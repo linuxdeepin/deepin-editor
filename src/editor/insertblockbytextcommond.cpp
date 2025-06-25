@@ -40,6 +40,7 @@ void InsertBlockByTextCommand::redo()
     treat(true);
     insertByBlock();
     treat(false);
+    qDebug() << "InsertBlockByTextCommand redo exit";
 }
 
 void InsertBlockByTextCommand::undo()
@@ -59,35 +60,45 @@ void InsertBlockByTextCommand::undo()
     }
 
     treat(false);
+    qDebug() << "InsertBlockByTextCommand undo exit";
 }
 
 void InsertBlockByTextCommand::treat(bool isStart)
 {
+    qDebug() << "InsertBlockByTextCommand treat, isStart:" << isStart;
     if(m_wrapper!=nullptr){
-
+        qDebug() << "InsertBlockByTextCommand treat, m_wrapper not nullptr";
         Window* window = m_wrapper->window();
         BottomBar* bar = m_wrapper->bottomBar();
         if(window){
+            qDebug() << "InsertBlockByTextCommand treat, window not nullptr";
             window->setPrintEnabled(!isStart);
         }
         if(bar){
+            qDebug() << "InsertBlockByTextCommand treat, bar not nullptr";
             bar->setChildEnabled(!isStart);
         }
     }
 
-    if(!isStart)
+    if(!isStart) {
+        qDebug() << "InsertBlockByTextCommand treat, connect cursorPositionChanged";
         QObject::connect(m_edit, &QPlainTextEdit::cursorPositionChanged, m_edit, &TextEdit::cursorPositionChanged);
-    else
+    } else {
+        qDebug() << "InsertBlockByTextCommand treat, disconnect cursorPositionChanged";
         QObject::disconnect(m_edit, &QPlainTextEdit::cursorPositionChanged, m_edit, &TextEdit::cursorPositionChanged);
+    }
+    qDebug() << "InsertBlockByTextCommand treat exit";
 }
 
 void InsertBlockByTextCommand::insertByBlock()
 {
+    qDebug() << "InsertBlockByTextCommand insertByBlock";
     auto cursor = m_edit->textCursor();
     int block = 1 * 1024 * 1024 ;
     int size = m_text.size();
     qDebug() << "Inserting text by blocks - total size:" << size << "block size:" << block;
     if(size > block){
+        qDebug() << "InsertBlockByTextCommand insertByBlock, size > block";
         int n = size / (block);
         int y = size % (block);
         int k=0;
@@ -100,6 +111,7 @@ void InsertBlockByTextCommand::insertByBlock()
             }
         }
         if(y){
+            qDebug() << "InsertBlockByTextCommand insertByBlock, y:" << y;
             if(m_wrapper!=nullptr && !m_wrapper->isQuit()){
                 QString insertText = m_text.mid(k*block,y);
                 qDebug() << "Inserting final block size:" << y;

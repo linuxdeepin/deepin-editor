@@ -4,29 +4,33 @@
 
 #include "fontitemdelegate.h"
 #include <QPainter>
+#include <QDebug>
 
 FontItemDelegate::FontItemDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
 {
-
+    qDebug() << "FontItemDelegate constructor";
 }
 
 FontItemDelegate::~FontItemDelegate()
 {
+    qDebug() << "FontItemDelegate destructor";
 }
 
 void FontItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    // qDebug() << "FontItemDelegate paint";
     const QString text = index.data(Qt::DisplayRole).toString();
     bool isSelected = option.state & QStyle::State_Selected;
-
+    // qDebug() << "isSelected" << isSelected;
     painter->setPen(Qt::black);
-
+    // qDebug() << "setPen";
     if (isSelected) {
         painter->setPen(Qt::NoPen);
         painter->setBrush(QColor("#2CA7F8"));
         painter->drawRect(option.rect);
         painter->setPen(Qt::white);
+        // qDebug() << "setPen white";
     }
 
     QFont font(painter->font());
@@ -42,5 +46,6 @@ void FontItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 
 QSize FontItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    // qDebug() << "FontItemDelegate sizeHint";
     return QSize(-1, 30);
 }

@@ -78,17 +78,21 @@ FindBar::FindBar(QWidget *parent)
     updateSizeMode();
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, &FindBar::updateSizeMode);
 #endif
+    qDebug() << "updateSizeMode success";
 }
 
 bool FindBar::isFocus()
 {
+    qDebug() << "isFocus";
     return m_editLine->lineEdit()->hasFocus();
 }
 
 void FindBar::focus()
 {
+    qDebug() << "focus";
     m_editLine->lineEdit()->setFocus();
     m_editLine->lineEdit()->selectAll();
+    qDebug() << "focus success";
 }
 
 void FindBar::activeInput(QString text, QString file, int row, int column, int scrollOffset)
@@ -156,6 +160,7 @@ void FindBar::hideEvent(QHideEvent *event)
 
 bool FindBar::focusNextPrevChild(bool next)
 {
+    qDebug() << "focusNextPrevChild";
     return false;
 }
 
@@ -186,6 +191,7 @@ void FindBar::keyPressEvent(QKeyEvent *e)
             m_findNextButton->click();
         }
     }
+    qDebug() << "keyPressEvent end";
 }
 
 /**
@@ -194,11 +200,13 @@ void FindBar::keyPressEvent(QKeyEvent *e)
  */
 void FindBar::updateSizeMode()
 {
+    qDebug() << "updateSizeMode";
 #ifdef DTKWIDGET_CLASS_DSizeMode
     bool isCompact = DGuiApplicationHelper::isCompactMode();
     qDebug() << "Updating size mode, compact:" << isCompact;
     
     if (isCompact) {
+        qDebug() << "isCompact";
         setFixedHeight(s_FBHeightCompact);
         m_closeButton->setFixedSize(s_FBCloseBtnSizeCompact, s_FBCloseBtnSizeCompact);
         m_closeButton->setIconSize(QSize(s_FBCloseIconSizeCompact, s_FBCloseIconSizeCompact));
@@ -206,6 +214,7 @@ void FindBar::updateSizeMode()
         m_layout->setContentsMargins(s_FBContentMarginsCompact);
         m_layout->invalidate();
     } else {
+        qDebug() << "is not compact";
         setFixedHeight(s_FBHeight);
         m_closeButton->setFixedSize(s_FBCloseBtnSize, s_FBCloseBtnSize);
         m_closeButton->setIconSize(QSize(s_FBCloseBtnSize, s_FBCloseBtnSize));
@@ -214,6 +223,7 @@ void FindBar::updateSizeMode()
         m_layout->invalidate();
     }
 #endif
+    qDebug() << "updateSizeMode end";
 }
 
 void FindBar::setMismatchAlert(bool isAlert)
@@ -224,10 +234,12 @@ void FindBar::setMismatchAlert(bool isAlert)
 
 void FindBar::receiveText(QString t)
 {
+    qDebug() << "receiveText";
     searched = false;
     if (t != "") {
         m_receivedText = t;
     }
+    qDebug() << "receiveText end";
 }
 
 void FindBar::setSearched(bool searched)
@@ -238,6 +250,7 @@ void FindBar::setSearched(bool searched)
 
 void FindBar::findPreClicked()
 {
+    qDebug() << "findPreClicked";
     if (!searched) {
         updateSearchKeyword(m_findFile, m_editLine->lineEdit()->text());
         emit findPrev(m_editLine->lineEdit()->text());
@@ -245,4 +258,5 @@ void FindBar::findPreClicked()
     } else {
         emit findPrev(m_editLine->lineEdit()->text());
     }
+    qDebug() << "findPreClicked end";
 }

@@ -22,6 +22,7 @@ CodeFlodArea::~CodeFlodArea()
 
 void CodeFlodArea::paintEvent(QPaintEvent *e)
 {
+    qDebug() << "CodeFlodArea paintEvent";
     m_pLeftAreaWidget->codeFlodAreaPaintEvent(e);
 }
 

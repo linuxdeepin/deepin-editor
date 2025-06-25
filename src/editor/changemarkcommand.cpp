@@ -30,9 +30,11 @@ void ChangeMarkCommand::undo()
 
     // 插入文本后，恢复旧的颜色标记状态
     if (m_EditPtr && !m_oldMarkReplace.isEmpty()) {
+        qDebug() << "m_EditPtr is not null";
         auto oldMark = TextEdit::convertReplaceToMark(m_oldMarkReplace);
         m_EditPtr->manualUpdateAllMark(oldMark);
     }
+    qDebug() << "ChangeMarkCommand undo end";
 }
 
 void ChangeMarkCommand::redo()
@@ -43,7 +45,9 @@ void ChangeMarkCommand::redo()
 
     // 插入文本后，更新颜色标记状态
     if (m_EditPtr && !m_newMarkReplace.isEmpty()) {
+        qDebug() << "m_EditPtr is not null";
         auto newMark = TextEdit::convertReplaceToMark(m_newMarkReplace);
         m_EditPtr->manualUpdateAllMark(newMark);
     }
+    qDebug() << "ChangeMarkCommand redo end";
 }

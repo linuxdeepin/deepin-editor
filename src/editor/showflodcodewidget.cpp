@@ -59,6 +59,7 @@ void ShowFlodCodeWidget::clear()
     m_pContentEdit->document()->clear();
     m_nTextWidth = 0;
     adjustSize();
+    qDebug() << "ShowFlodCodeWidget::clear() exit";
 }
 
 void ShowFlodCodeWidget::initHighLight(QString filepath, bool bIsLight)
@@ -101,10 +102,13 @@ void ShowFlodCodeWidget::setStyle(bool bIsLineWrap)
     }
 
     if (bIsLineWrap) {
+        qDebug() << "Setting line wrap mode to WidgetWidth";
         m_pContentEdit->setLineWrapMode(QPlainTextEdit::WidgetWidth);
     } else {
+        qDebug() << "Setting line wrap mode to NoWrap";
         m_pContentEdit->setLineWrapMode(QPlainTextEdit::NoWrap);
     }
+    qDebug() << "ShowFlodCodeWidget::setStyle() exit";
 }
 
 void ShowFlodCodeWidget::hideFirstBlock()
@@ -117,6 +121,7 @@ void ShowFlodCodeWidget::hideFirstBlock()
     for (auto block = m_pContentEdit->document()->firstBlock(); block.isValid(); block = block.next()) {
 
         if (block == m_pContentEdit->document()->lastBlock()) {
+            qDebug() << "Reached last block, breaking loop";
             break;
         }
 
@@ -125,6 +130,7 @@ void ShowFlodCodeWidget::hideFirstBlock()
 
     m_pContentEdit->setFixedHeight(editHight + 10);
     qDebug() << "Adjusted height to:" << editHight + 10;
+    qDebug() << "ShowFlodCodeWidget::hideFirstBlock() exit";
 }
 
 void ShowFlodCodeWidget::appendText(QString strText, int maxWidth)
@@ -133,8 +139,10 @@ void ShowFlodCodeWidget::appendText(QString strText, int maxWidth)
     int textWidth = m_pContentEdit->fontMetrics().horizontalAdvance(strText) + 10;
 
     if (m_nTextWidth < textWidth) {
+        qDebug() << "Updating text width, old:" << m_nTextWidth << ", new:" << textWidth;
         m_nTextWidth = textWidth;
         if (m_nTextWidth > maxWidth - 50) {
+            qDebug() << "Adjusting text width to fit maxWidth - 50";
             m_nTextWidth = maxWidth - 50;
         }
     }
@@ -143,13 +151,16 @@ void ShowFlodCodeWidget::appendText(QString strText, int maxWidth)
     qDebug() << "Text width set to:" << m_nTextWidth;
 
     if (m_pContentEdit->document()->isEmpty()) {
+        qDebug() << "Document is empty, setting plain text";
         m_pContentEdit->setPlainText(strText);
     } else {
+        qDebug() << "Document not empty, appending plain text";
         m_pContentEdit->appendPlainText(strText);
     }
 
     QTextCursor cursor = m_pContentEdit->textCursor();
     cursor.movePosition(QTextCursor::Start);
     m_pContentEdit->setTextCursor(cursor);
+    qDebug() << "ShowFlodCodeWidget::appendText() exit";
 }
 

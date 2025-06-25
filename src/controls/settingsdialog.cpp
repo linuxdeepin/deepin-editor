@@ -3,9 +3,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include <DSettings>
+#include <QDebug>
 
 void GenerateSettingTranslate()
 {
+    qDebug() << "GenerateSettingTranslate";
     auto group_baseName = QObject::tr("Basic");
     auto base_fontName = QObject::tr("Font Style");
     auto base_font_familyName = QObject::tr("Font");
@@ -127,4 +129,5 @@ void GenerateSettingTranslate()
     auto Japanese = QObject::tr("Japanese");
     auto Korean = QObject::tr("Korean");
     auto Vietnamese = QObject::tr("Vietnamese");
+    qDebug() << "GenerateSettingTranslate end";
 }

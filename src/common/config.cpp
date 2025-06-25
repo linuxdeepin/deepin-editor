@@ -71,6 +71,7 @@ Config::Config(QObject *parent)
 #ifdef DTKCORE_CLASS_DConfigFile
     dconfig = DConfig::create("org.deepin.editor", "org.deepin.editor");
     if (dconfig->isValid()) {
+        qDebug() << "DConfig is valid";
         // 默认提高GB18030识别率
         improveGB18030 = !dconfig->value(g_keyDisableImproveGB18030).toBool();
         qInfo() << qPrintable("DConfig::ImproveGB18030:") << improveGB18030;
@@ -82,15 +83,19 @@ Config::Config(QObject *parent)
         qInfo() << qPrintable("DConfig::defaultEncoding") << encoding;
 
         connect(dconfig, &DConfig::valueChanged, this, [this](const QString &key) {
+            qDebug() << "Config value changed for key:" << key;
             if (key == g_keyDisableImproveGB18030) {
                 this->improveGB18030 = !this->dconfig->value(g_keyDisableImproveGB18030).toBool();
                 qInfo() << qPrintable("DConfig::ImproveGB18030 changed:") << improveGB18030;
+                qDebug() << "improveGB18030 changed to" << this->improveGB18030;
             } else if (key == g_keyEnablePatchedIconv) {
                 this->patchedIconv = dconfig->value(g_keyEnablePatchedIconv).toBool();
                 qInfo() << qPrintable("DConfig::enablePatchedIconv changed:") << patchedIconv;
+                qDebug() << "patchedIconv changed to" << this->patchedIconv;
             } else if (key == g_keyDefaultEncoding) {
                 this->encoding = dconfig->value(g_keyDefaultEncoding).toByteArray().toUpper();
                 qInfo() << qPrintable("DConfig::defaultEncoding changed:") << encoding;
+                qDebug() << "encoding changed to" << this->encoding;
             }
         });
 
@@ -103,6 +108,7 @@ Config::Config(QObject *parent)
 
     // 检测当前iconv使用的GB18030编码是否为2005标准(2005标准强制使用上层补丁版本)
     iocnvUse2005Standard = detectIconvUse2005Standard();
+    qDebug() << "Leaving Config::Config";
 }
 
 Config::~Config()
@@ -110,15 +116,18 @@ Config::~Config()
     qDebug() << "Destroying Config instance";
 #ifdef DTKCORE_CLASS_DConfigFile
     if (dconfig) {
+        qDebug() << "Deleting dconfig";
         delete dconfig;
     }
 #endif
+    qDebug() << "Leaving Config::~Config";
 }
 
 Config *Config::instance()
 {
     qDebug() << "Getting Config singleton instance";
     static Config config;
+    qDebug() << "Leaving Config::instance";
     return &config;
 }
 
@@ -127,6 +136,7 @@ Config *Config::instance()
  */
 bool Config::enableImproveGB18030() const
 {
+    qDebug() << "Entering Config::enableImproveGB18030, returning" << improveGB18030;
     return improveGB18030;
 }
 
@@ -136,6 +146,7 @@ bool Config::enableImproveGB18030() const
  */
 bool Config::enablePatchedIconv() const
 {
+    qDebug() << "Entering Config::enablePatchedIconv, returning" << (patchedIconv || iocnvUse2005Standard);
     return patchedIconv || iocnvUse2005Standard;
 }
 
@@ -144,5 +155,11 @@ bool Config::enablePatchedIconv() const
  */
 QByteArray Config::defaultEncoding() const
 {
-    return encoding.isEmpty() ? QByteArray("UTF-8") : encoding;
+    qDebug() << "Entering Config::defaultEncoding";
+    if (encoding.isEmpty()) {
+        qDebug() << "Encoding is empty, returning UTF-8";
+        return QByteArray("UTF-8");
+    }
+    qDebug() << "Returning configured encoding:" << encoding;
+    return encoding;
 }

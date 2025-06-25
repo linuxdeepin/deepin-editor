@@ -16,6 +16,7 @@
 #include <QPixmap>
 #include <DFrame>
 #include <DGuiApplicationHelper>
+#include <QDebug>
 
 QPixmap *Tabbar::sm_pDragPixmap = nullptr;
 
@@ -31,8 +32,10 @@ const int s_TabbarHeightCompact = 26;
  */
 QString replaceMnemonic(const QString &str)
 {
+    qDebug() << "Enter replaceMnemonic, str:" << str;
     QString tmp = str;
     tmp.replace(QChar('&'), QString("&&"));
+    qDebug() << "Exit replaceMnemonic, tmp:" << tmp;
     return tmp;
 }
 
@@ -41,8 +44,10 @@ QString replaceMnemonic(const QString &str)
  */
 QString restoreMnemonic(const QString &str)
 {
+    qDebug() << "Enter restoreMnemonic, str:" << str;
     QString tmp = str;
     tmp.replace(QString("&&"), QChar('&'));
+    qDebug() << "Exit restoreMnemonic, tmp:" << tmp;
     return tmp;
 }
 
@@ -76,6 +81,7 @@ Tabbar::Tabbar(QWidget *parent)
         this->update();
     });
 #endif
+    qDebug() << "Tabbar constructor end";
 }
 
 Tabbar::~Tabbar()
@@ -92,73 +98,84 @@ Tabbar::~Tabbar()
 
 void Tabbar::addTab(const QString &filePath, const QString &tabName, const QString &tipPath)
 {
+    qDebug() << "Enter addTab, filePath:" << filePath << "tabName:" << tabName;
     qDebug() << "Adding tab for file:" << QFileInfo(filePath).fileName()
                   << "with name:" << tabName;
+    qDebug() << "Exit addTab";
     addTabWithIndex(count(), filePath, tabName, tipPath);
 }
 
 void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &tabName, const QString &tipPath)
 {
+    qDebug() << "Enter addTabWithIndex, index:" << index << "filePath:" << filePath << "tabName:" << tabName;
     // FIXME(rekols): do not insert duplicate values.
     if (m_tabPaths.contains(filePath)) {
+        qDebug() << "m_tabPaths contains filePath";
         return;
     }
+    qDebug() << "m_tabPaths does not contain filePath";
     m_tabPaths.insert(index, filePath);
     m_tabTruePaths.insert(index, tipPath);
+    qDebug() << "Exit addTabWithIndex";
     // }
 
     // 除去空白符 梁卫东 ２０２０－０８－２６　１４：４９：１５ ；适配助记符
     QString trimmedName = replaceMnemonic(tabName.simplified());
+    qDebug() << "trimmedName:" << trimmedName;
     DTabBar::insertTab(index, trimmedName);
     DTabBar::setCurrentIndex(index);
+    qDebug() << "filePath.contains(Utils::localDataPath())";
     if (filePath.contains(Utils::localDataPath())) {
         if (Utils::isBackupFile(filePath) && !tipPath.isNull() && tipPath.length() > 0) {
             setTabToolTip(index, tipPath);
+            qDebug() << "tipPath is not null";
         } else {
             setTabToolTip(index, tabName);
+            qDebug() << "tipPath is null";
         }
     } else {
         QString path = filePath;
         QFontMetrics fontMetrics(font());
         int nFontWidth = fontMetrics.horizontalAdvance(path) * (qApp->devicePixelRatio() == 1.25 ? 2 : 1);
-
+        qDebug() << "nFontWidth:" << nFontWidth;
         Window *pWindow = static_cast<Window *>(this->window());
         int w = pWindow->width() - 200;
         if (w < 800) w = 800;
 
         if (nFontWidth >= w) {
             int mod = nFontWidth % w;
-
+            qDebug() << "mod:" << mod;
             int step = nFontWidth / w + (mod > 0 ? 1 : 0);
-
+            qDebug() << "step:" << step;
             for (int i = 1; i < step; i++) {
                 path.insert(i * (path.length() / step), '\n');
             }
         }
-
+        qDebug() << "path:" << path;
         setTabToolTip(index, path);
     }
 }
 
 void Tabbar::resizeEvent(QResizeEvent *event)
 {
+    qDebug() << "Enter resizeEvent";
     int cnt = count();
-
+    qDebug() << "cnt:" << cnt;
     for (int i = 0; i < cnt ; i++) {
         QString path = tabToolTip(i);
         path = path.replace("\n", "");
         QFontMetrics fontMetrics(font());
         int nFontWidth = fontMetrics.horizontalAdvance(path) * (qApp->devicePixelRatio() == 1.25 ? 2 : 1);
-
+        qDebug() << "nFontWidth:" << nFontWidth;
         Window *pWindow = static_cast<Window *>(this->window());
         int w = pWindow->width() - 200;
         if (w < 800) w = 800;
-
+        qDebug() << "w:" << w;
         if (nFontWidth >= w) {
             int mod = nFontWidth % w;
-
+            qDebug() << "mod:" << mod;
             int step = nFontWidth / w + (mod > 0 ? 1 : 0);
-
+            qDebug() << "step:" << step;
             for (int j = 1; j < step; j++) {
                 path.insert(j * (path.length() / step), '\n');
             }
@@ -172,66 +189,82 @@ void Tabbar::resizeEvent(QResizeEvent *event)
     setIconSize(iconSize());
 
     DTabBar::resizeEvent(event);
+    qDebug() << "Exit resizeEvent";
 }
 
 void Tabbar::closeTab(int index)
 {
+    qDebug() << "Enter closeTab, index:" << index;
     if (index < 0) {
         qWarning() << "Attempt to close tab with invalid index:" << index;
         return;
     }
+    qDebug() << "index >= 0";
     QString file = fileAt(index);
     qDebug() << "Closing tab index:" << index
                   << "file:" << QFileInfo(file).fileName();
     emit requestHistorySaved(file);
     DTabBar::removeTab(index);
+    qDebug() << "Exit closeTab";
 }
 
 void Tabbar::closeCurrentTab()
 {
+    qDebug() << "Enter closeCurrentTab";
     closeTab(currentIndex());
+    qDebug() << "Exit closeCurrentTab";
 }
 
 void Tabbar::closeCurrentTab(const QString &strFilePath)
 {
+    qDebug() << "Enter closeCurrentTab, strFilePath:" << strFilePath;
     closeTab(this->indexOf(strFilePath));
+    qDebug() << "Exit closeCurrentTab";
 }
 
 void Tabbar::closeOtherTabs()
 {
+    qDebug() << "Enter closeOtherTabs";
     closeOtherTabsExceptFile(currentPath());
+    qDebug() << "Exit closeOtherTabs";
 }
 
 void Tabbar::closeOtherTabsExceptFile(const QString &filePath)
 {
+    qDebug() << "Enter closeOtherTabsExceptFile, filePath:" << filePath;
     QStringList closePathList;
 
     for (const QString &path : m_tabPaths) {
         if (filePath != path) {
+            qDebug() << "filePath != path";
             closePathList << path;
         }
     }
 
     emit closeTabs(closePathList);
+    qDebug() << "Exit closeOtherTabsExceptFile";
 }
 
 void Tabbar::closeLeftTabs(const QString &filePath)
 {
+    qDebug() << "Enter closeLeftTabs, filePath:" << filePath;
     QStringList closePathList;
 
     for (const QString &path : m_tabPaths) {
         if (filePath == path) {
+            qDebug() << "before break filePath == path";
             break;
         }
         closePathList << path;
     }
+    qDebug() << "closePathList:" << closePathList;
     emit closeTabs(closePathList);
-
+    qDebug() << "Exit closeLeftTabs";
 }
 
 void Tabbar::closeRightTabs(const QString &filePath)
 {
-
+    qDebug() << "Enter closeRightTabs, filePath:" << filePath;
     QStringList closePathlist;
 
 
@@ -239,12 +272,14 @@ void Tabbar::closeRightTabs(const QString &filePath)
         m_tabPaths.value(i);
 
         if (filePath == m_tabPaths.value(i)) {
+            qDebug() << "before break filePath == m_tabPaths.value(i)";
             break;
         }
         closePathlist << m_tabPaths.value(i);
     }
-
+    qDebug() << "closePathlist:" << closePathlist;
     emit closeTabs(closePathlist);
+    qDebug() << "Exit closeRightTabs";
 }
 
 void Tabbar::updateTab(int index, const QString &filePath, const QString &tabName)
@@ -259,80 +294,92 @@ void Tabbar::updateTab(int index, const QString &filePath, const QString &tabNam
 
     //show file path at tab,blank file only show it's name.
     if (filePath.contains(Utils::localDataPath())) {
+        qDebug() << "filePath contains Utils::localDataPath()";
         setTabToolTip(index, tabName);
     } else {
         QString path = filePath;
         QFontMetrics fontMetrics(font());
         int nFontWidth = fontMetrics.horizontalAdvance(path) * (qApp->devicePixelRatio() == 1.25 ? 2 : 1);
-
+        qDebug() << "nFontWidth:" << nFontWidth;
         Window *pWindow = static_cast<Window *>(this->window());
         int w = pWindow->width() - 200;
         if (w < 800) w = 800;
-
+        qDebug() << "w:" << w;
         if (nFontWidth >= w) {
             int mod = nFontWidth % w;
-
+            qDebug() << "mod:" << mod;
             int step = nFontWidth / w + (mod > 0 ? 1 : 0);
-
+            qDebug() << "step:" << step;
             for (int i = 1; i < step; i++) {
                 path.insert(i * (path.length() / step), '\n');
             }
         }
-
+        qDebug() << "path:" << path;
         setTabToolTip(index, path);
     }
+    qDebug() << "Exit updateTab";
 }
 
 void Tabbar::previousTab()
 {
+    qDebug() << "Enter previousTab";
     int currentIndex = DTabBar::currentIndex();
-
+    qDebug() << "currentIndex:" << currentIndex;
     if (currentIndex <= 0) {
         DTabBar::setCurrentIndex(DTabBar::count() - 1);
     } else {
         DTabBar::setCurrentIndex(currentIndex - 1);
     }
+    qDebug() << "Exit previousTab";
 }
 
 void Tabbar::nextTab()
 {
+    qDebug() << "Enter nextTab";
     int currentIndex = DTabBar::currentIndex();
-
+    qDebug() << "currentIndex:" << currentIndex;
     if (currentIndex >= DTabBar::count() - 1) {
         DTabBar::setCurrentIndex(0);
     } else {
         DTabBar::setCurrentIndex(currentIndex + 1);
     }
+    qDebug() << "Exit nextTab";
 }
 
 int Tabbar::indexOf(const QString &filePath)
 {
+    qDebug() << "Enter indexOf, filePath:" << filePath;
     return m_tabPaths.indexOf(filePath);
 }
 
 QString Tabbar::currentName() const
 {
+    qDebug() << "Enter currentName";
     return textAt(currentIndex());
 }
 
 QString Tabbar::currentPath() const
 {
+    qDebug() << "Enter currentPath";
     return m_tabPaths.value(currentIndex());
 }
 
 QString Tabbar::truePathAt(int index) const
 {
+    qDebug() << "Enter truePathAt, index:" << index;
     return m_tabTruePaths.value(index);
 }
 
 QString Tabbar::fileAt(int index) const
 {
+    qDebug() << "Enter fileAt, index:" << index;
     return m_tabPaths.value(index);
 }
 
 QString Tabbar::textAt(int index) const
 {
     // 获取显示文本时恢复设置的助记符 '&'
+    qDebug() << "Enter textAt, index:" << index;
     return restoreMnemonic(DTabBar::tabText(index));
 }
 
@@ -341,13 +388,17 @@ QString Tabbar::textAt(int index) const
  */
 void Tabbar::setTabText(int index, const QString &text)
 {
+    qDebug() << "Enter setTabText, index:" << index << "text:" << text;
     // 替换助记符
     QString tmp = replaceMnemonic(text);
+    qDebug() << "tmp:" << tmp;
     DTabBar::setTabText(index, tmp);
+    qDebug() << "Exit setTabText";
 }
 
 void Tabbar::setTabPalette(const QString &activeColor, const QString &highlightColor)
 {
+    qDebug() << "Enter setTabPalette, activeColor:" << activeColor << "highlightColor:" << highlightColor;
     // Not recommend manually setPalette()
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     Q_UNUSED(activeColor)
@@ -359,22 +410,28 @@ void Tabbar::setTabPalette(const QString &activeColor, const QString &highlightC
     pa.setColor(QPalette::Active, QPalette::WindowText, QColor(activeColor));
     setPalette(pa);
 #endif
+    qDebug() << "Exit setTabPalette";
 }
 
 void Tabbar::setBackground(const QString &startColor, const QString &endColor)
 {
+    qDebug() << "Enter setBackground, startColor:" << startColor << "endColor:" << endColor;
     m_backgroundStartColor = startColor;
     m_backgroundEndColor = endColor;
+    qDebug() << "Exit setBackground";
 }
 
 void Tabbar::setDNDColor(const QString &startColor, const QString &endColor)
 {
+    qDebug() << "Enter setDNDColor, startColor:" << startColor << "endColor:" << endColor;
     m_dndStartColor = startColor;
     m_dndEndColor = endColor;
+    qDebug() << "Exit setDNDColor";
 }
 
 QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option, QPoint *hotspot) const
 {
+    qDebug() << "Enter createDragPixmapFromTab, index:" << index;
     const qreal ratio = qApp->devicePixelRatio();
 
     Window *window = static_cast<Window *>(this->window());
@@ -403,6 +460,7 @@ QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option
     painter.setRenderHint(QPainter::Antialiasing, true);
 
     if (!Utils::isWayland() && count() == 1) {
+        qDebug() << "Utils::isWayland() && count() == 1";
         this->window()->showMinimized();
     }
 
@@ -427,6 +485,7 @@ QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option
         shadowColor.setAlpha(80);
 
         painter.end();
+        qDebug() << "painter.end()";
         if (sm_pDragPixmap) delete sm_pDragPixmap;
         sm_pDragPixmap = new QPixmap(Utils::dropShadow(QPixmap::fromImage(backgroundImage), 5, shadowColor, QPoint(0, 0)));
         return Utils::dropShadow(QPixmap::fromImage(backgroundImage), 5, shadowColor, QPoint(0, 0));
@@ -443,12 +502,14 @@ QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option
     sm_pDragPixmap = new QPixmap(backgroundImage);
     return backgroundImage;
 #endif
+    qDebug() << "Exit createDragPixmapFromTab";
 }
 
 QMimeData *Tabbar::createMimeDataFromTab(int index, const QStyleOptionTab &option) const
 {
+    qDebug() << "Enter createMimeDataFromTab, index:" << index;
     const QString tabName = textAt(index);
-
+    qDebug() << "tabName:" << tabName;
     Window *window = static_cast<Window *>(this->window());
     EditWrapper *wrapper = window->wrapper(fileAt(index));
 
@@ -459,6 +520,7 @@ QMimeData *Tabbar::createMimeDataFromTab(int index, const QStyleOptionTab &optio
 
     if (!wrapper) {
         //m_tabbar->closeCurrentTab();
+        qDebug() << "wrapper is null";
         return nullptr;
     }
 
@@ -472,10 +534,11 @@ QMimeData *Tabbar::createMimeDataFromTab(int index, const QStyleOptionTab &optio
 
 void Tabbar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source)
 {
+    qDebug() << "Enter insertFromMimeDataOnDragEnter, index:" << index;
     if (source == nullptr) {
         return;
     }
-
+    qDebug() << "source is not null";
     const QString tabName = QString::fromUtf8(source->data("dedit/tabbar"));
     QVariant pVar = source->property("wrapper");
     EditWrapper *wrapper = static_cast<EditWrapper *>(pVar.value<void *>());
@@ -486,6 +549,7 @@ void Tabbar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source)
     Window *window = static_cast<Window *>(this->window());
 
     if (!wrapper) {
+        qDebug() << "wrapper is null";
         return;
     }
 
@@ -494,20 +558,24 @@ void Tabbar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source)
     wrapper->updateModifyStatus(source->property("isModified").toBool());
     wrapper->OnUpdateHighlighter();
     window->focusActiveEditor();
+    qDebug() << "Exit insertFromMimeDataOnDragEnter";
 }
 
 void Tabbar::insertFromMimeData(int index, const QMimeData *source)
 {
+    qDebug() << "Enter insertFromMimeData, index:" << index;
     if (source == nullptr) {
+        qDebug() << "source is null";
         return;
     }
-
+    qDebug() << "source is not null";
     const QString tabName = QString::fromUtf8(source->data("dedit/tabbar"));
     QVariant pVar = source->property("wrapper");
     EditWrapper *wrapper = static_cast<EditWrapper *>(pVar.value<void *>());
     Window *window = static_cast<Window *>(this->window());
 
     if (!wrapper) {
+        qDebug() << "wrapper is null";
         return;
     }
 
@@ -517,31 +585,37 @@ void Tabbar::insertFromMimeData(int index, const QMimeData *source)
     wrapper->updateModifyStatus(source->property("isModified").toBool());
     wrapper->OnUpdateHighlighter();
     window->focusActiveEditor();
+    qDebug() << "Exit insertFromMimeData";
 }
 
 bool Tabbar::canInsertFromMimeData(int index, const QMimeData *source) const
 {
+    qDebug() << "Enter canInsertFromMimeData, index:" << index;
     return source->hasFormat("dedit/tabbar");
 }
 
 void Tabbar::handleDragActionChanged(Qt::DropAction action)
 {
+    qDebug() << "Enter handleDragActionChanged";
     // Reset cursor to Qt::ArrowCursor if drag tab to TextEditor widget.
     if (action == Qt::IgnoreAction) {
+        qDebug() << "action == Qt::IgnoreAction";
         if (dragIconWindow()) {
             QGuiApplication::changeOverrideCursor(Qt::ArrowCursor);
             DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), true);
         }
     } else if (dragIconWindow()) {
+        qDebug() << "dragIconWindow()";
         DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), false);
         if (QGuiApplication::overrideCursor())
             QGuiApplication::changeOverrideCursor(QGuiApplication::overrideCursor()->shape());
     }
+    qDebug() << "Exit handleDragActionChanged";
 }
 
 bool Tabbar::eventFilter(QObject *, QEvent *event)
 {
-
+    qDebug() << "Enter eventFilter";
     if (event->type() == QEvent::MouseButtonPress) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
 
@@ -576,6 +650,7 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
                 m_moreWaysCloseMenu->addAction(m_closeAllunModifiedTabAction);
 
                 if (m_tabPaths.length() < 2) {
+                    qDebug() << "m_tabPaths.length() < 2";
                     m_closeOtherTabAction->setEnabled(false);
                     m_closeLeftTabAction->setEnabled(false);
                     m_closeRightTabAction->setEnabled(false);
@@ -583,29 +658,36 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
 
                 //优化tab菜单显示　梁卫东
                 if (m_rightClickTab == 0 && indexCount == 1) {
+                    qDebug() << "m_rightClickTab == 0 && indexCount == 1";
                     m_closeLeftTabAction->setEnabled(false);
                     m_closeRightTabAction->setEnabled(false);
                 } else if (m_rightClickTab == 0 && indexCount > 1) {
+                    qDebug() << "m_rightClickTab == 0 && indexCount > 1";
                     m_closeLeftTabAction->setEnabled(false);
                     m_closeRightTabAction->setEnabled(true);
                 } else if (m_rightClickTab == indexCount - 1 && indexCount == 1) {
+                    qDebug() << "m_rightClickTab == indexCount - 1 && indexCount == 1";
                     m_closeLeftTabAction->setEnabled(false);
                     m_closeRightTabAction->setEnabled(false);
                 } else if (m_rightClickTab == indexCount - 1 && indexCount > 1) {
+                    qDebug() << "m_rightClickTab == indexCount - 1 && indexCount > 1";
                     m_closeLeftTabAction->setEnabled(true);
                     m_closeRightTabAction->setEnabled(false);
                 } else {
+                    qDebug() << "else";
                     m_closeLeftTabAction->setEnabled(true);
                     m_closeRightTabAction->setEnabled(true);
                 }
 
                 //showTabs();
-
+                qDebug() << "connect(m_closeTabAction, &QAction::triggered, this, [ = ]";
                 connect(m_closeTabAction, &QAction::triggered, this, [ = ] {
+                    qDebug() << "m_closeTabAction triggered";
                     Q_EMIT tabCloseRequested(m_rightClickTab);
                 });
-
+                qDebug() << "connect(m_closeOtherTabAction, &QAction::triggered, this, [ = ]";
                 connect(m_closeOtherTabAction, &QAction::triggered, this, [ = ] {
+                    qDebug() << "m_closeOtherTabAction triggered";
                     closeOtherTabsExceptFile(fileAt(m_rightClickTab));
                 });
 
@@ -654,50 +736,59 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
                 m_rightMenu->addMenu(m_moreWaysCloseMenu);
                 //yanyuhan 只有一个标签页时不显示更多方式关闭
                 if (m_tabPaths.size() > 1) {
+                    qDebug() << "m_tabPaths.size() > 1";
                     m_moreWaysCloseMenu->setEnabled(true);
                 } else {
+                    qDebug() << "m_tabPaths.size() <= 1";
                     m_moreWaysCloseMenu->setEnabled(false);
                 }
 
                 m_rightMenu->exec(mapToGlobal(position));
-
+                qDebug() << "m_rightMenu->exec(mapToGlobal(position))";
                 return true;
             }
         }
 
     } else if (event->type() == QEvent::DragEnter) {
-
+        qDebug() << "event->type() == QEvent::DragEnter";
 //        if ((!e->source() || e->source()->parent() != this) &&
 //            mimeData->hasFormat("dedit/tabbar")) {
 //            static_cast<Window*>(this->window())->changeTitlebarBackground(m_dndStartColor, m_dndEndColor);
 //        }
     } else if (event->type() == QEvent::DragLeave) {
+        qDebug() << "event->type() == QEvent::DragLeave";
     } else if (event->type() == QEvent::Drop) {
+        qDebug() << "event->type() == QEvent::Drop";
     } else if (event->type() == QEvent::DragMove) {
+        qDebug() << "event->type() == QEvent::DragMove";
         event->accept();
     }
-
+    qDebug() << "Exit eventFilter";
     return false;
 }
 
 void Tabbar::mousePressEvent(QMouseEvent *e)
 {
+    qDebug() << "Enter mousePressEvent";
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     bool midClick = (e->button() == Qt::MidButton);
 #else
     bool midClick = (e->button() == Qt::MiddleButton);
 #endif
     if (midClick) {
+        qDebug() << "midClick";
         emit tabCloseRequested(tabAt(QPoint(e->x(), e->y())));
     }
-
+    qDebug() << "Exit mousePressEvent";
     DTabBar::mousePressEvent(e);
 }
 
 void Tabbar::dropEvent(QDropEvent *e)
 {
+    qDebug() << "Enter dropEvent";
     if (e->dropAction() == Qt::CopyAction && e->mimeData()->hasFormat("dedit/tabbar")) {
         if (sm_pDragPixmap) {
+            qDebug() << "sm_pDragPixmap is not null";
             QPoint cursorPos = QCursor::pos() - QPoint(sm_pDragPixmap->width() / 2, 20);
             DLabel *pLabel = new DLabel();
             pLabel->setWindowFlags(Qt::FramelessWindowHint);
@@ -720,55 +811,64 @@ void Tabbar::dropEvent(QDropEvent *e)
     }
 
     DTabBar::dropEvent(e);
+    qDebug() << "Exit dropEvent";
 }
 
 QSize Tabbar::tabSizeHint(int index) const
 {
+    qDebug() << "Enter tabSizeHint, index:" << index;
     if (index >= 0) {
         int total = this->width();
-
+        qDebug() << "total:" << total;
         //计算每个tab平均宽度 返回　100到160
         int aveargeWidth = 160;
         aveargeWidth = total / DTabBar::count();
-
+        qDebug() << "aveargeWidth:" << aveargeWidth;
         if (aveargeWidth >= 160) {
+            qDebug() << "aveargeWidth >= 160";
             aveargeWidth = 160;
         } else if (aveargeWidth <= 110) {
+            qDebug() << "aveargeWidth <= 110";
             aveargeWidth = 110;
         }
-
+        qDebug() << "aveargeWidth:" << aveargeWidth;
 #ifdef DTKWIDGET_CLASS_DSizeMode
         return QSize(aveargeWidth, DGuiApplicationHelper::isCompactMode() ? s_TabbarHeightCompact : s_TabbarHeight);
 #else
         return QSize(aveargeWidth, 40);
 #endif
     }
-
+    qDebug() << "Exit tabSizeHint";
     return DTabBar::tabSizeHint(index);
 }
 
 QSize Tabbar::minimumTabSizeHint(int index) const
 {
+    qDebug() << "Enter minimumTabSizeHint, index:" << index;
     Q_UNUSED(index)
 #ifdef DTKWIDGET_CLASS_DSizeMode
     return QSize(110, DGuiApplicationHelper::isCompactMode() ? s_TabbarHeightCompact : s_TabbarHeight);
 #else
     return QSize(110, 40);
 #endif
+    qDebug() << "Exit minimumTabSizeHint";
 }
 
 QSize Tabbar::maximumTabSizeHint(int index) const
 {
+    qDebug() << "Enter maximumTabSizeHint, index:" << index;
     Q_UNUSED(index)
 #ifdef DTKWIDGET_CLASS_DSizeMode
     return QSize(160, DGuiApplicationHelper::isCompactMode() ? s_TabbarHeightCompact : s_TabbarHeight);
 #else
     return QSize(160, 40);
 #endif
+    qDebug() << "Exit maximumTabSizeHint";
 }
 
 void Tabbar::handleTabMoved(int fromIndex, int toIndex)
 {
+    qDebug() << "Enter handleTabMoved, fromIndex:" << fromIndex << "toIndex:" << toIndex;
     //qDebug () << "handleTabMoved";
     if (m_tabPaths.count() > fromIndex && m_tabPaths.count() > toIndex && fromIndex >= 0 && toIndex >= 0) {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -779,10 +879,12 @@ void Tabbar::handleTabMoved(int fromIndex, int toIndex)
         m_tabTruePaths.swapItemsAt(fromIndex, toIndex);
 #endif
     }
+    qDebug() << "Exit handleTabMoved";
 }
 
 void Tabbar::showTabs()
 {
+    qDebug() << "Enter showTabs";
     int currentIndex  =  DTabBar::currentIndex();
     if (currentIndex <= 0)  {
         m_closeLeftTabAction->setEnabled(false);
@@ -790,16 +892,19 @@ void Tabbar::showTabs()
     if (currentIndex >= DTabBar::count() - 1) {
         m_closeRightTabAction->setEnabled(false);
     }
+    qDebug() << "Exit showTabs";
 }
 
 void Tabbar::handleTabReleased(int index)
 {
+    qDebug() << "Enter handleTabReleased, index:" << index;
     if (index == -1) index = 0;
     QString path = m_listOldTabPath.value(index);
     if (path.isEmpty()) {
+        qDebug() << "path is empty";
         return;
     }
-
+    qDebug() << "path:" << path;
     int newIndex = m_tabPaths.indexOf(path);
     const QString tabPath = fileAt(newIndex);
     const QString tabName = textAt(newIndex);
@@ -807,6 +912,7 @@ void Tabbar::handleTabReleased(int index)
     Window *window = static_cast<Window *>(this->window());
     EditWrapper *wrapper = window->wrapper(tabPath);
     if (!wrapper) {
+        qDebug() << "wrapper is null";
         return;
     }
 
@@ -815,20 +921,23 @@ void Tabbar::handleTabReleased(int index)
     closeTab(newIndex);
     // remove wrapper from window, not delete.
     window->removeWrapper(tabPath, false);
+    qDebug() << "Exit handleTabReleased";
 }
 
 void Tabbar::handleTabIsRemoved(int index)
 {
-    //qDebug() << "handleTabIsRemoved" << index;
+    qDebug() << "Enter handleTabIsRemoved, index:" << index;
     const QString filePath = m_tabPaths.at(index);
     Window *window = static_cast<Window *>(this->window());
     m_tabPaths.removeAt(index);
     m_tabTruePaths.removeAt(index);
     window->removeWrapper(filePath, false);
+    qDebug() << "Exit handleTabIsRemoved";
 }
 
 void Tabbar::handleTabDroped(int index, Qt::DropAction action, QObject *target)
 {
+    qDebug() << "Enter handleTabDroped, index:" << index << "action:" << action << "target:" << target;
     Tabbar *tabbar = qobject_cast<Tabbar *>(target);
     if (tabbar == nullptr) {
         // tab页拖动到外部应用如网页电子表格或wps电子表格时,
@@ -836,13 +945,15 @@ void Tabbar::handleTabDroped(int index, Qt::DropAction action, QObject *target)
         // 这种情况下DTabBar内容不能发出DTabBar::tabReleaseRequested来重新构建编辑窗口
         // 因此只能再次添加判断，若目标文本编辑窗口的TabBar未创建，则重新重建文本编辑窗口
         handleTabReleased(index);
+        qDebug() << "Exit handleTabDroped";
     } else {
 //        QString path = m_listOldTabPath.value(index);
 //        int newIndex = m_tabPaths.indexOf(path);
-
+        qDebug() << "closeTab(index)";
         closeTab(index);
 //        StartManager::instance()->setDragEnter(false);
     }
+    qDebug() << "Exit handleTabDroped";
 }
 
 void Tabbar::onTabDrapStart()

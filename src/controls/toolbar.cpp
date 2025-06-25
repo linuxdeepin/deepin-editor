@@ -19,6 +19,7 @@ ToolBar::ToolBar(QWidget *parent)
 
 ToolBar::~ToolBar()
 {
+    qDebug() << "ToolBar destructor";
 }
 
 void ToolBar::setTabbar(QWidget *w)

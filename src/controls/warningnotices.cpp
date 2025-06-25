@@ -34,6 +34,7 @@ WarningNotices::WarningNotices(MessageType notifyType, QWidget *parent)
 #ifdef DTKWIDGET_CLASS_DSizeMode
     DDialogCloseButton *closeBtn = findChild<DDialogCloseButton *>();
     if (closeBtn) {
+        qDebug() << "closeBtn is not null";
         closeBtn->setIconSize(DSizeModeHelper::element(QSize(26, 26), QSize(32, 32)));
         connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, [=]() {
             closeBtn->setIconSize(DSizeModeHelper::element(QSize(26, 26), QSize(32, 32)));
@@ -49,49 +50,64 @@ WarningNotices::WarningNotices(MessageType notifyType, QWidget *parent)
     // TODO: wait dtkwidget fixed, see dtkwidget PR-628
     connect(this, &DFloatingMessage::closeButtonClicked, this, [this]() {
         if (this->isVisible()) {
+            qDebug() << "closeButtonClicked";
             this->close();
         }
     });
+    qDebug() << "WarningNotices constructor end";
 }
 
-WarningNotices::~WarningNotices() {}
+WarningNotices::~WarningNotices()
+{
+    qDebug() << "WarningNotices destructor";
+}
 
 void WarningNotices::setReloadBtn()
 {
+    qDebug() << "setReloadBtn";
     if (!m_reloadBtn->isVisible()) {
+        qDebug() << "m_reloadBtn->setVisible(true)";
         m_reloadBtn->setVisible(true);
     }
+    qDebug() << "m_reloadBtn->setVisible(true)";
     m_reloadBtn->setVisible(true);
     m_saveAsBtn->setVisible(false);
     setWidget(m_reloadBtn);
+    qDebug() << "setReloadBtn end";
 }
 
 void WarningNotices::setSaveAsBtn()
 {
+    qDebug() << "setSaveAsBtn";
     if (!m_saveAsBtn->isVisible()) {
         m_saveAsBtn->setVisible(true);
     }
     m_saveAsBtn->setVisible(true);
     m_reloadBtn->setVisible(false);
     setWidget(m_saveAsBtn);
+    qDebug() << "setSaveAsBtn end";
 }
 
 void WarningNotices::clearBtn()
 {
+    qDebug() << "clearBtn";
     m_saveAsBtn->setVisible(false);
     m_reloadBtn->setVisible(false);
+    qDebug() << "clearBtn end";
 }
 
 void WarningNotices::slotreloadBtnClicked()
 {
-    qDebug() << "Reload button clicked, hiding warning";
+    qDebug() << "slotreloadBtnClicked";
     this->hide();
     emit reloadBtnClicked();
+    qDebug() << "slotreloadBtnClicked end";
 }
 
 void WarningNotices::slotsaveAsBtnClicked()
 {
-    qDebug() << "SaveAs button clicked, hiding warning";
+    qDebug() << "slotsaveAsBtnClicked";
     this->hide();
     emit saveAsBtnClicked();
+    qDebug() << "slotsaveAsBtnClicked end";
 }

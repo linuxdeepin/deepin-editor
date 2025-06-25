@@ -70,19 +70,24 @@ JumpLineBar::JumpLineBar(DFloatingWidget *parent)
     updateSizeMode();
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, &JumpLineBar::updateSizeMode);
 #endif
+    qDebug() << "JumpLineBar constructor end";
 }
 
 JumpLineBar::~JumpLineBar()
-{}
+{
+    qDebug() << "JumpLineBar destructor";
+}
 
 void JumpLineBar::focus()
 {
-    qDebug() << "Setting focus to line input";
+    qDebug() << "focus";
     m_pSpinBoxInput->lineEdit()->setFocus();
+    qDebug() << "focus success";
 }
 
 bool JumpLineBar::isFocus()
 {
+    qDebug() << "isFocus";
     return m_pSpinBoxInput->lineEdit()->hasFocus();
 }
 
@@ -102,10 +107,13 @@ void JumpLineBar::activeInput(QString file, int row, int column, int lineCount, 
     m_pSpinBoxInput->setRange(0, lineCount);
     int lineWidth = QString::number(lineCount).size() * fontMetrics().horizontalAdvance('9');
     if (m_pSpinBoxInput->minimumWidth() < lineWidth) {
+        qDebug() << "lineWidth" << lineWidth;
         m_pSpinBoxInput->setFixedWidth(lineWidth);
     } else {
+        qDebug() << "lineWidth" << lineWidth;
         m_pSpinBoxInput->setFixedWidth(s_nJumpLineBarSpinBoxWidth);
     }
+    qDebug() << "setFixedWidth";
     setFixedWidth(m_layout->sizeHint().width() + s_nJumpLineBarHorizenMargin);
 
     // Clear line number.
@@ -113,28 +121,36 @@ void JumpLineBar::activeInput(QString file, int row, int column, int lineCount, 
         qDebug() << "Clearing invalid line number input";
         m_pSpinBoxInput->lineEdit()->setText("");
     }
+    qDebug() << "activeInput end";
 }
 
 void JumpLineBar::handleFocusOut()
 {
+    qDebug() << "handleFocusOut";
     //hide();
     lostFocusExit();
+    qDebug() << "handleFocusOut end";
 }
 
 void JumpLineBar::handleLineChanged()
 {
+    qDebug() << "handleLineChanged";
     QString content = m_pSpinBoxInput->lineEdit()->text();
     if (content != "") {
+        qDebug() << "content" << content;
         if (content.toInt() == 0) {
             m_pSpinBoxInput->clear();
+            qDebug() << "clear";
             return;
         }
         jumpToLine(m_jumpFile, content.toInt(), false);
     }
+    qDebug() << "handleLineChanged end";
 }
 
 void JumpLineBar::jumpCancel()
 {
+    qDebug() << "jumpCancel";
     hide();
     // esc键不跳转　返回当前
     // backToPosition(m_jumpFile, m_rowBeforeJump, m_columnBeforeJump, m_jumpFileScrollOffset);
@@ -142,35 +158,45 @@ void JumpLineBar::jumpCancel()
 
 void JumpLineBar::jumpConfirm()
 {
+    qDebug() << "jumpConfirm";
     QString content = m_pSpinBoxInput->lineEdit()->text();
     if (content != "") {
+        qDebug() << "content" << content;
         jumpToLine(m_jumpFile, content.toInt(), true);
     }
+    qDebug() << "jumpConfirm end";
 }
 
 void JumpLineBar::slotFocusChanged(bool bFocus)
 {
+    qDebug() << "slotFocusChanged";
     if (bFocus == false) {
         lostFocusExit();
+        qDebug() << "slotFocusChanged end";
     }
 }
 
 // Hide 跳转到行窗口时，需要清空编辑框中的内容
 void JumpLineBar::hide()
 {
+    qDebug() << "hide";
     m_pSpinBoxInput->clear();
     DFloatingWidget::hide();
+    qDebug() << "hide end";
 }
 
 int JumpLineBar::getLineCount()
 {
+    qDebug() << "getLineCount";
     return m_lineCount;
 }
 
 bool JumpLineBar::eventFilter(QObject *pObject, QEvent *pEvent)
 {
+    qDebug() << "eventFilter";
     if (pObject == m_pSpinBoxInput) {
         if (pEvent->type() == QEvent::FocusOut) {
+            qDebug() << "FocusOut";
             handleFocusOut();
             /**
              * 规避当DSpinBox输入框里为空且失去focus焦点时会显示上一次输入的数值内容的问题
@@ -180,7 +206,7 @@ bool JumpLineBar::eventFilter(QObject *pObject, QEvent *pEvent)
             }
         }
     }
-
+    qDebug() << "eventFilter end";
     return DFloatingWidget::eventFilter(pObject, pEvent);
 }
 
@@ -190,11 +216,13 @@ bool JumpLineBar::eventFilter(QObject *pObject, QEvent *pEvent)
  */
 void JumpLineBar::updateSizeMode()
 {
+    qDebug() << "updateSizeMode";
 #ifdef DTKWIDGET_CLASS_DSizeMode
     bool isCompact = DGuiApplicationHelper::isCompactMode();
     qDebug() << "Updating size mode, compact:" << isCompact;
     
     if (isCompact) {
+        qDebug() << "isCompact";
         m_layout->setContentsMargins(s_JLBCompactMarigins);
         m_closeButton->setIconSize(QSize(s_nCloseButtonSizeCompact, s_nCloseButtonSizeCompact));
         m_closeButton->setFixedSize(QSize(s_nCloseButtonSizeCompact, s_nCloseButtonSizeCompact));
@@ -202,6 +230,7 @@ void JumpLineBar::updateSizeMode()
         setMinimumWidth(s_nJumpLineBarWidthCompact);
         setFixedHeight(s_nJumpLineBarHeightCompact);
     } else {
+        qDebug() << "is not compact";
         m_layout->setContentsMargins(s_JLBDefaultMarigins);
         m_closeButton->setIconSize(QSize(s_nCloseButtonSize, s_nCloseButtonSize));
         m_closeButton->setFixedSize(QSize(s_nCloseButtonSize, s_nCloseButtonSize));
@@ -210,5 +239,6 @@ void JumpLineBar::updateSizeMode()
         setFixedHeight(s_nJumpLineBarHeight);
     }
 #endif
+    qDebug() << "updateSizeMode end";
 }
 
