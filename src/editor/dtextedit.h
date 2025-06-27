@@ -527,7 +527,6 @@ public slots:
     void slotAddComment(bool checked = false);
     void slotCancelComment(bool checked = false);
     void slotVoiceReadingAction(bool checked = false);
-    bool slotStopReadingAction(bool checked = false);
     void slotdictationAction(bool checked = false);
     
     // 音频设备检测方法
@@ -677,7 +676,6 @@ private:
     QAction *m_openInFileManagerAction;
     QAction *m_toggleCommentAction;
     QAction *m_voiceReadingAction;
-    QAction *m_stopReadingAction;
     QAction *m_dictationAction;
     QAction *m_translateAction;
     QAction *m_columnEditAction;
