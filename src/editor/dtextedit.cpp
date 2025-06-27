@@ -332,7 +332,6 @@ void TextEdit::initRightClickedMenu()
     m_openInFileManagerAction = new QAction(tr("Display in file manager"), this);
     m_toggleCommentAction = new QAction(tr("Add Comment"), this);
     m_voiceReadingAction = new QAction(tr("Text to Speech"), this);
-    m_stopReadingAction = new QAction(tr("Stop reading"), this);
     m_dictationAction = new QAction(tr("Speech to Text"), this);
     m_translateAction = new QAction(tr("Translate"), this);
     m_columnEditAction = new QAction(tr("Column Mode"), this);
@@ -410,7 +409,6 @@ void TextEdit::initRightClickedMenu()
     connect(m_addComment, &QAction::triggered, this, &TextEdit::slotAddComment);
     connect(m_cancelComment, &QAction::triggered, this, &TextEdit::slotCancelComment);
     connect(m_voiceReadingAction, &QAction::triggered, this, &TextEdit::slotVoiceReadingAction);
-    connect(m_stopReadingAction, &QAction::triggered, this, &TextEdit::slotStopReadingAction);
     connect(m_dictationAction, &QAction::triggered, this, &TextEdit::slotdictationAction);
     connect(m_translateAction, &QAction::triggered, this, &TextEdit::slot_translate);
     connect(m_columnEditAction, &QAction::triggered, this, &TextEdit::slotColumnEditAction);
@@ -9306,7 +9304,6 @@ void TextEdit::onAudioPortEnabledChanged(quint32 cardId, const QString &portName
         
         // 如果所有输出设备都被禁用，显示输出设备提示
         if (!hasOutputDevice) {
-            slotStopReadingAction();
 #ifdef DTKWIDGET_CLASS_DSizeMode
             Utils::sendFloatMessageFixedFont(this, QIcon(":/images/warning.svg"), tr("No audio output device was detected. Please ensure your speakers or headphones are properly connected and try again."));
 #else
