@@ -299,7 +299,7 @@ void TextEdit::initRightClickedMenu()
     m_openInFileManagerAction = new QAction(tr("Display in file manager"), this);
     m_toggleCommentAction = new QAction(tr("Add Comment"), this);
     m_voiceReadingAction = new QAction(tr("Text to Speech"), this);
-    m_stopReadingAction = new QAction(tr("Stop reading"), this);
+    m_stopReadingAction = new QAction(tr("Text to Speech"), this);
     m_dictationAction = new QAction(tr("Speech to Text"), this);
     m_translateAction = new QAction(tr("Translate"), this);
     m_columnEditAction = new QAction(tr("Column Mode"), this);
