@@ -299,7 +299,6 @@ void TextEdit::initRightClickedMenu()
     m_openInFileManagerAction = new QAction(tr("Display in file manager"), this);
     m_toggleCommentAction = new QAction(tr("Add Comment"), this);
     m_voiceReadingAction = new QAction(tr("Text to Speech"), this);
-    m_stopReadingAction = new QAction(tr("Stop reading"), this);
     m_dictationAction = new QAction(tr("Speech to Text"), this);
     m_translateAction = new QAction(tr("Translate"), this);
     m_columnEditAction = new QAction(tr("Column Mode"), this);
@@ -375,7 +374,6 @@ void TextEdit::initRightClickedMenu()
     connect(m_addComment, &QAction::triggered, this, &TextEdit::slotAddComment);
     connect(m_cancelComment, &QAction::triggered, this, &TextEdit::slotCancelComment);
     connect(m_voiceReadingAction, &QAction::triggered, this, &TextEdit::slotVoiceReadingAction);
-    connect(m_stopReadingAction, &QAction::triggered, this, &TextEdit::slotStopReadingAction);
     connect(m_dictationAction, &QAction::triggered, this, &TextEdit::slotdictationAction);
     connect(m_translateAction, &QAction::triggered, this, &TextEdit::slot_translate);
     connect(m_columnEditAction, &QAction::triggered, this, &TextEdit::slotColumnEditAction);
@@ -537,23 +535,9 @@ void TextEdit::popRightMenu(QPoint pos)
         (DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosHome) ||
         (DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosEducation)) {*/
 
-    bool stopReadingState = false;
-    QDBusMessage stopReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
-                                                                 "/aiassistant/tts",
-                                                                 "com.iflytek.aiassistant.tts",
-                                                                 "isTTSInWorking");
+    m_rightMenu->addAction(m_voiceReadingAction);
+    m_voiceReadingAction->setEnabled(true);
 
-    QDBusReply<bool> stopReadingStateRet = QDBusConnection::sessionBus().asyncCall(stopReadingMsg, 100);
-    if (stopReadingStateRet.isValid()) {
-        stopReadingState = stopReadingStateRet.value();
-    }
-    if (!stopReadingState) {
-        m_rightMenu->addAction(m_voiceReadingAction);
-        m_voiceReadingAction->setEnabled(false);
-    } else {
-        m_rightMenu->removeAction(m_voiceReadingAction);
-        m_rightMenu->addAction(m_stopReadingAction);
-    }
     bool voiceReadingState = false;
     QDBusMessage voiceReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
                                                                   "/aiassistant/tts",
@@ -2847,35 +2831,14 @@ void TextEdit::slotVoiceReadingAction(bool checked)
 #endif
         return;
     }
+
+    // 先结束之前的播放
+    QProcess process;
+    process.start("dbus-send", QStringList() << "--print-reply" << "--dest=com.iflytek.aiassistant" << "/aiassistant/tts" << "com.iflytek.aiassistant.tts.stopTTSDirectly");
+    process.waitForFinished(1000); // 最多等待1秒
     
     QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.TextToSpeech");
     emit signal_readingPath();
-}
-
-bool TextEdit::slotStopReadingAction(bool checked)
-{
-    Q_UNUSED(checked);
-    bool voiceReadingState = false;
-    QDBusMessage voiceReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
-                                                                  "/aiassistant/tts",
-                                                                  "com.iflytek.aiassistant.tts",
-                                                                  "getTTSEnable");
-
-    QDBusReply<bool> voiceReadingStateRet = QDBusConnection::sessionBus().asyncCall(voiceReadingMsg, 100);
-    //没有收到返回就加载配置文件数据
-    if (voiceReadingStateRet.isValid()) {
-        voiceReadingState = voiceReadingStateRet.value();
-    }
-    if (!voiceReadingState) {
-#ifdef DTKWIDGET_CLASS_DSizeMode
-        Utils::sendFloatMessageFixedFont(this, QIcon(":/images/warning.svg"), tr("Please install UOS AI from the app store first."));
-#else
-        DMessageManager::instance()->sendMessage(this, QIcon(":/images/warning.svg"), tr("Please install UOS AI from the app store first."));
-#endif
-        return false;
-    }
-
-    return QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
 }
 
 void TextEdit::slotdictationAction(bool checked)
@@ -8209,7 +8172,6 @@ void TextEdit::onAudioPortEnabledChanged(quint32 cardId, const QString &portName
         
         // 如果所有输出设备都被禁用，显示输出设备提示
         if (!hasOutputDevice) {
-            slotStopReadingAction();
 #ifdef DTKWIDGET_CLASS_DSizeMode
             Utils::sendFloatMessageFixedFont(this, QIcon(":/images/warning.svg"), tr("No audio output device was detected. Please ensure your speakers or headphones are properly connected and try again."));
 #else

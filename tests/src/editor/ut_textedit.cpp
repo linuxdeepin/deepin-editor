@@ -5701,23 +5701,6 @@ TEST_F(test_textedit, slotVoiceReadingAction)
     pWindow->deleteLater();
 }
 
-//slotStopReadingAction
-TEST_F(test_textedit, slotStopReadingAction)
-{
-    Window *pWindow = new Window();
-    pWindow->addBlankTab(QString());
-    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
-                                                          QString("Holle world.\nHolle world."));
-    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
-    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
-    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
-    pWindow->currentWrapper()->textEditor()->slotStopReadingAction(true);
-    bool bRet = pWindow->currentWrapper()->textEditor()->textCursor().hasSelection();
-    ASSERT_TRUE(bRet == true);
-
-    pWindow->deleteLater();
-}
-
 //slotdictationAction
 TEST_F(test_textedit, slotdictationAction)
 {
