@@ -548,10 +548,12 @@ void TextEdit::popRightMenu(QPoint pos)
     //没有收到返回就加载配置文件数据
     if (voiceReadingStateRet.isValid()) {
         voiceReadingState = voiceReadingStateRet.value();
-    } else {
-        voiceReadingState = m_wrapper->window()->getIflytekaiassistantConfig("aiassistant-tts");
-    }
-    if ((textCursor().hasSelection()) || m_hasColumnSelection) {
+        if ((textCursor().hasSelection() && voiceReadingState) || m_hasColumnSelection) {
+            m_voiceReadingAction->setEnabled(true);
+        } else {
+            m_voiceReadingAction->setEnabled(false);
+        }
+    } else {        
         m_voiceReadingAction->setEnabled(true);
     }
 
@@ -566,16 +568,16 @@ void TextEdit::popRightMenu(QPoint pos)
     //没有收到返回就加载配置文件数据
     if (dictationStateRet.isValid()) {
         dictationState = dictationStateRet.value();
+        m_dictationAction->setEnabled(dictationState);
     } else {
-        dictationState = m_wrapper->window()->getIflytekaiassistantConfig("aiassistant-iat");
+        m_dictationAction->setEnabled(true);
     }
 
     if (m_bReadOnlyPermission || m_readOnlyMode) {
         m_dictationAction->setEnabled(false);
     }
 
-
-    m_translateAction->setEnabled(true);
+    m_translateAction->setEnabled(false);
     bool translateState = false;
     QDBusMessage translateReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
                                                                       "/aiassistant/trans",
@@ -585,15 +587,14 @@ void TextEdit::popRightMenu(QPoint pos)
     QDBusReply<bool> translateStateRet = QDBusConnection::sessionBus().asyncCall(translateReadingMsg, 100);
     //没有收到返回就加载配置文件数据
     if (translateStateRet.isValid()) {
+        m_rightMenu->addAction(m_translateAction);
         translateState = translateStateRet.value();
     } else {
-        m_rightMenu->addAction(m_translateAction);
         translateState = m_wrapper->window()->getIflytekaiassistantConfig("aiassistant-trans");
     }
-    if ((textCursor().hasSelection()) || m_hasColumnSelection) {
-        m_translateAction->setEnabled((textCursor().hasSelection()) || m_hasColumnSelection);
+    if ((textCursor().hasSelection() && translateState) || m_hasColumnSelection) {
+        m_translateAction->setEnabled(translateState);
     }
-
     if (!this->document()->isEmpty()) {
 
         m_colorMarkMenu->clear();
