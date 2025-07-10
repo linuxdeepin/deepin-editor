@@ -112,7 +112,7 @@
 
 您也可以使用快捷鍵 **Alt + U/ L/ C** 迅速切換大小寫。
 
-![toggle_case](fig/toggle_case.png)
+![toggle_case](fig/togglecase.png)
 
 ### 高亮文本
 
@@ -210,7 +210,7 @@
 
 在文本編輯器界面，單擊鼠標右鍵選擇 **顏色標記**，在其下拉列表中進行選擇。
 
-![color](fig/color_tag.png)
+![color](fig/colortag.png)
 
    - **設置標記**：對某一行或某一段文本內容添加顏色標記；有8種顏色按鈕可供選擇。
       + 將光標定在某一行，標記當前所在的行。

@@ -112,7 +112,7 @@
 
 您也可以使用快捷鍵 **Alt + U/L/C** 迅速切換大小寫。
 
-![toggle_case](fig/toggle_case.png)
+![toggle_case](fig/togglecase.png)
 
 ### 突顯文字
 
@@ -201,13 +201,13 @@
 ### 列编辑
 在文字編輯器介面，按住鍵盤上的 **Alt** 鍵不放，滑鼠左鍵單擊多列啟動列編輯模式，為多行程式碼同時編輯相同的內容，提高工作效率。
 
-![column mode](fig/column mode.png)
+![column mode](fig/column_mode.png)
 
 ### 顏色標記
 
 在文字編輯器介面，滑鼠右鍵選擇 **顏色標記**，在其下拉選單中進行選擇。
 
-![color](fig/color_tag.png)
+![color](fig/colortag.png)
 
    - **添加標記**：對某一行或某一段文字內容添加顏色標記；有8種顏色按鈕可供選擇。
       + 將游標定在某一行，標記目前所在的行。
