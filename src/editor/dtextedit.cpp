@@ -538,43 +538,52 @@ void TextEdit::popRightMenu(QPoint pos)
     m_rightMenu->addAction(m_voiceReadingAction);
     m_voiceReadingAction->setEnabled(true);
 
-    bool voiceReadingState = false;
-    QDBusMessage voiceReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
-                                                                  "/aiassistant/tts",
-                                                                  "com.iflytek.aiassistant.tts",
-                                                                  "getTTSEnable");
+    if (checkAudioOutputDevice()) {
+        bool voiceReadingState = false;
+        QDBusMessage voiceReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
+                                                                      "/aiassistant/tts",
+                                                                      "com.iflytek.aiassistant.tts",
+                                                                      "getTTSEnable");
 
-    QDBusReply<bool> voiceReadingStateRet = QDBusConnection::sessionBus().asyncCall(voiceReadingMsg, 100);
-    //没有收到返回就加载配置文件数据
-    if (voiceReadingStateRet.isValid()) {
-        voiceReadingState = voiceReadingStateRet.value();
-        if ((textCursor().hasSelection() && voiceReadingState) || m_hasColumnSelection) {
-            m_voiceReadingAction->setEnabled(true);
+        QDBusReply<bool> voiceReadingStateRet = QDBusConnection::sessionBus().asyncCall(voiceReadingMsg, 100);
+        //没有收到返回就加载配置文件数据
+        if (voiceReadingStateRet.isValid()) {
+            voiceReadingState = voiceReadingStateRet.value();
+            if ((textCursor().hasSelection() && voiceReadingState) || m_hasColumnSelection) {
+                m_voiceReadingAction->setEnabled(true);
+            } else {
+                m_voiceReadingAction->setEnabled(false);
+            }
         } else {
-            m_voiceReadingAction->setEnabled(false);
+            m_voiceReadingAction->setEnabled(true);
         }
-    } else {        
+    } else {
         m_voiceReadingAction->setEnabled(true);
     }
 
     m_rightMenu->addAction(m_dictationAction);
-    bool dictationState = false;
-    QDBusMessage dictationMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
-                                                               "/aiassistant/iat",
-                                                               "com.iflytek.aiassistant.iat",
-                                                               "getIatEnable");
 
-    QDBusReply<bool> dictationStateRet = QDBusConnection::sessionBus().asyncCall(dictationMsg, 100);
-    //没有收到返回就加载配置文件数据
-    if (dictationStateRet.isValid()) {
-        dictationState = dictationStateRet.value();
-        m_dictationAction->setEnabled(dictationState);
+    if (checkAudioInputDevice()) {
+        bool dictationState = false;
+        QDBusMessage dictationMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
+                                                                   "/aiassistant/iat",
+                                                                   "com.iflytek.aiassistant.iat",
+                                                                   "getIatEnable");
+
+        QDBusReply<bool> dictationStateRet = QDBusConnection::sessionBus().asyncCall(dictationMsg, 100);
+        //没有收到返回就加载配置文件数据
+        if (dictationStateRet.isValid()) {
+            dictationState = dictationStateRet.value();
+            m_dictationAction->setEnabled(dictationState);
+        } else {
+            m_dictationAction->setEnabled(true);
+        }
+
+        if (m_bReadOnlyPermission || m_readOnlyMode) {
+            m_dictationAction->setEnabled(false);
+        }
     } else {
         m_dictationAction->setEnabled(true);
-    }
-
-    if (m_bReadOnlyPermission || m_readOnlyMode) {
-        m_dictationAction->setEnabled(false);
     }
 
     m_translateAction->setEnabled(false);
@@ -2803,6 +2812,16 @@ void TextEdit::slotVoiceReadingAction(bool checked)
 {
     Q_UNUSED(checked);
 
+    // 检查音频输出设备
+    if (!checkAudioOutputDevice()) {
+#ifdef DTKWIDGET_CLASS_DSizeMode
+        Utils::sendFloatMessageFixedFont(this, QIcon(":/images/warning.svg"), tr("No audio output device was detected. Please ensure your speakers or headphones are properly connected and try again."));
+#else
+        DMessageManager::instance()->sendMessage(this, QIcon(":/images/warning.svg"), tr("No audio output device was detected. Please ensure your speakers or headphones are properly connected and try again."));
+#endif
+        return;
+    }
+
     bool voiceReadingState = false;
     QDBusMessage voiceReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
                                                                   "/aiassistant/tts",
@@ -2822,16 +2841,6 @@ void TextEdit::slotVoiceReadingAction(bool checked)
 #endif
         return;
     }
-    
-    // 检查音频输出设备
-    if (!checkAudioOutputDevice()) {
-#ifdef DTKWIDGET_CLASS_DSizeMode
-        Utils::sendFloatMessageFixedFont(this, QIcon(":/images/warning.svg"), tr("No audio output device was detected. Please ensure your speakers or headphones are properly connected and try again."));
-#else
-        DMessageManager::instance()->sendMessage(this, QIcon(":/images/warning.svg"), tr("No audio output device was detected. Please ensure your speakers or headphones are properly connected and try again."));
-#endif
-        return;
-    }
 
     // 先结束之前的播放
     QProcess process;
@@ -2845,6 +2854,16 @@ void TextEdit::slotVoiceReadingAction(bool checked)
 void TextEdit::slotdictationAction(bool checked)
 {
     Q_UNUSED(checked);
+
+    // 检查音频输入设备
+    if (!checkAudioInputDevice()) {
+#ifdef DTKWIDGET_CLASS_DSizeMode
+        Utils::sendFloatMessageFixedFont(this, QIcon(":/images/warning.svg"), tr("No audio input device was detected. Please ensure your speakers or headphones are properly connected and try again."));
+#else
+        DMessageManager::instance()->sendMessage(this, QIcon(":/images/warning.svg"), tr("No audio input device was detected. Please ensure your speakers or headphones are properly connected and try again."));
+#endif
+        return;
+    }
 
     bool dictationState = false;
     QDBusMessage dictationMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
@@ -2864,17 +2883,7 @@ void TextEdit::slotdictationAction(bool checked)
 #endif
         return;
     }
-    
-    // 检查音频输入设备
-    if (!checkAudioInputDevice()) {
-#ifdef DTKWIDGET_CLASS_DSizeMode
-        Utils::sendFloatMessageFixedFont(this, QIcon(":/images/warning.svg"), tr("No audio input device was detected. Please ensure your speakers or headphones are properly connected and try again."));
-#else
-        DMessageManager::instance()->sendMessage(this, QIcon(":/images/warning.svg"), tr("No audio input device was detected. Please ensure your speakers or headphones are properly connected and try again."));
-#endif
-        return;
-    }
-    
+        
     QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.SpeechToText");
 }
 
