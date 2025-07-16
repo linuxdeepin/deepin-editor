@@ -1,3 +1,9 @@
+deepin-editor (6.5.31) unstable; urgency=medium
+
+  * fix: Remove return statement in recoverFile function
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Wed, 16 Jul 2025 11:32:50 +0800
+
 deepin-editor (6.5.30) unstable; urgency=medium
 
   * chore: Update package URLs and digests in linglong.yaml files
