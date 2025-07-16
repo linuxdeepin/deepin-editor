@@ -449,7 +449,6 @@ int StartManager::recoverFile(Window *window)
                 }
                 qInfo() << "Recovered files count:" << recFilesSum;
                 qDebug() << "Exit recoverFile";
-                return recFilesSum;
             }
         }
     }
