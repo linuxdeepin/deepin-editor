@@ -1390,8 +1390,10 @@ QString Window::saveAsFileToDisk()
         Settings::instance()->setSavePath(PathSettingWgt::LastOptBox, QFileInfo(newFilePath).absolutePath());
         Settings::instance()->setSavePath(PathSettingWgt::CurFileBox, QFileInfo(newFilePath).absolutePath());
 
-        wrapper->updatePath(wrapper->filePath(), newFilePath);
-
+        // 保存原始文件路径，用于后续更新
+        QString oldFilePath = wrapper->filePath();
+        
+        // 先保存文件，不更新路径
         bool needChangeEncode = (encode != wrapper->getTextEncode().toUtf8());
         bool saveSucc = false;
         if (QFileInfo(wrapper->filePath()).absoluteFilePath()
@@ -1411,6 +1413,10 @@ QString Window::saveAsFileToDisk()
             return QString();
         } else {
             qDebug() << "Save successful, updating file path to:" << newFilePath;
+            
+            // 保存成功后再更新路径，防止文件还未保存完成就触发文件是否存在的检测
+            wrapper->updatePath(oldFilePath, newFilePath);
+            
             // 更新文件编码
             wrapper->bottomBar()->setEncodeName(encode);
 
@@ -1444,7 +1450,7 @@ QString Window::saveAsFileToDisk()
             }
         }
 
-        updateSaveAsFileName(wrapper->filePath(), newFilePath);
+        updateSaveAsFileName(oldFilePath, newFilePath);
         qDebug() << "Exit saveAsFileToDisk, return new file path";
         return newFilePath;
     }
