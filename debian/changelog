@@ -1,3 +1,9 @@
+deepin-editor (6.5.32) unstable; urgency=medium
+
+  * fix: Update file path handling in saveAsFileToDisk function
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Fri, 18 Jul 2025 13:16:52 +0800
+
 deepin-editor (6.5.31) unstable; urgency=medium
 
   * fix: Remove return statement in recoverFile function
