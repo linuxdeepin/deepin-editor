@@ -300,7 +300,7 @@ void TextEdit::initRightClickedMenu()
     m_toggleCommentAction = new QAction(tr("Add Comment"), this);
     m_voiceReadingAction = new QAction(tr("Text to Speech"), this);
     m_dictationAction = new QAction(tr("Speech to Text"), this);
-    m_translateAction = new QAction(tr("Translate"), this);
+    // m_translateAction = new QAction(tr("Translate"), this);
     m_columnEditAction = new QAction(tr("Column Mode"), this);
     m_addBookMarkAction = new QAction(tr("Add bookmark"), this);
     m_cancelBookMarkAction = new QAction(tr("Remove Bookmark"), this);
@@ -375,7 +375,7 @@ void TextEdit::initRightClickedMenu()
     connect(m_cancelComment, &QAction::triggered, this, &TextEdit::slotCancelComment);
     connect(m_voiceReadingAction, &QAction::triggered, this, &TextEdit::slotVoiceReadingAction);
     connect(m_dictationAction, &QAction::triggered, this, &TextEdit::slotdictationAction);
-    connect(m_translateAction, &QAction::triggered, this, &TextEdit::slot_translate);
+    // connect(m_translateAction, &QAction::triggered, this, &TextEdit::slot_translate);
     connect(m_columnEditAction, &QAction::triggered, this, &TextEdit::slotColumnEditAction);
     connect(m_addBookMarkAction, &QAction::triggered, this, &TextEdit::addOrDeleteBookMark);
     connect(m_cancelBookMarkAction, &QAction::triggered, this, &TextEdit::addOrDeleteBookMark);
@@ -585,7 +585,7 @@ void TextEdit::popRightMenu(QPoint pos)
     } else {
         m_dictationAction->setEnabled(true);
     }
-
+    /*
     m_translateAction->setEnabled(false);
     bool translateState = false;
     QDBusMessage translateReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
@@ -604,6 +604,7 @@ void TextEdit::popRightMenu(QPoint pos)
     if ((textCursor().hasSelection() && translateState) || m_hasColumnSelection) {
         m_translateAction->setEnabled(translateState);
     }
+    */
     if (!this->document()->isEmpty()) {
 
         m_colorMarkMenu->clear();
@@ -3800,10 +3801,10 @@ void TextEdit::restoreMarkStatus()
 }
 
 
-void TextEdit::slot_translate()
-{
-    QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.TextToTranslate");
-}
+// void TextEdit::slot_translate()
+// {
+//     QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.TextToTranslate");
+// }
 
 QString TextEdit::getWordAtCursor()
 {
@@ -5663,9 +5664,9 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
         QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
         QMouseEvent *event2 = static_cast<QMouseEvent *>(event);
         DPlainTextEdit::mousePressEvent(event2);
-        if (touchPoints.count() == 3) {
-            slot_translate();
-        }
+        // if (touchPoints.count() == 3) {
+        //     slot_translate();
+        // }
         break;
     }
     default: break;
@@ -6387,9 +6388,9 @@ void TextEdit::onSelectionArea()
 
 void TextEdit::fingerZoom(QString name, QString direction, int fingers)
 {
-    if (name == "tap" && fingers == 3) {
-        slot_translate();
-    }
+    // if (name == "tap" && fingers == 3) {
+    //     slot_translate();
+    // }
     // 当前窗口被激活,且有焦点
     if (hasFocus()) {
         if (name == "pinch" && fingers == 2) {
