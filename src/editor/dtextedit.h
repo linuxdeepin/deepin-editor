@@ -484,7 +484,7 @@ public slots:
     void handleScrollFinish();
     void setSyntaxDefinition(KSyntaxHighlighting::Definition def);
 
-    void slot_translate();
+    // void slot_translate();
 
     //书签右键菜单功能
     void setHighLineCurrentLine(bool ok);
@@ -677,7 +677,7 @@ private:
     QAction *m_toggleCommentAction;
     QAction *m_voiceReadingAction;
     QAction *m_dictationAction;
-    QAction *m_translateAction;
+    // QAction *m_translateAction;
     QAction *m_columnEditAction;
 
     QAction *m_addBookMarkAction;

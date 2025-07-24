@@ -4835,25 +4835,25 @@ TEST_F(test_textedit, handleScrollFinish)
 }
 
 // void slot_translate();
-TEST_F(test_textedit, slot_translate)
-{
-    QList<QTextEdit::ExtraSelection> listSelection;
-    QTextEdit::ExtraSelection selectio;
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    startManager->slot_translate();
+// TEST_F(test_textedit, slot_translate)
+// {
+//     QList<QTextEdit::ExtraSelection> listSelection;
+//     QTextEdit::ExtraSelection selectio;
+//     QScrollBar *p = new QScrollBar();
+//     TextEdit *startManager = new TextEdit();
+//     startManager->setVerticalScrollBar(p);
+//     EditWrapper *ee = new EditWrapper();
+//     Settings *s = new Settings();
+//     startManager->setSettings(s);
+//     startManager->setWrapper(ee);
+//     startManager->slot_translate();
 
-    EXPECT_NE(ee->m_pTextEdit , nullptr);
-    s->deleteLater();
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
+//     EXPECT_NE(ee->m_pTextEdit , nullptr);
+//     s->deleteLater();
+//     ee->deleteLater();
+//     startManager->deleteLater();
+//     p->deleteLater();
+// }
 
 #if 0 //gerrit上段错误，暂且屏蔽
 // void upcaseWord();
