@@ -70,35 +70,28 @@ bool TextFileSaver::save()
         qWarning() << "Cannot save - file path is empty";
         return false;
     }
-    qDebug() << "m_filePath is not empty";
+
+    // TODO: 暂时禁用QSaveFile，后续再考虑, 因为QSaveFile在某些情况下会修改文件所属权限
     // WARNING: For long filenames (>245 chars), QSaveFile may create temporary files
     // with names that exceed system limits. TextFileSaver handles this internally.
-    QFileInfo fileInfo(m_filePath);
-    bool disableSaveProtect = fileInfo.fileName().length() > MAX_FILENAME_LENGTH;
-    qDebug() << "disableSaveProtect" << disableSaveProtect;
-    if (!disableSaveProtect) {
-        qDebug() << "Using QSaveFile for atomic write";
-        QSaveFile saveFile(m_filePath);
-        saveFile.setDirectWriteFallback(true);
-        qDebug() << "saveToFile";
-        if (!saveToFile(saveFile)) {
-            qDebug() << "saveToFile failed";
-            return false;
-        }
-        qDebug() << "Committing QSaveFile changes";
-        qDebug() << "saveFile.commit";
-        return saveFile.commit();
-    } else {
-        qWarning() << "File name too long, disable QSaveFile. path:" << m_filePath;
-        QFile file(m_filePath);
-        if (!saveToFile(file)) {
-            qDebug() << "saveToFile failed";
-            return false;
-        }
-        qDebug() << "saveToFile success";
-        return true;
+    // QFileInfo fileInfo(m_filePath);
+    // bool disableSaveProtect = fileInfo.fileName().length() > MAX_FILENAME_LENGTH;
+
+    // if (!disableSaveProtect) {
+    //     QSaveFile saveFile(m_filePath);
+    //     saveFile.setDirectWriteFallback(true);
+    //     if (!saveToFile(saveFile)) {
+    //         return false;
+    //     }
+    //     return saveFile.commit();
+    // } else {
+    //     qWarning() << "File name too long, disable QSaveFile. path:" << m_filePath;
+    QFile file(m_filePath);
+    if (!saveToFile(file)) {
+        return false;
     }
-    qDebug() << "save failed";
+    return true;
+    // }
 }
 
 /**
