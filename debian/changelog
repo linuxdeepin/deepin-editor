@@ -1,3 +1,10 @@
+deepin-editor (6.5.33) unstable; urgency=medium
+
+  * Update translations for Lao locale.
+  * update version to 6.5.33. 
+
+ -- Tian ShiLin <tianshilin@uniontech.com>  Thu, 07 Aug 2025 15:18:53 +0800
+
 deepin-editor (6.5.32) unstable; urgency=medium
 
   * fix: Update file path handling in saveAsFileToDisk function
