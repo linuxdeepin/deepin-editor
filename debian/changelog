@@ -1,3 +1,9 @@
+deepin-editor (6.0.19) unstable; urgency=medium
+
+  * fix: Temporarily disable QSaveFile in TextFileSaver
+
+ -- liujinchang <liujinchang@uniontech.com>  Thu, 07 Aug 2025 17:18:11 +0800
+
 deepin-editor (6.0.18) unstable; urgency=medium
 
   * fix: Change default search to be case insensitive(Bug: 262733)
@@ -27,7 +33,7 @@ deepin-editor (6.0.16) unstable; urgency=medium
 
 deepin-editor (6.0.15) unstable; urgency=medium
 
-  * fix: Tab height error under low version dtk. 
+  * fix: Tab height error under low version dtk.
 
  -- renbin <renbin@uniontech.com>  Wed, 25 Oct 2023 13:28:05 +0800
 
@@ -90,7 +96,7 @@ deepin-editor (6.0.7) unstable; urgency=medium
   * fix: 修复设置界面中字体和字号选项未对齐(Influence: 设置界面)
   * fix: 修复高分屏1.5缩放下图标模糊(Bug: 171749)(Influence: 高分屏缩放显示)
   * fix: 修复VBScript文件未高亮问题(Bug: 154719)(Influence: vbs格式高亮 授权文件)
-  * chore: remove redundant code for linglong.  
+  * chore: remove redundant code for linglong.
 
  -- Deepin Packages Builder <packages@deepin.org>  Thu, 20 Apr 2023 15:02:15 +0800
 
@@ -107,7 +113,7 @@ deepin-editor (6.0.6) unstable; urgency=medium
 
 deepin-editor (6.0.5) unstable; urgency=medium
 
-  * Fix application palette change bug. 
+  * Fix application palette change bug.
 
  -- Deepin Packages Builder <packages@deepin.com> Thu, 16 Mar 2023 09:42:02 +0800
 
@@ -135,7 +141,7 @@ deepin-editor (6.0.1) unstable; urgency=medium
 
   * Improve convert text encoding.
   * Adaptor V23 DDE DBus interface.
-  * Fix debian rules error. 
+  * Fix debian rules error.
 
  -- renbin <renbin@uniontech.com>  Tue, 14 Feb 2023 15:04:06 +0800
 
