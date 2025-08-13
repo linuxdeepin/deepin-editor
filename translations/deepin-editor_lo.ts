@@ -6,22 +6,22 @@
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="30"/>
         <source>Row</source>
-        <translation>แถว</translation>
+        <translation>ສດຖານ</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="31"/>
         <source>Column</source>
-        <translation>คอลัมน์</translation>
+        <translation>ຄອລັມນ໌</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="32"/>
         <source>Characters %1</source>
-        <translation>ตัวอักษร %1</translation>
+        <translation>ຕັວອັກສະ %1</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="44"/>
         <source>Loading:</source>
-        <translation>ກំລុះ:</translation>
+        <translation>ກຳລາການດຳເນີນການ:</translation>
     </message>
 </context>
 <context>
@@ -29,7 +29,7 @@
     <message>
         <location filename="../src/widgets/ddropdownmenu.cpp" line="316"/>
         <source>None</source>
-        <translation>ຍ៉ាងណាត្រូវ</translation>
+        <translation>ບໍ່ມີ</translation>
     </message>
 </context>
 <context>
@@ -37,62 +37,62 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="273"/>
         <source>Save</source>
-        <translation>រក្សា</translation>
+        <translation>ບັນທຶກ</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="467"/>
         <source>Do you want to save this file?</source>
-        <translation>តើអ្នកចងោទ์រក្សាគេហ្សុទ្ធនេះទេ?</translation>
+        <translation>ທ່ານຕ້ອງການບັນທຶກຂໍ້ມູນນີ້ຫຍັງ?</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="339"/>
         <source>Cancel</source>
-        <translation>ប៉ុន្តែ</translation>
+        <translation>ຢກເລີກ</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="336"/>
         <source>Encoding changed. Do you want to save the file now?</source>
-        <translation>ប្រអ័រគ្យកម្មប្រែបធែបបានប្រែបប្រូតេអ៊ូកាល់. តើអ្នកចងោទ์រក្សាគេហ្សុទ្ធនេះឥឡូកទេ?</translation>
+        <translation>ດັດຊະນີຂໍ້ມູນນີ້ຫຍັງ? ທ່ານຕ້ອງການບັນທຶກຂໍ້ມູນນີ້ຫຍັງ?</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="471"/>
         <source>Discard</source>
-        <translation>ប៉ុន្តែ</translation>
+        <translation>ລົບ</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="258"/>
         <source>You do not have permission to save %1</source>
-        <translation>អ្នកមិនមានសិទ្ធិទៅរក្សា %1</translation>
+        <translation>ທ່ານບໍ່ມີສິທາງການບັນທຶກ %1</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="745"/>
         <source>File removed on the disk. Save it now?</source>
-        <translation>គេហ្សុទ្ថានត្រូវបានបែបាក់ពីរបូរិន. តើអ្នកចងោទ์រក្សាត្រលប់មកទេ?</translation>
+        <translation>ໄຟລ໌ຖືກລຶບອອກຈາກດິສ. ທ່ານຕ້ອງການບັນທຶກມັນດຽວນີ້ບໍ?</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="750"/>
         <source>File has changed on disk. Reload?</source>
-        <translation>គេហ្សុទ្ថានត្រូវបានផ្លាស់ប្តូរលើរបូរិន. តើអ្នកចងោទ์ផ្លាស់មកម្តងទេ?</translation>
+        <translation>ໄຟລ໌ຖືກດັດຊະນີອອກຈາກດິສ. ທ່ານຕ້ອງການບັນທຶກມັນດຽວນີ້ບໍ?</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="784"/>
         <source>INSERT</source>
-        <translation>បញ្ចូល</translation>
+        <translation>ປ້ອນ</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="787"/>
         <source>OVERWRITE</source>
-        <translation>ជំនួស</translation>
+        <translation>ປ່ອຍປ່ອຍ</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="790"/>
         <source>R/O</source>
-        <translation>อ่าน/เขียน</translation>
+        <translation>ອ່ານ/ປ້ອນ</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="1417"/>
         <source>The file cannot be read, which may be too large or has been damaged!</source>
-        <translation>ཡིག파일 읽기에 실패했습니다. 파일이 너무 커서거나 손상되었을 수 있습니다!</translation>
+        <translation>ບໍ່ສາມາດອ່ານໄຟລ໌ໄດ້, ອາດຈະໃຫຍ່ເກີນໄປ ຫຼື ໄດ້ຮັບຄວາມເສຍຫາຍ!</translation>
     </message>
 </context>
 <context>
@@ -118,7 +118,7 @@
     <message>
         <location filename="../src/controls/jumplinebar.cpp" line="45"/>
         <source>Go to Line: </source>
-        <translation>страница: </translation>
+        <translation>ໄປຫາບຣາວຊາດ: </translation>
     </message>
 </context>
 <context>
@@ -126,12 +126,12 @@
     <message>
         <location filename="../src/editorapplication.cpp" line="12"/>
         <source>Text Editor is a powerful tool for viewing and editing text files.</source>
-        <translation>Текстовый редактор — это мощный инструмент для просмотра и редактирования текстовых файлов.</translation>
+        <translation>ຕົວເລີ່ມຕົ້ນສຳລັບດູແລະປ່ອຍປ່ອຍຂໍ້ມູນນີ້ຫຍັງ.</translation>
     </message>
     <message>
         <location filename="../src/editorapplication.cpp" line="24"/>
         <source>Text Editor</source>
-        <translation>Текстовый редактор</translation>
+        <translation>ຕົວເລີ່ມຕົ້ນສຳລັບດູແລະປ່ອຍປ່ອຍຂໍ້ມູນນີ້ຫຍັງ.</translation>
     </message>
 </context>
 <context>
@@ -157,12 +157,12 @@
     <message>
         <location filename="../src/editorapplication.cpp" line="21"/>
         <source>Text Editor</source>
-        <translation>Текстовый редактор</translation>
+        <translation>ຕົວເລີ່ມຕົ້ນສຳລັບດູແລະປ່ອຍປ່ອຍຂໍ້ມູນນີ້ຫຍັງ.</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="275"/>
         <source>Encoding</source>
-        <translation>Кодировка</translation>
+        <translation>ລະຫັດສະແດງ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="9"/>
@@ -177,77 +177,77 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="11"/>
         <source>Font</source>
-        <translation>ເອນශිලිපි</translation>
+        <translation>ເອນະລາການ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="12"/>
         <source>Font Size</source>
-        <translation>ເອນශිලිපි ඥියුරු</translation>
+        <translation>ເອນະລາການ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="13"/>
         <source>Shortcuts</source>
-        <translation>හෂස්තුරු</translation>
+        <translation>ລະຫັດການດຳເນີນການ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="14"/>
         <source>Keymap</source>
-        <translation>គශුරු ඥියුරු</translation>
+        <translation>ລະຫັດການດຳເນີນການ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="16"/>
         <source>Window</source>
-        <translation>ප្រាប់បង្អូច</translation>
+        <translation>ຫນ້າທີ່</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="17"/>
         <source>New tab</source>
-        <translation>ថ្មថ្មិតថ្មថ្មិតថ្មថ្មិត</translation>
+        <translation>ຫນ້າທີ່ໃຫມ່</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="18"/>
         <source>New window</source>
-        <translation>ព្រាប់បង្អូចថ្មថ្មិត</translation>
+        <translation>ຫນ້າທີ່ໃຫມ່</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="19"/>
         <source>Save</source>
-        <translation>រក្សា</translation>
+        <translation>ບັນທຶກ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="20"/>
         <source>Save as</source>
-        <translation>រក្សាជាមួយ</translation>
+        <translation>ບັນທຶກດັດຊະນີ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="21"/>
         <source>Next tab</source>
-        <translation>ថ្មថ្មិតបន្ទាប់</translation>
+        <translation>ຫນ້າທີ່ໃຫມ່</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="22"/>
         <source>Previous tab</source>
-        <translation>ថ្មថ្មិតមុន</translation>
+        <translation>ຫນ້າທີ່ໃຫມ່</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="23"/>
         <source>Close tab</source>
-        <translation>បង្អូចថ្ម</translation>
+        <translation>ລົບຫນ້າທີ່</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="24"/>
         <source>Close other tabs</source>
-        <translation>ปิดแท็บอื่น</translation>
+        <translation>ລົບຫນ້າທີ່ອື່ນ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="25"/>
         <source>Restore tab</source>
-        <translation>ស្លាប់ថ្ម</translation>
+        <translation>ກຳລາການກູ້ຄືນ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="26"/>
         <source>Open file</source>
-        <translation>ប្រទោះឯកសារ</translation>
+        <translation>ດູແລະປ່ອຍປ່ອຍຂໍ້ມູນນີ້ຫຍັງ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="27"/>
@@ -257,77 +257,77 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="28"/>
         <source>Decrement font size</source>
-        <translation>ຫែលទំហំអក្សរ</translation>
+        <translation>ລົບទំហំអក្សរ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="29"/>
         <source>Reset font size</source>
-        <translation>ត្រូវឡើងទំហំអក្សរ</translation>
+        <translation>ກຳລາການກູ້ຄືນ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="30"/>
         <source>Help</source>
-        <translation>ជួយ</translation>
+        <translation>ຊ່ວຍເຫຼືອ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="31"/>
         <source>Toggle fullscreen</source>
-        <translation>สลับโหมดภาพเต็มหน้าจอ</translation>
+        <translation>ສລັບຫນ້າຈອມາດຠຽມ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="32"/>
         <source>Find</source>
-        <translation>រកหา</translation>
+        <translation>ຄົ້ນຫາ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="33"/>
         <source>Find Next</source>
-        <translation>រកหาต่อไป</translation>
+        <translation>ຄົ້ນຫາຕ່ອໄປ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="34"/>
         <source>Find Previous</source>
-        <translation>រកหาត្រឹមមុន</translation>
+        <translation>ຄົ້ນຫາກ້ອນກ່ອນ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="35"/>
         <source>Replace</source>
-        <translation>ប្រៀបប្រដូប</translation>
+        <translation>ປ່ອຍປ່ອຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="36"/>
         <source>Go to line</source>
-        <translation>ទៅការៗលំដាប់</translation>
+        <translation>ໄປຫາບຣາວຊາດ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="37"/>
         <source>Save cursor position</source>
-        <translation>រក្សាកតែប្រវត្តិសន្ធិត</translation>
+        <translation>ບັນທຶກຕຳຫມັດຕຳຫມັດ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="38"/>
         <source>Reset cursor position</source>
-        <translation>ត្រូវឡើងទិតកតែប្រវត្តិសន្ធិត</translation>
+        <translation>ກຳລາການກູ້ຄືນ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="39"/>
         <source>Exit</source>
-        <translation>ចាក់ចេញ</translation>
+        <translation>ອອກ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="40"/>
         <source>Display shortcuts</source>
-        <translation>បង្ហាញតួអក្សរខ្លឹមសារ</translation>
+        <translation>ດູແລະປ່ອຍປ່ອຍຂໍ້ມູນນີ້ຫຍັງ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="41"/>
         <source>Print</source>
-        <translation>រុញ</translation>
+        <translation>ພິມ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="42"/>
         <source>Editor</source>
-        <translation>ແບບແບ່ງແຍ່ງ</translation>
+        <translation>ຕົວເລີ່ມຕົ້ນສຳລັບດູແລະປ່ອຍປ່ອຍຂໍ້ມູນນີ້ຫຍັງ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="43"/>
@@ -347,7 +347,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="46"/>
         <source>Backward character</source>
-        <translation>ຂໍාරා ངා ངා</translation>
+        <translation>ຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="47"/>
@@ -357,7 +357,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="48"/>
         <source>Backward word</source>
-        <translation>ຂໍාරා ངා ངා</translation>
+        <translation>ຂໍ້າງ່າຍຈຳນຳ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="49"/>
@@ -377,12 +377,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="52"/>
         <source>New line above</source>
-        <translation>ຖືກເພີ່ມຂໍාරා ངා ངා</translation>
+        <translation>ຖືກເພີ່ມຂໍ້າງ່າຍຈຳນຳ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="53"/>
         <source>New line below</source>
-        <translation>ຖືກເພີ່ມຂໍ້າງ່າຍໃຫຍ່ ང່າຍ</translation>
+        <translation>ຖືກເພີ່ມຂໍ້າງ່າຍໃຫຍ່ ຈຳນຳ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="54"/>
@@ -392,7 +392,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="55"/>
         <source>Delete to end of line</source>
-        <translation>ຖືກລືມຂໍාරා ངා ངා</translation>
+        <translation>ຖືກລືມຂໍ້າງ່າຍໃຫຍ່ ຈຳນຳ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="56"/>
@@ -402,337 +402,337 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="57"/>
         <source>Swap line up</source>
-        <translation>ປະ교ອນ 줄 위 para</translation>
+        <translation>ປະກາດຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="58"/>
         <source>Swap line down</source>
-        <translation>ປະ교ອນ 줄 아래 para</translation>
+        <translation>ປະກາດຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="59"/>
         <source>Scroll up one line</source>
-        <translation>ນაໂក 위쪽으로 한 줄</translation>
+        <translation>ນາມາຂ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="60"/>
         <source>Scroll down one line</source>
-        <translation>ນაໂក 아래쪽으로 한 줄</translation>
+        <translation>ນາມາຂ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="61"/>
         <source>Page up</source>
-        <translation>페이지 위쪽으로</translation>
+        <translation>ນາມາຂ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="62"/>
         <source>Page down</source>
-        <translation>페이지 아래쪽으로</translation>
+        <translation>ນາມາຂ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="63"/>
         <source>Move to end of line</source>
-        <translation>ย้ายไปท้ายบรรทุก</translation>
+        <translation>ຢ້າງຂ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="64"/>
         <source>Move to start of line</source>
-        <translation>ย้ายไปต้นบรรทุก</translation>
+        <translation>ຢ້າງຂ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="65"/>
         <source>Move to end of text</source>
-        <translation>ย้ายไปท้ายข้อความ</translation>
+        <translation>ຢ້າງຂ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="66"/>
         <source>Move to start of text</source>
-        <translation>ย้ายไปต้นข้อความ</translation>
+        <translation>ຢ້າງຂ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="67"/>
         <source>Move to line indentation</source>
-        <translation>ย้ายไปที่-indentation บรรทุก</translation>
+        <translation>ຢ້າງຂ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="68"/>
         <source>Upper case</source>
-        <translation>대문자</translation>
+        <translation>ຕັວຫມາຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="69"/>
         <source>Lower case</source>
-        <translation>소문자</translation>
+        <translation>ຕັວພະຍາງາຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="70"/>
         <source>Capitalize</source>
-        <translation>제목 형식</translation>
+        <translation>ຕັວຫມາຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="71"/>
         <source>Delete backward word</source>
-        <translation>뒤쪽 단어 삭제</translation>
+        <translation>ລືມຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="72"/>
         <source>Delete forward word</source>
-        <translation>លិចលោតតាមคำ</translation>
+        <translation>ລືມຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="73"/>
         <source>Forward over a pair</source>
-        <translation>លិចលោតលើតេរ៉ែបប៉ុន្តេ</translation>
+        <translation>ລືມຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="74"/>
         <source>Backward over a pair</source>
-        <translation>លើស្និទ្ធិតាមតេរ៉ែប</translation>
+        <translation>ລືມຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="75"/>
         <source>Select all</source>
-        <translation>ជ្រុងត្រូវគ្រប់គ្រាន់</translation>
+        <translation>ລືມຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="76"/>
         <source>Copy</source>
-        <translation>ចិត្បាព័ត្ងេ</translation>
+        <translation>ລືມຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="77"/>
         <source>Cut</source>
-        <translation>កាត់តែលោត</translation>
+        <translation>ລືມຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="78"/>
         <source>Paste</source>
-        <translation>ត្រូវចំណត់</translation>
+        <translation>ລືມຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="79"/>
         <source>Transpose character</source>
-        <translation>ផ្លាស់ប្តូរតួអក្សរ៍</translation>
+        <translation>ລືມຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="80"/>
         <source>Mark</source>
-        <translation>ស្តាប់ត្រួត</translation>
+        <translation>ລືມຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="81"/>
         <source>Unmark</source>
-        <translation>ប៉ុន្តេស្តាប់ត្រួត</translation>
+        <translation>ລືມຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="82"/>
         <source>Copy line</source>
-        <translation>ចិត្បាព័ត្ងេខ្លឹម</translation>
+        <translation>ລືມຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="83"/>
         <source>Cut line</source>
-        <translation>កាត់តែលោតខ្លឹម</translation>
+        <translation>ລືມຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="84"/>
         <source>Merge lines</source>
-        <translation>រួមបញ្ចូលខ្លឹម</translation>
+        <translation>ລືມຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="85"/>
         <source>Read-Only mode</source>
-        <translation>មードត្រឹមតែអាន</translation>
+        <translation>ລືມຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="86"/>
         <source>Add comment</source>
-        <translation>បញ្ចូលការសម្គាល់</translation>
+        <translation>ລືມຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="87"/>
         <source>Remove comment</source>
-        <translation>លិང་លេខ</translation>
+        <translation>ລືມຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="88"/>
         <source>Undo</source>
-        <translation>ย้อนกลับ</translation>
+        <translation>ລືມຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="89"/>
         <source>Redo</source>
-        <translation>ทำซ้ำ</translation>
+        <translation>ລືມຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="90"/>
         <source>Add/Remove bookmark</source>
-        <translation>เพิ่ม/ลบ ป๊อป</translation>
+        <translation>ລືມຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="91"/>
         <source>Move to previous bookmark</source>
-        <translation>ย้ายไปป๊อปก่อนหน้า</translation>
+        <translation>ລືມຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="92"/>
         <source>Move to next bookmark</source>
-        <translation>ย้ายไปป๊อปถัดไป</translation>
+        <translation>ລືມຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="93"/>
         <source>Advanced</source>
-        <translation>លិចលាកៅ</translation>
+        <translation>ລືມຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="95"/>
         <source>Window size</source>
-        <translation>ウィンドウのサイズ</translation>
+        <translation>ລືມຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="96"/>
         <source>Tab width</source>
-        <translation>ទទឹងតារាកេស</translation>
+        <translation>ລືມຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="97"/>
         <source>Paste by pressing a middle mouse button</source>
-        <translation>ចុចលំនាំនេះពូឡេដោយចុចមធ្ល័យ</translation>
+        <translation>ລືມຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="99"/>
         <source>Startup</source>
-        <translation>ចាប់ផ្តុត</translation>
+        <translation>ລືມຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="100"/>
         <source>Reopen last closed tabs</source>
-        <translation>បុរាណបង្កកបានចង្អៀតត្រូវបានបុរាណ</translation>
+        <translation>ເປີດແຖບທີ່ປິດລ່າສຸດຄືນໃໝ່</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="102"/>
         <source>Open/Save Settings</source>
-        <translation>បុរាណរាជូត/រក្សាការកំណត់</translation>
+        <translation>ເປີດ/ບັນທຶກການຕັດສູງສຸດ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="104"/>
         <source>Word wrap</source>
-        <translation>បញ្ចាំងពាក់ពែងតាមតែមុខបន្ត</translation>
+        <translation>ລືມຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="105"/>
         <source>Code folding flag</source>
-        <translation>សញ្ញាស្រាវជ្រាលកូដ</translation>
+        <translation>ລືມຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="106"/>
         <source>Show line numbers</source>
-        <translation>បង្កើតលំដាប់លេខ</translation>
+        <translation>ສະແດງເລກແຖວ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="107"/>
         <source>Show bookmarks icon</source>
-        <translation>បង្កើតរូបីមក្រស័ម</translation>
+        <translation>ສະແດງສັນຍາລາດຂໍ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="108"/>
         <source>Show whitespaces and tabs</source>
-        <translation>បង្កើតរលកទទេងនិងតៅបញ្ចប់</translation>
+        <translation>ສະແດງຊ່ອງຫວ່າງ ແລະ ແທັບ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="109"/>
         <source>Highlight current line</source>
-        <translation>ធ្វើប្រភេទជ្រើនសម្រាប់បន្តុចបច្ចុប្បន្ន</translation>
+        <translation>ສະແດງສີຂ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="110"/>
         <source>Color mark</source>
-        <translation>ស្តាបែនជំរុញពណ៌</translation>
+        <translation>ສະແດງສີຂ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="113"/>
         <source>Unicode</source>
-        <translation>យូនិក</translation>
+        <translation>ນາມາຂ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="114"/>
         <source>WesternEuropean</source>
-        <translation>អាល៊ូគ្នាអឺរ៉ុបខាងលិច</translation>
+        <translation>ນາມາຂ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="115"/>
         <source>CentralEuropean</source>
-        <translation>អាល៊ូគ្នាអឺរ៉ុបខាងកណ្តាល</translation>
+        <translation>ນາມາຂ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="116"/>
         <source>Baltic</source>
-        <translation>បាតុកស្លាប់</translation>
+        <translation>ນາມາຂ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="117"/>
         <source>Cyrillic</source>
-        <translation>ស្លាប់សៃលេង</translation>
+        <translation>ນາມາຂ້າງ່າຍຂ້າງ່າຍ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="118"/>
         <source>Arabic</source>
-        <translation>អាល៊ូគ្នាមេធិក</translation>
+        <translation>ອາຣາບິກ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="123"/>
         <source>Celtic</source>
-        <translation>គ្រប់គ្រងភាគច្រើនជៃអាល៊ូគ្នាអឺរ៉ុបខាងកើត</translation>
+        <translation>ອາຣາບິກ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="124"/>
         <source>SouthEasternEuropean</source>
-        <translation>អាល៊ូគ្នាអឺរ៉ុបខាងត្បូងកើត</translation>
+        <translation>ອາຣາບິກ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="119"/>
         <source>Greek</source>
-        <translation>យូនានេស៊ី</translation>
+        <translation>ອາຣາບິກ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="120"/>
         <source>Hebrew</source>
-        <translation>អាល៊ូគ្នាខេស៊ី</translation>
+        <translation>ອາຣາບິກ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="125"/>
         <source>ChineseSimplified</source>
-        <translation>លេខចិនបង្កើតចំនួនសាមស្បាប់</translation>
+        <translation>ອາຣາບິກ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="126"/>
         <source>ChineseTraditional</source>
-        <translation>លេខចិនបង្កើតចំនួនប្រព័ន្ធតូច</translation>
+        <translation>ອາຣາບິກ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="127"/>
         <source>Japanese</source>
-        <translation>ជប់ជួស</translation>
+        <translation>ອາຣາບິກ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="128"/>
         <source>Korean</source>
-        <translation>រូបសង្បូរ</translation>
+        <translation>ອາຣາບິກ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="122"/>
         <source>Thai</source>
-        <translation>ទូរគ្រង</translation>
+        <translation>ອາຣາບິກ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="121"/>
         <source>Turkish</source>
-        <translation>ដែលកំណត់</translation>
+        <translation>ອາຣາບິກ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="129"/>
         <source>Vietnamese</source>
-        <translation>ខ្មែរខ្សាំង</translation>
+        <translation>ອາຣາບິກ</translation>
     </message>
     <message>
         <location filename="../src/startmanager.cpp" line="875"/>
@@ -752,12 +752,12 @@
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="245"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation>ບໍ່ພີ້ນີ້ມືຖືສີ່ງສຽງໄດ້. ກະລູນາກວດສອບ ກຳນຳໃຫ້ອັກກະນານອັດຕະສະນະ</translation>
+        <translation>ບໍ່ພົບອຸປະກອນຮັບສຽງ. ກະລຸນາກວດສອບ ແລະ ລອງໃໝ່ອີກຄັ້ງ</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="247"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation>ບໍ່ພີ້ນີ້ອຸປະກອນອອກສຽງໄດ້. ກະລູນາກວດສອບ ກຳນຳໃຫ້ອັກກະນານອັດຕະສະນະ</translation>
+        <translation>ບໍ່ພົບອຸປະກອນອອກສຽງ. ກະລຸນາກວດສອບ ແລະ ລອງໃໝ່ອີກຄັ້ງ</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="65"/>
@@ -839,7 +839,7 @@
         <location filename="../third/libiconv-1.16/src/iconv.c" line="103"/>
         <source></source>
         <comment>The first line of the short usage message.</comment>
-        <translation type="unfinished">ຂໍ້ຄວາມການນຳໃຊ້ແບບສັ້ນແຖວທຳອິດ</translation>
+        <translation>ຂໍ້ຄວາມການນຳໃຊ້ແບບສັ້ນແຖວທຳອິດ</translation>
     </message>
 </context>
 <context>
@@ -862,27 +862,27 @@
     <message>
         <location filename="../src/common/settings.cpp" line="145"/>
         <source>Maximum</source>
-        <translation>ລើងវិញ</translation>
+        <translation>ລະຄອມສູງສຸດ</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="145"/>
         <source>Fullscreen</source>
-        <translation>fullscreen</translation>
+        <translation>ລະຄອມສູງສຸດ</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="438"/>
         <source>This shortcut conflicts with system shortcut %1</source>
-        <translation>Shortcut %1 ཅង្ប៉າងກັບ system shortcut</translation>
+        <translation>ປຸ່ມລັດນີ້ຂັດແຍ່ງກັບປຸ່ມລັດລະບົບ %1</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="440"/>
         <source>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</source>
-        <translation>ນີ້ແມ່ນ shortcut བ່າຍຂ້ອງຂ້ີ້ມົນ %1, དີ້ກັບຄັນ, ཊັ້ນເປັນ Replace རັບໄດ້ ཁົວໄດ້ དັ້ນ</translation>
+        <translation>ປຸ່ມລັດນີ້ຂັດແຍ່ງກັບ %1, ກົດທີ່ ແທນທີ່ ເພື່ອເຮັດໃຫ້ປຸ່ມລັດນີ້ມີຜົນທັນທີ</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="606"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
-        <translation>Shortcut %1 བໍ່ຖືກນັກໃຊ້ໄດ້, དັ້ງນີ້ དີ້ ཐັງ ད້າວ དັ້ງນີ້ ང དີ້ དັ້ງນີ້ ང དີ້ དັ້ງນີ້ ང དີ້ དັ້ງນີ້ ང དີ້ དັ້ງນີ້ ང དີ້ དັ້ງນີ້ ང དີ້ དັ້ງນີ້ ང དີ້ དັ້ງນີ້ ང དີ້ དັ້ງນີ້ ང དີ້ དັ້ງນີ້ ང དີ້ དັ້ງນີ້ ང དີ້ དັ້ງນີ້ ང དີ་</translation>
+        <translation>ປຸ່ມລັດ %1 ບໍ່ຖືກຕ້ອງ, ກະລຸນາຕັ້ງຄ່າປຸ່ມລັດອື່ນ.</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="653"/>
@@ -905,7 +905,7 @@
     <message>
         <location filename="../src/startmanager.cpp" line="368"/>
         <source>Untitled %1</source>
-        <translation>Untitled %1</translation>
+        <translation>ບໍ່ມີຊື່ %1</translation>
     </message>
 </context>
 <context>
@@ -946,12 +946,12 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="283"/>
         <source>Undo</source>
-        <translation>ຍល់លើ</translation>
+        <translation>ຍົກກລັບ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="284"/>
         <source>Redo</source>
-        <translation>ຍល់ລືງ</translation>
+        <translation>ຍົກກລັບອີກຄັ້ງ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="285"/>
@@ -996,12 +996,12 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="293"/>
         <source>Turn on Read-Only mode</source>
-        <translation>ເປັນ mode ངບັ້ງ</translation>
+        <translation>ເປັນ mode ອອກສຽງ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="294"/>
         <source>Turn off Read-Only mode</source>
-        <translation>ປັ້ນ off mode ངບັ້ງ</translation>
+        <translation>ປັ້ນ off mode ອອກສຽງ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="295"/>
@@ -1016,182 +1016,182 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="297"/>
         <source>Display in file manager</source>
-        <translation>ສະແບບໃຫ້ເບ຺້ມັນໃນໂຄງການເອົ້າຊື່ມັນ</translation>
+        <translation>ສະແດງໃນໂຕຈັດການໄຟລ໌</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="298"/>
         <source>Add Comment</source>
-        <translation>เพิ่มความคิดเห็น</translation>
+        <translation>ເພີ່ມຄວາມຄິດເຫັນ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="299"/>
         <source>Text to Speech</source>
-        <translation>ข้อความเป็นเสียง</translation>
+        <translation>ຂໍ້ຄວາມເປັນສຽງ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="300"/>
         <source>Stop reading</source>
-        <translation>หยุดอ่าน</translation>
+        <translation>ຫຢຸດອ່ານ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="301"/>
         <source>Speech to Text</source>
-        <translation>เสียงเป็นข้อความ</translation>
+        <translation>ສຽງເປັນຂໍ້ຄວາມ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="302"/>
         <source>Translate</source>
-        <translation>แปลภาษา</translation>
+        <translation>ຖອດຕັດ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="303"/>
         <source>Column Mode</source>
-        <translation>โหมดคอลัมน์</translation>
+        <translation>ສະແດງໃນໂຕຈັດການໄຟລ໌</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="304"/>
         <source>Add bookmark</source>
-        <translation>เพิ่มการติดป้าย</translation>
+        <translation>ເພີ່ມການຕິດປ້າຍ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="305"/>
         <source>Remove Bookmark</source>
-        <translation>ลบการติดป้าย</translation>
+        <translation>ລບການຕິດປ້າຍ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="306"/>
         <source>Previous bookmark</source>
-        <translation>ป้ายก่อนหน้า</translation>
+        <translation>ປ້າຍກ່ອນຫນ້າ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="307"/>
         <source>Next bookmark</source>
-        <translation>ป้ายถัดไป</translation>
+        <translation>ປ້າຍຖັດໄປ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="308"/>
         <source>Remove All Bookmarks</source>
-        <translation>ลบ semua การติดป้าย</translation>
+        <translation>ລບທັງຫມືການຕິດປ້າຍ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="309"/>
         <source>Fold All</source>
-        <translation>ยับยองทั้งหมด</translation>
+        <translation>ຢັບຢອງທັງຫມື</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="310"/>
         <source>Fold Current Level</source>
-        <translation>ยับยองระดับปัจจุบัน</translation>
+        <translation>ຢັບຢອງຣະດັບປັຈຈຸບັນ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="311"/>
         <source>Unfold All</source>
-        <translation>ขยายทั้งหมด</translation>
+        <translation>ຂຢັບຢອງທັງຫມື</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="312"/>
         <source>Unfold Current Level</source>
-        <translation>ขยายระดับปัจจุบัน</translation>
+        <translation>ຂຢັບຢອງຣະດັບປັຈຈຸບັນ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="317"/>
         <source>Color Mark</source>
-        <translation>ກំណត់ពណ៌</translation>
+        <translation>ກຳນົດສີ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="321"/>
         <source>Clear All Marks</source>
-        <translation>លើчистить всі ознаки</translation>
+        <translation>ລບທັງຫມືການຕິດປ້າຍ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="322"/>
         <source>Clear Last Mark</source>
-        <translation>លើчистить ознаку</translation>
+        <translation>ລບການຕິດປ້າຍສ້າງລົບ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="331"/>
         <source>Mark</source>
-        <translation>ກំណត់</translation>
+        <translation>ກຳນົດ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="343"/>
         <source>Mark All</source>
-        <translation>ກំណត់ всі</translation>
+        <translation>ກຳນົດທັງຫມື</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="351"/>
         <source>Remove Comment</source>
-        <translation>លើдалити комментарий</translation>
+        <translation>ລບຄວາມຄິດເຫັນ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2748"/>
         <source>Copy failed: not enough memory</source>
-        <translation>&apos;Сбой копирования: недостаточно памяти&apos;</translation>
+        <translation>ການຄັດລອກບໍ່ສຳເລັດ: ຫມື່ມີຄວາມຈຸ່ມວາງ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2843"/>
         <source>Press ALT and click lines to edit in column mode</source>
-        <translation>Нажмите ALT и щелкните линии для редактирования в столбцовом режиме</translation>
+        <translation>ກົດ ALT ແລະຄລິກບຣາບາບສຳລັບການແກ້ໄຂໃນສະແດງໃນໂຕຈັດການໄຟລ໌</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="394"/>
         <source>Change Case</source>
-        <translation>Изменить регистр</translation>
+        <translation>ປ່ຽນກໍລະນີ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="395"/>
         <source>Upper Case</source>
-        <translation>Заглавные буквы</translation>
+        <translation>ຕັດຕັວຫມືພິມ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="396"/>
         <source>Lower Case</source>
-        <translation>Строчные буквы</translation>
+        <translation>ຕັດຕັວຫມືພິມ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="397"/>
         <source>Capitalize</source>
-        <translation>Заглавная первая буква</translation>
+        <translation>ຕັດຕັວຫມືພິມ</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="78"/>
         <source>None</source>
-        <translation>Ничего</translation>
+        <translation>ບໍ່ມີ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="1189"/>
         <source>Selected line(s) copied</source>
-        <translation>Скопировано выбранных строк</translation>
+        <translation>ແຖວທີ່ເລືອກໄວ້ຖືກສຳເນົາແລ້ວ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="1195"/>
         <source>Current line copied</source>
-        <translation>Скопирована текущая строка</translation>
+        <translation>ສຳເນົາບຣາບາບປັຈຈຸບັນແລ້ວ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="1220"/>
         <source>Selected line(s) clipped</source>
-        <translation>ລូຫ្គំបានត្រូវបានកាត់ចេញ</translation>
+        <translation>ລອຫາດທີ່ເລືອກໄວ້ຖືກລອຫາດແລ້ວ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="1231"/>
         <source>Current line clipped</source>
-        <translation>គ្រប់គ្រាន់បានត្រូវបានកាត់ចេញ</translation>
+        <translation>ລອຫາດທີ່ເລືອກໄວ້ຖືກລອຫາດແລ້ວ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2762"/>
         <source>Paste failed: not enough memory</source>
-        <translation>ត្រូវបានត្រូវបានចំនុចចែកទុកដោយសម្រែកមិនគ្រប់គ្រាន់</translation>
+        <translation>ການລອຫາດບໍ່ສຳເລັດ: ຫມື່ມີຄວາມຈຸ່ມວາງ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3859"/>
         <source>Read-Only mode is off</source>
-        <translation>មードអាចបកិច្ចគួរើមគឺបុរាណ</translation>
+        <translation>ໂໝດອ່ານຢ່າງດຽວຖືກປິດ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3869"/>
         <source>Read-Only mode is on</source>
-        <translation>មードអាចបកិច្ចគួរើមគឺថ្មី</translation>
+        <translation>ໂໝດອ່ານຢ່າງດຽວຖືກເປີດ</translation>
     </message>
 </context>
 <context>
@@ -1199,7 +1199,7 @@
     <message>
         <location filename="../src/controls/warningnotices.cpp" line="24"/>
         <source>Reload</source>
-        <translation>ផ្ទុកឡើងវិញ</translation>
+        <translation>ຕັດສຽງມາກກວ່ານີ້</translation>
     </message>
 </context>
 <context>
@@ -1207,92 +1207,92 @@
     <message>
         <location filename="../src/controls/warningnotices.cpp" line="25"/>
         <source>Save as</source>
-        <translation>រក្សាទុកជាមួយ</translation>
+        <translation>ບັນທຶກຕົວຢ່າງ</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="492"/>
         <source>New window</source>
-        <translation>ប្រព័ន្ធដេកថ្មី</translation>
+        <translation>ຫນ້າທີ່ໃຫມ່</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="493"/>
         <source>New tab</source>
-        <translation>ប្រភេទបង្គែលថ្មី</translation>
+        <translation>ຫນ້າທີ່ໃຫມ່</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="494"/>
         <source>Open file</source>
-        <translation>បុរាណលើកទូទៅលើខូចតុក</translation>
+        <translation>ເປີດໄຟລ໌</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="495"/>
         <source>Save</source>
-        <translation>រក្សាទុក</translation>
+        <translation>ບັນທຶກ</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="497"/>
         <source>Print</source>
-        <translation>រុញ</translation>
+        <translation>ພິມ</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="498"/>
         <source>Switch theme</source>
-        <translation>ប្រែបប្រូបសម្រែក</translation>
+        <translation>ປ່ຽນສີສັນ</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="499"/>
         <source>Settings</source>
-        <translation>ការកំណត់</translation>
+        <translation>ຕັດສຽງມາກກວ່ານີ້</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="618"/>
         <source>Read-Only</source>
-        <translation>អាចបកិច្ចគួរើម</translation>
+        <translation>ອ່ານຢ່າງດຽວ</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="634"/>
         <source>You do not have permission to open %1</source>
-        <translation>ບ្រាកដណាស់: អ្នកគ្រប់គ្រោះមិនមានសិទ្ធិទៅបុក %1</translation>
+        <translation>ທ່ານບໍ່ມີສິດທິໃນການເປີດ %1</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="674"/>
         <source>Invalid file: %1</source>
-        <translation>ឯកសារមិនទាន់បញ្ហា: %1</translation>
+        <translation>ໄຟລ໌ບໍ່ຖືກຕ້ອງ: %1</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="806"/>
         <source>Do you want to save this file?</source>
-        <translation>តុល្យាក់: អ្នកចងក្រងឯកសារនេះទៅដោយត្រឹមត្រូវទេ?</translation>
+        <translation>ທ່ານຕ້ອງການບັນທຶກໄຟລ໌ນີ້ຫມືບໍ່?</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1143"/>
         <source>You do not have permission to save %1</source>
-        <translation>ບ្រាកដណាស់: អ្នកគ្រប់គ្រោះមិនមានសិទ្ធិទៅរក្សាបន្ថែង %1</translation>
+        <translation>ທ່ານບໍ່ມີສິດທິໃນການບັນທຶກ %1</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1163"/>
         <source>Saved successfully</source>
-        <translation>រក្សាបានជាសេចក្តីជ័យជាទិច</translation>
+        <translation>ບັນທຶກສຳເລັດແລ້ວ</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1199"/>
         <source>Save File</source>
-        <translation>រក្សាបន្ថែងឯកសារ</translation>
+        <translation>ບັນທຶກໄຟລ໌</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1304"/>
         <source>Encoding</source>
-        <translation>ការប៉ាន់ស្មាន</translation>
+        <translation>ການດັດສຽງ</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1557"/>
         <source>Read-Only mode is on</source>
-        <translation>លក្ខខណ្ឌអានប្រហែលគ្រប់គ្រោះតែប៉ុណ្ណ័ត្នត្រូវបានបុរាណ</translation>
+        <translation>ໂໝດອ່ານຢ່າງດຽວຖືກເປີດ</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2035"/>
         <source>Current location remembered</source>
-        <translation>ទីតាំងបច្ចុប្បន្នត្រូវបានចុចចុចច្រើនលើក</translation>
+        <translation>ຕຳລາທີ່ເລືອກໄວ້ຖືກຈັດສຳເລັດແລ້ວ</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2103"/>
@@ -1307,22 +1307,22 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="2135"/>
         <source>Editor</source>
-        <translation>កម្រុមកំណត់</translation>
+        <translation>ຕັດສຽງມາກກວ່ານີ້</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2717"/>
         <source>Untitled %1</source>
-        <translation>មិនមានឈ្មោះ %1</translation>
+        <translation>ບໍ່ມີຊື່ %1</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="3081"/>
         <source>Cancel</source>
-        <translation>បញ្ចាញចេញ</translation>
+        <translation>ຢກເລີກ</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="3082"/>
         <source>Discard</source>
-        <translation>ប៉ាប៉ាល់</translation>
+        <translation>ລົບລາຍການ</translation>
     </message>
 </context>
 </TS>
