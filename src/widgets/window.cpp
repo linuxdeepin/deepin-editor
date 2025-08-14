@@ -282,6 +282,8 @@ Window::Window(DMainWindow *parent)
         handleUpdateSearchKeyword(m_findBar, file, keyword);
     });
     connect(m_findBar, &FindBar::sigFindbarClose, this, &Window::slotFindbarClose, Qt::QueuedConnection);
+    
+    connect(m_findBar, &FindBar::sigSwitchToReplaceBar, this, &Window::slotSwitchToReplaceBar, Qt::QueuedConnection);
 
     // Init replace bar.
     //connect(m_replaceBar, &ReplaceBar::removeSearchKeyword, this, &Window::handleRemoveSearchKeyword, Qt::QueuedConnection);
@@ -3284,6 +3286,51 @@ void Window::slotReplacebarClose()
     currentWrapper()->textEditor()->setFocus();
     currentWrapper()->textEditor()->tellFindBarClose();
     qDebug() << "slotReplacebarClose end";
+}
+
+void Window::slotSwitchToReplaceBar()
+{
+    qDebug() << "slotSwitchToReplaceBar - switching from find bar to replace bar";
+    
+    // 获取当前查找栏中的搜索文本和位置信息
+    QString searchText;
+    QString currentFile;
+    int row = 0, column = 0, scrollOffset = 0;
+    
+    if (m_findBar && m_findBar->isVisible()) {
+        searchText = m_findBar->getCurrentSearchText();
+        qDebug() << "Got search text from find bar:" << searchText;
+        
+        // 获取当前编辑器的位置信息
+        EditWrapper *wrapper = currentWrapper();
+        if (wrapper && wrapper->textEditor()) {
+            currentFile = wrapper->textEditor()->getFilePath();
+            QTextCursor cursor = wrapper->textEditor()->textCursor();
+            row = cursor.blockNumber();
+            column = cursor.columnNumber();
+            scrollOffset = wrapper->textEditor()->verticalScrollBar()->value();
+            qDebug() << "Current position - file:" << currentFile << "row:" << row << "column:" << column;
+        }
+        
+        // 隐藏查找栏
+        m_findBar->hide();
+        qDebug() << "Find bar hidden";
+    }
+    
+    // 弹出替换栏并传递搜索文本
+    if (currentWrapper() == nullptr) {
+        qDebug() << "No current wrapper, cannot popup replace bar";
+        return;
+    }
+
+    if (currentWrapper()->textEditor()->document()->isEmpty()) {
+        qDebug() << "Current document is empty, cannot popup replace bar";
+        return;
+    }
+    
+    // 激活替换栏并传递搜索文本
+    m_replaceBar->activeInput(searchText, currentFile, row, column, scrollOffset);
+    qDebug() << "Replace bar activated with search text:" << searchText;
 }
 
 void Window::handleReplaceAll(const QString &replaceText, const QString &withText)

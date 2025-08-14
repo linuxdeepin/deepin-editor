@@ -35,6 +35,7 @@ FindBar::FindBar(QWidget *parent)
     m_editLine = new LineBar();
     m_findPrevButton = new QPushButton(tr("Previous"));
     m_findNextButton = new QPushButton(tr("Next"));
+    m_replaceButton = new QPushButton(tr("Replace"));
     m_closeButton = new DIconButton(DStyle::SP_CloseButton);
     m_closeButton->setIconSize(QSize(30, 30));
     m_closeButton->setFixedSize(30, 30);
@@ -53,6 +54,7 @@ FindBar::FindBar(QWidget *parent)
 
     m_layout->addWidget(m_findPrevButton);
     m_layout->addWidget(m_findNextButton);
+    m_layout->addWidget(m_replaceButton);
     m_layout->addWidget(m_closeButton);
     this->setLayout(m_layout);
 
@@ -71,6 +73,7 @@ FindBar::FindBar(QWidget *parent)
     connect(m_findNextButton, &QPushButton::clicked,  this, &FindBar::handleFindNext, Qt::QueuedConnection);
     connect(m_findPrevButton, &QPushButton::clicked, this, &FindBar::handleFindPrev, Qt::QueuedConnection);
     //connect(m_findPrevButton, &QPushButton::clicked, this, &FindBar::findPrev, Qt::QueuedConnection);
+    connect(m_replaceButton, &QPushButton::clicked, this, &FindBar::handleSwitchToReplace, Qt::QueuedConnection);
 
     connect(m_closeButton, &DIconButton::clicked, this, &FindBar::findCancel, Qt::QueuedConnection);
 
@@ -259,4 +262,19 @@ void FindBar::findPreClicked()
         emit findPrev(m_editLine->lineEdit()->text());
     }
     qDebug() << "findPreClicked end";
+}
+
+void FindBar::handleSwitchToReplace()
+{
+    qDebug() << "handleSwitchToReplace - switching from find bar to replace bar";
+    emit sigSwitchToReplaceBar();
+    qDebug() << "Switch to replace bar signal emitted";
+}
+
+QString FindBar::getCurrentSearchText() const
+{
+    if (m_editLine && m_editLine->lineEdit()) {
+        return m_editLine->lineEdit()->text();
+    }
+    return QString();
 }

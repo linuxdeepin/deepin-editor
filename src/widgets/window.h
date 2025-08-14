@@ -170,6 +170,7 @@ public Q_SLOTS:
 
     void slotFindbarClose();
     void slotReplacebarClose();
+    void slotSwitchToReplaceBar();
 
     void handleReplaceAll(const QString &replaceText, const QString &withText);
     void handleReplaceNext(const QString &file, const QString &replaceText, const QString &withText);

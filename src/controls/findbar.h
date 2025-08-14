@@ -39,6 +39,9 @@ public:
     void receiveText(QString t);
     void setSearched(bool _);
     void findPreClicked();
+    
+    // 添加获取当前搜索文本的方法
+    QString getCurrentSearchText() const;
 
 Q_SIGNALS:
     void pressEsc();
@@ -51,11 +54,14 @@ Q_SIGNALS:
     //add guoshao
     void sigFindbarClose();
 
+    void sigSwitchToReplaceBar();
+
 public Q_SLOTS:
     void findCancel();
     void handleContentChanged();
     void handleFindNext();
     void handleFindPrev();
+    void handleSwitchToReplace();
 
 protected:
     void hideEvent(QHideEvent *event) override;
@@ -68,6 +74,7 @@ private:
 private:
     QPushButton *m_findNextButton;
     QPushButton *m_findPrevButton;
+    QPushButton *m_replaceButton; 
     DIconButton *m_closeButton;
     LineBar *m_editLine;
     QHBoxLayout *m_layout;
