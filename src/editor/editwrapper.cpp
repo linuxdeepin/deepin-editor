@@ -703,29 +703,42 @@ void EditWrapper::hideWarningNotices()
 //除草稿文件 检查文件是否被删除,是否被修复
 void EditWrapper::checkForReload()
 {
+    qDebug() << __func__;
     if (Utils::isDraftFile(m_pTextEdit->getTruePath())) {
         return;
     }
 
     QFileInfo fi(m_pTextEdit->getTruePath());
 
-    QTimer::singleShot(50, [ = ]() {
-        if (fi.lastModified() == m_tModifiedDateTime || m_pWaringNotices->isVisible()) {
+    // 使用 QPointer 检查对象是否还存在
+    QPointer<EditWrapper> self(this);
+    QTimer::singleShot(50, [self, fi]() {
+        if (self.isNull()) {
+            qWarning() << "EditWrapper obj is destroyed";
+            return; // 对象已被销毁
+        }
+
+        if (fi.lastModified() == self->m_tModifiedDateTime || self->m_pWaringNotices->isVisible()) {
             return;
         }
 
-        QFileInfo finfo(m_pTextEdit->getTruePath());
+        if (self->m_pTextEdit == nullptr) {
+            qWarning() << "TextEdit obj is destroyed";
+            return; // 对象已被销毁
+        }
+
+        QFileInfo finfo(self->m_pTextEdit->getTruePath());
 
         if (!finfo.exists()) {
-            m_pWaringNotices->setMessage(tr("File removed on the disk. Save it now?"));
-            m_pWaringNotices->setSaveAsBtn();
-            m_pWaringNotices->show();
-            DMessageManager::instance()->sendMessage(m_pTextEdit, m_pWaringNotices);
-        } else if (!m_tModifiedDateTime.toString().isEmpty() && finfo.lastModified().toString() != m_tModifiedDateTime.toString()) {
-            m_pWaringNotices->setMessage(tr("File has changed on disk. Reload?"));
-            m_pWaringNotices->setReloadBtn();
-            m_pWaringNotices->show();
-            DMessageManager::instance()->sendMessage(m_pTextEdit, m_pWaringNotices);
+            self->m_pWaringNotices->setMessage(tr("File removed on the disk. Save it now?"));
+            self->m_pWaringNotices->setSaveAsBtn();
+            self->m_pWaringNotices->show();
+            DMessageManager::instance()->sendMessage(self->m_pTextEdit, self->m_pWaringNotices);
+        } else if (!self->m_tModifiedDateTime.toString().isEmpty() && finfo.lastModified().toString() != self->m_tModifiedDateTime.toString()) {
+            self->m_pWaringNotices->setMessage(tr("File has changed on disk. Reload?"));
+            self->m_pWaringNotices->setReloadBtn();
+            self->m_pWaringNotices->show();
+            DMessageManager::instance()->sendMessage(self->m_pTextEdit, self->m_pWaringNotices);
         }
     });
 }
