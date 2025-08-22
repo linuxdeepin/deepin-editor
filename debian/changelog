@@ -1,3 +1,9 @@
+deepin-editor (6.5.35) unstable; urgency=medium
+
+  * fix: Change elide mode in Tabbar to ElideRight
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Fri, 22 Aug 2025 09:57:38 +0800
+
 deepin-editor (6.5.34) unstable; urgency=medium
 
   * feat: Update translations for Lao locale (#376)
