@@ -64,7 +64,7 @@ Tabbar::Tabbar(QWidget *parent)
     setVisibleAddButton(true);
     setDragable(true);
     // setStartDragDistance(40);
-    setElideMode(Qt::ElideMiddle);
+    setElideMode(Qt::ElideRight);
     setTabPalette(palette().buttonText().color().name(), palette().highlightedText().color().name());
     setFocusPolicy(Qt::NoFocus);
     qDebug() << "Tabbar initialized with movable and closable tabs";
