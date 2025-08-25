@@ -2237,6 +2237,13 @@ void TextEdit::clearFindMatchSelections()
     m_findMatchSelections.clear();
 }
 
+void TextEdit::setFindHighlightSelection(const QTextCursor &cursor)
+{
+    qDebug() << "Setting find highlight selection";
+    m_findHighlightSelection.cursor = cursor;
+    qDebug() << "Find highlight selection set to position:" << cursor.position() << "with selection:" << cursor.hasSelection();
+}
+
 void TextEdit::updateCursorKeywordSelection(QString keyword, bool findNext)
 {
     qDebug() << "Updating cursor keyword selection";

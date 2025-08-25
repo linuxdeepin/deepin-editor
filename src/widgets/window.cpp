@@ -3310,6 +3310,19 @@ void Window::slotSwitchToReplaceBar()
             column = cursor.columnNumber();
             scrollOffset = wrapper->textEditor()->verticalScrollBar()->value();
             qDebug() << "Current position - file:" << currentFile << "row:" << row << "column:" << column;
+            if (!searchText.isEmpty()) {
+                // 检查当前光标是否有选中文本，且选中文本与搜索文本匹配
+                QTextCursor currentCursor = wrapper->textEditor()->textCursor();
+                if (currentCursor.hasSelection() && currentCursor.selectedText() == searchText) {
+                    qDebug() << "Current selection matches search text, using it as search pointer";
+                    // 直接将当前选中文本设置为搜索指针
+                    wrapper->textEditor()->setFindHighlightSelection(currentCursor);
+                } else {
+                    qDebug() << "No matching selection, setting search pointer from current position";
+                    // 没有匹配的选中文本，从当前位置搜索
+                    wrapper->textEditor()->updateCursorKeywordSelection(searchText, true);
+                }
+            }
         }
         
         // 隐藏查找栏
