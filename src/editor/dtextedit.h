@@ -204,6 +204,7 @@ public:
     bool highlightKeyword(const QString &keyword, int position, Qt::CaseSensitivity caseFlag = Qt::CaseInsensitive);
     bool highlightKeywordInView(const QString &keyword, Qt::CaseSensitivity caseFlag = Qt::CaseInsensitive);
     void clearFindMatchSelections();
+    void setFindHighlightSelection(const QTextCursor &cursor);
     void updateCursorKeywordSelection(QString keyword, bool findNext);
     void updateHighlightLineSelection();
     bool updateKeywordSelections(QString keyword, QTextCharFormat charFormat, QList<QTextEdit::ExtraSelection> &listSelection);
