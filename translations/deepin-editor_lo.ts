@@ -1023,12 +1023,12 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="315"/>
         <source>Turn on Read-Only mode</source>
-        <translation>ເປັນ mode ອອກສຽງ</translation>
+        <translation>ເປີດໂໝດອ່ານຢ່າງດຽວ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="316"/>
         <source>Turn off Read-Only mode</source>
-        <translation>ປັ້ນ off mode ອອກສຽງ</translation>
+        <translation>ປິດໂໝດອ່ານຢ່າງດຽວ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="317"/>
