@@ -1,3 +1,9 @@
+deepin-editor (6.5.36) unstable; urgency=medium
+
+  * Update version to 6.5.36.
+
+ -- Tian ShiLin <tianshilin@uniontech.com>  Wed, 27 Aug 2025 11:13:48 +0800
+
 deepin-editor (6.5.35) unstable; urgency=medium
 
   * fix: Change elide mode in Tabbar to ElideRight
