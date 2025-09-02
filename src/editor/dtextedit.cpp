@@ -17,6 +17,7 @@
 #include "undolist.h"
 #include "changemarkcommand.h"
 #include "endlineformatcommond.h"
+#include <QSet>
 
 #include <KSyntaxHighlighting/definition.h>
 #include <KSyntaxHighlighting/syntaxhighlighter.h>
@@ -6503,10 +6504,14 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
         }
 
         //从标记列表中移除标记
-        for (int j = 0; j < listRemoveItem.count(); j++) {
-            // 不应该-j
-            // m_wordMarkSelections.removeAt(listRemoveItem.value(j) - j);
-            m_wordMarkSelections.removeAt(listRemoveItem.value(j));
+        // 修复：使用removeIf避免索引管理问题
+        if (!listRemoveItem.isEmpty()) {
+            QSet<int> removeSet(listRemoveItem.begin(), listRemoveItem.end());
+            int index = 0;
+            int removedCount = m_wordMarkSelections.removeIf([&removeSet, &index](const auto&) {
+                return removeSet.contains(index++);
+            });
+            qDebug() << "updateMark: Removed" << removedCount << "marks, remaining:" << m_wordMarkSelections.size();
         }
     }
 
