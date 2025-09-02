@@ -2702,6 +2702,23 @@ void TextEdit::setSelectAll()
     m_bIsAltMod = false;
     m_isSelectAll = true;
     selectTextInView();
+
+    if (!document()->isEmpty()) {
+        if (auto clip = qApp->clipboard()) {
+            // limit the size of the text to avoid performance issue
+            static const int kMaxSelectCount = 200000;
+            int charCount = document()->characterCount();
+
+            if (charCount < kMaxSelectCount) {
+                clip->setText(toPlainText(), QClipboard::Selection);
+            } else {
+                auto selectCursor = textCursor();
+                selectCursor.setPosition(0);
+                selectCursor.setPosition(kMaxSelectCount, QTextCursor::KeepAnchor);
+                clip->setText(selectCursor.selectedText(), QClipboard::Selection);
+            }
+        }
+    }
 }
 
 void TextEdit::slotSigColorSelected(bool bSelected, QColor color)
