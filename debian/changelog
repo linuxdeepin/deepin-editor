@@ -1,3 +1,9 @@
+deepin-editor (6.5.37) unstable; urgency=medium
+
+  * fix: Optimize mark removal logic in TextEdit and enhance file path handling in Window
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Thu, 04 Sep 2025 17:02:39 +0800
+
 deepin-editor (6.5.36) unstable; urgency=medium
 
   * Update version to 6.5.36.
