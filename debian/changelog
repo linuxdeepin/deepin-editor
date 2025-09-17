@@ -1,3 +1,9 @@
+deepin-editor (6.5.38) unstable; urgency=medium
+
+  * chore: Update linglong base and runtime
+
+ -- wangrong <wangrong@uniontech.com>  Wed, 17 Sep 2025 11:25:22 +0800
+
 deepin-editor (6.5.37) unstable; urgency=medium
 
   * fix: Optimize mark removal logic in TextEdit and enhance file path handling in Window
