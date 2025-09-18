@@ -51,6 +51,11 @@ void TextFileSaver::setEncoding(const QByteArray &toEncode)
     m_toEncode = toEncode;
 }
 
+void TextFileSaver::setWindowsEndlineFormat(bool isWindowsFormat)
+{
+    isWindowsEndlineFormat = isWindowsFormat;
+}
+
 /**
  * @brief Saves the document to the preset file path
  * @return true if the file was saved successfully, false otherwise
@@ -125,15 +130,17 @@ bool TextFileSaver::saveToFile(QFileDevice &file)
             return false;
         }
 
-        auto characterCount = m_document->characterCount();
-        // Check memory for document content (QChar is 2 bytes)
-        qlonglong docMemoryNeeded = characterCount * 2;
-        if (!Utils::isMemorySufficientForOperation(Utils::OperationType::RawOperation, docMemoryNeeded, characterCount)) {
+        QString content = m_document->toPlainText();
+        if (isWindowsEndlineFormat) {
+            content.replace("\n", "\r\n");
+        }
+        // Check memory for actual content (QChar is 2 bytes)
+        qlonglong contentMemoryNeeded = content.length() * sizeof(QChar);
+        if (!Utils::isMemorySufficientForOperation(Utils::OperationType::RawOperation, contentMemoryNeeded, content.length())) {
             m_errorString = QObject::tr("Insufficient memory to load document content");
             return false;
         }
 
-        const QString content = m_document->toPlainText();
         const ushort *data = content.utf16();
         const int length = content.length();
 
@@ -147,7 +154,7 @@ bool TextFileSaver::saveToFile(QFileDevice &file)
             // Check memory for encoding conversion (input + estimated output size)
             qlonglong conversionMemoryNeeded = input.size() * 2;  // Estimate 2x for worst case
             if (!Utils::isMemorySufficientForOperation(
-                    Utils::OperationType::RawOperation, conversionMemoryNeeded, characterCount)) {
+                    Utils::OperationType::RawOperation, conversionMemoryNeeded, content.length())) {
                 m_errorString = QObject::tr("Insufficient memory for encoding conversion");
                 return false;
             }

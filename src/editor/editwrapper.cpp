@@ -223,6 +223,8 @@ bool EditWrapper::saveAsFile(const QString &newFilePath, const QByteArray &encod
 {
     // Use TextFileSaver for safe file saving
     TextFileSaver saver(m_pTextEdit->document());
+    if (BottomBar::EndlineFormat::Windows == m_pBottomBar->getEndlineFormat())
+        saver.setWindowsEndlineFormat(true);
     saver.setFilePath(newFilePath);
     saver.setEncoding(encodeName);
     
@@ -516,6 +518,8 @@ bool EditWrapper::saveFile(QByteArray encode)
 
     // 使用TextFileSaver进行文件保存
     TextFileSaver saver(m_pTextEdit->document());
+    if (BottomBar::EndlineFormat::Windows == m_pBottomBar->getEndlineFormat())
+        saver.setWindowsEndlineFormat(true);
     saver.setFilePath(qstrFilePath);
     saver.setEncoding(m_sCurEncode.toUtf8());
     
@@ -579,6 +583,8 @@ bool EditWrapper::saveTemFile(QString qstrDir)
 {
     // Use TextFileSaver for safe file saving
     TextFileSaver saver(m_pTextEdit->document());
+    if (BottomBar::EndlineFormat::Windows == m_pBottomBar->getEndlineFormat())
+        saver.setWindowsEndlineFormat(true);
     saver.setFilePath(qstrDir);
     saver.setEncoding(m_sCurEncode.toUtf8());
     

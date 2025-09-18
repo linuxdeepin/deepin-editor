@@ -19,6 +19,7 @@ public:
 
     void setFilePath(const QString &filePath);
     void setEncoding(const QByteArray &toEncode);
+    void setWindowsEndlineFormat(bool isWindowsFormat);
     bool save();
     bool saveAs(const QString &newFilePath);
     QString errorString() const;
@@ -34,6 +35,7 @@ private:
     QByteArray m_toEncode;   // default is UTF-8
     QString m_errorString;
     static const int MAX_FILENAME_LENGTH = 245;
+    bool isWindowsEndlineFormat = false;
 };
 
 #endif // TEXT_FILE_SAVER_H
