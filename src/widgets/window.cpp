@@ -224,10 +224,9 @@ Window::Window(DMainWindow *parent)
 
     // Init.
     setAcceptDrops(true);
+    // 此处已经从默认的配置文件中获取了设置的主题，无需再根据系统主题类型加载对应的主题，
+    // 防止DGUIapplication的未初始化完成从而使用跟随系统覆盖上一次的设置
     loadTheme(m_themePath);
-
-    DGuiApplicationHelper *guiAppHelp = DGuiApplicationHelper::instance();
-    slotLoadContentTheme(guiAppHelp->themeType());
 
     //关闭　替换　查找 跳行bar
     connect(this, &Window::pressEsc, m_replaceBar, &ReplaceBar::pressEsc, Qt::QueuedConnection);
