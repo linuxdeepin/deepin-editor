@@ -587,17 +587,17 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="92"/>
         <source>Add/Remove bookmark</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till/ta bort bokmärke</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="93"/>
         <source>Move to previous bookmark</source>
-        <translation type="unfinished"/>
+        <translation>Flytta till föregående bokmärke</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="94"/>
         <source>Move to next bookmark</source>
-        <translation type="unfinished"/>
+        <translation>Flytta till nästa bokmärke</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="95"/>
@@ -622,7 +622,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="101"/>
         <source>Startup</source>
-        <translation type="unfinished"/>
+        <translation>Uppstart</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="102"/>
@@ -647,12 +647,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="108"/>
         <source>Show line numbers</source>
-        <translation type="unfinished"/>
+        <translation>Visa radnummer</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="109"/>
         <source>Show bookmarks icon</source>
-        <translation type="unfinished"/>
+        <translation>Visa bokmärkesikon</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="110"/>
