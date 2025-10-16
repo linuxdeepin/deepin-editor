@@ -19,7 +19,7 @@
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="44"/>
         <source>Loading:</source>
-        <translation>Yükleniyor:</translation>
+        <translation>Yükleme:</translation>
     </message>
 </context>
 <context>
@@ -98,7 +98,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="1618"/>
         <source>The file cannot be read, which may be too large or has been damaged!</source>
-        <translation>Dosya okunamıyor, çok büyük veya hasar görmüş olabilir!</translation>
+        <translation>Dosya okunamıyor, büyük olabilir veya hasarlı olabilir!</translation>
     </message>
 </context>
 <context>
@@ -155,12 +155,12 @@
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="85"/>
         <source>Same path as the current file</source>
-        <translation>Geçerli dosya ile aynı yol</translation>
+        <translation>Mevcut dosyanın aynı yolunu kullan</translation>
     </message>
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="86"/>
         <source>Customize the default path</source>
-        <translation>Varsayılan yolu özelleştirin</translation>
+        <translation>Varsayılan yolu özelleştir</translation>
     </message>
 </context>
 <context>
@@ -617,7 +617,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="99"/>
         <source>Paste by pressing a middle mouse button</source>
-        <translation>Farenin orta tuşuna basarak yapıştırın</translation>
+        <translation>Orta fare düğmesine basarak yapıştırın</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="101"/>
@@ -627,12 +627,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="102"/>
         <source>Reopen last closed tabs</source>
-        <translation>Son kapatılan sekmeleri yeniden açın</translation>
+        <translation>Son kapalı sekme(ler)i tekrar aç</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="104"/>
         <source>Open/Save Settings</source>
-        <translation>Açma/Kaydetme Ayarları</translation>
+        <translation>Aç/Kaydet Ayarları</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="106"/>
@@ -768,57 +768,57 @@
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="243"/>
         <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
-        <translation>Lütfen kullanmadan önce App Store&apos;dan &apos;UOS AI&apos; yükleyin</translation>
+        <translation>Kullanmadan önce &apos;UOS AI&apos; uygulamasını Uygulama Mağazasından yükleyin</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="245"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation>Ses giriş aygıtı algılanmadı. Lütfen kontrol edin ve tekrar deneyin</translation>
+        <translation>Ses girdi cihazı tespit edilemedi. Lütfen kontrol edip tekrar deneyin</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="247"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation>Ses çıkış aygıtı algılanmadı. Lütfen kontrol edin ve tekrar deneyin</translation>
+        <translation>Ses çıktı cihazı tespit edilemedi. Lütfen kontrol edip tekrar deneyin</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="69"/>
         <source>File path is empty</source>
-        <translation type="unfinished"/>
+        <translation>Dosya yolu boş</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="155"/>
         <source>Insufficient memory to load document content</source>
-        <translation type="unfinished"/>
+        <translation>Belge içeriğini yüklemek için yeterli bellek yok</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="177"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation type="unfinished"/>
+        <translation>Kodlama dönüştürmesi için yeterli bellek yok</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="183"/>
         <source>Encoding conversion failed</source>
-        <translation type="unfinished"/>
+        <translation>Kodlama dönüştürmesi başarısız oldu</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="189"/>
         <source>Converted content is empty</source>
-        <translation type="unfinished"/>
+        <translation>Dönüştürülen içerik boş</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="207"/>
         <source>Memory allocation failed</source>
-        <translation type="unfinished"/>
+        <translation>Bellek ayırma başarısız oldu</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="211"/>
         <source>Error occurred: %1</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Hata oluştu: %1&apos;</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="215"/>
         <source>Unknown error occurred</source>
-        <translation type="unfinished"/>
+        <translation>Bilinmeyen bir hata oluştu</translation>
     </message>
 </context>
 <context>
