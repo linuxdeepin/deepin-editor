@@ -567,12 +567,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="88"/>
         <source>Add comment</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till kommentar</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="89"/>
         <source>Remove comment</source>
-        <translation type="unfinished"/>
+        <translation>Ta bort kommentar</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="90"/>
@@ -831,7 +831,7 @@
     <message>
         <location filename="../src/controls/replacebar.cpp" line="34"/>
         <source>Replace With</source>
-        <translation type="unfinished"/>
+        <translation>Ersätt med</translation>
     </message>
     <message>
         <location filename="../src/controls/replacebar.cpp" line="36"/>
@@ -928,7 +928,7 @@
     <message>
         <location filename="../src/startmanager.cpp" line="411"/>
         <source>Untitled %1</source>
-        <translation type="unfinished"/>
+        <translation>Namnlös %1</translation>
     </message>
 </context>
 <context>
@@ -946,17 +946,17 @@
     <message>
         <location filename="../src/controls/tabbar.cpp" line="643"/>
         <source>More options</source>
-        <translation type="unfinished"/>
+        <translation>Fler alternativ</translation>
     </message>
     <message>
         <location filename="../src/controls/tabbar.cpp" line="644"/>
         <source>Close tabs to the left</source>
-        <translation type="unfinished"/>
+        <translation>Stäng flikar till vänster</translation>
     </message>
     <message>
         <location filename="../src/controls/tabbar.cpp" line="645"/>
         <source>Close tabs to the right</source>
-        <translation type="unfinished"/>
+        <translation>Stäng flikar till höger</translation>
     </message>
     <message>
         <location filename="../src/controls/tabbar.cpp" line="646"/>
@@ -1052,17 +1052,17 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="321"/>
         <source>Text to Speech</source>
-        <translation type="unfinished"/>
+        <translation>Text till tal</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="322"/>
         <source>Stop reading</source>
-        <translation type="unfinished"/>
+        <translation>Stoppa läsning</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="323"/>
         <source>Speech to Text</source>
-        <translation type="unfinished"/>
+        <translation>Tal till text</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="324"/>
@@ -1354,7 +1354,7 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="3061"/>
         <source>Untitled %1</source>
-        <translation type="unfinished"/>
+        <translation>Namnlös %1</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="3543"/>
