@@ -1189,22 +1189,22 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="1363"/>
         <source>Selected line(s) copied</source>
-        <translation type="unfinished"/>
+        <translation>Markerade rad(er) kopierade</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="1370"/>
         <source>Current line copied</source>
-        <translation type="unfinished"/>
+        <translation>Aktuell rad kopierad</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="1400"/>
         <source>Selected line(s) clipped</source>
-        <translation type="unfinished"/>
+        <translation>Markerade rad(er) utklippta</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="1412"/>
         <source>Current line clipped</source>
-        <translation type="unfinished"/>
+        <translation>Aktuell rad utklippt</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3227"/>
