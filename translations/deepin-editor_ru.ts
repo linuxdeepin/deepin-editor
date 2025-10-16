@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ru">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ru">
 <context>
     <name>BottomBar</name>
     <message>
@@ -144,7 +142,7 @@
     <message>
         <location filename="../src/editorapplication.cpp" line="34"/>
         <source>Text Editor</source>
-        <translation>Текстовый Редактор</translation>
+        <translation>Текстовый редактор</translation>
     </message>
 </context>
 <context>
@@ -191,7 +189,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="12"/>
         <source>Font Style</source>
-        <translation>Стиль Шрифта</translation>
+        <translation>Стиль шрифта</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="13"/>
@@ -201,12 +199,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="14"/>
         <source>Font Size</source>
-        <translation>Размер Шрифта</translation>
+        <translation>Размер шрифта</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="15"/>
         <source>Shortcuts</source>
-        <translation>Горячие Клавиши</translation>
+        <translation>Горячие клавиши</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="16"/>
@@ -424,7 +422,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="59"/>
         <source>Swap line up</source>
-        <translation>заменить верхнюю строку</translation>
+        <translation>Заменить верхнюю строку</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="60"/>
@@ -454,7 +452,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="65"/>
         <source>Move to end of line</source>
-        <translation>Переход к конецу строки</translation>
+        <translation>Переход к концу строки</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="66"/>
@@ -564,7 +562,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="87"/>
         <source>Read-Only mode</source>
-        <translation>Режим Только Чтение</translation>
+        <translation>Режим Только чтение</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="88"/>
@@ -584,7 +582,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="91"/>
         <source>Redo</source>
-        <translation>Готово</translation>
+        <translation>Вернуть</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="92"/>
@@ -770,57 +768,57 @@
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="243"/>
         <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
-        <translation>Пожалуйста, установите &apos;UOS AI&apos; из магазина приложений перед использованием</translation>
+        <translation>Пожалуйста, установите &quot;UOS AI&quot; из App Store перед использованием</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="245"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation>Не найдено устройство ввода аудио. Пожалуйста, проверьте и попробуйте снова</translation>
+        <translation>Устройство аудиовхода не обнаружено. Пожалуйста, проверьте и повторите попытку</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="247"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation>Не найдено устройство вывода аудио. Пожалуйста, проверьте и попробуйте снова</translation>
+        <translation>Устройство вывода звука не обнаружено. Пожалуйста, проверьте и повторите попытку</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="69"/>
         <source>File path is empty</source>
-        <translation>Путь к файлу пуст</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="155"/>
         <source>Insufficient memory to load document content</source>
-        <translation>Недостаточно памяти для загрузки содержимого документа</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="177"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation>Недостаточно памяти для кодирования</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="183"/>
         <source>Encoding conversion failed</source>
-        <translation>Кодирование завершилось с ошибкой</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="189"/>
         <source>Converted content is empty</source>
-        <translation>Сконвертированное содержимое пусто</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="207"/>
         <source>Memory allocation failed</source>
-        <translation>Не удалось выделить память</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="211"/>
         <source>Error occurred: %1</source>
-        <translation>&apos;Ошибка: %1&apos;</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="215"/>
         <source>Unknown error occurred</source>
-        <translation>Произошла неизвестная ошибка</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -833,12 +831,12 @@
     <message>
         <location filename="../src/controls/replacebar.cpp" line="34"/>
         <source>Replace With</source>
-        <translation>Заменить На</translation>
+        <translation>Заменить на</translation>
     </message>
     <message>
         <location filename="../src/controls/replacebar.cpp" line="36"/>
         <source>Replace</source>
-        <translation>Заменить:</translation>
+        <translation>Заменить</translation>
     </message>
     <message>
         <location filename="../src/controls/replacebar.cpp" line="37"/>
@@ -848,21 +846,21 @@
     <message>
         <location filename="../src/controls/replacebar.cpp" line="38"/>
         <source>Replace Rest</source>
-        <translation>Заменить Остальное</translation>
+        <translation>Заменить остальное</translation>
     </message>
     <message>
         <location filename="../src/controls/replacebar.cpp" line="39"/>
         <source>Replace All</source>
-        <translation>Заменить Всё</translation>
+        <translation>Заменить всё</translation>
     </message>
 </context>
 <context>
     <name>S:</name>
     <message>
         <location filename="../third/libiconv-1.16/src/iconv.c" line="103"/>
-        <source></source>
+        <source/>
         <comment>The first line of the short usage message.</comment>
-        <translation></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -890,7 +888,7 @@
     <message>
         <location filename="../src/common/settings.cpp" line="154"/>
         <source>Fullscreen</source>
-        <translation>Полный экран</translation>
+        <translation>Полноэкранный режим</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="484"/>
@@ -976,7 +974,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="306"/>
         <source>Redo</source>
-        <translation>Готово</translation>
+        <translation>Вернуть</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="307"/>
@@ -1023,12 +1021,12 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="315"/>
         <source>Turn on Read-Only mode</source>
-        <translation>Включить режим Только Чтение</translation>
+        <translation>Включить режим Только чтение</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="316"/>
         <source>Turn off Read-Only mode</source>
-        <translation>Отключить режим Только Чтение</translation>
+        <translation>Отключить режим Только чтение</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="317"/>
@@ -1217,7 +1215,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="4548"/>
         <source>Read-Only mode is off</source>
-        <translation>Режим Только Чтение отключён</translation>
+        <translation>Режим Только чтение отключён</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="4560"/>
@@ -1227,7 +1225,7 @@
         <location filename="../src/editor/dtextedit.cpp" line="8015"/>
         <location filename="../src/editor/dtextedit.cpp" line="8026"/>
         <source>Read-Only mode is on</source>
-        <translation>Режим Только Чтение включён</translation>
+        <translation>Режим Только чтение включён</translation>
     </message>
 </context>
 <context>
@@ -1287,7 +1285,7 @@
         <location filename="../src/widgets/window.cpp" line="666"/>
         <location filename="../src/widgets/window.cpp" line="3845"/>
         <source>Read-Only</source>
-        <translation>Только Чтение</translation>
+        <translation>Только чтение</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="687"/>
@@ -1331,7 +1329,7 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="1773"/>
         <source>Read-Only mode is on</source>
-        <translation>Режим Только Чтение включён</translation>
+        <translation>Режим Только чтение включён</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2322"/>
