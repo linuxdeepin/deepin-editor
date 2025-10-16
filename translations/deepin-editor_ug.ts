@@ -472,7 +472,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="69"/>
         <source>Move to line indentation</source>
-        <translation type="unfinished"/>
+        <translation>قۇر قىسقارغۇچە يۆتكەش</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="70"/>
@@ -507,7 +507,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="76"/>
         <source>Backward over a pair</source>
-        <translation type="unfinished"/>
+        <translation>سولغا ماسلاشسۇن</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="77"/>
@@ -888,7 +888,7 @@
     <message>
         <location filename="../src/common/settings.cpp" line="154"/>
         <source>Fullscreen</source>
-        <translation type="unfinished"/>
+        <translation>پۈتۈن ئېكران</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="484"/>
@@ -994,7 +994,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="310"/>
         <source>Delete</source>
-        <translation type="unfinished"/>
+        <translation>ئۆچۈرۈش</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="311"/>
