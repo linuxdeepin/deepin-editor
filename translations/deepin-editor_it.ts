@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="it">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="it">
 <context>
     <name>BottomBar</name>
     <message>
@@ -58,8 +56,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="360"/>
         <source>Encoding changed. Do you want to save the file now?</source>
-        <translation>&#xa0;
-La codifica è cambiata. Vuoi salvare il file ora?</translation>
+        <translation>La codifica è cambiata. Vuoi salvare il file ora?</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="520"/>
@@ -101,7 +98,7 @@ La codifica è cambiata. Vuoi salvare il file ora?</translation>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="1618"/>
         <source>The file cannot be read, which may be too large or has been damaged!</source>
-        <translation>Il file non può essere letto, potrebbe essere troppo grande o danneggiato!</translation>
+        <translation>File illeggibile, potrebbe essere troppo grande oppure danneggiato!</translation>
     </message>
 </context>
 <context>
@@ -154,7 +151,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="84"/>
         <source>Remember the last used path</source>
-        <translation>Ricorda l&apos;ultimo percorso usato</translation>
+        <translation>Ricorda l&apos;ultimo percorso utilizzato</translation>
     </message>
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="85"/>
@@ -164,7 +161,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="86"/>
         <source>Customize the default path</source>
-        <translation>Personalizza il percorso predefinito</translation>
+        <translation>Personalizza il percorso di default</translation>
     </message>
 </context>
 <context>
@@ -631,12 +628,12 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="102"/>
         <source>Reopen last closed tabs</source>
-        <translation>Riavvia ultimi tab chiusi</translation>
+        <translation>Riapri le ultime schede chiuse</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="104"/>
         <source>Open/Save Settings</source>
-        <translation>Apri/Salva Impostazioni</translation>
+        <translation>Apri/Salva impostazioni</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="106"/>
@@ -772,57 +769,57 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="243"/>
         <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
-        <translation>Installa &apos;UOS AI&apos; dall&apos;App Store prima di usarlo</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="245"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation>Nessun dispositivo di input audio rilevato. Controlla e prova di nuovo</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="247"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation>Nessun dispositivo di output audio rilevato. Controlla e prova di nuovo</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="69"/>
         <source>File path is empty</source>
-        <translation>Il percorso del file è vuoto</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="155"/>
         <source>Insufficient memory to load document content</source>
-        <translation>Memoria insufficiente per caricare il contenuto del documento</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="177"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation>Memoria insufficiente per la conversione di codifica</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="183"/>
         <source>Encoding conversion failed</source>
-        <translation>Conversione di codifica fallita</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="189"/>
         <source>Converted content is empty</source>
-        <translation>Il contenuto convertito è vuoto</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="207"/>
         <source>Memory allocation failed</source>
-        <translation>Allocazione della memoria fallita</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="211"/>
         <source>Error occurred: %1</source>
-        <translation>Si è verificato un errore: %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="215"/>
         <source>Unknown error occurred</source>
-        <translation>Si è verificato un errore sconosciuto</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -862,9 +859,9 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <name>S:</name>
     <message>
         <location filename="../third/libiconv-1.16/src/iconv.c" line="103"/>
-        <source></source>
+        <source/>
         <comment>The first line of the short usage message.</comment>
-        <translation></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
