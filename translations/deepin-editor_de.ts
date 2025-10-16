@@ -307,7 +307,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="36"/>
         <source>Find Previous</source>
-        <translation>Vorheriges finden</translation>
+        <translation>Vorheriges Suchen</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="37"/>
@@ -768,57 +768,57 @@
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="243"/>
         <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
-        <translation type="unfinished"/>
+        <translation>Bitte installieren Sie &apos;UOS AI&apos; aus dem App Store, bevor Sie es verwenden</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="245"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation type="unfinished"/>
+        <translation>Kein Audio-Eingabegerät erkannt. Bitte überprüfen Sie und versuchen Sie es erneut</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="247"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation type="unfinished"/>
+        <translation>Kein Audio-Ausgabegerät erkannt. Bitte überprüfen Sie und versuchen Sie es erneut</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="69"/>
         <source>File path is empty</source>
-        <translation type="unfinished"/>
+        <translation>Dateipfad ist leer</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="155"/>
         <source>Insufficient memory to load document content</source>
-        <translation type="unfinished"/>
+        <translation>Nicht genügend Speicher zum Laden des Dokumentinhalts</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="177"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation type="unfinished"/>
+        <translation>Nicht genügend Speicher für Kodierungsumwandlung</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="183"/>
         <source>Encoding conversion failed</source>
-        <translation type="unfinished"/>
+        <translation>Kodierungsumwandlung fehlgeschlagen</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="189"/>
         <source>Converted content is empty</source>
-        <translation type="unfinished"/>
+        <translation>Umgewandelter Inhalt ist leer</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="207"/>
         <source>Memory allocation failed</source>
-        <translation type="unfinished"/>
+        <translation>Speicherzuweisung fehlgeschlagen</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="211"/>
         <source>Error occurred: %1</source>
-        <translation type="unfinished"/>
+        <translation>Fehler aufgetreten: %1</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="215"/>
         <source>Unknown error occurred</source>
-        <translation type="unfinished"/>
+        <translation>Unbekannter Fehler aufgetreten</translation>
     </message>
 </context>
 <context>
