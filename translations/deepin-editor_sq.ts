@@ -362,12 +362,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="47"/>
         <source>Forward character</source>
-        <translation type="unfinished"/>
+        <translation>Shko një shkronjë përpara</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="48"/>
         <source>Backward character</source>
-        <translation type="unfinished"/>
+        <translation>Shko një shkronjë mbrapsht</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="49"/>
@@ -442,12 +442,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="63"/>
         <source>Page up</source>
-        <translation>Një faqe sipër</translation>
+        <translation>Page Up</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="64"/>
         <source>Page down</source>
-        <translation>Një faqe poshtë</translation>
+        <translation>Page Down</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="65"/>
@@ -557,7 +557,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="86"/>
         <source>Merge lines</source>
-        <translation>Përzje rreshta</translation>
+        <translation>Përzie rreshta</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="87"/>
@@ -612,7 +612,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="98"/>
         <source>Tab width</source>
-        <translation>Gjerësi tabulacioni</translation>
+        <translation>Gjerësi Tabulacioni</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="99"/>
@@ -677,12 +677,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="116"/>
         <source>WesternEuropean</source>
-        <translation>Evropiane Perëndimore</translation>
+        <translation>Europiane Perëndimore</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="117"/>
         <source>CentralEuropean</source>
-        <translation>Evropiane Qendrore</translation>
+        <translation>Europiane Qendrore</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="118"/>
@@ -707,7 +707,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="126"/>
         <source>SouthEasternEuropean</source>
-        <translation>Evropiane Juglindore</translation>
+        <translation>Europiane Juglindore</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="121"/>
@@ -768,57 +768,57 @@
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="243"/>
         <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
-        <translation type="unfinished"/>
+        <translation>Ju lutemi, instaloni &apos;UOS AI&apos; nga Shitorja e Aplikacioneve, përpara se ta përdorni</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="245"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation>S’u pikas pajisje audio hyrje. Ju lutemi, kontrolloni dhe riprovoni</translation>
+        <translation>Nuk u dha ndonjë pajisje hyrëse audio. Ju lutemi, kontrolloni dhe provoni përsëri</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="247"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation>S’u pikas pajisje audio dalje. Ju lutemi, kontrolloni dhe riprovoni</translation>
+        <translation>Nuk u dha ndonjë pajisje dalëse audio. Ju lutemi, kontrolloni dhe provoni përsëri</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="69"/>
         <source>File path is empty</source>
-        <translation type="unfinished"/>
+        <translation>Shtegja e kartelës është e zbrazët</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="155"/>
         <source>Insufficient memory to load document content</source>
-        <translation type="unfinished"/>
+        <translation>Shfletuesi nuk ka mjaft kujtesë për të ngarkuar kontentin e dokumentit</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="177"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation type="unfinished"/>
+        <translation>Shfletuesi nuk ka mjaft kujtesë për kodimin e kodimit</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="183"/>
         <source>Encoding conversion failed</source>
-        <translation type="unfinished"/>
+        <translation>Kodimi i kodimit dështoi</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="189"/>
         <source>Converted content is empty</source>
-        <translation type="unfinished"/>
+        <translation>Kontenti i koduar është i zbrazët</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="207"/>
         <source>Memory allocation failed</source>
-        <translation type="unfinished"/>
+        <translation>Asignimi i kujtesës dështoi</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="211"/>
         <source>Error occurred: %1</source>
-        <translation type="unfinished"/>
+        <translation>Ndodhi një gabim: %1</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="215"/>
         <source>Unknown error occurred</source>
-        <translation type="unfinished"/>
+        <translation>Ndodhi një gabim i panjohur</translation>
     </message>
 </context>
 <context>
@@ -846,7 +846,7 @@
     <message>
         <location filename="../src/controls/replacebar.cpp" line="38"/>
         <source>Replace Rest</source>
-        <translation type="unfinished"/>
+        <translation>Zëvendëso Pjesën e Mbetur</translation>
     </message>
     <message>
         <location filename="../src/controls/replacebar.cpp" line="39"/>
@@ -898,7 +898,7 @@
     <message>
         <location filename="../src/common/settings.cpp" line="487"/>
         <source>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</source>
-        <translation>Kjo shkurtore përplaset me %1, klikoni mbi “Zëvendësoje” për ta bërë këtë shkurtore të hyjë në fuqi menjëherë</translation>
+        <translation>Kjo shkurtore përplaset me %1, klikoni mbi Zëvendësoje për ta bërë këtë shkurtore të hyjë në fuqi menjëherë</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="682"/>
@@ -1164,7 +1164,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="418"/>
         <source>Change Case</source>
-        <translation>Ndryshoni Shkronjë të Madhe/të Vogël</translation>
+        <translation>Këmbe Shkronja</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="419"/>
@@ -1174,7 +1174,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="420"/>
         <source>Lower Case</source>
-        <translation>Shkronja të Vogla</translation>
+        <translation>Kaloje në Shkronja të Vogla</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="421"/>
@@ -1215,7 +1215,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="4548"/>
         <source>Read-Only mode is off</source>
-        <translation>Mënyra “Vetëm Për Lexim” është e çaktivizuar</translation>
+        <translation>Mënyra “Vetëm Për Lexim” është off</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="4560"/>
@@ -1225,7 +1225,7 @@
         <location filename="../src/editor/dtextedit.cpp" line="8015"/>
         <location filename="../src/editor/dtextedit.cpp" line="8026"/>
         <source>Read-Only mode is on</source>
-        <translation>Mënyra “Vetëm Për Lexim” është e aktivizuar</translation>
+        <translation>Mënyra “Vetëm Për Lexim” është on</translation>
     </message>
 </context>
 <context>
@@ -1273,7 +1273,7 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="533"/>
         <source>Switch theme</source>
-        <translation>Ndërroni temë</translation>
+        <translation>Këmbeni temë</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="534"/>
@@ -1329,7 +1329,7 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="1773"/>
         <source>Read-Only mode is on</source>
-        <translation>Mënyra “Vetëm Për Lexim” është e aktivizuar</translation>
+        <translation>Mënyra “Vetëm Për Lexim” është on</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2322"/>
