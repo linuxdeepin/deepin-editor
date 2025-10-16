@@ -19,7 +19,7 @@
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="44"/>
         <source>Loading:</source>
-        <translation type="unfinished"/>
+        <translation>୬୪ଦାନ୍ତା</translation>
     </message>
 </context>
 <context>
@@ -98,7 +98,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="1618"/>
         <source>The file cannot be read, which may be too large or has been damaged!</source>
-        <translation type="unfinished"/>
+        <translation>ଫାଇଲ୍ ପଢ଼ିବା ଯାଇପାରେ ନାହିଁ, ଯାହା ଅତ୍ୟଧିକ ବଡ଼ ହୋଇଥାଏ ବା କ୍ଷତିଗ୍ରସ୍ଥ ହୋଇଥାଏ!</translation>
     </message>
 </context>
 <context>
@@ -150,17 +150,17 @@
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="84"/>
         <source>Remember the last used path</source>
-        <translation type="unfinished"/>
+        <translation>ଅକ୍ଷତ ବ୍ୟବହାର କରାଯାଇଥବା ପଥ ରଖନ୍ତୁ</translation>
     </message>
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="85"/>
         <source>Same path as the current file</source>
-        <translation type="unfinished"/>
+        <translation>ବର୍ତ୍ତମାନ ଫାଇଲ୍ ର ଅକ୍ଷତ ପଥ</translation>
     </message>
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="86"/>
         <source>Customize the default path</source>
-        <translation type="unfinished"/>
+        <translation>ଅକ୍ଷତ ପଥ ପ୍ରାଥମିକ ପଥ ପରିବର୍ତ୍ତନ କରନ୍ତୁ</translation>
     </message>
 </context>
 <context>
@@ -302,12 +302,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="35"/>
         <source>Find Next</source>
-        <translation type="unfinished"/>
+        <translation>ଅଗାଧ ଅଧିକ ଖୋଜନ୍ତୁ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="36"/>
         <source>Find Previous</source>
-        <translation type="unfinished"/>
+        <translation>ଅଗାଧ ଅପେକ୍ଷା ଖୋଜନ୍ତୁ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="37"/>
@@ -567,12 +567,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="88"/>
         <source>Add comment</source>
-        <translation type="unfinished"/>
+        <translation>କମେଣ୍ଟ ଯୋଗ କରନ୍ତୁ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="89"/>
         <source>Remove comment</source>
-        <translation type="unfinished"/>
+        <translation>କମେଣ୍ଟ ଅଟୋକରନ୍ତୁ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="90"/>
@@ -587,17 +587,17 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="92"/>
         <source>Add/Remove bookmark</source>
-        <translation type="unfinished"/>
+        <translation>ବୁକ୍ମାର୍କ ଯୋଗ/ଅଟୋକରନ୍ତୁ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="93"/>
         <source>Move to previous bookmark</source>
-        <translation type="unfinished"/>
+        <translation>ଅଗାଧ ବୁକ୍ମାର୍କ ପାଇଁ ଯାନ୍ତୁ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="94"/>
         <source>Move to next bookmark</source>
-        <translation type="unfinished"/>
+        <translation>ଅଗାଧ ବୁକ୍ମାର୍କ ପାଇଁ ଯାନ୍ତୁ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="95"/>
@@ -617,142 +617,142 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="99"/>
         <source>Paste by pressing a middle mouse button</source>
-        <translation type="unfinished"/>
+        <translation>ମଧ୍ୟମ ମାଉସ୍ ବଟନ୍ ଚାପିବା ଦ୍ୱାରା ପସ୍ତାକରନ୍ତୁ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="101"/>
         <source>Startup</source>
-        <translation type="unfinished"/>
+        <translation>ପ୍ରାରମ୍ଭ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="102"/>
         <source>Reopen last closed tabs</source>
-        <translation type="unfinished"/>
+        <translation>ଶେଷ ବନ୍ଧ ଟାବ୍ ପୁନଃଖୋଲନ୍ତୁ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="104"/>
         <source>Open/Save Settings</source>
-        <translation type="unfinished"/>
+        <translation>ଖୋଲନ୍ତୁ/ରଖନ୍ତୁ ପ୍ରାଥମିକ ବ୍ୟବସ୍ଥା</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="106"/>
         <source>Word wrap</source>
-        <translation type="unfinished"/>
+        <translation>ଶବ୍ଦ ପ୍ରାଥମିକ ବ୍ୟବସ୍ଥା</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="107"/>
         <source>Code folding flag</source>
-        <translation type="unfinished"/>
+        <translation>କୋଡ୍ ପ୍ରାଥମିକ ବ୍ୟବସ୍ଥା</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="108"/>
         <source>Show line numbers</source>
-        <translation type="unfinished"/>
+        <translation>ଲାଇନ୍ ନମ୍ବର୍ ଦେଖାନ୍ତୁ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="109"/>
         <source>Show bookmarks icon</source>
-        <translation type="unfinished"/>
+        <translation>ବୁକ୍ମାର୍କ ଚିହ୍ନ ଦେଖାନ୍ତୁ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="110"/>
         <source>Show whitespaces and tabs</source>
-        <translation type="unfinished"/>
+        <translation>ଶ୍ୱେତାଶ୍ର ଏବଂ ଟାବ୍ ଦେଖାନ୍ତୁ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="111"/>
         <source>Highlight current line</source>
-        <translation type="unfinished"/>
+        <translation>ଚାଲୁ ଲାଇନ୍ ପ୍ରାଥମିକ ବ୍ୟବସ୍ଥା</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="112"/>
         <source>Color mark</source>
-        <translation type="unfinished"/>
+        <translation>ରଙ୍ଗ ଚିହ୍ନ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="115"/>
         <source>Unicode</source>
-        <translation type="unfinished"/>
+        <translation>ସିନ୍ଧୁରିକା</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="116"/>
         <source>WesternEuropean</source>
-        <translation type="unfinished"/>
+        <translation>ପଶ୍ଚିମ ଇଉରୋପୀୟ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="117"/>
         <source>CentralEuropean</source>
-        <translation type="unfinished"/>
+        <translation>କେନ୍ଦ୍ରୀୟ ଇଉରୋପୀୟ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="118"/>
         <source>Baltic</source>
-        <translation type="unfinished"/>
+        <translation>ବାଲ୍ଟିକ୍</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="119"/>
         <source>Cyrillic</source>
-        <translation type="unfinished"/>
+        <translation>ସିରିଲିକ୍</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="120"/>
         <source>Arabic</source>
-        <translation type="unfinished"/>
+        <translation>ଅରବୀୟ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="125"/>
         <source>Celtic</source>
-        <translation type="unfinished"/>
+        <translation>କେଲ୍ଟିକ୍</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="126"/>
         <source>SouthEasternEuropean</source>
-        <translation type="unfinished"/>
+        <translation>दक्षिण पूर्वी युरोपीय</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="121"/>
         <source>Greek</source>
-        <translation type="unfinished"/>
+        <translation>युनानी</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="122"/>
         <source>Hebrew</source>
-        <translation type="unfinished"/>
+        <translation>हिब्राई</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="127"/>
         <source>ChineseSimplified</source>
-        <translation type="unfinished"/>
+        <translation>चीनी सरल</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="128"/>
         <source>ChineseTraditional</source>
-        <translation type="unfinished"/>
+        <translation>चीनी पारंपरिक</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="129"/>
         <source>Japanese</source>
-        <translation type="unfinished"/>
+        <translation>जापानी</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="130"/>
         <source>Korean</source>
-        <translation type="unfinished"/>
+        <translation>कोरियाई</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="124"/>
         <source>Thai</source>
-        <translation type="unfinished"/>
+        <translation>थाई</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="123"/>
         <source>Turkish</source>
-        <translation type="unfinished"/>
+        <translation>तुर्की</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="131"/>
         <source>Vietnamese</source>
-        <translation type="unfinished"/>
+        <translation>वियतनामी</translation>
     </message>
     <message>
         <location filename="../src/startmanager.cpp" line="971"/>
@@ -768,57 +768,57 @@
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="243"/>
         <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
-        <translation type="unfinished"/>
+        <translation>कृपया उपयोग करने से पहले &apos;UOS AI&apos; को एप्प स्टोर से स्थापित करें</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="245"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation type="unfinished"/>
+        <translation>कोई ऑडियो इनपुट डिवाइस नहीं डिटेक्ट किया गया। कृपया जांच करें और फिर से प्रयास करें</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="247"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation type="unfinished"/>
+        <translation>कोई ऑडियो आउटपुट डिवाइस नहीं डिटेक्ट किया गया। कृपया जांच करें और फिर से प्रयास करें</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="69"/>
         <source>File path is empty</source>
-        <translation type="unfinished"/>
+        <translation>फाइल पथ खाली है</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="155"/>
         <source>Insufficient memory to load document content</source>
-        <translation type="unfinished"/>
+        <translation>दस्तावेज़ सामग्री लोड करने के लिए अपर्याप्त स्मृति</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="177"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation type="unfinished"/>
+        <translation>एन्कोडिंग कनवर्ज़न के लिए अपर्याप्त स्मृति</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="183"/>
         <source>Encoding conversion failed</source>
-        <translation type="unfinished"/>
+        <translation>एन्कोडिंग कनवर्ज़न में विफलता</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="189"/>
         <source>Converted content is empty</source>
-        <translation type="unfinished"/>
+        <translation>कनवर्ट की गई सामग्री खाली है</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="207"/>
         <source>Memory allocation failed</source>
-        <translation type="unfinished"/>
+        <translation>स्मृति आवंटन में विफलता</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="211"/>
         <source>Error occurred: %1</source>
-        <translation type="unfinished"/>
+        <translation>त्रुटि हुई: %1</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="215"/>
         <source>Unknown error occurred</source>
-        <translation type="unfinished"/>
+        <translation>अज्ञात त्रुटि हुई</translation>
     </message>
 </context>
 <context>
@@ -893,19 +893,19 @@
     <message>
         <location filename="../src/common/settings.cpp" line="484"/>
         <source>This shortcut conflicts with system shortcut %1</source>
-        <translation type="unfinished"/>
+        <translation>यह शॉर्टकट सिस्टम शॉर्टकट %1 के साथ टकराता है</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="487"/>
         <source>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</source>
-        <translation type="unfinished"/>
+        <translation>यह शॉर्टकट %1 के साथ टकराता है, इस शॉर्टकट को तुरंत प्रभावी बनाने के लिए Replace पर क्लिक करें</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="682"/>
         <location filename="../src/common/settings.cpp" line="695"/>
         <location filename="../src/common/settings.cpp" line="704"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
-        <translation type="unfinished"/>
+        <translation>शॉर्टकट %1 अमान्य है, कृपया दूसरा निर्धारित करें।</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="736"/>
@@ -920,7 +920,7 @@
     <message>
         <location filename="../src/common/settings.cpp" line="740"/>
         <source>OK</source>
-        <translation type="unfinished"/>
+        <translation>ठीक है</translation>
     </message>
 </context>
 <context>
@@ -946,22 +946,22 @@
     <message>
         <location filename="../src/controls/tabbar.cpp" line="643"/>
         <source>More options</source>
-        <translation type="unfinished"/>
+        <translation>अधिक विकल्प</translation>
     </message>
     <message>
         <location filename="../src/controls/tabbar.cpp" line="644"/>
         <source>Close tabs to the left</source>
-        <translation type="unfinished"/>
+        <translation>बाईं ओर टैब बंद करें</translation>
     </message>
     <message>
         <location filename="../src/controls/tabbar.cpp" line="645"/>
         <source>Close tabs to the right</source>
-        <translation type="unfinished"/>
+        <translation>दाईं ओर टैब बंद करें</translation>
     </message>
     <message>
         <location filename="../src/controls/tabbar.cpp" line="646"/>
         <source>Close unmodified tabs</source>
-        <translation type="unfinished"/>
+        <translation>अपरिवर्तित टैब बंद करें</translation>
     </message>
 </context>
 <context>
@@ -1047,7 +1047,7 @@
         <location filename="../src/editor/dtextedit.cpp" line="320"/>
         <location filename="../src/editor/dtextedit.cpp" line="374"/>
         <source>Add Comment</source>
-        <translation type="unfinished"/>
+        <translation>टिप्पणी जोड़ें</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="321"/>
@@ -1057,7 +1057,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="322"/>
         <source>Stop reading</source>
-        <translation type="unfinished"/>
+        <translation>ढुल्न छोड्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="323"/>
@@ -1067,72 +1067,72 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="324"/>
         <source>Translate</source>
-        <translation type="unfinished"/>
+        <translation>अनुवाद गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="325"/>
         <source>Column Mode</source>
-        <translation type="unfinished"/>
+        <translation>कोलम मोड</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="326"/>
         <source>Add bookmark</source>
-        <translation type="unfinished"/>
+        <translation>बुकमार्क थप्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="327"/>
         <source>Remove Bookmark</source>
-        <translation type="unfinished"/>
+        <translation>बुकमार्क हटाउन</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="328"/>
         <source>Previous bookmark</source>
-        <translation type="unfinished"/>
+        <translation>पिछलो बुकमार्क</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="329"/>
         <source>Next bookmark</source>
-        <translation type="unfinished"/>
+        <translation>अगलो बुकमार्क</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="330"/>
         <source>Remove All Bookmarks</source>
-        <translation type="unfinished"/>
+        <translation>सबै बुकमार्क हटाउन</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="331"/>
         <source>Fold All</source>
-        <translation type="unfinished"/>
+        <translation>सबै बन्द गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="332"/>
         <source>Fold Current Level</source>
-        <translation type="unfinished"/>
+        <translation>समान स्तर बन्द गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="333"/>
         <source>Unfold All</source>
-        <translation type="unfinished"/>
+        <translation>सबै खुलाउन</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="334"/>
         <source>Unfold Current Level</source>
-        <translation type="unfinished"/>
+        <translation>समान स्तर खुलाउन</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="339"/>
         <source>Color Mark</source>
-        <translation type="unfinished"/>
+        <translation>रंग चिह्न</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="343"/>
         <source>Clear All Marks</source>
-        <translation type="unfinished"/>
+        <translation>सबै चिह्न हटाउन</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="344"/>
         <source>Clear Last Mark</source>
-        <translation type="unfinished"/>
+        <translation>अन्तिम चिह्न हटाउन</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="353"/>
@@ -1142,24 +1142,24 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="366"/>
         <source>Mark All</source>
-        <translation type="unfinished"/>
+        <translation>सबै चिह्न गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="375"/>
         <source>Remove Comment</source>
-        <translation type="unfinished"/>
+        <translation>कमेन्ट हटाउन</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3208"/>
         <location filename="../src/editor/dtextedit.cpp" line="3211"/>
         <source>Copy failed: not enough memory</source>
-        <translation type="unfinished"/>
+        <translation>काट्न असफल: सामाग्री अप्याद छ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3333"/>
         <location filename="../src/editor/dtextedit.cpp" line="3335"/>
         <source>Press ALT and click lines to edit in column mode</source>
-        <translation type="unfinished"/>
+        <translation>ALT दबाउँदा रेखा क्लिक गर्नुहोस् कोलम मोडमा सम्पादन गर्न</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="418"/>
@@ -1210,7 +1210,7 @@
         <location filename="../src/editor/dtextedit.cpp" line="3227"/>
         <location filename="../src/editor/dtextedit.cpp" line="3230"/>
         <source>Paste failed: not enough memory</source>
-        <translation type="unfinished"/>
+        <translation>पेस्ट असफल: सामाग्री अप्याद छ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="4548"/>
@@ -1339,12 +1339,12 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="2398"/>
         <source>Ctrl+&apos;=&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Ctrl+=&apos;</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2401"/>
         <source>Ctrl+&apos;-&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Ctrl+=&apos;-</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2430"/>
