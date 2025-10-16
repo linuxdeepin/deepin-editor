@@ -56,7 +56,8 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="360"/>
         <source>Encoding changed. Do you want to save the file now?</source>
-        <translation>La codifica è cambiata. Vuoi salvare il file ora?</translation>
+        <translation> 
+La codifica è cambiata. Vuoi salvare il file ora?</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="520"/>
@@ -98,7 +99,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="1618"/>
         <source>The file cannot be read, which may be too large or has been damaged!</source>
-        <translation>File illeggibile, potrebbe essere troppo grande oppure danneggiato!</translation>
+        <translation>Il file non può essere letto, potrebbe essere troppo grande o danneggiato!</translation>
     </message>
 </context>
 <context>
@@ -151,7 +152,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="84"/>
         <source>Remember the last used path</source>
-        <translation>Ricorda l&apos;ultimo percorso utilizzato</translation>
+        <translation>Ricorda l&apos;ultimo percorso usato</translation>
     </message>
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="85"/>
@@ -161,7 +162,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="86"/>
         <source>Customize the default path</source>
-        <translation>Personalizza il percorso di default</translation>
+        <translation>Personalizza il percorso predefinito</translation>
     </message>
 </context>
 <context>
@@ -628,12 +629,12 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="102"/>
         <source>Reopen last closed tabs</source>
-        <translation>Riapri le ultime schede chiuse</translation>
+        <translation>Riavvia ultimi tab chiusi</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="104"/>
         <source>Open/Save Settings</source>
-        <translation>Apri/Salva impostazioni</translation>
+        <translation>Apri/Salva Impostazioni</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="106"/>
@@ -769,57 +770,57 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="243"/>
         <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
-        <translation type="unfinished"/>
+        <translation>Installa &apos;UOS AI&apos; dall&apos;App Store prima di usarlo</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="245"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation type="unfinished"/>
+        <translation>Nessun dispositivo di input audio rilevato. Controlla e prova di nuovo</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="247"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation type="unfinished"/>
+        <translation>Nessun dispositivo di output audio rilevato. Controlla e prova di nuovo</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="69"/>
         <source>File path is empty</source>
-        <translation type="unfinished"/>
+        <translation>Il percorso del file è vuoto</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="155"/>
         <source>Insufficient memory to load document content</source>
-        <translation type="unfinished"/>
+        <translation>Memoria insufficiente per caricare il contenuto del documento</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="177"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation type="unfinished"/>
+        <translation>Memoria insufficiente per la conversione di codifica</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="183"/>
         <source>Encoding conversion failed</source>
-        <translation type="unfinished"/>
+        <translation>Conversione di codifica fallita</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="189"/>
         <source>Converted content is empty</source>
-        <translation type="unfinished"/>
+        <translation>Il contenuto convertito è vuoto</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="207"/>
         <source>Memory allocation failed</source>
-        <translation type="unfinished"/>
+        <translation>Allocazione della memoria fallita</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="211"/>
         <source>Error occurred: %1</source>
-        <translation type="unfinished"/>
+        <translation>Si è verificato un errore: %1</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="215"/>
         <source>Unknown error occurred</source>
-        <translation type="unfinished"/>
+        <translation>Si è verificato un errore sconosciuto</translation>
     </message>
 </context>
 <context>
