@@ -61,7 +61,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="520"/>
         <source>Discard</source>
-        <translation>Släng</translation>
+        <translation>Förkasta</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="274"/>
@@ -1364,7 +1364,7 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="3544"/>
         <source>Discard</source>
-        <translation>Släng</translation>
+        <translation>Förkasta</translation>
     </message>
 </context>
 </TS>
