@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="hu">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="hu">
 <context>
     <name>BottomBar</name>
     <message>
@@ -123,7 +121,7 @@
     <message>
         <location filename="../src/controls/findbar.cpp" line="38"/>
         <source>Replace</source>
-        <translation>Helyettesítés</translation>
+        <translation>Csere</translation>
     </message>
 </context>
 <context>
@@ -770,57 +768,57 @@
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="243"/>
         <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
-        <translation>Kérjük, telepítse a &apos;UOS AI&apos;-t az Alkalmazásboltból a használat előtt</translation>
+        <translation>Használat előtt kérjük telepítse az „UOS AI”-t az Áruházból</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="245"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation>Nincs észlelt audio bemeneti eszköz. Kérjük, ellenőrizze, és próbálja újra</translation>
+        <translation>Nem észlelhető hangbemeneti eszköz. Kérjük ellenőrizze, és próbálja újra</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="247"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation>Nincs észlelt audio kimeneti eszköz. Kérjük, ellenőrizze, és próbálja újra</translation>
+        <translation>Nem észlelhető hang kimeneti eszköz. Kérjük ellenőrizze, és próbálja újra</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="69"/>
         <source>File path is empty</source>
-        <translation>A fájl elérési útja üres</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="155"/>
         <source>Insufficient memory to load document content</source>
-        <translation>Nem elég memória a dokumentum tartalmának betöltéséhez</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="177"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation>Nem elég memória a kódolási átalakításhoz</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="183"/>
         <source>Encoding conversion failed</source>
-        <translation>A kódolási átalakítás meghiúsult</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="189"/>
         <source>Converted content is empty</source>
-        <translation>Az átalakított tartalom üres</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="207"/>
         <source>Memory allocation failed</source>
-        <translation>A memóriaelosztás meghiúsult</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="211"/>
         <source>Error occurred: %1</source>
-        <translation>Hiba történt: %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="215"/>
         <source>Unknown error occurred</source>
-        <translation>Ismeretlen hiba történt</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -860,9 +858,9 @@
     <name>S:</name>
     <message>
         <location filename="../third/libiconv-1.16/src/iconv.c" line="103"/>
-        <source></source>
+        <source/>
         <comment>The first line of the short usage message.</comment>
-        <translation></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
