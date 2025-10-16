@@ -142,7 +142,7 @@
     <message>
         <location filename="../src/editorapplication.cpp" line="34"/>
         <source>Text Editor</source>
-        <translation>Текстовый редактор</translation>
+        <translation>Текстовый Редактор</translation>
     </message>
 </context>
 <context>
@@ -189,7 +189,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="12"/>
         <source>Font Style</source>
-        <translation>Стиль шрифта</translation>
+        <translation>Стиль Шрифта</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="13"/>
@@ -199,12 +199,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="14"/>
         <source>Font Size</source>
-        <translation>Размер шрифта</translation>
+        <translation>Размер Шрифта</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="15"/>
         <source>Shortcuts</source>
-        <translation>Горячие клавиши</translation>
+        <translation>Горячие Клавиши</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="16"/>
@@ -422,7 +422,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="59"/>
         <source>Swap line up</source>
-        <translation>Заменить верхнюю строку</translation>
+        <translation>заменить верхнюю строку</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="60"/>
@@ -452,7 +452,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="65"/>
         <source>Move to end of line</source>
-        <translation>Переход к концу строки</translation>
+        <translation>Переход к конецу строки</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="66"/>
@@ -562,7 +562,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="87"/>
         <source>Read-Only mode</source>
-        <translation>Режим Только чтение</translation>
+        <translation>Режим Только Чтение</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="88"/>
@@ -582,7 +582,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="91"/>
         <source>Redo</source>
-        <translation>Вернуть</translation>
+        <translation>Готово</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="92"/>
@@ -768,57 +768,57 @@
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="243"/>
         <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
-        <translation>Пожалуйста, установите &quot;UOS AI&quot; из App Store перед использованием</translation>
+        <translation>Пожалуйста, установите &apos;UOS AI&apos; из магазина приложений перед использованием</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="245"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation>Устройство аудиовхода не обнаружено. Пожалуйста, проверьте и повторите попытку</translation>
+        <translation>Не найдено устройство ввода аудио. Пожалуйста, проверьте и попробуйте снова</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="247"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation>Устройство вывода звука не обнаружено. Пожалуйста, проверьте и повторите попытку</translation>
+        <translation>Не найдено устройство вывода аудио. Пожалуйста, проверьте и попробуйте снова</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="69"/>
         <source>File path is empty</source>
-        <translation type="unfinished"/>
+        <translation>Путь к файлу пуст</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="155"/>
         <source>Insufficient memory to load document content</source>
-        <translation type="unfinished"/>
+        <translation>Недостаточно памяти для загрузки содержимого документа</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="177"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation type="unfinished"/>
+        <translation>Недостаточно памяти для кодирования</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="183"/>
         <source>Encoding conversion failed</source>
-        <translation type="unfinished"/>
+        <translation>Кодирование завершилось с ошибкой</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="189"/>
         <source>Converted content is empty</source>
-        <translation type="unfinished"/>
+        <translation>Сконвертированное содержимое пусто</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="207"/>
         <source>Memory allocation failed</source>
-        <translation type="unfinished"/>
+        <translation>Не удалось выделить память</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="211"/>
         <source>Error occurred: %1</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Ошибка: %1&apos;</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="215"/>
         <source>Unknown error occurred</source>
-        <translation type="unfinished"/>
+        <translation>Произошла неизвестная ошибка</translation>
     </message>
 </context>
 <context>
@@ -831,12 +831,12 @@
     <message>
         <location filename="../src/controls/replacebar.cpp" line="34"/>
         <source>Replace With</source>
-        <translation>Заменить на</translation>
+        <translation>Заменить На</translation>
     </message>
     <message>
         <location filename="../src/controls/replacebar.cpp" line="36"/>
         <source>Replace</source>
-        <translation>Заменить</translation>
+        <translation>Заменить:</translation>
     </message>
     <message>
         <location filename="../src/controls/replacebar.cpp" line="37"/>
@@ -846,12 +846,12 @@
     <message>
         <location filename="../src/controls/replacebar.cpp" line="38"/>
         <source>Replace Rest</source>
-        <translation>Заменить остальное</translation>
+        <translation>Заменить Остальное</translation>
     </message>
     <message>
         <location filename="../src/controls/replacebar.cpp" line="39"/>
         <source>Replace All</source>
-        <translation>Заменить всё</translation>
+        <translation>Заменить Всё</translation>
     </message>
 </context>
 <context>
@@ -888,7 +888,7 @@
     <message>
         <location filename="../src/common/settings.cpp" line="154"/>
         <source>Fullscreen</source>
-        <translation>Полноэкранный режим</translation>
+        <translation>Полный экран</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="484"/>
@@ -974,7 +974,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="306"/>
         <source>Redo</source>
-        <translation>Вернуть</translation>
+        <translation>Готово</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="307"/>
@@ -1021,12 +1021,12 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="315"/>
         <source>Turn on Read-Only mode</source>
-        <translation>Включить режим Только чтение</translation>
+        <translation>Включить режим Только Чтение</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="316"/>
         <source>Turn off Read-Only mode</source>
-        <translation>Отключить режим Только чтение</translation>
+        <translation>Отключить режим Только Чтение</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="317"/>
@@ -1215,7 +1215,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="4548"/>
         <source>Read-Only mode is off</source>
-        <translation>Режим Только чтение отключён</translation>
+        <translation>Режим Только Чтение отключён</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="4560"/>
@@ -1225,7 +1225,7 @@
         <location filename="../src/editor/dtextedit.cpp" line="8015"/>
         <location filename="../src/editor/dtextedit.cpp" line="8026"/>
         <source>Read-Only mode is on</source>
-        <translation>Режим Только чтение включён</translation>
+        <translation>Режим Только Чтение включён</translation>
     </message>
 </context>
 <context>
@@ -1285,7 +1285,7 @@
         <location filename="../src/widgets/window.cpp" line="666"/>
         <location filename="../src/widgets/window.cpp" line="3845"/>
         <source>Read-Only</source>
-        <translation>Только чтение</translation>
+        <translation>Только Чтение</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="687"/>
@@ -1329,7 +1329,7 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="1773"/>
         <source>Read-Only mode is on</source>
-        <translation>Режим Только чтение включён</translation>
+        <translation>Режим Только Чтение включён</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2322"/>
