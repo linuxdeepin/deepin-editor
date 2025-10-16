@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="bo">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="bo">
 <context>
     <name>BottomBar</name>
     <message>
@@ -770,57 +768,57 @@
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="243"/>
         <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
-        <translation>མནན་ནས་མ་ལག་གི་མྱུར་མཐེབ་འདི་དང་%1འགལ་ཟླ་ཡོད་པས། བརྗེ་པོ་མནན་ནས་མྱུར་མཐེབ་འདི་ལམ་སེང་སྤྱོད་གོ་ཆོད།</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="245"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation>མིག་སྔའི་མཐོ་ཚད་གསལ་བ།</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="247"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation>སྟོང་ཆའི་ཡིག་རྟགས།/རེའུ་མིག་བཟོ་རྟགས་གསལ་བ།</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="69"/>
         <source>File path is empty</source>
-        <translation>ཡིག་ཆ་ཉར་ཚགས་བྱས་མེད།</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="155"/>
         <source>Insufficient memory to load document content</source>
-        <translation>སྟོང་ཆའི་ཡིག་རྟགས།/རེའུ་མིག་བཟོ་རྟགས་གསལ་བ།</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="177"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation>སྟོང་ཆའི་ཡིག་རྟགས།/རེའུ་མིག་བཟོ་རྟགས་གསལ་བ།</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="183"/>
         <source>Encoding conversion failed</source>
-        <translation>སྟོང་ཆའི་ཡིག་རྟགས།/རེའུ་མིག་བཟོ་རྟགས་གསལ་བ།</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="189"/>
         <source>Converted content is empty</source>
-        <translation>སྟོང་ཆའི་ཡིག་རྟགས།/རེའུ་མིག་བཟོ་རྟགས་གསལ་བ།</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="207"/>
         <source>Memory allocation failed</source>
-        <translation>སྟོང་ཆའི་ཡིག་རྟགས།/རེའུ་མིག་བཟོ་རྟགས་གསལ་བ།</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="211"/>
         <source>Error occurred: %1</source>
-        <translation>སྟོང་ཆའི་ཡིག་རྟགས།/རེའུ་མིག་བཟོ་རྟགས་གསལ་བ།</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="215"/>
         <source>Unknown error occurred</source>
-        <translation>སྟོང་ཆའི་ཡིག་རྟགས།/རེའུ་མིག་བཟོ་རྟགས་གསལ་བ།</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -860,9 +858,9 @@
     <name>S:</name>
     <message>
         <location filename="../third/libiconv-1.16/src/iconv.c" line="103"/>
-        <source></source>
+        <source/>
         <comment>The first line of the short usage message.</comment>
-        <translation></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
