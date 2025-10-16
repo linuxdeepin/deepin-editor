@@ -14,7 +14,7 @@
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="32"/>
         <source>Characters %1</source>
-        <translation>%1 caractères</translation>
+        <translation>Caractères %1</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="44"/>
@@ -98,7 +98,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="1618"/>
         <source>The file cannot be read, which may be too large or has been damaged!</source>
-        <translation>Le fichier ne peut être lu, il peut être trop lourd ou endommagé.</translation>
+        <translation>Le fichier ne peut être lu, il peut être trop gros ou endommagé.</translation>
     </message>
 </context>
 <context>
@@ -184,7 +184,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="11"/>
         <source>Basic</source>
-        <translation>Basique</translation>
+        <translation>De base</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="12"/>
@@ -210,7 +210,7 @@
         <location filename="../src/controls/settingsdialog.cpp" line="16"/>
         <location filename="../src/controls/settingsdialog.cpp" line="17"/>
         <source>Keymap</source>
-        <translation>Clavier</translation>
+        <translation>Préréglage</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="18"/>
@@ -322,12 +322,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="39"/>
         <source>Save cursor position</source>
-        <translation>Sauvegarder la position du curseur</translation>
+        <translation>Sauvegarder position curseur</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="40"/>
         <source>Reset cursor position</source>
-        <translation>Réinitialiser la position du curseur</translation>
+        <translation>Réinitialiser position curseur</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="41"/>
@@ -352,12 +352,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="45"/>
         <source>Increase indent</source>
-        <translation>Augmenter l&apos;indentation</translation>
+        <translation>Augmenter espace</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="46"/>
         <source>Decrease indent</source>
-        <translation>Diminuer l&apos;indentation</translation>
+        <translation>Diminuer espace</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="47"/>
@@ -422,22 +422,22 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="59"/>
         <source>Swap line up</source>
-        <translation>Échanger avec la ligne du haut</translation>
+        <translation>Basculer ligne vers haut</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="60"/>
         <source>Swap line down</source>
-        <translation>Échanger avec la ligne du bas</translation>
+        <translation>Basculer ligne vers bas</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="61"/>
         <source>Scroll up one line</source>
-        <translation>Aller à la ligne du haut</translation>
+        <translation>Faire défiler la ligne vers le haut</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="62"/>
         <source>Scroll down one line</source>
-        <translation>Aller à la ligne du bas</translation>
+        <translation>Faire défiler la ligne vers le bas</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="63"/>
@@ -452,27 +452,27 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="65"/>
         <source>Move to end of line</source>
-        <translation>Aller à la fin de ligne</translation>
+        <translation>Déplacer à la fin ligne</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="66"/>
         <source>Move to start of line</source>
-        <translation>Aller au début de ligne</translation>
+        <translation>Déplacer au début ligne</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="67"/>
         <source>Move to end of text</source>
-        <translation>Aller à la fin du texte</translation>
+        <translation>Basculer à la fin du texte</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="68"/>
         <source>Move to start of text</source>
-        <translation>Aller au début du texte</translation>
+        <translation>Basculer au début du texte</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="69"/>
         <source>Move to line indentation</source>
-        <translation>Aller à l&apos;indentation de ligne</translation>
+        <translation>Basculer à l&apos;index ligne</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="70"/>
@@ -487,7 +487,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="72"/>
         <source>Capitalize</source>
-        <translation>Mettre en majuscules</translation>
+        <translation>Mettre en majuscule</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="73"/>
@@ -602,7 +602,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="95"/>
         <source>Advanced</source>
-        <translation>Avancé</translation>
+        <translation>Avancés</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="97"/>
@@ -763,62 +763,62 @@
         <location filename="../src/widgets/window.cpp" line="1532"/>
         <location filename="../src/widgets/window.cpp" line="1549"/>
         <source>Line Endings</source>
-        <translation>Fins de ligne</translation>
+        <translation>Fin de ligne</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="243"/>
         <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
-        <translation>Veuillez installer &quot;UOS AI&quot; depuis l&apos;App Store avant d&apos;utiliser</translation>
+        <translation>Veuillez installer &apos;UOS AI&apos; de l&apos;App Store avant d&apos;utiliser</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="245"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation>Aucun périphérique audio d&apos;entrée. Veuillez vérifier et réessayer.</translation>
+        <translation>Aucun périphérique d&apos;entrée audio détecté. Veuillez vérifier et réessayer</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="247"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation>Aucun périphérique audio de sortie. Veuillez vérifier et réessayer.</translation>
+        <translation>Aucun périphérique de sortie audio détecté. Veuillez vérifier et réessayer</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="69"/>
         <source>File path is empty</source>
-        <translation type="unfinished"/>
+        <translation>Le chemin du fichier est vide</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="155"/>
         <source>Insufficient memory to load document content</source>
-        <translation type="unfinished"/>
+        <translation>Mémoire insuffisante pour charger le contenu du document</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="177"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation type="unfinished"/>
+        <translation>Mémoire insuffisante pour la conversion d&apos;encodage</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="183"/>
         <source>Encoding conversion failed</source>
-        <translation type="unfinished"/>
+        <translation>La conversion d&apos;encodage a échoué</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="189"/>
         <source>Converted content is empty</source>
-        <translation type="unfinished"/>
+        <translation>Le contenu converti est vide</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="207"/>
         <source>Memory allocation failed</source>
-        <translation type="unfinished"/>
+        <translation>L&apos;allocation de mémoire a échoué</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="211"/>
         <source>Error occurred: %1</source>
-        <translation type="unfinished"/>
+        <translation>Une erreur s&apos;est produite : %1</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="215"/>
         <source>Unknown error occurred</source>
-        <translation type="unfinished"/>
+        <translation>Une erreur inconnue s&apos;est produite</translation>
     </message>
 </context>
 <context>
@@ -1041,7 +1041,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="319"/>
         <source>Display in file manager</source>
-        <translation>Afficher dans le gestionnaire de fichiers</translation>
+        <translation>Afficher dans l&apos;explorateur de fichiers</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="320"/>
@@ -1153,18 +1153,18 @@
         <location filename="../src/editor/dtextedit.cpp" line="3208"/>
         <location filename="../src/editor/dtextedit.cpp" line="3211"/>
         <source>Copy failed: not enough memory</source>
-        <translation>Copie ratée : pas assez de mémoire</translation>
+        <translation>Copie ratée: pas assez de mémoire</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3333"/>
         <location filename="../src/editor/dtextedit.cpp" line="3335"/>
         <source>Press ALT and click lines to edit in column mode</source>
-        <translation>Appuyez sur ALT et cliquez sur les lignes pour éditer en mode colonne</translation>
+        <translation>Appuyer sur ALT et cliquer sur les lignes pour éditer en mode colonne</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="418"/>
         <source>Change Case</source>
-        <translation>Changer de casse</translation>
+        <translation>Changer de case</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="419"/>
@@ -1210,7 +1210,7 @@
         <location filename="../src/editor/dtextedit.cpp" line="3227"/>
         <location filename="../src/editor/dtextedit.cpp" line="3230"/>
         <source>Paste failed: not enough memory</source>
-        <translation>Échec du collage : mémoire insuffisante</translation>
+        <translation>Échec du collage : mémoire insuffisante</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="4548"/>
@@ -1334,7 +1334,7 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="2322"/>
         <source>Current location remembered</source>
-        <translation>Emplacement actuel sauvegardé</translation>
+        <translation>Location actuelle sauvegardée</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2398"/>
