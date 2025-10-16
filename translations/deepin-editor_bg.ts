@@ -19,7 +19,7 @@
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="44"/>
         <source>Loading:</source>
-        <translation type="unfinished"/>
+        <translation>Зареждане:</translation>
     </message>
 </context>
 <context>
@@ -56,7 +56,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="360"/>
         <source>Encoding changed. Do you want to save the file now?</source>
-        <translation type="unfinished"/>
+        <translation>Кодирането е променено. Желаете ли да запазите файла сега?</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="520"/>
@@ -98,7 +98,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="1618"/>
         <source>The file cannot be read, which may be too large or has been damaged!</source>
-        <translation type="unfinished"/>
+        <translation>Файловете не може да се прочете, може да е прекалено голям или повреден!</translation>
     </message>
 </context>
 <context>
@@ -137,12 +137,12 @@
     <message>
         <location filename="../src/editorapplication.cpp" line="12"/>
         <source>Text Editor is a powerful tool for viewing and editing text files.</source>
-        <translation type="unfinished"/>
+        <translation>Текстовият редактор е мощен инструмент за преглед и редактиране на текстови файлове.</translation>
     </message>
     <message>
         <location filename="../src/editorapplication.cpp" line="34"/>
         <source>Text Editor</source>
-        <translation type="unfinished"/>
+        <translation>Текстов редактор</translation>
     </message>
 </context>
 <context>
@@ -150,17 +150,17 @@
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="84"/>
         <source>Remember the last used path</source>
-        <translation type="unfinished"/>
+        <translation>Запомнете последния използван път</translation>
     </message>
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="85"/>
         <source>Same path as the current file</source>
-        <translation type="unfinished"/>
+        <translation>Същият път като текущия файл</translation>
     </message>
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="86"/>
         <source>Customize the default path</source>
-        <translation type="unfinished"/>
+        <translation>Персонализирайте подразумевания път</translation>
     </message>
 </context>
 <context>
@@ -168,7 +168,7 @@
     <message>
         <location filename="../src/editorapplication.cpp" line="28"/>
         <source>Text Editor</source>
-        <translation type="unfinished"/>
+        <translation>Текстов редактор</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="294"/>
@@ -287,7 +287,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="32"/>
         <source>Help</source>
-        <translation type="unfinished"/>
+        <translation>Помощ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="33"/>
@@ -302,12 +302,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="35"/>
         <source>Find Next</source>
-        <translation type="unfinished"/>
+        <translation>Намери следващо</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="36"/>
         <source>Find Previous</source>
-        <translation type="unfinished"/>
+        <translation>Намери предишно</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="37"/>
@@ -567,12 +567,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="88"/>
         <source>Add comment</source>
-        <translation type="unfinished"/>
+        <translation>Добави коментар</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="89"/>
         <source>Remove comment</source>
-        <translation type="unfinished"/>
+        <translation>Премахни коментар</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="90"/>
@@ -587,17 +587,17 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="92"/>
         <source>Add/Remove bookmark</source>
-        <translation type="unfinished"/>
+        <translation>Добави/премахни бележка</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="93"/>
         <source>Move to previous bookmark</source>
-        <translation type="unfinished"/>
+        <translation>Премини към предишната бележка</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="94"/>
         <source>Move to next bookmark</source>
-        <translation type="unfinished"/>
+        <translation>Премини към следващата бележка</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="95"/>
@@ -617,147 +617,147 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="99"/>
         <source>Paste by pressing a middle mouse button</source>
-        <translation type="unfinished"/>
+        <translation>Поставете по натискане на средния бутон на мишката</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="101"/>
         <source>Startup</source>
-        <translation type="unfinished"/>
+        <translation>Стартиране</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="102"/>
         <source>Reopen last closed tabs</source>
-        <translation type="unfinished"/>
+        <translation>Повторно отворете последните затворени вкладки</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="104"/>
         <source>Open/Save Settings</source>
-        <translation type="unfinished"/>
+        <translation>Отвори/Запази настройки</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="106"/>
         <source>Word wrap</source>
-        <translation type="unfinished"/>
+        <translation>Обръч на дума</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="107"/>
         <source>Code folding flag</source>
-        <translation type="unfinished"/>
+        <translation>Флаг за свиване на код</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="108"/>
         <source>Show line numbers</source>
-        <translation type="unfinished"/>
+        <translation>Покажи номера на редовете</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="109"/>
         <source>Show bookmarks icon</source>
-        <translation type="unfinished"/>
+        <translation>Покажи иконата за бележки</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="110"/>
         <source>Show whitespaces and tabs</source>
-        <translation type="unfinished"/>
+        <translation>Покажи празните места и табовете</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="111"/>
         <source>Highlight current line</source>
-        <translation type="unfinished"/>
+        <translation>Оцвети текущия ред</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="112"/>
         <source>Color mark</source>
-        <translation type="unfinished"/>
+        <translation>Оцвети бележка</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="115"/>
         <source>Unicode</source>
-        <translation type="unfinished"/>
+        <translation>Юникод</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="116"/>
         <source>WesternEuropean</source>
-        <translation type="unfinished"/>
+        <translation>Западноевропейски</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="117"/>
         <source>CentralEuropean</source>
-        <translation type="unfinished"/>
+        <translation>Централизиран</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="118"/>
         <source>Baltic</source>
-        <translation type="unfinished"/>
+        <translation>Балтийски</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="119"/>
         <source>Cyrillic</source>
-        <translation type="unfinished"/>
+        <translation>Кирилица</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="120"/>
         <source>Arabic</source>
-        <translation type="unfinished"/>
+        <translation>Арабски</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="125"/>
         <source>Celtic</source>
-        <translation type="unfinished"/>
+        <translation>Келтски</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="126"/>
         <source>SouthEasternEuropean</source>
-        <translation type="unfinished"/>
+        <translation>Югоизточненоевропейски</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="121"/>
         <source>Greek</source>
-        <translation type="unfinished"/>
+        <translation>Гръцки</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="122"/>
         <source>Hebrew</source>
-        <translation type="unfinished"/>
+        <translation>Еврейски</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="127"/>
         <source>ChineseSimplified</source>
-        <translation type="unfinished"/>
+        <translation>Упрощен китайски</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="128"/>
         <source>ChineseTraditional</source>
-        <translation type="unfinished"/>
+        <translation>Традиционен китайски</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="129"/>
         <source>Japanese</source>
-        <translation type="unfinished"/>
+        <translation>Японски</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="130"/>
         <source>Korean</source>
-        <translation type="unfinished"/>
+        <translation>Корейски</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="124"/>
         <source>Thai</source>
-        <translation type="unfinished"/>
+        <translation>Тайски</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="123"/>
         <source>Turkish</source>
-        <translation type="unfinished"/>
+        <translation>Турски</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="131"/>
         <source>Vietnamese</source>
-        <translation type="unfinished"/>
+        <translation>Виетнамски</translation>
     </message>
     <message>
         <location filename="../src/startmanager.cpp" line="971"/>
         <source>File not saved</source>
-        <translation type="unfinished"/>
+        <translation>Файлът не е запазен</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1532"/>
@@ -768,57 +768,57 @@
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="243"/>
         <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
-        <translation type="unfinished"/>
+        <translation>Моля, инсталирайте &apos;UOS AI&apos; от App Store преди използване</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="245"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation type="unfinished"/>
+        <translation>Не е открит аудио въходен уред. Моля, проверете и опитайте отново</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="247"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation type="unfinished"/>
+        <translation>Не е открит аудио изходен уред. Моля, проверете и опитайте отново</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="69"/>
         <source>File path is empty</source>
-        <translation type="unfinished"/>
+        <translation>Пътят към файла е празен</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="155"/>
         <source>Insufficient memory to load document content</source>
-        <translation type="unfinished"/>
+        <translation>Недостатъчно памет за зареждане на съдържание на документа</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="177"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation type="unfinished"/>
+        <translation>Недостатъчно памет за конвертиране на кодирането</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="183"/>
         <source>Encoding conversion failed</source>
-        <translation type="unfinished"/>
+        <translation>Конвертирането на кодирането е сбъркано</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="189"/>
         <source>Converted content is empty</source>
-        <translation type="unfinished"/>
+        <translation>Конвертираното съдържание е празно</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="207"/>
         <source>Memory allocation failed</source>
-        <translation type="unfinished"/>
+        <translation>Паметта не е осигурена</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="211"/>
         <source>Error occurred: %1</source>
-        <translation type="unfinished"/>
+        <translation>Грешка: %1</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="215"/>
         <source>Unknown error occurred</source>
-        <translation type="unfinished"/>
+        <translation>Неизвестна грешка</translation>
     </message>
 </context>
 <context>
@@ -831,7 +831,7 @@
     <message>
         <location filename="../src/controls/replacebar.cpp" line="34"/>
         <source>Replace With</source>
-        <translation type="unfinished"/>
+        <translation>Замени с</translation>
     </message>
     <message>
         <location filename="../src/controls/replacebar.cpp" line="36"/>
@@ -893,19 +893,19 @@
     <message>
         <location filename="../src/common/settings.cpp" line="484"/>
         <source>This shortcut conflicts with system shortcut %1</source>
-        <translation type="unfinished"/>
+        <translation>Този кратък текст се конфликтува с системния кратък текст %1</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="487"/>
         <source>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</source>
-        <translation type="unfinished"/>
+        <translation>Този кратък текст се конфликтува с %1, кликнете върху Замени, за да направите този кратък текст ефективен веднага</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="682"/>
         <location filename="../src/common/settings.cpp" line="695"/>
         <location filename="../src/common/settings.cpp" line="704"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
-        <translation type="unfinished"/>
+        <translation>Кратката %1 е невалидна, моля, задайте друга.</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="736"/>
@@ -920,7 +920,7 @@
     <message>
         <location filename="../src/common/settings.cpp" line="740"/>
         <source>OK</source>
-        <translation type="unfinished"/>
+        <translation>Добре</translation>
     </message>
 </context>
 <context>
@@ -928,7 +928,7 @@
     <message>
         <location filename="../src/startmanager.cpp" line="411"/>
         <source>Untitled %1</source>
-        <translation type="unfinished"/>
+        <translation>Без заглавие %1</translation>
     </message>
 </context>
 <context>
@@ -946,22 +946,22 @@
     <message>
         <location filename="../src/controls/tabbar.cpp" line="643"/>
         <source>More options</source>
-        <translation type="unfinished"/>
+        <translation>Повече опции</translation>
     </message>
     <message>
         <location filename="../src/controls/tabbar.cpp" line="644"/>
         <source>Close tabs to the left</source>
-        <translation type="unfinished"/>
+        <translation>Затвори вкладки от ляво</translation>
     </message>
     <message>
         <location filename="../src/controls/tabbar.cpp" line="645"/>
         <source>Close tabs to the right</source>
-        <translation type="unfinished"/>
+        <translation>Затвори вкладки от дясно</translation>
     </message>
     <message>
         <location filename="../src/controls/tabbar.cpp" line="646"/>
         <source>Close unmodified tabs</source>
-        <translation type="unfinished"/>
+        <translation>Затвори непроменени вкладки</translation>
     </message>
 </context>
 <context>
@@ -1047,92 +1047,92 @@
         <location filename="../src/editor/dtextedit.cpp" line="320"/>
         <location filename="../src/editor/dtextedit.cpp" line="374"/>
         <source>Add Comment</source>
-        <translation type="unfinished"/>
+        <translation>Добави коментар</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="321"/>
         <source>Text to Speech</source>
-        <translation type="unfinished"/>
+        <translation>Текст към глас</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="322"/>
         <source>Stop reading</source>
-        <translation type="unfinished"/>
+        <translation>Стопи четене</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="323"/>
         <source>Speech to Text</source>
-        <translation type="unfinished"/>
+        <translation>Глас към текст</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="324"/>
         <source>Translate</source>
-        <translation type="unfinished"/>
+        <translation>Преведи</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="325"/>
         <source>Column Mode</source>
-        <translation type="unfinished"/>
+        <translation>Колонен режим</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="326"/>
         <source>Add bookmark</source>
-        <translation type="unfinished"/>
+        <translation>Добави закладка</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="327"/>
         <source>Remove Bookmark</source>
-        <translation type="unfinished"/>
+        <translation>Премахни закладка</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="328"/>
         <source>Previous bookmark</source>
-        <translation type="unfinished"/>
+        <translation>Предишна закладка</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="329"/>
         <source>Next bookmark</source>
-        <translation type="unfinished"/>
+        <translation>Следваща закладка</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="330"/>
         <source>Remove All Bookmarks</source>
-        <translation type="unfinished"/>
+        <translation>Премахни всички закладки</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="331"/>
         <source>Fold All</source>
-        <translation type="unfinished"/>
+        <translation>Затвори всичко</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="332"/>
         <source>Fold Current Level</source>
-        <translation type="unfinished"/>
+        <translation>Затвори текущия ниво</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="333"/>
         <source>Unfold All</source>
-        <translation type="unfinished"/>
+        <translation>Разгъни всичко</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="334"/>
         <source>Unfold Current Level</source>
-        <translation type="unfinished"/>
+        <translation>Разгъни текущия ниво</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="339"/>
         <source>Color Mark</source>
-        <translation type="unfinished"/>
+        <translation>Цветен бележка</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="343"/>
         <source>Clear All Marks</source>
-        <translation type="unfinished"/>
+        <translation>Премахни всички бележки</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="344"/>
         <source>Clear Last Mark</source>
-        <translation type="unfinished"/>
+        <translation>Премахни последната бележка</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="353"/>
@@ -1142,24 +1142,24 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="366"/>
         <source>Mark All</source>
-        <translation type="unfinished"/>
+        <translation>Маркирай всичко</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="375"/>
         <source>Remove Comment</source>
-        <translation type="unfinished"/>
+        <translation>Премахни коментар</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3208"/>
         <location filename="../src/editor/dtextedit.cpp" line="3211"/>
         <source>Copy failed: not enough memory</source>
-        <translation type="unfinished"/>
+        <translation>Копиране неуспешно: недостатъчно памет</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3333"/>
         <location filename="../src/editor/dtextedit.cpp" line="3335"/>
         <source>Press ALT and click lines to edit in column mode</source>
-        <translation type="unfinished"/>
+        <translation>Натиснете ALT и кликнете върху редове, за да редактирате в колонен режим</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="418"/>
@@ -1189,28 +1189,28 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="1363"/>
         <source>Selected line(s) copied</source>
-        <translation type="unfinished"/>
+        <translation>Избран ред(а) е копиран</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="1370"/>
         <source>Current line copied</source>
-        <translation type="unfinished"/>
+        <translation>Текстът на текущия ред е копиран</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="1400"/>
         <source>Selected line(s) clipped</source>
-        <translation type="unfinished"/>
+        <translation>Избран ред(и) е изрязан</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="1412"/>
         <source>Current line clipped</source>
-        <translation type="unfinished"/>
+        <translation>Текстът на текущия ред е изрязан</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3227"/>
         <location filename="../src/editor/dtextedit.cpp" line="3230"/>
         <source>Paste failed: not enough memory</source>
-        <translation type="unfinished"/>
+        <translation>Пастинг неуспешен: недостатъчно памет</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="4548"/>
@@ -1334,17 +1334,17 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="2322"/>
         <source>Current location remembered</source>
-        <translation type="unfinished"/>
+        <translation>Текущата позиция е запомнена</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2398"/>
         <source>Ctrl+&apos;=&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Ctrl+=&apos;</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2401"/>
         <source>Ctrl+&apos;-&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Ctrl=&apos;-</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2430"/>
@@ -1354,7 +1354,7 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="3061"/>
         <source>Untitled %1</source>
-        <translation type="unfinished"/>
+        <translation>Без заглавие %1</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="3543"/>
