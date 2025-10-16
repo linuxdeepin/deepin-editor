@@ -83,7 +83,7 @@
         <location filename="../src/editor/editwrapper.cpp" line="884"/>
         <location filename="../src/widgets/bottombar.cpp" line="74"/>
         <source>INSERT</source>
-        <translation type="unfinished"/>
+        <translation>SETT INN</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="888"/>
@@ -888,7 +888,7 @@
     <message>
         <location filename="../src/common/settings.cpp" line="154"/>
         <source>Fullscreen</source>
-        <translation type="unfinished"/>
+        <translation>Fullskjerm</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="484"/>
@@ -994,7 +994,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="310"/>
         <source>Delete</source>
-        <translation type="unfinished"/>
+        <translation>Slett</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="311"/>
@@ -1005,7 +1005,7 @@
         <location filename="../src/editor/dtextedit.cpp" line="312"/>
         <location filename="../src/widgets/window.cpp" line="535"/>
         <source>Find</source>
-        <translation type="unfinished"/>
+        <translation>Finn</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="313"/>
