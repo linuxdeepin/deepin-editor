@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="nl">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="nl">
 <context>
     <name>BottomBar</name>
     <message>
@@ -69,7 +67,7 @@
         <location filename="../src/editor/editwrapper.cpp" line="274"/>
         <location filename="../src/editor/editwrapper.cpp" line="620"/>
         <source>You do not have permission to save %1</source>
-        <translation>Je bent niet gemachtigd om %1 op te slaan</translation>
+        <translation>Je bent niet bevoegd om %1 op te slaan</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="836"/>
@@ -157,12 +155,12 @@
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="85"/>
         <source>Same path as the current file</source>
-        <translation>Dezelfde locatie als huidig bestand</translation>
+        <translation>Locatie van huidig bestand gebruiken</translation>
     </message>
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="86"/>
         <source>Customize the default path</source>
-        <translation>Standaardlocatie wijzigen</translation>
+        <translation>Standaardlocatie instellen:</translation>
     </message>
 </context>
 <context>
@@ -191,7 +189,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="12"/>
         <source>Font Style</source>
-        <translation>Lettertypestijl</translation>
+        <translation>Tekststijl</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="13"/>
@@ -201,7 +199,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="14"/>
         <source>Font Size</source>
-        <translation>Lettergrootte</translation>
+        <translation>Tekstgrootte</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="15"/>
@@ -274,17 +272,17 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="29"/>
         <source>Increment font size</source>
-        <translation>Lettertype vergroten</translation>
+        <translation>Tekst vergroten</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="30"/>
         <source>Decrement font size</source>
-        <translation>Lettertype verkleinen</translation>
+        <translation>Tekst verkleinen</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="31"/>
         <source>Reset font size</source>
-        <translation>Lettergrootte herstellen</translation>
+        <translation>Tekstgrootte herstellen</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="32"/>
@@ -294,7 +292,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="33"/>
         <source>Toggle fullscreen</source>
-        <translation>Beeldvullende modus in-/uitschakelen</translation>
+        <translation>Schermvullende weergave aan/uit</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="34"/>
@@ -324,7 +322,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="39"/>
         <source>Save cursor position</source>
-        <translation>Cursorpositie opslaan</translation>
+        <translation>Cursorpositie onthouden</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="40"/>
@@ -409,7 +407,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="56"/>
         <source>Duplicate line</source>
-        <translation>Regel dupliceren</translation>
+        <translation>Regel klonen</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="57"/>
@@ -424,12 +422,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="59"/>
         <source>Swap line up</source>
-        <translation>Regel omhoog verwisselen</translation>
+        <translation>Wisselen met regel erboven</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="60"/>
         <source>Swap line down</source>
-        <translation>Regel omlaag verwisselen</translation>
+        <translation>Wisselen met regel eronder</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="61"/>
@@ -504,12 +502,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="75"/>
         <source>Forward over a pair</source>
-        <translation>Voorwaarts over een stel</translation>
+        <translation>Voorwaarts over een groep</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="76"/>
         <source>Backward over a pair</source>
-        <translation>Achterwaarts over een stel</translation>
+        <translation>Achterwaarts over een groep</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="77"/>
@@ -639,12 +637,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="106"/>
         <source>Word wrap</source>
-        <translation>Regelafbreking</translation>
+        <translation>Regels afbreken</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="107"/>
         <source>Code folding flag</source>
-        <translation>Codefloodvlag</translation>
+        <translation>Code-invouwknop tonen</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="108"/>
@@ -770,57 +768,57 @@
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="243"/>
         <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
-        <translation>Installeer &apos;UOS AI&apos; vanaf de App Store voordat u het gebruikt</translation>
+        <translation>Installeer eerst UOS AI via de appwinkel</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="245"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation>Geen audio-inapparaat is gedetecteerd. Controleer en probeer opnieuw</translation>
+        <translation>Er is geen audioinvoer. Controleer de geluidsinstellingen en probeer het opnieuw.</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="247"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation>Geen audio-outapparaat is gedetecteerd. Controleer en probeer opnieuw</translation>
+        <translation>Er is geen audiouitvoer. Controleer de geluidsinstellingen en probeer het opnieuw.</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="69"/>
         <source>File path is empty</source>
-        <translation>Bestandspad is leeg</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="155"/>
         <source>Insufficient memory to load document content</source>
-        <translation>Onvoldoende geheugen om het documentinhoud te laden</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="177"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation>Onvoldoende geheugen voor coderingconversie</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="183"/>
         <source>Encoding conversion failed</source>
-        <translation>Coderingconversie is mislukt</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="189"/>
         <source>Converted content is empty</source>
-        <translation>Geconverteerde inhoud is leeg</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="207"/>
         <source>Memory allocation failed</source>
-        <translation>Geheugenallocatie is mislukt</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="211"/>
         <source>Error occurred: %1</source>
-        <translation>Fout opgetreden: %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="215"/>
         <source>Unknown error occurred</source>
-        <translation>Onbekende fout is opgetreden</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -860,9 +858,9 @@
     <name>S:</name>
     <message>
         <location filename="../third/libiconv-1.16/src/iconv.c" line="103"/>
-        <source></source>
+        <source/>
         <comment>The first line of the short usage message.</comment>
-        <translation></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -890,12 +888,12 @@
     <message>
         <location filename="../src/common/settings.cpp" line="154"/>
         <source>Fullscreen</source>
-        <translation>Beeldvullende modus</translation>
+        <translation>Schermvullende weergave</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="484"/>
         <source>This shortcut conflicts with system shortcut %1</source>
-        <translation>Deze sneltoets is wordt al gebruikt door de algemene sneltoets %1</translation>
+        <translation>Deze sneltoets wordt al gebruikt door de algemene sneltoets %1</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="487"/>
@@ -907,7 +905,7 @@
         <location filename="../src/common/settings.cpp" line="695"/>
         <location filename="../src/common/settings.cpp" line="704"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
-        <translation>De sneltoets &apos;%1&apos; is ongeldig. Stel een andere in.</translation>
+        <translation>De sneltoets ‘%1’ is ongeldig. Stel een andere in.</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="736"/>
@@ -963,7 +961,7 @@
     <message>
         <location filename="../src/controls/tabbar.cpp" line="646"/>
         <source>Close unmodified tabs</source>
-        <translation>Onaangepaste tabbladen sluiten</translation>
+        <translation>Onaangetaste tabbladen sluiten</translation>
     </message>
 </context>
 <context>
@@ -1033,17 +1031,17 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="317"/>
         <source>Fullscreen</source>
-        <translation>Beeldvullende modus</translation>
+        <translation>Schermvullende weergave</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="318"/>
         <source>Exit fullscreen</source>
-        <translation>Beeldvullende modus verlaten</translation>
+        <translation>Schermvullende weergave verlaten</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="319"/>
         <source>Display in file manager</source>
-        <translation>Tonen in bestandsbeheerder</translation>
+        <translation>Tonen in bestandsbeheer</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="320"/>
@@ -1129,12 +1127,12 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="343"/>
         <source>Clear All Marks</source>
-        <translation>Alle markeringen missen</translation>
+        <translation>Alle markeringen wissen</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="344"/>
         <source>Clear Last Mark</source>
-        <translation>Recentste markering demarkeren</translation>
+        <translation>Recentste markering wissen</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="353"/>
@@ -1292,7 +1290,7 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="687"/>
         <source>You do not have permission to open %1</source>
-        <translation>Je bent niet gemachtigd om %1 te openen</translation>
+        <translation>Je bent niet bevoegd om %1 te openen</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="738"/>
@@ -1309,7 +1307,7 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="1290"/>
         <source>You do not have permission to save %1</source>
-        <translation>Je bent niet gemachtigd om %1 op te slaan</translation>
+        <translation>Je bent niet bevoegd om %1 op te slaan</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1312"/>
