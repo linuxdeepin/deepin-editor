@@ -768,57 +768,57 @@
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="243"/>
         <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
-        <translation type="unfinished"/>
+        <translation>Tətbiq mağazasından &apos;UOS AI&apos; təqdim edin, istifadə etməzdən əvvəl</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="245"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation type="unfinished"/>
+        <translation>Audio daxil edici cihaz aşkarlanmadı. Təkkləyin və ya təkrar cəhd edin</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="247"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation type="unfinished"/>
+        <translation>Audio çıxış cihazı aşkarlanmadı. Təkkləyin və ya təkrar cəhd edin</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="69"/>
         <source>File path is empty</source>
-        <translation type="unfinished"/>
+        <translation>Fayl yolunun boş olduğunu</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="155"/>
         <source>Insufficient memory to load document content</source>
-        <translation type="unfinished"/>
+        <translation>Dokument məzmunun yüklənməsi üçün yeterli yaddaş yoxdur</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="177"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation type="unfinished"/>
+        <translation>Kodlamadan keçirmək üçün yeterli yaddaş yoxdur</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="183"/>
         <source>Encoding conversion failed</source>
-        <translation type="unfinished"/>
+        <translation>Kodlama çevrilməsi uğursuz oldu</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="189"/>
         <source>Converted content is empty</source>
-        <translation type="unfinished"/>
+        <translation>Çevrilməmiş məzmun boşdur</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="207"/>
         <source>Memory allocation failed</source>
-        <translation type="unfinished"/>
+        <translation>Yaddaş təyinatı uğursuz oldu</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="211"/>
         <source>Error occurred: %1</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Xəta baş verdi: %1&apos;</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="215"/>
         <source>Unknown error occurred</source>
-        <translation type="unfinished"/>
+        <translation>Məlum olmayan xəta baş verdi</translation>
     </message>
 </context>
 <context>
