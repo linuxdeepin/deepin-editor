@@ -19,7 +19,7 @@
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="44"/>
         <source>Loading:</source>
-        <translation>Načítá se:</translation>
+        <translation>Nahrává se:</translation>
     </message>
 </context>
 <context>
@@ -67,7 +67,7 @@
         <location filename="../src/editor/editwrapper.cpp" line="274"/>
         <location filename="../src/editor/editwrapper.cpp" line="620"/>
         <source>You do not have permission to save %1</source>
-        <translation>Nemáte oprávnění uložit %1</translation>
+        <translation>Nemáte oprávnění pro uložení %1</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="836"/>
@@ -150,17 +150,17 @@
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="84"/>
         <source>Remember the last used path</source>
-        <translation>Pamatovat si poslední použité umístění</translation>
+        <translation>Pamatovat si poslední použitou cestu</translation>
     </message>
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="85"/>
         <source>Same path as the current file</source>
-        <translation>Stejné umístění jako to u stávajícího souboru</translation>
+        <translation>Stejná cesta jako k nynějšímu souboru</translation>
     </message>
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="86"/>
         <source>Customize the default path</source>
-        <translation>Přizpůsobit výchozí popis umístění</translation>
+        <translation>Přizpůsobit výchozí cestu</translation>
     </message>
 </context>
 <context>
@@ -768,57 +768,57 @@
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="243"/>
         <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
-        <translation type="unfinished"/>
+        <translation>Před použitím si prosím nainstalujte „UOS AI&quot; z App Store</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="245"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation type="unfinished"/>
+        <translation>Není detekován žádný vstupní audio zařízení. Zkontrolujte a zkuste to znovu</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="247"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation type="unfinished"/>
+        <translation>Není detekován žádný výstupní audio zařízení. Zkontrolujte a zkuste to znovu</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="69"/>
         <source>File path is empty</source>
-        <translation type="unfinished"/>
+        <translation>Cesta k souboru je prázdná</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="155"/>
         <source>Insufficient memory to load document content</source>
-        <translation type="unfinished"/>
+        <translation>Nedostatek paměti pro načtení obsahu dokumentu</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="177"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation type="unfinished"/>
+        <translation>Nedostatek paměti pro převod kódování</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="183"/>
         <source>Encoding conversion failed</source>
-        <translation type="unfinished"/>
+        <translation>Převod kódování se nezdařil</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="189"/>
         <source>Converted content is empty</source>
-        <translation type="unfinished"/>
+        <translation>Převedený obsah je prázdný</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="207"/>
         <source>Memory allocation failed</source>
-        <translation type="unfinished"/>
+        <translation>Přidělení paměti se nezdařilo</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="211"/>
         <source>Error occurred: %1</source>
-        <translation type="unfinished"/>
+        <translation>Došlo k chybě: %1</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="215"/>
         <source>Unknown error occurred</source>
-        <translation type="unfinished"/>
+        <translation>Došlo k neznámé chybě</translation>
     </message>
 </context>
 <context>
