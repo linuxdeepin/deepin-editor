@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_TW">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="zh_TW">
 <context>
     <name>BottomBar</name>
     <message>
@@ -21,7 +19,7 @@
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="44"/>
         <source>Loading:</source>
-        <translation>文件載入中：</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -79,13 +77,13 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="842"/>
         <source>File has changed on disk. Reload?</source>
-        <translation>磁碟上的檔案已被更改。是否重新載入？</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="884"/>
         <location filename="../src/widgets/bottombar.cpp" line="74"/>
         <source>INSERT</source>
-        <translation>插入</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="888"/>
@@ -118,12 +116,12 @@
     <message>
         <location filename="../src/controls/findbar.cpp" line="37"/>
         <source>Next</source>
-        <translation>下一個</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/findbar.cpp" line="38"/>
         <source>Replace</source>
-        <translation>取代</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -294,12 +292,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="33"/>
         <source>Toggle fullscreen</source>
-        <translation>切換全螢幕</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="34"/>
         <source>Find</source>
-        <translation>尋找</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="35"/>
@@ -329,7 +327,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="40"/>
         <source>Reset cursor position</source>
-        <translation>跳轉到儲存游標位置</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="41"/>
@@ -359,7 +357,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="46"/>
         <source>Decrease indent</source>
-        <translation>減少縮排</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="47"/>
@@ -369,17 +367,17 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="48"/>
         <source>Backward character</source>
-        <translation>左移一個字元</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="49"/>
         <source>Forward word</source>
-        <translation>右移一個詞</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="50"/>
         <source>Backward word</source>
-        <translation>左移一個詞</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="51"/>
@@ -389,7 +387,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="52"/>
         <source>Previous line</source>
-        <translation>上一行</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="53"/>
@@ -409,7 +407,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="56"/>
         <source>Duplicate line</source>
-        <translation>複製並貼上目前行</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="57"/>
@@ -474,7 +472,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="69"/>
         <source>Move to line indentation</source>
-        <translation>移動到行縮排</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="70"/>
@@ -509,7 +507,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="76"/>
         <source>Backward over a pair</source>
-        <translation>向左匹配</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="77"/>
@@ -529,7 +527,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="80"/>
         <source>Paste</source>
-        <translation>貼上</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="81"/>
@@ -569,7 +567,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="88"/>
         <source>Add comment</source>
-        <translation>添加注釋</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="89"/>
@@ -579,7 +577,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="90"/>
         <source>Undo</source>
-        <translation>復原</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="91"/>
@@ -624,7 +622,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="101"/>
         <source>Startup</source>
-        <translation>啟動</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="102"/>
@@ -639,7 +637,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="106"/>
         <source>Word wrap</source>
-        <translation>自動換行</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="107"/>
@@ -654,12 +652,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="109"/>
         <source>Show bookmarks icon</source>
-        <translation>顯示書籤圖示</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="110"/>
         <source>Show whitespaces and tabs</source>
-        <translation>顯示空白字元/定位符號</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="111"/>
@@ -719,7 +717,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="122"/>
         <source>Hebrew</source>
-        <translation>希伯來語</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="127"/>
@@ -729,7 +727,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="128"/>
         <source>ChineseTraditional</source>
-        <translation>繁體中文</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="129"/>
@@ -770,57 +768,57 @@
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="243"/>
         <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
-        <translation>請前往應用商店安裝“UOS AI”後再使用</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="245"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation>未檢測到音頻輸入設備，請檢查後重試</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="247"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation>未檢測到音頻輸出設備，請檢查後重試</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="69"/>
         <source>File path is empty</source>
-        <translation>檔案路徑為空</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="155"/>
         <source>Insufficient memory to load document content</source>
-        <translation>記憶體不足，無法載入文件內容</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="177"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation>記憶體不足，無法進行編碼轉換</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="183"/>
         <source>Encoding conversion failed</source>
-        <translation>編碼轉換失敗</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="189"/>
         <source>Converted content is empty</source>
-        <translation>轉換後的內容為空</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="207"/>
         <source>Memory allocation failed</source>
-        <translation>記憶體分配失敗</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="211"/>
         <source>Error occurred: %1</source>
-        <translation>發生錯誤: %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="215"/>
         <source>Unknown error occurred</source>
-        <translation>發生未知錯誤</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -860,9 +858,9 @@
     <name>S:</name>
     <message>
         <location filename="../third/libiconv-1.16/src/iconv.c" line="103"/>
-        <source></source>
+        <source/>
         <comment>The first line of the short usage message.</comment>
-        <translation></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -890,7 +888,7 @@
     <message>
         <location filename="../src/common/settings.cpp" line="154"/>
         <source>Fullscreen</source>
-        <translation>全螢幕</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="484"/>
@@ -917,7 +915,7 @@
     <message>
         <location filename="../src/common/settings.cpp" line="737"/>
         <source>Replace</source>
-        <translation>取代</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="740"/>
@@ -981,7 +979,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="307"/>
         <source>Cut</source>
-        <translation>剪下</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="308"/>
@@ -991,12 +989,12 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="309"/>
         <source>Paste</source>
-        <translation>貼上</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="310"/>
         <source>Delete</source>
-        <translation>刪除</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="311"/>
@@ -1007,7 +1005,7 @@
         <location filename="../src/editor/dtextedit.cpp" line="312"/>
         <location filename="../src/widgets/window.cpp" line="535"/>
         <source>Find</source>
-        <translation>尋找</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="313"/>
@@ -1023,7 +1021,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="315"/>
         <source>Turn on Read-Only mode</source>
-        <translation>開啟唯讀模式</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="316"/>
@@ -1059,7 +1057,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="322"/>
         <source>Stop reading</source>
-        <translation>停止朗讀</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="323"/>
@@ -1074,7 +1072,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="325"/>
         <source>Column Mode</source>
-        <translation>列編輯模式</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="326"/>
@@ -1144,7 +1142,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="366"/>
         <source>Mark All</source>
-        <translation>標記所有</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="375"/>
@@ -1196,7 +1194,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="1370"/>
         <source>Current line copied</source>
-        <translation>已複製目前行到剪貼簿</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="1400"/>
@@ -1366,7 +1364,7 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="3544"/>
         <source>Discard</source>
-        <translation>不儲存</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>
