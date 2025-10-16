@@ -1,3 +1,9 @@
+deepin-editor (6.5.39) unstable; urgency=medium
+
+  * i18n: Updates for project Deepin Text Editor (#391)
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Thu, 16 Oct 2025 19:37:27 +0800
+
 deepin-editor (6.5.38) unstable; urgency=medium
 
   * chore: Update linglong base and runtime
