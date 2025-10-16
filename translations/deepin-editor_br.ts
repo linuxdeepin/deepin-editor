@@ -67,7 +67,7 @@
         <location filename="../src/editor/editwrapper.cpp" line="274"/>
         <location filename="../src/editor/editwrapper.cpp" line="620"/>
         <source>You do not have permission to save %1</source>
-        <translation type="unfinished"/>
+        <translation>N&apos;ho peus ket an aotre da enrollañ %1</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="836"/>
@@ -77,13 +77,13 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="842"/>
         <source>File has changed on disk. Reload?</source>
-        <translation type="unfinished"/>
+        <translation>Ar restr a zo bet kemmet war an disk. Adkargañ?</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="884"/>
         <location filename="../src/widgets/bottombar.cpp" line="74"/>
         <source>INSERT</source>
-        <translation type="unfinished"/>
+        <translation>ENLAKAAT</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="888"/>
@@ -116,12 +116,12 @@
     <message>
         <location filename="../src/controls/findbar.cpp" line="37"/>
         <source>Next</source>
-        <translation type="unfinished"/>
+        <translation>Da-heul</translation>
     </message>
     <message>
         <location filename="../src/controls/findbar.cpp" line="38"/>
         <source>Replace</source>
-        <translation type="unfinished"/>
+        <translation>Erlec&apos;hiañ</translation>
     </message>
 </context>
 <context>
@@ -227,12 +227,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="20"/>
         <source>New window</source>
-        <translation type="unfinished"/>
+        <translation>Prenestr nevez</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="21"/>
         <source>Save</source>
-        <translation type="unfinished"/>
+        <translation>Enrollañ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="22"/>
@@ -247,7 +247,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="24"/>
         <source>Previous tab</source>
-        <translation type="unfinished"/>
+        <translation>Ivinell gent</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="25"/>
@@ -292,12 +292,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="33"/>
         <source>Toggle fullscreen</source>
-        <translation type="unfinished"/>
+        <translation>Gwintañ e skramm-leun</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="34"/>
         <source>Find</source>
-        <translation type="unfinished"/>
+        <translation>Klask</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="35"/>
@@ -322,12 +322,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="39"/>
         <source>Save cursor position</source>
-        <translation type="unfinished"/>
+        <translation>Enrollañ lec&apos;hiadur ar reti</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="40"/>
         <source>Reset cursor position</source>
-        <translation type="unfinished"/>
+        <translation>Adderaouekaat lec&apos;hiadur ar reti</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="41"/>
@@ -352,12 +352,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="45"/>
         <source>Increase indent</source>
-        <translation type="unfinished"/>
+        <translation>Brasaat ar spas</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="46"/>
         <source>Decrease indent</source>
-        <translation type="unfinished"/>
+        <translation>Bihanaat ar spas</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="47"/>
@@ -367,17 +367,17 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="48"/>
         <source>Backward character</source>
-        <translation type="unfinished"/>
+        <translation>Arouezenn gent</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="49"/>
         <source>Forward word</source>
-        <translation type="unfinished"/>
+        <translation>Ger da-heul</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="50"/>
         <source>Backward word</source>
-        <translation type="unfinished"/>
+        <translation>Ger kent</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="51"/>
@@ -387,7 +387,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="52"/>
         <source>Previous line</source>
-        <translation type="unfinished"/>
+        <translation>Linenn gent</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="53"/>
@@ -407,7 +407,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="56"/>
         <source>Duplicate line</source>
-        <translation type="unfinished"/>
+        <translation>Eiladiñ al linenn</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="57"/>
@@ -437,7 +437,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="62"/>
         <source>Scroll down one line</source>
-        <translation type="unfinished"/>
+        <translation>Dibunañ al linenn war-draoñ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="63"/>
@@ -447,7 +447,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="64"/>
         <source>Page down</source>
-        <translation type="unfinished"/>
+        <translation>Pajenn gent</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="65"/>
@@ -462,7 +462,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="67"/>
         <source>Move to end of text</source>
-        <translation type="unfinished"/>
+        <translation>Gwintañ betek fin an destenn</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="68"/>
@@ -472,7 +472,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="69"/>
         <source>Move to line indentation</source>
-        <translation type="unfinished"/>
+        <translation>Gwintañ en indeksañ linenno</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="70"/>
@@ -502,17 +502,17 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="75"/>
         <source>Forward over a pair</source>
-        <translation type="unfinished"/>
+        <translation>Mont da fin an diuzadenn</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="76"/>
         <source>Backward over a pair</source>
-        <translation type="unfinished"/>
+        <translation>Mont da zeroù an diuzadenn</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="77"/>
         <source>Select all</source>
-        <translation type="unfinished"/>
+        <translation>Diuzañ pep-tra</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="78"/>
@@ -522,12 +522,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="79"/>
         <source>Cut</source>
-        <translation type="unfinished"/>
+        <translation>Troc&apos;hañ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="80"/>
         <source>Paste</source>
-        <translation type="unfinished"/>
+        <translation>Pegañ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="81"/>
@@ -537,7 +537,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="82"/>
         <source>Mark</source>
-        <translation type="unfinished"/>
+        <translation>Kochañ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="83"/>
@@ -552,7 +552,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="85"/>
         <source>Cut line</source>
-        <translation type="unfinished"/>
+        <translation>Troc&apos;hañ al linenn</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="86"/>
@@ -562,7 +562,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="87"/>
         <source>Read-Only mode</source>
-        <translation type="unfinished"/>
+        <translation>Mod lenn hepken</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="88"/>
@@ -577,7 +577,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="90"/>
         <source>Undo</source>
-        <translation type="unfinished"/>
+        <translation>Nullañ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="91"/>
@@ -888,7 +888,7 @@
     <message>
         <location filename="../src/common/settings.cpp" line="154"/>
         <source>Fullscreen</source>
-        <translation type="unfinished"/>
+        <translation>Skramm-leun</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="484"/>
@@ -915,7 +915,7 @@
     <message>
         <location filename="../src/common/settings.cpp" line="737"/>
         <source>Replace</source>
-        <translation type="unfinished"/>
+        <translation>Erlec&apos;hiañ</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="740"/>
@@ -969,7 +969,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="305"/>
         <source>Undo</source>
-        <translation type="unfinished"/>
+        <translation>Nullañ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="306"/>
@@ -979,22 +979,22 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="307"/>
         <source>Cut</source>
-        <translation type="unfinished"/>
+        <translation>Troc&apos;hañ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="308"/>
         <source>Copy</source>
-        <translation type="unfinished"/>
+        <translation>Eilañ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="309"/>
         <source>Paste</source>
-        <translation type="unfinished"/>
+        <translation>Pegañ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="310"/>
         <source>Delete</source>
-        <translation type="unfinished"/>
+        <translation>Dilemel</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="311"/>
@@ -1005,7 +1005,7 @@
         <location filename="../src/editor/dtextedit.cpp" line="312"/>
         <location filename="../src/widgets/window.cpp" line="535"/>
         <source>Find</source>
-        <translation type="unfinished"/>
+        <translation>Klask</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="313"/>
@@ -1021,7 +1021,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="315"/>
         <source>Turn on Read-Only mode</source>
-        <translation type="unfinished"/>
+        <translation>Enaouiñ ar mod lenn hepken</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="316"/>
@@ -1169,7 +1169,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="419"/>
         <source>Upper Case</source>
-        <translation type="unfinished"/>
+        <translation>Pennlizherennañ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="420"/>
@@ -1194,7 +1194,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="1370"/>
         <source>Current line copied</source>
-        <translation type="unfinished"/>
+        <translation>Linenn a-vremañ eilet</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="1400"/>
@@ -1225,7 +1225,7 @@
         <location filename="../src/editor/dtextedit.cpp" line="8015"/>
         <location filename="../src/editor/dtextedit.cpp" line="8026"/>
         <source>Read-Only mode is on</source>
-        <translation type="unfinished"/>
+        <translation>Ar mod lenn hepken a zo enaouet</translation>
     </message>
 </context>
 <context>
@@ -1242,7 +1242,7 @@
         <location filename="../src/controls/warningnotices.cpp" line="25"/>
         <location filename="../src/widgets/window.cpp" line="531"/>
         <source>Save as</source>
-        <translation type="unfinished"/>
+        <translation>Enrollañ dindan</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="527"/>
@@ -1263,7 +1263,7 @@
         <location filename="../src/widgets/window.cpp" line="530"/>
         <location filename="../src/widgets/window.cpp" line="3545"/>
         <source>Save</source>
-        <translation type="unfinished"/>
+        <translation>Enrollañ</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="532"/>
@@ -1319,7 +1319,7 @@
         <location filename="../src/widgets/window.cpp" line="1481"/>
         <location filename="../src/widgets/window.cpp" line="1529"/>
         <source>Save File</source>
-        <translation type="unfinished"/>
+        <translation>Enrollañ ar restr</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1483"/>
@@ -1354,7 +1354,7 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="3061"/>
         <source>Untitled %1</source>
-        <translation type="unfinished"/>
+        <translation>Hep titl %1</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="3543"/>
@@ -1364,7 +1364,7 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="3544"/>
         <source>Discard</source>
-        <translation type="unfinished"/>
+        <translation>Na ober van</translation>
     </message>
 </context>
 </TS>
