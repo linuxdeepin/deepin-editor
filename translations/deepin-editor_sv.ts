@@ -19,7 +19,7 @@
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="44"/>
         <source>Loading:</source>
-        <translation type="unfinished"/>
+        <translation>Läser in:</translation>
     </message>
 </context>
 <context>
@@ -56,7 +56,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="360"/>
         <source>Encoding changed. Do you want to save the file now?</source>
-        <translation type="unfinished"/>
+        <translation>Kodningen har ändrats. Vill du spara filen nu?</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="520"/>
@@ -83,12 +83,12 @@
         <location filename="../src/editor/editwrapper.cpp" line="884"/>
         <location filename="../src/widgets/bottombar.cpp" line="74"/>
         <source>INSERT</source>
-        <translation type="unfinished"/>
+        <translation>INFOGA</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="888"/>
         <source>OVERWRITE</source>
-        <translation type="unfinished"/>
+        <translation>SKRIVÖVER</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="892"/>
@@ -98,7 +98,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="1618"/>
         <source>The file cannot be read, which may be too large or has been damaged!</source>
-        <translation type="unfinished"/>
+        <translation>Filen kan inte läsas, den kan vara för stor eller ha skadats!</translation>
     </message>
 </context>
 <context>
@@ -137,12 +137,12 @@
     <message>
         <location filename="../src/editorapplication.cpp" line="12"/>
         <source>Text Editor is a powerful tool for viewing and editing text files.</source>
-        <translation type="unfinished"/>
+        <translation>Textredigerare är ett kraftfullt verktyg för att visa och redigera textfiler.</translation>
     </message>
     <message>
         <location filename="../src/editorapplication.cpp" line="34"/>
         <source>Text Editor</source>
-        <translation type="unfinished"/>
+        <translation>Textredigerare</translation>
     </message>
 </context>
 <context>
@@ -150,12 +150,12 @@
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="84"/>
         <source>Remember the last used path</source>
-        <translation type="unfinished"/>
+        <translation>Kom ihåg den senast använda sökvägen</translation>
     </message>
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="85"/>
         <source>Same path as the current file</source>
-        <translation type="unfinished"/>
+        <translation>Samma sökväg som den aktuella filen</translation>
     </message>
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="86"/>
@@ -168,7 +168,7 @@
     <message>
         <location filename="../src/editorapplication.cpp" line="28"/>
         <source>Text Editor</source>
-        <translation type="unfinished"/>
+        <translation>Textredigerare</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="294"/>
