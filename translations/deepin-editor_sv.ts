@@ -1153,7 +1153,7 @@
         <location filename="../src/editor/dtextedit.cpp" line="3208"/>
         <location filename="../src/editor/dtextedit.cpp" line="3211"/>
         <source>Copy failed: not enough memory</source>
-        <translation type="unfinished"/>
+        <translation>Kopiering misslyckades: slut på minne</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3333"/>
@@ -1210,7 +1210,7 @@
         <location filename="../src/editor/dtextedit.cpp" line="3227"/>
         <location filename="../src/editor/dtextedit.cpp" line="3230"/>
         <source>Paste failed: not enough memory</source>
-        <translation type="unfinished"/>
+        <translation>Inklistring misslyckades: slut på minne</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="4548"/>
@@ -1339,12 +1339,12 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="2398"/>
         <source>Ctrl+&apos;=&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Ctrl+&apos;=&apos;</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2401"/>
         <source>Ctrl+&apos;-&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Ctrl+&apos;-&apos;</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2430"/>
