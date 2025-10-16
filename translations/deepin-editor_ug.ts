@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ug">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ug">
 <context>
     <name>BottomBar</name>
     <message>
@@ -474,7 +472,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="69"/>
         <source>Move to line indentation</source>
-        <translation>قۇر قىسقارغۇچە يۆتكەش</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="70"/>
@@ -509,7 +507,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="76"/>
         <source>Backward over a pair</source>
-        <translation>سولغا ماسلاشسۇن</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="77"/>
@@ -770,57 +768,57 @@
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="243"/>
         <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
-        <translation>ئۇنى ئاستىلەش چۈشىنىش ئۈچۈن &apos;UOS AI&apos; نى ئەپ سىتى ئاستىدىن سېنىشلىق كېرەك</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="245"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation>ئەپسىلەش كىرەكلىك ھەجىمەتىنى ھەققىدە تەسىر قىلمىغان. تەسىر قىلىڭ ۋە ھەققىدە كېرەك</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="247"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation>ئەپسىلەش چыغىش ھەجىمەتىنى ھەققىدە تەسىر قىلمىغان. تەسىر قىلىڭ ۋە ھەققىدە كېرەك</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="69"/>
         <source>File path is empty</source>
-        <translation>ھۆججەت يولى ھەققىدە كۆرۈنگۈچ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="155"/>
         <source>Insufficient memory to load document content</source>
-        <translation>ھۆججەت مېنىسىنى چۈشىنىش چۈشىنىشلىق مېمىرىيىسى ھەققىدە كۆرۈنگۈچ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="177"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation>كىرەكلىك مېمىرىيىسى ھەققىدە كۆرۈنگۈچ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="183"/>
         <source>Encoding conversion failed</source>
-        <translation>كىرەكلىك ھەجىمەتىنى تەسىر قىلغان</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="189"/>
         <source>Converted content is empty</source>
-        <translation>تەسىر قىلغان مېنىسىنى ھەققىدە كۆرۈنگۈچ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="207"/>
         <source>Memory allocation failed</source>
-        <translation>مېمىرىيىسى تەسىر قىلغان</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="211"/>
         <source>Error occurred: %1</source>
-        <translation>تەسىر قىلغان: %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="215"/>
         <source>Unknown error occurred</source>
-        <translation>نىشانلىق تەسىر قىلمىغان</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -860,9 +858,9 @@
     <name>S:</name>
     <message>
         <location filename="../third/libiconv-1.16/src/iconv.c" line="103"/>
-        <source></source>
+        <source/>
         <comment>The first line of the short usage message.</comment>
-        <translation></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -890,7 +888,7 @@
     <message>
         <location filename="../src/common/settings.cpp" line="154"/>
         <source>Fullscreen</source>
-        <translation>پۈتۈن ئېكران</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="484"/>
@@ -996,7 +994,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="310"/>
         <source>Delete</source>
-        <translation>ئۆچۈرۈش</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="311"/>
