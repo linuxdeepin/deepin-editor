@@ -19,7 +19,7 @@
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="44"/>
         <source>Loading:</source>
-        <translation type="unfinished"/>
+        <translation>بارگذاری:</translation>
     </message>
 </context>
 <context>
@@ -56,7 +56,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="360"/>
         <source>Encoding changed. Do you want to save the file now?</source>
-        <translation type="unfinished"/>
+        <translation>کدگذاری تغییر کرد. آیا می‌خواهید فایل را اکنون ذخیره کنید؟</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="520"/>
@@ -98,7 +98,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="1618"/>
         <source>The file cannot be read, which may be too large or has been damaged!</source>
-        <translation type="unfinished"/>
+        <translation>فایل قابل خواندن نیست، که ممکن است بسیار بزرگ یا خراب شده باشد!</translation>
     </message>
 </context>
 <context>
@@ -137,12 +137,12 @@
     <message>
         <location filename="../src/editorapplication.cpp" line="12"/>
         <source>Text Editor is a powerful tool for viewing and editing text files.</source>
-        <translation type="unfinished"/>
+        <translation>ویرایشگر متن ابزاری قدرتمند برای نمایش و ویرایش فایل‌های متنی است.</translation>
     </message>
     <message>
         <location filename="../src/editorapplication.cpp" line="34"/>
         <source>Text Editor</source>
-        <translation type="unfinished"/>
+        <translation>ویرایشگر متن</translation>
     </message>
 </context>
 <context>
@@ -150,17 +150,17 @@
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="84"/>
         <source>Remember the last used path</source>
-        <translation type="unfinished"/>
+        <translation>مسیر آخر استفاده شده را به خاطر بسپار</translation>
     </message>
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="85"/>
         <source>Same path as the current file</source>
-        <translation type="unfinished"/>
+        <translation>مسیر یکسان با فایل جاری</translation>
     </message>
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="86"/>
         <source>Customize the default path</source>
-        <translation type="unfinished"/>
+        <translation>مسیر پیش‌فرض را شخصی‌سازی کنید</translation>
     </message>
 </context>
 <context>
@@ -168,7 +168,7 @@
     <message>
         <location filename="../src/editorapplication.cpp" line="28"/>
         <source>Text Editor</source>
-        <translation type="unfinished"/>
+        <translation>ویرایشگر متن</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="294"/>
@@ -272,12 +272,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="29"/>
         <source>Increment font size</source>
-        <translation type="unfinished"/>
+        <translation>اندازه فونت را افزایش دهید</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="30"/>
         <source>Decrement font size</source>
-        <translation type="unfinished"/>
+        <translation>اندازه فونت را کاهش دهید</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="31"/>
@@ -287,7 +287,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="32"/>
         <source>Help</source>
-        <translation type="unfinished"/>
+        <translation>کمک</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="33"/>
@@ -302,12 +302,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="35"/>
         <source>Find Next</source>
-        <translation type="unfinished"/>
+        <translation>یافتن بعدی</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="36"/>
         <source>Find Previous</source>
-        <translation type="unfinished"/>
+        <translation>یافتن قبلی</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="37"/>
@@ -567,12 +567,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="88"/>
         <source>Add comment</source>
-        <translation type="unfinished"/>
+        <translation>اضافه کردن نظر</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="89"/>
         <source>Remove comment</source>
-        <translation type="unfinished"/>
+        <translation>حذف نظر</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="90"/>
@@ -587,17 +587,17 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="92"/>
         <source>Add/Remove bookmark</source>
-        <translation type="unfinished"/>
+        <translation>افزودن/حذف نشانک</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="93"/>
         <source>Move to previous bookmark</source>
-        <translation type="unfinished"/>
+        <translation>به نشانک قبلی جابه‌جا شوید</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="94"/>
         <source>Move to next bookmark</source>
-        <translation type="unfinished"/>
+        <translation>به نشانک بعدی جابه‌جا شوید</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="95"/>
@@ -617,147 +617,147 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="99"/>
         <source>Paste by pressing a middle mouse button</source>
-        <translation type="unfinished"/>
+        <translation>کپی کردن با فشار دادن دکمه میانی ماوس</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="101"/>
         <source>Startup</source>
-        <translation type="unfinished"/>
+        <translation>شروع</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="102"/>
         <source>Reopen last closed tabs</source>
-        <translation type="unfinished"/>
+        <translation>تک‌ها را که آخرین بار بسته شده‌اند دوباره باز کنید</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="104"/>
         <source>Open/Save Settings</source>
-        <translation type="unfinished"/>
+        <translation>باز کردن/ذخیره تنظیمات</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="106"/>
         <source>Word wrap</source>
-        <translation type="unfinished"/>
+        <translation>بند کردن کلمات</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="107"/>
         <source>Code folding flag</source>
-        <translation type="unfinished"/>
+        <translation>پرچم چاپ کد</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="108"/>
         <source>Show line numbers</source>
-        <translation type="unfinished"/>
+        <translation>نمایش شماره خطوط</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="109"/>
         <source>Show bookmarks icon</source>
-        <translation type="unfinished"/>
+        <translation>نمایش نشانک ایکون</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="110"/>
         <source>Show whitespaces and tabs</source>
-        <translation type="unfinished"/>
+        <translation>نمایش فضاهای سفید و تب‌ها</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="111"/>
         <source>Highlight current line</source>
-        <translation type="unfinished"/>
+        <translation>اکتشاف خط جاری</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="112"/>
         <source>Color mark</source>
-        <translation type="unfinished"/>
+        <translation>نشانه رنگ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="115"/>
         <source>Unicode</source>
-        <translation type="unfinished"/>
+        <translation>Unicode</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="116"/>
         <source>WesternEuropean</source>
-        <translation type="unfinished"/>
+        <translation>اسکیوی اوروپی</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="117"/>
         <source>CentralEuropean</source>
-        <translation type="unfinished"/>
+        <translation>اسکیوی مرکزی اوروپی</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="118"/>
         <source>Baltic</source>
-        <translation type="unfinished"/>
+        <translation>اسکیوی بلتیک</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="119"/>
         <source>Cyrillic</source>
-        <translation type="unfinished"/>
+        <translation>سیریلیک</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="120"/>
         <source>Arabic</source>
-        <translation type="unfinished"/>
+        <translation>عربی</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="125"/>
         <source>Celtic</source>
-        <translation type="unfinished"/>
+        <translation>سیلتیک</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="126"/>
         <source>SouthEasternEuropean</source>
-        <translation type="unfinished"/>
+        <translation>اسکیوی جنوبی-شرقی اوروپی</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="121"/>
         <source>Greek</source>
-        <translation type="unfinished"/>
+        <translation>یونانی</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="122"/>
         <source>Hebrew</source>
-        <translation type="unfinished"/>
+        <translation>عبری</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="127"/>
         <source>ChineseSimplified</source>
-        <translation type="unfinished"/>
+        <translation>چینی ساده</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="128"/>
         <source>ChineseTraditional</source>
-        <translation type="unfinished"/>
+        <translation>چینی سنتی</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="129"/>
         <source>Japanese</source>
-        <translation type="unfinished"/>
+        <translation>ژاپنی</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="130"/>
         <source>Korean</source>
-        <translation type="unfinished"/>
+        <translation>کره ای</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="124"/>
         <source>Thai</source>
-        <translation type="unfinished"/>
+        <translation>تایی</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="123"/>
         <source>Turkish</source>
-        <translation type="unfinished"/>
+        <translation>ترکی</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="131"/>
         <source>Vietnamese</source>
-        <translation type="unfinished"/>
+        <translation>ویتنامی</translation>
     </message>
     <message>
         <location filename="../src/startmanager.cpp" line="971"/>
         <source>File not saved</source>
-        <translation type="unfinished"/>
+        <translation>فایل ذخیره نشده است</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1532"/>
@@ -768,57 +768,57 @@
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="243"/>
         <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
-        <translation type="unfinished"/>
+        <translation>لطفاً قبل از استفاده &apos;UOS AI&apos; را از فروشگاه برنامه‌ها نصب کنید</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="245"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation type="unfinished"/>
+        <translation>دستگاه ورودی صوتی یافت نشد. لطفاً چک کنید و دوباره تلاش کنید</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="247"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation type="unfinished"/>
+        <translation>دستگاه خروجی صوتی یافت نشد. لطفاً چک کنید و دوباره تلاش کنید</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="69"/>
         <source>File path is empty</source>
-        <translation type="unfinished"/>
+        <translation>مسیر فایل خالی است</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="155"/>
         <source>Insufficient memory to load document content</source>
-        <translation type="unfinished"/>
+        <translation>حافظه کافی برای بارگذاری محتوای دستورالعمل وجود ندارد</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="177"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation type="unfinished"/>
+        <translation>حافظه کافی برای تبدیل کدگذاری وجود ندارد</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="183"/>
         <source>Encoding conversion failed</source>
-        <translation type="unfinished"/>
+        <translation>تبدیل کدگذاری با خطا مواجه شد</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="189"/>
         <source>Converted content is empty</source>
-        <translation type="unfinished"/>
+        <translation>محتوای تبدیل شده خالی است</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="207"/>
         <source>Memory allocation failed</source>
-        <translation type="unfinished"/>
+        <translation>تخصیص حافظه با خطا مواجه شد</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="211"/>
         <source>Error occurred: %1</source>
-        <translation type="unfinished"/>
+        <translation>خطا ایجاد شد: %1</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="215"/>
         <source>Unknown error occurred</source>
-        <translation type="unfinished"/>
+        <translation>خطای ناشناخته ایجاد شد</translation>
     </message>
 </context>
 <context>
@@ -831,7 +831,7 @@
     <message>
         <location filename="../src/controls/replacebar.cpp" line="34"/>
         <source>Replace With</source>
-        <translation type="unfinished"/>
+        <translation>جایگزین کنید</translation>
     </message>
     <message>
         <location filename="../src/controls/replacebar.cpp" line="36"/>
@@ -893,19 +893,19 @@
     <message>
         <location filename="../src/common/settings.cpp" line="484"/>
         <source>This shortcut conflicts with system shortcut %1</source>
-        <translation type="unfinished"/>
+        <translation>این کوتاه‌تر از کوتاه‌تر سیستم %1 تداخل دارد</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="487"/>
         <source>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</source>
-        <translation type="unfinished"/>
+        <translation>این کوتاه‌تر با %1 تداخل دارد، روی جایگزینی کلیک کنید تا این کوتاه‌تر به‌صورت فوری فعال شود</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="682"/>
         <location filename="../src/common/settings.cpp" line="695"/>
         <location filename="../src/common/settings.cpp" line="704"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
-        <translation type="unfinished"/>
+        <translation>کوتاه‌تر %1 نامعتبر است، لطفاً یکی دیگر را تنظیم کنید.</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="736"/>
@@ -920,7 +920,7 @@
     <message>
         <location filename="../src/common/settings.cpp" line="740"/>
         <source>OK</source>
-        <translation type="unfinished"/>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -928,7 +928,7 @@
     <message>
         <location filename="../src/startmanager.cpp" line="411"/>
         <source>Untitled %1</source>
-        <translation type="unfinished"/>
+        <translation>بدون عنوان %1</translation>
     </message>
 </context>
 <context>
@@ -946,22 +946,22 @@
     <message>
         <location filename="../src/controls/tabbar.cpp" line="643"/>
         <source>More options</source>
-        <translation type="unfinished"/>
+        <translation>گزینه‌های بیشتر</translation>
     </message>
     <message>
         <location filename="../src/controls/tabbar.cpp" line="644"/>
         <source>Close tabs to the left</source>
-        <translation type="unfinished"/>
+        <translation>فیلترهای چپ را ببند</translation>
     </message>
     <message>
         <location filename="../src/controls/tabbar.cpp" line="645"/>
         <source>Close tabs to the right</source>
-        <translation type="unfinished"/>
+        <translation>فیلترهای راست را ببند</translation>
     </message>
     <message>
         <location filename="../src/controls/tabbar.cpp" line="646"/>
         <source>Close unmodified tabs</source>
-        <translation type="unfinished"/>
+        <translation>فیلترهای تغییر نکرده را ببند</translation>
     </message>
 </context>
 <context>
@@ -1047,92 +1047,92 @@
         <location filename="../src/editor/dtextedit.cpp" line="320"/>
         <location filename="../src/editor/dtextedit.cpp" line="374"/>
         <source>Add Comment</source>
-        <translation type="unfinished"/>
+        <translation>یک نظر اضافه کن</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="321"/>
         <source>Text to Speech</source>
-        <translation type="unfinished"/>
+        <translation>متن به پیام رسان</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="322"/>
         <source>Stop reading</source>
-        <translation type="unfinished"/>
+        <translation>توقف از خواندن</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="323"/>
         <source>Speech to Text</source>
-        <translation type="unfinished"/>
+        <translation>پیام رسان به متن</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="324"/>
         <source>Translate</source>
-        <translation type="unfinished"/>
+        <translation>ترجمه</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="325"/>
         <source>Column Mode</source>
-        <translation type="unfinished"/>
+        <translation>حالت ستونی</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="326"/>
         <source>Add bookmark</source>
-        <translation type="unfinished"/>
+        <translation>یک نشانه گذاری کن</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="327"/>
         <source>Remove Bookmark</source>
-        <translation type="unfinished"/>
+        <translation>حذف نشانه</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="328"/>
         <source>Previous bookmark</source>
-        <translation type="unfinished"/>
+        <translation>نشانه قبلی</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="329"/>
         <source>Next bookmark</source>
-        <translation type="unfinished"/>
+        <translation>نشانه بعدی</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="330"/>
         <source>Remove All Bookmarks</source>
-        <translation type="unfinished"/>
+        <translation>حذف تمام نشانه‌ها</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="331"/>
         <source>Fold All</source>
-        <translation type="unfinished"/>
+        <translation>بستن همه</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="332"/>
         <source>Fold Current Level</source>
-        <translation type="unfinished"/>
+        <translation>بستن سطح جاری</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="333"/>
         <source>Unfold All</source>
-        <translation type="unfinished"/>
+        <translation>باز کردن همه</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="334"/>
         <source>Unfold Current Level</source>
-        <translation type="unfinished"/>
+        <translation>باز کردن سطح جاری</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="339"/>
         <source>Color Mark</source>
-        <translation type="unfinished"/>
+        <translation>نشانه رنگی</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="343"/>
         <source>Clear All Marks</source>
-        <translation type="unfinished"/>
+        <translation>پاک کردن تمام نشانه‌ها</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="344"/>
         <source>Clear Last Mark</source>
-        <translation type="unfinished"/>
+        <translation>پاک کردن آخرین نشانه</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="353"/>
@@ -1142,24 +1142,24 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="366"/>
         <source>Mark All</source>
-        <translation type="unfinished"/>
+        <translation>نشانه‌گذاری همه</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="375"/>
         <source>Remove Comment</source>
-        <translation type="unfinished"/>
+        <translation>حذف نظر</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3208"/>
         <location filename="../src/editor/dtextedit.cpp" line="3211"/>
         <source>Copy failed: not enough memory</source>
-        <translation type="unfinished"/>
+        <translation>کپی نشد: حافظه کافی نیست</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3333"/>
         <location filename="../src/editor/dtextedit.cpp" line="3335"/>
         <source>Press ALT and click lines to edit in column mode</source>
-        <translation type="unfinished"/>
+        <translation>فشار کنید ALT و کلیک روی خطوط برای ویرایش در حالت ستونی</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="418"/>
@@ -1189,28 +1189,28 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="1363"/>
         <source>Selected line(s) copied</source>
-        <translation type="unfinished"/>
+        <translation>خط(های) انتخاب شده کپی شد</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="1370"/>
         <source>Current line copied</source>
-        <translation type="unfinished"/>
+        <translation>خط فعلی کپی شد</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="1400"/>
         <source>Selected line(s) clipped</source>
-        <translation type="unfinished"/>
+        <translation>خط(های) انتخاب شده چسبانده شد</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="1412"/>
         <source>Current line clipped</source>
-        <translation type="unfinished"/>
+        <translation>خط فعلی چسبانده شد</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3227"/>
         <location filename="../src/editor/dtextedit.cpp" line="3230"/>
         <source>Paste failed: not enough memory</source>
-        <translation type="unfinished"/>
+        <translation>چسباندن ناموفق بود: حافظه کافی نیست</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="4548"/>
@@ -1233,7 +1233,7 @@
     <message>
         <location filename="../src/controls/warningnotices.cpp" line="24"/>
         <source>Reload</source>
-        <translation>بارگیری مجدد</translation>
+        <translation>بارگذاری مجدد</translation>
     </message>
 </context>
 <context>
@@ -1334,17 +1334,17 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="2322"/>
         <source>Current location remembered</source>
-        <translation type="unfinished"/>
+        <translation>مکان فعلی به یاد گرفته شد</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2398"/>
         <source>Ctrl+&apos;=&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Ctrl+&apos;=&apos;</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2401"/>
         <source>Ctrl+&apos;-&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Ctrl+&apos;-&apos;</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2430"/>
@@ -1354,7 +1354,7 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="3061"/>
         <source>Untitled %1</source>
-        <translation type="unfinished"/>
+        <translation>بدون عنوان %1</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="3543"/>
