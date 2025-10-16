@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="tr">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="tr">
 <context>
     <name>BottomBar</name>
     <message>
@@ -21,7 +19,7 @@
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="44"/>
         <source>Loading:</source>
-        <translation>Yükleme:</translation>
+        <translation>Yükleniyor:</translation>
     </message>
 </context>
 <context>
@@ -100,7 +98,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="1618"/>
         <source>The file cannot be read, which may be too large or has been damaged!</source>
-        <translation>Dosya okunamıyor, büyük olabilir veya hasarlı olabilir!</translation>
+        <translation>Dosya okunamıyor, çok büyük veya hasar görmüş olabilir!</translation>
     </message>
 </context>
 <context>
@@ -157,12 +155,12 @@
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="85"/>
         <source>Same path as the current file</source>
-        <translation>Mevcut dosyanın aynı yolunu kullan</translation>
+        <translation>Geçerli dosya ile aynı yol</translation>
     </message>
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="86"/>
         <source>Customize the default path</source>
-        <translation>Varsayılan yolu özelleştir</translation>
+        <translation>Varsayılan yolu özelleştirin</translation>
     </message>
 </context>
 <context>
@@ -619,7 +617,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="99"/>
         <source>Paste by pressing a middle mouse button</source>
-        <translation>Orta fare düğmesine basarak yapıştırın</translation>
+        <translation>Farenin orta tuşuna basarak yapıştırın</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="101"/>
@@ -629,12 +627,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="102"/>
         <source>Reopen last closed tabs</source>
-        <translation>Son kapalı sekme(ler)i tekrar aç</translation>
+        <translation>Son kapatılan sekmeleri yeniden açın</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="104"/>
         <source>Open/Save Settings</source>
-        <translation>Aç/Kaydet Ayarları</translation>
+        <translation>Açma/Kaydetme Ayarları</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="106"/>
@@ -770,57 +768,57 @@
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="243"/>
         <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
-        <translation>Kullanmadan önce &apos;UOS AI&apos; uygulamasını Uygulama Mağazasından yükleyin</translation>
+        <translation>Lütfen kullanmadan önce App Store&apos;dan &apos;UOS AI&apos; yükleyin</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="245"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation>Ses girdi cihazı tespit edilemedi. Lütfen kontrol edip tekrar deneyin</translation>
+        <translation>Ses giriş aygıtı algılanmadı. Lütfen kontrol edin ve tekrar deneyin</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="247"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation>Ses çıktı cihazı tespit edilemedi. Lütfen kontrol edip tekrar deneyin</translation>
+        <translation>Ses çıkış aygıtı algılanmadı. Lütfen kontrol edin ve tekrar deneyin</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="69"/>
         <source>File path is empty</source>
-        <translation>Dosya yolu boş</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="155"/>
         <source>Insufficient memory to load document content</source>
-        <translation>Belge içeriğini yüklemek için yeterli bellek yok</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="177"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation>Kodlama dönüştürmesi için yeterli bellek yok</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="183"/>
         <source>Encoding conversion failed</source>
-        <translation>Kodlama dönüştürmesi başarısız oldu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="189"/>
         <source>Converted content is empty</source>
-        <translation>Dönüştürülen içerik boş</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="207"/>
         <source>Memory allocation failed</source>
-        <translation>Bellek ayırma başarısız oldu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="211"/>
         <source>Error occurred: %1</source>
-        <translation>&apos;Hata oluştu: %1&apos;</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="215"/>
         <source>Unknown error occurred</source>
-        <translation>Bilinmeyen bir hata oluştu</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -860,9 +858,9 @@
     <name>S:</name>
     <message>
         <location filename="../third/libiconv-1.16/src/iconv.c" line="103"/>
-        <source></source>
+        <source/>
         <comment>The first line of the short usage message.</comment>
-        <translation></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
