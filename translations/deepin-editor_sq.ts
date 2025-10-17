@@ -783,32 +783,32 @@
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="69"/>
         <source>File path is empty</source>
-        <translation>Shtegja e kartelës është e zbrazët</translation>
+        <translation>Shtegu i kartelës është i zbrazët</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="155"/>
         <source>Insufficient memory to load document content</source>
-        <translation>Shfletuesi nuk ka mjaft kujtesë për të ngarkuar kontentin e dokumentit</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="177"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation>Shfletuesi nuk ka mjaft kujtesë për kodimin e kodimit</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="183"/>
         <source>Encoding conversion failed</source>
-        <translation>Kodimi i kodimit dështoi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="189"/>
         <source>Converted content is empty</source>
-        <translation>Kontenti i koduar është i zbrazët</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="207"/>
         <source>Memory allocation failed</source>
-        <translation>Asignimi i kujtesës dështoi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="211"/>
