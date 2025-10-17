@@ -788,7 +788,7 @@
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="155"/>
         <source>Insufficient memory to load document content</source>
-        <translation type="unfinished"/>
+        <translation>Kujtesë e pamjaftueshme për ngarkim lënde dokumenti</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="177"/>
@@ -1215,7 +1215,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="4548"/>
         <source>Read-Only mode is off</source>
-        <translation>Mënyra “Vetëm Për Lexim” është off</translation>
+        <translation>Mënyra “Vetëm Për Lexim” është e çaktivizuar</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="4560"/>
@@ -1225,7 +1225,7 @@
         <location filename="../src/editor/dtextedit.cpp" line="8015"/>
         <location filename="../src/editor/dtextedit.cpp" line="8026"/>
         <source>Read-Only mode is on</source>
-        <translation>Mënyra “Vetëm Për Lexim” është on</translation>
+        <translation>Mënyra “Vetëm Për Lexim” është e aktivizuar</translation>
     </message>
 </context>
 <context>
@@ -1273,7 +1273,7 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="533"/>
         <source>Switch theme</source>
-        <translation>Këmbeni temë</translation>
+        <translation>Ndërroni temë</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="534"/>
@@ -1329,7 +1329,7 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="1773"/>
         <source>Read-Only mode is on</source>
-        <translation>Mënyra “Vetëm Për Lexim” është on</translation>
+        <translation>Mënyra “Vetëm Për Lexim” është e aktivizuar</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2322"/>
