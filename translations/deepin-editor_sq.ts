@@ -362,12 +362,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="47"/>
         <source>Forward character</source>
-        <translation>Shko një shkronjë përpara</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="48"/>
         <source>Backward character</source>
-        <translation>Shko një shkronjë mbrapsht</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="49"/>
@@ -557,7 +557,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="86"/>
         <source>Merge lines</source>
-        <translation>Përzie rreshta</translation>
+        <translation>Përzje rreshta</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="87"/>
@@ -612,7 +612,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="98"/>
         <source>Tab width</source>
-        <translation>Gjerësi Tabulacioni</translation>
+        <translation>Gjerësi tabulacioni</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="99"/>
@@ -677,12 +677,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="116"/>
         <source>WesternEuropean</source>
-        <translation>Europiane Perëndimore</translation>
+        <translation>Evropiane Perëndimore</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="117"/>
         <source>CentralEuropean</source>
-        <translation>Europiane Qendrore</translation>
+        <translation>Evropiane Qendrore</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="118"/>
@@ -707,7 +707,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="126"/>
         <source>SouthEasternEuropean</source>
-        <translation>Europiane Juglindore</translation>
+        <translation>Evropiane Juglindore</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="121"/>
@@ -773,12 +773,12 @@
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="245"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation>Nuk u dha ndonjë pajisje hyrëse audio. Ju lutemi, kontrolloni dhe provoni përsëri</translation>
+        <translation>S’u pikas pajisje audio hyrje. Ju lutemi, kontrolloni dhe riprovoni</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="247"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation>Nuk u dha ndonjë pajisje dalëse audio. Ju lutemi, kontrolloni dhe provoni përsëri</translation>
+        <translation>S’u pikas pajisje audio dalje. Ju lutemi, kontrolloni dhe riprovoni</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="69"/>
