@@ -898,7 +898,7 @@
     <message>
         <location filename="../src/common/settings.cpp" line="487"/>
         <source>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</source>
-        <translation>Kjo shkurtore përplaset me %1, klikoni mbi Zëvendësoje për ta bërë këtë shkurtore të hyjë në fuqi menjëherë</translation>
+        <translation>Kjo shkurtore përplaset me %1, klikoni mbi “Zëvendësoje” për ta bërë këtë shkurtore të hyjë në fuqi menjëherë</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="682"/>
@@ -1164,7 +1164,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="418"/>
         <source>Change Case</source>
-        <translation>Këmbe Shkronja</translation>
+        <translation>Ndryshoni Shkronjë të Madhe/të Vogël</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="419"/>
@@ -1174,7 +1174,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="420"/>
         <source>Lower Case</source>
-        <translation>Kaloje në Shkronja të Vogla</translation>
+        <translation>Shkronja të Vogla</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="421"/>
