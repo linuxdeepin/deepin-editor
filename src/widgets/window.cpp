@@ -228,6 +228,12 @@ Window::Window(DMainWindow *parent)
     // 防止DGUIapplication的未初始化完成从而使用跟随系统覆盖上一次的设置
     loadTheme(m_themePath);
 
+    if (!qEnvironmentVariableIsSet("LINGLONG_APPID")) {
+        qWarning() << "Linglong environment not set, sync system theme state";
+        DGuiApplicationHelper *guiAppHelp = DGuiApplicationHelper::instance();
+        slotLoadContentTheme(guiAppHelp->themeType());
+    }
+
     //关闭　替换　查找 跳行bar
     connect(this, &Window::pressEsc, m_replaceBar, &ReplaceBar::pressEsc, Qt::QueuedConnection);
     connect(this, &Window::pressEsc, m_findBar, &FindBar::pressEsc, Qt::QueuedConnection);
