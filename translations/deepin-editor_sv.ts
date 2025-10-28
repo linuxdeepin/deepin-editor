@@ -362,22 +362,22 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="47"/>
         <source>Forward character</source>
-        <translation type="unfinished"/>
+        <translation>Framåt ett tecken</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="48"/>
         <source>Backward character</source>
-        <translation type="unfinished"/>
+        <translation>Bakåt ett tecken</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="49"/>
         <source>Forward word</source>
-        <translation type="unfinished"/>
+        <translation>Framåt ett ord</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="50"/>
         <source>Backward word</source>
-        <translation type="unfinished"/>
+        <translation>Bakåt ett ord</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="51"/>
@@ -472,7 +472,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="69"/>
         <source>Move to line indentation</source>
-        <translation type="unfinished"/>
+        <translation>Flytta till radindrag</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="70"/>
@@ -617,7 +617,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="99"/>
         <source>Paste by pressing a middle mouse button</source>
-        <translation type="unfinished"/>
+        <translation>Klistra in genom att tryck på mittenmusknappen</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="101"/>
@@ -627,7 +627,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="102"/>
         <source>Reopen last closed tabs</source>
-        <translation type="unfinished"/>
+        <translation>Återöppna senaste stängda flikar</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="104"/>
