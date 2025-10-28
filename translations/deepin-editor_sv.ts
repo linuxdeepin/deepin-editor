@@ -632,7 +632,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="104"/>
         <source>Open/Save Settings</source>
-        <translation type="unfinished"/>
+        <translation>Inställningar för öppna/spara</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="106"/>
@@ -697,12 +697,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="120"/>
         <source>Arabic</source>
-        <translation type="unfinished"/>
+        <translation>Arabisk</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="125"/>
         <source>Celtic</source>
-        <translation type="unfinished"/>
+        <translation>Keltisk</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="126"/>
@@ -712,12 +712,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="121"/>
         <source>Greek</source>
-        <translation type="unfinished"/>
+        <translation>Grekisk</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="122"/>
         <source>Hebrew</source>
-        <translation type="unfinished"/>
+        <translation>Hebreisk</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="127"/>
@@ -961,7 +961,7 @@
     <message>
         <location filename="../src/controls/tabbar.cpp" line="646"/>
         <source>Close unmodified tabs</source>
-        <translation type="unfinished"/>
+        <translation>Stäng oförändrade flikar</translation>
     </message>
 </context>
 <context>
