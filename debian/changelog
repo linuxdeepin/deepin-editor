@@ -1,3 +1,9 @@
+deepin-editor (6.5.40) unstable; urgency=medium
+
+  * fix bugs.
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Thu, 30 Oct 2025 19:21:51 +0800
+
 deepin-editor (6.5.39) unstable; urgency=medium
 
   * i18n: Updates for project Deepin Text Editor (#391)
