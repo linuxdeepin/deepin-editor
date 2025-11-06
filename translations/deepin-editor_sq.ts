@@ -362,12 +362,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="47"/>
         <source>Forward character</source>
-        <translation>Shko një shkronjë përpara</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="48"/>
         <source>Backward character</source>
-        <translation>Shko një shkronjë mbrapsht</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="49"/>
@@ -557,7 +557,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="86"/>
         <source>Merge lines</source>
-        <translation>Përzie rreshta</translation>
+        <translation>Përzje rreshta</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="87"/>
@@ -612,7 +612,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="98"/>
         <source>Tab width</source>
-        <translation>Gjerësi Tabulacioni</translation>
+        <translation>Gjerësi tabulacioni</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="99"/>
@@ -677,12 +677,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="116"/>
         <source>WesternEuropean</source>
-        <translation>Europiane Perëndimore</translation>
+        <translation>Evropiane Perëndimore</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="117"/>
         <source>CentralEuropean</source>
-        <translation>Europiane Qendrore</translation>
+        <translation>Evropiane Qendrore</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="118"/>
@@ -707,7 +707,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="126"/>
         <source>SouthEasternEuropean</source>
-        <translation>Europiane Juglindore</translation>
+        <translation>Evropiane Juglindore</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="121"/>
@@ -773,42 +773,42 @@
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="245"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation>Nuk u dha ndonjë pajisje hyrëse audio. Ju lutemi, kontrolloni dhe provoni përsëri</translation>
+        <translation>S’u pikas pajisje audio hyrje. Ju lutemi, kontrolloni dhe riprovoni</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="247"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation>Nuk u dha ndonjë pajisje dalëse audio. Ju lutemi, kontrolloni dhe provoni përsëri</translation>
+        <translation>S’u pikas pajisje audio dalje. Ju lutemi, kontrolloni dhe riprovoni</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="69"/>
         <source>File path is empty</source>
-        <translation>Shtegja e kartelës është e zbrazët</translation>
+        <translation>Shtegu i kartelës është i zbrazët</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="155"/>
         <source>Insufficient memory to load document content</source>
-        <translation>Shfletuesi nuk ka mjaft kujtesë për të ngarkuar kontentin e dokumentit</translation>
+        <translation>Kujtesë e pamjaftueshme për ngarkim lënde dokumenti</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="177"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation>Shfletuesi nuk ka mjaft kujtesë për kodimin e kodimit</translation>
+        <translation>Kujtesë e pamjaftueshme për shndërrim kodimi</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="183"/>
         <source>Encoding conversion failed</source>
-        <translation>Kodimi i kodimit dështoi</translation>
+        <translation>Shndërrimi i kodimit dështoi</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="189"/>
         <source>Converted content is empty</source>
-        <translation>Kontenti i koduar është i zbrazët</translation>
+        <translation>Lënda e shndërruar është e zbrazët</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="207"/>
         <source>Memory allocation failed</source>
-        <translation>Asignimi i kujtesës dështoi</translation>
+        <translation>Dështoi dhënie kujtese</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="211"/>
@@ -898,7 +898,7 @@
     <message>
         <location filename="../src/common/settings.cpp" line="487"/>
         <source>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</source>
-        <translation>Kjo shkurtore përplaset me %1, klikoni mbi Zëvendësoje për ta bërë këtë shkurtore të hyjë në fuqi menjëherë</translation>
+        <translation>Kjo shkurtore përplaset me %1, klikoni mbi “Zëvendësoje” për ta bërë këtë shkurtore të hyjë në fuqi menjëherë</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="682"/>
@@ -1164,7 +1164,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="418"/>
         <source>Change Case</source>
-        <translation>Këmbe Shkronja</translation>
+        <translation>Ndryshoni Shkronjë të Madhe/të Vogël</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="419"/>
@@ -1174,7 +1174,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="420"/>
         <source>Lower Case</source>
-        <translation>Kaloje në Shkronja të Vogla</translation>
+        <translation>Shkronja të Vogla</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="421"/>
@@ -1215,7 +1215,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="4548"/>
         <source>Read-Only mode is off</source>
-        <translation>Mënyra “Vetëm Për Lexim” është off</translation>
+        <translation>Mënyra “Vetëm Për Lexim” është e çaktivizuar</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="4560"/>
@@ -1225,7 +1225,7 @@
         <location filename="../src/editor/dtextedit.cpp" line="8015"/>
         <location filename="../src/editor/dtextedit.cpp" line="8026"/>
         <source>Read-Only mode is on</source>
-        <translation>Mënyra “Vetëm Për Lexim” është on</translation>
+        <translation>Mënyra “Vetëm Për Lexim” është e aktivizuar</translation>
     </message>
 </context>
 <context>
@@ -1273,7 +1273,7 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="533"/>
         <source>Switch theme</source>
-        <translation>Këmbeni temë</translation>
+        <translation>Ndërroni temë</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="534"/>
@@ -1329,7 +1329,7 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="1773"/>
         <source>Read-Only mode is on</source>
-        <translation>Mënyra “Vetëm Për Lexim” është on</translation>
+        <translation>Mënyra “Vetëm Për Lexim” është e aktivizuar</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2322"/>
