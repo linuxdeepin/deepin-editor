@@ -17,6 +17,25 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/basepub)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/dbus)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/include)
 
+# Configure settings.json based on installation prefix
+# 根据 CMAKE_INSTALL_PREFIX 设置主题默认路径
+if(CMAKE_INSTALL_PREFIX MATCHES "^/opt/apps")
+    # 玲珑环境：CMAKE_INSTALL_PREFIX = /opt/apps/org.deepin.editor/files/
+    set(THEME_DEFAULT_PATH "${CMAKE_INSTALL_PREFIX}/share/deepin-editor/themes/deepin.theme")
+    message(STATUS "Linglong build detected (PREFIX=${CMAKE_INSTALL_PREFIX}), theme default path: ${THEME_DEFAULT_PATH}")
+else()
+    # 普通环境：使用标准路径
+    set(THEME_DEFAULT_PATH "/usr/share/deepin-editor/themes/deepin.theme")
+    message(STATUS "Normal build (PREFIX=${CMAKE_INSTALL_PREFIX}), theme default path: ${THEME_DEFAULT_PATH}")
+endif()
+
+# 在构建时从模板生成 settings.json
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/resources/settings.json.in"
+    "${CMAKE_CURRENT_SOURCE_DIR}/resources/settings.json"
+    @ONLY
+)
+
 # Find the library
 find_package(PkgConfig REQUIRED)
 

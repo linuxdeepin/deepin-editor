@@ -52,4 +52,5 @@ tasks/
 .roo/
 .roomodes
 .specstory/
-.windsurf/
+.windsurf/src/resources/settings.json
+src/resources/settings.json
