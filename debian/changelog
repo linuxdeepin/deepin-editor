@@ -1,3 +1,9 @@
+deepin-editor (6.5.41) unstable; urgency=medium
+
+  * fix: Configure settings.json generation and theme path based on installation prefix
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Thu, 06 Nov 2025 11:24:46 +0800
+
 deepin-editor (6.5.40) unstable; urgency=medium
 
   * fix bugs.
