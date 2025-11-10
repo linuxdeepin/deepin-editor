@@ -7467,12 +7467,19 @@ void TextEdit::resizeEvent(QResizeEvent *e)
 
     // 当前处于文档页面尾部时，缩放后保持焦点在文档页面尾部
     if (e->oldSize().width() < e->size().width() && verticalScrollBar()->maximum() == verticalScrollBar()->value()) {
-        QTimer::singleShot(0, [this]() {
+        // 使用 QPointer 检查对象是否还存在
+        QPointer<TextEdit> self(this);
+        QTimer::singleShot(0, [self]() {
+            if (self.isNull()) {
+                qWarning() << "TextEdit obj is destroyed";
+                return; // 对象已被销毁
+            }
+
             // 宽度变大时文档布局大小变更信号未触发，手动通知
-            auto docLayout = this->document()->documentLayout();
+            auto docLayout = self->document()->documentLayout();
             Q_EMIT docLayout->documentSizeChanged(docLayout->documentSize());
 
-            verticalScrollBar()->setValue(verticalScrollBar()->maximum());
+            self->verticalScrollBar()->setValue(self->verticalScrollBar()->maximum());
         });
     }
 
