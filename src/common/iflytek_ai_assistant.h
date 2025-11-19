@@ -34,6 +34,10 @@ public:
     inline bool valid() const { return Enable == status(); }
     void checkAiExists();
     CallStatus checkValid();
+    
+    // audio device detection
+    bool hasAudioOutputDevice() const;
+    bool hasAudioInputDevice() const;
 
     // text to speech
     CallStatus isTtsInWorking() const;
