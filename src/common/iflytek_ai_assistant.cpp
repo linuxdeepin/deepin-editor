@@ -14,7 +14,115 @@
 #include <QProcess>
 #include <QStandardPaths>
 
+#include <QDBusInterface>
+#include <QDBusReply>
+#include <QDBusObjectPath>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonParseError>
+
 #include <DSysInfo>
+
+namespace {
+// DDE音频服务常量
+const QString AUDIO_SERVICE = "org.deepin.dde.Audio1";
+const QString AUDIO_PATH = "/org/deepin/dde/Audio1";
+const QString AUDIO_INTERFACE = "org.deepin.dde.Audio1";
+
+// 端口方向枚举
+enum PortDirection {
+    OUTPUT_PORT = 1,
+    INPUT_PORT = 2
+};
+
+/**
+ * @brief 音频设备检测工具类
+ */
+class AudioDeviceDetector {
+public:
+    /**
+     * @brief 检查指定方向的音频设备是否可用
+     * @param direction 端口方向 (OUTPUT_PORT 或 INPUT_PORT)
+     * @return 是否有可用设备
+     */
+    static bool hasEnabledPorts(PortDirection direction) {
+        qDebug() << "Checking audio device availability for direction:" << direction;
+        
+        QDBusInterface audioInter(AUDIO_SERVICE, AUDIO_PATH, AUDIO_INTERFACE, QDBusConnection::sessionBus());
+        
+        if (!audioInter.isValid()) {
+            qWarning() << "Failed to connect to DDE Audio service:" << audioInter.lastError().message();
+            return false;
+        }
+        
+        // 获取声卡信息
+        QVariant cardsVariant = audioInter.property("CardsWithoutUnavailable");
+        if (!cardsVariant.isValid()) {
+            qWarning() << "Failed to get CardsWithoutUnavailable property";
+            return false;
+        }
+        
+        QString cardsJson = cardsVariant.toString();
+        qDebug() << "Cards JSON:" << cardsJson;
+        
+        QJsonParseError parseError;
+        QJsonDocument cardsDoc = QJsonDocument::fromJson(cardsJson.toUtf8(), &parseError);
+        if (parseError.error != QJsonParseError::NoError) {
+            qWarning() << "Failed to parse cards JSON:" << parseError.errorString();
+            return false;
+        }
+        
+        return countEnabledPorts(cardsDoc.array(), direction) > 0;
+    }
+
+private:
+    /**
+     * @brief 统计指定方向的启用端口数量
+     * @param cardsArray 声卡数组
+     * @param direction 端口方向
+     * @return 启用的端口数量
+     */
+    static int countEnabledPorts(const QJsonArray &cardsArray, PortDirection direction) {
+        int enabledPorts = 0;
+        const QString directionName = (direction == OUTPUT_PORT) ? "output" : "input";
+        
+        // 遍历所有声卡
+        for (const QJsonValue &cardValue : cardsArray) {
+            QJsonObject cardObj = cardValue.toObject();
+            uint cardId = static_cast<uint>(cardObj["Id"].toInt());
+            QString cardName = cardObj["Name"].toString();
+            
+            QJsonValue portsValue = cardObj["Ports"];
+            if (portsValue.isNull()) {
+                qDebug() << "Card" << cardName << "has no ports, skipping";
+                continue;
+            }
+            
+            QJsonArray portsArray = portsValue.toArray();
+            qDebug() << "Checking card:" << cardName << "(ID:" << cardId << ") with" << portsArray.size() << "ports";
+            
+            // 遍历该声卡的所有端口
+            for (const QJsonValue &portValue : portsArray) {
+                QJsonObject portObj = portValue.toObject();
+                QString portId = portObj["Name"].toString();
+                bool enabled = portObj["Enabled"].toBool();
+                int portDirection = portObj["Direction"].toInt();
+                
+                // 检查是否为目标方向且启用的端口
+                if (portDirection == direction && enabled) {
+                    qDebug() << "Found enabled" << directionName << "port:" << portId << "on card:" << cardName;
+                    enabledPorts++;
+                }
+            }
+        }
+        
+        qDebug() << "Total enabled" << directionName << "ports:" << enabledPorts;
+        return enabledPorts;
+    }
+};
+
+} // anonymous namespace
 
 // progress
 static const QString kUosAiBin = "uos-ai-assistant";
@@ -29,6 +137,16 @@ IflytekAiAssistant::IflytekAiAssistant(QObject *parent)
 {
     qDebug() << "IflytekAiAssistant created";
     m_copilot->setTimeout(2000);
+}
+
+bool IflytekAiAssistant::hasAudioOutputDevice() const
+{
+    return AudioDeviceDetector::hasEnabledPorts(OUTPUT_PORT);
+}
+
+bool IflytekAiAssistant::hasAudioInputDevice() const
+{
+    return AudioDeviceDetector::hasEnabledPorts(INPUT_PORT);
 }
 
 IflytekAiAssistant *IflytekAiAssistant::instance()
@@ -92,6 +210,12 @@ IflytekAiAssistant::CallStatus IflytekAiAssistant::isTtsEnable() const
     if (Enable != status()) {
         qDebug() << "status is not enable!";
         return status();
+    }
+
+    // 首先检查音频输出设备是否存在
+    if (!hasAudioOutputDevice()) {
+        qDebug() << "No audio output device available";
+        return NoOutputDevice;
     }
 
     QDBusInterface interface(copilotService(), "/aiassistant/tts", "com.iflytek.aiassistant.tts");
@@ -163,6 +287,12 @@ IflytekAiAssistant::CallStatus IflytekAiAssistant::getIatEnable() const
     if (Enable != status()) {
         qDebug() << "status is not enable!";
         return status();
+    }
+
+    // 首先检查音频输入设备是否存在
+    if (!hasAudioInputDevice()) {
+        qDebug() << "No audio input device available";
+        return NoInputDevice;
     }
 
     QDBusInterface interface(copilotService(), "/aiassistant/iat", "com.iflytek.aiassistant.iat");
