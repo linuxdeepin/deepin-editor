@@ -66,7 +66,11 @@ StartManager::StartManager(QObject *parent)
         QDir().mkpath(m_backupDir);
     }
 
-    m_qlistTemFile = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();
+    // 判断是否需要打开上次关闭前的文件
+    bool openSavedTab = Settings::instance()->settings->option("advance.startup.save_tab_before_close")->value().toBool();
+    if (openSavedTab) {
+        m_qlistTemFile = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();
+    }
     // 初始化书签信息记录表
     initBookmark();
     qDebug() << "inited bookmark";
