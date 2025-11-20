@@ -1,3 +1,9 @@
+deepin-editor (6.5.42) unstable; urgency=medium
+
+  * fix: Improve audio device detection for TTS and STT functionality with DDE control center consistency
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Thu, 20 Nov 2025 18:54:32 +0800
+
 deepin-editor (6.5.41) unstable; urgency=medium
 
   * fix: Configure settings.json generation and theme path based on installation prefix
