@@ -118,6 +118,8 @@ public:
     void backupFile();
     // 关闭当前窗口所有文件
     bool closeAllFiles();
+    // 保存窗口所有文件
+    bool saveAllFiles();
     // 恢复备份文件标签页
     void addTemFileTab(const QString &qstrPath, const QString &qstrName, const QString &qstrTruePath, const QString &lastModifiedTime, bool bIsTemFile = false);
 

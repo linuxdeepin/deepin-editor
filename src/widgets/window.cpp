@@ -2934,6 +2934,65 @@ bool Window::closeAllFiles()
     return true;
 }
 
+bool Window::saveAllFiles()
+{
+    qInfo() << "begin saveAllFiles()";
+    QMap<QString, EditWrapper *> wrappers = m_wrappers;
+    for (int i = wrappers.count() - 1; i > 0; i--) {
+        const QString &filePath = m_tabbar->fileAt(i);
+        // 避免异常情况重入时当前已无标签页的情况
+        if (filePath.isEmpty()) {
+            return false;
+        }
+        EditWrapper *wrapper = m_wrappers.value(filePath);
+        if (!wrapper) {
+            return false;
+        }
+        bool isDraftFile = wrapper->isDraftFile();
+        bool isModified = wrapper->isModified();
+        bool bIsBackupFile = false;
+
+        if (wrapper->isTemFile()) {
+            bIsBackupFile = true;
+        }
+
+        if (isModified) {
+            DDialog *dialog = createDialog(tr("Do you want to save this file?"), "");
+            int res = dialog->exec();
+
+            //取消或关闭弹窗不做任务操作
+            if (res == 0 || res == -1) {
+                return false;
+            }
+
+            //不保存
+            if (res == 1) {
+                continue;
+            }
+
+            //保存
+            if (res == 2) {
+                m_tabbar->setCurrentIndex(i);
+                QFileInfo fileInfo(filePath);
+                QString newFilePath;
+                if (isDraftFile) {
+                    wrapper->saveDraftFile(newFilePath);
+                } else if(bIsBackupFile) {
+                    if (!wrapper->saveFile()) {
+                        saveAsFile();
+                    }
+                } else {
+                    if (!wrapper->saveFile()) {
+                        saveAsFile();
+                    }
+                }
+            }
+        }
+    }
+    qInfo() << "end saveAllFiles()";
+    return true;
+}
+
 /**
  * @brief addTemFileTab　恢复备份文件标签页
  * @param qstrPath　打开文件路径
@@ -3946,7 +4005,11 @@ void Window::closeEvent(QCloseEvent *e)
                 QString filePath = itr.value()->textEditor()->getFilePath();
                 Utils::recordCloseFile(filePath);
             }
-
+            if (!saveAllFiles()) {
+                backupFile();
+                e->ignore();
+                return;
+            }
             backupFile();
         }
     }
