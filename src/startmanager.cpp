@@ -66,11 +66,7 @@ StartManager::StartManager(QObject *parent)
         QDir().mkpath(m_backupDir);
     }
 
-    // 判断是否需要打开上次关闭前的文件
-    bool openSavedTab = Settings::instance()->settings->option("advance.startup.save_tab_before_close")->value().toBool();
-    if (openSavedTab) {
-        m_qlistTemFile = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();
-    }
+    m_qlistTemFile = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();
     // 初始化书签信息记录表
     initBookmark();
     qDebug() << "inited bookmark";
@@ -178,9 +174,6 @@ void StartManager::autoBackupFile()
     QFileInfo fileInfo;
     m_qlistTemFile.clear();
     listBackupInfo = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();
-    if (m_windows.isEmpty()) {
-        return;
-    }
 
     //记录所有的文件信息
     for (int var = 0; var < m_windows.count(); ++var) {
@@ -268,6 +261,7 @@ void StartManager::autoBackupFile()
     }
 
     //将json串列表写入配置文件
+    qInfo() << __func__ << "history file counts:" << m_qlistTemFile.size();
     Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->setValue(m_qlistTemFile);
     // 备份书签信息
     saveBookmark();
