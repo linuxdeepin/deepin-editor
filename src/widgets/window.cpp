@@ -2606,29 +2606,21 @@ bool Window::closeAllFiles()
     return true;
 }
 
-bool Window::saveAllFiles()
+bool Window::saveAllFloatingFiles()
 {
-    qInfo() << "begin saveAllFiles()";
+    qInfo() << "begin saveAllFloatingFiles()";
     QMap<QString, EditWrapper *> wrappers = m_wrappers;
-    for (int i = wrappers.count() - 1; i > 0; i--) {
-        const QString &filePath = m_tabbar->fileAt(i);
+    for (int i = wrappers.count() - 1; i >= 0; i--) {
+        const QString &filePath = m_tabbar->truePathAt(i);
         // 避免异常情况重入时当前已无标签页的情况
         if (filePath.isEmpty()) {
             return false;
         }
-        EditWrapper *wrapper = m_wrappers.value(filePath);
-        if (!wrapper) {
-            return false;
-        }
-        bool isDraftFile = wrapper->isDraftFile();
-        bool isModified = wrapper->isModified();
-        bool bIsBackupFile = false;
 
-        if (wrapper->isTemFile()) {
-            bIsBackupFile = true;
-        }
-
-        if (isModified) {
+        QFileInfo finfo(filePath);
+        if (!finfo.exists()) {
+            qWarning() << "File not exist:" << filePath;
+            m_tabbar->setCurrentIndex(i);
             DDialog *dialog = createDialog(tr("Do you want to save this file?"), "");
             int res = dialog->exec();
 
@@ -2644,24 +2636,11 @@ bool Window::saveAllFiles()
 
             //保存
             if (res == 2) {
-                m_tabbar->setCurrentIndex(i);
-                QFileInfo fileInfo(filePath);
-                QString newFilePath;
-                if (isDraftFile) {
-                    wrapper->saveDraftFile(newFilePath);
-                } else if(bIsBackupFile) {
-                    if (!wrapper->saveFile()) {
-                        saveAsFile();
-                    }
-                } else {
-                    if (!wrapper->saveFile()) {
-                        saveAsFile();
-                    }
-                }
+                saveAsFile();
             }
         }
     }
-    qInfo() << "end saveAllFiles()";
+    qInfo() << "end saveAllFloatingFiles()";
     return true;
 }
 
@@ -3459,19 +3438,23 @@ void Window::closeEvent(QCloseEvent *e)
             return;
         }
     } else {
+        // 是否记录上次打开的文件
         bool save_tab_before_close = m_settings->settings->option("advance.startup.save_tab_before_close")->value().toBool();
         if (!save_tab_before_close) {
+            // 不记录，关闭所有标签页，没保存的文件提示保存
             if (!closeAllFiles()) {
                 e->ignore();
                 return;
             }
         } else {
+            // 记录，没保存的文件不提示保存，除非磁盘上文件已删除
             // 单个窗口时，没有记录单独关闭窗口，需要记录窗口信息。
             for (auto itr = m_wrappers.begin(); itr != m_wrappers.end(); ++itr) {
                 QString filePath = itr.value()->textEditor()->getFilePath();
                 Utils::recordCloseFile(filePath);
             }
-            if (!saveAllFiles()) {
+            // 检查是否存在磁盘上已删除的文件，若存在则提示保存
+            if (!saveAllFloatingFiles()) {
                 backupFile();
                 e->ignore();
                 return;
