@@ -2612,9 +2612,9 @@ bool Window::saveAllFloatingFiles()
     QMap<QString, EditWrapper *> wrappers = m_wrappers;
     for (int i = wrappers.count() - 1; i >= 0; i--) {
         const QString &filePath = m_tabbar->truePathAt(i);
-        // 避免异常情况重入时当前已无标签页的情况
+        // 对于草稿文件，filePath为空，应该略过而不是返回false
         if (filePath.isEmpty()) {
-            return false;
+            continue;
         }
 
         QFileInfo finfo(filePath);
