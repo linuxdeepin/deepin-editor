@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
 
         QFileInfo fileInfo(path);
         qInfo() << qPrintable(QString("Open file, isFile: %1, suffix: %2, size: %3, permssion: %4").arg(fileInfo.isFile())
-                              .arg(fileInfo.suffix()).arg(fileInfo.size()).arg(fileInfo.permissions()));
+                              .arg(fileInfo.suffix()).arg(fileInfo.size()).arg(static_cast<int>(fileInfo.permissions())));
     }
 
     bool hasWindowFlag = parser.isSet(newWindowOption);
