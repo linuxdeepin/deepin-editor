@@ -2233,15 +2233,20 @@ void Window::popupPrintDialog()
     m_pPreview = new DPrintPreviewDialog(this);
     m_pPreview->setAttribute(Qt::WA_DeleteOnClose);
 
-    // 设置 QPrinter 的文档名称，保留绝对路径和文件后缀(在cups的page_log中保留完整的job-name)
-    // 注意和文件的输出文件路径进行区分
     if (fileDir == m_blankFileDir) {
+        QString name = m_tabbar->currentName();
+        QRegularExpression reg("[^*](.+)");
+        QRegularExpressionMatch match = reg.match(name);
+        QString docName = match.captured(0);
+        qInfo() << __func__ << "print blank file, docName:" << docName;
         qInfo() << qPrintable("Print blank file");
-        m_pPreview->setDocName(filePath);
+        m_pPreview->setDocName(docName);
     } else {
         qInfo() << qPrintable("Print file: ") << filePath;
         QString path = currentWrapper()->textEditor()->getTruePath();
-        m_pPreview->setDocName(path);
+        QString docName = QFileInfo(path).baseName();
+        qInfo() << __func__ << "print normal file, docName:" << docName;
+        m_pPreview->setDocName(docName);
     }
 
     // 后续布局计算后再更新打印页数
