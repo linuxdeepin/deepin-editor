@@ -549,15 +549,22 @@ void TextEdit::popRightMenu(QPoint pos)
         //没有收到返回就加载配置文件数据
         if (voiceReadingStateRet.isValid()) {
             voiceReadingState = voiceReadingStateRet.value();
+            if (voiceReadingState) {
+                qInfo() << __func__ << "DBUS getTTSEnable: true";
+            } else {
+                qWarning() << __func__ << "DBUS getTTSEnable: false";
+            }
             if ((textCursor().hasSelection() && voiceReadingState) || m_hasColumnSelection) {
                 m_voiceReadingAction->setEnabled(true);
             } else {
                 m_voiceReadingAction->setEnabled(false);
             }
         } else {
+            qWarning() << __func__ << "DBUS getTTSEnable failed";
             m_voiceReadingAction->setEnabled(true);
         }
     } else {
+        qWarning() << __func__ << "No audio output device was detected.";
         m_voiceReadingAction->setEnabled(true);
     }
 
@@ -574,15 +581,23 @@ void TextEdit::popRightMenu(QPoint pos)
         //没有收到返回就加载配置文件数据
         if (dictationStateRet.isValid()) {
             dictationState = dictationStateRet.value();
+            if (dictationState) {
+                qInfo() << __func__ << "DBUS getIatEnable: true";
+            } else {
+                qWarning() << __func__ << "DBUS getIatEnable: false";
+            }
             m_dictationAction->setEnabled(dictationState);
         } else {
+            qWarning() << __func__ << "DBUS getIatEnable failed";
             m_dictationAction->setEnabled(true);
         }
 
         if (m_bReadOnlyPermission || m_readOnlyMode) {
+            qWarning() << __func__ << "IAT action is disabled in readonly mode.";
             m_dictationAction->setEnabled(false);
         }
     } else {
+        qWarning() << __func__ << "No audio input device was detected.";
         m_dictationAction->setEnabled(true);
     }
     /*
@@ -2832,6 +2847,7 @@ void TextEdit::slotVoiceReadingAction(bool checked)
 
     // 检查音频输出设备
     if (!checkAudioOutputDevice()) {
+        qWarning() << "No audio output device was detected.";
 #ifdef DTKWIDGET_CLASS_DSizeMode
         Utils::sendFloatMessageFixedFont(this, QIcon(":/images/warning.svg"), tr("No audio output device was detected. Please ensure your speakers or headphones are properly connected and try again."));
 #else
@@ -2850,6 +2866,13 @@ void TextEdit::slotVoiceReadingAction(bool checked)
     //没有收到返回就加载配置文件数据
     if (voiceReadingStateRet.isValid()) {
         voiceReadingState = voiceReadingStateRet.value();
+        if (voiceReadingState) {
+            qInfo() << "DBUS getTTSEnable: true";
+        } else {
+            qWarning() << "DBUS getTTSEnable: false";
+        }
+    } else {
+        qWarning() << "DBUS getTTSEnable failed";
     }
     if (!voiceReadingState) {
 #ifdef DTKWIDGET_CLASS_DSizeMode
@@ -2875,6 +2898,7 @@ void TextEdit::slotdictationAction(bool checked)
 
     // 检查音频输入设备
     if (!checkAudioInputDevice()) {
+        qWarning() << "No audio input device was detected.";
 #ifdef DTKWIDGET_CLASS_DSizeMode
         Utils::sendFloatMessageFixedFont(this, QIcon(":/images/warning.svg"), tr("No audio input device was detected. Please ensure your speakers or headphones are properly connected and try again."));
 #else
@@ -2892,6 +2916,13 @@ void TextEdit::slotdictationAction(bool checked)
     QDBusReply<bool> dictationStateRet = QDBusConnection::sessionBus().asyncCall(dictationMsg, 100);
     if (dictationStateRet.isValid()) {
         dictationState = dictationStateRet.value();
+        if (dictationState) {
+            qInfo() << "DBUS getIatEnable: true";
+        } else {
+            qWarning() << "DBUS getIatEnable: false";
+        }
+    } else {
+        qWarning() << "DBUS getIatEnable failed";
     }
     if (!dictationState) {
 #ifdef DTKWIDGET_CLASS_DSizeMode
