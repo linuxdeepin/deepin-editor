@@ -4,6 +4,7 @@
 
 #include "toolbar.h"
 #include <QLabel>
+#include <QDebug>
 #include <DHiDPIHelper>
 
 DWIDGET_USE_NAMESPACE

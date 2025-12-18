@@ -6,9 +6,9 @@
 #include <QPainter>
 #include <QHBoxLayout>
 #include <QActionGroup>
+#include <QDebug>
 #include <DMenu>
 #include <DVerticalLine>
-#include "bottombar.h"
 #include "bottombar.h"
 #include "../common/utils.h"
 #include "../editor/editwrapper.h"

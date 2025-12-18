@@ -6516,12 +6516,22 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
         //从标记列表中移除标记
         // 修复：使用removeIf避免索引管理问题
         if (!listRemoveItem.isEmpty()) {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+            QSet<int> removeSet = listRemoveItem.toSet();
+            for (int i = m_wordMarkSelections.size() - 1; i >= 0; --i) {
+                if (removeSet.contains(i)) {
+                    m_wordMarkSelections.removeAt(i);
+                }
+            }
+            qDebug() << "updateMark: Removed marks, remaining:" << m_wordMarkSelections.size();
+#else
             QSet<int> removeSet(listRemoveItem.begin(), listRemoveItem.end());
             int index = 0;
             int removedCount = m_wordMarkSelections.removeIf([&removeSet, &index](const auto&) {
                 return removeSet.contains(index++);
             });
             qDebug() << "updateMark: Removed" << removedCount << "marks, remaining:" << m_wordMarkSelections.size();
+#endif
         }
     }
 

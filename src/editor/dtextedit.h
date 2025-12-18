@@ -530,6 +530,7 @@ public slots:
     void slotAddComment(bool checked = false);
     void slotCancelComment(bool checked = false);
     void slotVoiceReadingAction(bool checked = false);
+    bool slotStopReadingAction(bool checked = false);
     void slotdictationAction(bool checked = false);
     
     // 音频设备检测方法

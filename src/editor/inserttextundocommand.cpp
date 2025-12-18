@@ -4,6 +4,7 @@
 
 #include "inserttextundocommand.h"
 #include "dtextedit.h"
+#include <QDebug>
 
 InsertTextUndoCommand::InsertTextUndoCommand(const QTextCursor &textcursor,
                                              const QString &text,

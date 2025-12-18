@@ -41,6 +41,8 @@ private:
     uint h;
 };
 
+Q_DECLARE_METATYPE(DockRect)
+
 class ComDeepinDdeDaemonDockInterface: public QDBusAbstractInterface
 {
     Q_OBJECT
