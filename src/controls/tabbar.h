@@ -73,6 +73,7 @@ protected:
     QSize maximumTabSizeHint(int index) const;
     void dropEvent(QDropEvent *e);
     void resizeEvent(QResizeEvent *event);
+    void mousePressEvent(QMouseEvent *e);
 
 private:
     void handleTabMoved(int fromIndex, int toIndex);

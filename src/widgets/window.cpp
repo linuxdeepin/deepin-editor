@@ -17,6 +17,7 @@
 #include <QScreen>
 #include <QStyleFactory>
 #include <QEvent>
+#include <QDebug>
 #include <DDialog>
 #include <QStackedWidget>
 #include <QResizeEvent>

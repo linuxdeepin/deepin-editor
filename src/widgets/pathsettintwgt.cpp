@@ -12,6 +12,7 @@
 #include <QHBoxLayout>
 #include <QButtonGroup>
 #include <QFileDialog>
+#include <QDebug>
 
 // 不同布局模式参数
 const int s_PSWSuggestBtnSize = 36;
