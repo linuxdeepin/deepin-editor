@@ -141,11 +141,18 @@ TextEdit::TextEdit(QWidget *parent)
             break;
     }
     
-    // 连接音频设备状态变化信号
+    // 连接音频设备状态变化信号 (根据Qt版本选择不同的DBus服务)
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    dbus.sessionBus().connect("org.deepin.dde.Audio1",
+                            "/org/deepin/dde/Audio1", "org.deepin.dde.Audio1",
+                            "PortEnabledChanged",
+                            this, SLOT(onAudioPortEnabledChanged(quint32, QString, bool)));
+#else
     dbus.sessionBus().connect("com.deepin.daemon.Audio",
                             "/com/deepin/daemon/Audio", "com.deepin.daemon.Audio",
                             "PortEnabledChanged",
                             this, SLOT(onAudioPortEnabledChanged(quint32, QString, bool)));
+#endif
 
     //初始化右键菜单
     initRightClickedMenu();
@@ -9241,77 +9248,17 @@ void TextEdit::onTextContentChanged(int from, int charsRemoved, int charsAdded)
     }
 }
 
-bool TextEdit::checkAudioOutputDevice()
-{
-    QDBusMessage msg = QDBusMessage::createMethodCall("com.deepin.daemon.Audio",
-                                                      "/com/deepin/daemon/Audio",
-                                                      "org.freedesktop.DBus.Properties",
-                                                      "Get");
-    msg << QString("com.deepin.daemon.Audio") << QString("CardsWithoutUnavailable");
-
-    QDBusReply<QVariant> reply = QDBusConnection::sessionBus().call(msg);
-    if (reply.isValid()) {
-        QJsonDocument doc = QJsonDocument::fromJson(reply.value().toByteArray());
-        QJsonArray cards = doc.array();
-
-        // 检查是否有启用的输出设备 (Direction=1)
-        for (const QJsonValue &cardValue : cards) {
-            QJsonObject card = cardValue.toObject();
-            QJsonArray ports = card["Ports"].toArray();
-
-            for (const QJsonValue &portValue : ports) {
-                QJsonObject port = portValue.toObject();
-                if (port["Direction"].toInt() == 1 && port["Enabled"].toBool()) {
-                    return true; // 找到启用的输出设备
-                }
-            }
-        }
-    }
-
-    return false;
-}
-
-bool TextEdit::checkAudioInputDevice()
-{
-    QDBusMessage msg = QDBusMessage::createMethodCall("com.deepin.daemon.Audio",
-                                                      "/com/deepin/daemon/Audio",
-                                                      "org.freedesktop.DBus.Properties",
-                                                      "Get");
-    msg << QString("com.deepin.daemon.Audio") << QString("CardsWithoutUnavailable");
-
-    QDBusReply<QVariant> reply = QDBusConnection::sessionBus().call(msg);
-    if (reply.isValid()) {
-        QJsonDocument doc = QJsonDocument::fromJson(reply.value().toByteArray());
-        QJsonArray cards = doc.array();
-
-        // 检查是否有启用的输出设备 (Direction=2)
-        for (const QJsonValue &cardValue : cards) {
-            QJsonObject card = cardValue.toObject();
-            QJsonArray ports = card["Ports"].toArray();
-
-            for (const QJsonValue &portValue : ports) {
-                QJsonObject port = portValue.toObject();
-                if (port["Direction"].toInt() == 2 && port["Enabled"].toBool()) {
-                    return true; // 找到启用的输入设备
-                }
-            }
-        }
-    }
-
-    return false;
-}
-
 void TextEdit::onAudioPortEnabledChanged(quint32 cardId, const QString &portName, bool enabled)
 {
     Q_UNUSED(cardId)
     Q_UNUSED(portName)
-    
+
     // 只处理设备被禁用的情况
     if (!enabled) {
         // 检查是否还有可用的输出设备和输入设备
-        bool hasOutputDevice = checkAudioOutputDevice();
-        bool hasInputDevice = checkAudioInputDevice();
-        
+        bool hasOutputDevice = IflytekAiAssistant::instance()->hasAudioOutputDevice();
+        bool hasInputDevice = IflytekAiAssistant::instance()->hasAudioInputDevice();
+
         // 如果所有输出设备都被禁用，显示输出设备提示
         if (!hasOutputDevice) {
 #ifdef DTKWIDGET_CLASS_DSizeMode
@@ -9320,7 +9267,7 @@ void TextEdit::onAudioPortEnabledChanged(quint32 cardId, const QString &portName
             DMessageManager::instance()->sendMessage(this, QIcon(":/images/warning.svg"), tr("No audio output device was detected. Please ensure your speakers or headphones are properly connected and try again."));
 #endif
         }
-        
+
         // 如果所有输入设备都被禁用，显示输入设备提示
         if (!hasInputDevice) {
 #ifdef DTKWIDGET_CLASS_DSizeMode
