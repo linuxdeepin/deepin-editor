@@ -150,17 +150,17 @@
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="84"/>
         <source>Remember the last used path</source>
-        <translation type="unfinished"/>
+        <translation>最後に使用したパスを記憶する</translation>
     </message>
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="85"/>
         <source>Same path as the current file</source>
-        <translation type="unfinished"/>
+        <translation>現在のファイルと同じパスを指定する</translation>
     </message>
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="86"/>
         <source>Customize the default path</source>
-        <translation type="unfinished"/>
+        <translation>デフォルトのパスを指定する</translation>
     </message>
 </context>
 <context>
@@ -622,47 +622,47 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="101"/>
         <source>Startup</source>
-        <translation type="unfinished"/>
+        <translation>起動時</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="102"/>
         <source>Reopen last closed tabs</source>
-        <translation type="unfinished"/>
+        <translation>最後に使用したタブを開く</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="104"/>
         <source>Open/Save Settings</source>
-        <translation type="unfinished"/>
+        <translation>読み込み/保存先</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="106"/>
         <source>Word wrap</source>
-        <translation type="unfinished"/>
+        <translation>ワードラップ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="107"/>
         <source>Code folding flag</source>
-        <translation type="unfinished"/>
+        <translation>コード折り畳みフラグ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="108"/>
         <source>Show line numbers</source>
-        <translation type="unfinished"/>
+        <translation>行番号を表示する</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="109"/>
         <source>Show bookmarks icon</source>
-        <translation type="unfinished"/>
+        <translation>ブックマークアイコンを表示する</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="110"/>
         <source>Show whitespaces and tabs</source>
-        <translation type="unfinished"/>
+        <translation>スペースとタブを表示する</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="111"/>
         <source>Highlight current line</source>
-        <translation type="unfinished"/>
+        <translation>現在の行をハイライトする</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="112"/>
@@ -813,12 +813,12 @@
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="211"/>
         <source>Error occurred: %1</source>
-        <translation type="unfinished"/>
+        <translation>エラーが発生しました: %1</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="215"/>
         <source>Unknown error occurred</source>
-        <translation type="unfinished"/>
+        <translation>不明なエラーが発生しました</translation>
     </message>
 </context>
 <context>
@@ -1334,7 +1334,7 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="2322"/>
         <source>Current location remembered</source>
-        <translation type="unfinished"/>
+        <translation>現在の位置を記憶しました</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2398"/>
