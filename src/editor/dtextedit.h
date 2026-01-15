@@ -532,6 +532,9 @@ public slots:
     void slotVoiceReadingAction(bool checked = false);
     bool slotStopReadingAction(bool checked = false);
     void slotdictationAction(bool checked = false);
+
+    // 音频设备状态监听槽函数
+    void onAudioPortEnabledChanged(quint32 cardId, const QString &portName, bool enabled);
     void slotColumnEditAction(bool checked = false);
     void slotPreBookMarkAction(bool checked = false);
     void slotNextBookMarkAction(bool checked = false);
@@ -675,7 +678,6 @@ private:
     QAction *m_openInFileManagerAction;
     QAction *m_toggleCommentAction;
     QAction *m_voiceReadingAction;
-    QAction *m_stopReadingAction;
     QAction *m_dictationAction;
     QAction *m_translateAction;
     QAction *m_columnEditAction;

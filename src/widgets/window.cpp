@@ -17,6 +17,7 @@
 #include <QScreen>
 #include <QStyleFactory>
 #include <QEvent>
+#include <QDebug>
 #include <DDialog>
 #include <QStackedWidget>
 #include <QResizeEvent>
@@ -1183,6 +1184,7 @@ void Window::removeWrapper(const QString &filePath, bool isDelete)
     }
 
     qInfo() << "end removeWrapper";
+    StartManager::instance()->delayMallocTrim();
 }
 
 void Window::openFile()
@@ -2231,15 +2233,20 @@ void Window::popupPrintDialog()
     m_pPreview = new DPrintPreviewDialog(this);
     m_pPreview->setAttribute(Qt::WA_DeleteOnClose);
 
-    // 设置 QPrinter 的文档名称，保留绝对路径和文件后缀(在cups的page_log中保留完整的job-name)
-    // 注意和文件的输出文件路径进行区分
     if (fileDir == m_blankFileDir) {
+        QString name = m_tabbar->currentName();
+        QRegularExpression reg("[^*](.+)");
+        QRegularExpressionMatch match = reg.match(name);
+        QString docName = match.captured(0);
+        qInfo() << __func__ << "print blank file, docName:" << docName;
         qInfo() << qPrintable("Print blank file");
-        m_pPreview->setDocName(filePath);
+        m_pPreview->setDocName(docName);
     } else {
         qInfo() << qPrintable("Print file: ") << filePath;
         QString path = currentWrapper()->textEditor()->getTruePath();
-        m_pPreview->setDocName(path);
+        QString docName = QFileInfo(path).baseName();
+        qInfo() << __func__ << "print normal file, docName:" << docName;
+        m_pPreview->setDocName(docName);
     }
 
     // 后续布局计算后再更新打印页数
@@ -2356,6 +2363,7 @@ void Window::displayShortcuts()
                rect.y() + rect.height() / 2);
     // 获取当前焦点位置（光标所在屏幕中心）
     QScreen *screen = nullptr;
+#if DTK_VERSION > DTK_VERSION_CHECK(5, 5, 2, 0)
     if (DGuiApplicationHelper::isTabletEnvironment()) {
         // bug 88079 避免屏幕旋转弹出位置错误
         screen = qApp->primaryScreen();
@@ -2364,6 +2372,9 @@ void Window::displayShortcuts()
         screen = QGuiApplication::screenAt(QCursor::pos());
         qDebug() << "Use screen at cursor position";
     }
+#else
+    screen = QGuiApplication::screenAt(QCursor::pos());
+#endif
 
     if (screen) {
         pos = screen->geometry().center();
@@ -2931,6 +2942,44 @@ bool Window::closeAllFiles()
         }
     }
     qInfo() << "end closeAllFiles()";
+    return true;
+}
+
+bool Window::saveAllFloatingFiles()
+{
+    qInfo() << "begin saveAllFloatingFiles()";
+    QMap<QString, EditWrapper *> wrappers = m_wrappers;
+    for (int i = wrappers.count() - 1; i >= 0; i--) {
+        const QString &filePath = m_tabbar->truePathAt(i);
+        // 对于草稿文件，filePath为空，应该略过而不是返回false
+        if (filePath.isEmpty()) {
+            continue;
+        }
+
+        QFileInfo finfo(filePath);
+        if (!finfo.exists()) {
+            qWarning() << "File not exist:" << filePath;
+            m_tabbar->setCurrentIndex(i);
+            DDialog *dialog = createDialog(tr("Do you want to save this file?"), "");
+            int res = dialog->exec();
+
+            //取消或关闭弹窗不做任务操作
+            if (res == 0 || res == -1) {
+                return false;
+            }
+
+            //不保存
+            if (res == 1) {
+                continue;
+            }
+
+            //保存
+            if (res == 2) {
+                saveAsFile();
+            }
+        }
+    }
+    qInfo() << "end saveAllFloatingFiles()";
     return true;
 }
 
@@ -3880,6 +3929,7 @@ void Window::checkTabbarForReload()
     //判断是否需要阻塞系统关机
     emit sigJudgeBlockShutdown();
     qDebug() << "check tabbar for reload end";
+    StartManager::instance()->delayMallocTrim();
 }
 
 void Window::resizeEvent(QResizeEvent *e)
@@ -3930,9 +3980,11 @@ void Window::closeEvent(QCloseEvent *e)
             return;
         }
     } else {
+        // 是否记录上次打开的文件
         qDebug() << "close event single window";
         bool save_tab_before_close = m_settings->settings->option("advance.startup.save_tab_before_close")->value().toBool();
         if (!save_tab_before_close) {
+            // 不记录，关闭所有标签页，没保存的文件提示保存
             qDebug() << "close event save tab before close false";
             if (!closeAllFiles()) {
                 e->ignore();
@@ -3941,12 +3993,18 @@ void Window::closeEvent(QCloseEvent *e)
             }
         } else {
             qDebug() << "close event save tab before close true";
+            // 记录，没保存的文件不提示保存，除非磁盘上文件已删除
             // 单个窗口时，没有记录单独关闭窗口，需要记录窗口信息。
             for (auto itr = m_wrappers.begin(); itr != m_wrappers.end(); ++itr) {
                 QString filePath = itr.value()->textEditor()->getFilePath();
                 Utils::recordCloseFile(filePath);
             }
-
+            // 检查是否存在磁盘上已删除的文件，若存在则提示保存
+            if (!saveAllFloatingFiles()) {
+                backupFile();
+                e->ignore();
+                return;
+            }
             backupFile();
         }
     }

@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "changemarkcommand.h"
+#include <QDebug>
 
 ChangeMarkCommand::ChangeMarkCommand(QPointer<TextEdit> editPtr, const QList<TextEdit::MarkReplaceInfo> &oldMark, const QList<TextEdit::MarkReplaceInfo> &newMark, QUndoCommand *parent)
     : QUndoCommand(parent)

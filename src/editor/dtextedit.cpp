@@ -50,6 +50,12 @@
 #include <qpa/qplatformtheme.h>
 #endif
 #include <QtSvg/qsvgrenderer.h>
+#include <QDBusMessage>
+#include <QDBusConnection>
+#include <QDBusReply>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QJsonObject>
 
 TextEdit::TextEdit(QWidget *parent)
     : DPlainTextEdit(parent),
@@ -134,6 +140,19 @@ TextEdit::TextEdit(QWidget *parent)
                                     this, SLOT(fingerZoom(QString, QString, int)));
             break;
     }
+    
+    // 连接音频设备状态变化信号 (根据Qt版本选择不同的DBus服务)
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    dbus.sessionBus().connect("org.deepin.dde.Audio1",
+                            "/org/deepin/dde/Audio1", "org.deepin.dde.Audio1",
+                            "PortEnabledChanged",
+                            this, SLOT(onAudioPortEnabledChanged(quint32, QString, bool)));
+#else
+    dbus.sessionBus().connect("com.deepin.daemon.Audio",
+                            "/com/deepin/daemon/Audio", "com.deepin.daemon.Audio",
+                            "PortEnabledChanged",
+                            this, SLOT(onAudioPortEnabledChanged(quint32, QString, bool)));
+#endif
 
     //初始化右键菜单
     initRightClickedMenu();
@@ -320,7 +339,6 @@ void TextEdit::initRightClickedMenu()
     m_openInFileManagerAction = new QAction(tr("Display in file manager"), this);
     m_toggleCommentAction = new QAction(tr("Add Comment"), this);
     m_voiceReadingAction = new QAction(tr("Text to Speech"), this);
-    m_stopReadingAction = new QAction(tr("Stop reading"), this);
     m_dictationAction = new QAction(tr("Speech to Text"), this);
     m_translateAction = new QAction(tr("Translate"), this);
     m_columnEditAction = new QAction(tr("Column Mode"), this);
@@ -398,7 +416,6 @@ void TextEdit::initRightClickedMenu()
     connect(m_addComment, &QAction::triggered, this, &TextEdit::slotAddComment);
     connect(m_cancelComment, &QAction::triggered, this, &TextEdit::slotCancelComment);
     connect(m_voiceReadingAction, &QAction::triggered, this, &TextEdit::slotVoiceReadingAction);
-    connect(m_stopReadingAction, &QAction::triggered, this, &TextEdit::slotStopReadingAction);
     connect(m_dictationAction, &QAction::triggered, this, &TextEdit::slotdictationAction);
     connect(m_translateAction, &QAction::triggered, this, &TextEdit::slot_translate);
     connect(m_columnEditAction, &QAction::triggered, this, &TextEdit::slotColumnEditAction);
@@ -6506,12 +6523,22 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
         //从标记列表中移除标记
         // 修复：使用removeIf避免索引管理问题
         if (!listRemoveItem.isEmpty()) {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+            QSet<int> removeSet = listRemoveItem.toSet();
+            for (int i = m_wordMarkSelections.size() - 1; i >= 0; --i) {
+                if (removeSet.contains(i)) {
+                    m_wordMarkSelections.removeAt(i);
+                }
+            }
+            qDebug() << "updateMark: Removed marks, remaining:" << m_wordMarkSelections.size();
+#else
             QSet<int> removeSet(listRemoveItem.begin(), listRemoveItem.end());
             int index = 0;
             int removedCount = m_wordMarkSelections.removeIf([&removeSet, &index](const auto&) {
                 return removeSet.contains(index++);
             });
             qDebug() << "updateMark: Removed" << removedCount << "marks, remaining:" << m_wordMarkSelections.size();
+#endif
         }
     }
 
@@ -9218,5 +9245,36 @@ void TextEdit::onTextContentChanged(int from, int charsRemoved, int charsAdded)
         (void)new MidButtonInsertTextUndoCommand(cursor, insertText, this, undo);
 
         m_MidButtonPatse = false;
+    }
+}
+
+void TextEdit::onAudioPortEnabledChanged(quint32 cardId, const QString &portName, bool enabled)
+{
+    Q_UNUSED(cardId)
+    Q_UNUSED(portName)
+
+    // 只处理设备被禁用的情况
+    if (!enabled) {
+        // 检查是否还有可用的输出设备和输入设备
+        bool hasOutputDevice = IflytekAiAssistant::instance()->hasAudioOutputDevice();
+        bool hasInputDevice = IflytekAiAssistant::instance()->hasAudioInputDevice();
+
+        // 如果所有输出设备都被禁用，显示输出设备提示
+        if (!hasOutputDevice) {
+#ifdef DTKWIDGET_CLASS_DSizeMode
+            Utils::sendFloatMessageFixedFont(this, QIcon(":/images/warning.svg"), tr("No audio output device was detected. Please ensure your speakers or headphones are properly connected and try again."));
+#else
+            DMessageManager::instance()->sendMessage(this, QIcon(":/images/warning.svg"), tr("No audio output device was detected. Please ensure your speakers or headphones are properly connected and try again."));
+#endif
+        }
+
+        // 如果所有输入设备都被禁用，显示输入设备提示
+        if (!hasInputDevice) {
+#ifdef DTKWIDGET_CLASS_DSizeMode
+            Utils::sendFloatMessageFixedFont(this, QIcon(":/images/warning.svg"), tr("No audio input device was detected. Please ensure your speakers or headphones are properly connected and try again."));
+#else
+            DMessageManager::instance()->sendMessage(this, QIcon(":/images/warning.svg"), tr("No audio input device was detected. Please ensure your speakers or headphones are properly connected and try again."));
+#endif
+        }
     }
 }

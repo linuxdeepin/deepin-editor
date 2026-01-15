@@ -7,6 +7,7 @@
 #include <QScrollBar>
 #include <QApplication>
 #include <QEvent>
+#include <QDebug>
 
 ThemeListView::ThemeListView(QWidget *parent)
     : QListView(parent)

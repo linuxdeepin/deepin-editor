@@ -5,6 +5,7 @@
 #include "bookmarkwidget.h"
 #include "leftareaoftextedit.h"
 #include <QMouseEvent>
+#include <QDebug>
 
 BookMarkWidget::BookMarkWidget(LeftAreaTextEdit *leftAreaWidget)
 {

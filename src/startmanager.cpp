@@ -4,6 +4,7 @@
 
 #include "startmanager.h"
 //#include <settings.h>
+#include <malloc.h>
 
 #include <DApplication>
 #include <DWidgetUtil>
@@ -260,6 +261,7 @@ void StartManager::autoBackupFile()
     }
 
     //将json串列表写入配置文件
+    qInfo() << __func__ << "history file counts:" << m_qlistTemFile.size();
     Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->setValue(m_qlistTemFile);
     // 备份书签信息
     saveBookmark();
@@ -777,6 +779,7 @@ void StartManager::slotCloseWindow()
         QDBusConnection::sessionBus().unregisterService("com.deepin.Editor");
 
         QTimer::singleShot(1000, []() {
+             StartManager::instance()->delayMallocTrim();
             QApplication::quit();
         });
 
@@ -796,6 +799,13 @@ void StartManager::slotDelayBackupFile()
     qDebug() << "Exit slotDelayBackupFile";
 }
 
+void StartManager::delayMallocTrim()
+{
+    if (!m_FreeMemTimer.isActive()) {
+        m_FreeMemTimer.start(1000, this);
+    }
+}
+
 void StartManager::timerEvent(QTimerEvent *e)
 {
     qDebug() << "Enter timerEvent";
@@ -810,6 +820,12 @@ void StartManager::timerEvent(QTimerEvent *e)
         m_pTimer->start(EAutoBackupInterval);
     }
     qDebug() << "Exit timerEvent";
+
+    if (e->timerId() == m_FreeMemTimer.timerId()) {
+        m_FreeMemTimer.stop();
+        malloc_trim(0);
+        qInfo() << "malloc_trim over";
+    }
 }
 
 void StartManager::slotCreatNewwindow()

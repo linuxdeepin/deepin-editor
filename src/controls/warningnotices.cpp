@@ -6,6 +6,7 @@
 
 #include <DGuiApplicationHelper>
 #include <DDialogCloseButton>
+#include <QDebug>
 
 #ifdef DTKWIDGET_CLASS_DSizeMode
 #include <DSizeMode>

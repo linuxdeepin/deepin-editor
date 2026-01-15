@@ -8,6 +8,7 @@
 #include <QPainter>
 #include <DSettingsOption>
 #include <DFontSizeManager>
+#include <QDebug>
 
 ColorLabel::ColorLabel(QColor color,QWidget *parent) : DWidget(parent),
     m_color(color)

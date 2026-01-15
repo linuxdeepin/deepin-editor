@@ -63,6 +63,7 @@ Tabbar::Tabbar(QWidget *parent)
     setTabsClosable(true);
     setVisibleAddButton(true);
     setDragable(true);
+    setAcceptDrops(true);
     // setStartDragDistance(40);
     setElideMode(Qt::ElideRight);
     setTabPalette(palette().buttonText().color().name(), palette().highlightedText().color().name());
@@ -495,14 +496,6 @@ QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option
         sm_pDragPixmap = new QPixmap(QPixmap::fromImage(backgroundImage));
         return QPixmap::fromImage(backgroundImage);
     }
-
-#if 0
-    QPixmap backgroundImage = DTabBar::createDragPixmapFromTab(index, option, hotspot);
-    if (sm_pDragPixmap) delete sm_pDragPixmap;
-    sm_pDragPixmap = new QPixmap(backgroundImage);
-    return backgroundImage;
-#endif
-    qDebug() << "Exit createDragPixmapFromTab";
 }
 
 QMimeData *Tabbar::createMimeDataFromTab(int index, const QStyleOptionTab &option) const
@@ -748,7 +741,14 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
                 return true;
             }
         }
-
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+        if (mouseEvent->button() == Qt::MidButton) {
+#else
+        if (mouseEvent->button() == Qt::MiddleButton) {
+#endif
+            emit tabCloseRequested(tabAt(QPoint(mouseEvent->x(), mouseEvent->y())));
+            return true;
+        }
     } else if (event->type() == QEvent::DragEnter) {
         qDebug() << "event->type() == QEvent::DragEnter";
 //        if ((!e->source() || e->source()->parent() != this) &&

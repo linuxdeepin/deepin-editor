@@ -10,6 +10,7 @@
 #include <QVBoxLayout>
 #include <QPainter>
 #include <QTimer>
+#include <QDebug>
 
 ThemePanel::ThemePanel(QWidget *parent)
     : QWidget(parent),

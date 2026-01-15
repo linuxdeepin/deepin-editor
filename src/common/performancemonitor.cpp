@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "performancemonitor.h"
+#include <QDebug>
 
 const QString LOG_FLAG = "[PerformanceMonitor]";
 

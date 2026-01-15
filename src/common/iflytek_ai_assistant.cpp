@@ -25,10 +25,16 @@
 #include <DSysInfo>
 
 namespace {
-// DDE音频服务常量
+// DDE音频服务常量 (根据Qt版本选择不同的DBus服务)
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
 const QString AUDIO_SERVICE = "org.deepin.dde.Audio1";
 const QString AUDIO_PATH = "/org/deepin/dde/Audio1";
 const QString AUDIO_INTERFACE = "org.deepin.dde.Audio1";
+#else
+const QString AUDIO_SERVICE = "com.deepin.daemon.Audio";
+const QString AUDIO_PATH = "/com/deepin/daemon/Audio";
+const QString AUDIO_INTERFACE = "com.deepin.daemon.Audio";
+#endif
 
 // 端口方向枚举
 enum PortDirection {
