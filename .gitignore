@@ -47,6 +47,7 @@ tasks/
 
 # AI config
 .cursor/
+.claude/
 .cursorindexingignore
 .windsurfrules
 .roo/
