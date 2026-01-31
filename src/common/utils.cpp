@@ -882,29 +882,29 @@ void Utils::setChildrenFocus(QWidget *pWidget, Qt::FocusPolicy policy)
 int Utils::getProcessCountByName(const char *pstrName)
 {
     qDebug() << "Enter getProcessCountByName, pstrName:" << pstrName;
-    FILE *fp = NULL;
-    int count = -1;
-    char command[1024];
 
     if (NULL == pstrName || strlen(pstrName) == 0) {
         qDebug() << "pstrName is null";
-        return count;
+        return -1;
     }
 
-    memset(command, 0, sizeof(command));
-    sprintf(command, "ps -ef | grep %s | grep -v grep | wc -l", pstrName);
-    qDebug() << "command:" << command;
-    if ((fp = popen(command, "r")) != NULL) {
-        char buf[1024];
-        memset(buf, 0, sizeof(buf));
-        if ((fgets(buf, sizeof(buf) - 1, fp)) != NULL) {
-            qDebug() << "buf:" << buf;
-            count = atoi(buf);
-        }
-        pclose(fp);
-    } else {
-        qDebug() << ">>> popen error";
+    QProcess process;
+    process.start("ps", QStringList() << "-ef");
+    if (!process.waitForFinished(5000)) {
+        qDebug() << "ps command timeout";
+        return -1;
     }
+
+    QString output = process.readAllStandardOutput();
+    QString processName = QString::fromUtf8(pstrName);
+    int count = 0;
+
+    for (const QString &line : output.split('\n')) {
+        if (line.contains(processName)) {
+            count++;
+        }
+    }
+
     qDebug() << "Exit getProcessCountByName, count:" << count;
     return count;
 }
@@ -912,13 +912,16 @@ int Utils::getProcessCountByName(const char *pstrName)
 void Utils::killProcessByName(const char *pstrName)
 {
     qDebug() << "Enter killProcessByName, pstrName:" << pstrName;
-    if (pstrName != NULL && strlen(pstrName) > 0) {
-        char command[1024];
-        memset(command, 0, sizeof(command));
-        sprintf(command, "killall %s", pstrName);
-        qDebug() << "command:" << command;
-        system(command);
+
+    if (pstrName == NULL || strlen(pstrName) == 0) {
+        qDebug() << "pstrName is null or empty";
+        return;
     }
+
+    QProcess process;
+    process.start("killall", QStringList() << QString::fromUtf8(pstrName));
+    process.waitForFinished(5000);
+
     qDebug() << "Exit killProcessByName";
 }
 
