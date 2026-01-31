@@ -748,39 +748,48 @@ void Utils::setChildrenFocus(QWidget *pWidget, Qt::FocusPolicy policy)
 
 int Utils::getProcessCountByName(const char *pstrName)
 {
-    FILE *fp = NULL;
-    int count = -1;
-    char command[1024];
+    qDebug() << "Enter getProcessCountByName, pstrName:" << pstrName;
 
     if (NULL == pstrName || strlen(pstrName) == 0) {
-        return count;
+        qDebug() << "pstrName is null";
+        return -1;
     }
 
-    memset(command, 0, sizeof(command));
-    sprintf(command, "ps -ef | grep %s | grep -v grep | wc -l", pstrName);
+    QProcess process;
+    process.start("ps", QStringList() << "-ef");
+    if (!process.waitForFinished(5000)) {
+        qDebug() << "ps command timeout";
+        return -1;
+    }
 
-    if ((fp = popen(command, "r")) != NULL) {
-        char buf[1024];
-        memset(buf, 0, sizeof(buf));
-        if ((fgets(buf, sizeof(buf) - 1, fp)) != NULL) {
-            count = atoi(buf);
+    QString output = process.readAllStandardOutput();
+    QString processName = QString::fromUtf8(pstrName);
+    int count = 0;
+
+    for (const QString &line : output.split('\n')) {
+        if (line.contains(processName)) {
+            count++;
         }
-        pclose(fp);
-    } else {
-        qDebug() << ">>> popen error";
     }
 
+    qDebug() << "Exit getProcessCountByName, count:" << count;
     return count;
 }
 
 void Utils::killProcessByName(const char *pstrName)
 {
-    if (pstrName != NULL && strlen(pstrName) > 0) {
-        char command[1024];
-        memset(command, 0, sizeof(command));
-        sprintf(command, "killall %s", pstrName);
-        system(command);
+    qDebug() << "Enter killProcessByName, pstrName:" << pstrName;
+
+    if (pstrName == NULL || strlen(pstrName) == 0) {
+        qDebug() << "pstrName is null or empty";
+        return;
     }
+
+    QProcess process;
+    process.start("killall", QStringList() << QString::fromUtf8(pstrName));
+    process.waitForFinished(5000);
+
+    qDebug() << "Exit killProcessByName";
 }
 
 QString Utils::getStringMD5Hash(const QString &input)
