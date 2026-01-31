@@ -433,7 +433,6 @@ void Tabbar::setDNDColor(const QString &startColor, const QString &endColor)
 QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option, QPoint *hotspot) const
 {
     qDebug() << "Enter createDragPixmapFromTab, index:" << index;
-    const qreal ratio = qApp->devicePixelRatio();
 
     Window *window = static_cast<Window *>(this->window());
     EditWrapper *wrapper = window->wrapper(fileAt(index));
@@ -442,15 +441,14 @@ QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option
 
     TextEdit *textEdit = wrapper->textEditor();
 
-    int width = textEdit->width() * ratio;
-    int height = textEdit->height() * ratio;
+    int width = textEdit->width();
+    int height = textEdit->height();
     QImage screenshotImage(width, height, QImage::Format_ARGB32_Premultiplied);
-    screenshotImage.setDevicePixelRatio(ratio);
     textEdit->render(&screenshotImage, QPoint(), QRegion(0, 0, width, height));
 
     // scaled image to smaller.
-    int scaledWidth = width * ratio / 5;
-    int scaledHeight = height * ratio / 5;
+    int scaledWidth = width / 5;
+    int scaledHeight = height / 5;
     auto scaledImage = screenshotImage.scaled(scaledWidth, scaledHeight, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
     QImage backgroundImage(scaledWidth + 10, scaledHeight + 10, QImage::Format_ARGB32_Premultiplied);
@@ -475,7 +473,7 @@ QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option
         QPainterPath roundedRectPath;
 
         rectPath.addRect(0, 0, scaledWidth + 10, scaledHeight + 10);
-        roundedRectPath.addRoundedRect(QRect(0, 0, scaledWidth / ratio + 10, scaledHeight / ratio + 10), 6, 6);
+        roundedRectPath.addRoundedRect(QRect(0, 0, scaledWidth + 10, scaledHeight + 10), 6, 6);
 
         rectPath -= roundedRectPath;
 
