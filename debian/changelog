@@ -1,3 +1,30 @@
+deepin-editor (6.5.43) unstable; urgency=medium
+
+  * refactor: Replace popen with QProcess for process count and kill operations
+  * chore: Update compiler flags for security enhancements
+  * fix: remove device pixel ratio scaling in drag pixmap
+  * build(cmake): refactor Qt version compatibility
+  * fix: (docs)remove bold formatting from speech recognition headings
+  * i18n: Updates for project Deepin Text Editor (#392)
+  * Fix: support Qt 6.10.1
+  * fix: [Audio] Unify audio device detection and adapt DBus service for Qt version
+  * fix: Modify the parameters in the setDocName() function.
+  * fix: Adjust the handling of draft files when closing the window.
+  * fix: Adjust the logic for saving files when closing the window.
+  * fix: The "Do not keep tabs" feature is not working.
+  * fix: The "Do not keep tabs" feature is not working.
+  * fix: Null pointer exception after QTimer invocation
+  * fix: Temporarily disable QSaveFile in TextFileSaver
+  * fix: [Editor] Improve Qt5 compatibility and code cleanup
+  * fix: modify the 'Text to Speech' reading text
+  * fix: add the toast info for audio device disabled
+  * fix: 修复关闭窗口保存提示
+  * fix: improve MIME type detection and add man page support (#349)
+  * fix: 优化文本编辑器事件处理与1043编译问题
+  * fix: trim release memory
+
+ -- wangrong <wangrong@uniontech.com>  Wed, 04 Feb 2026 14:43:34 +0800
+
 deepin-editor (6.5.42) unstable; urgency=medium
 
   * fix: Improve audio device detection for TTS and STT functionality with DDE control center consistency
