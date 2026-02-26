@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -1602,30 +1602,51 @@ void TextEdit::unindentText()
 {
     qDebug() << "Unindenting text";
     QTextCursor cursor = this->textCursor();
-    cursor.movePosition(QTextCursor::StartOfBlock);
-    int pos = cursor.position();
-    cursor.setPosition(cursor.position() + 1, QTextCursor::KeepAnchor);
 
-    //the text in front of current line is '\t'.
-    if ("\t" == cursor.selectedText()) {
-        qDebug() << "Unindenting text with tab";
-        DeleteBackCommand *com = new DeleteBackCommand(cursor, this);
+    if (cursor.hasSelection()) {
+        qDebug() << "Unindenting text with selection";
+        //calculate the start postion and the end postion of current selection.
+        int pos1 = cursor.position();
+        int pos2 = cursor.anchor();
+        if (pos1 > pos2)
+            std::swap(pos1, pos2);
+
+        //calculate the start line and end line of current selection.
+        cursor.setPosition(pos1);
+        int line1 = cursor.blockNumber();
+        cursor.setPosition(pos2);
+        int line2 = cursor.blockNumber();
+
+        //do the unindent operation for multiple lines
+        auto com = new UnindentTextCommand(this, pos1, pos2, line1, line2, m_tabSpaceNumber);
         m_pUndoStack->push(com);
-    }
-    //the text in front of current line is ' '.
-    else if (" " == cursor.selectedText()) {
-        qDebug() << "Unindenting text with space";
-        int startpos = pos;
-        int cnt = 0;
-        // calculate the number of ' '.
-        while (document()->characterAt(pos) == ' ' && cnt < m_tabSpaceNumber) {
-            pos++;
-            cnt++;
+    } else {
+        //single line unindent (original behavior)
+        cursor.movePosition(QTextCursor::StartOfBlock);
+        int pos = cursor.position();
+        cursor.setPosition(cursor.position() + 1, QTextCursor::KeepAnchor);
+
+        //the text in front of current line is '\t'.
+        if ("\t" == cursor.selectedText()) {
+            qDebug() << "Unindenting text with tab";
+            DeleteBackCommand *com = new DeleteBackCommand(cursor, this);
+            m_pUndoStack->push(com);
         }
-        cursor.setPosition(startpos);
-        cursor.setPosition(pos, QTextCursor::KeepAnchor);
-        DeleteBackCommand *com = new DeleteBackCommand(cursor, this);
-        m_pUndoStack->push(com);
+        //the text in front of current line is ' '.
+        else if (" " == cursor.selectedText()) {
+            qDebug() << "Unindenting text with space";
+            int startpos = pos;
+            int cnt = 0;
+            // calculate the number of ' '.
+            while (document()->characterAt(pos) == ' ' && cnt < m_tabSpaceNumber) {
+                pos++;
+                cnt++;
+            }
+            cursor.setPosition(startpos);
+            cursor.setPosition(pos, QTextCursor::KeepAnchor);
+            DeleteBackCommand *com = new DeleteBackCommand(cursor, this);
+            m_pUndoStack->push(com);
+        }
     }
     qDebug() << "Unindenting text successfully";
 }
