@@ -1,3 +1,10 @@
+deepin-editor (6.5.44) unstable; urgency=medium
+
+  * chore: Unify linglong.yaml
+  * fix: resolve multi-line unindent issue with Shift+Tab
+
+ -- wangrong <wangrong@uniontech.com>  Fri, 27 Feb 2026 20:16:06 +0800
+
 deepin-editor (6.5.43) unstable; urgency=medium
 
   * refactor: Replace popen with QProcess for process count and kill operations
