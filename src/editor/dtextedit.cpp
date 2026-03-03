@@ -183,6 +183,34 @@ TextEdit::TextEdit(QWidget *parent)
 TextEdit::~TextEdit()
 {
     qDebug() << "Destroying TextEdit component";
+        // Disconnect D-Bus signals to prevent callbacks to destroyed object
+    QDBusConnection dbus = QDBusConnection::sessionBus();
+    switch (Utils::getSystemVersion()) {
+        case Utils::V23:
+            dbus.systemBus().disconnect("org.deepin.dde.Gesture1",
+                                        "/org/deepin/dde/Gesture1", "org.deepin.dde.Gesture1",
+                                        "Event",
+                                        this, SLOT(fingerZoom(QString, QString, int)));
+            break;
+        default:
+                dbus.systemBus().disconnect("com.deepin.daemon.Gesture",
+                                        "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture",
+                                        "Event",
+                                        this, SLOT(fingerZoom(QString, QString, int)));
+            break;
+    }
+    
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    dbus.sessionBus().disconnect("org.deepin.dde.Audio1",
+                                "/org/deepin/dde/Audio1", "org.deepin.dde.Audio1",
+                                "PortEnabledChanged",
+                                this, SLOT(onAudioPortEnabledChanged(quint32, QString, bool)));
+#else
+    dbus.sessionBus().disconnect("com.deepin.daemon.Audio",
+                                "/com/deepin/daemon/Audio", "com.deepin.daemon.Audio",
+                                "PortEnabledChanged",
+                                this, SLOT(onAudioPortEnabledChanged(quint32, QString, bool)));
+#endif
     if (m_scrollAnimation != nullptr) {
         qDebug() << "m_scrollAnimation is not null";
         if (m_scrollAnimation->state() != QAbstractAnimation::Stopped) {
