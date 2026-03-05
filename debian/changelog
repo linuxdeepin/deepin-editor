@@ -1,3 +1,10 @@
+deepin-editor (6.5.45) unstable; urgency=medium
+
+  * fix(editor): Disconnect D-Bus signals in TextEdit destructor to prevent callbacks to destroyed objects
+  * fix(cmake): Fix lrelease not found by using Qt6 LinguistTools target
+
+ -- wangrong <wangrong@uniontech.com>  Thu, 05 Mar 2026 20:38:31 +0800
+
 deepin-editor (6.5.44) unstable; urgency=medium
 
   * chore: Unify linglong.yaml
