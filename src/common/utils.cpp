@@ -492,6 +492,10 @@ QString Utils::getKeyshortcut(QKeyEvent *keyEvent)
             qDebug() << "keys.value(i).contains(Return)";
             keys.replace(i, "Enter");
         }
+        // 与 Return→Enter 同理：统一为常见写法，和配置/显示 "Ctrl+Shift+Tab" 一致
+        if (keys.value(i) == "Backtab") {
+            keys.replace(i, "Tab");
+        }
     }
 
     qDebug() << "Exit getKeyshortcut, keys:" << keys.join("+");
