@@ -1,3 +1,10 @@
+deepin-editor (6.5.46) unstable; urgency=medium
+
+  * fix: update dman' resources
+  * fix: Standardize key shortcut for previous tab functionality
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Fri, 13 Mar 2026 15:08:01 +0800
+
 deepin-editor (6.5.45) unstable; urgency=medium
 
   * fix(editor): Disconnect D-Bus signals in TextEdit destructor to prevent callbacks to destroyed objects
