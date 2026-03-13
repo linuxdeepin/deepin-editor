@@ -142,7 +142,7 @@ If you make an incorrect operation, press **Ctrl + Z** to undo it, or right-clic
 > ![tips](../common/tips.svg)Tips: Select the text and conduct search. The text selected will be automatically displayed in the **Find** box.
 
 ### Replace Texts
-1. Click ![menu](../common/icon_menu.svg) > **Replace**, or press **Ctrl + H** to open the **Replace** box  in the bottom of the Text Editor interface.
+1. Click ![menu](../common/icon_menu.svg) > **Replace**, or press **Ctrl + H**, or click **Replace** in the **Find** box to open the **Replace** box  in the bottom of the Text Editor interface.
 2.  Input the text to be replaced and the new text.
 3.  Click **Replace** to replace the matches one by one, and click **Replace Rest** and **Replace All** to replace the rest or all the matches at once. Click **Skip** to skip the current matching text.
 4.  Press **Esc** or click the close icon to close the dialog box.
