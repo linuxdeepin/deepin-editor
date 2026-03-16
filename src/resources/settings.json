@@ -255,7 +255,7 @@
                             "key": "backindentline",
                             "name": "Decrease indent",
                             "type": "keySequenceEdit",
-                            "default":  "Shift+Backtab"
+                            "default":  "Shift+Tab"
                         },
                         {
                             "key": "forwardchar",
@@ -726,7 +726,7 @@
                             "key": "backindentline",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Shift+Backtab"
+                            "default":  "Shift+Tab"
                         },
                         {
                             "key": "forwardchar",
