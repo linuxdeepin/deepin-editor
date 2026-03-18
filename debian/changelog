@@ -1,3 +1,9 @@
+deepin-editor (6.5.47) unstable; urgency=medium
+
+  * fix: Update key shortcut for backindentline to Shift+Tab
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Wed, 18 Mar 2026 10:01:29 +0800
+
 deepin-editor (6.5.46) unstable; urgency=medium
 
   * fix: update dman' resources
