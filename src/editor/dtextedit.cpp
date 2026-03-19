@@ -6706,6 +6706,8 @@ void TextEdit::mousePressEvent(QMouseEvent *e)
 
 void TextEdit::mouseMoveEvent(QMouseEvent *e)
 {
+    static const qreal MAX_INERTIAL_SPEED = 10.0;
+
     if (Qt::MouseEventSynthesizedByQt == e->source())
     {
         m_endY = e->y();
@@ -6736,8 +6738,10 @@ void TextEdit::mouseMoveEvent(QMouseEvent *e)
 
             /*预算惯性滑动时间*/
             m_stepSpeedY = static_cast<qreal>(diffYpos) / static_cast<qreal>(diffTimeY + 0.000001);
+            m_stepSpeedY = qBound(-MAX_INERTIAL_SPEED, m_stepSpeedY, MAX_INERTIAL_SPEED); // 限制速度在-10到10之间，避免速度过快导致滑动距离过长
             durationY = sqrt(abs(m_stepSpeedY)) * 1000;
             m_stepSpeedX = static_cast<qreal>(diffXpos) / static_cast<qreal>(diffTimeX + 0.000001);
+            m_stepSpeedX = qBound(-MAX_INERTIAL_SPEED, m_stepSpeedX, MAX_INERTIAL_SPEED); // 限制速度在-10到10之间，避免速度过快导致滑动距离过长
             durationX = sqrt(abs(m_stepSpeedX)) * 1000;
 
             /*预算惯性滑动距离,4.0为调优数值*/
