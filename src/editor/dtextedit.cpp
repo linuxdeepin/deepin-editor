@@ -6603,72 +6603,9 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
             //如果字符添加在标记中
             if (nCurrentPos > nStartPos && nCurrentPos < nEndPos) {
                 qDebug() << "updateMark, charsAdded > 0, nCurrentPos > nStartPos && nCurrentPos < nEndPos";
-                m_wordMarkSelections.removeAt(i);
-                selection.format.setBackground(strColor);
-                selection.cursor = textCursor();
-
-                QTextEdit::ExtraSelection preSelection;
-
-                //如果是输入法输入
-                if (m_bIsInputMethod) {
-                    qDebug() << "updateMark, charsAdded > 0, m_bIsInputMethod";
-                    //添加第一段标记
-                    selection.cursor.setPosition(nStartPos, QTextCursor::MoveAnchor);
-                    selection.cursor.setPosition(nCurrentPos - m_qstrCommitString.size(), QTextCursor::KeepAnchor);
-                    m_wordMarkSelections.insert(i, QPair<QTextEdit::ExtraSelection, qint64>
-                                                (selection, timeStamp));
-
-                    preSelection.cursor = selection.cursor;
-                    preSelection.format = selection.format;
-
-                    //添加第二段标记
-                    selection.cursor.setPosition(nCurrentPos, QTextCursor::MoveAnchor);
-                    selection.cursor.setPosition(nEndPos, QTextCursor::KeepAnchor);
-                    m_wordMarkSelections.insert(i + 1,  QPair<QTextEdit::ExtraSelection, qint64>
-                                                (selection, timeStamp));
-
-                    m_bIsInputMethod = false;
-                } else {
-                    qDebug() << "updateMark, charsAdded > 0, !m_bIsInputMethod";
-                    //添加第一段标记
-                    selection.cursor.setPosition(nStartPos, QTextCursor::MoveAnchor);
-                    selection.cursor.setPosition(from, QTextCursor::KeepAnchor);
-                    m_wordMarkSelections.insert(i, QPair<QTextEdit::ExtraSelection, qint64>
-                                                (selection, timeStamp));
-
-                    preSelection.cursor = selection.cursor;
-                    preSelection.format = selection.format;
-
-                    //添加第二段标记
-                    selection.cursor.setPosition(nCurrentPos, QTextCursor::MoveAnchor);
-                    selection.cursor.setPosition(nEndPos, QTextCursor::KeepAnchor);
-                    m_wordMarkSelections.insert(i + 1, QPair<QTextEdit::ExtraSelection, qint64>
-                                                (selection, timeStamp));
-                }
-
-                bool bIsFind = false;
-                qDebug() << "updateMark, charsAdded > 0, bIsFind";
-                //在记录标记的表中替换（按标记动作记录）
-                for (int j = 0; j < m_mapWordMarkSelections.count(); j++) {
-                    auto list = m_mapWordMarkSelections.value(j);
-                    for (int k = 0; k < list.count(); k++) {
-                        if (list.value(k).cursor == wordMarkSelections.value(i).first.cursor
-                                && list.value(k).format == wordMarkSelections.value(i).first.format) {
-                            list.removeAt(k);
-                            listSelections = list;
-                            listSelections.insert(k, preSelection);
-                            listSelections.insert(k + 1, selection);
-                            bIsFind = true;
-                            break;
-                        }
-                    }
-
-                    if (bIsFind) {
-                        m_mapWordMarkSelections.remove(j);
-                        m_mapWordMarkSelections.insert(j, listSelections);
-                        break;
-                    }
-                }
+                //Qt已自动调整cursor范围以包含新插入的文本，保持标记为整体不做分割，
+                //避免分割后新输入文本落在两段标记间隙中导致颜色丢失
+                //BUG-345731
                 break;
 
             } else if (nCurrentPos == nEndPos) { //如果字符添加在标记后
