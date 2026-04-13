@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -371,7 +371,10 @@ QPair<QWidget *, QWidget *> Settings::createKeySequenceEditHandle(QObject *obj)
             instance()->m_pDialog = instance()->createDialog(reason, "", bIsConflicts);
             instance()->m_pDialog->exec();
             // 恢复组合键序列
-            shortCutLineEdit->setKeySequence(instance()->settings->value(keySplitList.join(".")).toString());
+            QString currentValidValue = instance()->settings->value(checkName).toString();
+            QStringList customizeKeySplitList = option->key().split(".");
+            customizeKeySplitList[1] = QString("%1_keymap_customize").arg(customizeKeySplitList[1]);
+            instance()->settings->option(customizeKeySplitList.join("."))->setValue(currentValidValue);
             keymap->setValue("emacs");
             keymap->setValue("customize");
             qDebug() << "Leaving createKeySequenceEditHandle";
