@@ -2446,8 +2446,18 @@ bool TextEdit::updateKeywordSelectionsInView(QString keyword, QTextCharFormat ch
             return false;
         }
 
+        int lastMatchPos = -1;
         while (!cursor.isNull()) {
             extra.cursor = cursor;
+            int currentMatchPos = std::min(extra.cursor.position(), extra.cursor.anchor());
+
+            // 防止光标位置未前进导致死循环
+            if (currentMatchPos <= lastMatchPos) {
+                qDebug() << "Updating keyword selections in view, cursor not advancing, break";
+                break;
+            }
+            lastMatchPos = currentMatchPos;
+
             // 调整为不区分大小写
             Qt::CaseSensitivity option = defaultCaseSensitive;
             /* 查找字符时，查找到完全相等的时候才高亮，如查找小写f时，大写的F不高亮 */
@@ -2465,7 +2475,7 @@ bool TextEdit::updateKeywordSelectionsInView(QString keyword, QTextCharFormat ch
                 cursor = document()->find(keyword, cursor, flags);
             }
 
-            if (cursor.position() > endPos) {
+            if (!cursor.isNull() && cursor.position() > endPos) {
                 qDebug() << "Updating keyword selections in view with position greater than end pos, break";
                 break;
             }
