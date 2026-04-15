@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -20,6 +20,11 @@ FileLoadThread::~FileLoadThread()
     qDebug() << "Destroying FileLoadThread for file:" << m_strFilePath;
 }
 
+void FileLoadThread::setEncodeHint(const QByteArray &encode)
+{
+    m_encodeHint = encode;
+}
+
 void FileLoadThread::run()
 {
     qDebug() << "Starting file load thread for:" << m_strFilePath;
@@ -35,7 +40,11 @@ void FileLoadThread::run()
             qDebug() << "Large file detected (" << file.size() << " bytes), using optimized loading strategy";
             // 先读取1MB数据
             indata = file.read(DATA_SIZE_1024 * DATA_SIZE_1024);
-            encode = DetectCode::GetFileEncodingFormat(m_strFilePath, indata);
+            if (!m_encodeHint.isEmpty()) {
+                encode = m_encodeHint;
+            } else {
+                encode = DetectCode::GetFileEncodingFormat(m_strFilePath, indata);
+            }
             qDebug() << "Initial encoding detection result:" << encode;
 
             // 发送文件头信息，用于预先加载数据
@@ -64,7 +73,10 @@ void FileLoadThread::run()
             return;
         }
 
-        if (encode.isEmpty()) {
+        if (!m_encodeHint.isEmpty()) {
+            qDebug() << "Using encoding hint:" << m_encodeHint;
+            encode = m_encodeHint;
+        } else if (encode.isEmpty()) {
             qDebug() << "Performing full encoding detection";
             //编码识别，如果文件数据大于1M，则只裁剪出1M文件数据去做编码探测
             QByteArray dateUsedForCodeIdentify;
