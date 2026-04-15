@@ -5626,6 +5626,28 @@ QStringList TextEdit::readEncodeHistoryRecord()
     return filePathList;
 }
 
+QByteArray TextEdit::getStoredEncode(const QString &filePath)
+{
+    Settings *settings = Settings::instance();
+    if (!settings) return QByteArray();
+
+    QString history = settings->settings->option("advance.editor.browsing_encode_history")->value().toString();
+    QString pattern = "*{*[" + filePath + "]*";
+    int pos = history.indexOf(pattern);
+    if (pos == -1) return QByteArray();
+
+    int encodeStart = pos + pattern.length();
+    int encodeEnd = history.indexOf("}*", encodeStart);
+    if (encodeEnd == -1) return QByteArray();
+
+    return history.mid(encodeStart, encodeEnd - encodeStart).toLocal8Bit();
+}
+
+void TextEdit::setTextEncode(const QString &encode)
+{
+    m_textEncode = encode;
+}
+
 void TextEdit::tellFindBarClose()
 {
     qDebug() << "Tell find bar close";

@@ -197,6 +197,12 @@ void EditWrapper::openFile(const QString &filepath, QString qstrTruePath, bool b
 
     FileLoadThread *thread = new FileLoadThread(filepath);
     qDebug() << "Created file load thread for:" << filepath;
+    // 优先使用历史记录的编码
+    QByteArray storedEncode = TextEdit::getStoredEncode(filepath);
+    if (!storedEncode.isEmpty()) {
+        qDebug() << "Using stored encoding from history:" << storedEncode;
+        thread->setEncodeHint(storedEncode);
+    }
     // begin to load the file.
     connect(thread, &FileLoadThread::sigPreProcess, this, &EditWrapper::handleFilePreProcess);
     connect(thread, &FileLoadThread::sigLoadFinished, this, &EditWrapper::handleFileLoadFinished);
@@ -615,6 +621,9 @@ bool EditWrapper::saveFile(QByteArray encode)
         m_tModifiedDateTime = fi.lastModified();
         updateModifyStatus(false);
         m_bIsTemFile = false;
+        // 记录编码到历史，下次打开时优先使用
+        m_pTextEdit->setTextEncode(m_sCurEncode);
+        m_pTextEdit->writeEncodeHistoryRecord();
     } else {
         qDebug() << "EditWrapper saveFile, ok is false";
         DMessageManager::instance()->sendMessage(
@@ -684,6 +693,8 @@ bool EditWrapper::saveTemFile(QString qstrDir)
         qDebug() << "EditWrapper saveTemFile, ok is true";
         m_sFirstEncode = m_sCurEncode;
         updateModifyStatus(isModified());
+        m_pTextEdit->setTextEncode(m_sCurEncode);
+        m_pTextEdit->writeEncodeHistoryRecord();
     }
     qDebug() << "EditWrapper saveTemFile, ok:" << ok;
     return ok;
@@ -799,6 +810,8 @@ bool EditWrapper::saveDraftFile(QString &newFilePath)
         updateSaveAsFileName(m_pTextEdit->getFilePath(), newFilePath);
         m_pTextEdit->document()->setModified(false);
         m_bIsTemFile = false;
+        m_pTextEdit->setTextEncode(m_sCurEncode);
+        m_pTextEdit->writeEncodeHistoryRecord();
         qDebug() << "EditWrapper saveDraftFile, saver.save() success";
         return true;
     }

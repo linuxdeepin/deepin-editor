@@ -414,6 +414,8 @@ public:
     void setCursorStart(int pos);
     void writeEncodeHistoryRecord();
     QStringList readEncodeHistoryRecord();
+    static QByteArray getStoredEncode(const QString &filePath);
+    void setTextEncode(const QString &encode);
     /**
      * @brief tellFindBarClose 通知查找框关闭
      */
