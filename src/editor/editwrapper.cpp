@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -262,7 +262,8 @@ bool EditWrapper::saveAsFile(const QString &newFilePath, const QByteArray &encod
     TextFileSaver saver(m_pTextEdit->document());
     saver.setFilePath(newFilePath);
     saver.setEncoding(encodeName);
-    
+    saver.setEndlineFormat(m_pBottomBar->getEndlineFormat() == BottomBar::EndlineFormat::Windows);
+
     bool saveSuccess = saver.save();
     if (!saveSuccess) {
         qWarning() << "Failed to save file:" << newFilePath << "Error:" << saver.errorString();
@@ -310,7 +311,8 @@ bool EditWrapper::saveAsFile()
         TextFileSaver saver(m_pTextEdit->document());
         saver.setFilePath(newFilePath);
         saver.setEncoding(m_sFirstEncode.toUtf8());
-        
+        saver.setEndlineFormat(m_pBottomBar->getEndlineFormat() == BottomBar::EndlineFormat::Windows);
+
         if (!saver.save()) {
             qWarning() << "EditWrapper saveAsFile, Failed to save file:" << saver.errorString();
             return false;
@@ -603,7 +605,8 @@ bool EditWrapper::saveFile(QByteArray encode)
     TextFileSaver saver(m_pTextEdit->document());
     saver.setFilePath(qstrFilePath);
     saver.setEncoding(m_sCurEncode.toUtf8());
-    
+    saver.setEndlineFormat(m_pBottomBar->getEndlineFormat() == BottomBar::EndlineFormat::Windows);
+
     bool ok = saver.save();
     if (ok) {
         qDebug() << "EditWrapper saveFile, ok is true";
@@ -674,7 +677,8 @@ bool EditWrapper::saveTemFile(QString qstrDir)
     TextFileSaver saver(m_pTextEdit->document());
     saver.setFilePath(qstrDir);
     saver.setEncoding(m_sCurEncode.toUtf8());
-    
+    saver.setEndlineFormat(m_pBottomBar->getEndlineFormat() == BottomBar::EndlineFormat::Windows);
+
     bool ok = saver.save();
     if (ok) {
         qDebug() << "EditWrapper saveTemFile, ok is true";
@@ -782,7 +786,8 @@ bool EditWrapper::saveDraftFile(QString &newFilePath)
         TextFileSaver saver(m_pTextEdit->document());
         saver.setFilePath(newFilePath);
         saver.setEncoding(encode);
-        
+        saver.setEndlineFormat(m_pBottomBar->getEndlineFormat() == BottomBar::EndlineFormat::Windows);
+
         if (!saver.save()) {
             qDebug() << "EditWrapper saveDraftFile, saver.save() failed";
             return false;
