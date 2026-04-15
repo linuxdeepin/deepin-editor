@@ -201,16 +201,18 @@ public:
     bool findKeywordForward(const QString &keyword);
 
     void removeKeywords();
-    bool highlightKeyword(const QString &keyword, int position, Qt::CaseSensitivity caseFlag = Qt::CaseSensitive);
-    bool highlightKeywordInView(const QString &keyword, Qt::CaseSensitivity caseFlag = Qt::CaseSensitive);
+    bool highlightKeyword(const QString &keyword, int position, Qt::CaseSensitivity caseFlag = Qt::CaseInsensitive);
+    bool highlightKeywordInView(const QString &keyword, Qt::CaseSensitivity caseFlag = Qt::CaseInsensitive);
     void clearFindMatchSelections();
     void setFindHighlightSelection(const QTextCursor &cursor);
-    void updateCursorKeywordSelection(QString keyword, bool findNext);
+    void updateCursorKeywordSelection(QString keyword, bool findNext,
+                                      Qt::CaseSensitivity caseFlag = Qt::CaseInsensitive);
     void updateHighlightLineSelection();
     bool updateKeywordSelections(QString keyword, QTextCharFormat charFormat, QList<QTextEdit::ExtraSelection> &listSelection);
     bool updateKeywordSelectionsInView(QString keyword, QTextCharFormat charFormat, QList<QTextEdit::ExtraSelection> *listSelection,
-                                       Qt::CaseSensitivity caseFlag = Qt::CaseSensitive);
-    bool searchKeywordSeletion(QString keyword, QTextCursor cursor, bool findNext);
+                                       Qt::CaseSensitivity caseFlag = Qt::CaseInsensitive);
+    bool searchKeywordSeletion(QString keyword, QTextCursor cursor, bool findNext,
+                               Qt::CaseSensitivity caseFlag = Qt::CaseInsensitive);
     void renderAllSelections();
 
     bool clearMarkOperationForCursor(QTextCursor cursor);
@@ -555,7 +557,7 @@ public slots:
 
     void moveText(int from, int to, const QString& text, bool copy = false);
     QTextCursor findCursor(const QString &substr, const QString &text, int from, bool backward = false, int cursorPos = 0,
-                           Qt::CaseSensitivity caseFlag = Qt::CaseSensitive);
+                           Qt::CaseSensitivity caseFlag = Qt::CaseInsensitive);
     void onPressedLineNumber(const QPoint& point);
     QString selectedText(bool checkCRLF = false);
     void onEndlineFormatChanged(BottomBar::EndlineFormat from,BottomBar::EndlineFormat to);
@@ -870,6 +872,6 @@ private:
     bool m_isPreeditBefore = false;     // 上一个输入法时间是否是 preedit
     int m_preeditLengthBefore = 0;
 
-    Qt::CaseSensitivity defaultCaseSensitive = Qt::CaseSensitive; // 查找匹配时默认区分大小写
+    Qt::CaseSensitivity defaultCaseSensitive = Qt::CaseInsensitive; // 查找匹配时默认不区分大小写
 };
 #endif
