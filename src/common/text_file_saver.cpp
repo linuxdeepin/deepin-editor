@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2025 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2025 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -55,6 +55,11 @@ void TextFileSaver::setEncoding(const QByteArray &toEncode)
 {
     qDebug() << "Setting target encoding to:" << toEncode;
     m_toEncode = toEncode;
+}
+
+void TextFileSaver::setEndlineFormat(bool useCRLF)
+{
+    m_useCRLF = useCRLF;
 }
 
 /**
@@ -150,7 +155,10 @@ bool TextFileSaver::saveToFile(QFileDevice &file)
             return false;
         }
         qDebug() << "memory sufficient";
-        const QString content = m_document->toPlainText();
+        QString content = m_document->toPlainText();
+        if (m_useCRLF) {
+            content.replace(QStringLiteral("\n"), QStringLiteral("\r\n"));
+        }
         const ushort *data = content.utf16();
         const int length = content.length();
 

@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2025 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2025 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -19,6 +19,7 @@ public:
 
     void setFilePath(const QString &filePath);
     void setEncoding(const QByteArray &toEncode);
+    void setEndlineFormat(bool useCRLF);
     bool save();
     bool saveAs(const QString &newFilePath);
     QString errorString() const;
@@ -32,6 +33,7 @@ private:
     QString m_filePath;
     QByteArray m_fromEncode; // default is UTF-16 (QString)
     QByteArray m_toEncode;   // default is UTF-8
+    bool m_useCRLF = false;
     QString m_errorString;
     static const int MAX_FILENAME_LENGTH = 245;
 };
