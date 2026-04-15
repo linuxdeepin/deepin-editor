@@ -2134,10 +2134,10 @@ void TextEdit::replaceNext(const QString &replaceText, const QString &withText, 
         new InsertTextUndoCommand(cursor, withText, this, pChangeMark);
         m_pUndoStack->push(pChangeMark);
         ensureCursorVisible();
+        // Update cursor.
+        setTextCursor(cursor);
     }
 
-    // Update cursor.
-    setTextCursor(cursor);
     highlightKeyword(replaceText, getPosition(), caseFlag);
     qDebug() << "Replace all operation completed for:" << replaceText.left(20);
 }
@@ -2277,7 +2277,7 @@ bool TextEdit::highlightKeyword(const QString &keyword, int position, Qt::CaseSe
     Q_UNUSED(position)
     m_findMatchSelections.clear();
     updateHighlightLineSelection();
-    updateCursorKeywordSelection(keyword, true);
+    updateCursorKeywordSelection(keyword, true, caseFlag);
     bool bRet = updateKeywordSelectionsInView(keyword, m_findMatchFormat, &m_findMatchSelections, caseFlag);
     renderAllSelections();
 
@@ -2311,17 +2311,18 @@ void TextEdit::setFindHighlightSelection(const QTextCursor &cursor)
     qDebug() << "Find highlight selection set to position:" << cursor.position() << "with selection:" << cursor.hasSelection();
 }
 
-void TextEdit::updateCursorKeywordSelection(QString keyword, bool findNext)
+void TextEdit::updateCursorKeywordSelection(QString keyword, bool findNext,
+                                             Qt::CaseSensitivity caseFlag)
 {
     qDebug() << "Updating cursor keyword selection";
-    bool findOne = searchKeywordSeletion(keyword, textCursor(), findNext);
+    bool findOne = searchKeywordSeletion(keyword, textCursor(), findNext, caseFlag);
 
     qDebug() << "Updating cursor keyword selection successfully: " << findOne;
     if (!findOne) {
         qDebug() << "Updating cursor keyword selection with no find";
         QTextCursor cursor = textCursor();
         cursor.movePosition(findNext ? QTextCursor::Start : QTextCursor::End, QTextCursor::MoveAnchor);
-        if (!searchKeywordSeletion(keyword, cursor, findNext)) {
+        if (!searchKeywordSeletion(keyword, cursor, findNext, caseFlag)) {
             m_findHighlightSelection.cursor = textCursor();
             m_findMatchSelections.clear();
             renderAllSelections();
@@ -2489,7 +2490,8 @@ bool TextEdit::updateKeywordSelectionsInView(QString keyword, QTextCharFormat ch
     return false;
 }
 
-bool TextEdit::searchKeywordSeletion(QString keyword, QTextCursor cursor, bool findNext)
+bool TextEdit::searchKeywordSeletion(QString keyword, QTextCursor cursor, bool findNext,
+                                      Qt::CaseSensitivity caseFlag)
 {
     qDebug() << "Searching keyword seletion";
     if (keyword.isEmpty()) {
@@ -2503,7 +2505,7 @@ bool TextEdit::searchKeywordSeletion(QString keyword, QTextCursor cursor, bool f
     if (findNext) {
         qDebug() << "Searching keyword seletion with find next";
         QTextDocument::FindFlags options;
-        if (Qt::CaseSensitive == defaultCaseSensitive) {
+        if (Qt::CaseSensitive == caseFlag) {
             qDebug() << "Searching keyword seletion with find next and case sensitive";
             options |= QTextDocument::FindCaseSensitively;
         }
@@ -2512,7 +2514,7 @@ bool TextEdit::searchKeywordSeletion(QString keyword, QTextCursor cursor, bool f
         if (keyword.contains("\n")) {
             qDebug() << "Searching keyword seletion with find next and contains newline";
             int pos = std::max(cursor.position(), cursor.anchor());
-            next = findCursor(keyword, this->toPlainText(), pos, false, 0, defaultCaseSensitive);
+            next = findCursor(keyword, this->toPlainText(), pos, false, 0, caseFlag);
         }
         if (!next.isNull()) {
             qDebug() << "Searching keyword seletion with find next and not null";
@@ -2524,7 +2526,7 @@ bool TextEdit::searchKeywordSeletion(QString keyword, QTextCursor cursor, bool f
     } else {
         qDebug() << "Searching keyword seletion with find previous";
         QTextDocument::FindFlags options = QTextDocument::FindBackward;
-        if (Qt::CaseSensitive == defaultCaseSensitive) {
+        if (Qt::CaseSensitive == caseFlag) {
             qDebug() << "Searching keyword seletion with find previous and case sensitive";
             options |= QTextDocument::FindCaseSensitively;
         }
@@ -2533,7 +2535,7 @@ bool TextEdit::searchKeywordSeletion(QString keyword, QTextCursor cursor, bool f
         if (keyword.contains("\n")) {
             int pos = std::min(cursor.position(), cursor.anchor());
             qDebug() << "Searching keyword seletion with find previous and contains newline";
-            prev = findCursor(keyword, this->toPlainText().mid(0, pos), -1, true, defaultCaseSensitive);
+            prev = findCursor(keyword, this->toPlainText().mid(0, pos), -1, true, 0, caseFlag);
         }
         if (!prev.isNull()) {
             qDebug() << "Searching keyword seletion with find previous and not null";
