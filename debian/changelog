@@ -1,3 +1,16 @@
+deepin-editor (6.5.48) unstable; urgency=medium
+
+  * chore: Update version to 6.5.48
+  * fix(editor): separate find/replace case sensitivity logic
+  * fix(editor): prevent freeze when replacing newline characters
+  * fix(editor): persist file encoding across sessions
+  * fix(editor): fix color mark lost when pressing Enter in middle of marked text
+  * fix(editor): restore CRLF line ending conversion when saving files
+  * fix: sync customize keymap when reverting invalid shortcut
+  * fix(editor): change find/replace default to case-sensitive
+
+ -- zhanghongyuan <zhanghongyuan@uniontech.com>  Thu, 16 Apr 2026 21:15:13 +0800
+
 deepin-editor (6.5.47) unstable; urgency=medium
 
   * fix: Update key shortcut for backindentline to Shift+Tab
