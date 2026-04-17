@@ -100,6 +100,9 @@ void FileLoadThread::run()
             emit sigLoadFinished(encode, outData, false);
             qDebug() << "Encoding conversion completed, output size:" << outData.size();
         }
+    } else {
+        qWarning() << "Failed to open file:" << m_strFilePath << "error:" << file.errorString();
+        emit sigLoadFinished("", "", true);
     }
 
     qDebug() << "FileLoadThread finished processing:" << m_strFilePath;
