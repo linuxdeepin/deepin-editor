@@ -3991,11 +3991,50 @@ void Window::closeEvent(QCloseEvent *e)
             }
         } else {
             qDebug() << "close event save tab before close true";
-            // 记录，没保存的文件不提示保存，除非磁盘上文件已删除
-            // 单个窗口时，没有记录单独关闭窗口，需要记录窗口信息。
+            // 记录，单个窗口时，需要记录窗口信息以便下次恢复。
             for (auto itr = m_wrappers.begin(); itr != m_wrappers.end(); ++itr) {
                 QString filePath = itr.value()->textEditor()->getFilePath();
                 Utils::recordCloseFile(filePath);
+            }
+            // 检查有未保存修改的文件，提示用户保存（不关闭标签页，保持 m_wrappers 完整供 backupFile 使用）
+            for (int i = 0; i < m_tabbar->count(); i++) {
+                const QString &filePath = m_tabbar->fileAt(i);
+                EditWrapper *wrapper = m_wrappers.value(filePath);
+                if (!wrapper) continue;
+
+                bool isModified = false;
+                if (wrapper->isDraftFile()) {
+                    isModified = wrapper->isModified();
+                } else {
+                    QString tabText = m_tabbar->textAt(i);
+                    isModified = !tabText.isEmpty() && tabText.front() == '*';
+                }
+                if (!isModified) continue;
+
+                m_tabbar->setCurrentIndex(i);
+                DDialog *dialog = createDialog(tr("Do you want to save this file?"), "");
+                int res = dialog->exec();
+
+                // 取消或关闭弹窗，中止关闭窗口
+                if (res == 0 || res == -1) {
+                    qDebug() << "close event cancelled by user";
+                    backupFile();
+                    e->ignore();
+                    return;
+                }
+                // 不保存，继续下一个文件
+                if (res == 1) {
+                    continue;
+                }
+                // 保存
+                if (res == 2) {
+                    if (wrapper->isDraftFile()) {
+                        QString newFilePath;
+                        wrapper->saveDraftFile(newFilePath);
+                    } else {
+                        wrapper->saveFile();
+                    }
+                }
             }
             // 检查是否存在磁盘上已删除的文件，若存在则提示保存
             if (!saveAllFloatingFiles()) {
