@@ -3419,17 +3419,17 @@ void Window::handleReplaceRest(const QString &replaceText, const QString &withTe
     qDebug() << "handleReplaceRest end";
 }
 
-void Window::handleReplaceSkip(QString file, QString keyword)
+void Window::handleReplaceSkip(QString file, QString keyword, Qt::CaseSensitivity caseFlag)
 {
-    qDebug() << "handleReplaceSkip" << file << keyword;
+    qDebug() << "handleReplaceSkip" << file << keyword << caseFlag;
     EditWrapper *wrapper = currentWrapper();
-    handleUpdateSearchKeyword(m_replaceBar, file, keyword);
+    handleUpdateSearchKeyword(m_replaceBar, file, keyword, caseFlag);
     if (QString::compare(m_keywordForSearch, m_keywordForSearchAll, Qt::CaseInsensitive) != 0) {
         m_keywordForSearchAll.clear();
         wrapper->textEditor()->clearFindMatchSelections();
         qDebug() << "m_keywordForSearchAll is not equal to m_keywordForSearch, clear it";
     } else {
-        wrapper->textEditor()->highlightKeywordInView(m_keywordForSearchAll);
+        wrapper->textEditor()->highlightKeywordInView(m_keywordForSearchAll, caseFlag);
         qDebug() << "m_keywordForSearchAll is equal to m_keywordForSearch, highlight it";
     }
 #if 0
@@ -3450,9 +3450,10 @@ void Window::handleRemoveSearchKeyword()
     qDebug() << "handleRemoveSearchKeyword end";
 }
 
-void Window::handleUpdateSearchKeyword(QWidget *widget, const QString &file, const QString &keyword)
+void Window::handleUpdateSearchKeyword(QWidget *widget, const QString &file, const QString &keyword,
+                                       Qt::CaseSensitivity caseFlag)
 {
-    qDebug() << "handleUpdateSearchKeyword" << file << keyword;
+    qDebug() << "handleUpdateSearchKeyword" << file << keyword << caseFlag;
     if (file == m_tabbar->currentPath() && m_wrappers.contains(file)) {
         qDebug() << "update search keyword";
         EditWrapper* wrapper = m_wrappers.value(file);
@@ -3462,7 +3463,7 @@ void Window::handleUpdateSearchKeyword(QWidget *widget, const QString &file, con
          }
 
         // Update input widget warning status along with keyword match situation.
-        bool findKeyword = wrapper->textEditor()->highlightKeyword(keyword, wrapper->textEditor()->getPosition());
+        bool findKeyword = wrapper->textEditor()->highlightKeyword(keyword, wrapper->textEditor()->getPosition(), caseFlag);
         m_keywordForSearchAll = keyword;
         m_keywordForSearch = keyword;
         bool emptyKeyword = keyword.trimmed().isEmpty();
