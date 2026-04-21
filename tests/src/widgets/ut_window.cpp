@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -1502,7 +1502,7 @@ TEST(UT_Window_handleReplaceSkip, UT_Window_handleReplaceSkip)
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addTabWithWrapper(a,"bb","aad","aadd",1);
     window->m_settings =Settings::instance();
-    window->handleReplaceSkip("aa", "");
+    window->handleReplaceSkip("aa", "", Qt::CaseSensitive);
 
     EXPECT_NE(window,nullptr);
     window->deleteLater();

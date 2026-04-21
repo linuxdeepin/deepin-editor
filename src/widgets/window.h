@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -177,10 +177,11 @@ public Q_SLOTS:
     void handleReplaceAll(const QString &replaceText, const QString &withText);
     void handleReplaceNext(const QString &file, const QString &replaceText, const QString &withText);
     void handleReplaceRest(const QString &replaceText, const QString &withText);
-    void handleReplaceSkip(QString file, QString keyword);
+    void handleReplaceSkip(QString file, QString keyword, Qt::CaseSensitivity caseFlag);
 
     void handleRemoveSearchKeyword();
-    void handleUpdateSearchKeyword(QWidget *widget, const QString &file, const QString &keyword);
+    void handleUpdateSearchKeyword(QWidget *widget, const QString &file, const QString &keyword,
+                                   Qt::CaseSensitivity caseFlag = Qt::CaseInsensitive);
 
     void loadTheme(const QString &path);
 

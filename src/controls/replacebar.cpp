@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -133,7 +133,7 @@ void ReplaceBar::activeInput(QString text, QString file, int row, int column, in
 void ReplaceBar::handleSkip()
 {
     qDebug() << "handleSkip";
-    emit replaceSkip(m_replaceFile, m_replaceLine->lineEdit()->text());
+    emit replaceSkip(m_replaceFile, m_replaceLine->lineEdit()->text(), Qt::CaseSensitive);
 }
 
 void ReplaceBar::replaceClose()

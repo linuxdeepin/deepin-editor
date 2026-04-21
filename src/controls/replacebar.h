@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -36,7 +36,7 @@ public:
 Q_SIGNALS:
     void pressEsc();
     void replaceNext(QString file, QString replaceText, QString withText);
-    void replaceSkip(QString file, QString keyword);
+    void replaceSkip(QString file, QString keyword, Qt::CaseSensitivity caseFlag);
     void replaceRest(QString replaceText, QString withText);
     void replaceAll(QString replaceText, QString withText);
     void beforeReplace(QString _);
