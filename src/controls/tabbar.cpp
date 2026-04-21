@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -58,6 +58,10 @@ Tabbar::Tabbar(QWidget *parent)
     m_rightClickTab = -1;
 
     installEventFilter(this);
+
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    qApp->installEventFilter(this);
+#endif
 
     setMovable(true);
     setTabsClosable(true);
@@ -606,7 +610,12 @@ void Tabbar::handleDragActionChanged(Qt::DropAction action)
 
 bool Tabbar::eventFilter(QObject *, QEvent *event)
 {
-    qDebug() << "Enter eventFilter";
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    if (event->type() == QEvent::ApplicationFontChange) {
+        setFont(qApp->font());
+        return false;
+    }
+#endif
     if (event->type() == QEvent::MouseButtonPress) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
 

@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -53,6 +53,7 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *);
+    bool eventFilter(QObject *, QEvent *) override;
 
 private:
     void initFormatMenu();

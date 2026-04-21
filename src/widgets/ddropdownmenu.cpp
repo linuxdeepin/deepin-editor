@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -494,8 +494,11 @@ void DDropdownMenu::OnFontChangedSlot(const QFont &font)
 {
     qDebug() << "DDropdownMenu OnFontChangedSlot";
     m_font = font;
-    int fontsize =DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T8);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    int fontsize = DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T8);
     m_font.setPixelSize(fontsize);
+#endif
+    m_pToolButton->setFont(m_font);
     m_pToolButton->setIcon(createIcon());
     qDebug() << "DDropdownMenu OnFontChangedSlot end";
 }
@@ -508,8 +511,7 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
         // 处理字体变化
         QFont font = qApp->font(); // 获取当前应用程序字体
         OnFontChangedSlot(font);   // 调用槽函数更新字体
-        qDebug() << "DDropdownMenu eventFilter ApplicationFontChange, return true";
-        return true;
+        return false;
     }
 #endif
 
