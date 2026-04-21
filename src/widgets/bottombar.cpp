@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -55,6 +55,10 @@ BottomBar::BottomBar(QWidget *parent)
     DFontSizeManager::instance()->bind(m_pCursorStatus, DFontSizeManager::T9);
     DFontSizeManager::instance()->bind(m_scaleLabel, DFontSizeManager::T9);
     DFontSizeManager::instance()->bind(m_progressLabel, DFontSizeManager::T9);
+
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    qApp->installEventFilter(this);
+#endif
 
     initFormatMenu();
 
@@ -279,6 +283,22 @@ DDropdownMenu *BottomBar::getEncodeMenu()
 DDropdownMenu *BottomBar::getHighlightMenu()
 {
     return m_pHighlightMenu;
+}
+
+bool BottomBar::eventFilter(QObject *watched, QEvent *event)
+{
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    if (event->type() == QEvent::ApplicationFontChange) {
+        QFont font = qApp->font();
+        m_pPositionLabel->setFont(font);
+        m_pCharCountLabel->setFont(font);
+        m_pCursorStatus->setFont(font);
+        m_scaleLabel->setFont(font);
+        m_progressLabel->setFont(font);
+        return false;
+    }
+#endif
+    return QWidget::eventFilter(watched, event);
 }
 
 void BottomBar::paintEvent(QPaintEvent *)
