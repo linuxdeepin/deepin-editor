@@ -133,7 +133,7 @@ void ReplaceBar::activeInput(QString text, QString file, int row, int column, in
 void ReplaceBar::handleSkip()
 {
     qDebug() << "handleSkip";
-    emit replaceSkip(m_replaceFile, m_replaceLine->lineEdit()->text(), Qt::CaseSensitive);
+    emit replaceSkip(m_replaceFile, m_replaceLine->lineEdit()->text());
 }
 
 void ReplaceBar::replaceClose()
