@@ -1055,10 +1055,12 @@ void TextEdit::nextLine()
     if (m_wrapper != nullptr) {
         qDebug() << "Updating highlighter";
         m_wrapper->OnUpdateHighlighter();
-        if ((m_wrapper->window()->findBarIsVisiable() || m_wrapper->window()->replaceBarIsVisiable()) &&
-                (QString::compare(m_wrapper->window()->getKeywordForSearchAll(), m_wrapper->window()->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
+        Window *win = m_wrapper->window();
+        const QString keyword = win->getKeywordForSearchAll();
+        if ((win->findBarIsVisiable() || win->replaceBarIsVisiable()) &&
+                (QString::compare(keyword, win->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
             qDebug() << "Highlighting keyword in view";
-            highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
+            highlightKeywordInView(keyword, win->getSearchCaseFlag());
         }
 
         qDebug() << "Marking all keyword in view";
@@ -1090,10 +1092,12 @@ void TextEdit::prevLine()
     if (m_wrapper != nullptr) {
         qDebug() << "Updating highlighter";
         m_wrapper->OnUpdateHighlighter();
-        if ((m_wrapper->window()->findBarIsVisiable() || m_wrapper->window()->replaceBarIsVisiable()) &&
-                (QString::compare(m_wrapper->window()->getKeywordForSearchAll(), m_wrapper->window()->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
+        Window *win = m_wrapper->window();
+        const QString keyword = win->getKeywordForSearchAll();
+        if ((win->findBarIsVisiable() || win->replaceBarIsVisiable()) &&
+                (QString::compare(keyword, win->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
             qDebug() << "Highlighting keyword in view";
-            highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
+            highlightKeywordInView(keyword, win->getSearchCaseFlag());
         }
 
         qDebug() << "Marking all keyword in view";
@@ -1302,10 +1306,12 @@ void TextEdit::scrollUp()
     if (m_wrapper != nullptr) {
         qDebug() << "Updating highlighter";
         m_wrapper->OnUpdateHighlighter();
-        if ((m_wrapper->window()->findBarIsVisiable() || m_wrapper->window()->replaceBarIsVisiable()) &&
-                (QString::compare(m_wrapper->window()->getKeywordForSearchAll(), m_wrapper->window()->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
+        Window *win = m_wrapper->window();
+        const QString keyword = win->getKeywordForSearchAll();
+        if ((win->findBarIsVisiable() || win->replaceBarIsVisiable()) &&
+                (QString::compare(keyword, win->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
             qDebug() << "Highlighting keyword in view";
-            highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
+            highlightKeywordInView(keyword, win->getSearchCaseFlag());
         }
 
         markAllKeywordInView();
@@ -1336,10 +1342,12 @@ void TextEdit::scrollDown()
     if (m_wrapper != nullptr) {
         qDebug() << "Updating highlighter";
         m_wrapper->OnUpdateHighlighter();
-        if ((m_wrapper->window()->findBarIsVisiable() || m_wrapper->window()->replaceBarIsVisiable()) &&
-                (QString::compare(m_wrapper->window()->getKeywordForSearchAll(), m_wrapper->window()->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
+        Window *win = m_wrapper->window();
+        const QString keyword = win->getKeywordForSearchAll();
+        if ((win->findBarIsVisiable() || win->replaceBarIsVisiable()) &&
+                (QString::compare(keyword, win->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
             qDebug() << "Highlighting keyword in view";
-            highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
+            highlightKeywordInView(keyword, win->getSearchCaseFlag());
         }
 
         markAllKeywordInView();
