@@ -36,7 +36,7 @@ public:
 Q_SIGNALS:
     void pressEsc();
     void replaceNext(QString file, QString replaceText, QString withText);
-    void replaceSkip(QString file, QString keyword, Qt::CaseSensitivity caseFlag);
+    void replaceSkip(QString file, QString keyword);
     void replaceRest(QString replaceText, QString withText);
     void replaceAll(QString replaceText, QString withText);
     void beforeReplace(QString _);

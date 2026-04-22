@@ -3419,17 +3419,17 @@ void Window::handleReplaceRest(const QString &replaceText, const QString &withTe
     qDebug() << "handleReplaceRest end";
 }
 
-void Window::handleReplaceSkip(QString file, QString keyword, Qt::CaseSensitivity caseFlag)
+void Window::handleReplaceSkip(QString file, QString keyword)
 {
-    qDebug() << "handleReplaceSkip" << file << keyword << caseFlag;
+    qDebug() << "handleReplaceSkip" << file << keyword;
     EditWrapper *wrapper = currentWrapper();
-    handleUpdateSearchKeyword(m_replaceBar, file, keyword, caseFlag);
+    handleUpdateSearchKeyword(m_replaceBar, file, keyword, Qt::CaseSensitive);
     if (QString::compare(m_keywordForSearch, m_keywordForSearchAll, Qt::CaseInsensitive) != 0) {
         m_keywordForSearchAll.clear();
         wrapper->textEditor()->clearFindMatchSelections();
         qDebug() << "m_keywordForSearchAll is not equal to m_keywordForSearch, clear it";
     } else {
-        wrapper->textEditor()->highlightKeywordInView(m_keywordForSearchAll, caseFlag);
+        wrapper->textEditor()->highlightKeywordInView(m_keywordForSearchAll, Qt::CaseSensitive);
         qDebug() << "m_keywordForSearchAll is equal to m_keywordForSearch, highlight it";
     }
 #if 0

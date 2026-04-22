@@ -1502,7 +1502,7 @@ TEST(UT_Window_handleReplaceSkip, UT_Window_handleReplaceSkip)
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addTabWithWrapper(a,"bb","aad","aadd",1);
     window->m_settings =Settings::instance();
-    window->handleReplaceSkip("aa", "", Qt::CaseSensitive);
+    window->handleReplaceSkip("aa", "");
 
     EXPECT_NE(window,nullptr);
     window->deleteLater();
