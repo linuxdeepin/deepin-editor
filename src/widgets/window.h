@@ -132,7 +132,6 @@ public:
     bool findBarIsVisiable();
     QString getKeywordForSearchAll();
     QString getKeywordForSearch();
-    Qt::CaseSensitivity getSearchCaseFlag();
     void setPrintEnabled(bool enabled);
     QStackedWidget *getStackedWgt();
 
@@ -281,7 +280,6 @@ private:
 
     QString m_keywordForSearch;
     QString m_keywordForSearchAll;
-    Qt::CaseSensitivity m_searchCaseFlag = Qt::CaseInsensitive;
 
     QString m_themePath;
     QString m_tabbarActiveColor;
