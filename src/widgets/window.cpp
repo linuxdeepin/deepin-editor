@@ -676,15 +676,22 @@ void Window::addTab(const QString &filepath, bool activeTab)
             }
         }
 
-        // check if have permission to read the file.
-        bool bIsReadable = fileInfo.isReadable();
-        qDebug() << "File readable:" << bIsReadable;
-
-        if (fileInfo.exists() && !bIsReadable) {
-            qWarning() << "No permission to read file:" << filepath;
-            DMessageManager::instance()->sendMessage(m_editorWidget->currentWidget(), QIcon(":/images/warning.svg")
-                                                     , QString(tr("You do not have permission to open %1")).arg(filepath));
-            return;
+        // Verify the file is actually readable by attempting to open it.
+        // This is more reliable than QFileInfo::isReadable(), which can be incorrect
+        // in some edge cases (e.g. setuid processes, certain filesystems).
+        if (fileInfo.exists()) {
+            QFile testFile(filepath);
+            if (testFile.open(QIODevice::ReadOnly)) {
+                testFile.close();
+            } else if (testFile.error() == QFileDevice::PermissionsError) {
+                qWarning() << "No permission to read file:" << filepath << "error:" << testFile.errorString();
+                QWidget *const msgParent = m_editorWidget->currentWidget() ? m_editorWidget->currentWidget() : this;
+                DMessageManager::instance()->sendMessage(msgParent, QIcon(":/images/warning.svg"),
+                                                         QString(tr("You do not have permission to open %1")).arg(filepath));
+                return;
+            } else {
+                qWarning() << "Failed to open file:" << filepath << "error:" << testFile.errorString();
+            }
         }
 
         if (StartManager::instance()->checkPath(filepath)) {
