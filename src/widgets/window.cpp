@@ -837,6 +837,20 @@ bool Window::closeTab()
 bool Window::closeTab(const QString &filePath)
 {
     qDebug() << "Enter closeTab with path:" << filePath;
+
+    if (m_unloadedTabs.contains(filePath)) {
+        qDebug() << "Closing unloaded tab:" << filePath;
+        m_unloadedTabs.remove(filePath);
+        int idx = m_tabbar->indexOf(filePath);
+        if (idx >= 0) {
+            m_tabbar->closeTab(idx);
+        }
+        if (m_wrappers.isEmpty() && m_unloadedTabs.isEmpty()) {
+            close();
+        }
+        return true;
+    }
+
     EditWrapper *wrapper = m_wrappers.value(filePath);
     if (!wrapper) {
         qWarning() << "No wrapper found for path:" << filePath;
@@ -1144,11 +1158,10 @@ void Window::focusActiveEditor()
 {
     qDebug() << "Enter focusActiveEditor";
     if (m_tabbar->count() > 0) {
-        if (currentWrapper() == nullptr) {
-            qDebug() << "No current wrapper, adding blank tab";
-            return;
+        EditWrapper *wrapper = currentWrapper();
+        if (wrapper && wrapper->textEditor()) {
+            wrapper->textEditor()->setFocus();
         }
-        currentWrapper()->textEditor()->setFocus();
     }
     qDebug() << "Exit focusActiveEditor";
 }
@@ -1176,7 +1189,7 @@ void Window::removeWrapper(const QString &filePath, bool isDelete)
     }
 
     // Exit window after close all tabs.
-    if (m_wrappers.isEmpty()) {
+    if (m_wrappers.isEmpty() && m_unloadedTabs.isEmpty()) {
         close();
         qInfo() << "after close";
     }
@@ -1304,9 +1317,10 @@ bool Window::saveFile()
 
     if (success) {
         updateSabeAsFileNameTemp(temPath, filePath);
-        if (currentWrapper()) {
+        EditWrapper *curWrapper = currentWrapper();
+        if (curWrapper) {
             qDebug() << "Saved successfully, updating save as file name";
-            currentWrapper()->hideWarningNotices();
+            curWrapper->hideWarningNotices();
         }
         showNotify(tr("Saved successfully"));
 
@@ -1703,8 +1717,8 @@ void Window::popupFindBar()
     QString tabPath = m_tabbar->currentPath();
     EditWrapper *wrapper = currentWrapper();
 
-    if (currentWrapper() == nullptr) {
-        qDebug() << "No current wrapper, cannot popup find bar";
+    if (!wrapper || !wrapper->textEditor()) {
+        qDebug() << "No valid current wrapper, cannot popup find bar";
         return;
     }
 
@@ -1713,7 +1727,7 @@ void Window::popupFindBar()
         return;
     }
 
-    currentWrapper()->bottomBar()->updateSize(m_findBar->height() + 8, true);
+    wrapper->bottomBar()->updateSize(m_findBar->height() + 8, true);
 
     if (m_replaceBar->isVisible()) {
         qDebug() << "Hiding replace bar before showing find bar";
@@ -1742,29 +1756,29 @@ void Window::popupFindBar()
 void Window::popupReplaceBar()
 {
     qDebug() << "Enter popupReplaceBar";
-    if (currentWrapper() == nullptr) {
-        qDebug() << "No current wrapper, cannot popup replace bar";
+    EditWrapper *wrapper = currentWrapper();
+    if (!wrapper || !wrapper->textEditor()) {
+        qDebug() << "No valid current wrapper, cannot popup replace bar";
         return;
     }
 
-    if (currentWrapper()->textEditor()->document()->isEmpty()) {
+    if (wrapper->textEditor()->document()->isEmpty()) {
         qDebug() << "Current document is empty, cannot popup replace bar";
         return;
     }
 
-    if (currentWrapper() && currentWrapper()->getFileLoading()) {
+    if (wrapper->getFileLoading()) {
         qDebug() << "File is loading, cannot popup replace bar";
         return;
     }
 
-    QTextCursor cursor = currentWrapper()->textEditor()->textCursor();
+    QTextCursor cursor = wrapper->textEditor()->textCursor();
 
     m_replaceBar->setsearched(false);
-    EditWrapper *curWrapper = currentWrapper();
-    bool bIsReadOnly = curWrapper->textEditor()->getReadOnlyMode();
+    bool bIsReadOnly = wrapper->textEditor()->getReadOnlyMode();
 
     if (cursor.hasSelection()) {
-        currentWrapper()->textEditor()->setCursorStart(cursor.selectionStart());
+        wrapper->textEditor()->setCursorStart(cursor.selectionStart());
         qDebug() << "Replace bar: selected";
     }
 
@@ -1774,9 +1788,8 @@ void Window::popupReplaceBar()
         return;
     }
 
-    currentWrapper()->bottomBar()->updateSize(m_replaceBar->height() + 8, true);
+    wrapper->bottomBar()->updateSize(m_replaceBar->height() + 8, true);
 
-    EditWrapper *wrapper = currentWrapper();
     if (m_findBar->isVisible()) {
         m_findBar->hide();
         qDebug() << "Hiding find bar before showing replace bar";
@@ -2139,15 +2152,20 @@ void Window::rehighlightPrintDoc(QTextDocument *doc, CSyntaxHighlighter *highlig
 void Window::updateSizeMode()
 {
     qDebug() << "Update size mode";
+    EditWrapper *wrapper = currentWrapper();
     if (m_findBar && m_findBar->isVisible()) {
         qDebug() << "Find bar is visible, updating its position";
-        currentWrapper()->bottomBar()->updateSize(m_findBar->height() + 8, true);
+        if (wrapper && wrapper->bottomBar()) {
+            wrapper->bottomBar()->updateSize(m_findBar->height() + 8, true);
+        }
         m_findBar->move(QPoint(4, height() - m_findBar->height() - 4));
     }
 
     if (m_replaceBar && m_replaceBar->isVisible()) {
         qDebug() << "Replace bar is visible, updating its position";
-        currentWrapper()->bottomBar()->updateSize(m_replaceBar->height() + 8, true);
+        if (wrapper && wrapper->bottomBar()) {
+            wrapper->bottomBar()->updateSize(m_replaceBar->height() + 8, true);
+        }
         m_replaceBar->move(QPoint(4, height() - m_replaceBar->height() - 4));
     }
 
@@ -2157,8 +2175,15 @@ void Window::updateSizeMode()
 void Window::popupPrintDialog()
 {
     qDebug() << "Enter popupPrintDialog";
+
+    EditWrapper *wrapper = currentWrapper();
+    if (!wrapper || !wrapper->textEditor()) {
+        qWarning() << "No valid current wrapper, cannot print";
+        return;
+    }
+
     //大文本加载过程不允许打印操作
-    if (currentWrapper() && currentWrapper()->getFileLoading()) {
+    if (wrapper->getFileLoading()) {
         qDebug() << "File is loading, cannot print";
         return;
     }
@@ -2169,7 +2194,7 @@ void Window::popupPrintDialog()
         return;
     }
 
-    const QString &filePath = currentWrapper()->textEditor()->getFilePath();
+    const QString &filePath = wrapper->textEditor()->getFilePath();
     const QString &fileDir = QFileInfo(filePath).dir().absolutePath();
 
     qInfo() << qPrintable("Start print doc");
@@ -2179,10 +2204,10 @@ void Window::popupPrintDialog()
     || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 4) \
     || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 4 && DTK_VERSION_PATCH >= 10))
 
-    QTextDocument *doc = currentWrapper()->textEditor()->document();
+    QTextDocument *doc = wrapper->textEditor()->document();
     m_bLargePrint = false;
     m_bPrintProcessing = false;
-    m_printWrapper = currentWrapper();
+    m_printWrapper = wrapper;
     m_multiDocPageCount = 0;
 
     if (doc != nullptr && !doc->isEmpty()) {
@@ -2190,8 +2215,8 @@ void Window::popupPrintDialog()
         static const int s_maxDirectReadLen = 1024 * 1024 * 10;
         static const int s_maxHighlighterDirectReadLen = 1024 * 1024 * 5;
         // 判断是否需要文本高亮，文本数据量大小，不同数据量使用不同分支。
-        bool needHighlighter = currentWrapper()->getSyntaxHighlighter()
-                               && currentWrapper()->getSyntaxHighlighter()->definition().isValid();
+        bool needHighlighter = wrapper->getSyntaxHighlighter()
+                               && wrapper->getSyntaxHighlighter()->definition().isValid();
 
         if (needHighlighter
                 && doc->characterCount() > s_maxHighlighterDirectReadLen) {
@@ -2204,7 +2229,7 @@ void Window::popupPrintDialog()
             m_bLargePrint = true;
             qInfo() << qPrintable("Clone large print document without highlighting");
         } else {
-            currentWrapper()->updateHighlighterAll();
+            wrapper->updateHighlighterAll();
             m_printDoc = doc->clone(doc);
             qInfo() << qPrintable("Clone small print document");
         }
@@ -2213,7 +2238,7 @@ void Window::popupPrintDialog()
         if (m_bLargePrint) {
             qInfo() << qPrintable("Clone large print document");
             // 克隆大文本数据
-            if (!cloneLargeDocument(currentWrapper())) {
+            if (!cloneLargeDocument(wrapper)) {
                 qWarning() << "Failed to clone large document for printing!";
                 return;
             }
@@ -2241,7 +2266,7 @@ void Window::popupPrintDialog()
         m_pPreview->setDocName(docName);
     } else {
         qInfo() << qPrintable("Print file: ") << filePath;
-        QString path = currentWrapper()->textEditor()->getTruePath();
+        QString path = wrapper->textEditor()->getTruePath();
         QString docName = QFileInfo(path).baseName();
         qInfo() << __func__ << "print normal file, docName:" << docName;
         m_pPreview->setDocName(docName);
@@ -2282,10 +2307,10 @@ void Window::popupPrintDialog()
         } else {
             printer->setDocName(QString(QFileInfo(filePath).baseName()));
         }
-        currentWrapper()->textEditor()->print(printer);
+        wrapper->textEditor()->print(printer);
     });
 
-    currentWrapper()->updateHighlighterAll();
+    wrapper->updateHighlighterAll();
 
     preview.exec();
 #endif
@@ -2317,13 +2342,17 @@ void Window::remberPositionSave()
 {
     qDebug() << "Enter remberPositionSave";
     EditWrapper *wrapper = currentWrapper();
+    if (!wrapper || !wrapper->textEditor()) {
+        qWarning() << "No valid current wrapper, cannot save position";
+        return;
+    }
 
     m_remberPositionFilePath = m_tabbar->currentPath();
     m_remberPositionRow = wrapper->textEditor()->getCurrentLine();
     m_remberPositionColumn = wrapper->textEditor()->getCurrentColumn();
     m_remberPositionScrollOffset = wrapper->textEditor()->getScrollOffset();
 
-    currentWrapper()->showNotify(tr("Current location remembered"));
+    wrapper->showNotify(tr("Current location remembered"));
     qDebug() << "Exit remberPositionSave";
 }
 
@@ -2528,14 +2557,15 @@ void Window::doPrint(DPrinter *printer, const QVector<int> &pageRange)
 
     (void)m_printDoc->documentLayout(); // make sure that there is a layout
 
-    if (currentWrapper() == nullptr) {
-        qDebug() << "Current wrapper is null";
+    EditWrapper *wrapper = currentWrapper();
+    if (!wrapper || !wrapper->textEditor()) {
+        qDebug() << "No valid current wrapper";
         return;
     }
-    QColor background = currentWrapper()->textEditor()->palette().color(QPalette::Base);
+    QColor background = wrapper->textEditor()->palette().color(QPalette::Base);
     bool backgroundIsDark = background.value() < 128;
     //对文本进行分页处理
-    for (QTextBlock srcBlock = currentWrapper()->textEditor()->document()->firstBlock(), dstBlock = m_printDoc->firstBlock();
+    for (QTextBlock srcBlock = wrapper->textEditor()->document()->firstBlock(), dstBlock = m_printDoc->firstBlock();
             srcBlock.isValid() && dstBlock.isValid();
             srcBlock = srcBlock.next(), dstBlock = dstBlock.next()) {
         QVector<QTextLayout::FormatRange> formatList = srcBlock.layout()->formats();
@@ -2906,6 +2936,30 @@ void Window::backupFile()
         m_qlistTemFile.replace(tabInfo.tabIndex, byteArray);
     }
 
+    // Record unloaded tabs with minimal JSON entries (path only, no cursor/content)
+    for (const QString &path : m_unloadedTabs) {
+        QJsonObject jsonObject;
+        QString truePath = m_tabbar->truePathAt(m_tabbar->indexOf(path));
+        QString effectivePath = truePath.isEmpty() ? path : truePath;
+        jsonObject.insert("localPath", effectivePath);
+        if (path == m_tabbar->currentPath()) {
+            jsonObject.insert("focus", true);
+        }
+        // Save bookmarks from global bookmark table for unloaded tabs
+        QList<int> bookmarkInfo = StartManager::instance()->findBookmark(effectivePath);
+        if (!bookmarkInfo.isEmpty()) {
+            QString bookmarkStr;
+            for (int i = 0; i < bookmarkInfo.size(); i++) {
+                if (i > 0) bookmarkStr += ",";
+                bookmarkStr += QString::number(bookmarkInfo[i]);
+            }
+            jsonObject.insert("bookMark", bookmarkStr);
+        }
+        QJsonDocument document;
+        document.setObject(jsonObject);
+        m_qlistTemFile.append(document.toJson(QJsonDocument::Compact));
+    }
+
     //将json串列表写入配置文件
     m_settings->settings->option("advance.editor.browsing_history_temfile")->setValue(m_qlistTemFile);
 
@@ -2921,6 +2975,18 @@ void Window::backupFile()
 bool Window::closeAllFiles()
 {
     qInfo() << "begin closeAllFiles()";
+
+    // Close unloaded tabs from back to front to avoid index shifting issues
+    QStringList unloadedList = m_unloadedTabs.values();
+    for (int i = unloadedList.count() - 1; i >= 0; i--) {
+        const QString &path = unloadedList[i];
+        int idx = m_tabbar->indexOf(path);
+        if (idx >= 0) {
+            m_tabbar->closeTab(idx);
+        }
+    }
+    m_unloadedTabs.clear();
+
     QMap<QString, EditWrapper *> wrappers = m_wrappers;
 
     // 被删除的窗口索引已变更，需要计算其范围
@@ -2989,6 +3055,63 @@ bool Window::saveAllFloatingFiles()
  * @param qstrTruePath　最后一次修改时间
  * @param bIsTemFile　是否修改
  */
+void Window::addTabLazy(const QString &filePath, const QString &tabName, const QString &truePath)
+{
+    qDebug() << "Enter addTabLazy, filePath:" << filePath;
+    QString name = tabName.isEmpty() ? QFileInfo(filePath).fileName() : tabName;
+    m_tabbar->addTab(filePath, name, truePath);
+    m_unloadedTabs.insert(filePath);
+    qDebug() << "Exit addTabLazy";
+}
+
+bool Window::ensureTabLoaded(const QString &filePath)
+{
+    qDebug() << "Enter ensureTabLoaded, filePath:" << filePath;
+    if (!m_unloadedTabs.contains(filePath)) {
+        qDebug() << "File not in unloaded tabs, already loaded or unknown";
+        return true;
+    }
+
+    m_unloadedTabs.remove(filePath);
+
+    QFileInfo fi(filePath);
+    if (!fi.exists()) {
+        qWarning() << "File does not exist:" << filePath;
+        int idx = m_tabbar->indexOf(filePath);
+        if (idx >= 0) {
+            m_tabbar->closeTab(idx);
+        }
+        return false;
+    }
+
+    // Handle unsupported MIME type - show warning but keep tab open
+    if (!Utils::isMimeTypeSupport(fi.absoluteFilePath())) {
+        qWarning() << "MIME type not supported:" << filePath;
+        QString strFileName = fi.fileName();
+        QString msg = tr("Invalid file: %1").arg(strFileName);
+        if (m_editorWidget && m_editorWidget->currentWidget()) {
+            msg = Utils::lineFeed(msg, m_editorWidget->currentWidget()->width() - FLOATTIP_MARGIN,
+                                  m_editorWidget->currentWidget()->font(), 2);
+            DMessageManager::instance()->sendMessage(m_editorWidget->currentWidget(),
+                                                     QIcon(":/images/warning.svg"), msg);
+        }
+        return true;  // Return true to indicate handling complete, tab remains open
+    }
+
+    // Get truePath from tabbar for bookmark lookup
+    int tabIndex = m_tabbar->indexOf(filePath);
+    QString truePath = (tabIndex >= 0) ? m_tabbar->truePathAt(tabIndex) : filePath;
+
+    EditWrapper *wrapper = createEditor();
+    wrapper->openFile(filePath, truePath);
+    auto bookmarkInfo = StartManager::instance()->findBookmark(truePath);
+    wrapper->textEditor()->setBookMarkList(bookmarkInfo);
+    m_wrappers[filePath] = wrapper;
+    showNewEditor(wrapper);
+    qDebug() << "Exit ensureTabLoaded, loaded:" << filePath << "truePath:" << truePath;
+    return true;
+}
+
 void Window::addTemFileTab(const QString &qstrPath, const QString &qstrName, const QString &qstrTruePath, const QString &lastModifiedTime, bool bIsTemFile)
 {
     qInfo() << "begin addTemFileTab()";
@@ -3180,13 +3303,26 @@ void Window::handleCurrentChanged(const int &index)
         wrapper->textEditor()->removeKeywords();
     }
 
-    if (currentWrapper()) {
+    EditWrapper *curWrapper = currentWrapper();
+    if (curWrapper) {
         qDebug() << "current wrapper is not null";
-        currentWrapper()->checkForReload();
+        curWrapper->checkForReload();
         checkTabbarForReload();
     }
 
     const QString &filepath = m_tabbar->fileAt(index);
+
+    if (m_unloadedTabs.contains(filepath)) {
+        if (!ensureTabLoaded(filepath)) {
+            qWarning() << "Failed to load tab:" << filepath;
+            // Tab was closed due to file not existing or unsupported MIME type
+            // Find another valid tab to display
+            if (m_tabbar->count() > 0) {
+                m_tabbar->setCurrentIndex(0);
+            }
+            return;
+        }
+    }
 
     if (m_wrappers.contains(filepath)) {
         bool bIsContains = false;
@@ -3217,8 +3353,11 @@ void Window::handleCurrentChanged(const int &index)
 
     if (currentWrapper() != nullptr) {
         qDebug() << "current wrapper is not null, show bottom bar";
-        currentWrapper()->bottomBar()->show();
-        currentWrapper()->bottomBar()->updateSize(BottomBar::defaultHeight(), false);
+        EditWrapper *curWrapper = currentWrapper();
+        if (curWrapper->bottomBar()) {
+            curWrapper->bottomBar()->show();
+            curWrapper->bottomBar()->updateSize(BottomBar::defaultHeight(), false);
+        }
     }
     qDebug() << "handleCurrentChanged end";
 }
@@ -3226,9 +3365,10 @@ void Window::handleCurrentChanged(const int &index)
 void Window::handleJumpLineBarExit()
 {
     qDebug() << "handleJumpLineBarExit";
-    if (currentWrapper() != nullptr) {
+    EditWrapper *wrapper = currentWrapper();
+    if (wrapper && wrapper->textEditor()) {
         qDebug() << "current wrapper is not null";
-        QTimer::singleShot(0, currentWrapper()->textEditor(), SLOT(setFocus()));
+        QTimer::singleShot(0, wrapper->textEditor(), SLOT(setFocus()));
     }
     qDebug() << "handleJumpLineBarExit end";
 }
@@ -3279,6 +3419,10 @@ void Window::handleFindKeyword(const QString &keyword, bool state)
 {
     qDebug() << "handleFindKeyword" << keyword << state;
     EditWrapper *wrapper = currentWrapper();
+    if (!wrapper || !wrapper->textEditor()) {
+        qWarning() << "handleFindKeyword: no valid current wrapper";
+        return;
+    }
     m_keywordForSearch = keyword;
     wrapper->textEditor()->saveMarkStatus();
     wrapper->textEditor()->updateCursorKeywordSelection(m_keywordForSearch, state);
@@ -3306,6 +3450,10 @@ void Window::slotFindbarClose()
 {
     qDebug() << "slotFindbarClose";
     EditWrapper *wrapper = currentWrapper();
+    if (!wrapper || !wrapper->textEditor()) {
+        qWarning() << "slotFindbarClose: no valid current wrapper";
+        return;
+    }
 
     if (wrapper->bottomBar()->isHidden()) {
         qDebug() << "bottom bar is hidden, show it";
@@ -3313,8 +3461,8 @@ void Window::slotFindbarClose()
     }
 
     wrapper->bottomBar()->updateSize(BottomBar::defaultHeight(), false);
-    currentWrapper()->textEditor()->setFocus();
-    currentWrapper()->textEditor()->tellFindBarClose();
+    wrapper->textEditor()->setFocus();
+    wrapper->textEditor()->tellFindBarClose();
     qDebug() << "slotFindbarClose end";
 }
 
@@ -3322,6 +3470,10 @@ void Window::slotReplacebarClose()
 {
     qDebug() << "slotReplacebarClose";
     EditWrapper *wrapper = currentWrapper();
+    if (!wrapper || !wrapper->textEditor()) {
+        qWarning() << "slotReplacebarClose: no valid current wrapper";
+        return;
+    }
 
     if (wrapper->bottomBar()->isHidden()) {
         qDebug() << "bottom bar is hidden, show it";
@@ -3329,8 +3481,8 @@ void Window::slotReplacebarClose()
     }
 
     wrapper->bottomBar()->updateSize(BottomBar::defaultHeight(), false);
-    currentWrapper()->textEditor()->setFocus();
-    currentWrapper()->textEditor()->tellFindBarClose();
+    wrapper->textEditor()->setFocus();
+    wrapper->textEditor()->tellFindBarClose();
     qDebug() << "slotReplacebarClose end";
 }
 
@@ -3396,6 +3548,10 @@ void Window::handleReplaceAll(const QString &replaceText, const QString &withTex
 {
     qDebug() << "handleReplaceAll" << replaceText << withText;
     EditWrapper *wrapper = currentWrapper();
+    if (!wrapper || !wrapper->textEditor()) {
+        qWarning() << "handleReplaceAll: no valid current wrapper";
+        return;
+    }
     wrapper->textEditor()->replaceAll(replaceText, withText);
     qDebug() << "handleReplaceAll end";
 }
@@ -3407,6 +3563,10 @@ void Window::handleReplaceNext(const QString &file, const QString &replaceText, 
     m_keywordForSearch = replaceText;
     m_keywordForSearchAll = replaceText;
     EditWrapper *wrapper = currentWrapper();
+    if (!wrapper || !wrapper->textEditor()) {
+        qWarning() << "handleReplaceNext: no valid current wrapper";
+        return;
+    }
     wrapper->textEditor()->replaceNext(replaceText, withText);
     qDebug() << "handleReplaceNext end";
 }
@@ -3415,6 +3575,10 @@ void Window::handleReplaceRest(const QString &replaceText, const QString &withTe
 {
     qDebug() << "handleReplaceRest" << replaceText << withText;
     EditWrapper *wrapper = currentWrapper();
+    if (!wrapper || !wrapper->textEditor()) {
+        qWarning() << "handleReplaceRest: no valid current wrapper";
+        return;
+    }
     wrapper->textEditor()->replaceRest(replaceText, withText);
     qDebug() << "handleReplaceRest end";
 }
@@ -3423,6 +3587,10 @@ void Window::handleReplaceSkip(QString file, QString keyword)
 {
     qDebug() << "handleReplaceSkip" << file << keyword;
     EditWrapper *wrapper = currentWrapper();
+    if (!wrapper || !wrapper->textEditor()) {
+        qWarning() << "handleReplaceSkip: no valid current wrapper";
+        return;
+    }
     handleUpdateSearchKeyword(m_replaceBar, file, keyword, Qt::CaseSensitive);
     if (QString::compare(m_keywordForSearch, m_keywordForSearchAll, Qt::CaseInsensitive) != 0) {
         m_keywordForSearchAll.clear();
@@ -3443,9 +3611,10 @@ void Window::handleReplaceSkip(QString file, QString keyword)
 void Window::handleRemoveSearchKeyword()
 {
     qDebug() << "handleRemoveSearchKeyword";
-    if (currentWrapper() != nullptr) {
+    EditWrapper *wrapper = currentWrapper();
+    if (wrapper && wrapper->textEditor()) {
         qDebug() << "remove keywords";
-        currentWrapper()->textEditor()->removeKeywords();
+        wrapper->textEditor()->removeKeywords();
     }
     qDebug() << "handleRemoveSearchKeyword end";
 }
@@ -3549,7 +3718,10 @@ void Window::showNotify(const QString &message, bool warning)
         qDebug() << "current wrapper is null";
         this->addBlankTab();
     }
-    currentWrapper()->showNotify(message, warning);
+    EditWrapper *wrapper = currentWrapper();
+    if (wrapper) {
+        wrapper->showNotify(message, warning);
+    }
     qDebug() << "show notify end";
 }
 
@@ -3666,14 +3838,22 @@ void Window::slot_saveReadingPath()
 {
     qDebug() << "slot save reading path";
     m_reading_list.clear();
-    m_reading_list.append(currentWrapper()->textEditor());
+    EditWrapper *wrapper = currentWrapper();
+    if (wrapper && wrapper->textEditor()) {
+        m_reading_list.append(wrapper->textEditor());
+    }
     qDebug() << "slot save reading path end";
 }
 
 void Window::slot_beforeReplace(QString _)
 {
     qDebug() << "slot before replace";
-    currentWrapper()->textEditor()->beforeReplace(_);
+    EditWrapper *wrapper = currentWrapper();
+    if (!wrapper || !wrapper->textEditor()) {
+        qWarning() << "slot_beforeReplace: no valid current wrapper";
+        return;
+    }
+    wrapper->textEditor()->beforeReplace(_);
 }
 
 void Window::slot_setTitleFocus()
@@ -3704,7 +3884,10 @@ void Window::slot_setTitleFocus()
     QWidget::setTabOrder(minBtn, quitFullBtn);
     QWidget::setTabOrder(quitFullBtn, maxBtn);
     QWidget::setTabOrder(maxBtn, closeBtn);
-    currentWrapper()->bottomBar()->setChildrenFocus(true, closeBtn);
+    EditWrapper *wrapper = currentWrapper();
+    if (wrapper && wrapper->bottomBar()) {
+        wrapper->bottomBar()->setChildrenFocus(true, closeBtn);
+    }
     qDebug() << "slot set title focus end";
 }
 
@@ -3865,12 +4048,13 @@ void Window::slotSigChangeWindowSize(QString mode)
 void Window::handleFocusWindowChanged(QWindow *w)
 {
     qDebug() << "handle focus window changed";
-    if (windowHandle() != w || !currentWrapper() || !isActiveWindow()) {
+    EditWrapper *wrapper = currentWrapper();
+    if (windowHandle() != w || !wrapper || !isActiveWindow()) {
         qDebug() << "handle focus window changed return";
         return;
     }
 
-    currentWrapper()->checkForReload();
+    wrapper->checkForReload();
     checkTabbarForReload();
     qDebug() << "handle focus window changed end";
 }
@@ -3973,6 +4157,7 @@ void Window::resizeEvent(QResizeEvent *e)
 void Window::closeEvent(QCloseEvent *e)
 {
     qDebug() << "close event";
+    m_unloadedTabs.clear();
     PerformanceMonitor::closeAppStart();
 
     if (StartManager::instance()->isMultiWindow()) {
@@ -4054,10 +4239,11 @@ void Window::closeEvent(QCloseEvent *e)
 void Window::hideEvent(QHideEvent *event)
 {
     qDebug() << "hide event";
+    EditWrapper *wrapper = currentWrapper();
     if (this->isVisible()) {
         qDebug() << "hide event is visible";
-        if (currentWrapper() != nullptr) {
-            currentWrapper()->textEditor()->setFocus();
+        if (wrapper && wrapper->textEditor()) {
+            wrapper->textEditor()->setFocus();
             qDebug() << "hide event set focus";
         }
     }
@@ -4065,8 +4251,8 @@ void Window::hideEvent(QHideEvent *event)
     if (m_findBar->isVisible()) {
         qDebug() << "hide event hide find bar";
         // m_findBar->hide();
-        if (currentWrapper() != nullptr) {
-            currentWrapper()->bottomBar()->show();
+        if (wrapper && wrapper->bottomBar()) {
+            wrapper->bottomBar()->show();
             qDebug() << "hide event show bottom bar";
         }
     }
@@ -4076,8 +4262,8 @@ void Window::hideEvent(QHideEvent *event)
     if (m_replaceBar->isVisible()) {
         qDebug() << "hide event hide replace bar";
         //m_replaceBar->hide();
-        if (currentWrapper() != nullptr) {
-            currentWrapper()->m_bottomBar->show();
+        if (wrapper) {
+            wrapper->m_bottomBar->show();
         }
     }
 #endif
@@ -4089,10 +4275,13 @@ void Window::keyPressEvent(QKeyEvent *e)
     QString key = Utils::getKeyshortcut(e);
     qDebug() << "key press event" << key;
 
+    EditWrapper *wrapper = currentWrapper();
     if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "decrementfontsize") ||
             key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "incrementfontsize") ||
             key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "togglefullscreen")) {
-        currentWrapper()->textEditor()->setCodeFoldWidgetHide(true);
+        if (wrapper && wrapper->textEditor()) {
+            wrapper->textEditor()->setCodeFoldWidgetHide(true);
+        }
         qDebug() << "key press event toggle full screen";
     }
 

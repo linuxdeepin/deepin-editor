@@ -459,6 +459,7 @@ QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option
 
     Window *window = static_cast<Window *>(this->window());
     EditWrapper *wrapper = window->wrapper(fileAt(index));
+    if (!wrapper) return QPixmap();
     //加载大文本不允许拖拽
     //if(wrapper && wrapper->getFileLoading()) return QPixmap();
 
