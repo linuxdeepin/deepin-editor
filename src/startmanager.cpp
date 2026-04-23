@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -291,7 +291,21 @@ int StartManager::recoverFile(Window *window)
 
     int windowIndex = -1;
 
-    //根据备份信息恢复文件
+    // Struct to collect recovery entry info for two-pass approach
+    struct RecoverEntry {
+        Window *win;
+        QString openPath;
+        QString tabName;
+        QString truePath;
+        QString lastModifiedTime;
+        bool isTemFile;
+        bool isFocus;
+        bool hasTemFile;
+        QList<int> bookmarks;
+    };
+    QList<RecoverEntry> entries;
+
+    // First pass: collect all valid entries
     qDebug() << "Processing" << m_qlistTemFile.count() << "temporary files for recovery";
     for (int i = 0; i < m_qlistTemFile.count(); i++) {
         QJsonParseError jsonError;
@@ -367,84 +381,86 @@ int StartManager::recoverFile(Window *window)
                     }
                 }
 
+                // Determine if this is the focus tab
+                bool isFocusTab = false;
+                if (object.contains("focus")) {
+                    QJsonValue value = object.value("focus");
+                    if (value.isBool() && value.toBool()) {
+                        isFocusTab = true;
+                    }
+                }
+
+                // Parse bookmarks for later use
+                QList<int> parsedBookmarks;
+                if (object.contains("bookMark")) {
+                    QJsonValue value = object.value("bookMark");
+                    if (value.isString()) {
+                        parsedBookmarks = analyzeBookmakeInfo(value.toString());
+                    }
+                }
+
                 //打开文件
                 if (!temFilePath.isEmpty()) {
                     if (Utils::fileExists(temFilePath)) {
-                        qDebug() << "Opening temporary file:" << temFilePath << "for" << fileInfo.fileName();
-                        window->addTemFileTab(temFilePath, fileInfo.fileName(), localPath, lastmodifiedtime, bIsTemFile);
+                        qDebug() << "Collecting temporary file:" << temFilePath << "for" << fileInfo.fileName();
 
-                        //打开文件后设置书签
-                        if (object.contains("bookMark")) {  // 包含指定的 key
-                            QJsonValue value = object.value("bookMark");  // 获取指定 key 对应的 value
-
-                            if (value.isString()) {
-                                QList<int> bookmarkList;
-                                bookmarkList = analyzeBookmakeInfo(value.toString());
-                                qDebug() << "Setting bookmarks from file config:" << bookmarkList;
-                                window->wrapper(temFilePath)->textEditor()->setBookMarkList(bookmarkList);
-                            }
-                        } else if (m_bookmarkTable.contains(temFilePath)) {
-                            // 若文件已有配置，则以文件为准，否则以全局配置为准
-                            qDebug() << "Setting bookmarks from global config for:" << temFilePath;
-                            window->wrapper(localPath)->textEditor()->setBookMarkList(m_bookmarkTable.value(temFilePath));
+                        if (isFocusTab) {
+                            qDebug() << "Setting focus to file:" << temFilePath;
+                            pFocusWindow = window;
+                            focusPath = temFilePath;
                         }
 
-                        if (object.contains("focus")) {  // 包含指定的 key
-                            QJsonValue value = object.value("focus");  // 获取指定 key 对应的 value
-
-                            if (value.isBool() && value.toBool()) {
-                                qDebug() << "Setting focus to file:" << temFilePath;
-                                pFocusWindow = window;
-                                focusPath = temFilePath;
-                            }
-                        }
+                        RecoverEntry entry;
+                        entry.win = window;
+                        entry.openPath = temFilePath;
+                        entry.tabName = fileInfo.fileName();
+                        entry.truePath = localPath;
+                        entry.lastModifiedTime = lastmodifiedtime;
+                        entry.isTemFile = bIsTemFile;
+                        entry.isFocus = isFocusTab;
+                        entry.hasTemFile = true;
+                        entry.bookmarks = parsedBookmarks;
+                        entries.append(entry);
 
                         recFilesSum++;
                     }
                 } else {
                     if (!localPath.isEmpty() && Utils::fileExists(localPath)) {
-                        qDebug() << "Opening local file:" << localPath;
+                        qDebug() << "Collecting local file:" << localPath;
+                        QString tabName;
                         // 若为草稿文件或不支持的MIMETYPE文件，显示默认名称标签
                         if (Utils::isDraftFile(localPath) || !Utils::isMimeTypeSupport(localPath)) {
                             //得到新建文件名称
                             int index = files.indexOf(QFileInfo(localPath).fileName());
-
                             if (index >= 0) {
-                                QString fileName = tr("Untitled %1").arg(index + 1);
-                                qDebug() << "Using untitled name for draft file:" << fileName;
-                                window->addTemFileTab(localPath, fileName, localPath, lastmodifiedtime, bIsTemFile);
-
+                                tabName = tr("Untitled %1").arg(index + 1);
+                                qDebug() << "Using untitled name for draft file:" << tabName;
+                            } else {
+                                qDebug() << "Skipping draft file, not in file list:" << localPath;
+                                continue;
                             }
                         } else {
-                            qDebug() << "Using file name for regular file:" << fileInfo.fileName();
-                            window->addTemFileTab(localPath, fileInfo.fileName(), localPath, lastmodifiedtime, bIsTemFile);
+                            tabName = fileInfo.fileName();
+                            qDebug() << "Using file name for regular file:" << tabName;
                         }
 
-                        //打开文件后设置书签
-                        if (object.contains("bookMark")) {  // 包含指定的 key
-                            QJsonValue value = object.value("bookMark");  // 获取指定 key 对应的 value
-
-                            if (value.isString()) {
-                                QList<int> bookmarkList;
-                                bookmarkList = analyzeBookmakeInfo(value.toString());
-                                qDebug() << "Setting bookmarks from file config:" << bookmarkList;
-                                window->wrapper(localPath)->textEditor()->setBookMarkList(bookmarkList);
-                            }
-                        } else if (m_bookmarkTable.contains(localPath)) {
-                            // 若文件已有配置，则以文件为准，否则以全局配置为准
-                            qDebug() << "Setting bookmarks from global config for:" << localPath;
-                            window->wrapper(localPath)->textEditor()->setBookMarkList(m_bookmarkTable.value(localPath));
+                        if (isFocusTab) {
+                            qDebug() << "Setting focus to file:" << localPath;
+                            pFocusWindow = window;
+                            focusPath = localPath;
                         }
 
-                        if (object.contains("focus")) {  // 包含指定的 key
-                            QJsonValue value = object.value("focus");  // 获取指定 key 对应的 value
-
-                            if (value.isBool() && value.toBool()) {
-                                qDebug() << "Setting focus to file:" << localPath;
-                                pFocusWindow = window;
-                                focusPath = localPath;
-                            }
-                        }
+                        RecoverEntry entry;
+                        entry.win = window;
+                        entry.openPath = localPath;
+                        entry.tabName = tabName;
+                        entry.truePath = localPath;
+                        entry.lastModifiedTime = lastmodifiedtime;
+                        entry.isTemFile = bIsTemFile;
+                        entry.isFocus = isFocusTab;
+                        entry.hasTemFile = false;
+                        entry.bookmarks = parsedBookmarks;
+                        entries.append(entry);
 
                         recFilesSum++;
                     }
@@ -452,6 +468,26 @@ int StartManager::recoverFile(Window *window)
                 qInfo() << "Recovered files count:" << recFilesSum;
                 qDebug() << "Exit recoverFile";
             }
+        }
+    }
+
+    // Second pass: create tabs - focus tab gets full load, others get lazy load
+    for (const RecoverEntry &entry : entries) {
+        if (entry.isFocus) {
+            // Focus tab: fully load with addTemFileTab
+            entry.win->addTemFileTab(entry.openPath, entry.tabName, entry.truePath, entry.lastModifiedTime, entry.isTemFile);
+
+            // Set bookmarks on the just-loaded wrapper
+            if (!entry.bookmarks.isEmpty()) {
+                qDebug() << "Setting bookmarks from file config:" << entry.bookmarks;
+                entry.win->wrapper(entry.openPath)->textEditor()->setBookMarkList(entry.bookmarks);
+            } else if (m_bookmarkTable.contains(entry.truePath)) {
+                qDebug() << "Setting bookmarks from global config for:" << entry.truePath;
+                entry.win->wrapper(entry.openPath)->textEditor()->setBookMarkList(m_bookmarkTable.value(entry.truePath));
+            }
+        } else {
+            // Non-focus tab: lazy load (tabbar button only)
+            entry.win->addTabLazy(entry.openPath, entry.tabName, entry.truePath);
         }
     }
 
@@ -598,8 +634,9 @@ void StartManager::openFilesInTab(QStringList files)
             else {
                 qDebug() << "Opening file in first existing window";
                 Window *window = m_windows[0];
-                window->addTab(canonicalFile);
-                qDebug() << "Added tab for file:" << canonicalFile << "in existing window";
+                // Lazy load: only add tab button, defer EditWrapper creation until tab is activated
+                window->addTabLazy(canonicalFile, QFileInfo(canonicalFile).fileName(), canonicalFile);
+                qDebug() << "Added lazy tab for file:" << canonicalFile << "in existing window";
                 //window->setWindowState(Qt::WindowActive);
                 //通过dbus接口从任务栏激活窗口
                 if (!Q_LIKELY(Utils::activeWindowFromDock(window->winId()))) {

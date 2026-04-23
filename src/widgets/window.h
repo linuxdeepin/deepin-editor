@@ -68,6 +68,8 @@ public:
     void addTab(const QString &filepath, bool activeTab = false);
     void addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, const QString &qstrTruePath,
                            const QString &tabName, int index = -1);
+    void addTabLazy(const QString &filePath, const QString &tabName, const QString &truePath = "");
+    bool ensureTabLoaded(const QString &filePath);
     bool closeTab();
     bool closeTab(const QString &fileName);
     void restoreTab();
@@ -261,6 +263,7 @@ private:
     Settings *m_settings {nullptr};
 
     QMap<QString, EditWrapper *> m_wrappers;
+    QSet<QString> m_unloadedTabs;
 
     DMenu *m_menu {nullptr};
 
