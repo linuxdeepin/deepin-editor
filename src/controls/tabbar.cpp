@@ -127,8 +127,17 @@ void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &
     // 除去空白符 梁卫东 ２０２０－０８－２６　１４：４９：１５ ；适配助记符
     QString trimmedName = replaceMnemonic(tabName.simplified());
     qDebug() << "trimmedName:" << trimmedName;
+
+    // Batch all layout-triggering operations to avoid jitter:
+    // 1. Disable visual updates
+    // 2. Insert tab (triggers QTabBar layout with old width → may overflow)
+    // 3. Force DTabBar layout to resize inner QTabBar to correct width
+    // 4. Force QTabBar to recalculate tab positions with correct width
+    // 5. Re-enable visual updates → single paint with final state
+    setUpdatesEnabled(false);
     DTabBar::insertTab(index, trimmedName);
     DTabBar::setCurrentIndex(index);
+
     qDebug() << "filePath.contains(Utils::localDataPath())";
     if (filePath.contains(Utils::localDataPath())) {
         if (Utils::isBackupFile(filePath) && !tipPath.isNull() && tipPath.length() > 0) {
@@ -159,6 +168,16 @@ void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &
         qDebug() << "path:" << path;
         setTabToolTip(index, path);
     }
+
+    // Force DTabBar's layout to resize inner QTabBar to its new sizeHint
+    layout()->activate();
+    // Force QTabBar internal layout recalculation with correct width
+    setIconSize(iconSize());
+    // activate() may trigger scroll button show/hide cascade which
+    // invalidates layout again; run a second time to settle completely
+    layout()->activate();
+
+    setUpdatesEnabled(true);
 }
 
 void Tabbar::resizeEvent(QResizeEvent *event)
@@ -826,23 +845,20 @@ QSize Tabbar::tabSizeHint(int index) const
     qDebug() << "Enter tabSizeHint, index:" << index;
     if (index >= 0) {
         int total = this->width();
-        qDebug() << "total:" << total;
-        //计算每个tab平均宽度 返回　100到160
-        int aveargeWidth = 160;
-        aveargeWidth = total / DTabBar::count();
-        qDebug() << "aveargeWidth:" << aveargeWidth;
-        if (aveargeWidth >= 160) {
-            qDebug() << "aveargeWidth >= 160";
-            aveargeWidth = 160;
-        } else if (aveargeWidth <= 110) {
-            qDebug() << "aveargeWidth <= 110";
-            aveargeWidth = 110;
+        // 计算每个tab宽度：标签数未溢出时使用固定最大宽度，溢出时等分
+        const int maxTabWidth = 160;
+        const int minTabWidth = 110;
+        int tabCount = DTabBar::count();
+        int tabWidth = maxTabWidth;
+
+        if (tabCount * maxTabWidth > total) {
+            tabWidth = total / tabCount;
+            tabWidth = qBound(minTabWidth, tabWidth, maxTabWidth);
         }
-        qDebug() << "aveargeWidth:" << aveargeWidth;
 #ifdef DTKWIDGET_CLASS_DSizeMode
-        return QSize(aveargeWidth, DGuiApplicationHelper::isCompactMode() ? s_TabbarHeightCompact : s_TabbarHeight);
+        return QSize(tabWidth, DGuiApplicationHelper::isCompactMode() ? s_TabbarHeightCompact : s_TabbarHeight);
 #else
-        return QSize(aveargeWidth, 40);
+        return QSize(tabWidth, 40);
 #endif
     }
     qDebug() << "Exit tabSizeHint";

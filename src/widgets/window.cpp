@@ -3914,12 +3914,16 @@ void Window::checkTabbarForReload()
     if (fi.exists() && !fi.isWritable()) {
         qDebug() << "check tabbar for reload backup-files not writable";
         tabName.append(readOnlyStr);
-        m_tabbar->setTabText(m_tabbar->currentIndex(), tabName);
+        if (m_tabbar->currentName() != tabName) {
+            m_tabbar->setTabText(m_tabbar->currentIndex(), tabName);
+        }
         wrapper->textEditor()->setReadOnlyPermission(true);
     } else {
         qDebug() << "check tabbar for reload backup-files writable";
         tabName.remove(readOnlyStr);
-        m_tabbar->setTabText(m_tabbar->currentIndex(), tabName);
+        if (m_tabbar->currentName() != tabName) {
+            m_tabbar->setTabText(m_tabbar->currentIndex(), tabName);
+        }
         wrapper->textEditor()->setReadOnlyPermission(false);
     }
 
