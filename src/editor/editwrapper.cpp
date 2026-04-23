@@ -126,7 +126,7 @@ EditWrapper::EditWrapper(Window *window, QWidget *parent)
         if ((m_pWindow->findBarIsVisiable() || m_pWindow->replaceBarIsVisiable()) &&
                 (QString::compare(m_pWindow->getKeywordForSearchAll(), m_pWindow->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
             qDebug() << "EditWrapper connect verticalScrollBar valueChanged, highlightKeywordInView";
-            m_pTextEdit->highlightKeywordInView(m_pWindow->getKeywordForSearchAll(), m_pWindow->getSearchCaseFlag());
+            m_pTextEdit->highlightKeywordInView(m_pWindow->getKeywordForSearchAll());
         }
 
         m_pTextEdit->markAllKeywordInView();

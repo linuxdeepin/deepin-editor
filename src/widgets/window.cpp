@@ -11,7 +11,6 @@
 #include <DSettings>
 #include <DSettingsOption>
 #include <QApplication>
-#include <QTimer>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include <QPrinter>
@@ -295,7 +294,7 @@ Window::Window(DMainWindow *parent)
     connect(m_replaceBar, &ReplaceBar::replaceRest, this, &Window::handleReplaceRest, Qt::QueuedConnection);
     connect(m_replaceBar, &ReplaceBar::replaceSkip, this, &Window::handleReplaceSkip, Qt::QueuedConnection);
     connect(m_replaceBar, &ReplaceBar::updateSearchKeyword, this, [ = ](QString file, QString keyword) {
-        handleUpdateSearchKeyword(m_replaceBar, file, keyword, Qt::CaseSensitive);
+        handleUpdateSearchKeyword(m_replaceBar, file, keyword);
     });
     connect(m_replaceBar, &ReplaceBar::sigReplacebarClose, this, &Window::slotReplacebarClose, Qt::QueuedConnection);
 
@@ -1738,9 +1737,8 @@ void Window::popupFindBar()
     int scrollOffset = wrapper->textEditor()->getScrollOffset();
 
     m_findBar->activeInput(text, tabPath, row, column, scrollOffset);
-    // highlight keyword when findbar show (find bar uses case-insensitive by default)
-    m_searchCaseFlag = Qt::CaseInsensitive;
-    wrapper->textEditor()->highlightKeywordInView(text, m_searchCaseFlag);
+    // highlight keyword when findbar show
+    wrapper->textEditor()->highlightKeywordInView(text);
     // set keywords
     m_keywordForSearchAll = m_keywordForSearch = text;
 
@@ -1803,8 +1801,6 @@ void Window::popupReplaceBar()
     int scrollOffset = wrapper->textEditor()->getScrollOffset();
 
     m_replaceBar->activeInput(text, tabPath, row, column, scrollOffset);
-    // replace bar uses case-sensitive search by default
-    m_searchCaseFlag = Qt::CaseSensitive;
 
     QTimer::singleShot(10, this, [ = ] { m_replaceBar->focus(); });
     qDebug() << "Popup replace bar completed";
@@ -3299,7 +3295,7 @@ void Window::handleFindKeyword(const QString &keyword, bool state)
         wrapper->textEditor()->clearFindMatchSelections();
     } else {
         qDebug() << "m_keywordForSearchAll is equal to m_keywordForSearch, highlight it";
-        wrapper->textEditor()->highlightKeywordInView(m_keywordForSearchAll, m_searchCaseFlag);
+        wrapper->textEditor()->highlightKeywordInView(m_keywordForSearchAll);
     }
 
     wrapper->textEditor()->markAllKeywordInView();
@@ -3417,7 +3413,6 @@ void Window::handleReplaceNext(const QString &file, const QString &replaceText, 
     Q_UNUSED(file);
     m_keywordForSearch = replaceText;
     m_keywordForSearchAll = replaceText;
-    m_searchCaseFlag = Qt::CaseSensitive;
     EditWrapper *wrapper = currentWrapper();
     wrapper->textEditor()->replaceNext(replaceText, withText);
     qDebug() << "handleReplaceNext end";
@@ -3478,7 +3473,6 @@ void Window::handleUpdateSearchKeyword(QWidget *widget, const QString &file, con
         bool findKeyword = wrapper->textEditor()->highlightKeyword(keyword, wrapper->textEditor()->getPosition(), caseFlag);
         m_keywordForSearchAll = keyword;
         m_keywordForSearch = keyword;
-        m_searchCaseFlag = caseFlag;
         bool emptyKeyword = keyword.trimmed().isEmpty();
 
         auto *findBarWidget = qobject_cast<FindBar *>(widget);
@@ -3927,12 +3921,16 @@ void Window::checkTabbarForReload()
     if (fi.exists() && !fi.isWritable()) {
         qDebug() << "check tabbar for reload backup-files not writable";
         tabName.append(readOnlyStr);
-        m_tabbar->setTabText(m_tabbar->currentIndex(), tabName);
+        if (m_tabbar->currentName() != tabName) {
+            m_tabbar->setTabText(m_tabbar->currentIndex(), tabName);
+        }
         wrapper->textEditor()->setReadOnlyPermission(true);
     } else {
         qDebug() << "check tabbar for reload backup-files writable";
         tabName.remove(readOnlyStr);
-        m_tabbar->setTabText(m_tabbar->currentIndex(), tabName);
+        if (m_tabbar->currentName() != tabName) {
+            m_tabbar->setTabText(m_tabbar->currentIndex(), tabName);
+        }
         wrapper->textEditor()->setReadOnlyPermission(false);
     }
 
@@ -3978,8 +3976,6 @@ void Window::resizeEvent(QResizeEvent *e)
 
     DMainWindow::resizeEvent(e);
 }
-
-
 
 void Window::closeEvent(QCloseEvent *e)
 {
@@ -4315,11 +4311,6 @@ QString Window::getKeywordForSearch()
 {
     qDebug() << "get keyword for search";
     return m_keywordForSearch;
-}
-
-Qt::CaseSensitivity Window::getSearchCaseFlag()
-{
-    return m_searchCaseFlag;
 }
 
 void Window::setPrintEnabled(bool enabled)
