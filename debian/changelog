@@ -1,3 +1,15 @@
+deepin-editor (6.5.49) unstable; urgency=medium
+
+  * fix(editor): resolve tab bar jitter when adding new tabs
+  * Revert "fix: Skip case insensitive"
+  * fix: Skip case insensitive
+  * fix(editor): hardcode CaseSensitive in replace skip to fix highlight
+  * fix(editor): make tabbar and bottombar follow system font changes
+  * fix(editor): pass caseFlag in replace skip to fix wrong highlight
+  * fix(editor): fix blank tab when opening file without read permission
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Thu, 23 Apr 2026 18:58:05 +0800
+
 deepin-editor (6.5.48) unstable; urgency=medium
 
   * chore: Update version to 6.5.48
