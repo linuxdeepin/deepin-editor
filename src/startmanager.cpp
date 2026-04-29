@@ -177,8 +177,15 @@ void StartManager::autoBackupFile()
 
     //记录所有的文件信息
     for (int var = 0; var < m_windows.count(); ++var) {
+        // 懒加载兼容：先按 TabBar 顺序构建完整列表（包括 pending 标签的占位），
+        // 再逐一填入已加载 wrapper 的 JSON 数据。
+        Tabbar *tabbar = m_windows.value(var)->getTabbar();
+        QStringList list;
+        for (int t = 0; t < tabbar->count(); t++) {
+            list.append(tabbar->fileAt(t));
+        }
+
         wrappers = m_windows.value(var)->getWrappers();
-        QStringList list = wrappers.keys();
 
         for (EditWrapper *wrapper : wrappers) {
             //大文件加载时不备份
@@ -190,7 +197,12 @@ void StartManager::autoBackupFile()
             filePath = wrapper->textEditor()->getFilePath();
             localPath = wrapper->textEditor()->getTruePath();
 
-            StartManager::FileTabInfo tabInfo = StartManager::instance()->getFileTabInfo(filePath);
+            // 懒加载兼容：使用当前窗口 TabBar 的本地索引，避免跨窗口索引错位
+            int tabIndex = tabbar->indexOf(filePath);
+            if (tabIndex < 0) {
+                qWarning() << "autoBackupFile: tab not found for path:" << filePath << ", skip";
+                continue;
+            }
             curPos = QString::number(wrapper->textEditor()->textCursor().position());
             fileInfo.setFile(localPath);
 
@@ -252,14 +264,44 @@ void StartManager::autoBackupFile()
             //使用json串形式保存
             document.setObject(jsonObject);
             QByteArray byteArray = document.toJson(QJsonDocument::Compact);
-            list.replace(tabInfo.tabIndex, byteArray);
-            qInfo() << "Auto backup completed, files backed up:" << m_qlistTemFile.size();
-            qDebug() << "Exit autoBackupFile";
+            // 安全替换：确保索引不越界
+            if (tabIndex < list.size()) {
+                list.replace(tabIndex, byteArray);
+            } else {
+                qWarning() << "autoBackupFile: tabIndex" << tabIndex << "out of range (size" << list.size() << "), appending";
+                list.append(byteArray);
+            }
+        }
+
+        // 懒加载兼容：为 pending 标签页从配置中恢复原始记录
+        // 复用上面已获取的 wrappers 变量，无需重复调用 getWrappers()
+        for (int t = 0; t < tabbar->count(); t++) {
+            QString tabPath = tabbar->fileAt(t);
+            if (!wrappers.contains(tabPath)) {
+                // pending 标签：从 listBackupInfo 中查找原始 JSON 记录
+                for (const QString &entry : listBackupInfo) {
+                    QJsonDocument doc = QJsonDocument::fromJson(entry.toUtf8());
+                    if (doc.isObject()) {
+                        const QJsonObject object = doc.object();
+                        if (object.value("localPath").toString() != tabPath
+                                && object.value("temFilePath").toString() != tabPath) {
+                            continue;
+                        }
+                        if (t < list.size()) {
+                            list[t] = entry;
+                        } else {
+                            list.append(entry);
+                        }
+                        break;
+                    }
+                }
+            }
         }
 
         m_qlistTemFile.append(list);
     }
 
+    qDebug() << "Exit autoBackupFile";
     //将json串列表写入配置文件
     qInfo() << __func__ << "history file counts:" << m_qlistTemFile.size();
     Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->setValue(m_qlistTemFile);
@@ -271,15 +313,13 @@ void StartManager::autoBackupFile()
 int StartManager::recoverFile(Window *window)
 {
     qDebug() << "Enter recoverFile";
+
     Window *pFocusWindow = nullptr;
     QString focusPath;
-    bool bIsTemFile = false;
     QStringList blankFiles = QDir(m_blankFileDir).entryList(QStringList(), QDir::Files);
     qDebug() << "Found" << blankFiles.size() << "blank files in directory:" << m_blankFileDir;
     int recFilesSum = 0;
     QStringList files = blankFiles;
-    QFileInfo fileInfo;
-    QString lastmodifiedtime;
     //去除非新建文件
     for (auto file : blankFiles) {
         if (!file.contains("blank_file")) {
@@ -289,179 +329,166 @@ int StartManager::recoverFile(Window *window)
     }
     qDebug() << "After filtering, found" << files.size() << "blank files";
 
-    int windowIndex = -1;
-
-    //根据备份信息恢复文件
+    // 第一阶段：解析所有 JSON 记录
     qDebug() << "Processing" << m_qlistTemFile.count() << "temporary files for recovery";
+    QVector<QJsonObject> tabRecords;
     for (int i = 0; i < m_qlistTemFile.count(); i++) {
         QJsonParseError jsonError;
-        // 转化为 JSON 文档
         QJsonDocument doucment = QJsonDocument::fromJson(m_qlistTemFile.value(i).toUtf8(), &jsonError);
-        // 解析未发生错误
-        if (!doucment.isNull() && (jsonError.error == QJsonParseError::NoError)) {
-            if (doucment.isObject()) {
-                QString temFilePath;
-                QString localPath;
-                // JSON 文档为对象
-                QJsonObject object = doucment.object();  // 转化为对象
-                qDebug() << "Processing JSON object for recovery, item" << (i+1) << "of" << m_qlistTemFile.count();
-
-                //得到恢复文件对应的窗口
-                if (object.contains("window")) {  // 包含指定的 key
-                    QJsonValue value = object.value("window");  // 获取指定 key 对应的 value
-
-                    if (value.isDouble()) {
-                        if (windowIndex == -1) {
-                            windowIndex = static_cast<int>(value.toDouble());
-                            qDebug() << "First window index found:" << windowIndex;
-                        } else {
-                            if (windowIndex != static_cast<int>(value.toDouble())) {
-                                windowIndex = static_cast<int>(value.toDouble());
-                                qDebug() << "New window index found:" << windowIndex << ", creating new window";
-                                window = createWindow(true);
-                                window->showCenterWindow(false);
-                            }
-                        }
-                    }
-                }
-
-                //得到备份文件路径
-                if (object.contains("temFilePath")) {  // 包含指定的 key
-                    QJsonValue value = object.value("temFilePath");  // 获取指定 key 对应的 value
-
-                    if (value.isString()) {  // 判断 value 是否为字符串
-                        temFilePath = value.toString();  // 将 value 转化为字符串
-                        qDebug() << "Found temporary file path:" << temFilePath;
-                    }
-                }
-
-                //得到文件修改状态
-                if (object.contains("modify")) {  // 包含指定的 key
-                    QJsonValue value = object.value("modify");  // 获取指定 key 对应的 value
-
-                    if (value.isBool()) {  // 判断 value 是否为字符串
-                        bIsTemFile = value.toBool();
-                        qDebug() << "File modification status:" << (bIsTemFile ? "modified" : "unmodified");
-                    }
-                }
-                if (object.contains("lastModifiedTime")) {
-                    auto v = object.value("lastModifiedTime");
-                    if (v.isString()) {
-                        lastmodifiedtime = v.toString();
-                        qDebug() << "Last modified time:" << lastmodifiedtime;
-                    }
-                }
-
-                //得到真实文件路径
-                if (object.contains("localPath")) {  // 包含指定的 key
-                    QJsonValue value = object.value("localPath");  // 获取指定 key 对应的 value
-
-                    if (value.isString()) {  // 判断 value 是否为字符串
-                        localPath = value.toString();  // 将 value 转化为字符串
-                        fileInfo.setFile(localPath);
-                        qDebug() << "Local file path:" << localPath << "exists:" << fileInfo.exists();
-                        if (!fileInfo.exists()) {
-                            qWarning() << "Local file does not exist, skipping recovery for:" << localPath;
-                            continue;
-                        }
-                    }
-                }
-
-                //打开文件
-                if (!temFilePath.isEmpty()) {
-                    if (Utils::fileExists(temFilePath)) {
-                        qDebug() << "Opening temporary file:" << temFilePath << "for" << fileInfo.fileName();
-                        window->addTemFileTab(temFilePath, fileInfo.fileName(), localPath, lastmodifiedtime, bIsTemFile);
-
-                        //打开文件后设置书签
-                        if (object.contains("bookMark")) {  // 包含指定的 key
-                            QJsonValue value = object.value("bookMark");  // 获取指定 key 对应的 value
-
-                            if (value.isString()) {
-                                QList<int> bookmarkList;
-                                bookmarkList = analyzeBookmakeInfo(value.toString());
-                                qDebug() << "Setting bookmarks from file config:" << bookmarkList;
-                                window->wrapper(temFilePath)->textEditor()->setBookMarkList(bookmarkList);
-                            }
-                        } else if (m_bookmarkTable.contains(temFilePath)) {
-                            // 若文件已有配置，则以文件为准，否则以全局配置为准
-                            qDebug() << "Setting bookmarks from global config for:" << temFilePath;
-                            window->wrapper(localPath)->textEditor()->setBookMarkList(m_bookmarkTable.value(temFilePath));
-                        }
-
-                        if (object.contains("focus")) {  // 包含指定的 key
-                            QJsonValue value = object.value("focus");  // 获取指定 key 对应的 value
-
-                            if (value.isBool() && value.toBool()) {
-                                qDebug() << "Setting focus to file:" << temFilePath;
-                                pFocusWindow = window;
-                                focusPath = temFilePath;
-                            }
-                        }
-
-                        recFilesSum++;
-                    }
-                } else {
-                    if (!localPath.isEmpty() && Utils::fileExists(localPath)) {
-                        qDebug() << "Opening local file:" << localPath;
-                        // 若为草稿文件或不支持的MIMETYPE文件，显示默认名称标签
-                        if (Utils::isDraftFile(localPath) || !Utils::isMimeTypeSupport(localPath)) {
-                            //得到新建文件名称
-                            int index = files.indexOf(QFileInfo(localPath).fileName());
-
-                            if (index >= 0) {
-                                QString fileName = tr("Untitled %1").arg(index + 1);
-                                qDebug() << "Using untitled name for draft file:" << fileName;
-                                window->addTemFileTab(localPath, fileName, localPath, lastmodifiedtime, bIsTemFile);
-
-                            }
-                        } else {
-                            qDebug() << "Using file name for regular file:" << fileInfo.fileName();
-                            window->addTemFileTab(localPath, fileInfo.fileName(), localPath, lastmodifiedtime, bIsTemFile);
-                        }
-
-                        //打开文件后设置书签
-                        if (object.contains("bookMark")) {  // 包含指定的 key
-                            QJsonValue value = object.value("bookMark");  // 获取指定 key 对应的 value
-
-                            if (value.isString()) {
-                                QList<int> bookmarkList;
-                                bookmarkList = analyzeBookmakeInfo(value.toString());
-                                qDebug() << "Setting bookmarks from file config:" << bookmarkList;
-                                window->wrapper(localPath)->textEditor()->setBookMarkList(bookmarkList);
-                            }
-                        } else if (m_bookmarkTable.contains(localPath)) {
-                            // 若文件已有配置，则以文件为准，否则以全局配置为准
-                            qDebug() << "Setting bookmarks from global config for:" << localPath;
-                            window->wrapper(localPath)->textEditor()->setBookMarkList(m_bookmarkTable.value(localPath));
-                        }
-
-                        if (object.contains("focus")) {  // 包含指定的 key
-                            QJsonValue value = object.value("focus");  // 获取指定 key 对应的 value
-
-                            if (value.isBool() && value.toBool()) {
-                                qDebug() << "Setting focus to file:" << localPath;
-                                pFocusWindow = window;
-                                focusPath = localPath;
-                            }
-                        }
-
-                        recFilesSum++;
-                    }
-                }
-                qInfo() << "Recovered files count:" << recFilesSum;
-                qDebug() << "Exit recoverFile";
-            }
+        if (!doucment.isNull() && (jsonError.error == QJsonParseError::NoError) && doucment.isObject()) {
+            tabRecords.append(doucment.object());
         }
     }
+    qDebug() << "Parsed" << tabRecords.size() << "valid tab records";
 
-    //当前活动页
+    // 找到焦点标签页
+    int focusIndex = -1;
+    for (int i = 0; i < tabRecords.size(); i++) {
+        const QJsonObject &obj = tabRecords[i];
+        if (obj.contains("focus") && obj.value("focus").toBool()) {
+            focusIndex = i;
+            qDebug() << "Found focus tab at index:" << focusIndex;
+            break;
+        }
+    }
+    // 如果没有焦点标签页，默认第一个
+    if (focusIndex == -1 && !tabRecords.isEmpty()) {
+        focusIndex = 0;
+        qDebug() << "No focus tab found, using first tab as focus";
+    }
+
+    int windowIndex = -1;
+
+    // 记录所有参与恢复的窗口，确保批量结束后都恢复 handleCurrentChanged 的懒加载能力
+    QList<Window *> recoveryWindows;
+    recoveryWindows.append(window);
+    window->setBatchAddingPendingTabs(true);
+
+    // 第二阶段：恢复标签页（焦点标签页立即加载，其余懒加载）
+    for (int i = 0; i < tabRecords.size(); i++) {
+        const QJsonObject &object = tabRecords[i];
+        QString temFilePath;
+        QString localPath;
+        bool bIsTemFile = false;
+        QString lastmodifiedtime;
+        int cursorPosition = -1;
+        QList<int> bookmarks;
+
+        qDebug() << "Processing record" << (i + 1) << "of" << tabRecords.size()
+                 << "(focus:" << (i == focusIndex) << ")";
+
+        // 解析公共字段
+        if (object.contains("temFilePath") && object.value("temFilePath").isString())
+            temFilePath = object.value("temFilePath").toString();
+
+        if (object.contains("modify") && object.value("modify").isBool())
+            bIsTemFile = object.value("modify").toBool();
+
+        if (object.contains("lastModifiedTime") && object.value("lastModifiedTime").isString())
+            lastmodifiedtime = object.value("lastModifiedTime").toString();
+
+        if (object.contains("cursorPosition") && object.value("cursorPosition").isString())
+            cursorPosition = object.value("cursorPosition").toString().toInt();
+
+        if (object.contains("bookMark") && object.value("bookMark").isString())
+            bookmarks = analyzeBookmakeInfo(object.value("bookMark").toString());
+
+        if (object.contains("localPath") && object.value("localPath").isString()) {
+            localPath = object.value("localPath").toString();
+            QFileInfo fi(localPath);
+            qDebug() << "Local file path:" << localPath << "exists:" << fi.exists();
+            if (!fi.exists()) {
+                qWarning() << "Local file does not exist, skipping:" << localPath;
+                continue;
+            }
+        }
+
+        // 确定实际打开路径和显示名称
+        QString openPath;
+        QString displayName;
+        if (!temFilePath.isEmpty() && Utils::fileExists(temFilePath)) {
+            openPath = temFilePath;
+            displayName = QFileInfo(localPath).fileName();
+        } else if (!localPath.isEmpty() && Utils::fileExists(localPath)) {
+            openPath = localPath;
+            if (Utils::isDraftFile(localPath) || !Utils::isMimeTypeSupport(localPath)) {
+                int idx = files.indexOf(QFileInfo(localPath).fileName());
+                displayName = (idx >= 0) ? tr("Untitled %1").arg(idx + 1) : QFileInfo(localPath).fileName();
+            } else {
+                displayName = QFileInfo(localPath).fileName();
+            }
+        } else {
+            continue;
+        }
+
+        // 处理多窗口：当窗口索引变化时创建新窗口
+        if (object.contains("window") && object.value("window").isDouble()) {
+            int newWindowIdx = static_cast<int>(object.value("window").toDouble());
+            if (windowIndex == -1) {
+                windowIndex = newWindowIdx;
+                qDebug() << "First window index:" << windowIndex;
+            } else if (windowIndex != newWindowIdx) {
+                windowIndex = newWindowIdx;
+                qDebug() << "New window index:" << windowIndex << ", creating window";
+                window = createWindow(true);
+                window->showCenterWindow(false);
+                window->setBatchAddingPendingTabs(true);
+                recoveryWindows.append(window);
+            }
+        }
+
+        bool isFocusTab = (i == focusIndex);
+
+        if (isFocusTab) {
+            // 焦点标签页：立即完整加载
+            window->addTemFileTab(openPath, displayName, localPath, lastmodifiedtime, bIsTemFile, -1, cursorPosition);
+
+            // 恢复书签
+            if (!bookmarks.isEmpty()) {
+                qDebug() << "Setting bookmarks for focus tab:" << bookmarks;
+                if (auto *w = window->wrapper(openPath))
+                    w->textEditor()->setBookMarkList(bookmarks);
+            } else if (m_bookmarkTable.contains(openPath)) {
+                qDebug() << "Setting bookmarks from global config for focus tab:" << openPath;
+                if (auto *w = window->wrapper(openPath))
+                    w->textEditor()->setBookMarkList(m_bookmarkTable.value(openPath));
+            }
+
+            pFocusWindow = window;
+            focusPath = openPath;
+            recFilesSum++;
+        } else {
+            // 非焦点标签页：添加为待加载状态（懒加载）
+            Window::PendingTabInfo pendingInfo;
+            pendingInfo.filepath = openPath;
+            pendingInfo.truePath = localPath;
+            pendingInfo.displayName = displayName;
+            pendingInfo.cursorPosition = cursorPosition;
+            pendingInfo.bookmarks = bookmarks;
+            pendingInfo.isTemFile = bIsTemFile;
+            pendingInfo.lastModifiedTime = lastmodifiedtime;
+            window->addPendingTab(pendingInfo);
+            recFilesSum++;
+        }
+    }
+    qDebug() << "Pending tabs added, total:" << recFilesSum << "tabs";
+
+    // 恢复所有参与恢复窗口的 handleCurrentChanged 懒加载能力
+    for (Window *w : recoveryWindows) {
+        w->setBatchAddingPendingTabs(false);
+    }
+
+    // 激活焦点标签页
     if (pFocusWindow != nullptr && !focusPath.isNull()) {
-        qDebug() << "Setting focus to window and tab for path:" << focusPath;
+        qDebug() << "Activating focus tab:" << focusPath;
         FileTabInfo info;
         info.windowIndex = m_windows.indexOf(pFocusWindow);
         info.tabIndex = pFocusWindow->getTabIndex(focusPath);
         popupExistTabs(info);
+    } else if (recFilesSum > 0 && window->getTabbar()->count() > 0) {
+        // 焦点标签页文件不存在或无焦点记录，加载第一个可用标签页
+        qDebug() << "No focus tab available, loading first tab";
+        window->activeTab(0);
     }
 
     qInfo() << "Recovered files count:" << recFilesSum;

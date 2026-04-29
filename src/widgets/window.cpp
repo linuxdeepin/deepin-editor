@@ -844,6 +844,22 @@ bool Window::closeTab()
 bool Window::closeTab(const QString &filePath)
 {
     qDebug() << "Enter closeTab with path:" << filePath;
+
+    // 懒加载：如果标签页处于待加载状态，直接移除
+    if (isPendingTab(filePath)) {
+        qInfo() << "Closing pending tab:" << filePath;
+        m_pendingTabs.remove(filePath);
+        int index = m_tabbar->indexOf(filePath);
+        if (index >= 0) {
+            m_tabbar->removeTab(index);
+        }
+        // 如果是最后一个标签页，添加空白标签页
+        if (m_tabbar->count() == 0) {
+            addBlankTab();
+        }
+        return true;
+    }
+
     EditWrapper *wrapper = m_wrappers.value(filePath);
     if (!wrapper) {
         qWarning() << "No wrapper found for path:" << filePath;
@@ -2835,7 +2851,12 @@ void Window::backupFile()
     QString filePath, localPath, curPos;
     QFileInfo fileInfo;
     m_qlistTemFile.clear();
-    m_qlistTemFile = wrappers.keys();
+
+    // 懒加载兼容：m_qlistTemFile 的索引必须与 TabBar 标签顺序一一对应。
+    // 先按 TabBar 顺序添加所有标签页路径（包括 pending 的），再逐一填入 JSON 数据。
+    for (int i = 0; i < m_tabbar->count(); i++) {
+        m_qlistTemFile.append(m_tabbar->fileAt(i));
+    }
 
     for (EditWrapper *wrapper : wrappers) {
         if (nullptr == wrapper) {
@@ -2858,7 +2879,12 @@ void Window::backupFile()
         }
 
         qInfo() << "begin backupFile()";
-        StartManager::FileTabInfo tabInfo = StartManager::instance()->getFileTabInfo(filePath);
+        // 使用当前窗口的 TabBar 索引，避免跨窗口索引错位
+        int tabIndex = m_tabbar->indexOf(filePath);
+        if (tabIndex < 0) {
+            qWarning() << "backupFile: tab not found for path:" << filePath << ", skip";
+            continue;
+        }
         curPos = QString::number(wrapper->textEditor()->textCursor().position());
         fileInfo.setFile(localPath);
 
@@ -2910,7 +2936,49 @@ void Window::backupFile()
         //使用json串形式保存
         document.setObject(jsonObject);
         QByteArray byteArray = document.toJson(QJsonDocument::Compact);
-        m_qlistTemFile.replace(tabInfo.tabIndex, byteArray);
+        // 安全替换：确保索引不越界
+        if (tabIndex < m_qlistTemFile.size()) {
+            m_qlistTemFile.replace(tabIndex, byteArray);
+        } else {
+            qWarning() << "backupFile: tabIndex" << tabIndex << "out of range (size" << m_qlistTemFile.size() << "), appending";
+            m_qlistTemFile.append(byteArray);
+        }
+    }
+
+    // 懒加载兼容：为 pending 标签页生成备份记录
+    for (int i = 0; i < m_tabbar->count(); i++) {
+        QString tabPath = m_tabbar->fileAt(i);
+        if (!m_wrappers.contains(tabPath) && m_pendingTabs.contains(tabPath)) {
+            const PendingTabInfo &info = m_pendingTabs.value(tabPath);
+            QJsonObject jsonObject;
+            QJsonDocument document;
+            jsonObject.insert("localPath", info.truePath);
+            if (!info.filepath.isEmpty() && info.filepath != info.truePath) {
+                jsonObject.insert("temFilePath", info.filepath);
+            }
+            jsonObject.insert("cursorPosition", QString::number(info.cursorPosition));
+            jsonObject.insert("modify", info.isTemFile);
+            if (!info.lastModifiedTime.isEmpty())
+                jsonObject.insert("lastModifiedTime", info.lastModifiedTime);
+            if (!info.bookmarks.isEmpty()) {
+                QString bookmarkInfo;
+                for (int j = 0; j < info.bookmarks.count(); j++) {
+                    bookmarkInfo.append((j == info.bookmarks.count() - 1)
+                                       ? QString::number(info.bookmarks.value(j))
+                                       : QString::number(info.bookmarks.value(j)) + ",");
+                }
+                jsonObject.insert("bookMark", bookmarkInfo);
+            }
+            if (tabPath == m_tabbar->currentPath())
+                jsonObject.insert("focus", true);
+            document.setObject(jsonObject);
+            QByteArray byteArray = document.toJson(QJsonDocument::Compact);
+            if (i < m_qlistTemFile.size()) {
+                m_qlistTemFile.replace(i, byteArray);
+            } else {
+                m_qlistTemFile.append(byteArray);
+            }
+        }
     }
 
     //将json串列表写入配置文件
@@ -2928,6 +2996,17 @@ void Window::backupFile()
 bool Window::closeAllFiles()
 {
     qInfo() << "begin closeAllFiles()";
+
+    // 先关闭所有待加载标签页（无需保存提示）
+    QMap<QString, PendingTabInfo> pendingCopy = m_pendingTabs;
+    for (const QString &path : pendingCopy.keys()) {
+        m_pendingTabs.remove(path);
+        int idx = m_tabbar->indexOf(path);
+        if (idx >= 0) {
+            m_tabbar->removeTab(idx);
+        }
+    }
+
     QMap<QString, EditWrapper *> wrappers = m_wrappers;
 
     // 被删除的窗口索引已变更，需要计算其范围
@@ -2996,7 +3075,8 @@ bool Window::saveAllFloatingFiles()
  * @param qstrTruePath　最后一次修改时间
  * @param bIsTemFile　是否修改
  */
-void Window::addTemFileTab(const QString &qstrPath, const QString &qstrName, const QString &qstrTruePath, const QString &lastModifiedTime, bool bIsTemFile)
+void Window::addTemFileTab(const QString &qstrPath, const QString &qstrName, const QString &qstrTruePath, const QString &lastModifiedTime,
+                           bool bIsTemFile, int index, int restoreCursorPosition)
 {
     qInfo() << "begin addTemFileTab()";
     if (qstrPath.isEmpty() || !Utils::fileExists(qstrPath)) {
@@ -3022,7 +3102,13 @@ void Window::addTemFileTab(const QString &qstrPath, const QString &qstrName, con
     }
 
     EditWrapper *wrapper = createEditor();
-    m_tabbar->addTab(qstrPath, qstrName, qstrTruePath);
+    if (index < 0 || index > m_tabbar->count()) {
+        index = m_tabbar->count();
+    }
+    m_tabbar->addTabWithIndex(index, qstrPath, qstrName, qstrTruePath);
+    if (restoreCursorPosition >= 0) {
+        wrapper->setRestoreCursorPosition(restoreCursorPosition);
+    }
     wrapper->openFile(qstrPath, qstrTruePath, bIsTemFile);
 
     // 查找文件是否存在书签，临时文件同样可标记书签
@@ -3037,6 +3123,72 @@ void Window::addTemFileTab(const QString &qstrPath, const QString &qstrName, con
     m_wrappers[qstrPath] = wrapper;
     showNewEditor(wrapper);
     qInfo() << "end addTemFileTab()";
+}
+
+void Window::addPendingTab(const PendingTabInfo &info, int index)
+{
+    qInfo() << "addPendingTab:" << info.filepath << info.displayName;
+    // 阻止信号：addTab 内部会调用 setCurrentIndex 触发 currentChanged，
+    // 导致 handleCurrentChanged 立即加载 pending 标签页，懒加载失效
+    m_tabbar->blockSignals(true);
+    if (index < 0 || index > m_tabbar->count()) {
+        index = m_tabbar->count();
+    }
+    m_tabbar->addTabWithIndex(index, info.filepath, info.displayName, info.truePath);
+    m_tabbar->blockSignals(false);
+    m_pendingTabs[info.filepath] = info;
+}
+
+void Window::setBatchAddingPendingTabs(bool enabled)
+{
+    m_bBatchAddingPendingTabs = enabled;
+}
+
+bool Window::isPendingTab(const QString &filepath) const
+{
+    return m_pendingTabs.contains(filepath);
+}
+
+bool Window::loadPendingTab(const QString &filepath)
+{
+    if (!m_pendingTabs.contains(filepath)) {
+        return false;
+    }
+
+    PendingTabInfo info = m_pendingTabs.take(filepath);
+    qInfo() << "loadPendingTab: loading" << info.filepath;
+
+    if (!Utils::fileExists(info.filepath)) {
+        qWarning() << "loadPendingTab: file does not exist" << info.filepath;
+        m_pendingTabs.insert(info.filepath, info);
+        return false;
+    }
+
+    // 先移除 TabBar 上的占位标签，避免 addTemFileTab 重复添加
+    int existingIndex = m_tabbar->indexOf(info.filepath);
+    if (existingIndex >= 0) {
+        m_tabbar->removeTab(existingIndex);
+    }
+
+    // 完整加载文件内容并添加标签
+    addTemFileTab(info.filepath, info.displayName, info.truePath, info.lastModifiedTime, info.isTemFile, existingIndex, info.cursorPosition);
+
+    // 检查文件是否成功加载（addTemFileTab 可能因 MimeType 不支持等原因 early return）
+    EditWrapper *wrapper = m_wrappers.value(info.filepath);
+    if (!wrapper) {
+        qWarning() << "loadPendingTab: addTemFileTab failed, restoring pending info";
+        // 恢复 pending 信息和占位标签
+        m_pendingTabs.insert(info.filepath, info);
+        addPendingTab(info, existingIndex);
+        return false;
+    }
+
+    // 覆盖书签（记录中的书签优先于全局书签）
+    if (!info.bookmarks.isEmpty()) {
+        wrapper->textEditor()->setBookMarkList(info.bookmarks);
+    }
+
+    return true;
 }
 
 QMap<QString, EditWrapper *> Window::getWrappers()
@@ -3194,6 +3346,17 @@ void Window::handleCurrentChanged(const int &index)
     }
 
     const QString &filepath = m_tabbar->fileAt(index);
+
+    // 懒加载：如果标签页处于待加载状态，先触发完整加载
+    // 批量添加 pending 标签页期间跳过（addPendingTab 会触发 currentChanged）
+    if (!m_bBatchAddingPendingTabs && isPendingTab(filepath)) {
+        if (!loadPendingTab(filepath)) {
+            // 文件不存在或加载失败，移除该标签页
+            qWarning() << "Failed to load pending tab:" << filepath;
+            handleTabCloseRequested(index);
+            return;
+        }
+    }
 
     if (m_wrappers.contains(filepath)) {
         bool bIsContains = false;
