@@ -120,8 +120,29 @@ public:
     bool closeAllFiles();
     // 保存窗口中所有漂浮文件（本地文件已被删除）
     bool saveAllFloatingFiles();
+    // 待加载标签页信息（懒加载恢复用）
+    struct PendingTabInfo {
+        QString filepath;         // 标签页显示路径（可能是临时文件路径）
+        QString truePath;         // 真实文件路径
+        QString displayName;      // 标签页显示名称
+        int cursorPosition = -1;   // 光标位置（-1 表示不指定）
+        QList<int> bookmarks;     // 书签列表
+        bool isTemFile = false;   // 是否为临时备份文件
+        QString lastModifiedTime; // 最后修改时间（临时文件用）
+    };
+
+    // 添加待加载标签页（懒加载，仅在 TabBar 添加标签，不加载文件内容）
+    void addPendingTab(const PendingTabInfo &info, int index = -1);
+    // 检查指定路径是否为待加载标签页
+    bool isPendingTab(const QString &filepath) const;
+    // 加载指定路径的待加载标签页，返回是否成功加载
+    bool loadPendingTab(const QString &filepath);
+    // 设置/获取批量添加 pending 标签页模式（阻止 currentChanged 触发懒加载）
+    void setBatchAddingPendingTabs(bool enabled);
+
     // 恢复备份文件标签页
-    void addTemFileTab(const QString &qstrPath, const QString &qstrName, const QString &qstrTruePath, const QString &lastModifiedTime, bool bIsTemFile = false);
+    void addTemFileTab(const QString &qstrPath, const QString &qstrName, const QString &qstrTruePath, const QString &lastModifiedTime,
+                       bool bIsTemFile = false, int index = -1, int restoreCursorPosition = -1);
 
     QMap<QString, EditWrapper *> getWrappers();
 
@@ -261,6 +282,8 @@ private:
     Settings *m_settings {nullptr};
 
     QMap<QString, EditWrapper *> m_wrappers;
+    QMap<QString, PendingTabInfo> m_pendingTabs;  // 待加载标签页（懒加载）
+    bool m_bBatchAddingPendingTabs = false;       // 批量添加 pending 标签页期间，阻止 handleCurrentChanged 触发加载
 
     DMenu *m_menu {nullptr};
 
