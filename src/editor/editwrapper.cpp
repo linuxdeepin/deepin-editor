@@ -1022,44 +1022,60 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
 
     m_pTextEdit->setTextFinished();
 
-    QStringList temFileList = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();
+    // 仅在文件加载成功时恢复光标位置
+    if (!error) {
+        // 恢复光标位置：优先使用预设值（O(1)），否则遍历历史记录（O(N)）
+        bool cursorRestored = false;
+        if (m_nRestoreCursorPosition >= 0) {
+            QTextCursor cursor = m_pTextEdit->textCursor();
+            cursor.setPosition(m_nRestoreCursorPosition);
+            m_pTextEdit->setTextCursor(cursor);
+            OnUpdateHighlighter();
+            m_nRestoreCursorPosition = -1;  // 重置，仅使用一次
+            cursorRestored = true;
+        }
 
-    for (int var = 0; var < temFileList.count(); ++var) {
-        QJsonParseError jsonError;
-        // 转化为 JSON 文档
-        QJsonDocument doucment = QJsonDocument::fromJson(temFileList.value(var).toUtf8(), &jsonError);
-        // 解析未发生错误
-        if (!doucment.isNull() && (jsonError.error == QJsonParseError::NoError)) {
-            qDebug() << "EditWrapper handleFileLoadFinished, doucment is not null";
-            if (doucment.isObject()) {
-                qDebug() << "EditWrapper handleFileLoadFinished, doucment is object";
-                // JSON 文档为对象
-                QJsonObject object = doucment.object();  // 转化为对象
+        if (!cursorRestored) {
+            QStringList temFileList = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();
 
-                if (object.contains("localPath") || object.contains("temFilePath")) {
-                    qDebug() << "EditWrapper handleFileLoadFinished, doucment contains localPath or temFilePath";
-                    // 包含指定的 key
-                    QJsonValue localPathValue = object.value("localPath");  // 获取指定 key 对应的 value
-                    QJsonValue temFilePathValue = object.value("temFilePath");  // 获取指定 key 对应的 value
+            for (int var = 0; var < temFileList.count(); ++var) {
+                QJsonParseError jsonError;
+                // 转化为 JSON 文档
+                QJsonDocument doucment = QJsonDocument::fromJson(temFileList.value(var).toUtf8(), &jsonError);
+                // 解析未发生错误
+                if (!doucment.isNull() && (jsonError.error == QJsonParseError::NoError)) {
+                    qDebug() << "EditWrapper handleFileLoadFinished, doucment is not null";
+                    if (doucment.isObject()) {
+                        qDebug() << "EditWrapper handleFileLoadFinished, doucment is object";
+                        // JSON 文档为对象
+                        QJsonObject object = doucment.object();  // 转化为对象
 
-                    if (localPathValue.toString() == m_pTextEdit->getFilePath()
-                            || temFilePathValue.toString() == m_pTextEdit->getFilePath()) {
-                        qDebug() << "EditWrapper handleFileLoadFinished, localPathValue or temFilePathValue is equal to m_pTextEdit->getFilePath()";
-                        QJsonValue value = object.value("cursorPosition");  // 获取指定 key 对应的 value
+                        if (object.contains("localPath") || object.contains("temFilePath")) {
+                            qDebug() << "EditWrapper handleFileLoadFinished, doucment contains localPath or temFilePath";
+                            // 包含指定的 key
+                            QJsonValue localPathValue = object.value("localPath");  // 获取指定 key 对应的 value
+                            QJsonValue temFilePathValue = object.value("temFilePath");  // 获取指定 key 对应的 value
 
-                        if (value.isString()) {
-                            qDebug() << "EditWrapper handleFileLoadFinished, value is string";
-                            QTextCursor cursor = m_pTextEdit->textCursor();
-                            cursor.setPosition(value.toString().toInt());
-                            m_pTextEdit->setTextCursor(cursor);
-                            OnUpdateHighlighter();
-                            break;
+                            if (localPathValue.toString() == m_pTextEdit->getFilePath()
+                                    || temFilePathValue.toString() == m_pTextEdit->getFilePath()) {
+                                qDebug() << "EditWrapper handleFileLoadFinished, localPathValue or temFilePathValue is equal to m_pTextEdit->getFilePath()";
+                                QJsonValue value = object.value("cursorPosition");  // 获取指定 key 对应的 value
+
+                                if (value.isString()) {
+                                    qDebug() << "EditWrapper handleFileLoadFinished, value is string";
+                                    QTextCursor cursor = m_pTextEdit->textCursor();
+                                    cursor.setPosition(value.toString().toInt());
+                                    m_pTextEdit->setTextCursor(cursor);
+                                    OnUpdateHighlighter();
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
             }
-        }
-    }
+        }  // end if (!cursorRestored)
+    }  // end if (!error)
 
     //备份显示修改状态
     if (m_bIsTemFile) {
@@ -1240,6 +1256,11 @@ void EditWrapper::setTemFile(bool value)
     qDebug() << "EditWrapper setTemFile, value:" << value;
     m_bIsTemFile = value;
     qDebug() << "EditWrapper setTemFile, exit";
+}
+
+void EditWrapper::setRestoreCursorPosition(int position)
+{
+    m_nRestoreCursorPosition = position;
 }
 
 void EditWrapper::updateHighlighterAll()

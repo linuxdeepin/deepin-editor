@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -145,6 +145,8 @@ public slots:
     void OnUpdateHighlighter();
     //set the value of m_bIsTemFile
     void setTemFile(bool value);
+    // 设置恢复光标位置（用于懒加载恢复，避免 O(N²) 扫描）
+    void setRestoreCursorPosition(int position);
 
 private:
     //第一次打开文件编码
@@ -180,6 +182,7 @@ private:
 
     bool m_bAsyncReadFileFinished = false;
     bool m_bHasPreProcess = false;               // 预处理标识
+    int m_nRestoreCursorPosition = -1;           // 恢复光标位置提示（-1 表示不指定）
 };
 
 #endif

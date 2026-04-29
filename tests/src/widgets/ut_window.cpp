@@ -7,6 +7,8 @@
 #include "ddialog.h"
 #include "qfileinfo.h"
 #include "qfile.h"
+#include <QJsonDocument>
+#include <QJsonObject>
 
 int exec_ret = 1;
 int QDialog_exec_stub()
@@ -1073,6 +1075,30 @@ TEST(UT_Window_backupFile, UT_Window_backupFile)
 
 }
 
+TEST(UT_Window_backupFile, UT_Window_backupFile_pendingTabKeepsTempPath)
+{
+    Window *window = new Window();
+
+    Window::PendingTabInfo info;
+    info.filepath = "/tmp/deepin-editor-pending-backup.tmp";
+    info.truePath = "/tmp/deepin-editor-pending-backup.txt";
+    info.displayName = "deepin-editor-pending-backup.txt";
+    info.cursorPosition = 42;
+    info.isTemFile = true;
+    window->addPendingTab(info);
+
+    window->backupFile();
+
+    ASSERT_EQ(window->m_qlistTemFile.size(), 1);
+    QJsonDocument doc = QJsonDocument::fromJson(window->m_qlistTemFile.first().toUtf8());
+    ASSERT_TRUE(doc.isObject());
+    EXPECT_EQ(doc.object().value("localPath").toString(), info.truePath);
+    EXPECT_EQ(doc.object().value("temFilePath").toString(), info.filepath);
+    EXPECT_EQ(doc.object().value("cursorPosition").toString(), QString::number(info.cursorPosition));
+
+    window->deleteLater();
+}
+
 //void closeAllFiles();
 TEST(UT_Window_closeAllFiles, UT_Window_closeAllFiles)
 {
@@ -1099,6 +1125,46 @@ TEST(UT_Window_addTemFileTab, UT_Window_addTemFileTab)
     window->deleteLater();
 
 
+}
+
+TEST(UT_Window_addPendingTab, UT_Window_addPendingTab_keepsRequestedIndex)
+{
+    Window *window = new Window();
+
+    Window::PendingTabInfo first;
+    first.filepath = "/tmp/deepin-editor-first.txt";
+    first.truePath = first.filepath;
+    first.displayName = "first.txt";
+    window->addPendingTab(first);
+
+    Window::PendingTabInfo second;
+    second.filepath = "/tmp/deepin-editor-second.txt";
+    second.truePath = second.filepath;
+    second.displayName = "second.txt";
+    window->addPendingTab(second, 0);
+
+    EXPECT_EQ(window->m_tabbar->fileAt(0), second.filepath);
+    EXPECT_EQ(window->m_tabbar->fileAt(1), first.filepath);
+
+    window->deleteLater();
+}
+
+TEST(UT_Window_loadPendingTab, UT_Window_loadPendingTab_missingFileCanStillClose)
+{
+    Window *window = new Window();
+
+    Window::PendingTabInfo info;
+    info.filepath = "/tmp/deepin-editor-missing-pending.txt";
+    info.truePath = info.filepath;
+    info.displayName = "missing.txt";
+    window->addPendingTab(info);
+
+    EXPECT_FALSE(window->loadPendingTab(info.filepath));
+    EXPECT_TRUE(window->isPendingTab(info.filepath));
+    EXPECT_TRUE(window->closeTab(info.filepath));
+    EXPECT_FALSE(window->isPendingTab(info.filepath));
+
+    window->deleteLater();
 }
 //Window(DMainWindow *parent = nullptr);
 //~Window() override;
@@ -2197,5 +2263,4 @@ TEST(UT_Window_rehighlightPrintDoc, rehighlightPrintDoc_HighlightCpp_pass)
     doc->deleteLater();
     w->deleteLater();
 }
-
 
