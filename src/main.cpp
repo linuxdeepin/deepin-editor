@@ -99,6 +99,7 @@ int main(int argc, char *argv[])
 #endif
 
         StartManager *startManager = StartManager::instance();
+
         //埋点记录启动数据
         QJsonObject objStartEvent{
             {"tid", Eventlogutils::StartUp},
