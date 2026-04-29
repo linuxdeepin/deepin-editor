@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -642,7 +642,7 @@ void Window::addTab(const QString &filepath, bool activeTab)
         QFile::Permissions permissions = file.permissions();
         bool bIsRead = (permissions & QFile::ReadUser || permissions & QFile::ReadOwner || permissions & QFile::ReadOther);
         if (fileInfo.exists() && !bIsRead) {
-            DMessageManager::instance()->sendMessage(m_editorWidget->currentWidget(), QIcon(":/images/warning.svg")
+            DMessageManager::instance()->sendMessage(this, QIcon(":/images/warning.svg")
                                                      , QString(tr("You do not have permission to open %1")).arg(filepath));
             return;
         }
