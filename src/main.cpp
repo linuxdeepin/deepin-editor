@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2024 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -99,6 +99,7 @@ int main(int argc, char *argv[])
 #endif
 
         StartManager *startManager = StartManager::instance();
+
         //埋点记录启动数据
         QJsonObject objStartEvent{
             {"tid", Eventlogutils::StartUp},
