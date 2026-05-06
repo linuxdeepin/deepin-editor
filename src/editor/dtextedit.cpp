@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -53,6 +53,12 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
+
+// 惯性滑动常量
+static const qreal MAX_INERTIAL_SPEED = 20.0;
+static const qreal MAX_INERTIAL_DURATION = 2000.0; // 限制最长惯性滑动时间为2秒
+static const qreal INERTIAL_SPEED_MULTIPLIER = 3.0; // 惯性速度放大倍数
+static const ulong MAX_IDLE_TIME = 50; // 最大停顿时间（毫秒），超过此值不触发惯性
 
 TextEdit::TextEdit(QWidget *parent)
     : DPlainTextEdit(parent),
@@ -6706,8 +6712,6 @@ void TextEdit::mousePressEvent(QMouseEvent *e)
 
 void TextEdit::mouseMoveEvent(QMouseEvent *e)
 {
-    static const qreal MAX_INERTIAL_SPEED = 10.0;
-
     if (Qt::MouseEventSynthesizedByQt == e->source())
     {
         m_endY = e->y();
@@ -6730,27 +6734,18 @@ void TextEdit::mouseMoveEvent(QMouseEvent *e)
         {
             QFont font = this->font();
 
-            /*开根号时数值越大衰减比例越大*/
+            /*实时跟随滑动*/
             qreal direction = diffYpos > 0 ? 1.0 : -1.0;
             slideGestureY(-direction * sqrt(abs(diffYpos)) / font.pointSize());
             qreal directionX = diffXpos > 0 ? 1.0 : -1.0;
             slideGestureX(-directionX * sqrt(abs(diffXpos)) / font.pointSize());
 
-            /*预算惯性滑动时间*/
-            m_stepSpeedY = static_cast<qreal>(diffYpos) / static_cast<qreal>(diffTimeY + 0.000001);
-            m_stepSpeedY = qBound(-MAX_INERTIAL_SPEED, m_stepSpeedY, MAX_INERTIAL_SPEED); // 限制速度在-10到10之间，避免速度过快导致滑动距离过长
-            durationY = sqrt(abs(m_stepSpeedY)) * 1000;
-            m_stepSpeedX = static_cast<qreal>(diffXpos) / static_cast<qreal>(diffTimeX + 0.000001);
-            m_stepSpeedX = qBound(-MAX_INERTIAL_SPEED, m_stepSpeedX, MAX_INERTIAL_SPEED); // 限制速度在-10到10之间，避免速度过快导致滑动距离过长
-            durationX = sqrt(abs(m_stepSpeedX)) * 1000;
-
-            /*预算惯性滑动距离,4.0为调优数值*/
-            m_stepSpeedY /= sqrt(font.pointSize() * 4.0);
-            changeY = m_stepSpeedY * sqrt(abs(m_stepSpeedY)) * 100;
-            m_stepSpeedX /= sqrt(font.pointSize() * 4.0);
-            changeX = m_stepSpeedX * sqrt(abs(m_stepSpeedX)) * 100;
-
-            // return true;
+            // 累加滑动距离和时间（用于计算整体速度，保留原始方向）
+            m_totalDistanceY += diffYpos;
+            m_totalDistanceX += diffXpos;
+            m_totalDurationY += diffTimeY;
+            m_totalDurationX += diffTimeX;
+            m_moveCount++;
         }
 
         if (m_gestureAction != GA_null)
@@ -6875,9 +6870,60 @@ void TextEdit::mouseReleaseEvent(QMouseEvent *e)
     //add for single refers to the sliding
     if (e->type() == QEvent::MouseButtonRelease && e->source() == Qt::MouseEventSynthesizedByQt) {
         if (m_gestureAction == GA_slide) {
+            // 检查最后一次移动到现在的时差，如果太长说明有停顿，不触发惯性
+            ulong timeSinceLastMove = e->timestamp() - m_lastMouseTimeY;
 
-            tweenX.startX(0, 0, changeX, durationX, std::bind(&TextEdit::slideGestureX, this, std::placeholders::_1));
-            tweenY.startY(0, 0, changeY, durationY, std::bind(&TextEdit::slideGestureY, this, std::placeholders::_1));
+            if (timeSinceLastMove < MAX_IDLE_TIME && m_moveCount > 0 && m_totalDurationY > 0 && m_totalDurationX > 0) {
+                QFont font = this->font();
+
+                // 计算Y轴惯性参数（速度已包含方向信息）
+                qreal avgSpeedY = static_cast<qreal>(m_totalDistanceY) / static_cast<qreal>(m_totalDurationY);
+                // 速度放大倍数以增强惯性效果
+                avgSpeedY *= INERTIAL_SPEED_MULTIPLIER;
+
+                // 限制速度范围
+                avgSpeedY = qBound(-MAX_INERTIAL_SPEED, avgSpeedY, MAX_INERTIAL_SPEED);
+
+                // 计算滑动时长
+                qreal durationY = sqrt(abs(avgSpeedY)) * 1000;
+                qreal originalDurationY = durationY;
+                durationY = qMin(durationY, MAX_INERTIAL_DURATION);
+
+                // 计算X轴惯性参数（速度已包含方向信息）
+                qreal avgSpeedX = static_cast<qreal>(m_totalDistanceX) / static_cast<qreal>(m_totalDurationX);
+                avgSpeedX = qBound(-MAX_INERTIAL_SPEED, avgSpeedX, MAX_INERTIAL_SPEED);
+
+                qreal durationX = sqrt(abs(avgSpeedX)) * 1000;
+                qreal originalDurationX = durationX;
+                durationX = qMin(durationX, MAX_INERTIAL_DURATION);
+
+                // 根据字体调整速度
+                qreal adjustedSpeedY = avgSpeedY / sqrt(font.pointSize() * 4.0);
+                qreal changeY = adjustedSpeedY * sqrt(abs(adjustedSpeedY)) * 100;
+                if (durationY < originalDurationY) {
+                    changeY *= (durationY / originalDurationY);
+                }
+
+                qreal adjustedSpeedX = avgSpeedX / sqrt(font.pointSize() * 4.0);
+                qreal changeX = adjustedSpeedX * sqrt(abs(adjustedSpeedX)) * 100;
+                if (durationX < originalDurationX) {
+                    changeX *= (durationX / originalDurationX);
+                }
+
+                // 日志：最终计算的惯性参数
+                qWarning() << "Inertial scroll started - Y: speed=" << avgSpeedY << "px/ms, duration=" << durationY << "ms, distance=" << changeY << "px | X: speed=" << avgSpeedX << "px/ms, duration=" << durationX << "ms, distance=" << changeX << "px";
+
+                // 启动惯性动画
+                tweenX.startX(0, 0, changeX, durationX, std::bind(&TextEdit::slideGestureX, this, std::placeholders::_1));
+                tweenY.startY(0, 0, changeY, durationY, std::bind(&TextEdit::slideGestureY, this, std::placeholders::_1));
+            }
+
+            // 重置累加变量
+            m_totalDistanceY = 0.0;
+            m_totalDistanceX = 0.0;
+            m_totalDurationY = 0;
+            m_totalDurationX = 0;
+            m_moveCount = 0;
         }
 
         m_gestureAction = GA_null;
