@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
+﻿// SPDX-FileCopyrightText: 2011 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -827,6 +827,13 @@ private:
     ulong m_lastMouseTimeY;
     qreal m_stepSpeedY = 0;
     qreal m_stepSpeedX = 0;
+
+    // 惯性滑动累加变量（用于计算整体滑动速度）
+    qreal m_totalDistanceY = {0.0};
+    qreal m_totalDistanceX = {0.0};
+    ulong m_totalDurationY = {0};
+    ulong m_totalDurationX = {0};
+    int m_moveCount = {0};
     bool m_bIsDoubleClick {false};
     bool m_bBeforeIsDoubleClick {false};
 
