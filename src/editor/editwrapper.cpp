@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -1312,6 +1312,8 @@ void EditWrapper::loadContent(const QByteArray &strContent)
                 QByteArray text = strContent.mid(InitContentPos, len - InitContentPos);
                 data = codec->toUnicode(text.constData(), text.size(), &state);
                 cursor.insertText(data);
+                // 第二次insertText会导致Qt内部跟随滚动，需重置视口到文档开头
+                m_pTextEdit->verticalScrollBar()->setValue(0);
                 inserted += (len - InitContentPos);
                 progress = (inserted * 1.0) / len * 100;
                 m_pBottomBar->setProgress(static_cast<int>(progress));
