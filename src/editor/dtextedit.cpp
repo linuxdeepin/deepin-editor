@@ -7547,7 +7547,9 @@ void TextEdit::resizeEvent(QResizeEvent *e)
     markAllKeywordInView();
 
     // 当前处于文档页面尾部时，缩放后保持焦点在文档页面尾部
-    if (e->oldSize().width() < e->size().width() && verticalScrollBar()->maximum() == verticalScrollBar()->value()) {
+    // maximum() > 0: 排除文档为空或尚未加载的情况（此时 max==val==0 恒成立）
+    if (e->oldSize().width() < e->size().width() && verticalScrollBar()->maximum() == verticalScrollBar()->value()
+            && verticalScrollBar()->maximum() > 0) {
         // 使用 QPointer 检查对象是否还存在
         QPointer<TextEdit> self(this);
         QTimer::singleShot(0, [self]() {
