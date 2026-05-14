@@ -1,3 +1,11 @@
+deepin-editor (6.5.50) unstable; urgency=medium
+
+  * chore: Update version to 6.5.50
+  * fix(perf): improve file opening performance with lazy loading
+  * wip: lazy tab restore for faster startup
+
+ -- zhanghongyuan <zhanghongyuan@uniontech.com>  Thu, 14 May 2026 16:26:09 +0800
+
 deepin-editor (6.5.49) unstable; urgency=medium
 
   * fix(editor): resolve tab bar jitter when adding new tabs
