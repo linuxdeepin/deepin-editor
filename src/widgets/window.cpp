@@ -1265,14 +1265,30 @@ void Window::openFile()
         } else {
             otherfiles.append(canonicalFile);
         }
-
-        //先添加支持的文件
-    }
-    foreach (QString var, supportfileNames) {
-        addTab(var, true);
     }
 
-    //后添加不支持文件　在最后编辑页面显示
+    // 使用懒加载机制：只立即加载并激活第一个支持的文件
+    // 其他支持的文件作为待加载标签页，用户点击时才加载内容
+    if (!supportfileNames.isEmpty()) {
+        // 第一个文件立即加载并激活
+        addTab(supportfileNames.first(), true);
+
+        // 剩余支持的文件使用懒加载
+        for (int i = 1; i < supportfileNames.size(); ++i) {
+            const QString &filepath = supportfileNames[i];
+            QFileInfo fileInfo(filepath);
+            PendingTabInfo pendingInfo;
+            pendingInfo.filepath = filepath;
+            pendingInfo.truePath = filepath;
+            pendingInfo.displayName = fileInfo.fileName();
+            pendingInfo.isTemFile = false;
+            pendingInfo.cursorPosition = -1;
+            addPendingTab(pendingInfo);
+        }
+    }
+
+    // 后添加不支持文件（在最后编辑页面显示）
+    // 不支持的文件无法懒加载，需要立即加载以显示错误提示
     foreach (QString var, otherfiles) {
         addTab(var, true);
     }
