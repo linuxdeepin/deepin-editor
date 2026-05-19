@@ -1,3 +1,9 @@
+deepin-editor (6.5.51) unstable; urgency=medium
+
+  * chore: bump version to 6.5.51
+
+ -- Wang Yu <wangyu@uniontech.com>  Tue, 19 May 2026 21:24:00 +0800
+
 deepin-editor (6.5.50) unstable; urgency=medium
 
   * chore: Update version to 6.5.50
