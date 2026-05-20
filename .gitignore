@@ -50,9 +50,11 @@ tasks/
 .claude/
 .cursorindexingignore
 .windsurfrules
+.trellis/
 .roo/
 .roomodes
 .specstory/
 .windsurf/src/resources/settings.json
 src/resources/settings.json
 obj-x86_64-linux-gnu/
+AGENTS.md

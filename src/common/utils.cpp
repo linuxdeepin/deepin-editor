@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2024 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -41,6 +41,52 @@ QT_BEGIN_NAMESPACE
 extern Q_WIDGETS_EXPORT void
 qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
 QT_END_NAMESPACE
+
+static const QStringList SupportedTextMimeTypes = {
+    "application/cmd",
+    "application/javascript",
+    "application/json",
+    "application/pkix-cert",
+    "application/octet-stream",
+    "application/sql",
+    "application/vnd.apple.mpegurl",
+    "application/vnd.nokia.qt.qmakeprofile",
+    "application/vnd.nokia.xml.qt.resource",
+    "application/x-desktop",
+    "application/x-designer",
+    "application/x-empty",
+    "application/x-msdos-program",
+    "application/x-pearl",
+    "application/x-php",
+    "application/x-shellscript",
+    "application/x-sh",
+    "application/x-theme",
+    "application/x-cue",
+    "application/x-csh",
+    "application/x-asp",
+    "application/x-subrip",
+    "application/x-text",
+    "application/x-trash",
+    "application/x-xbel",
+    "application/x-yaml",
+    "application/x-pem-key",
+    "application/xml",
+    "application/yaml",
+    "application/x-zerosize",
+    "image/svg+xml",
+    "application/x-perl",
+    "application/x-ruby",
+    "application/x-mpegURL",
+    "application/x-wine-extension-ini",
+    "model/vrml",
+    "application/pkix-cert+pem",
+    "application/x-pak",
+    "application/x-code-workspace",
+    "application/toml",
+    "audio/x-mod",
+    "application/pkix-attr-cert",
+    "application/x-x509-ca-cert"
+};
 
 QString Utils::m_systemLanguage;
 
@@ -616,7 +662,8 @@ QVariantMap Utils::getThemeMapFromPath(const QString &filepath)
 bool Utils::isMimeTypeSupport(const QString &filepath)
 {
     qDebug() << "Enter isMimeTypeSupport, filepath:" << filepath;
-    QString mimeType = QMimeDatabase().mimeTypeForFile(filepath, QMimeDatabase::MatchMode::MatchContent).name();
+    QMimeType mime = QMimeDatabase().mimeTypeForFile(filepath, QMimeDatabase::MatchMode::MatchContent);
+    QString mimeType = mime.name();
     qDebug() << "mimeType:" << mimeType;
     if (mimeType.startsWith("text/")) {
         qDebug() << "mimeType starts with text/";
@@ -627,55 +674,21 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
         qDebug() << "filepath ends with pub";
         return true;
     }
-    // Please check full mime type list from: https://www.freeformatter.com/mime-types-list.html
-    QStringList textMimeTypes;
-    textMimeTypes << "application/cmd"
-                  << "application/javascript"
-                  << "application/json"
-                  << "application/pkix-cert"
-                  << "application/octet-stream"
-                  << "application/sql"
-                  << "application/vnd.apple.mpegurl"
-                  << "application/vnd.nokia.qt.qmakeprofile"
-                  << "application/vnd.nokia.xml.qt.resource"
-                  << "application/x-desktop"
-                  << "application/x-designer"
-                  << "application/x-empty"
-                  << "application/x-msdos-program"
-                  << "application/x-pearl"
-                  << "application/x-php"
-                  << "application/x-shellscript"
-                  << "application/x-sh"
-                  << "application/x-theme"
-                  << "application/x-cue"
-                  << "application/x-csh"
-                  << "application/x-asp"
-                  << "application/x-subrip"
-                  << "application/x-text"
-                  << "application/x-trash"
-                  << "application/x-xbel"
-                  << "application/x-yaml"
-                  << "application/x-pem-key"
-                  << "application/xml"
-                  << "application/yaml"
-                  << "application/x-zerosize"
-                  << "image/svg+xml"
-                  << "application/x-perl"
-                  << "application/x-ruby"
-                  << "application/x-mpegURL"
-                  << "application/x-wine-extension-ini"
-                  << "model/vrml"
-                  << "application/pkix-cert+pem"
-                  << "application/x-pak"
-                  << "application/x-code-workspace"
-                  << "application/toml"
-                  << "audio/x-mod"
-                  << "application/pkix-attr-cert"
-                  << "application/x-x509-ca-cert";
 
-    if (textMimeTypes.contains(mimeType)) {
+    if (SupportedTextMimeTypes.contains(mimeType)) {
         qDebug() << "mimeType contains textMimeTypes";
         return true;
+    }
+
+    // Check if the MIME type inherits from any supported type
+    // e.g. application/schema+json inherits from application/json
+    if (mime.isValid()) {
+        for (const QString &supported : SupportedTextMimeTypes) {
+            if (mime.inherits(supported)) {
+                qDebug() << "mimeType inherits from supported type:" << supported;
+                return true;
+            }
+        }
     }
 
     qDebug() << "mimeType does not contain textMimeTypes";
