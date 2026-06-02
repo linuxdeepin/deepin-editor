@@ -618,12 +618,13 @@ bool Window::checkBlockShutdown()
     qDebug() << "checkBlockShutdown called";
     //判断是否有未保存的tab项
     for (int i = 0; i < m_tabbar->count(); i++) {
-        if (m_tabbar->textAt(i).isNull()) {
-            qDebug() << "Tab name is null, return false";
+        QString tabText = m_tabbar->textAt(i);
+        if (tabText.isNull() || tabText.isEmpty()) {
+            qDebug() << "Tab name is null or empty, return false";
             return false;
         }
         //如果有未保存的tab项，return true阻塞系统关机
-        if (m_tabbar->textAt(i).at(0) == '*') {
+        if (tabText.at(0) == '*') {
             qDebug() << "There are unsaved tabs, return true";
             return true;
         }

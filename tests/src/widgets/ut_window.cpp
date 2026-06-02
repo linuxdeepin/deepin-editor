@@ -2108,8 +2108,10 @@ TEST(UT_Window_doprint, UT_Window_doPrintWithLargeDoc)
     EXPECT_NE(w, nullptr);
     w->deleteLater();
     editwrapper_texteditor->deleteLater();
-    w->m_printDoc->deleteLater();
-    w->m_pPreview->deleteLater();
+    if (w->m_printDoc)
+        w->m_printDoc->deleteLater();
+    if (w->m_pPreview)
+        w->m_pPreview->deleteLater();
     delete p;
     p = nullptr;
 }
@@ -2167,7 +2169,7 @@ TEST(UT_Window_dropEvent, UT_Window_dropEvent)
     QMimeData* data = new QMimeData;
     QList<QUrl> urls = {QUrl("http://")};
     data->setUrls(urls);
-    QDropEvent* d = new QDropEvent(QPointF(100,100), Qt::MoveAction,data ,Qt::LeftButton, Qt::ShiftModifier);
+    QDropEvent* d = new QDropEvent(QPointF(100,100), Qt::MoveAction,data ,Qt::LeftButton, Qt::ShiftModifier, QEvent::Drop);
 
     w->dropEvent(d);
 
