@@ -62,7 +62,13 @@ void FileLoadThread::run()
         try {
             qDebug() << "Reading remaining file content";
             // reads all remaining data from the file.
-            indata += file.read(file.size());
+            // 对于 /proc、/sys 等虚拟文件，file.size() 返回 0 但实际有内容，
+            // 需要使用 readAll() 来正确读取。
+            if (file.size() == 0) {
+                indata += file.readAll();
+            } else {
+                indata += file.read(file.size());
+            }
             file.close();
             qDebug() << "Total bytes read:" << indata.size();
         } catch (const std::exception &e) {
