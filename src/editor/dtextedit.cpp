@@ -24,6 +24,7 @@
 #include <KSyntaxHighlighting/theme.h>
 
 #include <QAbstractTextDocumentLayout>
+#include <QPointer>
 #include <QTextDocumentFragment>
 #include <QInputMethodEvent>
 #include <DDesktopServices>
@@ -110,7 +111,8 @@ TextEdit::TextEdit(QWidget *parent)
     connect(this->verticalScrollBar(), &QScrollBar::valueChanged, this, &TextEdit::slotValueChanged);
     connect(this, &QPlainTextEdit::textChanged, this, &TextEdit::updateLeftAreaWidget);
     connect(this, &QPlainTextEdit::textChanged, this, [this]() {
-        this->m_wrapper->UpdateBottomBarWordCnt(this->characterCount());
+        if (this->m_wrapper)
+            this->m_wrapper->UpdateBottomBarWordCnt(this->characterCount());
     });
 
     connect(this, &QPlainTextEdit::cursorPositionChanged, this, &TextEdit::cursorPositionChanged);
@@ -7086,15 +7088,23 @@ void TextEdit::slotSelectionChanged()
 void TextEdit::slotCanRedoChanged(bool bCanRedo)
 {
     Q_UNUSED(bCanRedo)
+    if (!m_wrapper)
+        return;
     bool isModified = this->m_wrapper->isTemFile() | (m_pUndoStack->canUndo() || m_pUndoStack->index() != m_lastSaveIndex);
-    this->m_wrapper->window()->updateModifyStatus(m_sFilePath, isModified);
+    Window *wnd = dynamic_cast<Window *>(m_wrapper->window());
+    if (wnd)
+        wnd->updateModifyStatus(m_sFilePath, isModified);
     this->m_wrapper->OnUpdateHighlighter();
 }
 
 void TextEdit::slotCanUndoChanged(bool bCanUndo)
 {
+    if (!m_wrapper)
+        return;
     bool isModified = this->m_wrapper->isTemFile() | (bCanUndo || m_pUndoStack->index() != m_lastSaveIndex);
-    this->m_wrapper->window()->updateModifyStatus(m_sFilePath, isModified);
+    Window *wnd = dynamic_cast<Window *>(m_wrapper->window());
+    if (wnd)
+        wnd->updateModifyStatus(m_sFilePath, isModified);
     this->m_wrapper->OnUpdateHighlighter();
 }
 
@@ -8560,12 +8570,15 @@ void TextEdit::resizeEvent(QResizeEvent *e)
 
     // 当前处于文档页面尾部时，缩放后保持焦点在文档页面尾部
     if (e->oldSize().width() < e->size().width() && verticalScrollBar()->maximum() == verticalScrollBar()->value()) {
-        QTimer::singleShot(0, [this]() {
+        QPointer<TextEdit> guard(this);
+        QTimer::singleShot(0, [guard]() {
+            if (!guard)
+                return;
             // 宽度变大时文档布局大小变更信号未触发，手动通知
-            auto docLayout = this->document()->documentLayout();
+            auto docLayout = guard->document()->documentLayout();
             Q_EMIT docLayout->documentSizeChanged(docLayout->documentSize());
 
-            verticalScrollBar()->setValue(verticalScrollBar()->maximum());
+            guard->verticalScrollBar()->setValue(guard->verticalScrollBar()->maximum());
         });
     }
 

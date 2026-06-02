@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -280,6 +280,12 @@ TEST(UT_Utils_detectEncode, UT_Utils_detectEncode_006)
 
 TEST(UT_Utils_detectEncode, UT_Utils_detectEncode_007)
 {
+    // Qt6 note: removed QString::size stub because Qt6's QStringView
+    // asserts "str || !len" when constructing from a null pointer with
+    // a non-zero length.  Instead we provide real XML data containing a
+    // Content-Language meta tag so the code path is exercised without
+    // relying on the dangerous size stub.
+
     Utils *utils = new Utils;
 
     typedef QTextCodec *(*fptr)(const QByteArray &, QTextCodec *);
@@ -288,44 +294,41 @@ TEST(UT_Utils_detectEncode, UT_Utils_detectEncode_007)
     Stub st;
     st.set(A_foo, stub_codecForUtfText);
 
-    Stub s1;
-    s1.set(ADDR(QMimeType, name), namestub);
-    namevalue = "application/xml";
-
-    Stub s2;
-    s2.set(ADDR(QString, size), retintstub);
-
     Stub s3;
     s3.set((QLocale::Script(QLocale::*)() const)ADDR(QLocale, script), scriptstub2);
-    scriptvalue2 = QLocale::SimplifiedChineseScript;
 
-    QByteArray array("-");
-    EXPECT_NE(utils->detectEncode(array).size(), 0);
+    // Provide real XML data with Content-Language header for each script
+    // so the proberType switching path is exercised naturally.
+    auto makeXml = [](const QString &lang) -> QByteArray {
+        return QString("<meta http-equiv=\"Content-Language\" content=\"%1\">").arg(lang).toLatin1();
+    };
+
+    scriptvalue2 = QLocale::SimplifiedChineseScript;
+    EXPECT_NE(utils->detectEncode(makeXml("zh-CN")).size(), 0);
 
     scriptvalue2 = QLocale::TraditionalChineseScript;
-    EXPECT_NE(utils->detectEncode(array).size(), 0);
+    EXPECT_NE(utils->detectEncode(makeXml("zh-TW")).size(), 0);
 
     scriptvalue2 = QLocale::CyrillicScript;
-    EXPECT_NE(utils->detectEncode(array).size(), 0);
+    EXPECT_NE(utils->detectEncode(makeXml("ru")).size(), 0);
 
     scriptvalue2 = QLocale::GreekScript;
-    EXPECT_NE(utils->detectEncode(array).size(), 0);
+    EXPECT_NE(utils->detectEncode(makeXml("el")).size(), 0);
 
     scriptvalue2 = QLocale::HebrewScript;
-    EXPECT_NE(utils->detectEncode(array).size(), 0);
+    EXPECT_NE(utils->detectEncode(makeXml("he")).size(), 0);
 
     scriptvalue2 = QLocale::JapaneseScript;
-    EXPECT_NE(utils->detectEncode(array).size(), 0);
+    EXPECT_NE(utils->detectEncode(makeXml("ja")).size(), 0);
 
     scriptvalue2 = QLocale::KoreanScript;
-    EXPECT_NE(utils->detectEncode(array).size(), 0);
+    EXPECT_NE(utils->detectEncode(makeXml("ko")).size(), 0);
 
     scriptvalue2 = QLocale::ThaiScript;
-    EXPECT_NE(utils->detectEncode(array).size(), 0);
+    EXPECT_NE(utils->detectEncode(makeXml("th")).size(), 0);
 
     scriptvalue2 = QLocale::AvestanScript;
-    EXPECT_NE(utils->detectEncode(array).size(), 0);
-
+    EXPECT_NE(utils->detectEncode(makeXml("av")).size(), 0);
 
     delete utils;
     utils = nullptr;

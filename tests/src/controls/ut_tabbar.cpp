@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -540,7 +540,7 @@ TEST(UT_Tabbar_mousePressEvent, UT_Tabbar_mousePressEvent)
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QMouseEvent* event = new QMouseEvent(QEvent::None, QPoint(), Qt::MidButton, Qt::MidButton, Qt::NoModifier);
 #else
-    QMouseEvent* event = new QMouseEvent(QEvent::None, QPoint(), Qt::MiddleButton, Qt::MiddleButton, Qt::NoModifier);
+    QMouseEvent* event = new QMouseEvent(QEvent::None, QPoint(), QPoint(), Qt::MiddleButton, Qt::MiddleButton, Qt::NoModifier);
 #endif
 
 
@@ -569,7 +569,7 @@ TEST(UT_Tabbar_dropEvent, UT_Tabbar_dropEvent)
     QPoint p;
     QMimeData *mimeData = new QMimeData;
     mimeData->setData("dedit/tabbar","test");
-    QDropEvent* event = new QDropEvent(QPointF(100,100),Qt::CopyAction,mimeData,Qt::LeftButton,Qt::NoModifier);
+    QDropEvent* event = new QDropEvent(QPointF(100,100),Qt::CopyAction,mimeData,Qt::LeftButton,Qt::NoModifier, QEvent::Drop);
 
 
     Window * window = new Window;

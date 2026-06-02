@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -1151,6 +1151,21 @@ void stub_updateModifyStatus(const QString &path, bool isModified)
 {
     Q_UNUSED(path);
     Q_UNUSED(isModified);
+}
+
+void stub_insertMultiTextEx(const QList<QPair<QTextCursor, QString>> &multiText)
+{
+    Q_UNUSED(multiText);
+}
+
+void stub_deleteMultiTextEx(const QList<QTextCursor> &multiText)
+{
+    Q_UNUSED(multiText);
+}
+
+void stub_slotCanUndoChanged(bool bCanUndo)
+{
+    Q_UNUSED(bCanUndo);
 }
 
 bool popRightMenu_001_canRedo_stub()
@@ -5052,7 +5067,7 @@ TEST_F(test_textedit, mousePressEvent)
     startManager->setWrapper(ee);
     QPoint a(1, 2);
     QPointF b(a);
-    QMouseEvent *e = new QMouseEvent(QMouseEvent::Type::Enter, b, Qt::MouseButton::LeftButton, Qt::MouseButton::LeftButton, Qt::KeyboardModifier::NoModifier);
+    QMouseEvent *e = new QMouseEvent(QMouseEvent::Type::Enter, b, b, Qt::MouseButton::LeftButton, Qt::MouseButton::LeftButton, Qt::KeyboardModifier::NoModifier);
     startManager->mousePressEvent(e);
 
     EXPECT_NE(ee->m_pTextEdit , nullptr);
@@ -5067,7 +5082,7 @@ TEST(UT_TextEdit_mousePressEvent, UT_TextEdit_mousePressEvent_002)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
-    QMouseEvent* e = new QMouseEvent(QEvent::MouseButtonPress,QPointF(20.0,20.0),Qt::RightButton,Qt::RightButton,Qt::AltModifier);
+    QMouseEvent* e = new QMouseEvent(QEvent::MouseButtonPress,QPointF(20.0,20.0),QPointF(20.0,20.0),Qt::RightButton,Qt::RightButton,Qt::AltModifier);
 
     Stub s1;
     s1.set(ADDR(QMouseEvent,source),retintstub);
@@ -5099,7 +5114,7 @@ TEST_F(test_textedit, mouseMoveEvent)
     startManager->setWrapper(ee);
     QPoint a(1, 2);
     QPointF b(a);
-    QMouseEvent *e = new QMouseEvent(QMouseEvent::Type::Enter, b, Qt::MouseButton::LeftButton, Qt::MouseButton::LeftButton, Qt::KeyboardModifier::NoModifier);
+    QMouseEvent *e = new QMouseEvent(QMouseEvent::Type::Enter, b, b, Qt::MouseButton::LeftButton, Qt::MouseButton::LeftButton, Qt::KeyboardModifier::NoModifier);
     startManager->mouseMoveEvent(e);
 
     EXPECT_NE(ee->m_pTextEdit , nullptr);
@@ -5114,7 +5129,7 @@ TEST(UT_TextEdit_mouseMoveEvent, UT_TextEdit_mouseMoveEvent_002)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
-    QMouseEvent* e = new QMouseEvent(QEvent::MouseMove,QPointF(20.0,20.0),Qt::LeftButton,Qt::LeftButton,Qt::AltModifier);
+    QMouseEvent* e = new QMouseEvent(QEvent::MouseMove,QPointF(20.0,20.0),QPointF(20.0,20.0),Qt::LeftButton,Qt::LeftButton,Qt::AltModifier);
 
     Stub s1;
     s1.set(ADDR(QMouseEvent,source),retintstub);
@@ -5145,7 +5160,7 @@ TEST_F(test_textedit, mouseReleaseEvent)
     startManager->setWrapper(ee);
     QPoint a(1, 2);
     QPointF b(a);
-    QMouseEvent *e = new QMouseEvent(QMouseEvent::Type::Enter, b, Qt::MouseButton::LeftButton, Qt::MouseButton::LeftButton, Qt::KeyboardModifier::NoModifier);
+    QMouseEvent *e = new QMouseEvent(QMouseEvent::Type::Enter, b, b, Qt::MouseButton::LeftButton, Qt::MouseButton::LeftButton, Qt::KeyboardModifier::NoModifier);
     startManager->mouseReleaseEvent(e);
 
     EXPECT_NE(ee->m_pTextEdit , nullptr);
@@ -5160,7 +5175,7 @@ TEST(UT_TextEdit_mouseReleaseEvent, UT_TextEdit_mouseReleaseEvent_002)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
-    QMouseEvent* e = new QMouseEvent(QEvent::MouseButtonRelease,QPointF(20.0,20.0),Qt::LeftButton,Qt::LeftButton,Qt::NoModifier);
+    QMouseEvent* e = new QMouseEvent(QEvent::MouseButtonRelease,QPointF(20.0,20.0),QPointF(20.0,20.0),Qt::LeftButton,Qt::LeftButton,Qt::NoModifier);
 
     Stub s1;
     s1.set(ADDR(QMouseEvent,source),retintstub);
@@ -5228,7 +5243,7 @@ TEST_F(test_textedit, contextMenuEvent)
     startManager->setWrapper(ee);
     Stub stub;
     stub.set((QAction * (QMenu::*)(const QPoint &, QAction *)) ADDR(QMenu, exec), stub_exec);
-    QContextMenuEvent *e = new QContextMenuEvent(QContextMenuEvent::Reason::Keyboard, b);
+    QContextMenuEvent *e = new QContextMenuEvent(QContextMenuEvent::Reason::Keyboard, b, b);
     //startManager->contextMenuEvent(e);
 
     EXPECT_NE(ee->m_pTextEdit , nullptr);
@@ -6111,6 +6126,8 @@ TEST(UT_TextEdit_setComment, UT_TextEdit_setComment_002)
     s7.set(ADDR(TextEdit,deleteTextEx),rettruestub);
     Stub s8;
     s8.set(ADDR(TextEdit,insertTextEx),rettruestub);
+    Stub s9;
+    s9.set(ADDR(TextEdit,insertMultiTextEx),stub_insertMultiTextEx);
 
 
     intvalue = -1000;
@@ -6147,6 +6164,8 @@ TEST(UT_TextEdit_setComment, UT_TextEdit_setComment_003)
     s9.set(ADDR(TextEdit,deleteTextEx),rettruestub);
     Stub s10;
     s10.set(ADDR(TextEdit,insertTextEx),rettruestub);
+    Stub s11;
+    s11.set(ADDR(TextEdit,insertMultiTextEx),stub_insertMultiTextEx);
 
 
     intvalue = -1000;
@@ -6183,6 +6202,8 @@ TEST(UT_TextEdit_setComment, UT_TextEdit_setComment_004)
     s9.set(ADDR(TextEdit,deleteTextEx),rettruestub);
     Stub s10;
     s10.set(ADDR(TextEdit,insertTextEx),rettruestub);
+    Stub s11;
+    s11.set(ADDR(TextEdit,insertMultiTextEx),stub_insertMultiTextEx);
 
 
     intvalue = -1000;
@@ -6226,6 +6247,8 @@ TEST(UT_Textedit_removeComment, UT_Textedit_removeComment_002)
     s6.set(ADDR(TextEdit,deleteTextEx),rettruestub);
     Stub s7;
     s7.set(ADDR(TextEdit,insertTextEx),rettruestub);
+    Stub s8;
+    s8.set(ADDR(TextEdit,deleteMultiTextEx),stub_deleteMultiTextEx);
 
     intvalue = -1000;
     edit->removeComment();
@@ -6255,6 +6278,8 @@ TEST(UT_Textedit_removeComment, UT_Textedit_removeComment_003)
     s6.set(ADDR(TextEdit,deleteTextEx),rettruestub);
     Stub s7;
     s7.set(ADDR(TextEdit,insertTextEx),rettruestub);
+    Stub s8;
+    s8.set(ADDR(TextEdit,deleteMultiTextEx),stub_deleteMultiTextEx);
 
     intvalue = -1000;
     edit->removeComment();
@@ -8365,7 +8390,7 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_002)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
-    QMouseEvent* e = new QMouseEvent(QEvent::MouseButtonPress,QPointF(20.0,20.0),Qt::RightButton,Qt::RightButton,Qt::NoModifier);
+    QMouseEvent* e = new QMouseEvent(QEvent::MouseButtonPress,QPointF(20.0,20.0),QPointF(20.0,20.0),Qt::RightButton,Qt::RightButton,Qt::NoModifier);
 
     edit->m_rightMenu = new QMenu;
     // QAction *exec(const QPoint &pos, QAction *at = nullptr);
@@ -8390,7 +8415,7 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_003)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
-    QMouseEvent* e = new QMouseEvent(QEvent::MouseButtonPress,QPointF(20.0,20.0),Qt::LeftButton,Qt::LeftButton,Qt::NoModifier);
+    QMouseEvent* e = new QMouseEvent(QEvent::MouseButtonPress,QPointF(20.0,20.0),QPointF(20.0,20.0),Qt::LeftButton,Qt::LeftButton,Qt::NoModifier);
 
     edit->m_rightMenu = new QMenu;
     // QAction *exec(const QPoint &pos, QAction *at = nullptr);
@@ -8433,7 +8458,7 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_004)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
-    QMouseEvent* e = new QMouseEvent(QEvent::MouseButtonPress,QPointF(20.0,20.0),Qt::LeftButton,Qt::LeftButton,Qt::NoModifier);
+    QMouseEvent* e = new QMouseEvent(QEvent::MouseButtonPress,QPointF(20.0,20.0),QPointF(20.0,20.0),Qt::LeftButton,Qt::LeftButton,Qt::NoModifier);
 
     edit->m_rightMenu = new QMenu;
     // QAction *exec(const QPoint &pos, QAction *at = nullptr);
@@ -8478,7 +8503,7 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_005)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
-    QMouseEvent* e = new QMouseEvent(QEvent::MouseButtonPress,QPointF(20.0,20.0),Qt::RightButton,Qt::RightButton,Qt::NoModifier);
+    QMouseEvent* e = new QMouseEvent(QEvent::MouseButtonPress,QPointF(20.0,20.0),QPointF(20.0,20.0),Qt::RightButton,Qt::RightButton,Qt::NoModifier);
 
     edit->m_rightMenu = new QMenu;
     // QAction *exec(const QPoint &pos, QAction *at = nullptr);
@@ -8511,7 +8536,7 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_006)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
-    QHoverEvent* e = new QHoverEvent(QEvent::HoverMove,QPointF(20.0,20.0),QPointF(30.0,30.0),Qt::NoModifier);
+    QHoverEvent* e = new QHoverEvent(QEvent::HoverMove,QPointF(20.0,20.0),QPointF(30.0,30.0));
 
     edit->m_rightMenu = new QMenu;
     // QAction *exec(const QPoint &pos, QAction *at = nullptr);
@@ -8547,7 +8572,7 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_007)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
-    QHoverEvent* e = new QHoverEvent(QEvent::HoverMove,QPointF(20.0,20.0),QPointF(30.0,30.0),Qt::NoModifier);
+    QHoverEvent* e = new QHoverEvent(QEvent::HoverMove,QPointF(20.0,20.0),QPointF(30.0,30.0));
 
     edit->m_rightMenu = new QMenu;
     // QAction *exec(const QPoint &pos, QAction *at = nullptr);
@@ -8584,7 +8609,7 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_008)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
-    QHoverEvent* e = new QHoverEvent(QEvent::HoverLeave,QPointF(20.0,20.0),QPointF(30.0,30.0),Qt::NoModifier);
+    QHoverEvent* e = new QHoverEvent(QEvent::HoverLeave,QPointF(20.0,20.0),QPointF(30.0,30.0));
 
     edit->m_rightMenu = new QMenu;
     // QAction *exec(const QPoint &pos, QAction *at = nullptr);
@@ -8621,7 +8646,7 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_009)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
-    QHoverEvent* e = new QHoverEvent(QEvent::HoverLeave,QPointF(20.0,20.0),QPointF(30.0,30.0),Qt::NoModifier);
+    QHoverEvent* e = new QHoverEvent(QEvent::HoverLeave,QPointF(20.0,20.0),QPointF(30.0,30.0));
 
     edit->m_rightMenu = new QMenu;
     // QAction *exec(const QPoint &pos, QAction *at = nullptr);
@@ -9714,6 +9739,9 @@ TEST(UT_Textedit_MidButtonInsertText, onTextContentChanged_MidButtonInsertText_P
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+
+    Stub s1;
+    s1.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
 
     QString sourceText("123456789");
     edit->setPlainText(sourceText);

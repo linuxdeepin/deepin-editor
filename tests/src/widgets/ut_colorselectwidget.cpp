@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -82,7 +82,7 @@ TEST_F(test_colorlabel, checkMousePressEvent)
     // 场景1: LeftButtonPress
     auto colorLabel = new ColorLabel(QColor("#FF0000"));
     QSignalSpy spy(colorLabel, &ColorLabel::sigColorClicked);
-    QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonPress, QPointF(),
+    QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonPress, QPointF(), QPointF(),
                                          Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     colorLabel->mousePressEvent(event);
     EXPECT_EQ(spy.count(), 1);
@@ -97,7 +97,7 @@ TEST_F(test_colorlabel, checkMousePressEvent)
     // 场景2: 非LeftButtonPress
     colorLabel = new ColorLabel(QColor("#FF0000"));
     QSignalSpy spy2(colorLabel, &ColorLabel::sigColorClicked);
-    event = new QMouseEvent(QEvent::MouseButtonPress, QPointF(),
+    event = new QMouseEvent(QEvent::MouseButtonPress, QPointF(), QPointF(),
                             Qt::RightButton, Qt::RightButton, Qt::NoModifier);
     colorLabel->mousePressEvent(event);
     EXPECT_EQ(spy2.count(), 0);
@@ -167,7 +167,7 @@ TEST_F(test_colorselectwidget, checkEventFilter)
 
     // 场景2: 过滤m_pLabel的LeftButton事件
     ColorSelectWdg *colorSelctWidget = new ColorSelectWdg("this is a test");
-    QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonPress, QPointF(),
+    QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonPress, QPointF(), QPointF(),
                                          Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     bool result = colorSelctWidget->eventFilter(colorSelctWidget->m_pLabel, event);
     EXPECT_TRUE(result);
@@ -179,7 +179,7 @@ TEST_F(test_colorselectwidget, checkEventFilter)
 
     // 场景2: 过滤非m_pLabel的LeftButton事件
     colorSelctWidget = new ColorSelectWdg("this is a test");
-    event = new QMouseEvent(QEvent::MouseButtonPress, QPointF(),
+    event = new QMouseEvent(QEvent::MouseButtonPress, QPointF(), QPointF(),
                             Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     result = colorSelctWidget->eventFilter(colorSelctWidget->m_pButton, event);
     EXPECT_FALSE(result);
@@ -191,7 +191,7 @@ TEST_F(test_colorselectwidget, checkEventFilter)
 
     // 场景3: 过滤m_pLabel的非LeftButton事件
     colorSelctWidget = new ColorSelectWdg("this is a test");
-    event = new QMouseEvent(QEvent::MouseButtonPress, QPointF(),
+    event = new QMouseEvent(QEvent::MouseButtonPress, QPointF(), QPointF(),
                             Qt::RightButton, Qt::RightButton, Qt::NoModifier);
     result = colorSelctWidget->eventFilter(colorSelctWidget->m_pLabel, event);
     EXPECT_FALSE(result);
