@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -66,7 +66,7 @@ protected:
     void insertFromMimeDataOnDragEnter(int index, const QMimeData *source);
     void insertFromMimeData(int index, const QMimeData *source);
     bool canInsertFromMimeData(int index, const QMimeData *source) const;
-    bool eventFilter(QObject *, QEvent *event);
+    bool eventFilter(QObject *watched, QEvent *event);
 
     QSize tabSizeHint(int index) const;
     QSize minimumTabSizeHint(int index) const;
