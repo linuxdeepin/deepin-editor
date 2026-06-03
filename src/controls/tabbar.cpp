@@ -627,12 +627,12 @@ void Tabbar::handleDragActionChanged(Qt::DropAction action)
     qDebug() << "Exit handleDragActionChanged";
 }
 
-bool Tabbar::eventFilter(QObject *object, QEvent *event)
+bool Tabbar::eventFilter(QObject *watched, QEvent *event)
 {
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     // Only handle ApplicationFontChange for this widget itself,
     // not for every widget in the application.
-    if (event->type() == QEvent::ApplicationFontChange && object == this) {
+    if (event->type() == QEvent::ApplicationFontChange && watched == this) {
         if (this->font() != qApp->font()) {
             setFont(qApp->font());
         }
@@ -648,6 +648,11 @@ bool Tabbar::eventFilter(QObject *object, QEvent *event)
     }
 #endif
     if (event->type() == QEvent::MouseButtonPress) {
+
+        if (watched != this) {
+            return false;
+        }
+
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
 
         if (mouseEvent->button() == Qt::RightButton) {
