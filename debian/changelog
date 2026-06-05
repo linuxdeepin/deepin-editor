@@ -1,3 +1,10 @@
+deepin-editor (6.5.54) unstable; urgency=medium
+
+  * chore: Update version to 6.5.54
+  * chore: only build tests in Debug mode
+
+ -- zhanghongyuan <zhanghongyuan@uniontech.com>  Fri, 05 Jun 2026 14:04:46 +0800
+
 deepin-editor (6.5.53) unstable; urgency=medium
 
   * fix: use readAll() for virtual files with zero reported size
