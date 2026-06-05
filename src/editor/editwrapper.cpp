@@ -180,7 +180,7 @@ bool EditWrapper::getFileLoading()
 void EditWrapper::openFile(const QString &filepath, QString qstrTruePath, bool bIsTemFile)
 {
     qDebug() << "Opening file:" << filepath << "Real path:" << qstrTruePath << "Is temp:" << bIsTemFile;
-    
+
     m_bIsTemFile = bIsTemFile;
     // update file path.
     updatePath(filepath, qstrTruePath);
@@ -221,7 +221,7 @@ bool EditWrapper::readFile(QByteArray encode)
     qDebug() << "Reading file with encoding:" << encode;
     QString filePath = m_pTextEdit->getTruePath();
     qDebug() << "Reading file:" << filePath << "with encode:" << encode;
-    
+
     QFile file(filePath);
     if (file.open(QIODevice::ReadOnly)) {
         qDebug() << "File opened successfully";
@@ -263,7 +263,7 @@ bool EditWrapper::readFile(QByteArray encode)
 bool EditWrapper::saveAsFile(const QString &newFilePath, const QByteArray &encodeName)
 {
     qDebug() << "Attempting to save file to:" << newFilePath << "with encoding:" << encodeName;
-    
+
     // Use TextFileSaver for safe file saving
     TextFileSaver saver(m_pTextEdit->document());
     saver.setFilePath(newFilePath);
@@ -339,7 +339,7 @@ bool EditWrapper::saveAsFile()
 bool EditWrapper::reloadFileEncode(QByteArray encode)
 {
     qDebug() << "Reloading file with new encoding:" << encode.size();
-    
+
     //切换编码相同不重写加载
     if (m_sCurEncode == encode) {
         qDebug() << "Encoding unchanged, skipping reload";
@@ -971,7 +971,7 @@ void EditWrapper::handleFilePreProcess(const QByteArray &encode, const QByteArra
 void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteArray &content, bool error)
 {
     qDebug() << "File load finished. Encoding:" << encode << "Error:" << error << "Preprocessed:" << m_bHasPreProcess;
-    
+
     // 判断是否预加载，若已预加载，则无需重新初始化
     if (!m_bHasPreProcess) {
         qDebug() << "Performing initial file load initialization";
@@ -1094,7 +1094,12 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
     // 提示读取错误信息
     if (error) {
         qDebug() << "EditWrapper handleFileLoadFinished, error is true, onReadAllocError()";
-        onReadAllocError();
+        // 如果文件不存在，静默处理（可能是新建文件），不显示错误提示
+        if (!QFileInfo::exists(m_pTextEdit->getTruePath())) {
+            qDebug() << "File does not exist, skipping error notification (new file scenario)";
+        } else {
+            onReadAllocError();
+        }
     }
     qDebug() << "EditWrapper handleFileLoadFinished, exit";
 }
@@ -1309,15 +1314,15 @@ void EditWrapper::updateModifyStatus(bool bModified)
         qDebug() << "Skipping modify status update during file loading";
         return;
     }
-    
+
     QString filePath = m_pTextEdit->getFilePath();
     qDebug() << "Updating modify status for:" << filePath << "New status:" << bModified;
-    
+
     if (!bModified) {
         qDebug() << "Updating save index for:" << filePath;
         m_pTextEdit->updateSaveIndex();
     }
-    
+
     m_pTextEdit->document()->setModified(bModified);
     Window *pWindow = static_cast<Window *>(QWidget::window());
     pWindow->updateModifyStatus(filePath, bModified);
