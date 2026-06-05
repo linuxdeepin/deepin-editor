@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -10,6 +10,7 @@
 #include <QUrl>
 #include <QDir>
 #include <QDebug>
+#include "utils.h"
 
 class UrlInfo
 {
@@ -37,7 +38,7 @@ public:
         // assume a local file and just convert it to an url.
         if (!url.isValid()) {
             // create absolute file path, we will e.g. pass this over dbus to other processes
-            url = QUrl::fromLocalFile(QFileInfo(path).canonicalFilePath());
+            url = QUrl::fromLocalFile(Utils::getFilePath(path));
         }
     }
 

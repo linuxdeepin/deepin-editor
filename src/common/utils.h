@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2024 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -86,6 +86,15 @@ public:
     static bool fileExists(const QString &path);
     static bool fileIsWritable(const QString &path);
     static bool fileIsHome(const QString &path);
+    /**
+     * @brief getFilePath 获取文件路径
+     * @param filePath 原始文件路径
+     * @return 文件路径
+     * @note 优先使用 canonicalFilePath()（解析符号链接），当文件不存在时
+     *       返回空字符串，此时使用 absoluteFilePath() 作为后备方案。
+     *       确保即使是新建文件，标签页也能正确显示和关闭。
+     */
+    static QString getFilePath(const QString &filePath);
     static void passInputEvent(int wid);
     static QPixmap dropShadow(const QPixmap &source, qreal radius, const QColor &color, const QPoint &offset);
     static QImage dropShadow(const QPixmap &px, qreal radius, const QColor &color);

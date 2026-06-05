@@ -522,9 +522,9 @@ void StartManager::openFilesInWindow(QStringList files)
     } else {
         qDebug() << "Processing files to open in window:" << files;
         for (const QString &file : files) {
-            QString canonicalFile = QFileInfo(file).canonicalFilePath();
-            qDebug() << "Processing file:" << file << "canonical path:" << canonicalFile;
-            FileTabInfo info = getFileTabInfo(canonicalFile);
+            QString resolvedFile = Utils::getFilePath(file);
+            qDebug() << "Processing file:" << file << "resolved path:" << resolvedFile;
+            FileTabInfo info = getFileTabInfo(resolvedFile);
 
             // Open exist tab if file has opened.
             if (info.windowIndex != -1) {
@@ -536,8 +536,8 @@ void StartManager::openFilesInWindow(QStringList files)
                 qDebug() << "File not open, creating new window and tab";
                 Window *window = createWindow();
                 window->showCenterWindow(true);
-                window->addTab(canonicalFile);
-                qDebug() << "Added tab for file:" << canonicalFile;
+                window->addTab(resolvedFile);
+                qDebug() << "Added tab for file:" << resolvedFile;
             }
         }
     }
@@ -594,16 +594,16 @@ void StartManager::openFilesInTab(QStringList files)
     } else {
         qDebug() << "Processing" << files.size() << "files to open in tabs";
         for (const QString &file : files) {
-            QString canonicalFile = QFileInfo(file).canonicalFilePath();
-            qDebug() << "Processing file:" << file << "canonical path:" << canonicalFile;
-            
-            if (!checkPath(canonicalFile)) {
-                qDebug() << "File already open, skipping:" << canonicalFile;
+            QString resolvedFile = Utils::getFilePath(file);
+            qDebug() << "Processing file:" << file << "resolved path:" << resolvedFile;
+
+            if (!checkPath(resolvedFile)) {
+                qDebug() << "File already open, skipping:" << resolvedFile;
                 // 存在已打开文件时，进行下一文件判断
                 continue;
             }
 
-            FileTabInfo info = getFileTabInfo(canonicalFile);
+            FileTabInfo info = getFileTabInfo(resolvedFile);
 
             // Open exist tab if file has opened.
             if (info.windowIndex != -1) {
@@ -616,17 +616,17 @@ void StartManager::openFilesInTab(QStringList files)
                 Window *window = createWindow(true);
                 window->showCenterWindow(true);
                 QTimer::singleShot(50, [ = ] {
-                    qDebug() << "Delayed file opening for:" << canonicalFile;
+                    qDebug() << "Delayed file opening for:" << resolvedFile;
                     recoverFile(window);
-                    window->addTab(canonicalFile);
+                    window->addTab(resolvedFile);
                 });
             }
             // Open file tab in first window of window list.
             else {
                 qDebug() << "Opening file in first existing window";
                 Window *window = m_windows[0];
-                window->addTab(canonicalFile);
-                qDebug() << "Added tab for file:" << canonicalFile << "in existing window";
+                window->addTab(resolvedFile);
+                qDebug() << "Added tab for file:" << resolvedFile << "in existing window";
                 //window->setWindowState(Qt::WindowActive);
                 //通过dbus接口从任务栏激活窗口
                 if (!Q_LIKELY(Utils::activeWindowFromDock(window->winId()))) {

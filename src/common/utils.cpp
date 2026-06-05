@@ -476,6 +476,18 @@ bool Utils::fileExists(const QString &path)
     return exists;
 }
 
+QString Utils::getFilePath(const QString &filePath)
+{
+    QFileInfo info(filePath);
+    QString canonicalPath = info.canonicalFilePath();
+    // canonicalFilePath() returns empty string for non-existent files
+    // Use absoluteFilePath() as fallback to support creating new files
+    if (canonicalPath.isEmpty()) {
+        return info.absoluteFilePath();
+    }
+    return canonicalPath;
+}
+
 bool Utils::fileIsWritable(const QString &path)
 {
     qDebug() << "Enter fileIsWritable, path:" << path;
@@ -1430,7 +1442,7 @@ bool Utils::isMemorySufficientForOperation(OperationType operationType, qlonglon
                 return false;
             }
             break;
-            
+
         case OperationType::CopyOperation: {
             // Copy operation: Estimated memory consumption = data size * factor
             qlonglong estimatedMemoryNeeded = operationDataSize * COPY_CONSUME_MEMORY_MULTIPLE;
@@ -1440,7 +1452,7 @@ bool Utils::isMemorySufficientForOperation(OperationType operationType, qlonglon
             }
             break;
         }
-            
+
         case OperationType::PasteOperation: {
             // Paste operation: Estimated memory consumption = paste data size * factor
             qlonglong estimatedMemoryNeededForPaste = operationDataSize * PASTE_CONSUME_MEMORY_MULTIPLE;
