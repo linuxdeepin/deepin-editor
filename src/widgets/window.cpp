@@ -3097,6 +3097,9 @@ int Window::getBlankFileIndex()
         }
     }
     std::sort(tabIndexes.begin(), tabIndexes.end());
+    // Remove duplicates to avoid incorrect index calculation when tabs with
+    // the same "Untitled N" name are dragged between windows.
+    tabIndexes.erase(std::unique(tabIndexes.begin(), tabIndexes.end()), tabIndexes.end());
 
     // Return 1 if no blank file exists.
     if (tabIndexes.size() == 0) {
