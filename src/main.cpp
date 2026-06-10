@@ -25,11 +25,24 @@
 #include <QDebug>
 
 #include <iostream>
+#include <QLoggingCategory>
 
 DWIDGET_USE_NAMESPACE
 
+static const char *DEFAULT_LOGGING_RULES = "*.debug=false";
+
+static void initLoggingRules()
+{
+    QByteArray rules = qgetenv("QT_LOGGING_RULES");
+    if (rules.isEmpty()) {
+        QLoggingCategory::setFilterRules(DEFAULT_LOGGING_RULES);
+    }
+}
+
 int main(int argc, char *argv[])
 {
+    initLoggingRules();
+
     qDebug() << "Application starting with arguments:" << QCoreApplication::arguments();
     DCORE_USE_NAMESPACE
     PerformanceMonitor::initializeAppStart();
