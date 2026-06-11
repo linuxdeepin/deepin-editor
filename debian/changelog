@@ -1,3 +1,9 @@
+deepin-editor (6.5.55) unstable; urgency=medium
+
+  * fix(editor): deduplicate blank tab indexes to fix incorrect new document naming
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Thu, 11 Jun 2026 19:38:46 +0800
+
 deepin-editor (6.5.54) unstable; urgency=medium
 
   * chore: Update version to 6.5.54
