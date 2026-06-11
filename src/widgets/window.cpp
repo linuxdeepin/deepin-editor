@@ -1199,8 +1199,10 @@ void Window::removeWrapper(const QString &filePath, bool isDelete)
         }
     }
 
-    // Exit window after close all tabs.
-    if (m_wrappers.isEmpty()) {
+    // Exit window after close all tabs (including pending and blank tabs).
+    // Pending tabs are kept in m_pendingTabs, blank tabs are managed by the tabbar.
+    // Only close the window when the tabbar has no tabs left.
+    if (m_wrappers.isEmpty() && m_tabbar->count() == 0) {
         close();
         qInfo() << "after close";
     }

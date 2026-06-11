@@ -805,8 +805,8 @@ void StartManager::slotCloseWindow()
         // 导致被附加到上一文本编辑器进程
         QDBusConnection::sessionBus().unregisterService("com.deepin.Editor");
 
-        QTimer::singleShot(1000, []() {
-             StartManager::instance()->delayMallocTrim();
+        QTimer::singleShot(1000, [this]() {
+            this->delayMallocTrim();
             QApplication::quit();
         });
 
