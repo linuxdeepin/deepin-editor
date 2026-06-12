@@ -1,3 +1,11 @@
+deepin-editor (6.5.55) unstable; urgency=medium
+
+  * chore: Update version to 6.5.55
+  * fix(editor): fix window close logic and lambda capture
+  * fix(editor): deduplicate blank tab indexes to fix incorrect new document naming
+
+ -- zhanghongyuan <zhanghongyuan@uniontech.com>  Fri, 12 Jun 2026 09:02:18 +0800
+
 deepin-editor (6.5.54) unstable; urgency=medium
 
   * chore: Update version to 6.5.54
