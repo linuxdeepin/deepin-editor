@@ -1159,7 +1159,7 @@
         <location filename="../src/editor/dtextedit.cpp" line="3333"/>
         <location filename="../src/editor/dtextedit.cpp" line="3335"/>
         <source>Press ALT and click lines to edit in column mode</source>
-        <translation>Presiona ALT y haz clic en las líneas para editar en el modo de columna</translation>
+        <translation>Presiona ALT y haga clic en las líneas para editar en el modo de columna</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="418"/>
