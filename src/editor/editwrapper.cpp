@@ -455,6 +455,7 @@ void EditWrapper::reloadFileHighlight(QString definitionName)
         }
         if (m_pSyntaxHighlighter) m_pSyntaxHighlighter->setDefinition(m_Definition);
         m_pTextEdit->setSyntaxDefinition(m_Definition);
+        m_pSyntaxHighlighter->setEnableHighlight(true);
 
         // 获取当前展示区域文本块
         QPoint startPoint = QPoint(0, 0);
@@ -485,8 +486,14 @@ void EditWrapper::reloadFileHighlight(QString definitionName)
         // 复位标识位
         m_bHighlighterAll = false;
 
-        // 重新高亮当前界面
-        OnUpdateHighlighter();
+        // 底部栏切换语法高亮类型（如 Bash → Python）后，须强制重刷可见区域；
+        // 不可调用 OnUpdateHighlighter()，因其会跳过已有 userData 的文本块而导致不着色
+        for (QTextBlock var = beginBlock; var.isValid(); var = var.next()) {
+            m_pSyntaxHighlighter->rehighlightBlock(var);
+            if (var == endBlock) {
+                break;
+            }
+        }
     } else {
         qDebug() << "EditWrapper reloadFileHighlight, m_Definition.isValid() && !m_Definition.filePath().isEmpty() is false";
         // 不允许的高亮格式或无对应的高亮格式文件，例如“None”，移除高亮效果
@@ -1128,6 +1135,7 @@ void EditWrapper::OnThemeChangeSlot(QString theme)
             m_pSyntaxHighlighter->setTheme(m_Repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
             qDebug() << "EditWrapper OnThemeChangeSlot, QColor(backgroundColor).lightness() >= 128, setTheme(LightTheme)";
         }
+        m_pSyntaxHighlighter->setEnableHighlight(true);
         m_pSyntaxHighlighter->rehighlight();
         qDebug() << "EditWrapper OnThemeChangeSlot, m_pSyntaxHighlighter->rehighlight()";
     }
@@ -1226,9 +1234,7 @@ void EditWrapper::OnUpdateHighlighter()
 
         auto rehighlightBlock = [this](const QTextBlock &block) {
             qDebug() << "EditWrapper OnUpdateHighlighter, rehighlightBlock";
-            m_pSyntaxHighlighter->setEnableHighlight(true);
             m_pSyntaxHighlighter->rehighlightBlock(block);
-            m_pSyntaxHighlighter->setEnableHighlight(false);
         };
 
         if (foundBlock.isValid() && foundBlock < beginBlock) {
@@ -1245,13 +1251,15 @@ void EditWrapper::OnUpdateHighlighter()
             }
         }
 
-        for (QTextBlock var = beginBlock; var != endBlock; var = var.next()) {
-            qDebug() << "EditWrapper OnUpdateHighlighter, rehighlightBlock";
-            rehighlightBlock(var);
+        for (QTextBlock var = beginBlock; var.isValid(); var = var.next()) {
+            if (!var.userData()) {
+                qDebug() << "EditWrapper OnUpdateHighlighter, rehighlightBlock";
+                rehighlightBlock(var);
+            }
+            if (var == endBlock) {
+                break;
+            }
         }
-
-        qDebug() << "EditWrapper OnUpdateHighlighter, rehighlightBlock";
-        rehighlightBlock(endBlock);
     }
     qDebug() << "EditWrapper OnUpdateHighlighter, exit";
 }
@@ -1282,14 +1290,10 @@ void EditWrapper::updateHighlighterAll()
         }
 
         for (QTextBlock var = beginBlock; var != endBlock; var = var.next()) {
-            m_pSyntaxHighlighter->setEnableHighlight(true);
             m_pSyntaxHighlighter->rehighlightBlock(var);
-            m_pSyntaxHighlighter->setEnableHighlight(false);
         }
 
-        m_pSyntaxHighlighter->setEnableHighlight(true);
         m_pSyntaxHighlighter->rehighlightBlock(endBlock);
-        m_pSyntaxHighlighter->setEnableHighlight(false);
 
         m_bHighlighterAll = true;
     }

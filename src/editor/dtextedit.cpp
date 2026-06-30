@@ -6694,8 +6694,6 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
 
     //渲染所有的指定字符格式
     renderAllSelections();
-
-    highlight();
     qDebug() << "updateMark, completed";
 }
 
@@ -7094,7 +7092,6 @@ void TextEdit::slotCanRedoChanged(bool bCanRedo)
     Window *wnd = dynamic_cast<Window *>(m_wrapper->window());
     if (wnd)
         wnd->updateModifyStatus(m_sFilePath, isModified);
-    this->m_wrapper->OnUpdateHighlighter();
 }
 
 void TextEdit::slotCanUndoChanged(bool bCanUndo)
@@ -7105,7 +7102,6 @@ void TextEdit::slotCanUndoChanged(bool bCanUndo)
     Window *wnd = dynamic_cast<Window *>(m_wrapper->window());
     if (wnd)
         wnd->updateModifyStatus(m_sFilePath, isModified);
-    this->m_wrapper->OnUpdateHighlighter();
 }
 
 bool TextEdit::containsExtraSelection(QList<QTextEdit::ExtraSelection> listSelections, QTextEdit::ExtraSelection selection)
