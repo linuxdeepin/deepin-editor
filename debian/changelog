@@ -1,3 +1,11 @@
+deepin-editor (6.5.56) unstable; urgency=medium
+
+  * fix(editor): enhance cursor update handling and performance
+  * fix(editor): improve syntax highlighting handling and cleanup
+  * [skip CI] i18n: Translate deepin-editor.ts in es
+
+ -- Liu Zheng <liuzheng@uniontech.com>  Wed, 01 Jul 2026 19:03:05 +0800
+
 deepin-editor (6.5.55) unstable; urgency=medium
 
   * chore: Update version to 6.5.55
