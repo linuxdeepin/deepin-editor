@@ -27,6 +27,7 @@
 #include <DPlainTextEdit>
 #include <QLineEdit>
 #include <QPropertyAnimation>
+#include <QTimer>
 #include <QFont>
 #include <DGuiApplicationHelper>
 #include <QtDBus>
@@ -510,6 +511,9 @@ public slots:
     void onSelectionArea();
     void fingerZoom(QString name, QString direction, int fingers);
     void cursorPositionChanged();
+    void flushDeferredCursorUpdate();
+    void applyCursorHeavyUpdate();
+    void updateCursorPositionStatusLightweight();
 
     //剪切槽函数
     void cut(bool ignoreCheck = false);
@@ -784,6 +788,7 @@ private:
     QList<int> m_listBookmark;///< 存储书签的list
     int m_nBookMarkHoverLine;///< 悬浮效果书签所在的行
     int m_nLines;///< 文本总行数
+    int m_lastLeftAreaBlockCount = 0;///< 上次刷新左侧栏时的文档行数
     bool m_bIsFileOpen;///< 是否在读取文件（导致文本变化）
     bool m_bIsShortCut;///< 是否在使用书签快捷键
 
@@ -871,6 +876,13 @@ private:
     bool m_MidButtonPatse = false;      // 鼠标中键黏贴处理
     bool m_isPreeditBefore = false;     // 上一个输入法时间是否是 preedit
     int m_preeditLengthBefore = 0;
+
+    bool shouldDeferCursorHeavyUpdate(const QTextCursor &cursor, const QString &text) const;
+    void scheduleDeferredCursorUpdateBurst();
+
+    bool m_deferCursorHeavyUpdate = false;
+    int m_deferCursorLastLine = -1;
+    QTimer *m_typingBurstFlushTimer = nullptr;
 
     Qt::CaseSensitivity defaultCaseSensitive = Qt::CaseInsensitive; // 查找匹配时默认不区分大小写
 };

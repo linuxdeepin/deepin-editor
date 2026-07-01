@@ -109,10 +109,16 @@ TextEdit::TextEdit(QWidget *parent)
     // Init widgets.
     //左边栏控件　滑动条滚动跟新行号 折叠标记
     connect(this->verticalScrollBar(), &QScrollBar::valueChanged, this, &TextEdit::slotValueChanged);
-    connect(this, &QPlainTextEdit::textChanged, this, &TextEdit::updateLeftAreaWidget);
     connect(this, &QPlainTextEdit::textChanged, this, [this]() {
-        if (this->m_wrapper)
-            this->m_wrapper->UpdateBottomBarWordCnt(this->characterCount());
+        if (m_wrapper) {
+            m_wrapper->UpdateBottomBarWordCnt(characterCount());
+        }
+        // 仅行数变化时全量刷新左侧栏；同行编辑由 cursorPositionChanged 局部 update 负责
+        const int blockCountNow = blockCount();
+        if (blockCountNow != m_lastLeftAreaBlockCount) {
+            m_lastLeftAreaBlockCount = blockCountNow;
+            updateLeftAreaWidget();
+        }
     });
 
     connect(this, &QPlainTextEdit::cursorPositionChanged, this, &TextEdit::cursorPositionChanged);
@@ -163,6 +169,11 @@ TextEdit::TextEdit(QWidget *parent)
     m_scrollAnimation = new QPropertyAnimation(verticalScrollBar(), "value");
     m_scrollAnimation->setEasingCurve(QEasingCurve::InOutExpo);
     m_scrollAnimation->setDuration(300);
+
+    m_typingBurstFlushTimer = new QTimer(this);
+    m_typingBurstFlushTimer->setSingleShot(true);
+    m_typingBurstFlushTimer->setInterval(120);
+    connect(m_typingBurstFlushTimer, &QTimer::timeout, this, &TextEdit::flushDeferredCursorUpdate);
 
     m_cursorMode = Insert;
 
@@ -298,6 +309,7 @@ void TextEdit::deleteSelectTextEx(QTextCursor cursor, QString text, bool currLin
 void TextEdit::deleteTextEx(QTextCursor cursor)
 {
     qDebug() << "Deleting text at position:" << cursor.position();
+    flushDeferredCursorUpdate();
     QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(cursor, this);
     m_pUndoStack->push(pDeleteStack);
     qDebug() << "Text deleted successfully";
@@ -328,15 +340,32 @@ void TextEdit::deleteMultiTextEx(const QList<QTextCursor> &multiText)
 void TextEdit::insertSelectTextEx(QTextCursor cursor, QString text)
 {
     qDebug() << "Inserting selected text at position:" << cursor.position() << "Length:" << text.length();
+
+    const bool deferHeavyUpdate = shouldDeferCursorHeavyUpdate(cursor, text);
+    if (!deferHeavyUpdate) {
+        flushDeferredCursorUpdate();
+    } else {
+        const int line = cursor.blockNumber();
+        if (m_deferCursorHeavyUpdate && line != m_deferCursorLastLine) {
+            flushDeferredCursorUpdate();
+        }
+        m_deferCursorHeavyUpdate = true;
+        m_deferCursorLastLine = line;
+    }
+
     QUndoCommand *pInsertStack = new InsertTextUndoCommand(cursor, text, this);
     m_pUndoStack->push(pInsertStack);
     ensureCursorVisible();
+    if (deferHeavyUpdate) {
+        scheduleDeferredCursorUpdateBurst();
+    }
     qDebug() << "Selected text inserted successfully";
 }
 
 void TextEdit::insertColumnEditTextEx(QString text)
 {
     qDebug() << "Inserting column text";
+    flushDeferredCursorUpdate();
     if (m_isSelectAll) {
         QPlainTextEdit::selectAll();
     }
@@ -2987,7 +3016,63 @@ bool TextEdit::setCursorKeywordSeletoin(int position, bool findNext)
     return false;
 }
 
-void TextEdit::cursorPositionChanged()
+bool TextEdit::shouldDeferCursorHeavyUpdate(const QTextCursor &cursor, const QString &text) const
+{
+    if (m_cursorMode != Insert
+            || m_bIsAltMod
+            || m_readOnlyMode
+            || m_bReadOnlyPermission
+            || m_bIsFileOpen
+            || m_isPreeditBefore
+            || m_bIsInputMethod) {
+        return false;
+    }
+
+    if (cursor.anchor() != cursor.position()) {
+        return false;
+    }
+
+    for (const QChar ch : text) {
+        if (ch == QLatin1Char('\n') || ch == QLatin1Char('\t') || ch == QChar::ParagraphSeparator) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+void TextEdit::scheduleDeferredCursorUpdateBurst()
+{
+    m_deferCursorHeavyUpdate = true;
+    m_deferCursorLastLine = textCursor().blockNumber();
+    m_typingBurstFlushTimer->start();
+}
+
+void TextEdit::flushDeferredCursorUpdate()
+{
+    if (m_typingBurstFlushTimer != nullptr) {
+        m_typingBurstFlushTimer->stop();
+    }
+
+    if (!m_deferCursorHeavyUpdate) {
+        return;
+    }
+
+    m_deferCursorHeavyUpdate = false;
+    m_deferCursorLastLine = -1;
+    applyCursorHeavyUpdate();
+}
+
+void TextEdit::updateCursorPositionStatusLightweight()
+{
+    QTextCursor cursor = textCursor();
+    if (m_wrapper) {
+        m_wrapper->bottomBar()->updatePosition(cursor.blockNumber() + 1,
+                                               cursor.positionInBlock() + 1);
+    }
+}
+
+void TextEdit::applyCursorHeavyUpdate()
 {
     qDebug() << "Cursor position changed";
     // 以赋值形式，清空 Bracket 括号的selection
@@ -3001,17 +3086,28 @@ void TextEdit::cursorPositionChanged()
     updateHighlightBrackets('[', ']');
     renderAllSelections();
 
-    QTextCursor cursor = textCursor();
-    if (m_wrapper) {
-        qDebug() << "Cursor position changed with wrapper";
-        m_wrapper->bottomBar()->updatePosition(cursor.blockNumber() + 1,
-                                               cursor.positionInBlock() + 1);
-    }
+    updateCursorPositionStatusLightweight();
 
     m_pLeftAreaWidget->m_pLineNumberArea->update();
     m_pLeftAreaWidget->m_pBookMarkArea->update();
     m_pLeftAreaWidget->m_pFlodArea->update();
     qDebug() << "Cursor position changed completed";
+}
+
+void TextEdit::cursorPositionChanged()
+{
+    if (m_deferCursorHeavyUpdate) {
+        const int line = textCursor().blockNumber();
+        if (line != m_deferCursorLastLine) {
+            flushDeferredCursorUpdate();
+            return;
+        }
+
+        updateCursorPositionStatusLightweight();
+        return;
+    }
+
+    applyCursorHeavyUpdate();
 }
 
 /**
@@ -3539,6 +3635,7 @@ void TextEdit::slotRedoAvailable(bool redoIsAvailable)
 void TextEdit::redo_()
 {
     qDebug() << "Starting redo operation";
+    flushDeferredCursorUpdate();
     if (!m_pUndoStack->canRedo()) {
         qDebug() << "Redo operation skipped - nothing to redo";
         return;
@@ -3570,6 +3667,7 @@ void TextEdit::undo_()
 {
     qDebug() << "Starting undo operation";
     qDebug() << "Starting undo operation";
+    flushDeferredCursorUpdate();
     if (!m_pUndoStack->canUndo()) {
         qDebug() << "Undo operation skipped - nothing to undo";
         return;
@@ -5495,6 +5593,7 @@ void TextEdit::setTextFinished()
     qDebug() << "Set text finished";
     m_bIsFileOpen = false;
     m_nLines = blockCount();
+    m_lastLeftAreaBlockCount = m_nLines;
 
     if (!m_listBookmark.isEmpty()) {
         qDebug() << "Set text finished, m_listBookmark is not empty";
@@ -6563,6 +6662,13 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
         return;
     }
 
+    // 无任何颜色/关键字标记时无需处理；渲染由 cursorPositionChanged 统一负责
+    if (m_wordMarkSelections.isEmpty()
+            && m_mapKeywordMarkSelections.isEmpty()
+            && m_mapWordMarkSelections.isEmpty()) {
+        return;
+    }
+
     qDebug() << "updateMark, charsRemoved" << charsRemoved << "charsAdded" << charsAdded;
     //更新标记
     int nStartPos = 0,///< 标记的起始位置
@@ -7604,6 +7710,7 @@ void TextEdit::dropEvent(QDropEvent *event)
 
 void TextEdit::inputMethodEvent(QInputMethodEvent *e)
 {
+    flushDeferredCursorUpdate();
     m_bIsInputMethod = true;
 
     if (m_isSelectAll)
@@ -7674,6 +7781,7 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
 
 void TextEdit::mousePressEvent(QMouseEvent *e)
 {
+    flushDeferredCursorUpdate();
     if (m_bIsFindClose)
     {
         m_bIsFindClose = false;
@@ -8193,6 +8301,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
 
         //列编辑 删除撤销重做
         if (modifiers == Qt::NoModifier && (e->key() == Qt::Key_Backspace)) {
+            flushDeferredCursorUpdate();
             if (m_isSelectAll)
                 QPlainTextEdit::selectAll();
 
@@ -8216,6 +8325,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
 
         //列编辑 向后删除撤销重做
         if (modifiers == Qt::NoModifier && (e->key() == Qt::Key_Delete)) {
+            flushDeferredCursorUpdate();
             if (m_isSelectAll)
                 QPlainTextEdit::selectAll();
 
