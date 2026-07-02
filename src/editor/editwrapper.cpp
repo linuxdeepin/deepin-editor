@@ -119,6 +119,11 @@ EditWrapper::EditWrapper(Window *window, QWidget *parent)
     connect(m_pTextEdit, &TextEdit::cursorModeChanged, this, &EditWrapper::handleCursorModeChanged);
     connect(m_pWaringNotices, &WarningNotices::reloadBtnClicked, this, &EditWrapper::reloadModifyFile);
     connect(m_pWaringNotices, &WarningNotices::saveAsBtnClicked, m_pWindow, &Window::saveAsFile);
+
+    m_highlightDebounceTimer.setSingleShot(true);
+    m_highlightDebounceTimer.setInterval(150);
+    connect(&m_highlightDebounceTimer, &QTimer::timeout, this, &EditWrapper::OnUpdateHighlighter);
+
     // NOTE: 文本高亮会触发重新布局，与界面布局(拖拽、放大窗口)变更时的布局操作冲突，因此调整更新顺序，在布局后刷新高亮
     connect(m_pTextEdit->verticalScrollBar(), &QScrollBar::valueChanged, this, [this](int) {
         qDebug() << "EditWrapper connect verticalScrollBar valueChanged";
@@ -1148,6 +1153,11 @@ void EditWrapper::UpdateBottomBarWordCnt(int cnt)
 {
     qDebug() << "EditWrapper UpdateBottomBarWordCnt, cnt:" << cnt;
     m_pBottomBar->updateWordCount(cnt);
+}
+
+void EditWrapper::scheduleHighlight()
+{
+    m_highlightDebounceTimer.start();
 }
 
 /**

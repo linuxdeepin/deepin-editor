@@ -13,6 +13,7 @@
 #include "../common/utils.h"
 #include <QVBoxLayout>
 #include <QWidget>
+#include <QTimer>
 #include <DMessageManager>
 #include <DFloatingMessage>
 #include <QByteArray>
@@ -143,6 +144,7 @@ public slots:
     void OnThemeChangeSlot(QString theme);
     void UpdateBottomBarWordCnt(int cnt);
     void OnUpdateHighlighter();
+    void scheduleHighlight();
     //set the value of m_bIsTemFile
     void setTemFile(bool value);
     // 设置恢复光标位置（用于懒加载恢复，避免 O(N²) 扫描）
@@ -183,6 +185,8 @@ private:
     bool m_bAsyncReadFileFinished = false;
     bool m_bHasPreProcess = false;               // 预处理标识
     int m_nRestoreCursorPosition = -1;           // 恢复光标位置提示（-1 表示不指定）
+
+    QTimer m_highlightDebounceTimer;
 };
 
 #endif

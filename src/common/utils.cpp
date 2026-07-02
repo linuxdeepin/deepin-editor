@@ -17,6 +17,8 @@
 #include <QApplication>
 #include <QDebug>
 #include <QDir>
+#include <QHash>
+#include <QSet>
 #include <QFontMetrics>
 #include <QPainter>
 #include <QString>
@@ -562,8 +564,36 @@ QString Utils::getKeyshortcut(QKeyEvent *keyEvent)
 
 QString Utils::getKeyshortcutFromKeymap(Settings *settings, const QString &keyCategory, const QString &keyName)
 {
-    qDebug() << "Enter getKeyshortcutFromKeymap, keyCategory:" << keyCategory << "keyName:" << keyName;
-    return settings->settings->option(QString("shortcuts.%1.%2").arg(keyCategory).arg(keyName))->value().toString();
+    if (settings == nullptr || settings->settings == nullptr) {
+        return QString();
+    }
+
+    static QHash<QString, QString> cache;
+    static QSet<Settings *> watchedSettings;
+    const QString cacheKey = QStringLiteral("shortcuts.%1.%2").arg(keyCategory).arg(keyName);
+
+    if (!watchedSettings.contains(settings)) {
+        watchedSettings.insert(settings);
+        QObject::connect(settings->settings, &Dtk::Core::DSettings::valueChanged, settings, [&cache](const QString &key) {
+            if (key.startsWith(QStringLiteral("shortcuts."))) {
+                cache.clear();
+            }
+        });
+    }
+
+    const auto it = cache.constFind(cacheKey);
+    if (it != cache.constEnd()) {
+        return it.value();
+    }
+
+    Dtk::Core::DSettingsOption *option = settings->settings->option(cacheKey);
+    if (option == nullptr) {
+        return QString();
+    }
+
+    const QString result = option->value().toString();
+    cache.insert(cacheKey, result);
+    return result;
 }
 
 QPixmap Utils::dropShadow(const QPixmap &source, qreal radius, const QColor &color, const QPoint &offset)
