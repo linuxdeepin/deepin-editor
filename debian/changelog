@@ -1,3 +1,9 @@
+deepin-editor (6.5.57) unstable; urgency=medium
+
+  * chore: Update version to 6.5.57
+
+ -- zhanghongyuan <zhanghongyuan@uniontech.com>  Thu, 09 Jul 2026 13:15:59 +0800
+
 deepin-editor (6.5.56) unstable; urgency=medium
 
   * fix(editor): enhance cursor update handling and performance
