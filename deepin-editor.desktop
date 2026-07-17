@@ -11,6 +11,7 @@ Type=Application
 X-Deepin-AppID=deepin-editor
 X-Deepin-CreatedBy=com.deepin.dde.daemon.Launcher
 X-Deepin-Vendor=deepin
+X-Deepin-Singleton=true
 X-MultipleArgs=false
 
 # Translations:
