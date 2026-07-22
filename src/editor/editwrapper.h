@@ -119,6 +119,16 @@ public:
     inline CSyntaxHighlighter *getSyntaxHighlighter() const
     { return m_pSyntaxHighlighter; }
 
+    // 无效字符预览模式访问器
+    inline bool isInvalidCharPreview() const
+    { return m_bInvalidCharPreview; }
+    inline bool isInvalidCharEditAllowed() const
+    { return m_bInvalidCharEditAllowed; }
+    inline QString invalidCharOriginalPath() const
+    { return m_sInvalidCharOriginalPath; }
+    void exitInvalidCharPreview();
+    bool forceSaveInvalidCharFile();
+
 signals:
     void sigClearDoubleCharaterEncode();
 
@@ -139,7 +149,7 @@ private:
 public slots:
     // 处理文档预加载数据
     void handleFilePreProcess(const QByteArray &encode, const QByteArray &content);
-    void handleFileLoadFinished(const QByteArray &encode, const QByteArray &content, bool error);
+    void handleFileLoadFinished(const QByteArray &encode, const QByteArray &content, bool error, bool hasNul = false);
     void OnThemeChangeSlot(QString theme);
     void UpdateBottomBarWordCnt(int cnt);
     void OnUpdateHighlighter();
@@ -147,6 +157,7 @@ public slots:
     void setTemFile(bool value);
     // 设置恢复光标位置（用于懒加载恢复，避免 O(N²) 扫描）
     void setRestoreCursorPosition(int position);
+    void onEditAnyway();
 
 private:
     //第一次打开文件编码
@@ -183,6 +194,11 @@ private:
     bool m_bAsyncReadFileFinished = false;
     bool m_bHasPreProcess = false;               // 预处理标识
     int m_nRestoreCursorPosition = -1;           // 恢复光标位置提示（-1 表示不指定）
+
+    // 无效字符（NUL）预览模式状态
+    bool m_bInvalidCharPreview = false;
+    bool m_bInvalidCharEditAllowed = false;
+    QString m_sInvalidCharOriginalPath;
 };
 
 #endif

@@ -211,6 +211,7 @@ public Q_SLOTS:
     int getBlankFileIndex();
 
     DDialog *createDialog(const QString &title, const QString &content);
+    int confirmInvalidCharSave(const QString &fileName);
 
     void slotLoadContentTheme(DGuiApplicationHelper::ColorType themeType);
     void slotSettingResetTheme(const QString &path);

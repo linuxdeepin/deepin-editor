@@ -100,6 +100,11 @@
         <source>The file cannot be read, which may be too large or has been damaged!</source>
         <translation>無法讀取該文件，文件可能過大或損壞</translation>
     </message>
+    <message>
+        <location filename="../src/editor/editwrapper.cpp" line="1020"/>
+        <source>The file contains invalid characters (NUL). Preview mode is read-only.</source>
+        <translation>文件包含無效字元（NUL）。預覽模式為唯讀。</translation>
+    </message>
 </context>
 <context>
     <name>FindBar</name>
@@ -1235,6 +1240,11 @@
         <source>Reload</source>
         <translation>重新載入</translation>
     </message>
+    <message>
+        <location filename="../src/controls/warningnotices.cpp" line="26"/>
+        <source>Edit Anyway</source>
+        <translation>仍然編輯</translation>
+    </message>
 </context>
 <context>
     <name>Window</name>
@@ -1365,6 +1375,36 @@
         <location filename="../src/widgets/window.cpp" line="3544"/>
         <source>Discard</source>
         <translation>不保存</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1317"/>
+        <source>Invalid characters detected while saving "%1"</source>
+        <translation>保存「%1」時偵測到無效字元</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1318"/>
+        <source>If you force save this file, it may cause file corruption. Still want to save?</source>
+        <translation>強制保存此文件可能導致文件損壞。仍然要保存嗎？</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1321"/>
+        <source>Don&apos;t Save</source>
+        <translation>不保存</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1322"/>
+        <source>Save As</source>
+        <translation>另存為</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1323"/>
+        <source>Save Anyway</source>
+        <translation>強制保存</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1521"/>
+        <source>Cannot save as the original file in preview mode. Please choose a different path.</source>
+        <translation>預覽模式下不能另存為原文件。請選擇其他路徑。</translation>
     </message>
 </context>
 </TS>

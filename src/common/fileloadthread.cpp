@@ -50,10 +50,19 @@ void FileLoadThread::run()
             // 发送文件头信息，用于预先加载数据
             QString textEncode = QString::fromLocal8Bit(encode);
             if (textEncode.contains("ASCII", Qt::CaseInsensitive) || textEncode.contains("UTF-8", Qt::CaseInsensitive)) {
-                emit sigPreProcess(encode, indata);
+                if (indata.contains('\x00')) {
+                    QByteArray headData = indata;
+                    headData.replace('\x00', "\\00");
+                    emit sigPreProcess(encode, headData);
+                } else {
+                    emit sigPreProcess(encode, indata);
+                }
             } else {
                 QByteArray outHeadData;
                 DetectCode::ChangeFileEncodingFormat(indata, outHeadData, textEncode, QString("UTF-8"));
+                if (outHeadData.contains('\x00')) {
+                    outHeadData.replace('\x00', "\\00");
+                }
                 emit sigPreProcess(encode, outHeadData);
             }
         }
@@ -75,8 +84,15 @@ void FileLoadThread::run()
             qWarning() << "FileLoadThread read error:" << e.what() << "at" << m_strFilePath;
 
             file.close();
-            emit sigLoadFinished(encode, indata, true);
+            emit sigLoadFinished(encode, indata, true, false);
             return;
+        }
+
+        // NUL 字节检测与转义：将每个 \x00 替换为三个 ASCII 字符 \00
+        bool hasNul = indata.contains('\x00');
+        if (hasNul) {
+            qDebug() << "NUL bytes detected in file, escaping to \\00";
+            indata.replace('\x00', "\\00");
         }
 
         if (!m_encodeHint.isEmpty()) {
@@ -98,17 +114,17 @@ void FileLoadThread::run()
         qDebug() << "Final encoding detected:" << textEncode;
         if (textEncode.contains("ASCII", Qt::CaseInsensitive) || textEncode.contains("UTF-8", Qt::CaseInsensitive)) {
             qDebug() << "Using original encoding, no conversion needed";
-            emit sigLoadFinished(encode, indata, false);
+            emit sigLoadFinished(encode, indata, false, hasNul);
         } else {
             qDebug() << "Converting from" << textEncode << "to UTF-8";
             QByteArray outData;
             DetectCode::ChangeFileEncodingFormat(indata, outData, textEncode, QString("UTF-8"));
-            emit sigLoadFinished(encode, outData, false);
+            emit sigLoadFinished(encode, outData, false, hasNul);
             qDebug() << "Encoding conversion completed, output size:" << outData.size();
         }
     } else {
         qWarning() << "Failed to open file:" << m_strFilePath << "error:" << file.errorString();
-        emit sigLoadFinished("", "", true);
+        emit sigLoadFinished("", "", true, false);
     }
 
     qDebug() << "FileLoadThread finished processing:" << m_strFilePath;

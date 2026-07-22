@@ -24,12 +24,16 @@ WarningNotices::WarningNotices(MessageType notifyType, QWidget *parent)
     setIcon(QIcon(":/images/warning.svg"));
     m_reloadBtn = new QPushButton(tr("Reload"), this);
     m_saveAsBtn = new QPushButton(qApp->translate("Window", "Save as"), this);
+    m_editAnywayBtn = new QPushButton(tr("Edit Anyway"), this);
     m_reloadBtn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_saveAsBtn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_editAnywayBtn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_editAnywayBtn->setVisible(false);
     qDebug() << "Warning buttons initialized";
 
     connect(m_reloadBtn, &QPushButton::clicked, this, &WarningNotices::slotreloadBtnClicked);
     connect(m_saveAsBtn, &QPushButton::clicked, this, &WarningNotices::slotsaveAsBtnClicked);
+    connect(m_editAnywayBtn, &QPushButton::clicked, this, &WarningNotices::slotEditAnywayBtnClicked);
     qDebug() << "Warning button signals connected";
 
 #ifdef DTKWIDGET_CLASS_DSizeMode
@@ -111,4 +115,22 @@ void WarningNotices::slotsaveAsBtnClicked()
     this->hide();
     emit saveAsBtnClicked();
     qDebug() << "slotsaveAsBtnClicked end";
+}
+
+void WarningNotices::setEditAnywayBtn()
+{
+    qDebug() << "setEditAnywayBtn";
+    m_reloadBtn->setVisible(false);
+    m_saveAsBtn->setVisible(false);
+    m_editAnywayBtn->setVisible(true);
+    setWidget(m_editAnywayBtn);
+    qDebug() << "setEditAnywayBtn end";
+}
+
+void WarningNotices::slotEditAnywayBtnClicked()
+{
+    qDebug() << "slotEditAnywayBtnClicked";
+    this->hide();
+    emit editAnywayBtnClicked();
+    qDebug() << "slotEditAnywayBtnClicked end";
 }

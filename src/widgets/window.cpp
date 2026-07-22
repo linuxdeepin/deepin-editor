@@ -968,11 +968,51 @@ bool Window::closeTab(const QString &filePath)
     // need to prompt whether to save.
     else {
         QFileInfo fileInfo(filePath);
-        isModified = false;
-        if (m_tabbar->textAt(m_tabbar->currentIndex()).front() == "*") {
-            qDebug() << "Tab name starts with '*', indicating modified state";
-            isModified = true;
+
+        // 无效字符预览模式拦截：复用与 Ctrl+S 相同的三按钮确认弹窗
+        if (wrapper->isInvalidCharPreview()) {
+            if (wrapper->isInvalidCharEditAllowed() && isModified) {
+                QString fileName = QFileInfo(filePath).fileName();
+                int res = confirmInvalidCharSave(fileName);
+                switch (res) {
+                case 0:  // Don't Save
+                    qDebug() << "Preview closeTab: Don't Save, closing tab";
+                    removeWrapper(filePath, true);
+                    m_tabbar->closeCurrentTab(filePath);
+                    return true;
+                case 1:  // Save As
+                {
+                    qDebug() << "Preview closeTab: Save As";
+                    QString newPath = saveAsFileToDisk();
+                    if (!newPath.isEmpty()) {
+                        // saveAsFileToDisk 成功后 wrapper 映射键已更新为 newPath，必须用 newPath 关闭
+                        removeWrapper(newPath, true);
+                        m_tabbar->closeCurrentTab(newPath);
+                        return true;
+                    }
+                    return false;  // 失败或取消不关闭
+                }
+                case 2:  // Save Anyway
+                    qDebug() << "Preview closeTab: Save Anyway";
+                    if (wrapper->forceSaveInvalidCharFile()) {
+                        removeWrapper(filePath, true);
+                        m_tabbar->closeCurrentTab(filePath);
+                        return true;
+                    }
+                    return false;
+                default:  // 取消
+                    qDebug() << "Preview closeTab: cancelled";
+                    return false;
+                }
+            } else {
+                // 预览模式但未编辑（未点 Edit Anyway 或无修改），直接关闭不提示
+                qDebug() << "Preview closeTab: no edits, closing tab without prompt";
+                removeWrapper(filePath, true);
+                m_tabbar->closeCurrentTab(filePath);
+                return true;
+            }
         }
+
         if (isModified) {
             qDebug() << "File is modified, prompting to save";
             DDialog *dialog = createDialog(tr("Do you want to save this file?"), "");
@@ -1298,6 +1338,24 @@ void Window::openFile()
     qDebug() << "Exit openFile";
 }
 
+int Window::confirmInvalidCharSave(const QString &fileName)
+{
+    qDebug() << "confirmInvalidCharSave for file:" << fileName;
+    DDialog *dialog = new DDialog(
+        tr("Invalid characters detected while saving \"%1\"").arg(fileName),
+        tr("If you force save this file, it may cause file corruption. Still want to save?"),
+        this);
+    dialog->setIcon(QIcon::fromTheme("dialog-warning"));
+    dialog->addButton(tr("Don't Save"), false, DDialog::ButtonNormal);
+    dialog->addButton(tr("Save As"), true, DDialog::ButtonRecommend);
+    dialog->addButton(tr("Save Anyway"), false, DDialog::ButtonWarning);
+    dialog->setCloseButtonVisible(false);
+    int res = dialog->exec();
+    dialog->deleteLater();
+    // 0=Don't Save, 1=Save As, 2=Save Anyway, -1=取消
+    return res;
+}
+
 bool Window::saveFile()
 {
     qDebug() << "Saving current file";
@@ -1308,6 +1366,36 @@ bool Window::saveFile()
     if (!wrapperEdit || wrapperEdit->getFileLoading()) {
         qDebug() << "Wrapper is null or file is loading, returning";
         return false;
+    }
+
+    // 无效字符预览模式拦截：弹出三按钮确认框
+    if (wrapperEdit->isInvalidCharPreview()) {
+        // 未编辑（未点 Edit Anyway）时无需保存，直接返回
+        if (!wrapperEdit->isInvalidCharEditAllowed()) {
+            qDebug() << "Preview save: no edits made, nothing to save";
+            return false;
+        }
+        QString filePath = wrapperEdit->textEditor()->getTruePath();
+        QString fileName = QFileInfo(filePath).fileName();
+        int res = confirmInvalidCharSave(fileName);
+        switch (res) {
+        case 0:  // Don't Save
+            qDebug() << "Preview save: Don't Save";
+            return false;
+        case 1:  // Save As
+            qDebug() << "Preview save: Save As";
+            return saveAsFile();
+        case 2:  // Save Anyway
+            qDebug() << "Preview save: Save Anyway";
+            if (wrapperEdit->forceSaveInvalidCharFile()) {
+                showNotify(tr("Saved successfully"));
+                return true;
+            }
+            return false;
+        default:  // 取消
+            qDebug() << "Preview save: cancelled";
+            return false;
+        }
     }
 
     bool isDraftFile = wrapperEdit->isDraftFile();
@@ -1433,6 +1521,19 @@ QString Window::saveAsFileToDisk()
         Settings::instance()->setSavePath(PathSettingWgt::LastOptBox, QFileInfo(newFilePath).absolutePath());
         Settings::instance()->setSavePath(PathSettingWgt::CurFileBox, QFileInfo(newFilePath).absolutePath());
 
+        // 预览模式下拒绝另存为原文件路径
+        if (wrapper->isInvalidCharPreview()) {
+            QString originalPath = wrapper->invalidCharOriginalPath();
+            if (QFileInfo(originalPath).absoluteFilePath() == QFileInfo(newFilePath).absoluteFilePath()) {
+                qDebug() << "Save As rejected: same as original path in preview mode";
+                DMessageManager::instance()->sendMessage(
+                    m_editorWidget->currentWidget(),
+                    QIcon(":/images/warning.svg"),
+                    tr("Cannot save as the original file in preview mode. Please choose a different path."));
+                return QString();
+            }
+        }
+
         // 保存原始文件路径，用于后续更新
         QString oldFilePath = wrapper->filePath();
         
@@ -1459,6 +1560,11 @@ QString Window::saveAsFileToDisk()
             
             // 保存成功后再更新路径，防止文件还未保存完成就触发文件是否存在的检测
             wrapper->updatePath(oldFilePath, newFilePath);
+            
+            // 预览模式 Save As 成功后退出预览模式
+            if (wrapper->isInvalidCharPreview()) {
+                wrapper->exitInvalidCharPreview();
+            }
             
             // 更新文件编码
             wrapper->bottomBar()->setEncodeName(encode);
@@ -2911,7 +3017,12 @@ void Window::backupFile()
         QJsonDocument document;
         jsonObject.insert("localPath", localPath);
         jsonObject.insert("cursorPosition", QString::number(wrapper->textEditor()->textCursor().position()));
-        jsonObject.insert("modify", wrapper->isModified());
+        // 预览模式下不持久化修改状态
+        if (wrapper->isInvalidCharPreview()) {
+            jsonObject.insert("modify", false);
+        } else {
+            jsonObject.insert("modify", wrapper->isModified());
+        }
         jsonObject.insert("lastModifiedTime", wrapper->getLastModifiedTime().toString());
         QList<int> bookmarkList = wrapper->textEditor()->getBookmarkInfo();
         if (!bookmarkList.isEmpty()) {
@@ -2937,7 +3048,10 @@ void Window::backupFile()
         }
 
         //保存备份文件
-        if (Utils::isDraftFile(filePath)) {
+        if (wrapper->isInvalidCharPreview()) {
+            // 预览模式跳过备份，不写 temFilePath，不保存临时文件
+            qInfo() << "preview mode, skip backup file";
+        } else if (Utils::isDraftFile(filePath)) {
             qInfo() << "is draft file, save to draft dir";
             wrapper->saveTemFile(filePath);
         } else {
