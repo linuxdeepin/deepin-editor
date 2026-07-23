@@ -1243,7 +1243,7 @@
     <message>
         <location filename="../src/controls/warningnotices.cpp" line="26"/>
         <source>Edit Anyway</source>
-        <translation>Edita-ho tanmateix</translation>
+        <translation>Edita&apos;l tanmateix</translation>
     </message>
 </context>
 <context>
@@ -1384,22 +1384,22 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="1318"/>
         <source>If you force save this file, it may cause file corruption. Still want to save?</source>
-        <translation type="unfinished"/>
+        <translation>Si forceu el desament d&apos;aquest fitxer, es podria corrompre. Voleu desar-lo tanmateix?</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1321"/>
         <source>Don&apos;t Save</source>
-        <translation type="unfinished"/>
+        <translation>No el desis</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1322"/>
         <source>Save As</source>
-        <translation type="unfinished"/>
+        <translation>Desa com a</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1323"/>
         <source>Save Anyway</source>
-        <translation type="unfinished"/>
+        <translation>Desa&apos;l tanmateix</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1521"/>
