@@ -1404,7 +1404,7 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="1521"/>
         <source>Cannot save as the original file in preview mode. Please choose a different path.</source>
-        <translation type="unfinished"/>
+        <translation>No es pot desar com el fitxer original en el mode de previsualització. Si us plau, trieu una ubicació diferent.</translation>
     </message>
 </context>
 </TS>
