@@ -103,7 +103,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="1020"/>
         <source>The file contains invalid characters (NUL). Preview mode is read-only.</source>
-        <translation type="unfinished"/>
+        <translation>O arquivo contém caracteres inválidos (NUL). O modo de visualização é somente leitura.</translation>
     </message>
 </context>
 <context>
@@ -1243,7 +1243,7 @@
     <message>
         <location filename="../src/controls/warningnotices.cpp" line="26"/>
         <source>Edit Anyway</source>
-        <translation type="unfinished"/>
+        <translation>Editar mesmo assim</translation>
     </message>
 </context>
 <context>
@@ -1379,32 +1379,32 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="1317"/>
         <source>Invalid characters detected while saving &quot;%1&quot;</source>
-        <translation type="unfinished"/>
+        <translation>Foram detectados caracteres inválidos ao salvar &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1318"/>
         <source>If you force save this file, it may cause file corruption. Still want to save?</source>
-        <translation type="unfinished"/>
+        <translation>Se você forçar o salvamento deste arquivo, ele poderá ser corrompido. Salvá-lo mesmo assim?</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1321"/>
         <source>Don&apos;t Save</source>
-        <translation type="unfinished"/>
+        <translation>Não salvar</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1322"/>
         <source>Save As</source>
-        <translation type="unfinished"/>
+        <translation>Salvar como</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1323"/>
         <source>Save Anyway</source>
-        <translation type="unfinished"/>
+        <translation>Salvar mesmo assim</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1521"/>
         <source>Cannot save as the original file in preview mode. Please choose a different path.</source>
-        <translation type="unfinished"/>
+        <translation>Não é possível substituir o arquivo original no modo de visualização. Escolha outro local para salvá-lo.</translation>
     </message>
 </context>
 </TS>
