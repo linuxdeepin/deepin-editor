@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -194,6 +194,7 @@ public Q_SLOTS:
     int getBlankFileIndex();
 
     DDialog *createDialog(const QString &title, const QString &content);
+    int confirmInvalidCharSave(const QString &fileName);
 
     void slotLoadContentTheme(DGuiApplicationHelper::ColorType themeType);
     void slotSettingResetTheme(const QString &path);

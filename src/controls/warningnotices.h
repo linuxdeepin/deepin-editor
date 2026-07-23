@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -23,19 +23,23 @@ public:
     void setReloadBtn();
     void setSaveAsBtn();
     void clearBtn();
+    void setEditAnywayBtn();
 
 signals:
     void reloadBtnClicked();
     void saveAsBtnClicked();
     void closeBtnClicked();
+    void editAnywayBtnClicked();
 
 public slots:
     void slotreloadBtnClicked();
     void slotsaveAsBtnClicked();
+    void slotEditAnywayBtnClicked();
 
 private:
     QPushButton *m_reloadBtn;
     QPushButton *m_saveAsBtn;
+    QPushButton *m_editAnywayBtn;
     QHBoxLayout *m_pLayout;
 };
 

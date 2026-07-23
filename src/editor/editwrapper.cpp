@@ -114,6 +114,7 @@ EditWrapper::EditWrapper(Window *window, QWidget *parent)
     connect(m_pTextEdit, &TextEdit::cursorModeChanged, this, &EditWrapper::handleCursorModeChanged);
     connect(m_pWaringNotices, &WarningNotices::reloadBtnClicked, this, &EditWrapper::reloadModifyFile);
     connect(m_pWaringNotices, &WarningNotices::saveAsBtnClicked, m_pWindow, &Window::saveAsFile);
+    connect(m_pWaringNotices, &WarningNotices::editAnywayBtnClicked, this, &EditWrapper::onEditAnyway);
     // NOTE: 文本高亮会触发重新布局，与界面布局(拖拽、放大窗口)变更时的布局操作冲突，因此调整更新顺序，在布局后刷新高亮
     connect(m_pTextEdit->verticalScrollBar(), &QScrollBar::valueChanged, this, [this](int) {
         OnUpdateHighlighter();
@@ -507,6 +508,11 @@ QString EditWrapper::getTextEncode()
  */
 bool EditWrapper::saveFile(QByteArray encode)
 {
+    // 预览模式下不允许直接静默保存，交由 Window 层确认弹窗
+    if (m_bInvalidCharPreview) {
+        return false;
+    }
+
     QString qstrFilePath = m_pTextEdit->getTruePath();
     hideWarningNotices();
 
@@ -538,6 +544,47 @@ bool EditWrapper::saveFile(QByteArray encode)
         );
     }
 
+    return ok;
+}
+
+void EditWrapper::onEditAnyway()
+{
+    m_bInvalidCharEditAllowed = true;
+    m_pTextEdit->setReadOnly(false);
+    m_pWaringNotices->hide();
+    // 保持 m_bInvalidCharPreview = true，直到 Save As 或 Save Anyway 成功
+}
+
+void EditWrapper::exitInvalidCharPreview()
+{
+    m_bInvalidCharPreview = false;
+    m_bInvalidCharEditAllowed = false;
+    m_sInvalidCharOriginalPath.clear();
+    m_pTextEdit->setReadOnly(false);
+    m_pWaringNotices->hide();
+    if (m_pSyntaxHighlighter) {
+        m_pSyntaxHighlighter->setInvalidCharHighlight(false);
+    }
+    updateModifyStatus(false);
+}
+
+bool EditWrapper::forceSaveInvalidCharFile()
+{
+    QString savePath = m_sInvalidCharOriginalPath;
+    TextFileSaver saver(m_pTextEdit->document());
+    if (BottomBar::EndlineFormat::Windows == m_pBottomBar->getEndlineFormat())
+        saver.setWindowsEndlineFormat(true);
+    saver.setFilePath(savePath);
+    saver.setEncoding(m_sCurEncode.toUtf8());
+
+    bool ok = saver.save();
+    if (ok) {
+        m_sFirstEncode = m_sCurEncode;
+        QFileInfo fi(savePath);
+        m_tModifiedDateTime = fi.lastModified();
+        m_bIsTemFile = false;
+        exitInvalidCharPreview();
+    }
     return ok;
 }
 
@@ -823,7 +870,7 @@ void EditWrapper::handleFilePreProcess(const QByteArray &encode, const QByteArra
  * @param encode    文件编码
  * @param content   完整文件内容
  */
-void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteArray &content, bool error)
+void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteArray &content, bool error, bool hasNul)
 {
     // 判断是否预加载，若已预加载，则无需重新初始化
     if (!m_bHasPreProcess) {
@@ -855,6 +902,31 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
         m_bFileLoading = false;
         if (flag == true) {
             m_pTextEdit->setReadOnly(true);
+        }
+
+        // 无效字符（NUL）预览模式初始化
+        if (hasNul) {
+            m_bInvalidCharPreview = true;
+            m_bInvalidCharEditAllowed = false;
+            m_sInvalidCharOriginalPath = m_pTextEdit->getTruePath();
+            m_pTextEdit->setReadOnly(true);
+            m_pWaringNotices->setMessage(tr("The file contains invalid characters (NUL). Preview mode is read-only."));
+            m_pWaringNotices->setEditAnywayBtn();
+            m_pWaringNotices->show();
+            DMessageManager::instance()->sendMessage(m_pTextEdit, m_pWaringNotices);
+            // 确保 CSyntaxHighlighter 存在（无语法定义的文件如 .txt 不会在 reinitOnFileLoad 中创建）
+            if (!m_pSyntaxHighlighter) {
+                m_pSyntaxHighlighter = new CSyntaxHighlighter(m_pTextEdit->document());
+                QString themePath = Settings::instance()->settings->option("advance.editor.theme")->value().toString();
+                if (themePath.contains("dark")) {
+                    m_pSyntaxHighlighter->setTheme(m_Repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme));
+                } else {
+                    m_pSyntaxHighlighter->setTheme(m_Repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
+                }
+            }
+            if (m_pSyntaxHighlighter) {
+                m_pSyntaxHighlighter->setInvalidCharHighlight(true);
+            }
         }
 
         if (m_bQuit) {
@@ -1023,7 +1095,12 @@ void EditWrapper::OnUpdateHighlighter()
         auto rehighlightBlock = [this](const QTextBlock &block) {
             m_pSyntaxHighlighter->setEnableHighlight(true);
             m_pSyntaxHighlighter->rehighlightBlock(block);
-            m_pSyntaxHighlighter->setEnableHighlight(false);
+            // NUL 预览模式下保持 m_bHighlight=true，使 loadContent 的 insertText 触发的
+            // 延迟重排（contentsChange → _q_reformatBlocks）能正常重新应用 \00 高亮，
+            // 首屏立即可见无需滚动（与 master 行为一致）；普通文件仍重置 false 保留性能优化。
+            if (!m_bInvalidCharPreview) {
+                m_pSyntaxHighlighter->setEnableHighlight(false);
+            }
         };
 
         if (foundBlock.isValid() && foundBlock < beginBlock) {

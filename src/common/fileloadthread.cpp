@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -36,11 +36,20 @@ void FileLoadThread::run()
 
             // 发送文件头信息，用于预先加载数据
             QString textEncode = QString::fromLocal8Bit(encode);
-            if (textEncode.contains("ASCII", Qt::CaseInsensitive) || textEncode.contains("UTF-8", Qt::CaseInsensitive)) {
-                emit sigPreProcess(encode, indata);
+           if (textEncode.contains("ASCII", Qt::CaseInsensitive) || textEncode.contains("UTF-8", Qt::CaseInsensitive)) {
+                if (indata.contains('\x00')) {
+                    QByteArray headData = indata;
+                    headData.replace('\x00', "\\00");
+                    emit sigPreProcess(encode, headData);
+                } else {
+                    emit sigPreProcess(encode, indata);
+                }
             } else {
                 QByteArray outHeadData;
                 DetectCode::ChangeFileEncodingFormat(indata, outHeadData, textEncode, QString("UTF-8"));
+                if (outHeadData.contains('\x00')) {
+                    outHeadData.replace('\x00', "\\00");
+                }
                 emit sigPreProcess(encode, outHeadData);
             }
         }
@@ -54,8 +63,14 @@ void FileLoadThread::run()
             qWarning() << Q_FUNC_INFO << "Read file data error, " << QString(e.what());
 
             file.close();
-            emit sigLoadFinished(encode, indata, true);
+            emit sigLoadFinished(encode, indata, true, false);
             return;
+        }
+
+        // NUL 字节检测与转义：将每个 \x00 替换为三个 ASCII 字符 \00
+        bool hasNul = indata.contains('\x00');
+        if (hasNul) {
+            indata.replace('\x00', "\\00");
         }
 
         if (encode.isEmpty()) {
@@ -71,11 +86,11 @@ void FileLoadThread::run()
 
         QString textEncode = QString::fromLocal8Bit(encode);
         if (textEncode.contains("ASCII", Qt::CaseInsensitive) || textEncode.contains("UTF-8", Qt::CaseInsensitive)) {
-            emit sigLoadFinished(encode, indata, false);
+            emit sigLoadFinished(encode, indata, false, hasNul);
         } else {
             QByteArray outData;
             DetectCode::ChangeFileEncodingFormat(indata, outData, textEncode, QString("UTF-8"));
-            emit sigLoadFinished(encode, outData, false);
+            emit sigLoadFinished(encode, outData, false, hasNul);
         }
     }
 

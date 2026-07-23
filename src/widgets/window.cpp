@@ -862,6 +862,44 @@ bool Window::closeTab(const QString &filePath)
         if (m_tabbar->textAt(m_tabbar->currentIndex()).front() == "*") {
             isModified = true;
         }
+
+        // 无效字符预览模式拦截：复用与 Ctrl+S 相同的三按钮确认弹窗
+        if (wrapper->isInvalidCharPreview()) {
+            if (wrapper->isInvalidCharEditAllowed() && isModified) {
+                QString fileName = QFileInfo(filePath).fileName();
+                int res = confirmInvalidCharSave(fileName);
+                switch (res) {
+                case 0:  // Don't Save
+                    removeWrapper(filePath, true);
+                    m_tabbar->closeCurrentTab(filePath);
+                    return true;
+                case 1:  // Save As
+                {
+                    QString newPath = saveAsFileToDisk();
+                    if (!newPath.isEmpty()) {
+                        removeWrapper(newPath, true);
+                        m_tabbar->closeCurrentTab(newPath);
+                        return true;
+                    }
+                    return false;
+                }
+                case 2:  // Save Anyway
+                    if (wrapper->forceSaveInvalidCharFile()) {
+                        removeWrapper(filePath, true);
+                        m_tabbar->closeCurrentTab(filePath);
+                        return true;
+                    }
+                    return false;
+                default:  // 取消
+                    return false;
+                }
+            } else {
+                removeWrapper(filePath, true);
+                m_tabbar->closeCurrentTab(filePath);
+                return true;
+            }
+        }
+
         if (isModified) {
             DDialog *dialog = createDialog(tr("Do you want to save this file?"), "");
             int res = dialog->exec();
@@ -1127,12 +1165,53 @@ void Window::openFile()
     }
 }
 
+int Window::confirmInvalidCharSave(const QString &fileName)
+{
+    DDialog *dialog = new DDialog(
+        tr("Invalid characters detected while saving \"%1\"").arg(fileName),
+        tr("If you force save this file, it may cause file corruption. Still want to save?"),
+        this);
+    dialog->setIcon(QIcon::fromTheme("dialog-warning"));
+    dialog->addButton(tr("Don't Save"), false, DDialog::ButtonNormal);
+    dialog->addButton(tr("Save As"), true, DDialog::ButtonRecommend);
+    dialog->addButton(tr("Save Anyway"), false, DDialog::ButtonWarning);
+    dialog->setCloseButtonVisible(false);
+    int res = dialog->exec();
+    dialog->deleteLater();
+    // 0=Don't Save, 1=Save As, 2=Save Anyway, -1=取消
+    return res;
+}
+
 bool Window::saveFile()
 {
     EditWrapper *wrapperEdit = currentWrapper();
 
     //大文本加载过程不允许保存
     if (!wrapperEdit || wrapperEdit->getFileLoading()) return false;
+
+    // 无效字符预览模式拦截：弹出三按钮确认框
+    if (wrapperEdit->isInvalidCharPreview()) {
+        if (!wrapperEdit->isInvalidCharEditAllowed()) {
+            return false;
+        }
+        QString filePath = wrapperEdit->textEditor()->getTruePath();
+        QString fileName = QFileInfo(filePath).fileName();
+        int res = confirmInvalidCharSave(fileName);
+        switch (res) {
+        case 0:  // Don't Save
+            return false;
+        case 1:  // Save As
+            return saveAsFile();
+        case 2:  // Save Anyway
+            if (wrapperEdit->forceSaveInvalidCharFile()) {
+                showNotify(tr("Saved successfully"));
+                return true;
+            }
+            return false;
+        default:  // 取消
+            return false;
+        }
+    }
 
     bool isDraftFile = wrapperEdit->isDraftFile();
     //bool isEmpty = wrapperEdit->isPlainTextEmpty();
@@ -1243,6 +1322,18 @@ QString Window::saveAsFileToDisk()
         Settings::instance()->setSavePath(PathSettingWgt::LastOptBox, QFileInfo(newFilePath).absolutePath());
         Settings::instance()->setSavePath(PathSettingWgt::CurFileBox, QFileInfo(newFilePath).absolutePath());
 
+        // 预览模式下拒绝另存为原文件路径
+        if (wrapper->isInvalidCharPreview()) {
+            QString originalPath = wrapper->invalidCharOriginalPath();
+            if (QFileInfo(originalPath).absoluteFilePath() == QFileInfo(newFilePath).absoluteFilePath()) {
+                DMessageManager::instance()->sendMessage(
+                    m_editorWidget->currentWidget(),
+                    QIcon(":/images/warning.svg"),
+                    tr("Cannot save as the original file in preview mode. Please choose a different path."));
+                return QString();
+            }
+        }
+
         wrapper->updatePath(wrapper->filePath(), newFilePath);
 
         bool needChangeEncode = (encode != wrapper->getTextEncode().toUtf8());
@@ -1262,6 +1353,11 @@ QString Window::saveAsFileToDisk()
         } else {
             // 更新文件编码
             wrapper->bottomBar()->setEncodeName(encode);
+
+            // 预览模式 Save As 成功后退出预览模式
+            if (wrapper->isInvalidCharPreview()) {
+                wrapper->exitInvalidCharPreview();
+            }
 
             // 若编码变更，保存完成后，重新加载文件
             if (needChangeEncode) {
@@ -2533,7 +2629,12 @@ void Window::backupFile()
         QJsonDocument document;
         jsonObject.insert("localPath", localPath);
         jsonObject.insert("cursorPosition", QString::number(wrapper->textEditor()->textCursor().position()));
-        jsonObject.insert("modify", wrapper->isModified());
+        // 预览模式下不持久化修改状态
+        if (wrapper->isInvalidCharPreview()) {
+            jsonObject.insert("modify", false);
+        } else {
+            jsonObject.insert("modify", wrapper->isModified());
+        }
         jsonObject.insert("lastModifiedTime", wrapper->getLastModifiedTime().toString());
         QList<int> bookmarkList = wrapper->textEditor()->getBookmarkInfo();
         if (!bookmarkList.isEmpty()) {
@@ -2557,7 +2658,9 @@ void Window::backupFile()
         }
 
         //保存备份文件
-        if (Utils::isDraftFile(filePath)) {
+        if (wrapper->isInvalidCharPreview()) {
+            // 预览模式跳过备份，不写 temFilePath，不保存临时文件
+        } else if (Utils::isDraftFile(filePath)) {
             wrapper->saveTemFile(filePath);
         } else {
             if (wrapper->isModified()) {

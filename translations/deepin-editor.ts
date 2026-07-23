@@ -102,6 +102,11 @@
         <source>The file cannot be read, which may be too large or has been damaged!</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../src/editor/editwrapper.cpp" line="1020"/>
+        <source>The file contains invalid characters (NUL). Preview mode is read-only.</source>
+        <translation>The file contains invalid characters (NUL). Preview mode is read-only.</translation>
+    </message>
 </context>
 <context>
     <name>FindBar</name>
@@ -1174,6 +1179,11 @@
         <source>Reload</source>
         <translation>Reload</translation>
     </message>
+    <message>
+        <location filename="../src/controls/warningnotices.cpp" line="26"/>
+        <source>Edit Anyway</source>
+        <translation>Edit Anyway</translation>
+    </message>
 </context>
 <context>
     <name>Window</name>
@@ -1304,6 +1314,36 @@
         <location filename="../src/widgets/window.cpp" line="2975"/>
         <source>Discard</source>
         <translation>Discard</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1317"/>
+        <source>Invalid characters detected while saving "%1"</source>
+        <translation>Invalid characters detected while saving "%1"</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1318"/>
+        <source>If you force save this file, it may cause file corruption. Still want to save?</source>
+        <translation>If you force save this file, it may cause file corruption. Still want to save?</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1321"/>
+        <source>Don&apos;t Save</source>
+        <translation>Don&apos;t Save</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1322"/>
+        <source>Save As</source>
+        <translation>Save As</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1323"/>
+        <source>Save Anyway</source>
+        <translation>Save Anyway</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1521"/>
+        <source>Cannot save as the original file in preview mode. Please choose a different path.</source>
+        <translation>Cannot save as the original file in preview mode. Please choose a different path.</translation>
     </message>
 </context>
 </TS>

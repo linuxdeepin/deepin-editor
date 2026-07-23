@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -22,11 +22,15 @@ WarningNotices::WarningNotices(MessageType notifyType, QWidget *parent)
     setIcon(QIcon(":/images/warning.svg"));
     m_reloadBtn = new QPushButton(tr("Reload"), this);
     m_saveAsBtn = new QPushButton(qApp->translate("Window", "Save as"), this);
+    m_editAnywayBtn = new QPushButton(tr("Edit Anyway"), this);
     m_reloadBtn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_saveAsBtn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_editAnywayBtn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_editAnywayBtn->setVisible(false);
 
     connect(m_reloadBtn, &QPushButton::clicked, this, &WarningNotices::slotreloadBtnClicked);
     connect(m_saveAsBtn, &QPushButton::clicked, this, &WarningNotices::slotsaveAsBtnClicked);
+    connect(m_editAnywayBtn, &QPushButton::clicked, this, &WarningNotices::slotEditAnywayBtnClicked);
 
 #ifdef DTKWIDGET_CLASS_DSizeMode
     DDialogCloseButton *closeBtn = findChild<DDialogCloseButton *>();
@@ -82,4 +86,18 @@ void WarningNotices::slotsaveAsBtnClicked()
 {
     this->hide();
     emit saveAsBtnClicked();
+}
+
+void WarningNotices::setEditAnywayBtn()
+{
+    m_reloadBtn->setVisible(false);
+    m_saveAsBtn->setVisible(false);
+    m_editAnywayBtn->setVisible(true);
+    setWidget(m_editAnywayBtn);
+}
+
+void WarningNotices::slotEditAnywayBtnClicked()
+{
+    this->hide();
+    emit editAnywayBtnClicked();
 }

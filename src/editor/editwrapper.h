@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -119,6 +119,16 @@ public:
     inline CSyntaxHighlighter *getSyntaxHighlighter() const
     { return m_pSyntaxHighlighter; }
 
+    // 无效字符预览模式访问器
+    inline bool isInvalidCharPreview() const
+    { return m_bInvalidCharPreview; }
+    inline bool isInvalidCharEditAllowed() const
+    { return m_bInvalidCharEditAllowed; }
+    inline QString invalidCharOriginalPath() const
+    { return m_sInvalidCharOriginalPath; }
+    void exitInvalidCharPreview();
+    bool forceSaveInvalidCharFile();
+
 signals:
     void sigClearDoubleCharaterEncode();
 
@@ -139,12 +149,13 @@ private:
 public slots:
     // 处理文档预加载数据
     void handleFilePreProcess(const QByteArray &encode, const QByteArray &content);
-    void handleFileLoadFinished(const QByteArray &encode, const QByteArray &content, bool error);
+    void handleFileLoadFinished(const QByteArray &encode, const QByteArray &content, bool error, bool hasNul = false);
     void OnThemeChangeSlot(QString theme);
     void UpdateBottomBarWordCnt(int cnt);
     void OnUpdateHighlighter();
     //set the value of m_bIsTemFile
     void setTemFile(bool value);
+    void onEditAnyway();
 
 private:
     //第一次打开文件编码
@@ -180,6 +191,11 @@ private:
 
     bool m_bAsyncReadFileFinished = false;
     bool m_bHasPreProcess = false;               // 预处理标识
+
+    // 无效字符（NUL）预览模式状态
+    bool m_bInvalidCharPreview = false;
+    bool m_bInvalidCharEditAllowed = false;
+    QString m_sInvalidCharOriginalPath;
 };
 
 #endif
