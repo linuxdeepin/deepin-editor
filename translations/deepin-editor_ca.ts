@@ -103,7 +103,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="1020"/>
         <source>The file contains invalid characters (NUL). Preview mode is read-only.</source>
-        <translation type="unfinished"/>
+        <translation>El fitxer conté caràcters no vàlids (NUL). El mode de previsualització és de només lectura.</translation>
     </message>
 </context>
 <context>
@@ -1243,7 +1243,7 @@
     <message>
         <location filename="../src/controls/warningnotices.cpp" line="26"/>
         <source>Edit Anyway</source>
-        <translation type="unfinished"/>
+        <translation>Edita-ho tanmateix</translation>
     </message>
 </context>
 <context>
@@ -1379,7 +1379,7 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="1317"/>
         <source>Invalid characters detected while saving &quot;%1&quot;</source>
-        <translation type="unfinished"/>
+        <translation>S&apos;han detectat caràcters no vàlids en desar %1</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1318"/>
