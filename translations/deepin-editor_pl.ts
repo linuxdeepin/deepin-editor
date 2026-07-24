@@ -1404,7 +1404,7 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="1521"/>
         <source>Cannot save as the original file in preview mode. Please choose a different path.</source>
-        <translation type="unfinished"/>
+        <translation>Nie można nadpisać oryginalnego pliku w trybie poglądowym. Wybierz inną ścieżkę.</translation>
     </message>
 </context>
 </TS>
