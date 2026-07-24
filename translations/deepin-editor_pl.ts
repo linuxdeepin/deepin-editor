@@ -103,7 +103,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="1020"/>
         <source>The file contains invalid characters (NUL). Preview mode is read-only.</source>
-        <translation type="unfinished"/>
+        <translation>Plik zawiera nieprawidłowe znaki (NUL). Tryb poglądowy jest tylko-do-odczytu.</translation>
     </message>
 </context>
 <context>
