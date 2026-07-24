@@ -1243,7 +1243,7 @@
     <message>
         <location filename="../src/controls/warningnotices.cpp" line="26"/>
         <source>Edit Anyway</source>
-        <translation type="unfinished"/>
+        <translation>Edytuj mimo to</translation>
     </message>
 </context>
 <context>
@@ -1379,27 +1379,27 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="1317"/>
         <source>Invalid characters detected while saving &quot;%1&quot;</source>
-        <translation type="unfinished"/>
+        <translation>Znaleziono nieprawidłowe znaki podczas zapisywania &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1318"/>
         <source>If you force save this file, it may cause file corruption. Still want to save?</source>
-        <translation type="unfinished"/>
+        <translation>Jeśli wymusisz zapisanie tego pliku, może on ulec uszkodzeniu. Zapisać mimo to?</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1321"/>
         <source>Don&apos;t Save</source>
-        <translation type="unfinished"/>
+        <translation>Nie zapisuj</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1322"/>
         <source>Save As</source>
-        <translation type="unfinished"/>
+        <translation>Zapisz jako</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1323"/>
         <source>Save Anyway</source>
-        <translation type="unfinished"/>
+        <translation>Zapisz mimo to</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1521"/>
