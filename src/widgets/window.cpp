@@ -1385,6 +1385,11 @@ QString Window::saveAsFileToDisk()
         }
 
         updateSaveAsFileName(wrapper->filePath(), newFilePath);
+
+        // 另存为成功后，路径已更新为新路径，记录文件编码历史
+        wrapper->textEditor()->setTextEncode(QString::fromUtf8(encode));
+        wrapper->textEditor()->writeEncodeHistoryRecord();
+
         return newFilePath;
     }
 

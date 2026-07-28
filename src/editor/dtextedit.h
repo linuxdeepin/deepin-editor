@@ -119,6 +119,8 @@ public:
     inline QString getFilePath() { return m_sFilePath;}
     // 设置文件路径
     inline void setFilePath(const QString &file) { m_sFilePath = file;}
+    // 设置文件编码，用于记录编码历史
+    inline void setTextEncode(const QString &encode) { m_textEncode = encode;}
     // 取得左侧的导航控件，包含行号、书签、折叠控件等
     inline LeftAreaTextEdit *getLeftAreaWidget() { return m_pLeftAreaWidget;}
 
@@ -413,6 +415,12 @@ public:
     void setCursorStart(int pos);
     void writeEncodeHistoryRecord();
     QStringList readEncodeHistoryRecord();
+    /**
+     * @brief readEncodeHistoryRecord 读取指定文件路径的历史编码记录
+     * @param filepath 文件路径
+     * @return 返回该文件路径对应的历史编码，若无记录返回空字符串
+     */
+    QString readEncodeHistoryRecord(const QString &filepath);
     /**
      * @brief tellFindBarClose 通知查找框关闭
      */
