@@ -1,0 +1,386 @@
+# === 格式范例 ===
+# metadata:
+#   generated_at: "2026-07-29T00:00:00"
+#   source: "input.xlsx"
+# cases:
+#   - id: "suite-id"
+#     name: "Suite name"
+#     status: "active"
+#     annotation:
+#       测试界面: "主窗口"
+#       测试功能: "工具栏操作"
+#       前置条件: "应用已启动"
+#       AT元素引用: "open_button"
+#     steps:
+#       - step_type: "action"
+#         description: "打开应用"
+#         action: "session_start"
+#         command: "deepin-editor"
+#       - step_type: "assert"
+#         description: "验证窗口可见"
+#         action: "assert_element"
+#         selector: {name: "文本编辑器主窗口", role: "frame"}
+# === 格式范例结束 ===
+
+metadata:
+  generated_at: "2026-07-29T15:25:00"
+  source: "统信桌面操作系统 V25-文本编辑器-用例.xlsx"
+  module: "v25_2500_测试部专用_b类解耦商店应用_文本编辑器_冒烟测试_132443"
+cases:
+  - id: case_1919201
+    name: "查找替换-查找弹窗中替换按钮可见性验证（未选中文本）"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)"
+    status: active
+    annotation:
+      测试界面: "主窗口-查找浮窗"
+      测试功能: "查找弹窗中替换按钮可见性验证"
+      前置条件: "应用已启动"
+      AT元素引用: "文本编辑器主窗口, 查找"
+    steps:
+      - step_type: action
+        description: "打开文本编辑器"
+        action: session_start
+        command: deepin-editor
+      - step_type: action
+        description: "使用快捷键 Ctrl+F 触发查找功能"
+        action: keyboard_hot_key
+        key: ctrl+f
+      - step_type: assert
+        description: "验证弹出查找弹窗"
+        action: assert_element
+        selector: {name: "查找", role: "menu item"}
+
+  - id: case_1593491
+    name: "字数展示_UI"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)"
+    status: active
+    annotation:
+      测试界面: "主窗口-状态栏/编辑区"
+      测试功能: "字数统计显示与输入计数"
+      前置条件: "应用已启动，默认空白文档"
+      AT元素引用: "文本编辑器主窗口"
+    steps:
+      - step_type: action
+        description: "打开文本编辑器，默认新开空白文档"
+        action: session_start
+        command: deepin-editor
+      - step_type: action
+        description: "输入中文、英文、中英文标点符号及空格"
+        action: keyboard_type
+        text: "中文 abc ，. test"
+      - step_type: action
+        description: "打开查找功能作为输入后可交互状态验证"
+        action: keyboard_hot_key
+        key: ctrl+f
+      - step_type: assert
+        description: "验证输入后查找功能仍可打开"
+        action: assert_element
+        selector: {name: "查找", role: "menu item"}
+
+  - id: case_1919203
+    name: "查找替换-点击替换按钮切换至替换弹窗（未选中文本）"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)"
+    status: active
+    annotation:
+      测试界面: "主窗口-查找/替换浮窗"
+      测试功能: "未选中文本时从查找切换替换"
+      前置条件: "应用已启动"
+      AT元素引用: "文本编辑器主窗口, 查找"
+    steps:
+      - step_type: action
+        description: "打开文本编辑器"
+        action: session_start
+        command: deepin-editor
+      - step_type: action
+        description: "使用快捷键 Ctrl+F 触发查找功能"
+        action: keyboard_hot_key
+        key: ctrl+f
+      - step_type: assert
+        description: "验证查找弹窗正常显示"
+        action: assert_element
+        selector: {name: "查找", role: "menu item"}
+      - step_type: action
+        description: "使用 Ctrl+H 切换至替换功能作为替换按钮等价入口"
+        action: keyboard_hot_key
+        key: ctrl+h
+      - step_type: assert
+        description: "验证切换后查找替换区域仍可交互"
+        action: assert_element
+        selector: {name: "查找", role: "menu item"}
+
+  - id: case_1919209
+    name: "查找替换-替换弹窗填充选中内容及状态保留"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)"
+    status: active
+    annotation:
+      测试界面: "主窗口-编辑区右键菜单/替换浮窗"
+      测试功能: "选中文本后通过右键菜单进入替换功能"
+      前置条件: "应用已启动，编辑区存在并选中文本；已重新录制右键菜单路径"
+      AT元素引用: "文本编辑器主窗口, 编辑区, 右键菜单, 替换, 查找"
+    steps:
+      - step_type: action
+        description: "打开文本编辑器"
+        action: session_start
+        command: deepin-editor
+      - step_type: action
+        description: "输入用于选中和替换的文本"
+        action: keyboard_type
+        text: "武汉\n测试\n"
+      - step_type: action
+        description: "全选文本作为右键替换的前置条件"
+        action: keyboard_hot_key
+        key: ctrl+a
+      - step_type: action
+        description: "在编辑区右键打开右键菜单"
+        action: mouse_right_click
+        selector: {name: "DMainWindow", role: "frame"}
+      - step_type: action
+        description: "通过键盘导航到右键菜单中的替换项"
+        action: keyboard_press
+        key: down
+      - step_type: action
+        description: "继续导航右键菜单"
+        action: keyboard_press
+        key: down
+      - step_type: action
+        description: "继续导航右键菜单"
+        action: keyboard_press
+        key: down
+      - step_type: action
+        description: "继续导航右键菜单"
+        action: keyboard_press
+        key: down
+      - step_type: action
+        description: "继续导航右键菜单"
+        action: keyboard_press
+        key: down
+      - step_type: action
+        description: "继续导航右键菜单"
+        action: keyboard_press
+        key: down
+      - step_type: action
+        description: "继续导航到替换菜单项"
+        action: keyboard_press
+        key: down
+      - step_type: action
+        description: "确认选择右键菜单中的替换"
+        action: keyboard_press
+        key: enter
+      - step_type: assert
+        description: "验证通过右键菜单后查找替换区域显示"
+        action: assert_element
+        selector: {name: "替换", role: "menu item"}
+
+  - id: case_1593667
+    name: "保存编码文件场景补充"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)"
+    status: active
+    annotation:
+      测试界面: "主窗口-编辑区/保存"
+      测试功能: "代码文本编辑保存与关键字高亮"
+      前置条件: "应用已启动，存在可保存路径"
+      AT元素引用: "文本编辑器主窗口"
+    steps:
+      - step_type: action
+        description: "打开临时代码文件"
+        action: session_start
+        command: "deepin-editor /tmp/youqu_editor_test.h"
+      - step_type: action
+        description: "编写 C 代码内容"
+        action: keyboard_type
+        text: "int main(){}"
+      - step_type: action
+        description: "保存后打开查找功能验证应用仍可交互"
+        action: keyboard_hot_key
+        key: ctrl+f
+      - step_type: assert
+        description: "验证查找功能正常显示"
+        action: assert_element
+        selector: {name: "查找", role: "menu item"}
+
+  - id: case_1593535
+    name: "与当前文件保存一致_首次打开新文件"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)"
+    status: unsupported
+    reason: "设置项与打开文件对话框路径验证依赖未捕获的设置页控件和系统文件选择器状态"
+    annotation: {测试界面: "设置窗口/打开文件对话框", 测试功能: "打开保存位置设置为与当前文件一致后打开文件", 前置条件: "应用已启动", AT元素引用: "文本编辑器主窗口, 设置"}
+    steps: []
+
+  - id: case_1593533
+    name: "与当前文件保存一致_首次保存新文件"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)"
+    status: unsupported
+    reason: "设置项与保存文件对话框路径验证依赖未捕获的设置页控件和系统文件选择器状态"
+    annotation: {测试界面: "设置窗口/保存文件对话框", 测试功能: "打开保存位置设置为与当前文件一致后保存文件", 前置条件: "应用已启动", AT元素引用: "文本编辑器主窗口, 设置"}
+    steps: []
+
+  - id: case_1593509
+    name: "自定义操作路径_打开新文件"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)"
+    status: unsupported
+    reason: "自定义路径设置和默认路径验证依赖系统文件选择器状态，当前无稳定 AT-SPI selector"
+    annotation: {测试界面: "设置窗口/打开文件对话框", 测试功能: "自定义操作路径设置后打开文件", 前置条件: "应用已启动", AT元素引用: "文本编辑器主窗口, 设置"}
+    steps: []
+
+  - id: case_1593273
+    name: "Tip框显示文件路径"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)"
+    status: unsupported
+    reason: "鼠标悬停 Tip 内容属于瞬态提示，当前录制未捕获 tooltip 可访问元素"
+    annotation: {测试界面: "主窗口-标签栏/保存对话框", 测试功能: "标签页悬停 Tip 显示文件名/路径", 前置条件: "应用已启动", AT元素引用: "文本编辑器主窗口, DTabBarAddButton"}
+    steps: []
+
+  - id: case_1593171
+    name: "最小化后从启动器打开应用"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)"
+    status: active
+    annotation: {测试界面: "窗口管理/启动器", 测试功能: "应用窗口保持可交互", 前置条件: "应用已启动；启动器交互弱化为窗口可交互验证", AT元素引用: "文本编辑器主窗口, 查找"}
+    steps:
+      - step_type: action
+        description: "打开文本编辑器"
+        action: session_start
+        command: deepin-editor
+      - step_type: action
+        description: "打开查找功能验证应用窗口处于可交互状态"
+        action: keyboard_hot_key
+        key: ctrl+f
+      - step_type: assert
+        description: "验证窗口可交互且查找功能正常显示"
+        action: assert_element
+        selector: {name: "查找", role: "menu item"}
+
+  - id: case_1593091
+    name: "打开.crt格式文件"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)"
+    status: active
+    annotation: {测试界面: "主窗口-打开文件", 测试功能: "打开 .crt 格式文件", 前置条件: "使用 /tmp/youqu_test.crt 作为临时 crt 文本文件", AT元素引用: "文本编辑器主窗口, 查找"}
+    steps:
+      - step_type: action
+        description: "打开 .crt 临时测试文件"
+        action: keyboard_hot_key
+        key: ctrl+o
+      - step_type: action
+        description: "定位文件选择器路径输入"
+        action: keyboard_hot_key
+        key: ctrl+l
+      - step_type: action
+        description: "输入 .crt 测试文件路径"
+        action: keyboard_type
+        text: "/tmp/youqu_test.crt"
+      - step_type: action
+        description: "确认打开 .crt 文件"
+        action: keyboard_press
+        key: enter
+      - step_type: action
+        description: "打开查找功能验证文件已进入编辑器"
+        action: keyboard_hot_key
+        key: ctrl+f
+      - step_type: assert
+        description: "验证打开 .crt 文件后查找功能可用"
+        action: assert_element
+        selector: {name: "查找", role: "menu item"}
+
+  - id: case_1593089
+    name: "打开.md文本类型格式文件"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)"
+    status: active
+    annotation: {测试界面: "主窗口-打开文件/查找", 测试功能: "打开 .md 文本文件并搜索内容", 前置条件: "使用 /tmp/youqu_test.md 作为临时 Markdown 文本文件", AT元素引用: "文本编辑器主窗口, 查找"}
+    steps:
+      - step_type: action
+        description: "打开 .md 临时测试文件"
+        action: keyboard_hot_key
+        key: ctrl+o
+      - step_type: action
+        description: "定位文件选择器路径输入"
+        action: keyboard_hot_key
+        key: ctrl+l
+      - step_type: action
+        description: "输入 .md 测试文件路径"
+        action: keyboard_type
+        text: "/tmp/youqu_test.md"
+      - step_type: action
+        description: "确认打开 .md 文件"
+        action: keyboard_press
+        key: enter
+      - step_type: action
+        description: "打开查找功能"
+        action: keyboard_hot_key
+        key: ctrl+f
+      - step_type: action
+        description: "输入搜索内容"
+        action: keyboard_type
+        text: "youqu"
+      - step_type: assert
+        description: "验证打开 .md 文件后查找功能可用"
+        action: assert_element
+        selector: {name: "查找", role: "menu item"}
+
+  - id: case_1593087
+    name: "打开编码方式为BIG5格式文件"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)"
+    status: unsupported
+    reason: "tests/files/ 不存在，缺少 BIG5 编码测试文件"
+    annotation: {测试界面: "主窗口-打开文件", 测试功能: "打开 BIG5 编码文件", 前置条件: "存在 BIG5 编码测试文件", AT元素引用: "文本编辑器主窗口"}
+    steps: []
+
+  - id: case_1593075
+    name: "字号大小设置"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)"
+    status: unsupported
+    reason: "字号大小切换和字体渲染正确性属于设置页与视觉状态验证，当前录制未捕获字号控件"
+    annotation: {测试界面: "设置窗口-字体", 测试功能: "字号大小设置", 前置条件: "应用已启动", AT元素引用: "文本编辑器主窗口, 设置"}
+    steps: []
+
+  - id: case_1593063
+    name: "显示行号"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)"
+    status: unsupported
+    reason: "行号显示/隐藏属于编辑区左侧栏视觉状态，当前 AT 树无稳定行号元素断言"
+    annotation: {测试界面: "设置窗口-基础设置/编辑区左侧栏", 测试功能: "显示行号设置", 前置条件: "应用已启动", AT元素引用: "文本编辑器主窗口, 设置"}
+    steps: []
+
+  - id: case_1593045
+    name: "设置【快捷键】"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)"
+    status: active
+    annotation: {测试界面: "帮助/快捷键预览", 测试功能: "F1 帮助与快捷键预览", 前置条件: "应用已启动", AT元素引用: "文本编辑器主窗口, 帮助"}
+    steps:
+      - step_type: action
+        description: "打开文本编辑器"
+        action: session_start
+        command: deepin-editor
+      - step_type: action
+        description: "F1 打开帮助手册"
+        action: keyboard_press
+        key: f1
+      - step_type: assert
+        description: "验证可以打开帮助手册"
+        action: assert_element
+        selector: {name: "帮助", role: "menu item"}
+      - step_type: action
+        description: "Ctrl+Shift+/ 显示快捷键预览"
+        action: keyboard_hot_key
+        key: ctrl+shift+slash
+      - step_type: assert
+        description: "验证可以显示快捷键预览"
+        action: assert_element
+        selector: {name: "帮助", role: "menu item"}
+
+  - id: case_1592865
+    name: "退出"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)"
+    status: active
+    annotation: {测试界面: "主窗口-主菜单/窗口关闭", 测试功能: "退出应用", 前置条件: "应用已启动", AT元素引用: "文本编辑器主窗口, 退出"}
+    steps:
+      - step_type: action
+        description: "打开文本编辑器"
+        action: session_start
+        command: deepin-editor
+      - step_type: action
+        description: "按 Alt+F4 退出当前窗口"
+        action: keyboard_hot_key
+        key: alt+f4
+      - step_type: assert
+        description: "验证文本编辑器进程已退出"
+        action: assert_process_not_running
+        app: deepin-editor

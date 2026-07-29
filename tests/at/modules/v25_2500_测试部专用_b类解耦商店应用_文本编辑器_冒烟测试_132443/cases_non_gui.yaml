@@ -1,0 +1,121 @@
+version: '1.0'
+cases:
+- id: case_1704781
+  name: 【玲珑】【文本编辑器】卸载指定版本的玲珑应用
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 【玲珑】【文本编辑器】卸载指定版本的玲珑应用
+  status: non_gui
+  reason: 终端 ll-cli 命令验证，不属于 AT-SPI GUI 自动化用例
+  steps:
+  - step_type: action
+    description: 1. 在终端执行命令：ll-cli uninstall org.deepin.editor/6.0.17
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 在终端执行命令：ll-cli info org.deepin.editor
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 【文本编辑器】玲珑指定版本的应用卸载成功
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 没有指定版本玲珑应用【文本编辑器】的应用信息
+    needs_accessible_name: false
+- id: case_1704777
+  name: 【玲珑】【文本编辑器】查看玲珑应用包含的文件
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 【玲珑】【文本编辑器】查看玲珑应用包含的文件
+  status: non_gui
+  reason: 终端 ll-cli 命令验证，不属于 AT-SPI GUI 自动化用例
+  steps:
+  - step_type: action
+    description: 1. 在终端执行命令：ll-cli content org.deepin.editor
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 展示已安装的【文本编辑器】应用包含的文件
+    needs_accessible_name: false
+- id: case_1704775
+  name: 【玲珑】【文本编辑器】杀掉玲珑应用运行进程
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 【玲珑】【文本编辑器】杀掉玲珑应用运行进程
+  status: non_gui
+  reason: 终端 ll-cli 命令验证，不属于 AT-SPI GUI 自动化用例
+  steps:
+  - step_type: action
+    description: 1. 在终端执行命令：ll-cli kill org.deepin.editor
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 终止后再次终端执行命令：ll-cli ps
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 【文本编辑器】应用进程运行被终止
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 没有显示【文本编辑器】运行
+    needs_accessible_name: false
+- id: case_1704773
+  name: 【玲珑】【文本编辑器】检查玲珑应用运行情况
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 【玲珑】【文本编辑器】检查玲珑应用运行情况
+  status: non_gui
+  reason: 终端 ll-cli 命令验证，不属于 AT-SPI GUI 自动化用例
+  steps:
+  - step_type: action
+    description: 1. 在终端执行命令：ll-cli ps
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 可以查看到【文本编辑器】的运行情况，包含：应用名称、容器ID、进程ID
+    needs_accessible_name: false
+- id: case_1704761
+  name: 【玲珑】【文本编辑器】运行玲珑应用
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 【玲珑】【文本编辑器】运行玲珑应用
+  status: non_gui
+  reason: 终端 ll-cli 命令验证，不属于 AT-SPI GUI 自动化用例
+  steps:
+  - step_type: action
+    description: 1. 在终端执行命令：ll-cli run org.deepin.editor
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 打开运行【文本编辑器】应用
+    needs_accessible_name: false
+- id: case_1704759
+  name: 【玲珑】【文本编辑器】安装玲珑应用指定版本
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 【玲珑】【文本编辑器】安装玲珑应用指定版本
+  status: non_gui
+  reason: 终端 ll-cli 命令验证，不属于 AT-SPI GUI 自动化用例
+  steps:
+  - step_type: action
+    description: 1. 在终端执行命令：ll-cli install org.deepin.editor/XXX指定版本
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 可正常安装成功
+    needs_accessible_name: false
+- id: case_1704755
+  name: 【玲珑】【文本编辑器】仓库玲珑应用信息
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 【玲珑】【文本编辑器】仓库玲珑应用信息
+  status: non_gui
+  reason: 终端 ll-cli 命令验证，不属于 AT-SPI GUI 自动化用例
+  steps:
+  - step_type: action
+    description: 1. 在终端执行命令：ll-cli search org.deepin.editor
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 展示【文本编辑器】应用的相关信息，包含appid、name、version、arch、channel、module、description；如果版本有多个，则全部展示
+    needs_accessible_name: false
+- id: case_1704753
+  name: 【玲珑】【文本编辑器】查看玲珑应用信息
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 【玲珑】【文本编辑器】查看玲珑应用信息
+  status: non_gui
+  reason: 终端 ll-cli 命令验证，不属于 AT-SPI GUI 自动化用例
+  steps:
+  - step_type: action
+    description: 1. 在终端执行命令：ll-cli info org.deepin.editor
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 展示玲珑应用(文本编辑器)的应用信息；
+    needs_accessible_name: false
+  - step_type: assert
+    description: 'PS: 没有安装则不展示应用信息'
+    needs_accessible_name: false

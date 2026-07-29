@@ -1,0 +1,327 @@
+# === 格式范例 ===
+# metadata:
+#   generated_at: "2026-07-29T00:00:00"
+#   source: "input.xlsx"
+# cases:
+#   - id: "suite-id"
+#     name: "Suite name"
+#     status: "active"
+#     annotation:
+#       测试界面: "主窗口"
+#       测试功能: "工具栏操作"
+#       前置条件: "应用已启动"
+#       AT元素引用: "open_button"
+#     steps:
+#       - step_type: "action"
+#         description: "打开应用"
+#         action: "session_start"
+#         command: "deepin-editor"
+#       - step_type: "action"
+#         description: "点击打开按钮"
+#         action: "element_action"
+#         selector: {name: "打开", role: "push button"}
+#         do: "click"
+#       - step_type: "assert"
+#         description: "验证打开按钮可见"
+#         action: "assert_element"
+#         selector: {name: "打开", role: "push button"}
+# === 格式范例结束 ===
+
+metadata:
+  generated_at: "2026-07-29T15:10:00"
+  source: "统信桌面操作系统 V25-文本编辑器-用例.xlsx"
+  module: "v25_2500_测试部专用_b类解耦商店应用_文本编辑器_110607"
+cases:
+  - id: case_1978835
+    name: "【bug转用例】使用Shift+Tab缩进文本场景验证"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)"
+    status: unsupported
+    reason: "纯视觉/文本选区状态验证：多行缩进结果和选区变化无法通过当前录制到的 AT-SPI 元素稳定断言"
+    annotation:
+      测试界面: "主窗口-编辑区"
+      测试功能: "多行文本选择后使用 Shift+Tab 反向缩进"
+      前置条件: "应用已启动，编辑区已有多行文本并选中"
+      AT元素引用: "文本编辑器主窗口"
+    steps: []
+
+  - id: case_1934897
+    name: "【bug转用例】修改编辑保存bashrc文件"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)"
+    status: active
+    annotation:
+      测试界面: "主窗口-编辑区/主菜单保存"
+      测试功能: "打开并修改 bashrc 文本后保存"
+      前置条件: "使用 /tmp/youqu_bashrc_test 作为安全替代文件，避免修改真实 ~/.bashrc"
+      AT元素引用: "文本编辑器主窗口, 保存, 打开文件"
+    steps:
+      - step_type: action
+        description: "打开 bashrc 安全替代测试文件"
+        action: session_start
+        command: "deepin-editor /tmp/youqu_bashrc_test"
+      - step_type: action
+        description: "修改任意信息"
+        action: keyboard_type
+        text: "\n# youqu at save test\n"
+      - step_type: action
+        description: "保存文本"
+        action: keyboard_hot_key
+        key: ctrl+s
+      - step_type: action
+        description: "保存后打开查找功能验证应用仍可交互"
+        action: keyboard_hot_key
+        key: ctrl+f
+      - step_type: assert
+        description: "验证保存后查找功能正常显示"
+        action: assert_element
+        selector: {name: "查找", role: "menu item"}
+
+  - id: case_1919211
+    name: "查找替换-多匹配项中特定选中状态保留"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)"
+    status: active
+    annotation:
+      测试界面: "主窗口-查找/替换浮窗"
+      测试功能: "多匹配项查找后切换替换并保持高亮选中状态"
+      前置条件: "应用已启动，编辑区包含多个“武汉”文本"
+      AT元素引用: "文本编辑器主窗口, 查找, 替换"
+    steps:
+      - step_type: action
+        description: "打开文本编辑器"
+        action: session_start
+        command: deepin-editor
+      - step_type: action
+        description: "输入包含多个匹配项的文本"
+        action: keyboard_type
+        text: "武汉\n武汉\n测试"
+      - step_type: action
+        description: "快捷键 Ctrl+F 触发查找功能"
+        action: keyboard_hot_key
+        key: ctrl+f
+      - step_type: assert
+        description: "验证下方显示查找窗口"
+        action: assert_element
+        selector: {name: "查找", role: "menu item"}
+      - step_type: action
+        description: "在查找输入框输入文本武汉"
+        action: keyboard_type
+        text: "武汉"
+      - step_type: action
+        description: "点击替换按钮切换至替换弹窗"
+        action: element_action
+        selector: {name: "替换", role: "push button"}
+        do: click
+      - step_type: assert
+        description: "验证替换弹窗正常显示"
+        action: assert_element
+        selector: {name: "替换", role: "push button"}
+
+  - id: case_1919209
+    name: "查找替换-替换弹窗填充选中内容及状态保留"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)"
+    status: unsupported
+    reason: "步骤依赖编辑区右键上下文菜单中的查找入口，但本次录制的 transient_contexts 未捕获文本编辑区右键菜单项，无法稳定定位右键位置和菜单项"
+    annotation:
+      测试界面: "主窗口-右键菜单/查找替换浮窗"
+      测试功能: "通过右键查找后切换替换并保持选中状态"
+      前置条件: "应用已启动，编辑区包含多个“武汉”文本"
+      AT元素引用: "文本编辑器主窗口, 查找, 替换"
+    steps: []
+
+  - id: case_1919207
+    name: "查找替换-替换按钮切换后与Ctrl+H触发功能一致性验证"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)"
+    status: active
+    annotation:
+      测试界面: "主窗口-查找/替换浮窗"
+      测试功能: "查找浮窗替换按钮与 Ctrl+H 替换入口一致性"
+      前置条件: "应用已启动"
+      AT元素引用: "文本编辑器主窗口, 查找, 替换"
+    steps:
+      - step_type: action
+        description: "打开文本编辑器"
+        action: session_start
+        command: deepin-editor
+      - step_type: action
+        description: "快捷键 Ctrl+F 触发查找功能"
+        action: keyboard_hot_key
+        key: ctrl+f
+      - step_type: assert
+        description: "验证查找弹窗正常显示"
+        action: assert_element
+        selector: {name: "查找", role: "menu item"}
+      - step_type: action
+        description: "点击替换按钮切换至替换弹窗"
+        action: element_action
+        selector: {name: "替换", role: "push button"}
+        do: click
+      - step_type: assert
+        description: "验证成功切换至替换弹窗"
+        action: assert_element
+        selector: {name: "替换", role: "push button"}
+      - step_type: action
+        description: "快捷键 Ctrl+H 直接触发替换功能"
+        action: keyboard_hot_key
+        key: ctrl+h
+      - step_type: assert
+        description: "验证弹出替换弹窗"
+        action: assert_element
+        selector: {name: "替换", role: "push button"}
+
+  - id: case_1919205
+    name: "查找替换-已选中文本时点击替换按钮切换至替换弹窗（代入选中文本）"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)"
+    status: active
+    annotation:
+      测试界面: "主窗口-查找/替换浮窗"
+      测试功能: "已选中文本时从查找切换替换自动代入选中文本"
+      前置条件: "应用已启动，编辑区存在并已选中“测试”文本"
+      AT元素引用: "文本编辑器主窗口, 查找, 替换"
+    steps:
+      - step_type: action
+        description: "打开文本编辑器"
+        action: session_start
+        command: deepin-editor
+      - step_type: action
+        description: "输入测试文本"
+        action: keyboard_type
+        text: "测试"
+      - step_type: action
+        description: "全选测试文本作为前置条件"
+        action: keyboard_hot_key
+        key: ctrl+a
+      - step_type: action
+        description: "使用快捷键 Ctrl+F 触发查找功能"
+        action: keyboard_hot_key
+        key: ctrl+f
+      - step_type: assert
+        description: "验证查找弹窗正常显示"
+        action: assert_element
+        selector: {name: "查找", role: "menu item"}
+      - step_type: action
+        description: "点击查找弹窗中的替换按钮"
+        action: element_action
+        selector: {name: "替换", role: "push button"}
+        do: click
+      - step_type: assert
+        description: "验证替换弹窗正常显示"
+        action: assert_element
+        selector: {name: "替换", role: "push button"}
+
+  - id: case_1875739
+    name: "替换（右键菜单）"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)"
+    status: unsupported
+    reason: "右键替换菜单未在本次录制的 transient_contexts 中捕获，且替换框拖拉/不可移动属于视觉与鼠标拖拽状态验证，无法稳定自动化"
+    annotation:
+      测试界面: "主窗口-编辑区右键菜单/替换浮窗"
+      测试功能: "右键菜单替换入口及替换按钮操作"
+      前置条件: "应用已启动，编辑区存在可替换文本"
+      AT元素引用: "文本编辑器主窗口, 替换"
+    steps: []
+
+  - id: case_1873485
+    name: "语音朗读-全选文字"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)"
+    status: unsupported
+    reason: "语音朗读需要音频输出/语音服务，结果为声音播放，属于外部硬件和人工听觉判断"
+    annotation:
+      测试界面: "主窗口-编辑区右键菜单"
+      测试功能: "全选文本后语音朗读"
+      前置条件: "应用已启动，编辑区存在文本内容"
+      AT元素引用: "文本编辑器主窗口"
+    steps: []
+
+  - id: case_1873483
+    name: "语音朗读/语音听写-未安装uos-ai"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)"
+    status: unsupported
+    reason: "依赖系统未安装 UOS AI 的特定环境；本次录制未捕获语音朗读/语音听写右键菜单项和提示弹窗元素"
+    annotation:
+      测试界面: "主窗口-编辑区右键菜单"
+      测试功能: "未安装 UOS AI 时语音朗读/听写提示"
+      前置条件: "应用已启动，环境未安装 uos-ai"
+      AT元素引用: "文本编辑器主窗口"
+    steps: []
+
+  - id: case_1873481
+    name: "语音朗读-音频设备缺失"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)"
+    status: unsupported
+    reason: "依赖缺失音频输出设备的外部硬件环境，无法在通用 AT-SPI 自动化中稳定构造"
+    annotation:
+      测试界面: "主窗口-编辑区右键菜单"
+      测试功能: "无音频输出设备时语音朗读提示"
+      前置条件: "应用已启动，环境无音频输出设备"
+      AT元素引用: "文本编辑器主窗口"
+    steps: []
+
+  - id: case_1873479
+    name: "语音听写-音频设备缺失"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)"
+    status: unsupported
+    reason: "依赖缺失音频输入设备的外部硬件环境，无法在通用 AT-SPI 自动化中稳定构造"
+    annotation:
+      测试界面: "主窗口-编辑区右键菜单"
+      测试功能: "无音频输入设备时语音听写提示"
+      前置条件: "应用已启动，环境无音频输入设备"
+      AT元素引用: "文本编辑器主窗口"
+    steps: []
+
+  - id: case_1873477
+    name: "重复选择语音朗读"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)"
+    status: unsupported
+    reason: "语音朗读过程和重新朗读结果需要音频输出及人工听觉判断，无法通过 AT-SPI 元素断言"
+    annotation:
+      测试界面: "主窗口-编辑区右键菜单"
+      测试功能: "重复选择语音朗读时重新朗读当前选择文本"
+      前置条件: "应用已启动，编辑区存在多段文本"
+      AT元素引用: "文本编辑器主窗口"
+    steps: []
+
+  - id: case_1704765
+    name: "【玲珑】【文本编辑器】玲珑应用，基本功能测试"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)"
+    status: active
+    annotation:
+      测试界面: "主窗口-编辑区/查找替换/保存"
+      测试功能: "玲珑应用运行后的文本编辑器基本功能"
+      前置条件: "应用已通过玲珑方式启动"
+      AT元素引用: "文本编辑器主窗口, 查找, 替换, 保存, 另存为"
+    steps:
+      - step_type: action
+        description: "打开文本编辑器"
+        action: session_start
+        command: deepin-editor
+      - step_type: action
+        description: "进行文字输入"
+        action: keyboard_type
+        text: "basic edit test"
+      - step_type: action
+        description: "全选并复制文本"
+        action: keyboard_hot_key
+        key: ctrl+a
+      - step_type: action
+        description: "复制文本"
+        action: keyboard_hot_key
+        key: ctrl+c
+      - step_type: action
+        description: "粘贴文本"
+        action: keyboard_hot_key
+        key: ctrl+v
+      - step_type: action
+        description: "打开查找功能"
+        action: keyboard_hot_key
+        key: ctrl+f
+      - step_type: assert
+        description: "验证查找功能正常显示"
+        action: assert_element
+        selector: {name: "查找", role: "menu item"}
+      - step_type: action
+        description: "打开替换功能"
+        action: keyboard_hot_key
+        key: ctrl+h
+      - step_type: assert
+        description: "验证替换功能正常显示"
+        action: assert_element
+        selector: {name: "替换", role: "menu item"}
