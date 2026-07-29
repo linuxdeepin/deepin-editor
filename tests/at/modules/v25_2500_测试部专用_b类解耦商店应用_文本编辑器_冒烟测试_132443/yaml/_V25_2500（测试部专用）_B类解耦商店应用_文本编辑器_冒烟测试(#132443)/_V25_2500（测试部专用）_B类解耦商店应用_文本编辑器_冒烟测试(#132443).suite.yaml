@@ -1,0 +1,191 @@
+name: _V25_2500（测试部专用）_B类解耦商店应用_文本编辑器_冒烟测试(#132443)_suite
+app: deepin-editor
+description: ''
+module: _V25_2500（测试部专用）_B类解耦商店应用_文本编辑器_冒烟测试(#132443)
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-editor /tmp/youqu_editor_test.h
+  wait: 3.0
+suites:
+- id: case_1919201_s1
+  name: 打开文本编辑器
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+f
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 查找
+      role: menu item
+- id: case_1593491_s1
+  name: 打开文本编辑器，默认新开空白文档
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_type
+    text: 中文 abc ，. test
+  - action: keyboard_hot_key
+    key: ctrl+f
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 查找
+      role: menu item
+- id: case_1919203_s1
+  name: 打开文本编辑器
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: keyboard_hot_key
+    key: ctrl+h
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 查找
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 查找
+      role: menu item
+- id: case_1919209_s1
+  name: 打开文本编辑器
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_type
+    text: '武汉
+
+      测试
+
+      '
+  - action: keyboard_hot_key
+    key: ctrl+a
+  - action: mouse_right_click
+    selector:
+      name: DMainWindow
+      role: frame
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: enter
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 替换
+      role: menu item
+- id: case_1593667_s1
+  name: 打开临时代码文件
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_type
+    text: int main(){}
+  - action: keyboard_hot_key
+    key: ctrl+f
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 查找
+      role: menu item
+- id: case_1593171_s1
+  name: 打开文本编辑器
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+f
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 查找
+      role: menu item
+- id: case_1593091_s1
+  name: 打开 .crt 临时测试文件
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: keyboard_hot_key
+    key: ctrl+l
+  - action: keyboard_type
+    text: /tmp/youqu_test.crt
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_hot_key
+    key: ctrl+f
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 查找
+      role: menu item
+- id: case_1593089_s1
+  name: 打开 .md 临时测试文件
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: keyboard_hot_key
+    key: ctrl+l
+  - action: keyboard_type
+    text: /tmp/youqu_test.md
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: keyboard_type
+    text: youqu
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 查找
+      role: menu item
+- id: case_1593045_s1
+  name: 打开文本编辑器
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_press
+    key: f1
+  - action: keyboard_hot_key
+    key: ctrl+shift+slash
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 帮助
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 帮助
+      role: menu item
+- id: case_1592865_s1
+  name: 打开文本编辑器
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_hot_key
+    key: alt+f4
+  assert_steps:
+  - action: assert_process_not_running
+teardown:
+- action: session_stop

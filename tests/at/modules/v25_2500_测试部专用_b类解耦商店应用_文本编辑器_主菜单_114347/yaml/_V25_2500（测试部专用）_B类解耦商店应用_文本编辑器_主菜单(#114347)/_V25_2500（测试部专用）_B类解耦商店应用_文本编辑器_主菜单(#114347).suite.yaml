@@ -1,0 +1,67 @@
+name: _V25_2500（测试部专用）_B类解耦商店应用_文本编辑器_主菜单(#114347)_suite
+app: deepin-editor
+description: ''
+module: _V25_2500（测试部专用）_B类解耦商店应用_文本编辑器_主菜单(#114347)
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-editor
+  wait: 3.0
+suites:
+- id: case_1592881_s1
+  name: 打开文本编辑器
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+t
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTabBarAddButton
+      role: button
+- id: case_1592855_s1
+  name: 打开文本编辑器
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_type
+    text: find target
+  - action: keyboard_hot_key
+    key: ctrl+f
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 查找
+      role: menu item
+- id: case_1592861_s1
+  name: 打开文本编辑器
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_type
+    text: replace target
+  - action: keyboard_hot_key
+    key: ctrl+h
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 替换
+      role: menu item
+- id: case_1592867_s1
+  name: 打开文本编辑器
+  description: ''
+  tags: []
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 关于
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 关于
+      role: menu item
+teardown:
+- action: session_stop

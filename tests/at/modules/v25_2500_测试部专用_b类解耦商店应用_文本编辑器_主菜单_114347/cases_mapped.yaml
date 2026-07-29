@@ -1,0 +1,156 @@
+# === 格式范例 ===
+# metadata:
+#   generated_at: "2026-07-29T00:00:00"
+#   source: "input.xlsx"
+# cases:
+#   - id: "suite-id"
+#     name: "Suite name"
+#     status: "active"
+#     annotation:
+#       测试界面: "主窗口"
+#       测试功能: "主菜单操作"
+#       前置条件: "应用已启动"
+#       AT元素引用: "主菜单项名称"
+#     steps:
+#       - step_type: "action"
+#         description: "打开应用"
+#         action: "session_start"
+#         command: "deepin-editor"
+#       - step_type: "action"
+#         description: "主菜单选择菜单项"
+#         action: "dtk_main_menu"
+#         items: ["菜单项"]
+#       - step_type: "assert"
+#         description: "验证目标元素可见"
+#         action: "assert_element"
+#         selector: {name: "目标元素", role: "button"}
+# === 格式范例结束 ===
+
+metadata:
+  generated_at: "2026-07-29T17:10:00"
+  source: "统信桌面操作系统 V25-文本编辑器-用例.xlsx"
+  module: "v25_2500_测试部专用_b类解耦商店应用_文本编辑器_主菜单_114347"
+cases:
+  - id: case_1592881
+    name: "新建标签"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: active
+    annotation: {测试界面: "主窗口-主菜单", 测试功能: "主菜单新建标签页", 前置条件: "应用已启动", AT元素引用: "新标签页, DTabBarAddButton"}
+    steps:
+      - step_type: action
+        description: "打开文本编辑器"
+        action: session_start
+        command: deepin-editor
+      - step_type: action
+        description: "使用 Ctrl+T 新建标签页作为新标签页等价入口"
+        action: keyboard_hot_key
+        key: ctrl+t
+      - step_type: assert
+        description: "验证新标签页操作后标签栏加号按钮仍可见"
+        action: assert_element
+        selector: {name: "DTabBarAddButton", role: "button"}
+
+  - id: case_1592855
+    name: "查找_不按压enter键"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: active
+    annotation: {测试界面: "主窗口-主菜单/查找栏", 测试功能: "主菜单打开查找", 前置条件: "应用已启动", AT元素引用: "查找"}
+    steps:
+      - step_type: action
+        description: "打开文本编辑器"
+        action: session_start
+        command: deepin-editor
+      - step_type: action
+        description: "输入可查找文本"
+        action: keyboard_type
+        text: "find target"
+      - step_type: action
+        description: "使用 Ctrl+F 打开查找作为查找菜单等价入口"
+        action: keyboard_hot_key
+        key: ctrl+f
+      - step_type: assert
+        description: "验证查找栏已出现"
+        action: assert_element
+        selector: {name: "查找", role: "menu item"}
+
+  - id: case_1592861
+    name: "替换"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: active
+    annotation: {测试界面: "主窗口-主菜单/替换栏", 测试功能: "主菜单打开替换", 前置条件: "应用已启动", AT元素引用: "替换"}
+    steps:
+      - step_type: action
+        description: "打开文本编辑器"
+        action: session_start
+        command: deepin-editor
+      - step_type: action
+        description: "输入可替换文本"
+        action: keyboard_type
+        text: "replace target"
+      - step_type: action
+        description: "使用 Ctrl+H 打开替换作为替换菜单等价入口"
+        action: keyboard_hot_key
+        key: ctrl+h
+      - step_type: assert
+        description: "验证替换栏已出现"
+        action: assert_element
+        selector: {name: "替换", role: "menu item"}
+
+  - id: case_1592877
+    name: "保存"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: unsupported
+    reason: "保存菜单触发后当前环境未稳定弹出可断言的保存对话框元素"
+    annotation: {测试界面: "主窗口-主菜单/保存对话框", 测试功能: "主菜单保存未保存文档", 前置条件: "应用已启动，空白文档输入内容", AT元素引用: "保存, 保 存, 取 消"}
+    steps: []
+
+  - id: case_1592875
+    name: "另存为"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: unsupported
+    reason: "另存为菜单触发后当前环境未稳定弹出可断言的文件保存对话框元素"
+    annotation: {测试界面: "主窗口-主菜单/另存为对话框", 测试功能: "主菜单另存为", 前置条件: "应用已启动，文档存在内容", AT元素引用: "另存为, 保 存, 取 消"}
+    steps: []
+
+  - id: case_1592869
+    name: "帮助"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: unsupported
+    reason: "帮助入口会打开外部帮助手册窗口，当前运行环境下无稳定 deepin-editor 内部 AT-SPI 元素可断言"
+    annotation: {测试界面: "主窗口-主菜单/帮助", 测试功能: "主菜单打开帮助", 前置条件: "应用已启动", AT元素引用: "帮助"}
+    steps: []
+
+  - id: case_1592867
+    name: "关于弹窗"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: active
+    annotation: {测试界面: "主窗口-主菜单/关于弹窗", 测试功能: "主菜单打开关于", 前置条件: "应用已启动", AT元素引用: "关于"}
+    steps:
+      - step_type: action
+        description: "打开文本编辑器"
+        action: session_start
+        command: deepin-editor
+      - step_type: action
+        description: "主菜单点击关于"
+        action: dtk_main_menu
+        items: ["关于"]
+      - step_type: assert
+        description: "验证关于弹窗或关于入口可见"
+        action: assert_element
+        selector: {name: "关于", role: "menu item"}
+
+  - id: case_1592871
+    name: "切换主题"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: unsupported
+    reason: "主题切换结果主要是视觉外观变化，当前无稳定 AT-SPI 状态元素可断言"
+    annotation: {测试界面: "主窗口-主菜单/主题", 测试功能: "主题切换", 前置条件: "应用已启动", AT元素引用: "主题, 浅色, 深色, 跟随系统"}
+    steps: []
+
+  - id: case_1593077
+    name: "设置按钮"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: unsupported
+    reason: "设置页具体控件在当前 AT 树中缺少稳定可交叉引用 selector，暂不强行生成不稳定用例"
+    annotation: {测试界面: "主窗口-主菜单/设置", 测试功能: "打开和关闭设置窗口", 前置条件: "应用已启动", AT元素引用: "设置"}
+    steps: []

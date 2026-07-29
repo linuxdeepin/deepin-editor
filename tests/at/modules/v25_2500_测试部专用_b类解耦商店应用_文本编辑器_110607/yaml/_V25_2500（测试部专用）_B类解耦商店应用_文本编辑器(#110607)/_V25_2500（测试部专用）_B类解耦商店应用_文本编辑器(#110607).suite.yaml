@@ -1,0 +1,141 @@
+name: _V25_2500（测试部专用）_B类解耦商店应用_文本编辑器(#110607)_suite
+app: deepin-editor
+description: ''
+module: _V25_2500（测试部专用）_B类解耦商店应用_文本编辑器(#110607)
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-editor /tmp/youqu_bashrc_test
+  wait: 3.0
+suites:
+- id: case_1934897_s1
+  name: 打开 bashrc 安全替代测试文件
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_type
+    text: '
+
+      # youqu at save test
+
+      '
+  - action: keyboard_hot_key
+    key: ctrl+s
+  - action: keyboard_hot_key
+    key: ctrl+f
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 查找
+      role: menu item
+- id: case_1919211_s1
+  name: 打开文本编辑器
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_type
+    text: '武汉
+
+      武汉
+
+      测试'
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: keyboard_type
+    text: 武汉
+  - action: element_action
+    selector:
+      name: 替换
+      role: push button
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 查找
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 替换
+      role: push button
+- id: case_1919207_s1
+  name: 打开文本编辑器
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: element_action
+    selector:
+      name: 替换
+      role: push button
+    do: click
+  - action: keyboard_hot_key
+    key: ctrl+h
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 查找
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 替换
+      role: push button
+  - action: assert_element
+    selector:
+      name: 替换
+      role: push button
+- id: case_1919205_s1
+  name: 打开文本编辑器
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_type
+    text: 测试
+  - action: keyboard_hot_key
+    key: ctrl+a
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: element_action
+    selector:
+      name: 替换
+      role: push button
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 查找
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 替换
+      role: push button
+- id: case_1704765_s1
+  name: 打开文本编辑器
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_type
+    text: basic edit test
+  - action: keyboard_hot_key
+    key: ctrl+a
+  - action: keyboard_hot_key
+    key: ctrl+c
+  - action: keyboard_hot_key
+    key: ctrl+v
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: keyboard_hot_key
+    key: ctrl+h
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 查找
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 替换
+      role: menu item
+teardown:
+- action: session_stop

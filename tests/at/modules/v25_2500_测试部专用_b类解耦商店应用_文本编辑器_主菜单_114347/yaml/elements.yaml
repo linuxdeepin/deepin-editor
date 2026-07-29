@@ -1,0 +1,9224 @@
+elements:
+  DTabBarAddButton:
+    name: DTabBarAddButton
+    role: button
+  查找:
+    name: 查找
+    role: menu item
+  替换:
+    name: 替换
+    role: menu item
+  关于:
+    name: 关于
+    role: menu item
+  n0:
+    name: DMainWindow
+    role: frame
+  n5:
+    name: DTitlebarMainMenu
+    role: popup menu
+  n6:
+    name: 新窗口
+    role: menu item
+  n7:
+    name: 新标签页
+    role: menu item
+  n8:
+    name: 打开文件
+    role: menu item
+  n9:
+    name: 查找
+    role: menu item
+  n10:
+    name: 替换
+    role: menu item
+  n11:
+    name: 保存
+    role: menu item
+  n12:
+    name: 另存为
+    role: menu item
+  n13:
+    name: 打印
+    role: menu item
+  n14:
+    name: 设置
+    role: menu item
+  n15:
+    name: 主题
+    role: menu item
+  n16:
+    name: DTitlebarThemeMenu
+    role: popup menu
+  n17:
+    name: 浅色
+    role: menu item
+  n18:
+    name: 深色
+    role: menu item
+  n19:
+    name: 跟随系统
+    role: menu item
+  n20:
+    name: 帮助
+    role: menu item
+  n21:
+    name: 关于
+    role: menu item
+  n22:
+    name: 退出
+    role: menu item
+  n23:
+    name: ''
+    role: popup menu
+  n24:
+    name: Unix
+    role: menu item
+  n25:
+    name: Windows
+    role: menu item
+  n26:
+    name: DTitlebarMainMenu
+    role: popup menu
+  n27:
+    name: 新窗口
+    role: menu item
+  n28:
+    name: 新标签页
+    role: menu item
+  n29:
+    name: 打开文件
+    role: menu item
+  n30:
+    name: 查找
+    role: menu item
+  n31:
+    name: 替换
+    role: menu item
+  n32:
+    name: 保存
+    role: menu item
+  n33:
+    name: 另存为
+    role: menu item
+  n34:
+    name: 打印
+    role: menu item
+  n35:
+    name: 设置
+    role: menu item
+  n36:
+    name: 主题
+    role: menu item
+  n37:
+    name: DTitlebarThemeMenu
+    role: popup menu
+  n38:
+    name: 浅色
+    role: menu item
+  n39:
+    name: 深色
+    role: menu item
+  n40:
+    name: 跟随系统
+    role: menu item
+  n41:
+    name: 帮助
+    role: menu item
+  n42:
+    name: 关于
+    role: menu item
+  n43:
+    name: 退出
+    role: menu item
+  n44:
+    name: DTitlebarThemeMenu
+    role: popup menu
+  n45:
+    name: 浅色
+    role: menu item
+  n46:
+    name: 深色
+    role: menu item
+  n47:
+    name: 跟随系统
+    role: menu item
+  n50:
+    name: ''
+    role: popup menu
+  n51:
+    name: 大写
+    role: menu item
+  n52:
+    name: 小写
+    role: menu item
+  n53:
+    name: 首字母大写
+    role: menu item
+  n54:
+    name: ''
+    role: popup menu
+  n55:
+    name: Unicode
+    role: menu item
+  n56:
+    name: ''
+    role: popup menu
+  n57:
+    name: UTF-8
+    role: menu item
+  n58:
+    name: UTF-16BE
+    role: menu item
+  n59:
+    name: UTF-16LE
+    role: menu item
+  n60:
+    name: UTF-32BE
+    role: menu item
+  n61:
+    name: UTF-32LE
+    role: menu item
+  n62:
+    name: 西欧语系
+    role: menu item
+  n63:
+    name: ''
+    role: popup menu
+  n64:
+    name: ISO-8859-1
+    role: menu item
+  n65:
+    name: ISO-8859-15
+    role: menu item
+  n66:
+    name: CP1252
+    role: menu item
+  n67:
+    name: 中欧语系
+    role: menu item
+  n68:
+    name: ''
+    role: popup menu
+  n69:
+    name: ISO-8859-2
+    role: menu item
+  n70:
+    name: ISO-8859-3
+    role: menu item
+  n71:
+    name: CP1125
+    role: menu item
+  n72:
+    name: CP1250
+    role: menu item
+  n73:
+    name: MACCENTRALEUROPE
+    role: menu item
+  n74:
+    name: IBM852
+    role: menu item
+  n75:
+    name: 波罗的海语言
+    role: menu item
+  n76:
+    name: ''
+    role: popup menu
+  n77:
+    name: ISO-8859-4
+    role: menu item
+  n78:
+    name: ISO-8859-10
+    role: menu item
+  n79:
+    name: ISO-8859-13
+    role: menu item
+  n80:
+    name: CP1257
+    role: menu item
+  n81:
+    name: IBM775
+    role: menu item
+  n82:
+    name: 西里尔文
+    role: menu item
+  n83:
+    name: ''
+    role: popup menu
+  n84:
+    name: ISO-8859-5
+    role: menu item
+  n85:
+    name: CP1251
+    role: menu item
+  n86:
+    name: KOI8-R
+    role: menu item
+  n87:
+    name: KOI8-U
+    role: menu item
+  n88:
+    name: MACCYRILLIC
+    role: menu item
+  n89:
+    name: IBM855
+    role: menu item
+  n90:
+    name: IBM866
+    role: menu item
+  n91:
+    name: 阿拉伯语
+    role: menu item
+  n92:
+    name: ''
+    role: popup menu
+  n93:
+    name: ISO-8859-6
+    role: menu item
+  n94:
+    name: CP1256
+    role: menu item
+  n95:
+    name: 希腊语
+    role: menu item
+  n96:
+    name: ''
+    role: popup menu
+  n97:
+    name: ISO-8859-7
+    role: menu item
+  n98:
+    name: CP1253
+    role: menu item
+  n99:
+    name: 希伯来语
+    role: menu item
+  n100:
+    name: ''
+    role: popup menu
+  n101:
+    name: ISO-8859-8
+    role: menu item
+  n102:
+    name: CP1255
+    role: menu item
+  n103:
+    name: 土耳其语
+    role: menu item
+  n104:
+    name: ''
+    role: popup menu
+  n105:
+    name: ISO-8859-9
+    role: menu item
+  n106:
+    name: CP1254
+    role: menu item
+  n107:
+    name: 泰语
+    role: menu item
+  n108:
+    name: ''
+    role: popup menu
+  n109:
+    name: ISO-8859-11
+    role: menu item
+  n110:
+    name: TIS-620
+    role: menu item
+  n111:
+    name: 凯尔特语
+    role: menu item
+  n112:
+    name: ''
+    role: popup menu
+  n113:
+    name: ISO-8859-14
+    role: menu item
+  n114:
+    name: 东南欧语系
+    role: menu item
+  n115:
+    name: ''
+    role: popup menu
+  n116:
+    name: ISO-8859-16
+    role: menu item
+  n117:
+    name: 简体中文
+    role: menu item
+  n118:
+    name: ''
+    role: popup menu
+  n119:
+    name: GB18030
+    role: menu item
+  n120:
+    name: ISO-2022-CN
+    role: menu item
+  n121:
+    name: 繁体中文
+    role: menu item
+  n122:
+    name: ''
+    role: popup menu
+  n123:
+    name: BIG5
+    role: menu item
+  n124:
+    name: EUC-TW
+    role: menu item
+  n125:
+    name: 日语
+    role: menu item
+  n126:
+    name: ''
+    role: popup menu
+  n127:
+    name: EUC-JP
+    role: menu item
+  n128:
+    name: SHIFT_JIS
+    role: menu item
+  n129:
+    name: ISO-2022-JP
+    role: menu item
+  n130:
+    name: 韩语
+    role: menu item
+  n131:
+    name: ''
+    role: popup menu
+  n132:
+    name: EUC-KR
+    role: menu item
+  n133:
+    name: ISO-2022-KR
+    role: menu item
+  n134:
+    name: 越南语
+    role: menu item
+  n135:
+    name: ''
+    role: popup menu
+  n136:
+    name: CP1258
+    role: menu item
+  n137:
+    name: ''
+    role: popup menu
+  n138:
+    name: UTF-8
+    role: menu item
+  n139:
+    name: UTF-16BE
+    role: menu item
+  n140:
+    name: UTF-16LE
+    role: menu item
+  n141:
+    name: UTF-32BE
+    role: menu item
+  n142:
+    name: UTF-32LE
+    role: menu item
+  n143:
+    name: ISO-8859-1
+    role: menu item
+  n144:
+    name: ISO-8859-15
+    role: menu item
+  n145:
+    name: CP1252
+    role: menu item
+  n146:
+    name: ISO-8859-2
+    role: menu item
+  n147:
+    name: ISO-8859-3
+    role: menu item
+  n148:
+    name: CP1125
+    role: menu item
+  n149:
+    name: CP1250
+    role: menu item
+  n150:
+    name: MACCENTRALEUROPE
+    role: menu item
+  n151:
+    name: IBM852
+    role: menu item
+  n152:
+    name: ISO-8859-4
+    role: menu item
+  n153:
+    name: ISO-8859-10
+    role: menu item
+  n154:
+    name: ISO-8859-13
+    role: menu item
+  n155:
+    name: CP1257
+    role: menu item
+  n156:
+    name: IBM775
+    role: menu item
+  n157:
+    name: ISO-8859-5
+    role: menu item
+  n158:
+    name: CP1251
+    role: menu item
+  n159:
+    name: KOI8-R
+    role: menu item
+  n160:
+    name: KOI8-U
+    role: menu item
+  n161:
+    name: MACCYRILLIC
+    role: menu item
+  n162:
+    name: IBM855
+    role: menu item
+  n163:
+    name: IBM866
+    role: menu item
+  n164:
+    name: ISO-8859-6
+    role: menu item
+  n165:
+    name: CP1256
+    role: menu item
+  n166:
+    name: ISO-8859-7
+    role: menu item
+  n167:
+    name: CP1253
+    role: menu item
+  n168:
+    name: ISO-8859-8
+    role: menu item
+  n169:
+    name: CP1255
+    role: menu item
+  n170:
+    name: ISO-8859-9
+    role: menu item
+  n171:
+    name: CP1254
+    role: menu item
+  n172:
+    name: ISO-8859-11
+    role: menu item
+  n173:
+    name: TIS-620
+    role: menu item
+  n174:
+    name: ISO-8859-14
+    role: menu item
+  n175:
+    name: ISO-8859-16
+    role: menu item
+  n176:
+    name: GB18030
+    role: menu item
+  n177:
+    name: ISO-2022-CN
+    role: menu item
+  n178:
+    name: BIG5
+    role: menu item
+  n179:
+    name: EUC-TW
+    role: menu item
+  n180:
+    name: EUC-JP
+    role: menu item
+  n181:
+    name: SHIFT_JIS
+    role: menu item
+  n182:
+    name: ISO-2022-JP
+    role: menu item
+  n183:
+    name: EUC-KR
+    role: menu item
+  n184:
+    name: ISO-2022-KR
+    role: menu item
+  n185:
+    name: CP1258
+    role: menu item
+  n186:
+    name: G-Code
+    role: menu item
+  n187:
+    name: GLSL
+    role: menu item
+  n188:
+    name: Klipper G-Code
+    role: menu item
+  n189:
+    name: Klipper Config
+    role: menu item
+  n190:
+    name: OpenSCAD
+    role: menu item
+  n191:
+    name: PLY
+    role: menu item
+  n192:
+    name: POV-Ray
+    role: menu item
+  n193:
+    name: RenderMan RIB
+    role: menu item
+  n194:
+    name: STL
+    role: menu item
+  n195:
+    name: VRML
+    role: menu item
+  n196:
+    name: Wavefront OBJ
+    role: menu item
+  n197:
+    name: ABC
+    role: menu item
+  n198:
+    name: ChangeLog
+    role: menu item
+  n199:
+    name: CMake
+    role: menu item
+  n200:
+    name: CSV
+    role: menu item
+  n201:
+    name: CSV (semicolon)
+    role: menu item
+  n202:
+    name: CSV (whitespace)
+    role: menu item
+  n203:
+    name: CSV (pipe)
+    role: menu item
+  n204:
+    name: CUE Sheet
+    role: menu item
+  n205:
+    name: Debian Changelog
+    role: menu item
+  n206:
+    name: Debian Control
+    role: menu item
+  n207:
+    name: Diff
+    role: menu item
+  n208:
+    name: Dockerfile
+    role: menu item
+  n209:
+    name: Earthfile
+    role: menu item
+  n210:
+    name: GDB
+    role: menu item
+  n211:
+    name: GDB Init
+    role: menu item
+  n212:
+    name: GDB Backtrace
+    role: menu item
+  n213:
+    name: Git Rebase
+    role: menu item
+  n214:
+    name: GraphQL
+    role: menu item
+  n215:
+    name: Hunspell Thesaurus Index File
+    role: menu item
+  n216:
+    name: Hunspell Dictionary File
+    role: menu item
+  n217:
+    name: Hunspell Affix File
+    role: menu item
+  n218:
+    name: Hunspell Thesaurus File
+    role: menu item
+  n219:
+    name: InnoSetup
+    role: menu item
+  n220:
+    name: Intel HEX
+    role: menu item
+  n221:
+    name: Jam
+    role: menu item
+  n222:
+    name: Java Properties
+    role: menu item
+  n223:
+    name: JavaScript/Twig
+    role: menu item
+  n224:
+    name: LilyPond
+    role: menu item
+  n225:
+    name: Logcat
+    role: menu item
+  n226:
+    name: M3U
+    role: menu item
+  n227:
+    name: Makefile
+    role: menu item
+  n228:
+    name: Meson
+    role: menu item
+  n229:
+    name: MIB
+    role: menu item
+  n230:
+    name: Music Publisher
+    role: menu item
+  n231:
+    name: Ninja
+    role: menu item
+  n232:
+    name: Overpass QL
+    role: menu item
+  n233:
+    name: PGN
+    role: menu item
+  n234:
+    name: QMake
+    role: menu item
+  n235:
+    name: RPM Spec
+    role: menu item
+  n236:
+    name: SELinux File Contexts
+    role: menu item
+  n237:
+    name: Snort/Suricata
+    role: menu item
+  n238:
+    name: SubRip Subtitles
+    role: menu item
+  n239:
+    name: TextProto
+    role: menu item
+  n240:
+    name: Tiger
+    role: menu item
+  n241:
+    name: Todo.txt
+    role: menu item
+  n242:
+    name: TSV
+    role: menu item
+  n243:
+    name: TypeScript/Twig
+    role: menu item
+  n244:
+    name: Valgrind Suppression
+    role: menu item
+  n245:
+    name: Wayland Trace
+    role: menu item
+  n246:
+    name: YARA
+    role: menu item
+  n247:
+    name: Log File (simplified)
+    role: menu item
+  n248:
+    name: Log File (advanced)
+    role: menu item
+  n249:
+    name: Email
+    role: menu item
+  n250:
+    name: 4GL
+    role: menu item
+  n251:
+    name: 4GL-PER
+    role: menu item
+  n252:
+    name: LDIF
+    role: menu item
+  n253:
+    name: progress
+    role: menu item
+  n254:
+    name: SQL
+    role: menu item
+  n255:
+    name: SQL (MySQL)
+    role: menu item
+  n256:
+    name: SQL (Oracle)
+    role: menu item
+  n257:
+    name: SQL (PostgreSQL)
+    role: menu item
+  n258:
+    name: AppArmor Security Profile
+    role: menu item
+  n259:
+    name: AsciiDoc
+    role: menu item
+  n260:
+    name: ASN.1
+    role: menu item
+  n261:
+    name: ASP
+    role: menu item
+  n262:
+    name: BibTeX
+    role: menu item
+  n263:
+    name: CartoCSS MML
+    role: menu item
+  n264:
+    name: CartoCSS MSS
+    role: menu item
+  n265:
+    name: CleanCSS
+    role: menu item
+  n266:
+    name: ColdFusion
+    role: menu item
+  n267:
+    name: ConTeXt
+    role: menu item
+  n268:
+    name: CSS
+    role: menu item
+  n269:
+    name: Cucumber Gherkin feature
+    role: menu item
+  n270:
+    name: Django HTML Template
+    role: menu item
+  n271:
+    name: Doxygen
+    role: menu item
+  n272:
+    name: DoxygenLua
+    role: menu item
+  n273:
+    name: DTD
+    role: menu item
+  n274:
+    name: Fluent
+    role: menu item
+  n275:
+    name: FTL
+    role: menu item
+  n276:
+    name: GlossTex
+    role: menu item
+  n277:
+    name: GNU Gettext
+    role: menu item
+  n278:
+    name: Haml
+    role: menu item
+  n279:
+    name: Hamlet
+    role: menu item
+  n280:
+    name: HTML
+    role: menu item
+  n281:
+    name: Javadoc
+    role: menu item
+  n282:
+    name: Jira
+    role: menu item
+  n283:
+    name: JSON
+    role: menu item
+  n284:
+    name: JSP
+    role: menu item
+  n285:
+    name: LaTeX
+    role: menu item
+  n286:
+    name: LESSCSS
+    role: menu item
+  n287:
+    name: MAB-DB
+    role: menu item
+  n288:
+    name: Mako
+    role: menu item
+  n289:
+    name: MapCSS
+    role: menu item
+  n290:
+    name: Markdown
+    role: menu item
+  n291:
+    name: MediaWiki
+    role: menu item
+  n292:
+    name: Metapost/Metafont
+    role: menu item
+  n293:
+    name: Mustache/Handlebars (HTML)
+    role: menu item
+  n294:
+    name: Org Mode
+    role: menu item
+  n295:
+    name: Pango
+    role: menu item
+  n296:
+    name: PostScript
+    role: menu item
+  n297:
+    name: PostScript Printer Description
+    role: menu item
+  n298:
+    name: Pug
+    role: menu item
+  n299:
+    name: R Markdown
+    role: menu item
+  n300:
+    name: R documentation
+    role: menu item
+  n301:
+    name: RELAX NG
+    role: menu item
+  n302:
+    name: RelaxNG-Compact
+    role: menu item
+  n303:
+    name: reStructuredText
+    role: menu item
+  n304:
+    name: Roff
+    role: menu item
+  n305:
+    name: Ruby/Rails/RHTML
+    role: menu item
+  n306:
+    name: SASS
+    role: menu item
+  n307:
+    name: SCSS
+    role: menu item
+  n308:
+    name: SGML
+    role: menu item
+  n309:
+    name: SiSU
+    role: menu item
+  n310:
+    name: Texinfo
+    role: menu item
+  n311:
+    name: Textile
+    role: menu item
+  n312:
+    name: Troff Mandoc
+    role: menu item
+  n313:
+    name: TT2
+    role: menu item
+  n314:
+    name: Twig/Twig
+    role: menu item
+  n315:
+    name: txt2tags
+    role: menu item
+  n316:
+    name: Typst
+    role: menu item
+  n317:
+    name: vCard, vCalendar, iCalendar
+    role: menu item
+  n318:
+    name: Vue
+    role: menu item
+  n319:
+    name: Wesnoth Markup Language
+    role: menu item
+  n320:
+    name: XML
+    role: menu item
+  n321:
+    name: XML (Debug)
+    role: menu item
+  n322:
+    name: xslt
+    role: menu item
+  n323:
+    name: XUL
+    role: menu item
+  n324:
+    name: YAML
+    role: menu item
+  n325:
+    name: YANG
+    role: menu item
+  n326:
+    name: Rich Text Format
+    role: menu item
+  n327:
+    name: Asm6502
+    role: menu item
+  n328:
+    name: AVR Assembler
+    role: menu item
+  n329:
+    name: GNU Assembler
+    role: menu item
+  n330:
+    name: Intel x86 (NASM)
+    role: menu item
+  n331:
+    name: MIPS Assembler
+    role: menu item
+  n332:
+    name: Motorola 68k (VASM/Devpac)
+    role: menu item
+  n333:
+    name: Motorola DSP56k
+    role: menu item
+  n334:
+    name: PicAsm
+    role: menu item
+  n335:
+    name: Common Intermediate Language (CIL)
+    role: menu item
+  n336:
+    name: ABAP
+    role: menu item
+  n337:
+    name: ActionScript 2.0
+    role: menu item
+  n338:
+    name: Ada
+    role: menu item
+  n339:
+    name: Agda
+    role: menu item
+  n340:
+    name: ANS-Forth94
+    role: menu item
+  n341:
+    name: ANSI C89
+    role: menu item
+  n342:
+    name: ANTLR
+    role: menu item
+  n343:
+    name: ATS
+    role: menu item
+  n344:
+    name: Bitbake
+    role: menu item
+  n345:
+    name: Boo
+    role: menu item
+  n346:
+    name: C
+    role: menu item
+  n347:
+    name: C#
+    role: menu item
+  n348:
+    name: C++
+    role: menu item
+  n349:
+    name: CashScript
+    role: menu item
+  n350:
+    name: Cg
+    role: menu item
+  n351:
+    name: CGiS
+    role: menu item
+  n352:
+    name: Clipper
+    role: menu item
+  n353:
+    name: Clojure
+    role: menu item
+  n354:
+    name: COBOL
+    role: menu item
+  n355:
+    name: Common Lisp
+    role: menu item
+  n356:
+    name: Component-Pascal
+    role: menu item
+  n357:
+    name: Crack
+    role: menu item
+  n358:
+    name: Crystal
+    role: menu item
+  n359:
+    name: Curry
+    role: menu item
+  n360:
+    name: D
+    role: menu item
+  n361:
+    name: Dart
+    role: menu item
+  n362:
+    name: E Language
+    role: menu item
+  n363:
+    name: Eiffel
+    role: menu item
+  n364:
+    name: Elixir
+    role: menu item
+  n365:
+    name: Elm
+    role: menu item
+  n366:
+    name: FlatBuffers
+    role: menu item
+  n367:
+    name: Fortran (Fixed Format)
+    role: menu item
+  n368:
+    name: Fortran (Free Format)
+    role: menu item
+  n369:
+    name: FreeBASIC
+    role: menu item
+  n370:
+    name: FSharp
+    role: menu item
+  n371:
+    name: Gleam
+    role: menu item
+  n372:
+    name: GNU M4
+    role: menu item
+  n373:
+    name: Go
+    role: menu item
+  n374:
+    name: GPRBuild
+    role: menu item
+  n375:
+    name: Groovy
+    role: menu item
+  n376:
+    name: Hare
+    role: menu item
+  n377:
+    name: Haskell
+    role: menu item
+  n378:
+    name: Haxe
+    role: menu item
+  n379:
+    name: IDL
+    role: menu item
+  n380:
+    name: Idris
+    role: menu item
+  n381:
+    name: ILERPG
+    role: menu item
+  n382:
+    name: Inform
+    role: menu item
+  n383:
+    name: ISO C++
+    role: menu item
+  n384:
+    name: Java
+    role: menu item
+  n385:
+    name: Java Module
+    role: menu item
+  n386:
+    name: Julia
+    role: menu item
+  n387:
+    name: KBasic
+    role: menu item
+  n388:
+    name: KDev-PG[-Qt] Grammar
+    role: menu item
+  n389:
+    name: Kotlin
+    role: menu item
+  n390:
+    name: Lex/Flex
+    role: menu item
+  n391:
+    name: Literate Curry
+    role: menu item
+  n392:
+    name: Literate Haskell
+    role: menu item
+  n393:
+    name: LLVM
+    role: menu item
+  n394:
+    name: Logtalk
+    role: menu item
+  n395:
+    name: LPC
+    role: menu item
+  n396:
+    name: Modelica
+    role: menu item
+  n397:
+    name: Modula-2
+    role: menu item
+  n398:
+    name: Modula-2 (ISO only)
+    role: menu item
+  n399:
+    name: Modula-2 (PIM only)
+    role: menu item
+  n400:
+    name: Modula-2 (R10 only)
+    role: menu item
+  n401:
+    name: Modula-3
+    role: menu item
+  n402:
+    name: MonoBasic
+    role: menu item
+  n403:
+    name: Nemerle
+    role: menu item
+  n404:
+    name: nesC
+    role: menu item
+  n405:
+    name: Nim
+    role: menu item
+  n406:
+    name: noweb
+    role: menu item
+  n407:
+    name: Objective Caml
+    role: menu item
+  n408:
+    name: Objective Caml Ocamllex
+    role: menu item
+  n409:
+    name: Objective Caml Ocamlyacc
+    role: menu item
+  n410:
+    name: Objective-C
+    role: menu item
+  n411:
+    name: Objective-C++
+    role: menu item
+  n412:
+    name: Odin
+    role: menu item
+  n413:
+    name: OORS
+    role: menu item
+  n414:
+    name: OPAL
+    role: menu item
+  n415:
+    name: OpenCL
+    role: menu item
+  n416:
+    name: opsi-script
+    role: menu item
+  n417:
+    name: Pascal
+    role: menu item
+  n418:
+    name: PL/I
+    role: menu item
+  n419:
+    name: Pony
+    role: menu item
+  n420:
+    name: Prolog
+    role: menu item
+  n421:
+    name: Protobuf
+    role: menu item
+  n422:
+    name: Pure
+    role: menu item
+  n423:
+    name: PureBasic
+    role: menu item
+  n424:
+    name: PureScript
+    role: menu item
+  n425:
+    name: RapidQ
+    role: menu item
+  n426:
+    name: RenPy
+    role: menu item
+  n427:
+    name: RETRO
+    role: menu item
+  n428:
+    name: RSI IDL
+    role: menu item
+  n429:
+    name: Rust
+    role: menu item
+  n430:
+    name: Sather
+    role: menu item
+  n431:
+    name: Scala
+    role: menu item
+  n432:
+    name: SELinux CIL Policy
+    role: menu item
+  n433:
+    name: SELinux Policy
+    role: menu item
+  n434:
+    name: Smali
+    role: menu item
+  n435:
+    name: SML
+    role: menu item
+  n436:
+    name: AHDL
+    role: menu item
+  n437:
+    name: Spice
+    role: menu item
+  n438:
+    name: SystemC
+    role: menu item
+  n439:
+    name: SystemVerilog
+    role: menu item
+  n440:
+    name: Vera
+    role: menu item
+  n441:
+    name: Verilog
+    role: menu item
+  n442:
+    name: VHDL
+    role: menu item
+  n443:
+    name: Ansys
+    role: menu item
+  n444:
+    name: B-Method
+    role: menu item
+  n445:
+    name: dot
+    role: menu item
+  n446:
+    name: FASTQ
+    role: menu item
+  n447:
+    name: GAP
+    role: menu item
+  n448:
+    name: GDL
+    role: menu item
+  n449:
+    name: Gnuplot
+    role: menu item
+  n450:
+    name: Magma
+    role: menu item
+  n451:
+    name: Mathematica
+    role: menu item
+  n452:
+    name: Matlab
+    role: menu item
+  n453:
+    name: Maxima
+    role: menu item
+  n454:
+    name: Metamath
+    role: menu item
+  n455:
+    name: Octave
+    role: menu item
+  n456:
+    name: R Script
+    role: menu item
+  n457:
+    name: Replicode
+    role: menu item
+  n458:
+    name: scilab
+    role: menu item
+  n459:
+    name: Stan
+    role: menu item
+  n460:
+    name: Stata
+    role: menu item
+  n461:
+    name: TI Basic
+    role: menu item
+  n462:
+    name: yacas
+    role: menu item
+  n463:
+    name: 4DOS BatchToMemory
+    role: menu item
+  n464:
+    name: AMPLE
+    role: menu item
+  n465:
+    name: AutoHotKey
+    role: menu item
+  n466:
+    name: AWK
+    role: menu item
+  n467:
+    name: Bash
+    role: menu item
+  n468:
+    name: BrightScript
+    role: menu item
+  n469:
+    name: CLIST
+    role: menu item
+  n470:
+    name: CoffeeScript
+    role: menu item
+  n471:
+    name: CubeScript
+    role: menu item
+  n472:
+    name: Elvish
+    role: menu item
+  n473:
+    name: Erlang
+    role: menu item
+  n474:
+    name: Euphoria
+    role: menu item
+  n475:
+    name: ferite
+    role: menu item
+  n476:
+    name: Fish
+    role: menu item
+  n477:
+    name: GNU Linker Script
+    role: menu item
+  n478:
+    name: Godot
+    role: menu item
+  n479:
+    name: J
+    role: menu item
+  n480:
+    name: JavaScript
+    role: menu item
+  n481:
+    name: JavaScript React (JSX)
+    role: menu item
+  n482:
+    name: JCL
+    role: menu item
+  n483:
+    name: k
+    role: menu item
+  n484:
+    name: LSL
+    role: menu item
+  n485:
+    name: Lua
+    role: menu item
+  n486:
+    name: Mason
+    role: menu item
+  n487:
+    name: MEL
+    role: menu item
+  n488:
+    name: MS-DOS Batch
+    role: menu item
+  n489:
+    name: Nix
+    role: menu item
+  n490:
+    name: NSIS
+    role: menu item
+  n491:
+    name: Perl
+    role: menu item
+  n492:
+    name: PHP (HTML)
+    role: menu item
+  n493:
+    name: Pig
+    role: menu item
+  n494:
+    name: Pike
+    role: menu item
+  n495:
+    name: PowerShell
+    role: menu item
+  n496:
+    name: Praat
+    role: menu item
+  n497:
+    name: Puppet
+    role: menu item
+  n498:
+    name: Python
+    role: menu item
+  n499:
+    name: q
+    role: menu item
+  n500:
+    name: QFace
+    role: menu item
+  n501:
+    name: QML
+    role: menu item
+  n502:
+    name: Quake Script
+    role: menu item
+  n503:
+    name: Racket
+    role: menu item
+  n504:
+    name: Raku
+    role: menu item
+  n505:
+    name: REXX
+    role: menu item
+  n506:
+    name: Robot
+    role: menu item
+  n507:
+    name: Ruby
+    role: menu item
+  n508:
+    name: Scheme
+    role: menu item
+  n509:
+    name: sed
+    role: menu item
+  n510:
+    name: Sieve
+    role: menu item
+  n511:
+    name: TaskJuggler
+    role: menu item
+  n512:
+    name: Tcl/Tk
+    role: menu item
+  n513:
+    name: Tcsh
+    role: menu item
+  n514:
+    name: Twig (HTML)
+    role: menu item
+  n515:
+    name: TypeScript
+    role: menu item
+  n516:
+    name: TypeScript React (TSX)
+    role: menu item
+  n517:
+    name: UnrealScript
+    role: menu item
+  n518:
+    name: VBScript Files
+    role: menu item
+  n519:
+    name: Velocity
+    role: menu item
+  n520:
+    name: Xonotic Script
+    role: menu item
+  n521:
+    name: Zsh
+    role: menu item
+  n522:
+    name: .desktop
+    role: menu item
+  n523:
+    name: Adblock Plus
+    role: menu item
+  n524:
+    name: Apache Configuration
+    role: menu item
+  n525:
+    name: Cabal
+    role: menu item
+  n526:
+    name: Cisco
+    role: menu item
+  n527:
+    name: Doxyfile
+    role: menu item
+  n528:
+    name: fstab
+    role: menu item
+  n529:
+    name: Git Ignore
+    role: menu item
+  n530:
+    name: Gitolite
+    role: menu item
+  n531:
+    name: INI Files
+    role: menu item
+  n532:
+    name: Jsonnet
+    role: menu item
+  n533:
+    name: Kate Config
+    role: menu item
+  n534:
+    name: Kconfig
+    role: menu item
+  n535:
+    name: kdesrc-buildrc
+    role: menu item
+  n536:
+    name: mergetag text
+    role: menu item
+  n537:
+    name: Nagios
+    role: menu item
+  n538:
+    name: nginx Configuration
+    role: menu item
+  n539:
+    name: QDoc Configuration
+    role: menu item
+  n540:
+    name: systemd unit
+    role: menu item
+  n541:
+    name: TOML
+    role: menu item
+  n542:
+    name: Varnish Test Case language
+    role: menu item
+  n543:
+    name: Varnish Configuration Language
+    role: menu item
+  n544:
+    name: WINE Config
+    role: menu item
+  n545:
+    name: x.org Configuration
+    role: menu item
+  n546:
+    name: ''
+    role: popup menu
+  n547:
+    name: ISO-8859-1
+    role: menu item
+  n548:
+    name: ISO-8859-15
+    role: menu item
+  n549:
+    name: CP1252
+    role: menu item
+  n550:
+    name: ''
+    role: popup menu
+  n551:
+    name: ISO-8859-2
+    role: menu item
+  n552:
+    name: ISO-8859-3
+    role: menu item
+  n553:
+    name: CP1125
+    role: menu item
+  n554:
+    name: CP1250
+    role: menu item
+  n555:
+    name: MACCENTRALEUROPE
+    role: menu item
+  n556:
+    name: IBM852
+    role: menu item
+  n557:
+    name: ''
+    role: popup menu
+  n558:
+    name: ISO-8859-4
+    role: menu item
+  n559:
+    name: ISO-8859-10
+    role: menu item
+  n560:
+    name: ISO-8859-13
+    role: menu item
+  n561:
+    name: CP1257
+    role: menu item
+  n562:
+    name: IBM775
+    role: menu item
+  n563:
+    name: ''
+    role: popup menu
+  n564:
+    name: ISO-8859-5
+    role: menu item
+  n565:
+    name: CP1251
+    role: menu item
+  n566:
+    name: KOI8-R
+    role: menu item
+  n567:
+    name: KOI8-U
+    role: menu item
+  n568:
+    name: MACCYRILLIC
+    role: menu item
+  n569:
+    name: IBM855
+    role: menu item
+  n570:
+    name: IBM866
+    role: menu item
+  n571:
+    name: ''
+    role: popup menu
+  n572:
+    name: ISO-8859-6
+    role: menu item
+  n573:
+    name: CP1256
+    role: menu item
+  n574:
+    name: ''
+    role: popup menu
+  n575:
+    name: ISO-8859-7
+    role: menu item
+  n576:
+    name: CP1253
+    role: menu item
+  n577:
+    name: ''
+    role: popup menu
+  n578:
+    name: ISO-8859-8
+    role: menu item
+  n579:
+    name: CP1255
+    role: menu item
+  n580:
+    name: ''
+    role: popup menu
+  n581:
+    name: ISO-8859-9
+    role: menu item
+  n582:
+    name: CP1254
+    role: menu item
+  n583:
+    name: ''
+    role: popup menu
+  n584:
+    name: ISO-8859-11
+    role: menu item
+  n585:
+    name: TIS-620
+    role: menu item
+  n586:
+    name: ''
+    role: popup menu
+  n587:
+    name: ISO-8859-14
+    role: menu item
+  n588:
+    name: ''
+    role: popup menu
+  n589:
+    name: ISO-8859-16
+    role: menu item
+  n590:
+    name: ''
+    role: popup menu
+  n591:
+    name: GB18030
+    role: menu item
+  n592:
+    name: ISO-2022-CN
+    role: menu item
+  n593:
+    name: ''
+    role: popup menu
+  n594:
+    name: BIG5
+    role: menu item
+  n595:
+    name: EUC-TW
+    role: menu item
+  n596:
+    name: ''
+    role: popup menu
+  n597:
+    name: EUC-JP
+    role: menu item
+  n598:
+    name: SHIFT_JIS
+    role: menu item
+  n599:
+    name: ISO-2022-JP
+    role: menu item
+  n600:
+    name: ''
+    role: popup menu
+  n601:
+    name: EUC-KR
+    role: menu item
+  n602:
+    name: ISO-2022-KR
+    role: menu item
+  n603:
+    name: ''
+    role: popup menu
+  n604:
+    name: CP1258
+    role: menu item
+  n605:
+    name: ''
+    role: popup menu
+  n606:
+    name: 无
+    role: menu item
+  n607:
+    name: 3D
+    role: menu item
+  n608:
+    name: ''
+    role: popup menu
+  n609:
+    name: G-Code
+    role: menu item
+  n610:
+    name: GLSL
+    role: menu item
+  n611:
+    name: Klipper G-Code
+    role: menu item
+  n612:
+    name: Klipper Config
+    role: menu item
+  n613:
+    name: OpenSCAD
+    role: menu item
+  n614:
+    name: PLY
+    role: menu item
+  n615:
+    name: POV-Ray
+    role: menu item
+  n616:
+    name: RenderMan RIB
+    role: menu item
+  n617:
+    name: STL
+    role: menu item
+  n618:
+    name: VRML
+    role: menu item
+  n619:
+    name: Wavefront OBJ
+    role: menu item
+  n620:
+    name: 其他
+    role: menu item
+  n621:
+    name: ''
+    role: popup menu
+  n622:
+    name: ABC
+    role: menu item
+  n623:
+    name: ChangeLog
+    role: menu item
+  n624:
+    name: CMake
+    role: menu item
+  n625:
+    name: CSV
+    role: menu item
+  n626:
+    name: CSV (semicolon)
+    role: menu item
+  n627:
+    name: CSV (whitespace)
+    role: menu item
+  n628:
+    name: CSV (pipe)
+    role: menu item
+  n629:
+    name: CUE Sheet
+    role: menu item
+  n630:
+    name: Debian Changelog
+    role: menu item
+  n631:
+    name: Debian Control
+    role: menu item
+  n632:
+    name: Diff
+    role: menu item
+  n633:
+    name: Dockerfile
+    role: menu item
+  n634:
+    name: Earthfile
+    role: menu item
+  n635:
+    name: GDB
+    role: menu item
+  n636:
+    name: GDB Init
+    role: menu item
+  n637:
+    name: GDB Backtrace
+    role: menu item
+  n638:
+    name: Git Rebase
+    role: menu item
+  n639:
+    name: GraphQL
+    role: menu item
+  n640:
+    name: Hunspell Thesaurus Index File
+    role: menu item
+  n641:
+    name: Hunspell Dictionary File
+    role: menu item
+  n642:
+    name: Hunspell Affix File
+    role: menu item
+  n643:
+    name: Hunspell Thesaurus File
+    role: menu item
+  n644:
+    name: InnoSetup
+    role: menu item
+  n645:
+    name: Intel HEX
+    role: menu item
+  n646:
+    name: Jam
+    role: menu item
+  n647:
+    name: Java Properties
+    role: menu item
+  n648:
+    name: JavaScript/Twig
+    role: menu item
+  n649:
+    name: LilyPond
+    role: menu item
+  n650:
+    name: Logcat
+    role: menu item
+  n651:
+    name: M3U
+    role: menu item
+  n652:
+    name: Makefile
+    role: menu item
+  n653:
+    name: Meson
+    role: menu item
+  n654:
+    name: MIB
+    role: menu item
+  n655:
+    name: Music Publisher
+    role: menu item
+  n656:
+    name: Ninja
+    role: menu item
+  n657:
+    name: Overpass QL
+    role: menu item
+  n658:
+    name: PGN
+    role: menu item
+  n659:
+    name: QMake
+    role: menu item
+  n660:
+    name: RPM Spec
+    role: menu item
+  n661:
+    name: SELinux File Contexts
+    role: menu item
+  n662:
+    name: Snort/Suricata
+    role: menu item
+  n663:
+    name: SubRip Subtitles
+    role: menu item
+  n664:
+    name: TextProto
+    role: menu item
+  n665:
+    name: Tiger
+    role: menu item
+  n666:
+    name: Todo.txt
+    role: menu item
+  n667:
+    name: TSV
+    role: menu item
+  n668:
+    name: TypeScript/Twig
+    role: menu item
+  n669:
+    name: Valgrind Suppression
+    role: menu item
+  n670:
+    name: Wayland Trace
+    role: menu item
+  n671:
+    name: YARA
+    role: menu item
+  n672:
+    name: Log File (simplified)
+    role: menu item
+  n673:
+    name: Log File (advanced)
+    role: menu item
+  n674:
+    name: Email
+    role: menu item
+  n675:
+    name: 数据库
+    role: menu item
+  n676:
+    name: ''
+    role: popup menu
+  n677:
+    name: 4GL
+    role: menu item
+  n678:
+    name: 4GL-PER
+    role: menu item
+  n679:
+    name: LDIF
+    role: menu item
+  n680:
+    name: progress
+    role: menu item
+  n681:
+    name: SQL
+    role: menu item
+  n682:
+    name: SQL (MySQL)
+    role: menu item
+  n683:
+    name: SQL (Oracle)
+    role: menu item
+  n684:
+    name: SQL (PostgreSQL)
+    role: menu item
+  n685:
+    name: 标记
+    role: menu item
+  n686:
+    name: ''
+    role: popup menu
+  n687:
+    name: AppArmor Security Profile
+    role: menu item
+  n688:
+    name: AsciiDoc
+    role: menu item
+  n689:
+    name: ASN.1
+    role: menu item
+  n690:
+    name: ASP
+    role: menu item
+  n691:
+    name: BibTeX
+    role: menu item
+  n692:
+    name: CartoCSS MML
+    role: menu item
+  n693:
+    name: CartoCSS MSS
+    role: menu item
+  n694:
+    name: CleanCSS
+    role: menu item
+  n695:
+    name: ColdFusion
+    role: menu item
+  n696:
+    name: ConTeXt
+    role: menu item
+  n697:
+    name: CSS
+    role: menu item
+  n698:
+    name: Cucumber Gherkin feature
+    role: menu item
+  n699:
+    name: Django HTML Template
+    role: menu item
+  n700:
+    name: Doxygen
+    role: menu item
+  n701:
+    name: DoxygenLua
+    role: menu item
+  n702:
+    name: DTD
+    role: menu item
+  n703:
+    name: Fluent
+    role: menu item
+  n704:
+    name: FTL
+    role: menu item
+  n705:
+    name: GlossTex
+    role: menu item
+  n706:
+    name: GNU Gettext
+    role: menu item
+  n707:
+    name: Haml
+    role: menu item
+  n708:
+    name: Hamlet
+    role: menu item
+  n709:
+    name: HTML
+    role: menu item
+  n710:
+    name: Javadoc
+    role: menu item
+  n711:
+    name: Jira
+    role: menu item
+  n712:
+    name: JSON
+    role: menu item
+  n713:
+    name: JSP
+    role: menu item
+  n714:
+    name: LaTeX
+    role: menu item
+  n715:
+    name: LESSCSS
+    role: menu item
+  n716:
+    name: MAB-DB
+    role: menu item
+  n717:
+    name: Mako
+    role: menu item
+  n718:
+    name: MapCSS
+    role: menu item
+  n719:
+    name: Markdown
+    role: menu item
+  n720:
+    name: MediaWiki
+    role: menu item
+  n721:
+    name: Metapost/Metafont
+    role: menu item
+  n722:
+    name: Mustache/Handlebars (HTML)
+    role: menu item
+  n723:
+    name: Org Mode
+    role: menu item
+  n724:
+    name: Pango
+    role: menu item
+  n725:
+    name: PostScript
+    role: menu item
+  n726:
+    name: PostScript Printer Description
+    role: menu item
+  n727:
+    name: Pug
+    role: menu item
+  n728:
+    name: R Markdown
+    role: menu item
+  n729:
+    name: R documentation
+    role: menu item
+  n730:
+    name: RELAX NG
+    role: menu item
+  n731:
+    name: RelaxNG-Compact
+    role: menu item
+  n732:
+    name: reStructuredText
+    role: menu item
+  n733:
+    name: Roff
+    role: menu item
+  n734:
+    name: Ruby/Rails/RHTML
+    role: menu item
+  n735:
+    name: SASS
+    role: menu item
+  n736:
+    name: SCSS
+    role: menu item
+  n737:
+    name: SGML
+    role: menu item
+  n738:
+    name: SiSU
+    role: menu item
+  n739:
+    name: Texinfo
+    role: menu item
+  n740:
+    name: Textile
+    role: menu item
+  n741:
+    name: Troff Mandoc
+    role: menu item
+  n742:
+    name: TT2
+    role: menu item
+  n743:
+    name: Twig/Twig
+    role: menu item
+  n744:
+    name: txt2tags
+    role: menu item
+  n745:
+    name: Typst
+    role: menu item
+  n746:
+    name: vCard, vCalendar, iCalendar
+    role: menu item
+  n747:
+    name: Vue
+    role: menu item
+  n748:
+    name: Wesnoth Markup Language
+    role: menu item
+  n749:
+    name: XML
+    role: menu item
+  n750:
+    name: XML (Debug)
+    role: menu item
+  n751:
+    name: xslt
+    role: menu item
+  n752:
+    name: XUL
+    role: menu item
+  n753:
+    name: YAML
+    role: menu item
+  n754:
+    name: YANG
+    role: menu item
+  n755:
+    name: Rich Text Format
+    role: menu item
+  n756:
+    name: 汇编
+    role: menu item
+  n757:
+    name: ''
+    role: popup menu
+  n758:
+    name: Asm6502
+    role: menu item
+  n759:
+    name: AVR Assembler
+    role: menu item
+  n760:
+    name: GNU Assembler
+    role: menu item
+  n761:
+    name: Intel x86 (NASM)
+    role: menu item
+  n762:
+    name: MIPS Assembler
+    role: menu item
+  n763:
+    name: Motorola 68k (VASM/Devpac)
+    role: menu item
+  n764:
+    name: Motorola DSP56k
+    role: menu item
+  n765:
+    name: PicAsm
+    role: menu item
+  n766:
+    name: Common Intermediate Language (CIL)
+    role: menu item
+  n767:
+    name: 源代码
+    role: menu item
+  n768:
+    name: ''
+    role: popup menu
+  n769:
+    name: ABAP
+    role: menu item
+  n770:
+    name: ActionScript 2.0
+    role: menu item
+  n771:
+    name: Ada
+    role: menu item
+  n772:
+    name: Agda
+    role: menu item
+  n773:
+    name: ANS-Forth94
+    role: menu item
+  n774:
+    name: ANSI C89
+    role: menu item
+  n775:
+    name: ANTLR
+    role: menu item
+  n776:
+    name: ATS
+    role: menu item
+  n777:
+    name: Bitbake
+    role: menu item
+  n778:
+    name: Boo
+    role: menu item
+  n779:
+    name: C
+    role: menu item
+  n780:
+    name: C#
+    role: menu item
+  n781:
+    name: C++
+    role: menu item
+  n782:
+    name: CashScript
+    role: menu item
+  n783:
+    name: Cg
+    role: menu item
+  n784:
+    name: CGiS
+    role: menu item
+  n785:
+    name: Clipper
+    role: menu item
+  n786:
+    name: Clojure
+    role: menu item
+  n787:
+    name: COBOL
+    role: menu item
+  n788:
+    name: Common Lisp
+    role: menu item
+  n789:
+    name: Component-Pascal
+    role: menu item
+  n790:
+    name: Crack
+    role: menu item
+  n791:
+    name: Crystal
+    role: menu item
+  n792:
+    name: Curry
+    role: menu item
+  n793:
+    name: D
+    role: menu item
+  n794:
+    name: Dart
+    role: menu item
+  n795:
+    name: E Language
+    role: menu item
+  n796:
+    name: Eiffel
+    role: menu item
+  n797:
+    name: Elixir
+    role: menu item
+  n798:
+    name: Elm
+    role: menu item
+  n799:
+    name: FlatBuffers
+    role: menu item
+  n800:
+    name: Fortran (Fixed Format)
+    role: menu item
+  n801:
+    name: Fortran (Free Format)
+    role: menu item
+  n802:
+    name: FreeBASIC
+    role: menu item
+  n803:
+    name: FSharp
+    role: menu item
+  n804:
+    name: Gleam
+    role: menu item
+  n805:
+    name: GNU M4
+    role: menu item
+  n806:
+    name: Go
+    role: menu item
+  n807:
+    name: GPRBuild
+    role: menu item
+  n808:
+    name: Groovy
+    role: menu item
+  n809:
+    name: Hare
+    role: menu item
+  n810:
+    name: Haskell
+    role: menu item
+  n811:
+    name: Haxe
+    role: menu item
+  n812:
+    name: IDL
+    role: menu item
+  n813:
+    name: Idris
+    role: menu item
+  n814:
+    name: ILERPG
+    role: menu item
+  n815:
+    name: Inform
+    role: menu item
+  n816:
+    name: ISO C++
+    role: menu item
+  n817:
+    name: Java
+    role: menu item
+  n818:
+    name: Java Module
+    role: menu item
+  n819:
+    name: Julia
+    role: menu item
+  n820:
+    name: KBasic
+    role: menu item
+  n821:
+    name: KDev-PG[-Qt] Grammar
+    role: menu item
+  n822:
+    name: Kotlin
+    role: menu item
+  n823:
+    name: Lex/Flex
+    role: menu item
+  n824:
+    name: Literate Curry
+    role: menu item
+  n825:
+    name: Literate Haskell
+    role: menu item
+  n826:
+    name: LLVM
+    role: menu item
+  n827:
+    name: Logtalk
+    role: menu item
+  n828:
+    name: LPC
+    role: menu item
+  n829:
+    name: Modelica
+    role: menu item
+  n830:
+    name: Modula-2
+    role: menu item
+  n831:
+    name: Modula-2 (ISO only)
+    role: menu item
+  n832:
+    name: Modula-2 (PIM only)
+    role: menu item
+  n833:
+    name: Modula-2 (R10 only)
+    role: menu item
+  n834:
+    name: Modula-3
+    role: menu item
+  n835:
+    name: MonoBasic
+    role: menu item
+  n836:
+    name: Nemerle
+    role: menu item
+  n837:
+    name: nesC
+    role: menu item
+  n838:
+    name: Nim
+    role: menu item
+  n839:
+    name: noweb
+    role: menu item
+  n840:
+    name: Objective Caml
+    role: menu item
+  n841:
+    name: Objective Caml Ocamllex
+    role: menu item
+  n842:
+    name: Objective Caml Ocamlyacc
+    role: menu item
+  n843:
+    name: Objective-C
+    role: menu item
+  n844:
+    name: Objective-C++
+    role: menu item
+  n845:
+    name: Odin
+    role: menu item
+  n846:
+    name: OORS
+    role: menu item
+  n847:
+    name: OPAL
+    role: menu item
+  n848:
+    name: OpenCL
+    role: menu item
+  n849:
+    name: opsi-script
+    role: menu item
+  n850:
+    name: Pascal
+    role: menu item
+  n851:
+    name: PL/I
+    role: menu item
+  n852:
+    name: Pony
+    role: menu item
+  n853:
+    name: Prolog
+    role: menu item
+  n854:
+    name: Protobuf
+    role: menu item
+  n855:
+    name: Pure
+    role: menu item
+  n856:
+    name: PureBasic
+    role: menu item
+  n857:
+    name: PureScript
+    role: menu item
+  n858:
+    name: RapidQ
+    role: menu item
+  n859:
+    name: RenPy
+    role: menu item
+  n860:
+    name: RETRO
+    role: menu item
+  n861:
+    name: RSI IDL
+    role: menu item
+  n862:
+    name: Rust
+    role: menu item
+  n863:
+    name: Sather
+    role: menu item
+  n864:
+    name: Scala
+    role: menu item
+  n865:
+    name: SELinux CIL Policy
+    role: menu item
+  n866:
+    name: SELinux Policy
+    role: menu item
+  n867:
+    name: Smali
+    role: menu item
+  n868:
+    name: SML
+    role: menu item
+  n869:
+    name: 硬件
+    role: menu item
+  n870:
+    name: ''
+    role: popup menu
+  n871:
+    name: AHDL
+    role: menu item
+  n872:
+    name: Spice
+    role: menu item
+  n873:
+    name: SystemC
+    role: menu item
+  n874:
+    name: SystemVerilog
+    role: menu item
+  n875:
+    name: Vera
+    role: menu item
+  n876:
+    name: Verilog
+    role: menu item
+  n877:
+    name: VHDL
+    role: menu item
+  n878:
+    name: 科学
+    role: menu item
+  n879:
+    name: ''
+    role: popup menu
+  n880:
+    name: Ansys
+    role: menu item
+  n881:
+    name: B-Method
+    role: menu item
+  n882:
+    name: dot
+    role: menu item
+  n883:
+    name: FASTQ
+    role: menu item
+  n884:
+    name: GAP
+    role: menu item
+  n885:
+    name: GDL
+    role: menu item
+  n886:
+    name: Gnuplot
+    role: menu item
+  n887:
+    name: Magma
+    role: menu item
+  n888:
+    name: Mathematica
+    role: menu item
+  n889:
+    name: Matlab
+    role: menu item
+  n890:
+    name: Maxima
+    role: menu item
+  n891:
+    name: Metamath
+    role: menu item
+  n892:
+    name: Octave
+    role: menu item
+  n893:
+    name: R Script
+    role: menu item
+  n894:
+    name: Replicode
+    role: menu item
+  n895:
+    name: scilab
+    role: menu item
+  n896:
+    name: Stan
+    role: menu item
+  n897:
+    name: Stata
+    role: menu item
+  n898:
+    name: TI Basic
+    role: menu item
+  n899:
+    name: yacas
+    role: menu item
+  n900:
+    name: 脚本
+    role: menu item
+  n901:
+    name: ''
+    role: popup menu
+  n902:
+    name: 4DOS BatchToMemory
+    role: menu item
+  n903:
+    name: AMPLE
+    role: menu item
+  n904:
+    name: AutoHotKey
+    role: menu item
+  n905:
+    name: AWK
+    role: menu item
+  n906:
+    name: Bash
+    role: menu item
+  n907:
+    name: BrightScript
+    role: menu item
+  n908:
+    name: CLIST
+    role: menu item
+  n909:
+    name: CoffeeScript
+    role: menu item
+  n910:
+    name: CubeScript
+    role: menu item
+  n911:
+    name: Elvish
+    role: menu item
+  n912:
+    name: Erlang
+    role: menu item
+  n913:
+    name: Euphoria
+    role: menu item
+  n914:
+    name: ferite
+    role: menu item
+  n915:
+    name: Fish
+    role: menu item
+  n916:
+    name: GNU Linker Script
+    role: menu item
+  n917:
+    name: Godot
+    role: menu item
+  n918:
+    name: J
+    role: menu item
+  n919:
+    name: JavaScript
+    role: menu item
+  n920:
+    name: JavaScript React (JSX)
+    role: menu item
+  n921:
+    name: JCL
+    role: menu item
+  n922:
+    name: k
+    role: menu item
+  n923:
+    name: LSL
+    role: menu item
+  n924:
+    name: Lua
+    role: menu item
+  n925:
+    name: Mason
+    role: menu item
+  n926:
+    name: MEL
+    role: menu item
+  n927:
+    name: MS-DOS Batch
+    role: menu item
+  n928:
+    name: Nix
+    role: menu item
+  n929:
+    name: NSIS
+    role: menu item
+  n930:
+    name: Perl
+    role: menu item
+  n931:
+    name: PHP (HTML)
+    role: menu item
+  n932:
+    name: Pig
+    role: menu item
+  n933:
+    name: Pike
+    role: menu item
+  n934:
+    name: PowerShell
+    role: menu item
+  n935:
+    name: Praat
+    role: menu item
+  n936:
+    name: Puppet
+    role: menu item
+  n937:
+    name: Python
+    role: menu item
+  n938:
+    name: q
+    role: menu item
+  n939:
+    name: QFace
+    role: menu item
+  n940:
+    name: QML
+    role: menu item
+  n941:
+    name: Quake Script
+    role: menu item
+  n942:
+    name: Racket
+    role: menu item
+  n943:
+    name: Raku
+    role: menu item
+  n944:
+    name: REXX
+    role: menu item
+  n945:
+    name: Robot
+    role: menu item
+  n946:
+    name: Ruby
+    role: menu item
+  n947:
+    name: Scheme
+    role: menu item
+  n948:
+    name: sed
+    role: menu item
+  n949:
+    name: Sieve
+    role: menu item
+  n950:
+    name: TaskJuggler
+    role: menu item
+  n951:
+    name: Tcl/Tk
+    role: menu item
+  n952:
+    name: Tcsh
+    role: menu item
+  n953:
+    name: Twig (HTML)
+    role: menu item
+  n954:
+    name: TypeScript
+    role: menu item
+  n955:
+    name: TypeScript React (TSX)
+    role: menu item
+  n956:
+    name: UnrealScript
+    role: menu item
+  n957:
+    name: VBScript Files
+    role: menu item
+  n958:
+    name: Velocity
+    role: menu item
+  n959:
+    name: Xonotic Script
+    role: menu item
+  n960:
+    name: Zsh
+    role: menu item
+  n961:
+    name: 配置
+    role: menu item
+  n962:
+    name: ''
+    role: popup menu
+  n963:
+    name: .desktop
+    role: menu item
+  n964:
+    name: Adblock Plus
+    role: menu item
+  n965:
+    name: Apache Configuration
+    role: menu item
+  n966:
+    name: Cabal
+    role: menu item
+  n967:
+    name: Cisco
+    role: menu item
+  n968:
+    name: Doxyfile
+    role: menu item
+  n969:
+    name: fstab
+    role: menu item
+  n970:
+    name: Git Ignore
+    role: menu item
+  n971:
+    name: Gitolite
+    role: menu item
+  n972:
+    name: INI Files
+    role: menu item
+  n973:
+    name: Jsonnet
+    role: menu item
+  n974:
+    name: Kate Config
+    role: menu item
+  n975:
+    name: Kconfig
+    role: menu item
+  n976:
+    name: kdesrc-buildrc
+    role: menu item
+  n977:
+    name: mergetag text
+    role: menu item
+  n978:
+    name: Nagios
+    role: menu item
+  n979:
+    name: nginx Configuration
+    role: menu item
+  n980:
+    name: QDoc Configuration
+    role: menu item
+  n981:
+    name: systemd unit
+    role: menu item
+  n982:
+    name: TOML
+    role: menu item
+  n983:
+    name: Varnish Test Case language
+    role: menu item
+  n984:
+    name: Varnish Configuration Language
+    role: menu item
+  n985:
+    name: WINE Config
+    role: menu item
+  n986:
+    name: x.org Configuration
+    role: menu item
+  n987:
+    name: ''
+    role: popup menu
+  n988:
+    name: G-Code
+    role: menu item
+  n989:
+    name: GLSL
+    role: menu item
+  n990:
+    name: Klipper G-Code
+    role: menu item
+  n991:
+    name: Klipper Config
+    role: menu item
+  n992:
+    name: OpenSCAD
+    role: menu item
+  n993:
+    name: PLY
+    role: menu item
+  n994:
+    name: POV-Ray
+    role: menu item
+  n995:
+    name: RenderMan RIB
+    role: menu item
+  n996:
+    name: STL
+    role: menu item
+  n997:
+    name: VRML
+    role: menu item
+  n998:
+    name: Wavefront OBJ
+    role: menu item
+  n999:
+    name: ''
+    role: popup menu
+  n1000:
+    name: ABC
+    role: menu item
+  n1001:
+    name: ChangeLog
+    role: menu item
+  n1002:
+    name: CMake
+    role: menu item
+  n1003:
+    name: CSV
+    role: menu item
+  n1004:
+    name: CSV (semicolon)
+    role: menu item
+  n1005:
+    name: CSV (whitespace)
+    role: menu item
+  n1006:
+    name: CSV (pipe)
+    role: menu item
+  n1007:
+    name: CUE Sheet
+    role: menu item
+  n1008:
+    name: Debian Changelog
+    role: menu item
+  n1009:
+    name: Debian Control
+    role: menu item
+  n1010:
+    name: Diff
+    role: menu item
+  n1011:
+    name: Dockerfile
+    role: menu item
+  n1012:
+    name: Earthfile
+    role: menu item
+  n1013:
+    name: GDB
+    role: menu item
+  n1014:
+    name: GDB Init
+    role: menu item
+  n1015:
+    name: GDB Backtrace
+    role: menu item
+  n1016:
+    name: Git Rebase
+    role: menu item
+  n1017:
+    name: GraphQL
+    role: menu item
+  n1018:
+    name: Hunspell Thesaurus Index File
+    role: menu item
+  n1019:
+    name: Hunspell Dictionary File
+    role: menu item
+  n1020:
+    name: Hunspell Affix File
+    role: menu item
+  n1021:
+    name: Hunspell Thesaurus File
+    role: menu item
+  n1022:
+    name: InnoSetup
+    role: menu item
+  n1023:
+    name: Intel HEX
+    role: menu item
+  n1024:
+    name: Jam
+    role: menu item
+  n1025:
+    name: Java Properties
+    role: menu item
+  n1026:
+    name: JavaScript/Twig
+    role: menu item
+  n1027:
+    name: LilyPond
+    role: menu item
+  n1028:
+    name: Logcat
+    role: menu item
+  n1029:
+    name: M3U
+    role: menu item
+  n1030:
+    name: Makefile
+    role: menu item
+  n1031:
+    name: Meson
+    role: menu item
+  n1032:
+    name: MIB
+    role: menu item
+  n1033:
+    name: Music Publisher
+    role: menu item
+  n1034:
+    name: Ninja
+    role: menu item
+  n1035:
+    name: Overpass QL
+    role: menu item
+  n1036:
+    name: PGN
+    role: menu item
+  n1037:
+    name: QMake
+    role: menu item
+  n1038:
+    name: RPM Spec
+    role: menu item
+  n1039:
+    name: SELinux File Contexts
+    role: menu item
+  n1040:
+    name: Snort/Suricata
+    role: menu item
+  n1041:
+    name: SubRip Subtitles
+    role: menu item
+  n1042:
+    name: TextProto
+    role: menu item
+  n1043:
+    name: Tiger
+    role: menu item
+  n1044:
+    name: Todo.txt
+    role: menu item
+  n1045:
+    name: TSV
+    role: menu item
+  n1046:
+    name: TypeScript/Twig
+    role: menu item
+  n1047:
+    name: Valgrind Suppression
+    role: menu item
+  n1048:
+    name: Wayland Trace
+    role: menu item
+  n1049:
+    name: YARA
+    role: menu item
+  n1050:
+    name: Log File (simplified)
+    role: menu item
+  n1051:
+    name: Log File (advanced)
+    role: menu item
+  n1052:
+    name: Email
+    role: menu item
+  n1053:
+    name: ''
+    role: popup menu
+  n1054:
+    name: 4GL
+    role: menu item
+  n1055:
+    name: 4GL-PER
+    role: menu item
+  n1056:
+    name: LDIF
+    role: menu item
+  n1057:
+    name: progress
+    role: menu item
+  n1058:
+    name: SQL
+    role: menu item
+  n1059:
+    name: SQL (MySQL)
+    role: menu item
+  n1060:
+    name: SQL (Oracle)
+    role: menu item
+  n1061:
+    name: SQL (PostgreSQL)
+    role: menu item
+  n1062:
+    name: ''
+    role: popup menu
+  n1063:
+    name: AppArmor Security Profile
+    role: menu item
+  n1064:
+    name: AsciiDoc
+    role: menu item
+  n1065:
+    name: ASN.1
+    role: menu item
+  n1066:
+    name: ASP
+    role: menu item
+  n1067:
+    name: BibTeX
+    role: menu item
+  n1068:
+    name: CartoCSS MML
+    role: menu item
+  n1069:
+    name: CartoCSS MSS
+    role: menu item
+  n1070:
+    name: CleanCSS
+    role: menu item
+  n1071:
+    name: ColdFusion
+    role: menu item
+  n1072:
+    name: ConTeXt
+    role: menu item
+  n1073:
+    name: CSS
+    role: menu item
+  n1074:
+    name: Cucumber Gherkin feature
+    role: menu item
+  n1075:
+    name: Django HTML Template
+    role: menu item
+  n1076:
+    name: Doxygen
+    role: menu item
+  n1077:
+    name: DoxygenLua
+    role: menu item
+  n1078:
+    name: DTD
+    role: menu item
+  n1079:
+    name: Fluent
+    role: menu item
+  n1080:
+    name: FTL
+    role: menu item
+  n1081:
+    name: GlossTex
+    role: menu item
+  n1082:
+    name: GNU Gettext
+    role: menu item
+  n1083:
+    name: Haml
+    role: menu item
+  n1084:
+    name: Hamlet
+    role: menu item
+  n1085:
+    name: HTML
+    role: menu item
+  n1086:
+    name: Javadoc
+    role: menu item
+  n1087:
+    name: Jira
+    role: menu item
+  n1088:
+    name: JSON
+    role: menu item
+  n1089:
+    name: JSP
+    role: menu item
+  n1090:
+    name: LaTeX
+    role: menu item
+  n1091:
+    name: LESSCSS
+    role: menu item
+  n1092:
+    name: MAB-DB
+    role: menu item
+  n1093:
+    name: Mako
+    role: menu item
+  n1094:
+    name: MapCSS
+    role: menu item
+  n1095:
+    name: Markdown
+    role: menu item
+  n1096:
+    name: MediaWiki
+    role: menu item
+  n1097:
+    name: Metapost/Metafont
+    role: menu item
+  n1098:
+    name: Mustache/Handlebars (HTML)
+    role: menu item
+  n1099:
+    name: Org Mode
+    role: menu item
+  n1100:
+    name: Pango
+    role: menu item
+  n1101:
+    name: PostScript
+    role: menu item
+  n1102:
+    name: PostScript Printer Description
+    role: menu item
+  n1103:
+    name: Pug
+    role: menu item
+  n1104:
+    name: R Markdown
+    role: menu item
+  n1105:
+    name: R documentation
+    role: menu item
+  n1106:
+    name: RELAX NG
+    role: menu item
+  n1107:
+    name: RelaxNG-Compact
+    role: menu item
+  n1108:
+    name: reStructuredText
+    role: menu item
+  n1109:
+    name: Roff
+    role: menu item
+  n1110:
+    name: Ruby/Rails/RHTML
+    role: menu item
+  n1111:
+    name: SASS
+    role: menu item
+  n1112:
+    name: SCSS
+    role: menu item
+  n1113:
+    name: SGML
+    role: menu item
+  n1114:
+    name: SiSU
+    role: menu item
+  n1115:
+    name: Texinfo
+    role: menu item
+  n1116:
+    name: Textile
+    role: menu item
+  n1117:
+    name: Troff Mandoc
+    role: menu item
+  n1118:
+    name: TT2
+    role: menu item
+  n1119:
+    name: Twig/Twig
+    role: menu item
+  n1120:
+    name: txt2tags
+    role: menu item
+  n1121:
+    name: Typst
+    role: menu item
+  n1122:
+    name: vCard, vCalendar, iCalendar
+    role: menu item
+  n1123:
+    name: Vue
+    role: menu item
+  n1124:
+    name: Wesnoth Markup Language
+    role: menu item
+  n1125:
+    name: XML
+    role: menu item
+  n1126:
+    name: XML (Debug)
+    role: menu item
+  n1127:
+    name: xslt
+    role: menu item
+  n1128:
+    name: XUL
+    role: menu item
+  n1129:
+    name: YAML
+    role: menu item
+  n1130:
+    name: YANG
+    role: menu item
+  n1131:
+    name: Rich Text Format
+    role: menu item
+  n1132:
+    name: ''
+    role: popup menu
+  n1133:
+    name: Asm6502
+    role: menu item
+  n1134:
+    name: AVR Assembler
+    role: menu item
+  n1135:
+    name: GNU Assembler
+    role: menu item
+  n1136:
+    name: Intel x86 (NASM)
+    role: menu item
+  n1137:
+    name: MIPS Assembler
+    role: menu item
+  n1138:
+    name: Motorola 68k (VASM/Devpac)
+    role: menu item
+  n1139:
+    name: Motorola DSP56k
+    role: menu item
+  n1140:
+    name: PicAsm
+    role: menu item
+  n1141:
+    name: Common Intermediate Language (CIL)
+    role: menu item
+  n1142:
+    name: ''
+    role: popup menu
+  n1143:
+    name: ABAP
+    role: menu item
+  n1144:
+    name: ActionScript 2.0
+    role: menu item
+  n1145:
+    name: Ada
+    role: menu item
+  n1146:
+    name: Agda
+    role: menu item
+  n1147:
+    name: ANS-Forth94
+    role: menu item
+  n1148:
+    name: ANSI C89
+    role: menu item
+  n1149:
+    name: ANTLR
+    role: menu item
+  n1150:
+    name: ATS
+    role: menu item
+  n1151:
+    name: Bitbake
+    role: menu item
+  n1152:
+    name: Boo
+    role: menu item
+  n1153:
+    name: C
+    role: menu item
+  n1154:
+    name: C#
+    role: menu item
+  n1155:
+    name: C++
+    role: menu item
+  n1156:
+    name: CashScript
+    role: menu item
+  n1157:
+    name: Cg
+    role: menu item
+  n1158:
+    name: CGiS
+    role: menu item
+  n1159:
+    name: Clipper
+    role: menu item
+  n1160:
+    name: Clojure
+    role: menu item
+  n1161:
+    name: COBOL
+    role: menu item
+  n1162:
+    name: Common Lisp
+    role: menu item
+  n1163:
+    name: Component-Pascal
+    role: menu item
+  n1164:
+    name: Crack
+    role: menu item
+  n1165:
+    name: Crystal
+    role: menu item
+  n1166:
+    name: Curry
+    role: menu item
+  n1167:
+    name: D
+    role: menu item
+  n1168:
+    name: Dart
+    role: menu item
+  n1169:
+    name: E Language
+    role: menu item
+  n1170:
+    name: Eiffel
+    role: menu item
+  n1171:
+    name: Elixir
+    role: menu item
+  n1172:
+    name: Elm
+    role: menu item
+  n1173:
+    name: FlatBuffers
+    role: menu item
+  n1174:
+    name: Fortran (Fixed Format)
+    role: menu item
+  n1175:
+    name: Fortran (Free Format)
+    role: menu item
+  n1176:
+    name: FreeBASIC
+    role: menu item
+  n1177:
+    name: FSharp
+    role: menu item
+  n1178:
+    name: Gleam
+    role: menu item
+  n1179:
+    name: GNU M4
+    role: menu item
+  n1180:
+    name: Go
+    role: menu item
+  n1181:
+    name: GPRBuild
+    role: menu item
+  n1182:
+    name: Groovy
+    role: menu item
+  n1183:
+    name: Hare
+    role: menu item
+  n1184:
+    name: Haskell
+    role: menu item
+  n1185:
+    name: Haxe
+    role: menu item
+  n1186:
+    name: IDL
+    role: menu item
+  n1187:
+    name: Idris
+    role: menu item
+  n1188:
+    name: ILERPG
+    role: menu item
+  n1189:
+    name: Inform
+    role: menu item
+  n1190:
+    name: ISO C++
+    role: menu item
+  n1191:
+    name: Java
+    role: menu item
+  n1192:
+    name: Java Module
+    role: menu item
+  n1193:
+    name: Julia
+    role: menu item
+  n1194:
+    name: KBasic
+    role: menu item
+  n1195:
+    name: KDev-PG[-Qt] Grammar
+    role: menu item
+  n1196:
+    name: Kotlin
+    role: menu item
+  n1197:
+    name: Lex/Flex
+    role: menu item
+  n1198:
+    name: Literate Curry
+    role: menu item
+  n1199:
+    name: Literate Haskell
+    role: menu item
+  n1200:
+    name: LLVM
+    role: menu item
+  n1201:
+    name: Logtalk
+    role: menu item
+  n1202:
+    name: LPC
+    role: menu item
+  n1203:
+    name: Modelica
+    role: menu item
+  n1204:
+    name: Modula-2
+    role: menu item
+  n1205:
+    name: Modula-2 (ISO only)
+    role: menu item
+  n1206:
+    name: Modula-2 (PIM only)
+    role: menu item
+  n1207:
+    name: Modula-2 (R10 only)
+    role: menu item
+  n1208:
+    name: Modula-3
+    role: menu item
+  n1209:
+    name: MonoBasic
+    role: menu item
+  n1210:
+    name: Nemerle
+    role: menu item
+  n1211:
+    name: nesC
+    role: menu item
+  n1212:
+    name: Nim
+    role: menu item
+  n1213:
+    name: noweb
+    role: menu item
+  n1214:
+    name: Objective Caml
+    role: menu item
+  n1215:
+    name: Objective Caml Ocamllex
+    role: menu item
+  n1216:
+    name: Objective Caml Ocamlyacc
+    role: menu item
+  n1217:
+    name: Objective-C
+    role: menu item
+  n1218:
+    name: Objective-C++
+    role: menu item
+  n1219:
+    name: Odin
+    role: menu item
+  n1220:
+    name: OORS
+    role: menu item
+  n1221:
+    name: OPAL
+    role: menu item
+  n1222:
+    name: OpenCL
+    role: menu item
+  n1223:
+    name: opsi-script
+    role: menu item
+  n1224:
+    name: Pascal
+    role: menu item
+  n1225:
+    name: PL/I
+    role: menu item
+  n1226:
+    name: Pony
+    role: menu item
+  n1227:
+    name: Prolog
+    role: menu item
+  n1228:
+    name: Protobuf
+    role: menu item
+  n1229:
+    name: Pure
+    role: menu item
+  n1230:
+    name: PureBasic
+    role: menu item
+  n1231:
+    name: PureScript
+    role: menu item
+  n1232:
+    name: RapidQ
+    role: menu item
+  n1233:
+    name: RenPy
+    role: menu item
+  n1234:
+    name: RETRO
+    role: menu item
+  n1235:
+    name: RSI IDL
+    role: menu item
+  n1236:
+    name: Rust
+    role: menu item
+  n1237:
+    name: Sather
+    role: menu item
+  n1238:
+    name: Scala
+    role: menu item
+  n1239:
+    name: SELinux CIL Policy
+    role: menu item
+  n1240:
+    name: SELinux Policy
+    role: menu item
+  n1241:
+    name: Smali
+    role: menu item
+  n1242:
+    name: SML
+    role: menu item
+  n1243:
+    name: ''
+    role: popup menu
+  n1244:
+    name: AHDL
+    role: menu item
+  n1245:
+    name: Spice
+    role: menu item
+  n1246:
+    name: SystemC
+    role: menu item
+  n1247:
+    name: SystemVerilog
+    role: menu item
+  n1248:
+    name: Vera
+    role: menu item
+  n1249:
+    name: Verilog
+    role: menu item
+  n1250:
+    name: VHDL
+    role: menu item
+  n1251:
+    name: ''
+    role: popup menu
+  n1252:
+    name: Ansys
+    role: menu item
+  n1253:
+    name: B-Method
+    role: menu item
+  n1254:
+    name: dot
+    role: menu item
+  n1255:
+    name: FASTQ
+    role: menu item
+  n1256:
+    name: GAP
+    role: menu item
+  n1257:
+    name: GDL
+    role: menu item
+  n1258:
+    name: Gnuplot
+    role: menu item
+  n1259:
+    name: Magma
+    role: menu item
+  n1260:
+    name: Mathematica
+    role: menu item
+  n1261:
+    name: Matlab
+    role: menu item
+  n1262:
+    name: Maxima
+    role: menu item
+  n1263:
+    name: Metamath
+    role: menu item
+  n1264:
+    name: Octave
+    role: menu item
+  n1265:
+    name: R Script
+    role: menu item
+  n1266:
+    name: Replicode
+    role: menu item
+  n1267:
+    name: scilab
+    role: menu item
+  n1268:
+    name: Stan
+    role: menu item
+  n1269:
+    name: Stata
+    role: menu item
+  n1270:
+    name: TI Basic
+    role: menu item
+  n1271:
+    name: yacas
+    role: menu item
+  n1272:
+    name: ''
+    role: popup menu
+  n1273:
+    name: 4DOS BatchToMemory
+    role: menu item
+  n1274:
+    name: AMPLE
+    role: menu item
+  n1275:
+    name: AutoHotKey
+    role: menu item
+  n1276:
+    name: AWK
+    role: menu item
+  n1277:
+    name: Bash
+    role: menu item
+  n1278:
+    name: BrightScript
+    role: menu item
+  n1279:
+    name: CLIST
+    role: menu item
+  n1280:
+    name: CoffeeScript
+    role: menu item
+  n1281:
+    name: CubeScript
+    role: menu item
+  n1282:
+    name: Elvish
+    role: menu item
+  n1283:
+    name: Erlang
+    role: menu item
+  n1284:
+    name: Euphoria
+    role: menu item
+  n1285:
+    name: ferite
+    role: menu item
+  n1286:
+    name: Fish
+    role: menu item
+  n1287:
+    name: GNU Linker Script
+    role: menu item
+  n1288:
+    name: Godot
+    role: menu item
+  n1289:
+    name: J
+    role: menu item
+  n1290:
+    name: JavaScript
+    role: menu item
+  n1291:
+    name: JavaScript React (JSX)
+    role: menu item
+  n1292:
+    name: JCL
+    role: menu item
+  n1293:
+    name: k
+    role: menu item
+  n1294:
+    name: LSL
+    role: menu item
+  n1295:
+    name: Lua
+    role: menu item
+  n1296:
+    name: Mason
+    role: menu item
+  n1297:
+    name: MEL
+    role: menu item
+  n1298:
+    name: MS-DOS Batch
+    role: menu item
+  n1299:
+    name: Nix
+    role: menu item
+  n1300:
+    name: NSIS
+    role: menu item
+  n1301:
+    name: Perl
+    role: menu item
+  n1302:
+    name: PHP (HTML)
+    role: menu item
+  n1303:
+    name: Pig
+    role: menu item
+  n1304:
+    name: Pike
+    role: menu item
+  n1305:
+    name: PowerShell
+    role: menu item
+  n1306:
+    name: Praat
+    role: menu item
+  n1307:
+    name: Puppet
+    role: menu item
+  n1308:
+    name: Python
+    role: menu item
+  n1309:
+    name: q
+    role: menu item
+  n1310:
+    name: QFace
+    role: menu item
+  n1311:
+    name: QML
+    role: menu item
+  n1312:
+    name: Quake Script
+    role: menu item
+  n1313:
+    name: Racket
+    role: menu item
+  n1314:
+    name: Raku
+    role: menu item
+  n1315:
+    name: REXX
+    role: menu item
+  n1316:
+    name: Robot
+    role: menu item
+  n1317:
+    name: Ruby
+    role: menu item
+  n1318:
+    name: Scheme
+    role: menu item
+  n1319:
+    name: sed
+    role: menu item
+  n1320:
+    name: Sieve
+    role: menu item
+  n1321:
+    name: TaskJuggler
+    role: menu item
+  n1322:
+    name: Tcl/Tk
+    role: menu item
+  n1323:
+    name: Tcsh
+    role: menu item
+  n1324:
+    name: Twig (HTML)
+    role: menu item
+  n1325:
+    name: TypeScript
+    role: menu item
+  n1326:
+    name: TypeScript React (TSX)
+    role: menu item
+  n1327:
+    name: UnrealScript
+    role: menu item
+  n1328:
+    name: VBScript Files
+    role: menu item
+  n1329:
+    name: Velocity
+    role: menu item
+  n1330:
+    name: Xonotic Script
+    role: menu item
+  n1331:
+    name: Zsh
+    role: menu item
+  n1332:
+    name: ''
+    role: popup menu
+  n1333:
+    name: .desktop
+    role: menu item
+  n1334:
+    name: Adblock Plus
+    role: menu item
+  n1335:
+    name: Apache Configuration
+    role: menu item
+  n1336:
+    name: Cabal
+    role: menu item
+  n1337:
+    name: Cisco
+    role: menu item
+  n1338:
+    name: Doxyfile
+    role: menu item
+  n1339:
+    name: fstab
+    role: menu item
+  n1340:
+    name: Git Ignore
+    role: menu item
+  n1341:
+    name: Gitolite
+    role: menu item
+  n1342:
+    name: INI Files
+    role: menu item
+  n1343:
+    name: Jsonnet
+    role: menu item
+  n1344:
+    name: Kate Config
+    role: menu item
+  n1345:
+    name: Kconfig
+    role: menu item
+  n1346:
+    name: kdesrc-buildrc
+    role: menu item
+  n1347:
+    name: mergetag text
+    role: menu item
+  n1348:
+    name: Nagios
+    role: menu item
+  n1349:
+    name: nginx Configuration
+    role: menu item
+  n1350:
+    name: QDoc Configuration
+    role: menu item
+  n1351:
+    name: systemd unit
+    role: menu item
+  n1352:
+    name: TOML
+    role: menu item
+  n1353:
+    name: Varnish Test Case language
+    role: menu item
+  n1354:
+    name: Varnish Configuration Language
+    role: menu item
+  n1355:
+    name: WINE Config
+    role: menu item
+  n1356:
+    name: x.org Configuration
+    role: menu item
+  n1357:
+    name: main
+    role: desktop frame
+  n1358:
+    name: org.deepin.dde.deepinwmfaker
+    role: application
+  n1359:
+    name: xdg-desktop-portal-gtk
+    role: application
+  n1360:
+    name: kglobalaccel
+    role: application
+  n1361:
+    name: dde-application-manager
+    role: application
+  n1362:
+    name: kwin
+    role: application
+  n1363:
+    name: dde-polkit-agent
+    role: application
+  n1364:
+    name: dde-file-manager-daemon
+    role: application
+  n1365:
+    name: org.deepin.dde.lock
+    role: application
+  n1367:
+    name: org.deepin.dde-shell
+    role: application
+  n1368:
+    name: org.deepin.ds.dock
+    role: frame
+  n1369:
+    name: dde-shell/panelpopup
+    role: frame
+  n1377:
+    name: 软件包安装器
+    role: list item
+  n1378:
+    name: 搜狗输入法UOS Next版 属性设置
+    role: list item
+  n1379:
+    name: 邮箱
+    role: list item
+  n1380:
+    name: Chrome 谷歌浏览器
+    role: list item
+  n1381:
+    name: Element-Nightly
+    role: list item
+  n1382:
+    name: Warp
+    role: list item
+  n1383:
+    name: OpenCode
+    role: list item
+  n1384:
+    name: 局域网文件传输
+    role: list item
+  n1385:
+    name: deepin-herdr
+    role: list item
+  n1387:
+    name: ''
+    role: layered pane
+  n1390:
+    name: dde-shell/paneltooltip
+    role: frame
+  n1391:
+    name: org.deepin.ds.launchpad.fullscreen
+    role: frame
+  n1394:
+    name: ''
+    role: frame
+  n1398:
+    name: 取 消
+    role: button
+  n1399:
+    name: 确 定
+    role: button
+  n1400:
+    name: org.deepin.ds.notificationbubble
+    role: frame
+  n1404:
+    name: org.deepin.ds.notificationcenter
+    role: frame
+  n1406:
+    name: 收起
+    role: button
+  n1407:
+    name: 更多
+    role: button
+  n1408:
+    name: 清除全部
+    role: button
+  n1411:
+    name: org.deepin.ds.osd
+    role: frame
+  n1416:
+    name: ''
+    role: popup menu
+  n1417:
+    name: 一直显示
+    role: menu item
+  n1418:
+    name: 一直隐藏
+    role: menu item
+  n1419:
+    name: 智能隐藏
+    role: menu item
+  n1420:
+    name: 上
+    role: menu item
+  n1421:
+    name: 下
+    role: menu item
+  n1422:
+    name: 左
+    role: menu item
+  n1423:
+    name: 右
+    role: menu item
+  n1424:
+    name: 经典模式
+    role: menu item
+  n1425:
+    name: 居中模式
+    role: menu item
+  n1426:
+    name: 时尚模式
+    role: menu item
+  n1427:
+    name: 高效模式
+    role: menu item
+  n1428:
+    name: ''
+    role: popup menu
+  n1429:
+    name: 上
+    role: menu item
+  n1430:
+    name: 下
+    role: menu item
+  n1431:
+    name: 左
+    role: menu item
+  n1432:
+    name: 右
+    role: menu item
+  n1433:
+    name: ''
+    role: popup menu
+  n1434:
+    name: 经典模式
+    role: menu item
+  n1435:
+    name: 居中模式
+    role: menu item
+  n1436:
+    name: ''
+    role: popup menu
+  n1437:
+    name: 时尚模式
+    role: menu item
+  n1438:
+    name: 高效模式
+    role: menu item
+  n1439:
+    name: ''
+    role: popup menu
+  n1440:
+    name: 指示器样式
+    role: menu item
+  n1441:
+    name: ''
+    role: popup menu
+  n1442:
+    name: 时尚模式
+    role: menu item
+  n1443:
+    name: 高效模式
+    role: menu item
+  n1444:
+    name: 模式
+    role: menu item
+  n1445:
+    name: ''
+    role: popup menu
+  n1446:
+    name: 经典模式
+    role: menu item
+  n1447:
+    name: 居中模式
+    role: menu item
+  n1448:
+    name: 位置
+    role: menu item
+  n1449:
+    name: ''
+    role: popup menu
+  n1450:
+    name: 上
+    role: menu item
+  n1451:
+    name: 下
+    role: menu item
+  n1452:
+    name: 左
+    role: menu item
+  n1453:
+    name: 右
+    role: menu item
+  n1454:
+    name: 状态
+    role: menu item
+  n1455:
+    name: ''
+    role: popup menu
+  n1456:
+    name: 一直显示
+    role: menu item
+  n1457:
+    name: 一直隐藏
+    role: menu item
+  n1458:
+    name: 智能隐藏
+    role: menu item
+  n1459:
+    name: 禁用自由调节
+    role: menu item
+  n1460:
+    name: 任务栏设置
+    role: menu item
+  n1466:
+    name: otherTrayPlugins
+    role: application
+  n1467:
+    name: dde-clipboard-daemon
+    role: application
+  n1468:
+    name: dde-clipboard
+    role: application
+  n1469:
+    name: selfMaintenanceTrayPlugins
+    role: application
+  n1470:
+    name: subprojectTrayPlugins
+    role: application
+  n1471:
+    name: auth-dialog
+    role: application
+  n1472:
+    name: proxy-monitor
+    role: application
+  n1473:
+    name: ''
+    role: popup menu
+  n1474:
+    name: 配置…
+    role: menu item
+  n1475:
+    name: 关闭监控
+    role: menu item
+  n1476:
+    name: 退出
+    role: menu item
+  n1477:
+    name: uos-ai-assistant
+    role: application
+  n1478:
+    name: ''
+    role: dialog
+  n1487:
+    name: 开始使用
+    role: button
+  n1488:
+    name: 添加模型
+    role: button
+  n1489:
+    name: ''
+    role: popup menu
+  n1494:
+    name: ''
+    role: popup menu
+  n1495:
+    name: 添加到AI知识库
+    role: menu item
+  n1496:
+    name: 续写
+    role: menu item
+  n1497:
+    name: 扩写
+    role: menu item
+  n1498:
+    name: 纠错
+    role: menu item
+  n1499:
+    name: 润色
+    role: menu item
+  n1500:
+    name: 自定义设置
+    role: menu item
+  n1501:
+    name: ''
+    role: dialog
+  n1513:
+    name: 写文章
+    role: button
+  n1514:
+    name: 写大纲
+    role: button
+  n1515:
+    name: 写通知
+    role: button
+  n1516:
+    name: 调研报告
+    role: button
+  n1517:
+    name: 演讲稿
+    role: button
+  n1518:
+    name: 工作总结
+    role: button
+  n1519:
+    name: 公众号
+    role: button
+  n1522:
+    name: 取消
+    role: button
+  n1524:
+    name: 粘贴至正文
+    role: button
+  n1525:
+    name: 重新生成
+    role: button
+  n1526:
+    name: 复制
+    role: button
+  n1531:
+    name: ''
+    role: popup menu
+  n1536:
+    name: uos-eye-service
+    role: application
+  n1537:
+    name: uos-activator
+    role: application
+  n1538:
+    name: ''
+    role: frame
+  n1545:
+    name: ''
+    role: layered pane
+  n1546:
+    name: ''
+    role: panel
+  n1553:
+    name: 复制
+    role: button
+  n1563:
+    name: 显示
+    role: button
+  n1566:
+    name: 复制
+    role: button
+  n1576:
+    name: 复制
+    role: button
+  n1580:
+    name: 复制
+    role: button
+  n1582:
+    name: 试用期激活
+    role: button
+  n1583:
+    name: 查看详情
+    role: button
+  n1584:
+    name: 已授权，点击找回
+    role: button
+  n1585:
+    name: 输入序列号
+    role: button
+  n1586:
+    name: 导入激活文件
+    role: button
+  n1587:
+    name: 更换序列号
+    role: button
+  n1589:
+    name: deepin-defender-session-daemon
+    role: application
+  n1590:
+    name: udcp-wizzard
+    role: application
+  n1591:
+    name: DMainWindow
+    role: frame
+  n1596:
+    name: ''
+    role: dialog
+  n1603:
+    name: ''
+    role: dialog
+  n1609:
+    name: ''
+    role: dialog
+  n1610:
+    name: 继续
+    role: button
+  n1617:
+    name: DTitlebarMainMenu
+    role: popup menu
+  n1618:
+    name: 检查更新
+    role: menu item
+  n1619:
+    name: 调试模式
+    role: menu item
+  n1620:
+    name: 管理员临时维护
+    role: menu item
+  n1621:
+    name: 主题
+    role: menu item
+  n1622:
+    name: DTitlebarThemeMenu
+    role: popup menu
+  n1623:
+    name: 浅色
+    role: menu item
+  n1624:
+    name: 深色
+    role: menu item
+  n1625:
+    name: 跟随系统
+    role: menu item
+  n1626:
+    name: 帮助
+    role: menu item
+  n1627:
+    name: 关于
+    role: menu item
+  n1628:
+    name: 退出
+    role: menu item
+  n1629:
+    name: DTitlebarThemeMenu
+    role: popup menu
+  n1630:
+    name: 浅色
+    role: menu item
+  n1631:
+    name: 深色
+    role: menu item
+  n1632:
+    name: 跟随系统
+    role: menu item
+  n1637:
+    name: org.deepin.dde-shell
+    role: application
+  n1643:
+    name: cpis-panel-service
+    role: application
+  n1644:
+    name: ''
+    role: window
+  n1646:
+    name: cpis-engine-service
+    role: application
+  n1647:
+    name: deepin-terminal
+    role: application
+  n1648:
+    name: DMainWindow
+    role: frame
+  n1653:
+    name: DTitlebarMainMenu
+    role: popup menu
+  n1654:
+    name: 新建窗口
+    role: menu item
+  n1655:
+    name: 自定义命令
+    role: menu item
+  n1656:
+    name: 远程管理
+    role: menu item
+  n1657:
+    name: 设置
+    role: menu item
+  n1658:
+    name: 主题
+    role: menu item
+  n1659:
+    name: ''
+    role: popup menu
+  n1660:
+    name: 浅色
+    role: menu item
+  n1661:
+    name: 深色
+    role: menu item
+  n1662:
+    name: 跟随系统
+    role: menu item
+  n1663:
+    name: Elementary
+    role: menu item
+  n1664:
+    name: Empathy
+    role: menu item
+  n1665:
+    name: Tomorrow night blue
+    role: menu item
+  n1666:
+    name: Bim
+    role: menu item
+  n1667:
+    name: Freya
+    role: menu item
+  n1668:
+    name: Hybrid
+    role: menu item
+  n1669:
+    name: Ocean dark
+    role: menu item
+  n1670:
+    name: Deepin
+    role: menu item
+  n1671:
+    name: Ura
+    role: menu item
+  n1672:
+    name: One light
+    role: menu item
+  n1673:
+    name: 自定义主题
+    role: menu item
+  n1674:
+    name: DTitlebarThemeMenu
+    role: popup menu
+  n1675:
+    name: 浅色
+    role: menu item
+  n1676:
+    name: 深色
+    role: menu item
+  n1677:
+    name: 跟随系统
+    role: menu item
+  n1678:
+    name: 帮助
+    role: menu item
+  n1679:
+    name: 关于
+    role: menu item
+  n1680:
+    name: 退出
+    role: menu item
+  n1681:
+    name: DTitlebarMainMenu
+    role: popup menu
+  n1682:
+    name: 新建窗口
+    role: menu item
+  n1683:
+    name: 自定义命令
+    role: menu item
+  n1684:
+    name: 远程管理
+    role: menu item
+  n1685:
+    name: 设置
+    role: menu item
+  n1686:
+    name: 主题
+    role: menu item
+  n1687:
+    name: ''
+    role: popup menu
+  n1688:
+    name: 浅色
+    role: menu item
+  n1689:
+    name: 深色
+    role: menu item
+  n1690:
+    name: 跟随系统
+    role: menu item
+  n1691:
+    name: Elementary
+    role: menu item
+  n1692:
+    name: Empathy
+    role: menu item
+  n1693:
+    name: Tomorrow night blue
+    role: menu item
+  n1694:
+    name: Bim
+    role: menu item
+  n1695:
+    name: Freya
+    role: menu item
+  n1696:
+    name: Hybrid
+    role: menu item
+  n1697:
+    name: Ocean dark
+    role: menu item
+  n1698:
+    name: Deepin
+    role: menu item
+  n1699:
+    name: Ura
+    role: menu item
+  n1700:
+    name: One light
+    role: menu item
+  n1701:
+    name: 自定义主题
+    role: menu item
+  n1702:
+    name: 主题
+    role: menu item
+  n1703:
+    name: DTitlebarThemeMenu
+    role: popup menu
+  n1704:
+    name: 浅色
+    role: menu item
+  n1705:
+    name: 深色
+    role: menu item
+  n1706:
+    name: 跟随系统
+    role: menu item
+  n1707:
+    name: 帮助
+    role: menu item
+  n1708:
+    name: 关于
+    role: menu item
+  n1709:
+    name: 退出
+    role: menu item
+  n1710:
+    name: ''
+    role: popup menu
+  n1711:
+    name: 浅色
+    role: menu item
+  n1712:
+    name: 深色
+    role: menu item
+  n1713:
+    name: 跟随系统
+    role: menu item
+  n1714:
+    name: Elementary
+    role: menu item
+  n1715:
+    name: Empathy
+    role: menu item
+  n1716:
+    name: Tomorrow night blue
+    role: menu item
+  n1717:
+    name: Bim
+    role: menu item
+  n1718:
+    name: Freya
+    role: menu item
+  n1719:
+    name: Hybrid
+    role: menu item
+  n1720:
+    name: Ocean dark
+    role: menu item
+  n1721:
+    name: Deepin
+    role: menu item
+  n1722:
+    name: Ura
+    role: menu item
+  n1723:
+    name: One light
+    role: menu item
+  n1724:
+    name: 自定义主题
+    role: menu item
+  n1725:
+    name: Bing
+    role: menu item
+  n1726:
+    name: Baidu
+    role: menu item
+  n1727:
+    name: Github
+    role: menu item
+  n1728:
+    name: Stack Overflow
+    role: menu item
+  n1729:
+    name: DTitlebarThemeMenu
+    role: popup menu
+  n1730:
+    name: 浅色
+    role: menu item
+  n1731:
+    name: 深色
+    role: menu item
+  n1732:
+    name: 跟随系统
+    role: menu item
+  n1733:
+    name: ''
+    role: popup menu
+  n1734:
+    name: Bing
+    role: menu item
+  n1735:
+    name: Baidu
+    role: menu item
+  n1736:
+    name: Github
+    role: menu item
+  n1737:
+    name: Stack Overflow
+    role: menu item
+  n1738:
+    name: code
+    role: application
+  n1739:
+    name: AI 协作 - deepin-voice-note - Visual Studio Code
+    role: frame
+  n1740:
+    name: ''
+    role: panel
+  n1741:
+    name: ''
+    role: panel
+  n1743:
+    name: 最小化
+    role: button
+  n1744:
+    name: 最大化
+    role: button
+  n1745:
+    name: 恢复
+    role: button
+  n1746:
+    name: 关闭
+    role: button
+  n1747:
+    name: ''
+    role: panel
+  n1748:
+    name: ''
+    role: panel
+  n1749:
+    name: ''
+    role: panel
+  n1750:
+    name: ''
+    role: panel
+  n1753:
+    name: AI 协作 - deepin-voice-note - Visual Studio Code
+    role: document web
+  n1754:
+    name: ''
+    role: section
+  n1755:
+    name: ''
+    role: embedded
+  n1756:
+    name: ''
+    role: section
+  n1757:
+    name: ''
+    role: section
+  n1758:
+    name: ''
+    role: section
+  n1762:
+    name: ''
+    role: section
+  n1766:
+    name: ''
+    role: section
+  n1767:
+    name: ''
+    role: notification
+  n1768:
+    name: '错误: Todo-Tree: Failed to find vscode-ripgrep - please install ripgrep manually
+      and set ''todo-tree.ri'
+    role: static
+  n1772:
+    name: ''
+    role: section
+  n1773:
+    name: ''
+    role: section
+  n1774:
+    name: ''
+    role: internal frame
+  n1777:
+    name: dde-file-manager
+    role: application
+  n1778:
+    name: DMainWindow
+    role: frame
+  n1792:
+    name: ''
+    role: panel
+  n1793:
+    name: Form_
+    role: form
+  n1794:
+    name: ''
+    role: split pane
+  n1795:
+    name: ''
+    role: panel
+  n1796:
+    name: ''
+    role: split pane
+  n1799:
+    name: ''
+    role: panel
+  n1800:
+    name: Form_
+    role: form
+  n1801:
+    name: Form_
+    role: form
+  n1802:
+    name: Form_
+    role: form
+  n1803:
+    name: Form_
+    role: form
+  n1804:
+    name: ''
+    role: list
+  n1805:
+    name: 我的目录
+    role: list item
+  n1806:
+    name: 桌面
+    role: list item
+  n1807:
+    name: 视频
+    role: list item
+  n1808:
+    name: 音乐
+    role: list item
+  n1809:
+    name: 图片
+    role: list item
+  n1810:
+    name: 文档
+    role: list item
+  n1811:
+    name: 下载
+    role: list item
+  n1812:
+    name: 磁盘列表
+    role: list item
+  n1813:
+    name: 系统盘
+    role: list item
+  n1814:
+    name: 数据盘
+    role: list item
+  n1815:
+    name: 数据盘
+    role: list item
+  n1816:
+    name: 办公云盘
+    role: list item
+  n1817:
+    name: 10.20.32.83
+    role: list item
+  n1818:
+    name: 10.4.12.36
+    role: list item
+  n1819:
+    name: 10.8.12.139
+    role: list item
+  n1820:
+    name: 10.8.12.191
+    role: list item
+  n1821:
+    name: 10.8.12.212
+    role: list item
+  n1822:
+    name: 10.8.12.49
+    role: list item
+  n1823:
+    name: 10.8.12.56
+    role: list item
+  n1824:
+    name: 10.8.12.73
+    role: list item
+  n1825:
+    name: 10.8.12.75
+    role: list item
+  n1826:
+    name: 保险箱
+    role: list item
+  n1827:
+    name: 保险箱
+    role: list item
+  n1831:
+    name: ''
+    role: list
+  n1832:
+    name: deepin-compressor
+    role: list item
+  n1833:
+    name: deepin-editor
+    role: list item
+  n1834:
+    name: deepin-mail
+    role: list item
+  n1835:
+    name: deepin-movie-reborn
+    role: list item
+  n1836:
+    name: deepin-screen-recorder
+    role: list item
+  n1837:
+    name: deepin-voice-note
+    role: list item
+  n1838:
+    name: youqu-ai
+    role: list item
+  n1839:
+    name: 提示词
+    role: list item
+  n1840:
+    name: 用例文档
+    role: list item
+  n1841:
+    name: deepin-mail_6.5.77_amd64.deb
+    role: list item
+  n1842:
+    name: deepin-screen-recorder_6.6.37_amd64.buildinfo
+    role: list item
+  n1843:
+    name: deepin-screen-recorder_6.6.37_amd64.changes
+    role: list item
+  n1844:
+    name: deepin-screen-recorder_6.6.37_amd64.deb
+    role: list item
+  n1845:
+    name: 未命名文档6.txt
+    role: list item
+  n1846:
+    name: docs
+    role: list item
+  n1847:
+    name: modules
+    role: list item
+  n1848:
+    name: scan
+    role: list item
+  n1849:
+    name: cases_raw.yaml
+    role: list item
+  n1850:
+    name: plan.md
+    role: list item
+  n1851:
+    name: plan.yaml
+    role: list item
+  n1852:
+    name: record_instructions.md
+    role: list item
+  n1853:
+    name: Form_
+    role: form
+  n1854:
+    name: Form_
+    role: form
+  n1855:
+    name: Form_
+    role: form
+  n1856:
+    name: ''
+    role: list
+  n1857:
+    name: 我的目录
+    role: list item
+  n1858:
+    name: 桌面
+    role: list item
+  n1859:
+    name: 视频
+    role: list item
+  n1860:
+    name: 音乐
+    role: list item
+  n1861:
+    name: 图片
+    role: list item
+  n1862:
+    name: 文档
+    role: list item
+  n1863:
+    name: 下载
+    role: list item
+  n1864:
+    name: 磁盘列表
+    role: list item
+  n1865:
+    name: 系统盘
+    role: list item
+  n1866:
+    name: 数据盘
+    role: list item
+  n1867:
+    name: 数据盘
+    role: list item
+  n1868:
+    name: 办公云盘
+    role: list item
+  n1869:
+    name: 10.20.32.83
+    role: list item
+  n1870:
+    name: 10.4.12.36
+    role: list item
+  n1871:
+    name: 10.8.12.139
+    role: list item
+  n1872:
+    name: 10.8.12.191
+    role: list item
+  n1873:
+    name: 10.8.12.212
+    role: list item
+  n1874:
+    name: 10.8.12.49
+    role: list item
+  n1875:
+    name: 10.8.12.56
+    role: list item
+  n1876:
+    name: 10.8.12.73
+    role: list item
+  n1877:
+    name: 10.8.12.75
+    role: list item
+  n1878:
+    name: 保险箱
+    role: list item
+  n1879:
+    name: 保险箱
+    role: list item
+  n1883:
+    name: Form_
+    role: form
+  n1885:
+    name: Form_
+    role: form
+  n1886:
+    name: ''
+    role: list
+  n1887:
+    name: deepin-compressor
+    role: list item
+  n1888:
+    name: deepin-editor
+    role: list item
+  n1889:
+    name: deepin-mail
+    role: list item
+  n1890:
+    name: deepin-movie-reborn
+    role: list item
+  n1891:
+    name: deepin-screen-recorder
+    role: list item
+  n1892:
+    name: deepin-voice-note
+    role: list item
+  n1893:
+    name: youqu-ai
+    role: list item
+  n1894:
+    name: 提示词
+    role: list item
+  n1895:
+    name: 用例文档
+    role: list item
+  n1896:
+    name: deepin-mail_6.5.77_amd64.deb
+    role: list item
+  n1897:
+    name: deepin-screen-recorder_6.6.37_amd64.buildinfo
+    role: list item
+  n1898:
+    name: deepin-screen-recorder_6.6.37_amd64.changes
+    role: list item
+  n1899:
+    name: deepin-screen-recorder_6.6.37_amd64.deb
+    role: list item
+  n1900:
+    name: 未命名文档6.txt
+    role: list item
+  n1901:
+    name: Form_
+    role: form
+  n1903:
+    name: Form_
+    role: form
+  n1904:
+    name: ''
+    role: list
+  n1905:
+    name: docs
+    role: list item
+  n1906:
+    name: modules
+    role: list item
+  n1907:
+    name: scan
+    role: list item
+  n1908:
+    name: cases_raw.yaml
+    role: list item
+  n1909:
+    name: plan.md
+    role: list item
+  n1910:
+    name: plan.yaml
+    role: list item
+  n1911:
+    name: record_instructions.md
+    role: list item
+  n1912:
+    name: computer_title_bar
+    role: panel
+  n1913:
+    name: AddressToolBar
+    role: panel
+  n1915:
+    name: '...'
+    role: button
+  n1916:
+    name: AT_WorkSapce
+    role: button
+  n1917:
+    name: deepin-editor
+    role: button
+  n1918:
+    name: tests
+    role: button
+  n1919:
+    name: at
+    role: button
+  n1920:
+    name: Form_
+    role: form
+  n1922:
+    name: Form_
+    role: form
+  n1923:
+    name: DLineEditChildLineEdit
+    role: text
+  n1924:
+    name: DLineEditClearButton
+    role: button
+  n1925:
+    name: DSearchEditIconButton
+    role: button
+  n1926:
+    name: DSearchEditIconWidget
+    role: form
+  n1927:
+    name: DSearchEditIconButton
+    role: button
+  n1930:
+    name: back_button
+    role: button
+  n1931:
+    name: forword_button
+    role: button
+  n1932:
+    name: ContollerToolBar
+    role: form
+  n1933:
+    name: viewoptions_button
+    role: button
+  n1936:
+    name: iconView_button
+    role: check box
+  n1937:
+    name: listView_button
+    role: check box
+  n1938:
+    name: treeView_button
+    role: check box
+  n1939:
+    name: ''
+    role: panel
+  n1952:
+    name: Form_
+    role: form
+  n1954:
+    name: Form_
+    role: form
+  n1955:
+    name: at
+    role: page tab list
+  n1956:
+    name: AT_WorkSapce
+    role: page tab
+  n1957:
+    name: WorkSpace
+    role: page tab
+  n1958:
+    name: 计算机
+    role: page tab
+  n1959:
+    name: at
+    role: page tab
+  n1960:
+    name: 向左滚动
+    role: button
+  n1961:
+    name: 向右滚动
+    role: button
+  n1962:
+    name: DTabBarAddButton
+    role: button
+  n1965:
+    name: Form_
+    role: form
+  n1966:
+    name: back_button
+    role: button
+  n1967:
+    name: forword_button
+    role: button
+  n1968:
+    name: ''
+    role: text
+  n1971:
+    name: left_side_bar
+    role: panel
+  n1972:
+    name: Form_
+    role: form
+  n1973:
+    name: side_bar_view
+    role: tree
+  n2014:
+    name: DTitlebarMainMenu
+    role: popup menu
+  n2015:
+    name: 主题
+    role: menu item
+  n2016:
+    name: DTitlebarThemeMenu
+    role: popup menu
+  n2017:
+    name: 浅色
+    role: menu item
+  n2018:
+    name: 深色
+    role: menu item
+  n2019:
+    name: 跟随系统
+    role: menu item
+  n2020:
+    name: 帮助
+    role: menu item
+  n2021:
+    name: 关于
+    role: menu item
+  n2022:
+    name: 退出
+    role: menu item
+  n2023:
+    name: 新建窗口
+    role: menu item
+  n2024:
+    name: 新建标签页
+    role: menu item
+  n2025:
+    name: 连接到服务器
+    role: menu item
+  n2026:
+    name: 设置共享密码
+    role: menu item
+  n2027:
+    name: 设置
+    role: menu item
+  n2030:
+    name: ''
+    role: popup menu
+  n2031:
+    name: Icon view
+    role: menu item
+  n2032:
+    name: List view
+    role: menu item
+  n2033:
+    name: Tree view
+    role: menu item
+  n2036:
+    name: DTitlebarThemeMenu
+    role: popup menu
+  n2037:
+    name: 浅色
+    role: menu item
+  n2038:
+    name: 深色
+    role: menu item
+  n2039:
+    name: 跟随系统
+    role: menu item
+  n2040:
+    name: DTitlebarMainMenu
+    role: popup menu
+  n2041:
+    name: 新建窗口
+    role: menu item
+  n2042:
+    name: 新建标签页
+    role: menu item
+  n2043:
+    name: 连接到服务器
+    role: menu item
+  n2044:
+    name: 设置共享密码
+    role: menu item
+  n2045:
+    name: 设置
+    role: menu item
+  n2046:
+    name: 主题
+    role: menu item
+  n2047:
+    name: DTitlebarThemeMenu
+    role: popup menu
+  n2048:
+    name: 浅色
+    role: menu item
+  n2049:
+    name: 深色
+    role: menu item
+  n2050:
+    name: 跟随系统
+    role: menu item
+  n2051:
+    name: 帮助
+    role: menu item
+  n2052:
+    name: 关于
+    role: menu item
+  n2053:
+    name: 退出
+    role: menu item
+  n2054:
+    name: DTitlebarThemeMenu
+    role: popup menu
+  n2055:
+    name: 浅色
+    role: menu item
+  n2056:
+    name: 深色
+    role: menu item
+  n2057:
+    name: 跟随系统
+    role: menu item
+  n2058:
+    name: ''
+    role: panel
+  n2059:
+    name: ''
+    role: list
+  n2060:
+    name: 名称之前
+    role: list item
+  n2061:
+    name: 名称之后
+    role: list item
+  n2064:
+    name: ''
+    role: panel
+  n2065:
+    name: ''
+    role: list
+  n2066:
+    name: 替换文本
+    role: list item
+  n2067:
+    name: 添加文本
+    role: list item
+  n2068:
+    name: 自定义文本
+    role: list item
+  n2071:
+    name: ''
+    role: panel
+  n2072:
+    name: ''
+    role: list
+  n2073:
+    name: 名称之前
+    role: list item
+  n2074:
+    name: 名称之后
+    role: list item
+  n2077:
+    name: ''
+    role: panel
+  n2078:
+    name: ''
+    role: list
+  n2079:
+    name: 替换文本
+    role: list item
+  n2080:
+    name: 添加文本
+    role: list item
+  n2081:
+    name: 自定义文本
+    role: list item
+  n2084:
+    name: ''
+    role: popup menu
+  n2085:
+    name: 文件投送
+    role: menu item
+  n2086:
+    name: 通过邮箱发送
+    role: menu item
+  n2087:
+    name: 发送到桌面
+    role: menu item
+  n2088:
+    name: 创建链接
+    role: menu item
+  n2090:
+    name: Typora
+    role: application
+  n2091:
+    name: record_instructions.md• - Typora
+    role: frame
+  n2092:
+    name: ''
+    role: panel
+  n2093:
+    name: ''
+    role: panel
+  n2094:
+    name: ''
+    role: panel
+  n2095:
+    name: ''
+    role: panel
+  n2096:
+    name: ''
+    role: panel
+  n2097:
+    name: 文件
+    role: button
+  n2098:
+    name: 编辑
+    role: button
+  n2099:
+    name: 段落
+    role: button
+  n2100:
+    name: 格式
+    role: button
+  n2101:
+    name: 视图
+    role: button
+  n2102:
+    name: 主题
+    role: button
+  n2103:
+    name: 帮助
+    role: button
+  n2104:
+    name: ''
+    role: panel
+  n2107:
+    name: Typora
+    role: document web
+  n2108:
+    name: ''
+    role: section
+  n2109:
+    name: Search files
+    role: entry
+  n2110:
+    name: 菜单
+    role: section
+  n2111:
+    name: ''
+    role: section
+  n2113:
+    name: tooltip content
+    role: section
+  n2114:
+    name: ''
+    role: section
+  n2115:
+    name: deepin-editor AT 录制指引
+    role: heading
+  n2116:
+    name: deepin-editor AT 录制指引
+    role: static
+  n2117:
+    name: 当前录制命令
+    role: heading
+  n2118:
+    name: 当前录制命令
+    role: static
+  n2119:
+    name: ''
+    role: paragraph
+  n2120:
+    name: 请在项目根目录执行：
+    role: static
+  n2121:
+    name: ''
+    role: section
+  n2122:
+    name: ''
+    role: section
+  n2123:
+    name: ''
+    role: section
+  n2125:
+    name: q
+    role: section
+  n2128:
+    name: ''
+    role: section
+  n2130:
+    name: 你需要怎么操作
+    role: heading
+  n2131:
+    name: 你需要怎么操作
+    role: static
+  n2132:
+    name: ''
+    role: paragraph
+  n2133:
+    name: 录制开始后，按下面顺序操作文本编辑器。每一步操作后稍等 1 秒，让界面稳定。
+    role: static
+  n2134:
+    name: ''
+    role: list
+  n2135:
+    name: ''
+    role: list item
+  n2136:
+    name: ''
+    role: panel
+  n2137:
+    name: '1. '
+    role: static
+  n2138:
+    name: ''
+    role: paragraph
+  n2139:
+    name: 打开右上角/标题栏的主菜单。
+    role: static
+  n2140:
+    name: ''
+    role: list item
+  n2141:
+    name: ''
+    role: panel
+  n2142:
+    name: '2. '
+    role: static
+  n2143:
+    name: ''
+    role: paragraph
+  n2144:
+    name: '点击 '
+    role: static
+  n2145:
+    name: 新标签页
+    role: static
+  n2146:
+    name: 。
+    role: static
+  n2147:
+    name: ''
+    role: list item
+  n2148:
+    name: ''
+    role: panel
+  n2149:
+    name: '3. '
+    role: static
+  n2150:
+    name: ''
+    role: paragraph
+  n2151:
+    name: 再打开主菜单。
+    role: static
+  n2152:
+    name: ''
+    role: list item
+  n2153:
+    name: ''
+    role: panel
+  n2154:
+    name: '4. '
+    role: static
+  n2155:
+    name: ''
+    role: paragraph
+  n2156:
+    name: '点击 '
+    role: static
+  n2157:
+    name: 查找
+    role: static
+  n2158:
+    name: 。
+    role: static
+  n2159:
+    name: ''
+    role: list item
+  n2160:
+    name: ''
+    role: panel
+  n2161:
+    name: '5. '
+    role: static
+  n2162:
+    name: ''
+    role: paragraph
+  n2163:
+    name: '关闭查找栏，或按 '
+    role: static
+  n2164:
+    name: Esc
+    role: static
+  n2165:
+    name: ' 回到编辑区。'
+    role: static
+  n2166:
+    name: ''
+    role: list item
+  n2167:
+    name: ''
+    role: panel
+  n2168:
+    name: '6. '
+    role: static
+  n2169:
+    name: ''
+    role: paragraph
+  n2170:
+    name: 再打开主菜单。
+    role: static
+  n2171:
+    name: ''
+    role: list item
+  n2172:
+    name: ''
+    role: panel
+  n2173:
+    name: '7. '
+    role: static
+  n2174:
+    name: ''
+    role: paragraph
+  n2175:
+    name: '点击 '
+    role: static
+  n2176:
+    name: 替换
+    role: static
+  n2177:
+    name: 。
+    role: static
+  n2178:
+    name: ''
+    role: list item
+  n2179:
+    name: ''
+    role: panel
+  n2180:
+    name: '8. '
+    role: static
+  n2181:
+    name: ''
+    role: paragraph
+  n2182:
+    name: '关闭替换栏，或按 '
+    role: static
+  n2183:
+    name: Esc
+    role: static
+  n2184:
+    name: ' 回到编辑区。'
+    role: static
+  n2185:
+    name: ''
+    role: list item
+  n2186:
+    name: ''
+    role: panel
+  n2187:
+    name: '9. '
+    role: static
+  n2188:
+    name: ''
+    role: paragraph
+  n2189:
+    name: 在编辑区输入一小段文本，例如：
+    role: static
+  n2190:
+    name: ''
+    role: section
+  n2192:
+    name: ''
+    role: list item
+  n2193:
+    name: ''
+    role: panel
+  n2194:
+    name: '10. '
+    role: static
+  n2195:
+    name: ''
+    role: paragraph
+  n2196:
+    name: 再打开主菜单。
+    role: static
+  n2197:
+    name: ''
+    role: list item
+  n2198:
+    name: ''
+    role: panel
+  n2199:
+    name: '11. '
+    role: static
+  n2200:
+    name: ''
+    role: paragraph
+  n2201:
+    name: '点击 '
+    role: static
+  n2202:
+    name: 保存
+    role: static
+  n2203:
+    name: 。
+    role: static
+  n2204:
+    name: ''
+    role: list item
+  n2205:
+    name: ''
+    role: panel
+  n2206:
+    name: '12. '
+    role: static
+  n2207:
+    name: ''
+    role: paragraph
+  n2208:
+    name: 如果弹出保存对话框：
+    role: static
+  n2209:
+    name: ''
+    role: list
+  n2212:
+    name: ''
+    role: list item
+  n2213:
+    name: ''
+    role: panel
+  n2214:
+    name: '13. '
+    role: static
+  n2215:
+    name: ''
+    role: paragraph
+  n2216:
+    name: 再打开主菜单。
+    role: static
+  n2217:
+    name: ''
+    role: list item
+  n2218:
+    name: ''
+    role: panel
+  n2219:
+    name: '14. '
+    role: static
+  n2220:
+    name: ''
+    role: paragraph
+  n2221:
+    name: '点击 '
+    role: static
+  n2222:
+    name: 另存为
+    role: static
+  n2223:
+    name: 。
+    role: static
+  n2224:
+    name: ''
+    role: list item
+  n2225:
+    name: ''
+    role: panel
+  n2226:
+    name: '15. '
+    role: static
+  n2227:
+    name: ''
+    role: paragraph
+  n2228:
+    name: 如果弹出另存为对话框：
+    role: static
+  n2229:
+    name: ''
+    role: list
+  n2232:
+    name: ''
+    role: list item
+  n2233:
+    name: ''
+    role: panel
+  n2234:
+    name: '16. '
+    role: static
+  n2235:
+    name: ''
+    role: paragraph
+  n2236:
+    name: 再打开主菜单。
+    role: static
+  n2237:
+    name: ''
+    role: list item
+  n2238:
+    name: ''
+    role: panel
+  n2239:
+    name: '17. '
+    role: static
+  n2240:
+    name: ''
+    role: paragraph
+  n2241:
+    name: '进入 '
+    role: static
+  n2242:
+    name: 主题
+    role: static
+  n2243:
+    name: ，分别点一次：
+    role: static
+  n2244:
+    name: ''
+    role: list
+  n2248:
+    name: ''
+    role: list item
+  n2249:
+    name: ''
+    role: panel
+  n2250:
+    name: '18. '
+    role: static
+  n2251:
+    name: ''
+    role: paragraph
+  n2252:
+    name: 再打开主菜单。
+    role: static
+  n2253:
+    name: ''
+    role: list item
+  n2254:
+    name: ''
+    role: panel
+  n2255:
+    name: '19. '
+    role: static
+  n2256:
+    name: ''
+    role: paragraph
+  n2257:
+    name: '点击 '
+    role: static
+  n2258:
+    name: 设置
+    role: static
+  n2259:
+    name: 。
+    role: static
+  n2260:
+    name: ''
+    role: list item
+  n2261:
+    name: ''
+    role: panel
+  n2262:
+    name: '20. '
+    role: static
+  n2263:
+    name: ''
+    role: paragraph
+  n2264:
+    name: 设置窗口打开后，依次点一下能看到的页签/选项，例如：
+    role: static
+  n2265:
+    name: ''
+    role: list
+  n2272:
+    name: ''
+    role: list item
+  n2273:
+    name: ''
+    role: panel
+  n2274:
+    name: '21. '
+    role: static
+  n2275:
+    name: ''
+    role: paragraph
+  n2276:
+    name: 关闭设置窗口。
+    role: static
+  n2277:
+    name: ''
+    role: list item
+  n2278:
+    name: ''
+    role: panel
+  n2279:
+    name: '22. '
+    role: static
+  n2280:
+    name: ''
+    role: paragraph
+  n2281:
+    name: 再打开主菜单。
+    role: static
+  n2282:
+    name: ''
+    role: list item
+  n2283:
+    name: ''
+    role: panel
+  n2284:
+    name: '23. '
+    role: static
+  n2285:
+    name: ''
+    role: paragraph
+  n2286:
+    name: '点击 '
+    role: static
+  n2287:
+    name: 帮助
+    role: static
+  n2288:
+    name: 。
+    role: static
+  n2289:
+    name: ''
+    role: list item
+  n2290:
+    name: ''
+    role: panel
+  n2291:
+    name: '24. '
+    role: static
+  n2292:
+    name: ''
+    role: paragraph
+  n2293:
+    name: 如果帮助窗口打开，停留 1～2 秒后关闭。
+    role: static
+  n2294:
+    name: ''
+    role: list item
+  n2295:
+    name: ''
+    role: panel
+  n2296:
+    name: '25. '
+    role: static
+  n2297:
+    name: ''
+    role: paragraph
+  n2298:
+    name: 再打开主菜单。
+    role: static
+  n2299:
+    name: ''
+    role: list item
+  n2300:
+    name: ''
+    role: panel
+  n2301:
+    name: '26. '
+    role: static
+  n2302:
+    name: ''
+    role: paragraph
+  n2303:
+    name: '点击 '
+    role: static
+  n2304:
+    name: 关于
+    role: static
+  n2305:
+    name: 。
+    role: static
+  n2306:
+    name: ''
+    role: list item
+  n2307:
+    name: ''
+    role: panel
+  n2308:
+    name: '27. '
+    role: static
+  n2309:
+    name: ''
+    role: paragraph
+  n2310:
+    name: 关于窗口打开后，停留 1～2 秒后关闭。
+    role: static
+  n2311:
+    name: ''
+    role: list item
+  n2312:
+    name: ''
+    role: panel
+  n2313:
+    name: '28. '
+    role: static
+  n2314:
+    name: ''
+    role: paragraph
+  n2315:
+    name: 最后回到录制命令所在终端，输入：
+    role: static
+  n2316:
+    name: ''
+    role: section
+  n2317:
+    name: ''
+    role: section
+  n2318:
+    name: ''
+    role: section
+  n2320:
+    name: q
+    role: section
+  n2323:
+    name: ''
+    role: paragraph
+  n2324:
+    name: '   然后按 Enter 结束录制。'
+    role: static
+  n2325:
+    name: ''
+    role: paragraph
+  n2326:
+    name: 结束后告诉我“录制完成”，我继续处理。
+    role: static
+  n2328:
+    name: deepin-editor
+    role: application
+  n2329:
+    name: DMainWindow
+    role: frame
+  n2335:
+    name: ''
+    role: popup menu
+  n2336:
+    name: Unix
+    role: menu item
+  n2337:
+    name: Windows
+    role: menu item
+  n2338:
+    name: DTitlebarMainMenu
+    role: popup menu
+  n2339:
+    name: 新窗口
+    role: menu item
+  n2340:
+    name: 新标签页
+    role: menu item
+  n2341:
+    name: 打开文件
+    role: menu item
+  n2342:
+    name: 查找
+    role: menu item
+  n2343:
+    name: 替换
+    role: menu item
+  n2344:
+    name: 保存
+    role: menu item
+  n2345:
+    name: 另存为
+    role: menu item
+  n2346:
+    name: 打印
+    role: menu item
+  n2347:
+    name: 设置
+    role: menu item
+  n2348:
+    name: 主题
+    role: menu item
+  n2349:
+    name: DTitlebarThemeMenu
+    role: popup menu
+  n2350:
+    name: 浅色
+    role: menu item
+  n2351:
+    name: 深色
+    role: menu item
+  n2352:
+    name: 跟随系统
+    role: menu item
+  n2353:
+    name: 帮助
+    role: menu item
+  n2354:
+    name: 关于
+    role: menu item
+  n2355:
+    name: 退出
+    role: menu item
+  n2356:
+    name: DTitlebarThemeMenu
+    role: popup menu
+  n2357:
+    name: 浅色
+    role: menu item
+  n2358:
+    name: 深色
+    role: menu item
+  n2359:
+    name: 跟随系统
+    role: menu item
+  n2362:
+    name: ''
+    role: popup menu
+  n2363:
+    name: 大写
+    role: menu item
+  n2364:
+    name: 小写
+    role: menu item
+  n2365:
+    name: 首字母大写
+    role: menu item
+  n2366:
+    name: ''
+    role: popup menu
+  n2367:
+    name: Unicode
+    role: menu item
+  n2368:
+    name: ''
+    role: popup menu
+  n2369:
+    name: UTF-8
+    role: menu item
+  n2370:
+    name: UTF-16BE
+    role: menu item
+  n2371:
+    name: UTF-16LE
+    role: menu item
+  n2372:
+    name: UTF-32BE
+    role: menu item
+  n2373:
+    name: UTF-32LE
+    role: menu item
+  n2374:
+    name: 西欧语系
+    role: menu item
+  n2375:
+    name: ''
+    role: popup menu
+  n2376:
+    name: ISO-8859-1
+    role: menu item
+  n2377:
+    name: ISO-8859-15
+    role: menu item
+  n2378:
+    name: CP1252
+    role: menu item
+  n2379:
+    name: 中欧语系
+    role: menu item
+  n2380:
+    name: ''
+    role: popup menu
+  n2381:
+    name: ISO-8859-2
+    role: menu item
+  n2382:
+    name: ISO-8859-3
+    role: menu item
+  n2383:
+    name: CP1125
+    role: menu item
+  n2384:
+    name: CP1250
+    role: menu item
+  n2385:
+    name: MACCENTRALEUROPE
+    role: menu item
+  n2386:
+    name: IBM852
+    role: menu item
+  n2387:
+    name: 波罗的海语言
+    role: menu item
+  n2388:
+    name: ''
+    role: popup menu
+  n2389:
+    name: ISO-8859-4
+    role: menu item
+  n2390:
+    name: ISO-8859-10
+    role: menu item
+  n2391:
+    name: ISO-8859-13
+    role: menu item
+  n2392:
+    name: CP1257
+    role: menu item
+  n2393:
+    name: IBM775
+    role: menu item
+  n2394:
+    name: 西里尔文
+    role: menu item
+  n2395:
+    name: ''
+    role: popup menu
+  n2396:
+    name: ISO-8859-5
+    role: menu item
+  n2397:
+    name: CP1251
+    role: menu item
+  n2398:
+    name: KOI8-R
+    role: menu item
+  n2399:
+    name: KOI8-U
+    role: menu item
+  n2400:
+    name: MACCYRILLIC
+    role: menu item
+  n2401:
+    name: IBM855
+    role: menu item
+  n2402:
+    name: IBM866
+    role: menu item
+  n2403:
+    name: 阿拉伯语
+    role: menu item
+  n2404:
+    name: ''
+    role: popup menu
+  n2405:
+    name: ISO-8859-6
+    role: menu item
+  n2406:
+    name: CP1256
+    role: menu item
+  n2407:
+    name: 希腊语
+    role: menu item
+  n2408:
+    name: ''
+    role: popup menu
+  n2409:
+    name: ISO-8859-7
+    role: menu item
+  n2410:
+    name: CP1253
+    role: menu item
+  n2411:
+    name: 希伯来语
+    role: menu item
+  n2412:
+    name: ''
+    role: popup menu
+  n2413:
+    name: ISO-8859-8
+    role: menu item
+  n2414:
+    name: CP1255
+    role: menu item
+  n2415:
+    name: 土耳其语
+    role: menu item
+  n2416:
+    name: ''
+    role: popup menu
+  n2417:
+    name: ISO-8859-9
+    role: menu item
+  n2418:
+    name: CP1254
+    role: menu item
+  n2419:
+    name: 泰语
+    role: menu item
+  n2420:
+    name: ''
+    role: popup menu
+  n2421:
+    name: ISO-8859-11
+    role: menu item
+  n2422:
+    name: TIS-620
+    role: menu item
+  n2423:
+    name: 凯尔特语
+    role: menu item
+  n2424:
+    name: ''
+    role: popup menu
+  n2425:
+    name: ISO-8859-14
+    role: menu item
+  n2426:
+    name: 东南欧语系
+    role: menu item
+  n2427:
+    name: ''
+    role: popup menu
+  n2428:
+    name: ISO-8859-16
+    role: menu item
+  n2429:
+    name: 简体中文
+    role: menu item
+  n2430:
+    name: ''
+    role: popup menu
+  n2431:
+    name: GB18030
+    role: menu item
+  n2432:
+    name: ISO-2022-CN
+    role: menu item
+  n2433:
+    name: 繁体中文
+    role: menu item
+  n2434:
+    name: ''
+    role: popup menu
+  n2435:
+    name: BIG5
+    role: menu item
+  n2436:
+    name: EUC-TW
+    role: menu item
+  n2437:
+    name: 日语
+    role: menu item
+  n2438:
+    name: ''
+    role: popup menu
+  n2439:
+    name: EUC-JP
+    role: menu item
+  n2440:
+    name: SHIFT_JIS
+    role: menu item
+  n2441:
+    name: ISO-2022-JP
+    role: menu item
+  n2442:
+    name: 韩语
+    role: menu item
+  n2443:
+    name: ''
+    role: popup menu
+  n2444:
+    name: EUC-KR
+    role: menu item
+  n2445:
+    name: ISO-2022-KR
+    role: menu item
+  n2446:
+    name: 越南语
+    role: menu item
+  n2447:
+    name: ''
+    role: popup menu
+  n2448:
+    name: CP1258
+    role: menu item
+  n2449:
+    name: ''
+    role: popup menu
+  n2450:
+    name: UTF-8
+    role: menu item
+  n2451:
+    name: UTF-16BE
+    role: menu item
+  n2452:
+    name: UTF-16LE
+    role: menu item
+  n2453:
+    name: UTF-32BE
+    role: menu item
+  n2454:
+    name: UTF-32LE
+    role: menu item
+  n2455:
+    name: ''
+    role: popup menu
+  n2456:
+    name: ISO-8859-1
+    role: menu item
+  n2457:
+    name: ISO-8859-15
+    role: menu item
+  n2458:
+    name: CP1252
+    role: menu item
+  n2459:
+    name: ''
+    role: popup menu
+  n2460:
+    name: ISO-8859-2
+    role: menu item
+  n2461:
+    name: ISO-8859-3
+    role: menu item
+  n2462:
+    name: CP1125
+    role: menu item
+  n2463:
+    name: CP1250
+    role: menu item
+  n2464:
+    name: MACCENTRALEUROPE
+    role: menu item
+  n2465:
+    name: IBM852
+    role: menu item
+  n2466:
+    name: ''
+    role: popup menu
+  n2467:
+    name: ISO-8859-4
+    role: menu item
+  n2468:
+    name: ISO-8859-10
+    role: menu item
+  n2469:
+    name: ISO-8859-13
+    role: menu item
+  n2470:
+    name: CP1257
+    role: menu item
+  n2471:
+    name: IBM775
+    role: menu item
+  n2472:
+    name: ''
+    role: popup menu
+  n2473:
+    name: ISO-8859-5
+    role: menu item
+  n2474:
+    name: CP1251
+    role: menu item
+  n2475:
+    name: KOI8-R
+    role: menu item
+  n2476:
+    name: KOI8-U
+    role: menu item
+  n2477:
+    name: MACCYRILLIC
+    role: menu item
+  n2478:
+    name: IBM855
+    role: menu item
+  n2479:
+    name: IBM866
+    role: menu item
+  n2480:
+    name: ''
+    role: popup menu
+  n2481:
+    name: ISO-8859-6
+    role: menu item
+  n2482:
+    name: CP1256
+    role: menu item
+  n2483:
+    name: ''
+    role: popup menu
+  n2484:
+    name: ISO-8859-7
+    role: menu item
+  n2485:
+    name: CP1253
+    role: menu item
+  n2486:
+    name: ''
+    role: popup menu
+  n2487:
+    name: ISO-8859-8
+    role: menu item
+  n2488:
+    name: CP1255
+    role: menu item
+  n2489:
+    name: ''
+    role: popup menu
+  n2490:
+    name: ISO-8859-9
+    role: menu item
+  n2491:
+    name: CP1254
+    role: menu item
+  n2492:
+    name: ''
+    role: popup menu
+  n2493:
+    name: ISO-8859-11
+    role: menu item
+  n2494:
+    name: TIS-620
+    role: menu item
+  n2495:
+    name: ''
+    role: popup menu
+  n2496:
+    name: ISO-8859-14
+    role: menu item
+  n2497:
+    name: ''
+    role: popup menu
+  n2498:
+    name: ISO-8859-16
+    role: menu item
+  n2499:
+    name: ''
+    role: popup menu
+  n2500:
+    name: GB18030
+    role: menu item
+  n2501:
+    name: ISO-2022-CN
+    role: menu item
+  n2502:
+    name: ''
+    role: popup menu
+  n2503:
+    name: BIG5
+    role: menu item
+  n2504:
+    name: EUC-TW
+    role: menu item
+  n2505:
+    name: ''
+    role: popup menu
+  n2506:
+    name: EUC-JP
+    role: menu item
+  n2507:
+    name: SHIFT_JIS
+    role: menu item
+  n2508:
+    name: ISO-2022-JP
+    role: menu item
+  n2509:
+    name: ''
+    role: popup menu
+  n2510:
+    name: EUC-KR
+    role: menu item
+  n2511:
+    name: ISO-2022-KR
+    role: menu item
+  n2512:
+    name: ''
+    role: popup menu
+  n2513:
+    name: CP1258
+    role: menu item
+  n2514:
+    name: ''
+    role: popup menu
+  n2515:
+    name: 无
+    role: menu item
+  n2516:
+    name: 3D
+    role: menu item
+  n2517:
+    name: ''
+    role: popup menu
+  n2518:
+    name: G-Code
+    role: menu item
+  n2519:
+    name: GLSL
+    role: menu item
+  n2520:
+    name: Klipper G-Code
+    role: menu item
+  n2521:
+    name: Klipper Config
+    role: menu item
+  n2522:
+    name: OpenSCAD
+    role: menu item
+  n2523:
+    name: PLY
+    role: menu item
+  n2524:
+    name: POV-Ray
+    role: menu item
+  n2525:
+    name: RenderMan RIB
+    role: menu item
+  n2526:
+    name: STL
+    role: menu item
+  n2527:
+    name: VRML
+    role: menu item
+  n2528:
+    name: Wavefront OBJ
+    role: menu item
+  n2529:
+    name: 其他
+    role: menu item
+  n2530:
+    name: ''
+    role: popup menu
+  n2531:
+    name: ABC
+    role: menu item
+  n2532:
+    name: ChangeLog
+    role: menu item
+  n2533:
+    name: CMake
+    role: menu item
+  n2534:
+    name: CSV
+    role: menu item
+  n2535:
+    name: CSV (semicolon)
+    role: menu item
+  n2536:
+    name: CSV (whitespace)
+    role: menu item
+  n2537:
+    name: CSV (pipe)
+    role: menu item
+  n2538:
+    name: CUE Sheet
+    role: menu item
+  n2539:
+    name: Debian Changelog
+    role: menu item
+  n2540:
+    name: Debian Control
+    role: menu item
+  n2541:
+    name: Diff
+    role: menu item
+  n2542:
+    name: Dockerfile
+    role: menu item
+  n2543:
+    name: Earthfile
+    role: menu item
+  n2544:
+    name: GDB
+    role: menu item
+  n2545:
+    name: GDB Init
+    role: menu item
+  n2546:
+    name: GDB Backtrace
+    role: menu item
+  n2547:
+    name: Git Rebase
+    role: menu item
+  n2548:
+    name: GraphQL
+    role: menu item
+  n2549:
+    name: Hunspell Thesaurus Index File
+    role: menu item
+  n2550:
+    name: Hunspell Dictionary File
+    role: menu item
+  n2551:
+    name: Hunspell Affix File
+    role: menu item
+  n2552:
+    name: Hunspell Thesaurus File
+    role: menu item
+  n2553:
+    name: InnoSetup
+    role: menu item
+  n2554:
+    name: Intel HEX
+    role: menu item
+  n2555:
+    name: Jam
+    role: menu item
+  n2556:
+    name: Java Properties
+    role: menu item
+  n2557:
+    name: JavaScript/Twig
+    role: menu item
+  n2558:
+    name: LilyPond
+    role: menu item
+  n2559:
+    name: Logcat
+    role: menu item
+  n2560:
+    name: M3U
+    role: menu item
+  n2561:
+    name: Makefile
+    role: menu item
+  n2562:
+    name: Meson
+    role: menu item
+  n2563:
+    name: MIB
+    role: menu item
+  n2564:
+    name: Music Publisher
+    role: menu item
+  n2565:
+    name: Ninja
+    role: menu item
+  n2566:
+    name: Overpass QL
+    role: menu item
+  n2567:
+    name: PGN
+    role: menu item
+  n2568:
+    name: QMake
+    role: menu item
+  n2569:
+    name: RPM Spec
+    role: menu item
+  n2570:
+    name: SELinux File Contexts
+    role: menu item
+  n2571:
+    name: Snort/Suricata
+    role: menu item
+  n2572:
+    name: SubRip Subtitles
+    role: menu item
+  n2573:
+    name: TextProto
+    role: menu item
+  n2574:
+    name: Tiger
+    role: menu item
+  n2575:
+    name: Todo.txt
+    role: menu item
+  n2576:
+    name: TSV
+    role: menu item
+  n2577:
+    name: TypeScript/Twig
+    role: menu item
+  n2578:
+    name: Valgrind Suppression
+    role: menu item
+  n2579:
+    name: Wayland Trace
+    role: menu item
+  n2580:
+    name: YARA
+    role: menu item
+  n2581:
+    name: Log File (simplified)
+    role: menu item
+  n2582:
+    name: Log File (advanced)
+    role: menu item
+  n2583:
+    name: Email
+    role: menu item
+  n2584:
+    name: 数据库
+    role: menu item
+  n2585:
+    name: ''
+    role: popup menu
+  n2586:
+    name: 4GL
+    role: menu item
+  n2587:
+    name: 4GL-PER
+    role: menu item
+  n2588:
+    name: LDIF
+    role: menu item
+  n2589:
+    name: progress
+    role: menu item
+  n2590:
+    name: SQL
+    role: menu item
+  n2591:
+    name: SQL (MySQL)
+    role: menu item
+  n2592:
+    name: SQL (Oracle)
+    role: menu item
+  n2593:
+    name: SQL (PostgreSQL)
+    role: menu item
+  n2594:
+    name: 标记
+    role: menu item
+  n2595:
+    name: ''
+    role: popup menu
+  n2596:
+    name: AppArmor Security Profile
+    role: menu item
+  n2597:
+    name: AsciiDoc
+    role: menu item
+  n2598:
+    name: ASN.1
+    role: menu item
+  n2599:
+    name: ASP
+    role: menu item
+  n2600:
+    name: BibTeX
+    role: menu item
+  n2601:
+    name: CartoCSS MML
+    role: menu item
+  n2602:
+    name: CartoCSS MSS
+    role: menu item
+  n2603:
+    name: CleanCSS
+    role: menu item
+  n2604:
+    name: ColdFusion
+    role: menu item
+  n2605:
+    name: ConTeXt
+    role: menu item
+  n2606:
+    name: CSS
+    role: menu item
+  n2607:
+    name: Cucumber Gherkin feature
+    role: menu item
+  n2608:
+    name: Django HTML Template
+    role: menu item
+  n2609:
+    name: Doxygen
+    role: menu item
+  n2610:
+    name: DoxygenLua
+    role: menu item
+  n2611:
+    name: DTD
+    role: menu item
+  n2612:
+    name: Fluent
+    role: menu item
+  n2613:
+    name: FTL
+    role: menu item
+  n2614:
+    name: GlossTex
+    role: menu item
+  n2615:
+    name: GNU Gettext
+    role: menu item
+  n2616:
+    name: Haml
+    role: menu item
+  n2617:
+    name: Hamlet
+    role: menu item
+  n2618:
+    name: HTML
+    role: menu item
+  n2619:
+    name: Javadoc
+    role: menu item
+  n2620:
+    name: Jira
+    role: menu item
+  n2621:
+    name: JSON
+    role: menu item
+  n2622:
+    name: JSP
+    role: menu item
+  n2623:
+    name: LaTeX
+    role: menu item
+  n2624:
+    name: LESSCSS
+    role: menu item
+  n2625:
+    name: MAB-DB
+    role: menu item
+  n2626:
+    name: Mako
+    role: menu item
+  n2627:
+    name: MapCSS
+    role: menu item
+  n2628:
+    name: Markdown
+    role: menu item
+  n2629:
+    name: MediaWiki
+    role: menu item
+  n2630:
+    name: Metapost/Metafont
+    role: menu item
+  n2631:
+    name: Mustache/Handlebars (HTML)
+    role: menu item
+  n2632:
+    name: Org Mode
+    role: menu item
+  n2633:
+    name: Pango
+    role: menu item
+  n2634:
+    name: PostScript
+    role: menu item
+  n2635:
+    name: PostScript Printer Description
+    role: menu item
+  n2636:
+    name: Pug
+    role: menu item
+  n2637:
+    name: R Markdown
+    role: menu item
+  n2638:
+    name: R documentation
+    role: menu item
+  n2639:
+    name: RELAX NG
+    role: menu item
+  n2640:
+    name: RelaxNG-Compact
+    role: menu item
+  n2641:
+    name: reStructuredText
+    role: menu item
+  n2642:
+    name: Roff
+    role: menu item
+  n2643:
+    name: Ruby/Rails/RHTML
+    role: menu item
+  n2644:
+    name: SASS
+    role: menu item
+  n2645:
+    name: SCSS
+    role: menu item
+  n2646:
+    name: SGML
+    role: menu item
+  n2647:
+    name: SiSU
+    role: menu item
+  n2648:
+    name: Texinfo
+    role: menu item
+  n2649:
+    name: Textile
+    role: menu item
+  n2650:
+    name: Troff Mandoc
+    role: menu item
+  n2651:
+    name: TT2
+    role: menu item
+  n2652:
+    name: Twig/Twig
+    role: menu item
+  n2653:
+    name: txt2tags
+    role: menu item
+  n2654:
+    name: Typst
+    role: menu item
+  n2655:
+    name: vCard, vCalendar, iCalendar
+    role: menu item
+  n2656:
+    name: Vue
+    role: menu item
+  n2657:
+    name: Wesnoth Markup Language
+    role: menu item
+  n2658:
+    name: XML
+    role: menu item
+  n2659:
+    name: XML (Debug)
+    role: menu item
+  n2660:
+    name: xslt
+    role: menu item
+  n2661:
+    name: XUL
+    role: menu item
+  n2662:
+    name: YAML
+    role: menu item
+  n2663:
+    name: YANG
+    role: menu item
+  n2664:
+    name: Rich Text Format
+    role: menu item
+  n2665:
+    name: 汇编
+    role: menu item
+  n2666:
+    name: ''
+    role: popup menu
+  n2667:
+    name: Asm6502
+    role: menu item
+  n2668:
+    name: AVR Assembler
+    role: menu item
+  n2669:
+    name: GNU Assembler
+    role: menu item
+  n2670:
+    name: Intel x86 (NASM)
+    role: menu item
+  n2671:
+    name: MIPS Assembler
+    role: menu item
+  n2672:
+    name: Motorola 68k (VASM/Devpac)
+    role: menu item
+  n2673:
+    name: Motorola DSP56k
+    role: menu item
+  n2674:
+    name: PicAsm
+    role: menu item
+  n2675:
+    name: Common Intermediate Language (CIL)
+    role: menu item
+  n2676:
+    name: 源代码
+    role: menu item
+  n2678:
+    name: 硬件
+    role: menu item
+  n2679:
+    name: ''
+    role: popup menu
+  n2680:
+    name: AHDL
+    role: menu item
+  n2681:
+    name: Spice
+    role: menu item
+  n2682:
+    name: SystemC
+    role: menu item
+  n2683:
+    name: SystemVerilog
+    role: menu item
+  n2684:
+    name: Vera
+    role: menu item
+  n2685:
+    name: Verilog
+    role: menu item
+  n2686:
+    name: VHDL
+    role: menu item
+  n2687:
+    name: 科学
+    role: menu item
+  n2688:
+    name: ''
+    role: popup menu
+  n2689:
+    name: Ansys
+    role: menu item
+  n2690:
+    name: B-Method
+    role: menu item
+  n2691:
+    name: dot
+    role: menu item
+  n2692:
+    name: FASTQ
+    role: menu item
+  n2693:
+    name: GAP
+    role: menu item
+  n2694:
+    name: GDL
+    role: menu item
+  n2695:
+    name: Gnuplot
+    role: menu item
+  n2696:
+    name: Magma
+    role: menu item
+  n2697:
+    name: Mathematica
+    role: menu item
+  n2698:
+    name: Matlab
+    role: menu item
+  n2699:
+    name: Maxima
+    role: menu item
+  n2700:
+    name: Metamath
+    role: menu item
+  n2701:
+    name: Octave
+    role: menu item
+  n2702:
+    name: R Script
+    role: menu item
+  n2703:
+    name: Replicode
+    role: menu item
+  n2704:
+    name: scilab
+    role: menu item
+  n2705:
+    name: Stan
+    role: menu item
+  n2706:
+    name: Stata
+    role: menu item
+  n2707:
+    name: TI Basic
+    role: menu item
+  n2708:
+    name: yacas
+    role: menu item
+  n2709:
+    name: 脚本
+    role: menu item
+  n2710:
+    name: ''
+    role: popup menu
+  n2711:
+    name: 4DOS BatchToMemory
+    role: menu item
+  n2712:
+    name: AMPLE
+    role: menu item
+  n2713:
+    name: AutoHotKey
+    role: menu item
+  n2714:
+    name: AWK
+    role: menu item
+  n2715:
+    name: Bash
+    role: menu item
+  n2716:
+    name: BrightScript
+    role: menu item
+  n2717:
+    name: CLIST
+    role: menu item
+  n2718:
+    name: CoffeeScript
+    role: menu item
+  n2719:
+    name: CubeScript
+    role: menu item
+  n2720:
+    name: Elvish
+    role: menu item
+  n2721:
+    name: Erlang
+    role: menu item
+  n2722:
+    name: Euphoria
+    role: menu item
+  n2723:
+    name: ferite
+    role: menu item
+  n2724:
+    name: Fish
+    role: menu item
+  n2725:
+    name: GNU Linker Script
+    role: menu item
+  n2726:
+    name: Godot
+    role: menu item
+  n2727:
+    name: J
+    role: menu item
+  n2728:
+    name: JavaScript
+    role: menu item
+  n2729:
+    name: JavaScript React (JSX)
+    role: menu item
+  n2730:
+    name: JCL
+    role: menu item
+  n2731:
+    name: k
+    role: menu item
+  n2732:
+    name: LSL
+    role: menu item
+  n2733:
+    name: Lua
+    role: menu item
+  n2734:
+    name: Mason
+    role: menu item
+  n2735:
+    name: MEL
+    role: menu item
+  n2736:
+    name: MS-DOS Batch
+    role: menu item
+  n2737:
+    name: Nix
+    role: menu item
+  n2738:
+    name: NSIS
+    role: menu item
+  n2739:
+    name: Perl
+    role: menu item
+  n2740:
+    name: PHP (HTML)
+    role: menu item
+  n2741:
+    name: Pig
+    role: menu item
+  n2742:
+    name: Pike
+    role: menu item
+  n2743:
+    name: PowerShell
+    role: menu item
+  n2744:
+    name: Praat
+    role: menu item
+  n2745:
+    name: Puppet
+    role: menu item
+  n2746:
+    name: Python
+    role: menu item
+  n2747:
+    name: q
+    role: menu item
+  n2748:
+    name: QFace
+    role: menu item
+  n2749:
+    name: QML
+    role: menu item
+  n2750:
+    name: Quake Script
+    role: menu item
+  n2751:
+    name: Racket
+    role: menu item
+  n2752:
+    name: Raku
+    role: menu item
+  n2753:
+    name: REXX
+    role: menu item
+  n2754:
+    name: Robot
+    role: menu item
+  n2755:
+    name: Ruby
+    role: menu item
+  n2756:
+    name: Scheme
+    role: menu item
+  n2757:
+    name: sed
+    role: menu item
+  n2758:
+    name: Sieve
+    role: menu item
+  n2759:
+    name: TaskJuggler
+    role: menu item
+  n2760:
+    name: Tcl/Tk
+    role: menu item
+  n2761:
+    name: Tcsh
+    role: menu item
+  n2762:
+    name: Twig (HTML)
+    role: menu item
+  n2763:
+    name: TypeScript
+    role: menu item
+  n2764:
+    name: TypeScript React (TSX)
+    role: menu item
+  n2765:
+    name: UnrealScript
+    role: menu item
+  n2766:
+    name: VBScript Files
+    role: menu item
+  n2767:
+    name: Velocity
+    role: menu item
+  n2768:
+    name: Xonotic Script
+    role: menu item
+  n2769:
+    name: Zsh
+    role: menu item
+  n2770:
+    name: 配置
+    role: menu item
+  n2771:
+    name: ''
+    role: popup menu
+  n2772:
+    name: .desktop
+    role: menu item
+  n2773:
+    name: Adblock Plus
+    role: menu item
+  n2774:
+    name: Apache Configuration
+    role: menu item
+  n2775:
+    name: Cabal
+    role: menu item
+  n2776:
+    name: Cisco
+    role: menu item
+  n2777:
+    name: Doxyfile
+    role: menu item
+  n2778:
+    name: fstab
+    role: menu item
+  n2779:
+    name: Git Ignore
+    role: menu item
+  n2780:
+    name: Gitolite
+    role: menu item
+  n2781:
+    name: INI Files
+    role: menu item
+  n2782:
+    name: Jsonnet
+    role: menu item
+  n2783:
+    name: Kate Config
+    role: menu item
+  n2784:
+    name: Kconfig
+    role: menu item
+  n2785:
+    name: kdesrc-buildrc
+    role: menu item
+  n2786:
+    name: mergetag text
+    role: menu item
+  n2787:
+    name: Nagios
+    role: menu item
+  n2788:
+    name: nginx Configuration
+    role: menu item
+  n2789:
+    name: QDoc Configuration
+    role: menu item
+  n2790:
+    name: systemd unit
+    role: menu item
+  n2791:
+    name: TOML
+    role: menu item
+  n2792:
+    name: Varnish Test Case language
+    role: menu item
+  n2793:
+    name: Varnish Configuration Language
+    role: menu item
+  n2794:
+    name: WINE Config
+    role: menu item
+  n2795:
+    name: x.org Configuration
+    role: menu item
+  n2796:
+    name: ''
+    role: popup menu
+  n2797:
+    name: G-Code
+    role: menu item
+  n2798:
+    name: GLSL
+    role: menu item
+  n2799:
+    name: Klipper G-Code
+    role: menu item
+  n2800:
+    name: Klipper Config
+    role: menu item
+  n2801:
+    name: OpenSCAD
+    role: menu item
+  n2802:
+    name: PLY
+    role: menu item
+  n2803:
+    name: POV-Ray
+    role: menu item
+  n2804:
+    name: RenderMan RIB
+    role: menu item
+  n2805:
+    name: STL
+    role: menu item
+  n2806:
+    name: VRML
+    role: menu item
+  n2807:
+    name: Wavefront OBJ
+    role: menu item
+  n2808:
+    name: ''
+    role: popup menu
+  n2809:
+    name: ABC
+    role: menu item
+  n2810:
+    name: ChangeLog
+    role: menu item
+  n2811:
+    name: CMake
+    role: menu item
+  n2812:
+    name: CSV
+    role: menu item
+  n2813:
+    name: CSV (semicolon)
+    role: menu item
+  n2814:
+    name: CSV (whitespace)
+    role: menu item
+  n2815:
+    name: CSV (pipe)
+    role: menu item
+  n2816:
+    name: CUE Sheet
+    role: menu item
+  n2817:
+    name: Debian Changelog
+    role: menu item
+  n2818:
+    name: Debian Control
+    role: menu item
+  n2819:
+    name: Diff
+    role: menu item
+  n2820:
+    name: Dockerfile
+    role: menu item
+  n2821:
+    name: Earthfile
+    role: menu item
+  n2822:
+    name: GDB
+    role: menu item
+  n2823:
+    name: GDB Init
+    role: menu item
+  n2824:
+    name: GDB Backtrace
+    role: menu item
+  n2825:
+    name: Git Rebase
+    role: menu item
+  n2826:
+    name: GraphQL
+    role: menu item
+  n2827:
+    name: Hunspell Thesaurus Index File
+    role: menu item
+  n2828:
+    name: Hunspell Dictionary File
+    role: menu item
+  n2829:
+    name: Hunspell Affix File
+    role: menu item
+  n2830:
+    name: Hunspell Thesaurus File
+    role: menu item
+  n2831:
+    name: InnoSetup
+    role: menu item
+  n2832:
+    name: Intel HEX
+    role: menu item
+  n2833:
+    name: Jam
+    role: menu item
+  n2834:
+    name: Java Properties
+    role: menu item
+  n2835:
+    name: JavaScript/Twig
+    role: menu item
+  n2836:
+    name: LilyPond
+    role: menu item
+  n2837:
+    name: Logcat
+    role: menu item
+  n2838:
+    name: M3U
+    role: menu item
+  n2839:
+    name: Makefile
+    role: menu item
+  n2840:
+    name: Meson
+    role: menu item
+  n2841:
+    name: MIB
+    role: menu item
+  n2842:
+    name: Music Publisher
+    role: menu item
+  n2843:
+    name: Ninja
+    role: menu item
+  n2844:
+    name: Overpass QL
+    role: menu item
+  n2845:
+    name: PGN
+    role: menu item
+  n2846:
+    name: QMake
+    role: menu item
+  n2847:
+    name: RPM Spec
+    role: menu item
+  n2848:
+    name: SELinux File Contexts
+    role: menu item
+  n2849:
+    name: Snort/Suricata
+    role: menu item
+  n2850:
+    name: SubRip Subtitles
+    role: menu item
+  n2851:
+    name: TextProto
+    role: menu item
+  n2852:
+    name: Tiger
+    role: menu item
+  n2853:
+    name: Todo.txt
+    role: menu item
+  n2854:
+    name: TSV
+    role: menu item
+  n2855:
+    name: TypeScript/Twig
+    role: menu item
+  n2856:
+    name: Valgrind Suppression
+    role: menu item
+  n2857:
+    name: Wayland Trace
+    role: menu item
+  n2858:
+    name: YARA
+    role: menu item
+  n2859:
+    name: Log File (simplified)
+    role: menu item
+  n2860:
+    name: Log File (advanced)
+    role: menu item
+  n2861:
+    name: Email
+    role: menu item
+  n2862:
+    name: ''
+    role: popup menu
+  n2863:
+    name: 4GL
+    role: menu item
+  n2864:
+    name: 4GL-PER
+    role: menu item
+  n2865:
+    name: LDIF
+    role: menu item
+  n2866:
+    name: progress
+    role: menu item
+  n2867:
+    name: SQL
+    role: menu item
+  n2868:
+    name: SQL (MySQL)
+    role: menu item
+  n2869:
+    name: SQL (Oracle)
+    role: menu item
+  n2870:
+    name: SQL (PostgreSQL)
+    role: menu item
+  n2871:
+    name: ''
+    role: popup menu
+  n2872:
+    name: AppArmor Security Profile
+    role: menu item
+  n2873:
+    name: AsciiDoc
+    role: menu item
+  n2874:
+    name: ASN.1
+    role: menu item
+  n2875:
+    name: ASP
+    role: menu item
+  n2876:
+    name: BibTeX
+    role: menu item
+  n2877:
+    name: CartoCSS MML
+    role: menu item
+  n2878:
+    name: CartoCSS MSS
+    role: menu item
+  n2879:
+    name: CleanCSS
+    role: menu item
+  n2880:
+    name: ColdFusion
+    role: menu item
+  n2881:
+    name: ConTeXt
+    role: menu item
+  n2882:
+    name: CSS
+    role: menu item
+  n2883:
+    name: Cucumber Gherkin feature
+    role: menu item
+  n2884:
+    name: Django HTML Template
+    role: menu item
+  n2885:
+    name: Doxygen
+    role: menu item
+  n2886:
+    name: DoxygenLua
+    role: menu item
+  n2887:
+    name: DTD
+    role: menu item
+  n2888:
+    name: Fluent
+    role: menu item
+  n2889:
+    name: FTL
+    role: menu item
+  n2890:
+    name: GlossTex
+    role: menu item
+  n2891:
+    name: GNU Gettext
+    role: menu item
+  n2892:
+    name: Haml
+    role: menu item
+  n2893:
+    name: Hamlet
+    role: menu item
+  n2894:
+    name: HTML
+    role: menu item
+  n2895:
+    name: Javadoc
+    role: menu item
+  n2896:
+    name: Jira
+    role: menu item
+  n2897:
+    name: JSON
+    role: menu item
+  n2898:
+    name: JSP
+    role: menu item
+  n2899:
+    name: LaTeX
+    role: menu item
+  n2900:
+    name: LESSCSS
+    role: menu item
+  n2901:
+    name: MAB-DB
+    role: menu item
+  n2902:
+    name: Mako
+    role: menu item
+  n2903:
+    name: MapCSS
+    role: menu item
+  n2904:
+    name: Markdown
+    role: menu item
+  n2905:
+    name: MediaWiki
+    role: menu item
+  n2906:
+    name: Metapost/Metafont
+    role: menu item
+  n2907:
+    name: Mustache/Handlebars (HTML)
+    role: menu item
+  n2908:
+    name: Org Mode
+    role: menu item
+  n2909:
+    name: Pango
+    role: menu item
+  n2910:
+    name: PostScript
+    role: menu item
+  n2911:
+    name: PostScript Printer Description
+    role: menu item
+  n2912:
+    name: Pug
+    role: menu item
+  n2913:
+    name: R Markdown
+    role: menu item
+  n2914:
+    name: R documentation
+    role: menu item
+  n2915:
+    name: RELAX NG
+    role: menu item
+  n2916:
+    name: RelaxNG-Compact
+    role: menu item
+  n2917:
+    name: reStructuredText
+    role: menu item
+  n2918:
+    name: Roff
+    role: menu item
+  n2919:
+    name: Ruby/Rails/RHTML
+    role: menu item
+  n2920:
+    name: SASS
+    role: menu item
+  n2921:
+    name: SCSS
+    role: menu item
+  n2922:
+    name: SGML
+    role: menu item
+  n2923:
+    name: SiSU
+    role: menu item
+  n2924:
+    name: Texinfo
+    role: menu item
+  n2925:
+    name: Textile
+    role: menu item
+  n2926:
+    name: Troff Mandoc
+    role: menu item
+  n2927:
+    name: TT2
+    role: menu item
+  n2928:
+    name: Twig/Twig
+    role: menu item
+  n2929:
+    name: txt2tags
+    role: menu item
+  n2930:
+    name: Typst
+    role: menu item
+  n2931:
+    name: vCard, vCalendar, iCalendar
+    role: menu item
+  n2932:
+    name: Vue
+    role: menu item
+  n2933:
+    name: Wesnoth Markup Language
+    role: menu item
+  n2934:
+    name: XML
+    role: menu item
+  n2935:
+    name: XML (Debug)
+    role: menu item
+  n2936:
+    name: xslt
+    role: menu item
+  n2937:
+    name: XUL
+    role: menu item
+  n2938:
+    name: YAML
+    role: menu item
+  n2939:
+    name: YANG
+    role: menu item
+  n2940:
+    name: Rich Text Format
+    role: menu item
+  n2941:
+    name: ''
+    role: popup menu
+  n2942:
+    name: Asm6502
+    role: menu item
+  n2943:
+    name: AVR Assembler
+    role: menu item
+  n2944:
+    name: GNU Assembler
+    role: menu item
+  n2945:
+    name: Intel x86 (NASM)
+    role: menu item
+  n2946:
+    name: MIPS Assembler
+    role: menu item
+  n2947:
+    name: Motorola 68k (VASM/Devpac)
+    role: menu item
+  n2948:
+    name: Motorola DSP56k
+    role: menu item
+  n2949:
+    name: PicAsm
+    role: menu item
+  n2950:
+    name: Common Intermediate Language (CIL)
+    role: menu item
+  n2952:
+    name: ''
+    role: popup menu
+  n2953:
+    name: AHDL
+    role: menu item
+  n2954:
+    name: Spice
+    role: menu item
+  n2955:
+    name: SystemC
+    role: menu item
+  n2956:
+    name: SystemVerilog
+    role: menu item
+  n2957:
+    name: Vera
+    role: menu item
+  n2958:
+    name: Verilog
+    role: menu item
+  n2959:
+    name: VHDL
+    role: menu item
+  n2960:
+    name: ''
+    role: popup menu
+  n2961:
+    name: Ansys
+    role: menu item
+  n2962:
+    name: B-Method
+    role: menu item
+  n2963:
+    name: dot
+    role: menu item
+  n2964:
+    name: FASTQ
+    role: menu item
+  n2965:
+    name: GAP
+    role: menu item
+  n2966:
+    name: GDL
+    role: menu item
+  n2967:
+    name: Gnuplot
+    role: menu item
+  n2968:
+    name: Magma
+    role: menu item
+  n2969:
+    name: Mathematica
+    role: menu item
+  n2970:
+    name: Matlab
+    role: menu item
+  n2971:
+    name: Maxima
+    role: menu item
+  n2972:
+    name: Metamath
+    role: menu item
+  n2973:
+    name: Octave
+    role: menu item
+  n2974:
+    name: R Script
+    role: menu item
+  n2975:
+    name: Replicode
+    role: menu item
+  n2976:
+    name: scilab
+    role: menu item
+  n2977:
+    name: Stan
+    role: menu item
+  n2978:
+    name: Stata
+    role: menu item
+  n2979:
+    name: TI Basic
+    role: menu item
+  n2980:
+    name: yacas
+    role: menu item
+  n2981:
+    name: ''
+    role: popup menu
+  n2982:
+    name: 4DOS BatchToMemory
+    role: menu item
+  n2983:
+    name: AMPLE
+    role: menu item
+  n2984:
+    name: AutoHotKey
+    role: menu item
+  n2985:
+    name: AWK
+    role: menu item
+  n2986:
+    name: Bash
+    role: menu item
+  n2987:
+    name: BrightScript
+    role: menu item
+  n2988:
+    name: CLIST
+    role: menu item
+  n2989:
+    name: CoffeeScript
+    role: menu item
+  n2990:
+    name: CubeScript
+    role: menu item
+  n2991:
+    name: Elvish
+    role: menu item
+  n2992:
+    name: Erlang
+    role: menu item
+  n2993:
+    name: Euphoria
+    role: menu item
+  n2994:
+    name: ferite
+    role: menu item
+  n2995:
+    name: Fish
+    role: menu item
+  n2996:
+    name: GNU Linker Script
+    role: menu item
+  n2997:
+    name: Godot
+    role: menu item
+  n2998:
+    name: J
+    role: menu item
+  n2999:
+    name: JavaScript
+    role: menu item
+  n3000:
+    name: JavaScript React (JSX)
+    role: menu item
+  n3001:
+    name: JCL
+    role: menu item
+  n3002:
+    name: k
+    role: menu item
+  n3003:
+    name: LSL
+    role: menu item
+  n3004:
+    name: Lua
+    role: menu item
+  n3005:
+    name: Mason
+    role: menu item
+  n3006:
+    name: MEL
+    role: menu item
+  n3007:
+    name: MS-DOS Batch
+    role: menu item
+  n3008:
+    name: Nix
+    role: menu item
+  n3009:
+    name: NSIS
+    role: menu item
+  n3010:
+    name: Perl
+    role: menu item
+  n3011:
+    name: PHP (HTML)
+    role: menu item
+  n3012:
+    name: Pig
+    role: menu item
+  n3013:
+    name: Pike
+    role: menu item
+  n3014:
+    name: PowerShell
+    role: menu item
+  n3015:
+    name: Praat
+    role: menu item
+  n3016:
+    name: Puppet
+    role: menu item
+  n3017:
+    name: Python
+    role: menu item
+  n3018:
+    name: q
+    role: menu item
+  n3019:
+    name: QFace
+    role: menu item
+  n3020:
+    name: QML
+    role: menu item
+  n3021:
+    name: Quake Script
+    role: menu item
+  n3022:
+    name: Racket
+    role: menu item
+  n3023:
+    name: Raku
+    role: menu item
+  n3024:
+    name: REXX
+    role: menu item
+  n3025:
+    name: Robot
+    role: menu item
+  n3026:
+    name: Ruby
+    role: menu item
+  n3027:
+    name: Scheme
+    role: menu item
+  n3028:
+    name: sed
+    role: menu item
+  n3029:
+    name: Sieve
+    role: menu item
+  n3030:
+    name: TaskJuggler
+    role: menu item
+  n3031:
+    name: Tcl/Tk
+    role: menu item
+  n3032:
+    name: Tcsh
+    role: menu item
+  n3033:
+    name: Twig (HTML)
+    role: menu item
+  n3034:
+    name: TypeScript
+    role: menu item
+  n3035:
+    name: TypeScript React (TSX)
+    role: menu item
+  n3036:
+    name: UnrealScript
+    role: menu item
+  n3037:
+    name: VBScript Files
+    role: menu item
+  n3038:
+    name: Velocity
+    role: menu item
+  n3039:
+    name: Xonotic Script
+    role: menu item
+  n3040:
+    name: Zsh
+    role: menu item
+  n3041:
+    name: ''
+    role: popup menu
+  n3042:
+    name: .desktop
+    role: menu item
+  n3043:
+    name: Adblock Plus
+    role: menu item
+  n3044:
+    name: Apache Configuration
+    role: menu item
+  n3045:
+    name: Cabal
+    role: menu item
+  n3046:
+    name: Cisco
+    role: menu item
+  n3047:
+    name: Doxyfile
+    role: menu item
+  n3048:
+    name: fstab
+    role: menu item
+  n3049:
+    name: Git Ignore
+    role: menu item
+  n3050:
+    name: Gitolite
+    role: menu item
+  n3051:
+    name: INI Files
+    role: menu item
+  n3052:
+    name: Jsonnet
+    role: menu item
+  n3053:
+    name: Kate Config
+    role: menu item
+  n3054:
+    name: Kconfig
+    role: menu item
+  n3055:
+    name: kdesrc-buildrc
+    role: menu item
+  n3056:
+    name: mergetag text
+    role: menu item
+  n3057:
+    name: Nagios
+    role: menu item
+  n3058:
+    name: nginx Configuration
+    role: menu item
+  n3059:
+    name: QDoc Configuration
+    role: menu item
+  n3060:
+    name: systemd unit
+    role: menu item
+  n3061:
+    name: TOML
+    role: menu item
+  n3062:
+    name: Varnish Test Case language
+    role: menu item
+  n3063:
+    name: Varnish Configuration Language
+    role: menu item
+  n3064:
+    name: WINE Config
+    role: menu item
+  n3065:
+    name: x.org Configuration
+    role: menu item
+  n3066:
+    name: youqu
+    role: application
+  n3067:
+    name: dde-file-dialog
+    role: application
+  n3068:
+    name: DMainWindow
+    role: frame
+  n3082:
+    name: ''
+    role: panel
+  n3083:
+    name: Form_
+    role: form
+  n3084:
+    name: ''
+    role: split pane
+  n3085:
+    name: ''
+    role: panel
+  n3086:
+    name: ''
+    role: split pane
+  n3087:
+    name: ''
+    role: panel
+  n3088:
+    name: Form_
+    role: form
+  n3090:
+    name: Form_
+    role: form
+  n3091:
+    name: ''
+    role: list
+  n3092:
+    name: systemd-private-39a987c69bc342bda4cbe5bbbd70e2a4-filearmor.service-qOB1UQ
+    role: list item
+  n3093:
+    name: systemd-private-39a987c69bc342bda4cbe5bbbd70e2a4-systemd-timesyncd.service-2WAJnt
+    role: list item
+  n3094:
+    name: .font-unix
+    role: list item
+  n3095:
+    name: .ICE-unix
+    role: list item
+  n3096:
+    name: .XIM-unix
+    role: list item
+  n3097:
+    name: systemd-private-39a987c69bc342bda4cbe5bbbd70e2a4-dde-api-dbus-proxy-v1.service-uc9vtx
+    role: list item
+  n3098:
+    name: systemd-private-39a987c69bc342bda4cbe5bbbd70e2a4-dde-dconfig-daemon.service-5nc8Ph
+    role: list item
+  n3099:
+    name: systemd-private-39a987c69bc342bda4cbe5bbbd70e2a4-deepin-anything-server.service-3UVyN2
+    role: list item
+  n3100:
+    name: systemd-private-39a987c69bc342bda4cbe5bbbd70e2a4-deepin-login-sound.service-x8eewO
+    role: list item
+  n3101:
+    name: systemd-private-39a987c69bc342bda4cbe5bbbd70e2a4-deepin-shutdown-sound.service-OnpMlB
+    role: list item
+  n3102:
+    name: systemd-private-39a987c69bc342bda4cbe5bbbd70e2a4-event-log.service-SkaYvV
+    role: list item
+  n3103:
+    name: systemd-private-39a987c69bc342bda4cbe5bbbd70e2a4-ModemManager.service-jWBHg2
+    role: list item
+  n3104:
+    name: systemd-private-39a987c69bc342bda4cbe5bbbd70e2a4-polkit.service-WTrM9k
+    role: list item
+  n3105:
+    name: systemd-private-39a987c69bc342bda4cbe5bbbd70e2a4-rsyslog.service-q6R5IK
+    role: list item
+  n3106:
+    name: systemd-private-39a987c69bc342bda4cbe5bbbd70e2a4-systemd-logind.service-OrUvAZ
+    role: list item
+  n3107:
+    name: .X11-unix
+    role: list item
+  n3108:
+    name: systemd-private-39a987c69bc342bda4cbe5bbbd70e2a4-deepin-authenticate.service-tl3ybK
+    role: list item
+  n3109:
+    name: device-info
+    role: list item
+  n3110:
+    name: systemd-private-39a987c69bc342bda4cbe5bbbd70e2a4-upower.service-seNd7P
+    role: list item
+  n3111:
+    name: systemd-private-39a987c69bc342bda4cbe5bbbd70e2a4-uos-ste-eventd.service-yMrUMH
+    role: list item
+  n3112:
+    name: systemd-private-39a987c69bc342bda4cbe5bbbd70e2a4-bluetooth.service-Pa0HQw
+    role: list item
+  n3113:
+    name: deepin-deepinid-daemon-24474
+    role: list item
+  n3114:
+    name: .config
+    role: list item
+  n3115:
+    name: gitkraken
+    role: list item
+  n3116:
+    name: mcp-MdkTao
+    role: list item
+  n3117:
+    name: opencode
+    role: list item
+  n3118:
+    name: node-compile-cache
+    role: list item
+  n3119:
+    name: dogtail-ut006116
+    role: list item
+  n3120:
+    name: sniff_refresh.lock
+    role: list item
+  n3121:
+    name: .wine-24474
+    role: list item
+  n3122:
+    name: pulse-PKdhtXMmr18n
+    role: list item
+  n3123:
+    name: deepin-immutable-ctl
+    role: list item
+  n3124:
+    name: .org.chromium.Chromium.CyNETW
+    role: list item
+  n3125:
+    name: 2AACD8D5-F8BE-4993-AFE7-BADB52602FB7_16090
+    role: list item
+  n3126:
+    name: 2AACD8D5-F8BE-4993-AFE7-BADB52602FB7_16308
+    role: list item
+  n3127:
+    name: dbusadaptor.INFO
+    role: list item
+  n3128:
+    name: dbusadaptor.PECI13499.root.log.INFO.20260729-165204.861
+    role: list item
+  n3129:
+    name: qtsingleapp-uoslic-e6e4-0
+    role: list item
+  n3130:
+    name: qtsingleapp-uoslic-e6e4-0-lockfile
+    role: list item
+  n3131:
+    name: sunlogin_rundaemon.log
+    role: list item
+  n3132:
+    name: zlog-udcp.lock
+    role: list item
+  n3133:
+    name: .permission_manager_fisrt_start
+    role: list item
+  n3134:
+    name: .usec.dom
+    role: list item
+  n3135:
+    name: .X0-lock
+    role: list item
+  n3136:
+    name: classified_cache.json
+    role: list item
+  n3137:
+    name: update_has_run
+    role: list item
+  n3138:
+    name: GrabKeyboard_greeter
+    role: list item
+  n3139:
+    name: GrabKeyboard_lock_ut006116
+    role: list item
+  n3140:
+    name: org.deepin.dde.NetworkSecretAgent24474
+    role: list item
+  n3141:
+    name: _d_dtk_single_instance_24474_dde-clipboard_24474_4026531836
+    role: list item
+  n3142:
+    name: _d_dtk_single_instance_24474_dde-clipboard_24474_4026531836.lock
+    role: list item
+  n3143:
+    name: _d_dtk_single_instance_24474_dde-lock24474_4026531836
+    role: list item
+  n3144:
+    name: _d_dtk_single_instance_24474_dde-lock24474_4026531836.lock
+    role: list item
+  n3145:
+    name: _d_dtk_single_instance_24474_dde-polkit-agent_4026531836
+    role: list item
+  n3146:
+    name: _d_dtk_single_instance_24474_dde-polkit-agent_4026531836.lock
+    role: list item
+  n3147:
+    name: fileaudit_allowed_callers
+    role: list item
+  n3148:
+    name: firewall_allowed_callers
+    role: list item
+  n3149:
+    name: loginsagety_allowed_callers
+    role: list item
+  n3150:
+    name: netcheck_allowed_callers
+    role: list item
+  n3151:
+    name: peripherals_allowed_callers
+    role: list item
+  n3152:
+    name: scanner_allowed_callers
+    role: list item
+  n3153:
+    name: systemlevel_allowed_callers
+    role: list item
+  n3154:
+    name: usbmanager_allowed_callers
+    role: list item
+  n3155:
+    name: virusupdate_allowed_callers
+    role: list item
+  n3156:
+    name: write_allowed_callers
+    role: list item
+  n3157:
+    name: _d_dtk_single_instance_24474_uos-activator_4026531836
+    role: list item
+  n3158:
+    name: _d_dtk_single_instance_24474_uos-activator_4026531836.lock
+    role: list item
+  n3159:
+    name: _fcitx5_single_instance_24474_fcitx5-helper.lock
+    role: list item
+  n3160:
+    name: deepin-deepinid-daemon-24474.lock
+    role: list item
+  n3161:
+    name: com.cpis.panel.start.ut006116.log
+    role: list item
+  n3162:
+    name: com.cpis.hotkey.ut006116.log
+    role: list item
+  n3163:
+    name: .9adffef9faf2fda7-00000000.so
+    role: list item
+  n3164:
+    name: .bcdff7dfb6b5bfed-00000001.so
+    role: list item
+  n3165:
+    name: dnscache.json
+    role: list item
+  n3166:
+    name: at_agent.json
+    role: list item
+  n3167:
+    name: lastoreAgentCache
+    role: list item
+  n3168:
+    name: lastoreUnitCache
+    role: list item
+  n3169:
+    name: com.cpis.engine.ut006116.log
+    role: list item
+  n3170:
+    name: com.cpis.panel.ut006116.log
+    role: list item
+  n3171:
+    name: com.cpis.engine.thrift_conn_events.log
+    role: list item
+  n3172:
+    name: computer_title_bar
+    role: panel
+  n3173:
+    name: AddressToolBar
+    role: panel
+  n3175:
+    name: '...'
+    role: button
+  n3176:
+    name: Form_
+    role: form
+  n3178:
+    name: Form_
+    role: form
+  n3179:
+    name: DLineEditChildLineEdit
+    role: text
+  n3180:
+    name: DLineEditClearButton
+    role: button
+  n3181:
+    name: DSearchEditIconButton
+    role: button
+  n3182:
+    name: DSearchEditIconWidget
+    role: form
+  n3183:
+    name: DSearchEditIconButton
+    role: button
+  n3186:
+    name: ContollerToolBar
+    role: form
+  n3187:
+    name: viewoptions_button
+    role: button
+  n3190:
+    name: iconView_button
+    role: check box
+  n3191:
+    name: listView_button
+    role: check box
+  n3192:
+    name: treeView_button
+    role: check box
+  n3193:
+    name: ''
+    role: panel
+  n3206:
+    name: Form_
+    role: form
+  n3208:
+    name: Form_
+    role: form
+  n3209:
+    name: tmp
+    role: page tab list
+  n3210:
+    name: tmp
+    role: page tab
+  n3211:
+    name: 向左滚动
+    role: button
+  n3212:
+    name: 向右滚动
+    role: button
+  n3213:
+    name: DTabBarAddButton
+    role: button
+  n3216:
+    name: Form_
+    role: form
+  n3217:
+    name: back_button
+    role: button
+  n3218:
+    name: forword_button
+    role: button
+  n3219:
+    name: ''
+    role: text
+  n3222:
+    name: left_side_bar
+    role: panel
+  n3223:
+    name: Form_
+    role: form
+  n3224:
+    name: side_bar_view
+    role: tree
+  n3257:
+    name: dlg_status_bar
+    role: panel
+  n3262:
+    name: filenameedit
+    role: form
+  n3263:
+    name: DLineEditChildLineEdit
+    role: text
+  n3264:
+    name: 所有文件 (*)
+    role: combo box
+  n3265:
+    name: ''
+    role: list
+  n3266:
+    name: 所有文件 (*)
+    role: list item
+  n3267:
+    name: 保 存
+    role: button
+  n3268:
+    name: 取 消
+    role: button
+  n3270:
+    name: UTF-8
+    role: combo box
+  n3271:
+    name: ''
+    role: list
+  n3272:
+    name: BIG5
+    role: list item
+  n3273:
+    name: CP1125
+    role: list item
+  n3274:
+    name: CP1250
+    role: list item
+  n3275:
+    name: CP1251
+    role: list item
+  n3276:
+    name: CP1252
+    role: list item
+  n3277:
+    name: CP1253
+    role: list item
+  n3278:
+    name: CP1254
+    role: list item
+  n3279:
+    name: CP1255
+    role: list item
+  n3280:
+    name: CP1256
+    role: list item
+  n3281:
+    name: CP1257
+    role: list item
+  n3282:
+    name: CP1258
+    role: list item
+  n3283:
+    name: EUC-JP
+    role: list item
+  n3284:
+    name: EUC-KR
+    role: list item
+  n3285:
+    name: EUC-TW
+    role: list item
+  n3286:
+    name: GB18030
+    role: list item
+  n3287:
+    name: IBM775
+    role: list item
+  n3288:
+    name: IBM852
+    role: list item
+  n3289:
+    name: IBM855
+    role: list item
+  n3290:
+    name: IBM866
+    role: list item
+  n3291:
+    name: ISO-2022-CN
+    role: list item
+  n3292:
+    name: ISO-2022-JP
+    role: list item
+  n3293:
+    name: ISO-2022-KR
+    role: list item
+  n3294:
+    name: ISO-8859-1
+    role: list item
+  n3295:
+    name: ISO-8859-10
+    role: list item
+  n3296:
+    name: ISO-8859-11
+    role: list item
+  n3297:
+    name: ISO-8859-13
+    role: list item
+  n3298:
+    name: ISO-8859-14
+    role: list item
+  n3299:
+    name: ISO-8859-15
+    role: list item
+  n3300:
+    name: ISO-8859-16
+    role: list item
+  n3301:
+    name: ISO-8859-2
+    role: list item
+  n3302:
+    name: ISO-8859-3
+    role: list item
+  n3303:
+    name: ISO-8859-4
+    role: list item
+  n3304:
+    name: ISO-8859-5
+    role: list item
+  n3305:
+    name: ISO-8859-6
+    role: list item
+  n3306:
+    name: ISO-8859-7
+    role: list item
+  n3307:
+    name: ISO-8859-8
+    role: list item
+  n3308:
+    name: ISO-8859-9
+    role: list item
+  n3309:
+    name: KOI8-R
+    role: list item
+  n3310:
+    name: KOI8-U
+    role: list item
+  n3311:
+    name: MACCENTRALEUROPE
+    role: list item
+  n3312:
+    name: MACCYRILLIC
+    role: list item
+  n3313:
+    name: SHIFT_JIS
+    role: list item
+  n3314:
+    name: TIS-620
+    role: list item
+  n3315:
+    name: UTF-16BE
+    role: list item
+  n3316:
+    name: UTF-16LE
+    role: list item
+  n3317:
+    name: UTF-32BE
+    role: list item
+  n3318:
+    name: UTF-32LE
+    role: list item
+  n3319:
+    name: UTF-8
+    role: list item
+  n3324:
+    name: DTitlebarMainMenu
+    role: popup menu
+  n3325:
+    name: 主题
+    role: menu item
+  n3326:
+    name: DTitlebarThemeMenu
+    role: popup menu
+  n3327:
+    name: 浅色
+    role: menu item
+  n3328:
+    name: 深色
+    role: menu item
+  n3329:
+    name: 跟随系统
+    role: menu item
+  n3330:
+    name: 帮助
+    role: menu item
+  n3331:
+    name: 关于
+    role: menu item
+  n3332:
+    name: 退出
+    role: menu item
+  n3333:
+    name: ''
+    role: panel
+  n3336:
+    name: ''
+    role: list
+  n3337:
+    name: 所有文件 (*)
+    role: list item
+  n3340:
+    name: ''
+    role: popup menu
+  n3341:
+    name: Icon view
+    role: menu item
+  n3342:
+    name: List view
+    role: menu item
+  n3343:
+    name: Tree view
+    role: menu item
+  n3344:
+    name: DTitlebarMainMenu
+    role: popup menu
+  n3345:
+    name: 主题
+    role: menu item
+  n3346:
+    name: DTitlebarThemeMenu
+    role: popup menu
+  n3347:
+    name: 浅色
+    role: menu item
+  n3348:
+    name: 深色
+    role: menu item
+  n3349:
+    name: 跟随系统
+    role: menu item
+  n3350:
+    name: 帮助
+    role: menu item
+  n3351:
+    name: 关于
+    role: menu item
+  n3352:
+    name: 退出
+    role: menu item
+  n3354:
+    name: ''
+    role: panel
+  n3355:
+    name: ''
+    role: list
+  n3356:
+    name: BIG5
+    role: list item
+  n3357:
+    name: CP1125
+    role: list item
+  n3358:
+    name: CP1250
+    role: list item
+  n3359:
+    name: CP1251
+    role: list item
+  n3360:
+    name: CP1252
+    role: list item
+  n3361:
+    name: CP1253
+    role: list item
+  n3362:
+    name: CP1254
+    role: list item
+  n3363:
+    name: CP1255
+    role: list item
+  n3364:
+    name: CP1256
+    role: list item
+  n3365:
+    name: CP1257
+    role: list item
+  n3366:
+    name: CP1258
+    role: list item
+  n3367:
+    name: EUC-JP
+    role: list item
+  n3368:
+    name: EUC-KR
+    role: list item
+  n3369:
+    name: EUC-TW
+    role: list item
+  n3370:
+    name: GB18030
+    role: list item
+  n3371:
+    name: IBM775
+    role: list item
+  n3372:
+    name: IBM852
+    role: list item
+  n3373:
+    name: IBM855
+    role: list item
+  n3374:
+    name: IBM866
+    role: list item
+  n3375:
+    name: ISO-2022-CN
+    role: list item
+  n3376:
+    name: ISO-2022-JP
+    role: list item
+  n3377:
+    name: ISO-2022-KR
+    role: list item
+  n3378:
+    name: ISO-8859-1
+    role: list item
+  n3379:
+    name: ISO-8859-10
+    role: list item
+  n3380:
+    name: ISO-8859-11
+    role: list item
+  n3381:
+    name: ISO-8859-13
+    role: list item
+  n3382:
+    name: ISO-8859-14
+    role: list item
+  n3383:
+    name: ISO-8859-15
+    role: list item
+  n3384:
+    name: ISO-8859-16
+    role: list item
+  n3385:
+    name: ISO-8859-2
+    role: list item
+  n3386:
+    name: ISO-8859-3
+    role: list item
+  n3387:
+    name: ISO-8859-4
+    role: list item
+  n3388:
+    name: ISO-8859-5
+    role: list item
+  n3389:
+    name: ISO-8859-6
+    role: list item
+  n3390:
+    name: ISO-8859-7
+    role: list item
+  n3391:
+    name: ISO-8859-8
+    role: list item
+  n3392:
+    name: ISO-8859-9
+    role: list item
+  n3393:
+    name: KOI8-R
+    role: list item
+  n3394:
+    name: KOI8-U
+    role: list item
+  n3395:
+    name: MACCENTRALEUROPE
+    role: list item
+  n3396:
+    name: MACCYRILLIC
+    role: list item
+  n3397:
+    name: SHIFT_JIS
+    role: list item
+  n3398:
+    name: TIS-620
+    role: list item
+  n3399:
+    name: UTF-16BE
+    role: list item
+  n3400:
+    name: UTF-16LE
+    role: list item
+  n3401:
+    name: UTF-32BE
+    role: list item
+  n3402:
+    name: UTF-32LE
+    role: list item
+  n3403:
+    name: UTF-8
+    role: list item
+  n3406:
+    name: DTitlebarThemeMenu
+    role: popup menu
+  n3407:
+    name: 浅色
+    role: menu item
+  n3408:
+    name: 深色
+    role: menu item
+  n3409:
+    name: 跟随系统
+    role: menu item
+  n3410:
+    name: ''
+    role: panel
+  n3411:
+    name: ''
+    role: list
+  n3412:
+    name: 名称之前
+    role: list item
+  n3413:
+    name: 名称之后
+    role: list item
+  n3416:
+    name: ''
+    role: panel
+  n3417:
+    name: ''
+    role: list
+  n3418:
+    name: 替换文本
+    role: list item
+  n3419:
+    name: 添加文本
+    role: list item
+  n3420:
+    name: 自定义文本
+    role: list item
+  n3423:
+    name: DTitlebarThemeMenu
+    role: popup menu
+  n3424:
+    name: 浅色
+    role: menu item
+  n3425:
+    name: 深色
+    role: menu item
+  n3426:
+    name: 跟随系统
+    role: menu item
+  n3427:
+    name: ''
+    role: section
+  n3429:
+    name: ''
+    role: section
+  n3432:
+    name: q
+    role: static
+  n3433:
+    name:  
+    role: static
+  n3434:
+    name: ''
+    role: section
+  n3437:
+    name: q
+    role: static
+  n3438:
+    name: qq
+    role: static
+  n3439:
+    name: 
+    role: static
+  n3440:
+    name: 
+    role: static
+  n3441:
+    name: 
+    role: static
+  n3442:
+    name: 
+    role: static
+  n3443:
+    name: 
+    role: static
+  n3444:
+    name: 
+    role: static
+  n3445:
+    name: 
+    role: static
+  n3446:
+    name: 
+    role: static
+  n3447:
+    name: cpis-panel-service
+    role: application
+  n3448:
+    name: ''
+    role: window
+  n3450:
+    name: ''
+    role: window
+  n3452:
+    name: ''
+    role: section
+  n3455:
+    name: qq
+    role: static
+  n3456:
+    name: ''
+    role: section
+  n3457:
+    name: 
+    role: static

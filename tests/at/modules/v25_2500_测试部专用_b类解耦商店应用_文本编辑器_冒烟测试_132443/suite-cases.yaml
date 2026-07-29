@@ -1,0 +1,443 @@
+version: '1.0'
+cases:
+- id: case_1919203
+  name: 查找替换-点击替换按钮切换至替换弹窗（未选中文本）
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 查找替换-点击替换按钮切换至替换弹窗（未选中文本）
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 使用快捷键Ctrl+F触发查找功能
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 点击查找弹窗中的'替换'按钮
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 观察当前弹窗标题及布局
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 查找弹窗正常显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 替换弹窗正常显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 弹窗标题显示为'替换'，输入框位置、替换、跳过、剩余替换、全部替换按钮与使用快捷键Ctrl+H触发的替换弹窗完全一致
+    needs_accessible_name: false
+  annotation:
+    测试界面: 主窗口-查找/替换浮窗
+    测试功能: 未选中文本时从查找切换替换
+    前置条件: 应用已启动
+    AT元素引用: 文本编辑器主窗口, 查找
+- id: case_1919201
+  name: 查找替换-查找弹窗中替换按钮可见性验证（未选中文本）
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 查找替换-查找弹窗中替换按钮可见性验证（未选中文本）
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 使用快捷键Ctrl+F触发查找功能
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 观察查找弹窗底部按钮区域
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 弹出查找弹窗
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 查找弹窗中显示'替换'按钮，按钮无遮挡且未禁用（光标悬停时显示可点击状态）
+    needs_accessible_name: false
+  annotation:
+    测试界面: 主窗口-查找浮窗
+    测试功能: 查找弹窗中替换按钮可见性验证
+    前置条件: 应用已启动
+    AT元素引用: 文本编辑器主窗口, 查找
+- id: case_1593667
+  name: 保存编码文件场景补充
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 保存编码文件场景补充
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 编写任意代码，然后保存
+    needs_accessible_name: false
+  - step_type: action
+    description: '#include <stdio.h>'
+    needs_accessible_name: false
+  - step_type: action
+    description: int main() {
+    needs_accessible_name: false
+  - step_type: action
+    description: printf("hello world");
+    needs_accessible_name: false
+  - step_type: action
+    description: return 0;
+    needs_accessible_name: false
+  - step_type: action
+    description: '}'
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 关闭文本编辑器窗口
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 再次打开文本编辑器
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 保存为对应编码格式文档，如：test.h
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 窗口可正常关闭
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 文本编辑器中的代码关键字高亮显示，如：include、int、hello world
+    needs_accessible_name: false
+  annotation:
+    测试界面: 主窗口-编辑区/保存
+    测试功能: 代码文本编辑保存与关键字高亮
+    前置条件: 应用已启动，存在可保存路径
+    AT元素引用: 文本编辑器主窗口
+- id: case_1593535
+  name: 与当前文件保存一致_首次打开新文件
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 与当前文件保存一致_首次打开新文件
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 进入文本编辑器设置中切换 “打开/保存位置”项的属性为“与当前文件保存一致”
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 主菜单打开/Ctrl+O
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. “与当前文件保存一致”前高亮选中
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 打开的默认路径为 系统-文档 路径
+    needs_accessible_name: false
+  annotation:
+    测试界面: 设置窗口/打开文件对话框
+    测试功能: 打开保存位置设置为与当前文件一致后打开文件
+    前置条件: 应用已启动
+    AT元素引用: 文本编辑器主窗口, 设置
+- id: case_1593533
+  name: 与当前文件保存一致_首次保存新文件
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 与当前文件保存一致_首次保存新文件
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 进入文本编辑器设置中切换 “打开/保存位置”项的属性为“与当前文件保存一致”
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 编辑空白文档进行保存
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. “与当前文件保存一致”前高亮选中
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 存储的默认路径为 系统-文档 路径
+    needs_accessible_name: false
+  annotation:
+    测试界面: 设置窗口/保存文件对话框
+    测试功能: 打开保存位置设置为与当前文件一致后保存文件
+    前置条件: 应用已启动
+    AT元素引用: 文本编辑器主窗口, 设置
+- id: case_1593509
+  name: 自定义操作路径_打开新文件
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 自定义操作路径_打开新文件
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 进入文本编辑器设置中切换 “打开/保存位置”项的属性为“自定义操作路径”，并完成自定义路径设置
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 主菜单打开/Ctrl+O
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 成功设置自定义路径
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 默认路径为用户设置的自定义操作路径
+    needs_accessible_name: false
+  annotation:
+    测试界面: 设置窗口/打开文件对话框
+    测试功能: 自定义操作路径设置后打开文件
+    前置条件: 应用已启动
+    AT元素引用: 文本编辑器主窗口, 设置
+- id: case_1593491
+  name: 字数展示_UI
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 字数展示_UI
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 打开文本编辑器，默认新开空白文档
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 输入中文、英文、中英文标点符号及空格
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 底栏上“字数”显示0
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. “字数”跟随计数 ，每个字符都计入一个字
+    needs_accessible_name: false
+  annotation:
+    测试界面: 主窗口-状态栏/编辑区
+    测试功能: 字数统计显示与输入计数
+    前置条件: 应用已启动，默认空白文档
+    AT元素引用: 文本编辑器主窗口
+- id: case_1593273
+  name: Tip框显示文件路径
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: Tip框显示文件路径
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 打开编辑器，点击+新建标签页，鼠标光标移动到标签页上
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 点击Ctrl+s，弹出保存确认后，鼠标光标移动到标签页上
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 弹出tip框显示，文件名称
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 弹出tip框显示，文件路径+文件名称
+    needs_accessible_name: false
+  annotation:
+    测试界面: 主窗口-标签栏/保存对话框
+    测试功能: 标签页悬停 Tip 显示文件名/路径
+    前置条件: 应用已启动
+    AT元素引用: 文本编辑器主窗口, DTabBarAddButton
+- id: case_1593177
+  name: 软件卸载
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 软件卸载
+  status: unsupported
+  reason: 原始用例只有观察/断言描述，缺少可执行的具体 GUI 操作步骤或依赖窗口/设置状态人工判断
+  steps:
+  - step_type: action
+    description: 打开文本编辑器
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 软件安装成功后，在启动器中选中图标，点击右键--卸载，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 软件安装成功后，在终端中用命令将其卸载，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 软件卸载成功
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 软件卸载成功
+    needs_accessible_name: false
+  annotation:
+    测试界面: 启动器/终端
+    测试功能: 软件卸载
+    前置条件: 软件已安装
+    AT元素引用: 文本编辑器主窗口
+- id: case_1593171
+  name: 最小化后从启动器打开应用
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 最小化后从启动器打开应用
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 打开软件后，点击右上角的最小化，查看软件显示
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 软件最小化后，从启动器中点击文本编辑器打开
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 当前窗口会自动最小化
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 文本编辑器新开一窗口
+    needs_accessible_name: false
+  annotation:
+    测试界面: 窗口管理/启动器
+    测试功能: 最小化后从启动器打开应用
+    前置条件: 应用已启动
+    AT元素引用: 文本编辑器主窗口
+- id: case_1593091
+  name: 打开.crt格式文件
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 打开.crt格式文件
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 使用文本编辑器打开minetype:application/pkix-cert+pem类型文件(.crt)
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 可以正常打开，显示正常
+    needs_accessible_name: false
+  annotation:
+    测试界面: 主窗口-打开文件
+    测试功能: 打开 .crt 格式文件
+    前置条件: 存在 .crt 测试文件
+    AT元素引用: 文本编辑器主窗口
+- id: case_1593089
+  name: 打开.md文本类型格式文件
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 打开.md文本类型格式文件
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 使用文本编辑器打开markdown文本类型文件(.md)
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 使用附件中的文件，搜索查看“搜索日程”
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 可以正常打开
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 显示正常无乱码
+    needs_accessible_name: false
+  annotation:
+    测试界面: 主窗口-打开文件/查找
+    测试功能: 打开 .md 文本文件并搜索内容
+    前置条件: 存在 .md 测试文件
+    AT元素引用: 文本编辑器主窗口, 查找
+- id: case_1593087
+  name: 打开编码方式为BIG5格式文件
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 打开编码方式为BIG5格式文件
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 使用文本编辑器打开BIG5编码类型文件
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 可以正常打开
+    needs_accessible_name: false
+  annotation:
+    测试界面: 主窗口-打开文件
+    测试功能: 打开 BIG5 编码文件
+    前置条件: 存在 BIG5 编码测试文件
+    AT元素引用: 文本编辑器主窗口
+- id: case_1593075
+  name: 字号大小设置
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 字号大小设置
+  status: unsupported
+  reason: 原始用例只有观察/断言描述，缺少可执行的具体 GUI 操作步骤或依赖窗口/设置状态人工判断
+  steps:
+  - step_type: action
+    description: 打开文本编辑器
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 打开设置窗口后，选中字体样式，任意切换字体大小，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 查看字体最大最小设置显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 字体大小切换成功，在软件中显示正确
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 字体最小设置显示为8，最大设置显示为50。默认字号12px；
+    needs_accessible_name: false
+  annotation:
+    测试界面: 设置窗口-字体
+    测试功能: 字号大小设置
+    前置条件: 应用已启动
+    AT元素引用: 文本编辑器主窗口, 设置
+- id: case_1593063
+  name: 显示行号
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 显示行号
+  status: unsupported
+  reason: 原始用例只有观察/断言描述，缺少可执行的具体 GUI 操作步骤或依赖窗口/设置状态人工判断
+  steps:
+  - step_type: action
+    description: 打开文本编辑器
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 打开编辑器，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 在主菜单打开设置界面，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 在设置界面取消“显示行号”的勾选状态，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 左侧默认显示行号
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. “显示行号”默认勾选状态
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 左侧不显示行号
+    needs_accessible_name: false
+  annotation:
+    测试界面: 设置窗口-基础设置/编辑区左侧栏
+    测试功能: 显示行号设置
+    前置条件: 应用已启动
+    AT元素引用: 文本编辑器主窗口, 设置
+- id: case_1593045
+  name: 设置【快捷键】
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 设置【快捷键】
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. F1打开帮助手册
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. Ctrl+Shift+/显示快捷键预览
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 可以打开帮助手册
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 可以显示快捷键预览
+    needs_accessible_name: false
+  annotation:
+    测试界面: 帮助/快捷键预览
+    测试功能: F1 帮助与快捷键预览
+    前置条件: 应用已启动
+    AT元素引用: 文本编辑器主窗口, 帮助
+- id: case_1592865
+  name: 退出
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 退出
+  status: unsupported
+  reason: 原始用例只有观察/断言描述，缺少可执行的具体 GUI 操作步骤或依赖窗口/设置状态人工判断
+  steps:
+  - step_type: action
+    description: 打开文本编辑器
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 点击右上角的设置－退出按钮，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 打开软件后，按Alt+F4键，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 软件会自动退出
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 软件会自动退出当前窗口
+    needs_accessible_name: false
+  annotation:
+    测试界面: 主窗口-主菜单/窗口关闭
+    测试功能: 退出应用
+    前置条件: 应用已启动
+    AT元素引用: 文本编辑器主窗口, 退出
