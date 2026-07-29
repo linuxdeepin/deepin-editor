@@ -4729,31 +4729,6 @@ QStringList TextEdit::readEncodeHistoryRecord()
     return filePathList;
 }
 
-QString TextEdit::readEncodeHistoryRecord(const QString &filepath)
-{
-    QString history = m_settings->settings->option("advance.editor.browsing_encode_history")->value().toString();
-    if (history.isEmpty()) {
-        return QString();
-    }
-
-    int nLeftPosition = history.indexOf("*[" + filepath + "]*");
-    if (nLeftPosition == -1) {
-        return QString();
-    }
-
-    nLeftPosition = history.indexOf("]*", nLeftPosition);
-    if (nLeftPosition == -1) {
-        return QString();
-    }
-
-    int nRightPosition = history.indexOf("}*", nLeftPosition);
-    if (nRightPosition == -1) {
-        return QString();
-    }
-
-    return history.mid(nLeftPosition + 2, nRightPosition - nLeftPosition - 2);
-}
-
 void TextEdit::tellFindBarClose()
 {
     m_bIsFindClose = true;
