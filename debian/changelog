@@ -1,3 +1,17 @@
+deepin-editor (6.5.58) unstable; urgency=medium
+
+  * chore: Update version to 6.5.58
+  * fix(editor): prevent main thread deadlock in selectTextInView
+  * test(at): complete AT-SPI suites for deepin editor
+  * test(at): add license metadata for case files
+  * test(at): add AT-SPI suites for deepin editor
+  * feat(editor): add safe preview and controlled save for files containing NUL bytes
+  * fix(CI): update cppcheck workflow to use checkout@v7
+  * fix: add X-Deepin-Singleton flag to desktop file
+  * fix: remove deepin prefix from Chinese translations in desktop file
+
+ -- zhanghongyuan <zhanghongyuan@uniontech.com>  Thu, 30 Jul 2026 15:10:54 +0800
+
 deepin-editor (6.5.57) unstable; urgency=medium
 
   * chore: Update version to 6.5.57
