@@ -860,6 +860,8 @@ private:
 
     bool m_isSelectAll {false};
 
+    bool m_isSelectingInView = false;   ///< selectTextInView 重入守卫：阻断 setTextCursor→inputMethod/scrollbar 信号→selectTextInView 的自激振荡
+
 private:
     LeftAreaTextEdit *m_pLeftAreaWidget = nullptr;
     QString m_sFilePath;///＜打开文件路径

@@ -3289,6 +3289,16 @@ void TextEdit::highlight()
 void TextEdit::selectTextInView()
 {
     qDebug() << "Selecting text in view";
+    // 重入守卫：setTextCursor 会触发 QInputMethod::update（在 fcitx5 环境下会
+    // 异步回查光标矩形），并改变滚动条/布局，这些会分别触发 slotValueChanged、
+    // resizeEvent；它们在 m_isSelectAll 时会再次调用 selectTextInView，形成
+    // 自激振荡导致主线程死循环卡死。这里阻断重入。
+    if (m_isSelectingInView) {
+        qDebug() << "Selecting text in view skipped: already in progress";
+        return;
+    }
+    m_isSelectingInView = true;
+
     int startPos = cursorForPosition(QPoint(0, 0)).position();
     QPoint endPoint = QPoint(this->viewport()->width(), this->viewport()->height());
     int endPos = cursorForPosition(endPoint).position();
@@ -3298,6 +3308,8 @@ void TextEdit::selectTextInView()
     cursor.setPosition(startPos, QTextCursor::KeepAnchor);
     this->setTextCursor(cursor);
     this->horizontalScrollBar()->setValue(0);
+
+    m_isSelectingInView = false;
     qDebug() << "Selecting text in view completed";
 }
 

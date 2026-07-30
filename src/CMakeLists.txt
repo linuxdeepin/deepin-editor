@@ -76,6 +76,9 @@ link_directories(${chardet_LIBRARY_DIRS})
 
 # Tell CMake to create the executable
 add_executable(deepin-editor ${SRCS} deepin-editor.qrc)
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    target_compile_definitions(deepin-editor PRIVATE QT_NO_DEBUG_OUTPUT)
+endif()
 target_link_libraries(deepin-editor
     ${LINK_LIBS}
     ${chardet_LIBRARY_DIRS}
