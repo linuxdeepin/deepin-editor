@@ -154,3 +154,307 @@ cases:
     reason: "设置页具体控件在当前 AT 树中缺少稳定可交叉引用 selector，暂不强行生成不稳定用例"
     annotation: {测试界面: "主窗口-主菜单/设置", 测试功能: "打开和关闭设置窗口", 前置条件: "应用已启动", AT元素引用: "设置"}
     steps: []
+
+  - id: case_1592885
+    name: "查找_按压enter键"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: active
+    annotation: {测试界面: "主窗口-查找栏", 测试功能: "输入查找词后按 Enter 查找", 前置条件: "应用已启动，编辑区存在可查找文本", AT元素引用: "查找"}
+    steps:
+      - step_type: action
+        description: "打开文本编辑器"
+        action: session_start
+        command: deepin-editor
+      - step_type: action
+        description: "输入包含多个查找目标的文本"
+        action: keyboard_type
+        text: "find target\nfind target\nother"
+      - step_type: action
+        description: "使用 Ctrl+F 打开查找栏"
+        action: keyboard_hot_key
+        key: ctrl+f
+      - step_type: action
+        description: "输入查找词"
+        action: keyboard_type
+        text: "find"
+      - step_type: action
+        description: "按 Enter 执行查找"
+        action: keyboard_press
+        key: enter
+      - step_type: assert
+        description: "验证查找栏保持显示且可继续查找"
+        action: assert_element
+        selector: {name: "查找", role: "menu item"}
+
+  - id: case_1592853
+    name: "查找_更换查找词"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: active
+    annotation: {测试界面: "主窗口-查找栏", 测试功能: "更换查找词后继续查找", 前置条件: "应用已启动，编辑区存在多个可查找文本", AT元素引用: "查找"}
+    steps:
+      - step_type: action
+        description: "打开文本编辑器"
+        action: session_start
+        command: deepin-editor
+      - step_type: action
+        description: "输入两组可查找文本"
+        action: keyboard_type
+        text: "alpha beta\nalpha gamma\nbeta gamma"
+      - step_type: action
+        description: "使用 Ctrl+F 打开查找栏"
+        action: keyboard_hot_key
+        key: ctrl+f
+      - step_type: action
+        description: "输入第一组查找词"
+        action: keyboard_type
+        text: "alpha"
+      - step_type: action
+        description: "按 Enter 执行第一次查找"
+        action: keyboard_press
+        key: enter
+      - step_type: action
+        description: "全选查找框内容以更换查找词"
+        action: keyboard_hot_key
+        key: ctrl+a
+      - step_type: action
+        description: "输入新的查找词"
+        action: keyboard_type
+        text: "beta"
+      - step_type: action
+        description: "按 Enter 执行第二次查找"
+        action: keyboard_press
+        key: enter
+      - step_type: assert
+        description: "验证更换查找词后查找栏仍保持显示"
+        action: assert_element
+        selector: {name: "查找", role: "menu item"}
+
+  - id: case_1592883
+    name: "新建窗口"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: active
+    annotation: {测试界面: "主窗口-新建窗口", 测试功能: "通过快捷键新建窗口", 前置条件: "应用已启动", AT元素引用: "新建窗口, DTabBarAddButton"}
+    steps:
+      - step_type: action
+        description: "打开文本编辑器"
+        action: session_start
+        command: deepin-editor
+      - step_type: action
+        description: "使用 Ctrl+N 新建窗口作为主菜单新建窗口等价入口"
+        action: keyboard_hot_key
+        key: ctrl+n
+      - step_type: assert
+        description: "验证新建窗口后文本编辑器窗口仍显示标签栏加号按钮"
+        action: assert_element
+        selector: {name: "DTabBarAddButton", role: "button"}
+
+  - id: case_1592879
+    name: "打开文件"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: active
+    annotation: {测试界面: "主窗口-打开文件", 测试功能: "通过打开文件入口打开现有文本文件", 前置条件: "系统存在 /etc/hosts 文本文件", AT元素引用: "打开文件, 查找"}
+    steps:
+      - step_type: action
+        description: "打开文本编辑器"
+        action: session_start
+        command: deepin-editor
+      - step_type: action
+        description: "使用 Ctrl+O 打开文件选择器作为打开文件等价入口"
+        action: keyboard_hot_key
+        key: ctrl+o
+      - step_type: action
+        description: "定位文件选择器路径输入"
+        action: keyboard_hot_key
+        key: ctrl+l
+      - step_type: action
+        description: "输入稳定存在的文本文件路径"
+        action: keyboard_type
+        text: "/etc/hosts"
+      - step_type: action
+        description: "确认打开文件"
+        action: keyboard_press
+        key: enter
+      - step_type: action
+        description: "打开查找栏验证文件进入编辑器后仍可交互"
+        action: keyboard_hot_key
+        key: ctrl+f
+      - step_type: assert
+        description: "验证打开文件后查找栏可用"
+        action: assert_element
+        selector: {name: "查找", role: "menu item"}
+
+  - id: case_1593649
+    name: "不保留现场_关闭应用（子标签页已保存+未保存）"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: unsupported
+    reason: "用例依赖多标签混合已保存/未保存状态、连续保存提示框和保存对话框；当前保存对话框在运行环境中无稳定 AT-SPI selector，且恢复现场结果包含标题星号等视觉状态"
+    annotation: {测试界面: "主窗口-多标签关闭/保存提示", 测试功能: "关闭应用时逐个处理已保存和未保存标签", 前置条件: "存在多个已保存/未保存标签页", AT元素引用: "保存, 不保存, 取消"}
+    steps: []
+
+  - id: case_1593647
+    name: "不保留现场_多窗口关闭应用"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: unsupported
+    reason: "用例依赖多窗口、多标签、未保存提示框顺序处理和窗口间互不影响验证；当前无法通过稳定 AT-SPI 元素断言多窗口恢复与关闭顺序"
+    annotation: {测试界面: "多窗口-多标签关闭", 测试功能: "多窗口关闭时逐个处理未保存标签", 前置条件: "存在两个复杂标签状态窗口", AT元素引用: "保存, 不保存, 取消"}
+    steps: []
+
+  - id: case_1593645
+    name: "文本编辑器应用强制退出后再次打开"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: unsupported
+    reason: "用例依赖系统监视器结束进程、任务栏强制退出和应用崩溃场景，属于外部系统进程/崩溃注入环境，不适合通用 AT-SPI GUI 用例稳定构造"
+    annotation: {测试界面: "系统监视器/任务栏/应用恢复", 测试功能: "强制退出后重新打开", 前置条件: "可结束进程或构造崩溃", AT元素引用: "文本编辑器主窗口"}
+    steps: []
+
+  - id: case_1593561
+    name: "取消勾选“允许鼠标中键执行粘贴操作”"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: unsupported
+    reason: "用例依赖设置页高级选项稳定 selector 和鼠标中键硬件输入；当前 AT 树未捕获该设置控件，且中键粘贴属于鼠标硬件行为"
+    annotation: {测试界面: "设置-高级设置/编辑区", 测试功能: "允许鼠标中键粘贴开关", 前置条件: "可操作设置页高级选项和鼠标中键", AT元素引用: "设置"}
+    steps: []
+
+  - id: case_1593551
+    name: "记住最后的操作路径_打开新文件"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: unsupported
+    reason: "用例验证系统文件选择器默认路径是否记住上次操作路径，依赖文件选择器内部路径状态，当前无稳定 AT-SPI selector 可断言路径"
+    annotation: {测试界面: "打开文件对话框", 测试功能: "记住最后打开路径", 前置条件: "已有上次操作路径", AT元素引用: "打开文件"}
+    steps: []
+
+  - id: case_1593549
+    name: "记住最后的操作路径_保存一个未保存过的新文档"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: unsupported
+    reason: "用例依赖保存文件对话框默认路径记忆状态；当前保存对话框不稳定且路径文本无稳定 AT-SPI selector"
+    annotation: {测试界面: "保存文件对话框", 测试功能: "记住最后保存路径", 前置条件: "已有上次操作路径", AT元素引用: "保存"}
+    steps: []
+
+  - id: case_1593507
+    name: "自定义操作路径_保存一个未保存过的新文档"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: unsupported
+    reason: "用例依赖设置页打开/保存位置选项、自定义路径选择器和保存对话框默认路径验证，当前缺少稳定 selector"
+    annotation: {测试界面: "设置窗口/保存文件对话框", 测试功能: "自定义操作路径后保存", 前置条件: "可设置自定义操作路径", AT元素引用: "设置, 保存"}
+    steps: []
+
+  - id: case_1593073
+    name: "键盘映射"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: unsupported
+    reason: "用例要求查看和切换标准/Emacs/自定义键盘映射并验证快捷键列表和自定义跳转状态；当前设置页快捷键控件缺少稳定 selector，且部分为人工视觉核对"
+    annotation: {测试界面: "设置-快捷键", 测试功能: "键盘映射模式", 前置条件: "设置页快捷键控件可访问", AT元素引用: "设置"}
+    steps: []
+
+  - id: case_1593071
+    name: "窗口设置"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: unsupported
+    reason: "用例要求切换正常/最大化/全屏窗口设置并重启验证窗口状态，属于窗口管理视觉状态；当前缺少可稳定断言的设置项和窗口状态 selector"
+    annotation: {测试界面: "设置-高级设置/窗口状态", 测试功能: "窗口启动状态", 前置条件: "可修改窗口状态设置并重启", AT元素引用: "设置"}
+    steps: []
+
+  - id: case_1593069
+    name: "自动换行"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: unsupported
+    reason: "用例要求取消自动换行并验证长文本是否换行，结果为编辑区视觉排版状态；当前无稳定 AT-SPI 元素可断言换行效果"
+    annotation: {测试界面: "设置-基础设置/编辑区", 测试功能: "自动换行开关", 前置条件: "可操作自动换行设置", AT元素引用: "设置"}
+    steps: []
+
+  - id: case_1593067
+    name: "恢复默认"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: unsupported
+    reason: "用例要求任意修改设置后恢复默认并验证所有设置项状态；当前设置页多个控件缺少稳定 selector，无法逐项断言"
+    annotation: {测试界面: "设置窗口", 测试功能: "恢复默认设置", 前置条件: "设置页控件可访问", AT元素引用: "设置"}
+    steps: []
+
+  - id: case_1593065
+    name: "代码折叠标志"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: unsupported
+    reason: "用例要求验证代码折叠标识与代码结构一一对应显示，属于编辑区左侧视觉状态；当前无稳定 AT-SPI 元素断言折叠标志"
+    annotation: {测试界面: "设置-基础设置/编辑区左侧栏", 测试功能: "代码折叠标志", 前置条件: "打开代码文件并启用代码折叠", AT元素引用: "设置"}
+    steps: []
+
+  - id: case_1593061
+    name: "Tab 字符宽度"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: unsupported
+    reason: "用例要求调节 Tab 字符宽度并验证正文中 Tab 显示宽度，属于设置页数值控件和视觉排版状态；当前无稳定 selector 和断言元素"
+    annotation: {测试界面: "设置-高级设置/编辑区", 测试功能: "Tab字符宽度", 前置条件: "设置页 Tab 宽度控件可访问", AT元素引用: "设置"}
+    steps: []
+
+  - id: case_1593059
+    name: "空白字符/制表符"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: unsupported
+    reason: "用例要求验证空白字符/制表符是否以特殊符号显示，属于文本渲染视觉状态；当前 AT-SPI 无稳定元素可断言"
+    annotation: {测试界面: "设置-基础设置/编辑区", 测试功能: "显示空白字符和制表符", 前置条件: "可操作显示空白字符设置", AT元素引用: "设置"}
+    steps: []
+
+  - id: case_1593057
+    name: "窗口设置_新窗口路径"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: unsupported
+    reason: "用例包含启动器、任务栏、桌面快捷方式、主菜单和 Ctrl+N 多入口验证，并要求新窗口大小跟随设置；涉及外部桌面环境和窗口视觉状态，当前无法稳定 AT-SPI 自动化"
+    annotation: {测试界面: "桌面环境/主菜单/新窗口", 测试功能: "新窗口继承窗口设置", 前置条件: "可操作启动器、任务栏和桌面图标", AT元素引用: "新建窗口, 设置"}
+    steps: []
+
+  - id: case_1593055
+    name: "Tab字符宽度_首行的显示"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: unsupported
+    reason: "用例要求设置不同 Tab 字符宽度并验证首行和其他行显示，属于文本排版视觉状态；当前无稳定 AT-SPI 断言元素"
+    annotation: {测试界面: "设置-高级设置/编辑区", 测试功能: "Tab宽度显示", 前置条件: "可设置 Tab 宽度并输入 Tab", AT元素引用: "设置"}
+    steps: []
+
+  - id: case_1593053
+    name: "窗口设置_关闭应用保留现场"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: unsupported
+    reason: "用例要求最大化/全屏后关闭并重启验证窗口状态跟随设置，属于窗口管理视觉状态和现场恢复状态；当前无稳定断言"
+    annotation: {测试界面: "设置-窗口状态/应用重启", 测试功能: "关闭后保留窗口现场", 前置条件: "可修改窗口状态设置", AT元素引用: "设置"}
+    steps: []
+
+  - id: case_1593051
+    name: "字体类型设置"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: unsupported
+    reason: "用例要求切换字体并检查正文、行号、书签、代码折叠标志 UI 显示，主要为视觉渲染验证；当前无稳定 AT-SPI 断言"
+    annotation: {测试界面: "设置-字体/编辑区", 测试功能: "字体类型设置", 前置条件: "可打开字体列表并选择字体", AT元素引用: "设置"}
+    steps: []
+
+  - id: case_1593049
+    name: "快捷键编辑"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: unsupported
+    reason: "用例要求编辑任意快捷键输入框、触发无效快捷键/冲突弹窗并验证文案；当前快捷键输入框和弹窗按钮未在 AT 树中形成稳定 selector"
+    annotation: {测试界面: "设置-快捷键", 测试功能: "快捷键编辑和冲突提示", 前置条件: "快捷键输入框可访问", AT元素引用: "设置"}
+    steps: []
+
+  - id: case_1593047
+    name: "快捷键编辑_小键盘"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: unsupported
+    reason: "用例依赖 NumLock 状态和小键盘硬件输入组合，并要求验证快捷键设置可用；属于外部键盘状态和设置页控件验证，当前无法稳定自动化"
+    annotation: {测试界面: "设置-快捷键/键盘硬件", 测试功能: "小键盘快捷键编辑", 前置条件: "可控制 NumLock 和小键盘输入", AT元素引用: "设置"}
+    steps: []
+
+  - id: case_1592873
+    name: "打印"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: unsupported
+    reason: "用例依赖系统打印对话框、默认打印机、打印管理器队列和 toast 消息，属于外部系统服务/打印环境；当前无稳定 deepin-editor 内部 AT-SPI 元素可断言"
+    annotation: {测试界面: "打印对话框/打印管理器", 测试功能: "打印入口和打印队列", 前置条件: "系统配置打印机和打印服务", AT元素引用: "打印"}
+    steps: []
+
+  - id: case_1592863
+    name: "最大最小关闭"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
+    status: unsupported
+    reason: "用例主要验证最小化、Dock 还原、最大化、拖拽还原、重启窗口尺寸记忆和关闭窗口，涉及窗口管理器/Dock/鼠标拖拽及视觉尺寸状态，当前无法稳定 AT-SPI 断言"
+    annotation: {测试界面: "窗口标题栏/Dock/窗口管理", 测试功能: "最大化、最小化和关闭", 前置条件: "可操作窗口管理器和 Dock", AT元素引用: "文本编辑器主窗口"}
+    steps: []

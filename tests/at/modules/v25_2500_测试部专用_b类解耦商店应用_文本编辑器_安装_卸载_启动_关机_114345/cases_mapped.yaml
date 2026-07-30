@@ -1,0 +1,107 @@
+# === 格式范例 ===
+# metadata:
+#   generated_at: "2026-07-30T00:00:00"
+#   source: "input.xlsx"
+# cases:
+#   - id: "suite-id"
+#     name: "Suite name"
+#     status: "active"
+#     annotation:
+#       测试界面: "主窗口"
+#       测试功能: "启动验证"
+#       前置条件: "应用已安装"
+#       AT元素引用: "DTabBarAddButton"
+#     steps:
+#       - step_type: "action"
+#         description: "打开应用"
+#         action: "session_start"
+#         command: "deepin-editor"
+#       - step_type: "assert"
+#         description: "验证主窗口可交互"
+#         action: "assert_element"
+#         selector: {name: "DTabBarAddButton", role: "button"}
+# === 格式范例结束 ===
+
+metadata:
+  generated_at: "2026-07-30T03:30:00"
+  source: "统信桌面操作系统 V25-文本编辑器-用例.xlsx"
+  module: "v25_2500_测试部专用_b类解耦商店应用_文本编辑器_安装_卸载_启动_关机_114345"
+cases:
+  - id: case_1593181
+    name: "软件安装"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/安装/卸载/启动/关机(#114345)"
+    status: unsupported
+    reason: "需要手动下载软件包并执行 dpkg 安装，属于系统安装/包管理场景；安装成功和图标显示依赖系统环境，非 AT-SPI GUI 用例"
+    annotation:
+      测试界面: "系统包管理/启动器"
+      测试功能: "软件安装与重复安装"
+      前置条件: "存在安装包并具备管理员权限"
+      AT元素引用: "无稳定 deepin-editor 内部元素"
+    steps: []
+
+  - id: case_1593179
+    name: "软件启动"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/安装/卸载/启动/关机(#114345)"
+    status: active
+    annotation:
+      测试界面: "主窗口/命令启动"
+      测试功能: "通过 deepin-editor 命令启动应用并验证窗口可交互"
+      前置条件: "应用已安装；启动器、Dock、桌面图标、开机自启相关步骤因依赖系统 Shell 环境不纳入本自动化覆盖"
+      AT元素引用: "DTabBarAddButton"
+    steps:
+      - step_type: action
+        description: "通过终端命令等价启动文本编辑器"
+        action: session_start
+        command: deepin-editor
+      - step_type: assert
+        description: "验证文本编辑器主窗口启动后标签栏加号按钮可见"
+        action: assert_element
+        selector: {name: "DTabBarAddButton", role: "button"}
+
+  - id: case_1593175
+    name: "dock右键菜单"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/安装/卸载/启动/关机(#114345)"
+    status: unsupported
+    reason: "依赖启动器发送到 Dock、Dock 图标右键菜单、驻留/移除驻留/关闭所有窗口等桌面 Shell 行为，非 deepin-editor 内部 AT-SPI 元素"
+    annotation:
+      测试界面: "Dock/系统 Shell"
+      测试功能: "Dock 图标右键菜单"
+      前置条件: "应用图标已发送到 Dock"
+      AT元素引用: "无稳定 deepin-editor 内部元素"
+    steps: []
+
+  - id: case_1593173
+    name: "最小化后从桌面再次打开应用"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/安装/卸载/启动/关机(#114345)"
+    status: unsupported
+    reason: "依赖窗口最小化状态、桌面文件双击/右键打开方式和窗口还原行为，跨系统桌面环境且无稳定 AT-SPI 断言"
+    annotation:
+      测试界面: "桌面/窗口管理"
+      测试功能: "最小化后从桌面文件唤起应用"
+      前置条件: "桌面存在新文件和已打开文件"
+      AT元素引用: "无稳定 deepin-editor 内部元素"
+    steps: []
+
+  - id: case_1592799
+    name: "休眠、待机、锁屏不需要阻止框"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/安装/卸载/启动/关机(#114345)"
+    status: unsupported
+    reason: "需要触发休眠、待机、锁屏并恢复系统，属于系统电源/锁屏场景；不应由 AT-SPI 用例自动执行"
+    annotation:
+      测试界面: "系统电源/锁屏"
+      测试功能: "未保存文档时休眠/待机/锁屏不阻止"
+      前置条件: "存在未保存文本编辑器文档"
+      AT元素引用: "无稳定 deepin-editor 内部元素"
+    steps: []
+
+  - id: case_1592797
+    name: "关机、重启、注销弹出阻止框"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/安装/卸载/启动/关机(#114345)"
+    status: unsupported
+    reason: "需要触发关机、重启、注销等破坏性系统操作，并验证系统阻止框；不适合自动化执行"
+    annotation:
+      测试界面: "系统关机/重启/注销"
+      测试功能: "未保存文档时阻止系统退出"
+      前置条件: "存在未保存文本编辑器文档"
+      AT元素引用: "系统阻止框，非 deepin-editor 内部元素"
+    steps: []
