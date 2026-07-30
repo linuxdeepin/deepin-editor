@@ -1,0 +1,802 @@
+metadata:
+  generated_at: '2026-07-30T03:10:00'
+  source: 统信桌面操作系统 V25-文本编辑器-用例.xlsx
+  module: v25_2500_测试部专用_b类解耦商店应用_文本编辑器_工作区_114343
+cases:
+- id: case_1593169
+  name: +标签
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  status: active
+  annotation:
+    测试界面: 主窗口-标签栏
+    测试功能: 新建标签页
+    前置条件: 应用已启动
+    AT元素引用: 新标签页, DTabBarAddButton
+  steps:
+  - step_type: action
+    description: 打开文本编辑器
+    action: session_start
+    command: deepin-editor
+  - step_type: action
+    description: 使用 Ctrl+T 新建标签页
+    action: keyboard_hot_key
+    key: ctrl+t
+  - step_type: assert
+    description: 验证标签栏加号按钮仍可见
+    action: assert_element
+    selector:
+      name: DTabBarAddButton
+      role: button
+- id: case_1593219
+  name: 【快捷键优化】“重做”快捷键恢复为“Ctrl+Y”
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  status: active
+  annotation:
+    测试界面: 主窗口-编辑区
+    测试功能: 撤销和 Ctrl+Y 重做
+    前置条件: 应用已启动，默认空白文档
+    AT元素引用: 查找
+  steps:
+  - step_type: action
+    description: 打开文本编辑器
+    action: session_start
+    command: deepin-editor
+  - step_type: action
+    description: 输入用于撤销和重做的文本
+    action: keyboard_type
+    text: redo shortcut text
+  - step_type: action
+    description: 执行撤销
+    action: keyboard_hot_key
+    key: ctrl+z
+  - step_type: action
+    description: 执行 Ctrl+Y 重做
+    action: keyboard_hot_key
+    key: ctrl+y
+  - step_type: action
+    description: 打开查找功能验证重做后窗口仍可交互
+    action: keyboard_hot_key
+    key: ctrl+f
+  - step_type: assert
+    description: 验证查找栏可见
+    action: assert_element
+    selector:
+      name: 查找
+      role: menu item
+- id: case_1593015
+  name: 文件查找【快捷键】
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  status: active
+  annotation:
+    测试界面: 主窗口-查找栏
+    测试功能: Ctrl+F 打开查找并输入查找词
+    前置条件: 应用已启动，编辑区存在文本
+    AT元素引用: 查找
+  steps:
+  - step_type: action
+    description: 打开文本编辑器
+    action: session_start
+    command: deepin-editor
+  - step_type: action
+    description: 输入包含查找词的文本
+    action: keyboard_type
+    text: 'alpha beta
+
+      alpha gamma
+
+      '
+  - step_type: action
+    description: 按 Ctrl+F 打开查找栏
+    action: keyboard_hot_key
+    key: ctrl+f
+  - step_type: action
+    description: 输入查找词
+    action: keyboard_type
+    text: alpha
+  - step_type: assert
+    description: 验证查找栏可见
+    action: assert_element
+    selector:
+      name: 查找
+      role: menu item
+- id: case_1592893
+  name: 全选复制粘贴回车交互【快捷键】
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  status: active
+  annotation:
+    测试界面: 主窗口-编辑区
+    测试功能: 全选、复制、粘贴、回车交互
+    前置条件: 应用已启动，编辑区存在文本
+    AT元素引用: 查找
+  steps:
+  - step_type: action
+    description: 打开文本编辑器
+    action: session_start
+    command: deepin-editor
+  - step_type: action
+    description: 输入待复制文本
+    action: keyboard_type
+    text: copy paste line
+  - step_type: action
+    description: 全选文本
+    action: keyboard_hot_key
+    key: ctrl+a
+  - step_type: action
+    description: 复制文本
+    action: keyboard_hot_key
+    key: ctrl+c
+  - step_type: action
+    description: 多次粘贴文本
+    action: keyboard_hot_key
+    key: ctrl+v
+  - step_type: action
+    description: 按回车换行
+    action: keyboard_press
+    key: enter
+  - step_type: action
+    description: 继续粘贴
+    action: keyboard_hot_key
+    key: ctrl+v
+  - step_type: action
+    description: 打开查找功能验证编辑区仍可交互
+    action: keyboard_hot_key
+    key: ctrl+f
+  - step_type: assert
+    description: 验证查找栏可见
+    action: assert_element
+    selector:
+      name: 查找
+      role: menu item
+- id: case_1592835
+  name: 输入内容
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  status: active
+  annotation:
+    测试界面: 主窗口-编辑区
+    测试功能: 英文与中文内容输入
+    前置条件: 应用已启动，默认空白文档
+    AT元素引用: 查找
+  steps:
+  - step_type: action
+    description: 打开文本编辑器
+    action: session_start
+    command: deepin-editor
+  - step_type: action
+    description: 输入英文和中文文本
+    action: keyboard_type
+    text: English input 中文输入
+  - step_type: action
+    description: 打开查找功能验证输入后可交互
+    action: keyboard_hot_key
+    key: ctrl+f
+  - step_type: assert
+    description: 验证查找栏可见
+    action: assert_element
+    selector:
+      name: 查找
+      role: menu item
+- id: case_1592749
+  name: 全选
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  status: active
+  annotation:
+    测试界面: 主窗口-编辑区
+    测试功能: 全选与复制基础交互
+    前置条件: 应用已启动，编辑区存在文本
+    AT元素引用: 查找
+  steps:
+  - step_type: action
+    description: 打开文本编辑器
+    action: session_start
+    command: deepin-editor
+  - step_type: action
+    description: 输入用于全选的文本
+    action: keyboard_type
+    text: select all text
+  - step_type: action
+    description: 执行全选
+    action: keyboard_hot_key
+    key: ctrl+a
+  - step_type: action
+    description: 执行复制
+    action: keyboard_hot_key
+    key: ctrl+c
+  - step_type: action
+    description: 打开查找功能验证全选复制后窗口仍可交互
+    action: keyboard_hot_key
+    key: ctrl+f
+  - step_type: assert
+    description: 验证查找栏可见
+    action: assert_element
+    selector:
+      name: 查找
+      role: menu item
+- id: case_1592637
+  name: 替换_查询结果包含大小写
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  status: active
+  annotation:
+    测试界面: 主窗口-替换栏
+    测试功能: Ctrl+H 打开替换并输入替换条件
+    前置条件: 应用已启动，编辑区存在大小写文本
+    AT元素引用: 替换
+  steps:
+  - step_type: action
+    description: 打开文本编辑器
+    action: session_start
+    command: deepin-editor
+  - step_type: action
+    description: 输入包含大小写的文本
+    action: keyboard_type
+    text: Apple apple APPLE
+  - step_type: action
+    description: 按 Ctrl+H 打开替换栏
+    action: keyboard_hot_key
+    key: ctrl+h
+  - step_type: assert
+    description: 验证替换栏可见
+    action: assert_element
+    selector:
+      name: 替换
+      role: menu item
+- id: case_1593639
+  name: 文件加载进度条_新开大文件
+  status: unsupported
+  reason: 依赖大文件加载进度条和性能时序，当前无稳定 AT-SPI 状态可断言
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 文件加载进度条_新开大文件
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1593611
+  name: 点击行号_最后一行
+  status: unsupported
+  reason: 行号点击和最后一行高亮属于坐标/视觉状态，当前 AT 树无稳定 selector
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 点击行号_最后一行
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1593597
+  name: 复制含有跨行符文本_查找框
+  status: unsupported
+  reason: 需精确验证查找框跨行符显示和剪贴板内容，当前无稳定可访问文本值断言
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 复制含有跨行符文本_查找框
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1593577
+  name: 设置中缩放字号_缩放比例显示
+  status: unsupported
+  reason: 缩放字号显示属于视觉效果，且依赖设置页控件和屏幕缩放环境
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 设置中缩放字号_缩放比例显示
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1593373
+  name: 性能测试_冷热启动
+  status: unsupported
+  reason: 性能耗时不超过 1S 属于计时性能测试，非 AT-SPI 功能用例
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 性能测试_冷热启动
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1593349
+  name: 打开大文件加载过程中的交互测试_查找
+  status: unsupported
+  reason: 依赖大文件加载中时序窗口，当前录制无法稳定复现和断言
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 打开大文件加载过程中的交互测试_查找
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1593295
+  name: 关闭应用自动保存现场_label页高亮检查
+  status: unsupported
+  reason: 复杂现场恢复与标签高亮为跨进程/视觉状态，当前无稳定 AT-SPI 断言
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 关闭应用自动保存现场_label页高亮检查
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1593271
+  name: Tip框显示文件路径_长文件名
+  status: unsupported
+  reason: 鼠标悬停 tooltip 未稳定捕获，且依赖系统字体和缩放设置
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: Tip框显示文件路径_长文件名
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1593251
+  name: 关闭应用自动保存现场_恢复现场后保存临时文件
+  status: unsupported
+  reason: 自动保存现场和保存对话框路径状态不稳定，无法可靠自动化
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 关闭应用自动保存现场_恢复现场后保存临时文件
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1593243
+  name: 关闭应用自动保存现场_根源文件删除
+  status: unsupported
+  reason: 依赖外部删除文件和现场恢复策略，当前无稳定 GUI 断言
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 关闭应用自动保存现场_根源文件删除
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1593237
+  name: 打印预览2.0接口_存为PDF
+  status: unsupported
+  reason: 打印预览和存为 PDF 依赖系统打印/文件对话框
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 打印预览2.0接口_存为PDF
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1593099
+  name: 批量拖拽
+  status: unsupported
+  reason: 依赖桌面/文管拖拽多个文件和文件夹，非稳定 AT-SPI 操作
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 批量拖拽
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1593097
+  name: 打开无效文件
+  status: unsupported
+  reason: 依赖外部多媒体/文档文件拖拽和 toast 文案捕获
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 打开无效文件
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1593095
+  name: 打开U盘硬盘smb文件
+  status: unsupported
+  reason: 依赖 U 盘、硬盘路径和 SMB 网络环境
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 打开U盘硬盘smb文件
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1593093
+  name: 打开GB18030编码方式文件
+  status: unsupported
+  reason: 缺少固定测试附件文件，编码识别结果也无稳定 AT-SPI 断言
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 打开GB18030编码方式文件
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1593085
+  name: 打开大文件_1G +
+  status: unsupported
+  reason: 依赖 1G 以上大文件和性能/稳定性观察
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 打开大文件_1G +
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1593009
+  name: 跳转到行【快捷键】
+  status: unsupported
+  reason: 跳转行面板和光标行位置未在当前 AT 树中提供稳定 selector
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 跳转到行【快捷键】
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592845
+  name: 语法高亮
+  status: unsupported
+  reason: 语法高亮颜色显示属于纯视觉验证
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 语法高亮
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592833
+  name: 大文件加载过程中“编码方式”和“文本类型”按钮
+  status: unsupported
+  reason: 依赖大文件加载中时序和按钮置灰视觉状态
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 大文件加载过程中“编码方式”和“文本类型”按钮
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592831
+  name: 文件内容_输入特殊字符
+  status: unsupported
+  reason: 需断言未输入字符和标签无星号，当前无稳定可访问状态
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 文件内容_输入特殊字符
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592827
+  name: 支持换行符：linux、Windows、Mac OS
+  status: unsupported
+  reason: 依赖保存对话框换行符子菜单和文件重新打开后的行号验证
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 支持换行符：linux、Windows、Mac OS
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592813
+  name: 标签管理_异常保存_切换编码
+  status: unsupported
+  reason: 依赖保存确认对话框、编码切换和标签星号状态
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 标签管理_异常保存_切换编码
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592811
+  name: 切换编码_数据错误
+  status: unsupported
+  reason: 依赖特定乱码文件和编码错误弹框，缺少固定附件
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 切换编码_数据错误
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592809
+  name: 大文件复制粘帖
+  status: unsupported
+  reason: 依赖 100M 大文件、内存压力和性能稳定性观察
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 大文件复制粘帖
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592807
+  name: 文件内容_Insert覆盖输入
+  status: unsupported
+  reason: 插入/覆盖模式和光标形态属于状态栏/视觉状态，当前不可稳定断言
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 文件内容_Insert覆盖输入
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592791
+  name: 未保存时关闭标签
+  status: unsupported
+  reason: 1040 后需求变更为自动保存现场，原保存提示弹框不稳定出现
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 未保存时关闭标签
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592787
+  name: 文本编辑器重新载入被其他应用修改的根源文件
+  status: unsupported
+  reason: 依赖另一个应用修改文件和重新载入弹框，跨应用状态复杂
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 文本编辑器重新载入被其他应用修改的根源文件
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592779
+  name: “保存”一个有存储权限的网络文件
+  status: unsupported
+  reason: 依赖 SMB 网络文件和存储权限环境
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: “保存”一个有存储权限的网络文件
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592759
+  name: 语音朗读
+  status: unsupported
+  reason: 依赖语音朗读功能、音频设备和听觉结果
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 语音朗读
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592757
+  name: 语音听写
+  status: unsupported
+  reason: 依赖麦克风语音输入和语音识别结果
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 语音听写
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592743
+  name: 跳到行
+  status: unsupported
+  reason: 右键跳到行菜单和光标跳转结果未提供稳定 selector
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 跳到行
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592739
+  name: 重做
+  status: unsupported
+  reason: 右键菜单重做项动态显示状态和文本恢复结果不可稳定断言
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 重做
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592731
+  name: 转换大写
+  status: unsupported
+  reason: 需鼠标框选文本并验证内容大小写变化，当前无稳定文本值断言
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 转换大写
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592729
+  name: 转换小写
+  status: unsupported
+  reason: 需鼠标框选文本并验证内容大小写变化，当前无稳定文本值断言
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 转换小写
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592727
+  name: 首字母大写
+  status: unsupported
+  reason: 需鼠标框选文本并验证首字母变化，当前无稳定文本值断言
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 首字母大写
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592725
+  name: 标签栏的右键菜单
+  status: unsupported
+  reason: 标签栏右键菜单和关闭结果依赖动态标签状态，当前录制未形成稳定 selector
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 标签栏的右键菜单
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592721
+  name: 有左右标签时查看“更多关闭方式”
+  status: unsupported
+  reason: 多标签右键子菜单状态和左右标签位置依赖复杂动态标签布局
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 有左右标签时查看“更多关闭方式”
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592711
+  name: 颜色标记_清除所有标记
+  status: unsupported
+  reason: 颜色标记结果属于视觉状态，无法通过 AT-SPI 稳定断言
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 颜色标记_清除所有标记
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592701
+  name: 展开所有层次
+  status: unsupported
+  reason: 依赖源代码折叠层级和视觉展开状态
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 展开所有层次
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592699
+  name: 添加书签
+  status: unsupported
+  reason: 书签标记属于边栏/行号视觉状态，当前无稳定 AT-SPI 断言
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 添加书签
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592693
+  name: 上一个书签/下一个书签
+  status: unsupported
+  reason: 书签位置跳转依赖视觉光标位置，当前无稳定断言
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 上一个书签/下一个书签
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592685
+  name: 不同源代码文件注释
+  status: unsupported
+  reason: 依赖固定 C/C++/Java/Python 源文件和文本内容变化断言
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 不同源代码文件注释
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592681
+  name: 列编辑操作 (SP3)
+  status: unsupported
+  reason: 列编辑依赖 Alt+鼠标多列选择，属于复杂鼠标/视觉交互
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 列编辑操作 (SP3)
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592679
+  name: 只读模式_切换文件属性
+  status: unsupported
+  reason: 依赖文件管理器权限切换和状态栏只读显示
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 只读模式_切换文件属性
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592677
+  name: 切换注释&撤销的交互
+  status: unsupported
+  reason: 依赖源代码文件、右键注释菜单和文本内容变化断言
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 切换注释&撤销的交互
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592675
+  name: 只读模式_关闭应用后切换文件属性
+  status: unsupported
+  reason: 依赖关闭应用后外部文件权限切换和只读状态显示
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 只读模式_关闭应用后切换文件属性
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592669
+  name: 列编辑操作_Delete键删除
+  status: unsupported
+  reason: 依赖 Alt+鼠标列选择和多列删除视觉结果
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 列编辑操作_Delete键删除
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592665
+  name: 切换大小写&撤销的交互
+  status: unsupported
+  reason: 需验证选中文本大小写变化和撤销恢复，当前无稳定文本值断言
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 切换大小写&撤销的交互
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592645
+  name: 只读模式_全选复制
+  status: unsupported
+  reason: 需外部切换只读模式并验证复制到其他可编辑区
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 只读模式_全选复制
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592641
+  name: 颜色标记的"标记所有”后继续“添加标记”
+  status: unsupported
+  reason: 颜色覆盖结果属于视觉状态，无法稳定 AT-SPI 断言
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 颜色标记的"标记所有”后继续“添加标记”
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+- id: case_1592627
+  name: 列编辑交互颜色标记
+  status: unsupported
+  reason: 依赖 Alt+鼠标列编辑和颜色标记视觉状态
+  steps: []
+  annotation:
+    测试界面: 主窗口-工作区
+    测试功能: 列编辑交互颜色标记
+    前置条件: 应用已启动；该用例因 reason 中说明的限制不生成执行步骤
+    AT元素引用: 文本编辑器主窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)

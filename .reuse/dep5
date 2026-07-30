@@ -73,6 +73,11 @@ Files: tests/casefile/*.xlsx
 Copyright: UnionTech Software Technology Co., Ltd.
 License: CC-BY-4.0
 
+# AT test documents
+Files: tests/at/*.md
+Copyright: UnionTech Software Technology Co., Ltd.
+License: CC-BY-4.0
+
 # encoding
 Files: src/common/encoding.*
 Copyright: 2014-2020 Pedram Pourang (aka Tsu Jan) <tsujan2000@gmail.com>

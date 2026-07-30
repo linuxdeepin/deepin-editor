@@ -1,0 +1,24 @@
+name: _V25_2500（测试部专用）_B类解耦商店应用_文本编辑器_安装_卸载_启动_关机(#114345)_suite
+app: deepin-editor
+description: ''
+module: _V25_2500（测试部专用）_B类解耦商店应用_文本编辑器_安装_卸载_启动_关机(#114345)
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-editor
+  wait: 3.0
+suites:
+- id: case_1593179_s1
+  name: 通过终端命令等价启动文本编辑器
+  description: ''
+  tags: []
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTabBarAddButton
+      role: button
+teardown:
+- action: session_stop

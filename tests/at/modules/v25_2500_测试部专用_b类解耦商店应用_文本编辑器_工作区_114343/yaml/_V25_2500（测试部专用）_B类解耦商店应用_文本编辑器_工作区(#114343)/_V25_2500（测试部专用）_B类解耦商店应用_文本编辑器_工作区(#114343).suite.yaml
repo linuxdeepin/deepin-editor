@@ -1,7 +1,7 @@
-name: _V25_2500（测试部专用）_B类解耦商店应用_文本编辑器_主菜单(#114347)_suite
+name: _V25_2500（测试部专用）_B类解耦商店应用_文本编辑器_工作区(#114343)_suite
 app: deepin-editor
 description: ''
-module: _V25_2500（测试部专用）_B类解耦商店应用_文本编辑器_主菜单(#114347)
+module: _V25_2500（测试部专用）_B类解耦商店应用_文本编辑器_工作区(#114343)
 tags: []
 fast_fail: false
 env_check: []
@@ -10,7 +10,7 @@ setup:
   command: deepin-editor
   wait: 3.0
 suites:
-- id: case_1592881_s1
+- id: case_1593169_s1
   name: 打开文本编辑器
   description: ''
   tags: []
@@ -22,13 +22,17 @@ suites:
     selector:
       name: DTabBarAddButton
       role: button
-- id: case_1592855_s1
+- id: case_1593219_s1
   name: 打开文本编辑器
   description: ''
   tags: []
   steps:
   - action: keyboard_type
-    text: find target
+    text: redo shortcut text
+  - action: keyboard_hot_key
+    key: ctrl+z
+  - action: keyboard_hot_key
+    key: ctrl+y
   - action: keyboard_hot_key
     key: ctrl+f
   assert_steps:
@@ -36,56 +40,7 @@ suites:
     selector:
       name: 查找
       role: menu item
-- id: case_1592861_s1
-  name: 打开文本编辑器
-  description: ''
-  tags: []
-  steps:
-  - action: keyboard_type
-    text: replace target
-  - action: keyboard_hot_key
-    key: ctrl+h
-  assert_steps:
-  - action: assert_element
-    selector:
-      name: 替换
-      role: menu item
-- id: case_1592867_s1
-  name: 打开文本编辑器
-  description: ''
-  tags: []
-  steps:
-  - action: dtk_main_menu
-    items:
-    - 关于
-  assert_steps:
-  - action: assert_element
-    selector:
-      name: 关于
-      role: menu item
-- id: case_1592885_s1
-  name: 打开文本编辑器
-  description: ''
-  tags: []
-  steps:
-  - action: keyboard_type
-    text: 'find target
-
-      find target
-
-      other'
-  - action: keyboard_hot_key
-    key: ctrl+f
-  - action: keyboard_type
-    text: find
-  - action: keyboard_press
-    key: enter
-  assert_steps:
-  - action: assert_element
-    selector:
-      name: 查找
-      role: menu item
-- id: case_1592853_s1
+- id: case_1593015_s1
   name: 打开文本编辑器
   description: ''
   tags: []
@@ -95,55 +50,85 @@ suites:
 
       alpha gamma
 
-      beta gamma'
+      '
   - action: keyboard_hot_key
     key: ctrl+f
   - action: keyboard_type
     text: alpha
-  - action: keyboard_press
-    key: enter
-  - action: keyboard_hot_key
-    key: ctrl+a
-  - action: keyboard_type
-    text: beta
-  - action: keyboard_press
-    key: enter
   assert_steps:
   - action: assert_element
     selector:
       name: 查找
       role: menu item
-- id: case_1592883_s1
+- id: case_1592893_s1
   name: 打开文本编辑器
   description: ''
   tags: []
   steps:
-  - action: keyboard_hot_key
-    key: ctrl+n
-  assert_steps:
-  - action: assert_element
-    selector:
-      name: DTabBarAddButton
-      role: button
-- id: case_1592879_s1
-  name: 打开文本编辑器
-  description: ''
-  tags: []
-  steps:
-  - action: keyboard_hot_key
-    key: ctrl+o
-  - action: keyboard_hot_key
-    key: ctrl+l
   - action: keyboard_type
-    text: /etc/hosts
+    text: copy paste line
+  - action: keyboard_hot_key
+    key: ctrl+a
+  - action: keyboard_hot_key
+    key: ctrl+c
+  - action: keyboard_hot_key
+    key: ctrl+v
   - action: keyboard_press
     key: enter
+  - action: keyboard_hot_key
+    key: ctrl+v
   - action: keyboard_hot_key
     key: ctrl+f
   assert_steps:
   - action: assert_element
     selector:
       name: 查找
+      role: menu item
+- id: case_1592835_s1
+  name: 打开文本编辑器
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_type
+    text: English input 中文输入
+  - action: keyboard_hot_key
+    key: ctrl+f
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 查找
+      role: menu item
+- id: case_1592749_s1
+  name: 打开文本编辑器
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_type
+    text: select all text
+  - action: keyboard_hot_key
+    key: ctrl+a
+  - action: keyboard_hot_key
+    key: ctrl+c
+  - action: keyboard_hot_key
+    key: ctrl+f
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 查找
+      role: menu item
+- id: case_1592637_s1
+  name: 打开文本编辑器
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_type
+    text: Apple apple APPLE
+  - action: keyboard_hot_key
+    key: ctrl+h
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 替换
       role: menu item
 teardown:
 - action: session_stop
