@@ -567,11 +567,11 @@ void TextEdit::popRightMenu(QPoint pos)
             }
         } else {
             qWarning() << __func__ << "DBUS getTTSEnable failed";
-            m_voiceReadingAction->setEnabled(true);
+            m_voiceReadingAction->setEnabled(textCursor().hasSelection() || m_hasColumnSelection);
         }
     } else {
         qWarning() << __func__ << "No audio output device was detected.";
-        m_voiceReadingAction->setEnabled(true);
+        m_voiceReadingAction->setEnabled(textCursor().hasSelection() || m_hasColumnSelection);
     }
 
     m_rightMenu->addAction(m_dictationAction);
