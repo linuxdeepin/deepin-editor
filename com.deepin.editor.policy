@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-FileCopyrightText: 2026 UnionTech Software Technology Co., Ltd. -->
+<!-- SPDX-License-Identifier: CC0-1.0 -->
 <!DOCTYPE policyconfig PUBLIC
  "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
  "http://www.freedesktop.org/standards/PolicyKit/1.0/policyconfig.dtd">
@@ -8,7 +10,7 @@
     <message>Save file with administrator privilege</message>
     <defaults>
       <allow_inactive>no</allow_inactive>
-      <allow_active>auth_admin</allow_active>
+      <allow_active>auth_admin_keep</allow_active>
     </defaults>
   </action>
 </policyconfig>

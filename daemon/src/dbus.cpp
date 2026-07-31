@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -15,11 +15,12 @@ DBus::DBus(QObject *parent) : QObject(parent)
 {
 }
 
-bool DBus::saveFile(const QByteArray &path, const QByteArray &text, const QByteArray &encoding)
+bool DBus::saveFile(const QByteArray &path, const QByteArray &text, const QByteArray &encoding, const QString &callerBusName)
 {
     const QString filepath = QString::fromUtf8(path);
 
-    if (PolicyKitHelper::instance()->checkAuthorization("com.deepin.editor.saveFile", getpid())) {
+    // 使用 D-Bus 调用者的 system bus name 进行 polkit 授权校验
+    if (PolicyKitHelper::instance()->checkAuthorization("com.deepin.editor.saveFile", callerBusName)) {
         // Create file if filepath is not exists.
         if (!Utils::fileExists(filepath)) {
             QString directory = QFileInfo(filepath).dir().absolutePath();

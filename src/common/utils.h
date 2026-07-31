@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -106,8 +106,8 @@ public:
     static int getProcessCountByName(const char *pstrName);
     //批量结束指定名称的进程 秦浩玲　2021-01-26
     static void killProcessByName(const char *pstrName);
-    //计算字符串MD5哈希值 秦浩玲　2021-01-28
-    static QString getStringMD5Hash(const QString &input);
+    //计算字符串哈希值（SHA-256），秦浩玲　2021-01-28，2026-07-31 由 MD5 替换为 SHA-256
+    static QString getStringHash(const QString &input);
     //通过dbus接口从任务栏激活窗口 add by guoshaoyu 2021-04-07
     static bool activeWindowFromDock(quintptr winId);
 
