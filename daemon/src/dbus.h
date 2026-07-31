@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -16,7 +16,7 @@ public:
     DBus(QObject* parent = nullptr);
 
 public Q_SLOTS:
-    bool saveFile(const QByteArray &path, const QByteArray &text, const QByteArray &encoding);
+    bool saveFile(const QByteArray &path, const QByteArray &text, const QByteArray &encoding, const QString &callerBusName);
 };
 
 

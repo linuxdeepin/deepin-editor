@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -203,7 +203,7 @@ void StartManager::autoBackupFile()
             } else {
                 if (wrapper->isModified()) {
                     QString name = fileInfo.absolutePath().replace("/", "_");
-                    QString qstrFilePath = m_autoBackupDir + "/" + Utils::getStringMD5Hash(fileInfo.baseName()) + "." + name + "." + fileInfo.suffix();
+                    QString qstrFilePath = m_autoBackupDir + "/" + Utils::getStringHash(fileInfo.baseName()) + "." + name + "." + fileInfo.suffix();
                     jsonObject.insert("temFilePath", qstrFilePath);
                     wrapper->saveTemFile(qstrFilePath);
                 }

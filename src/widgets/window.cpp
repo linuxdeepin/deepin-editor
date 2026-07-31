@@ -923,7 +923,7 @@ bool Window::closeTab(const QString &filePath)
                 if (QFileInfo(m_autoBackupDir).exists()) {
                     fileInfo.setFile(wrapper->textEditor()->getTruePath());
                     QString name = fileInfo.absolutePath().replace("/", "_");
-                    QDir(m_autoBackupDir).remove(fileInfo.baseName() + "." + name + "." + fileInfo.suffix());
+                    QDir(m_autoBackupDir).remove(Utils::getStringHash(fileInfo.baseName()) + "." + name + "." + fileInfo.suffix());
                 }
 
                 return true;
@@ -957,7 +957,7 @@ bool Window::closeTab(const QString &filePath)
         if (QFileInfo(m_autoBackupDir).exists()) {
             fileInfo.setFile(wrapper->textEditor()->getTruePath());
             QString name = fileInfo.absolutePath().replace("/", "_");
-            QDir(m_autoBackupDir).remove(fileInfo.baseName() + "." + name + "." + fileInfo.suffix());
+            QDir(m_autoBackupDir).remove(Utils::getStringHash(fileInfo.baseName()) + "." + name + "." + fileInfo.suffix());
         }
     }
 
@@ -1261,7 +1261,7 @@ bool Window::saveFile()
         if (QFileInfo(m_autoBackupDir).exists()) {
             QFileInfo fileInfo(filePath);
             QString name = fileInfo.absolutePath().replace("/", "_");
-            QDir(m_autoBackupDir).remove(fileInfo.baseName() + "." + name + "." + fileInfo.suffix());
+            QDir(m_autoBackupDir).remove(Utils::getStringHash(fileInfo.baseName()) + "." + name + "." + fileInfo.suffix());
         }
 
         return true;
@@ -1374,10 +1374,10 @@ QString Window::saveAsFileToDisk()
             QString truePath = wrapper->textEditor()->getTruePath();
             fileInfo.setFile(truePath);
             QString name = fileInfo.absolutePath().replace("/", "_");
-            QDir(m_autoBackupDir).remove(fileInfo.baseName() + "." + name + "." + fileInfo.suffix());
+            QDir(m_autoBackupDir).remove(Utils::getStringHash(fileInfo.baseName()) + "." + name + "." + fileInfo.suffix());
         }
 
-        /* 如果另存为的文件名+路径与当前tab项对应的文件名+路径是一致，则直接做保存操作即可 */
+        /* 如另存为的文件名+路径与当前tab项对应的文件名+路径一致，则直接做保存操作即可 */
         if (!wrapper->filePath().compare(newFilePath)) {
             if (saveFile()) {
                 return newFilePath;
@@ -2665,7 +2665,7 @@ void Window::backupFile()
         } else {
             if (wrapper->isModified()) {
                 QString name = fileInfo.absolutePath().replace("/", "_");
-                QString qstrFilePath = m_backupDir + "/" + Utils::getStringMD5Hash(fileInfo.baseName()) + "." + name + "." + fileInfo.suffix();
+                QString qstrFilePath = m_backupDir + "/" + Utils::getStringHash(fileInfo.baseName()) + "." + name + "." + fileInfo.suffix();
                 jsonObject.insert("temFilePath", qstrFilePath);
                 wrapper->saveTemFile(qstrFilePath);
             }

@@ -802,13 +802,13 @@ void Utils::killProcessByName(const char *pstrName)
     qDebug() << "Exit killProcessByName";
 }
 
-QString Utils::getStringMD5Hash(const QString &input)
+QString Utils::getStringHash(const QString &input)
 {
     QByteArray byteArray;
     byteArray.append(input);
-    QByteArray md5Path = QCryptographicHash::hash(byteArray, QCryptographicHash::Md5);
+    QByteArray hashPath = QCryptographicHash::hash(byteArray, QCryptographicHash::Sha256);
 
-    return md5Path.toHex();
+    return hashPath.toHex();
 }
 
 bool Utils::activeWindowFromDock(quintptr winId)
