@@ -319,7 +319,7 @@ Window::Window(DMainWindow *parent)
     m_jumpLineBar->raise();
 
     // Init findbar panel.
-    static DAnchors<FindBar> anchors_findbar(m_findBar);
+    DAnchors<FindBar> anchors_findbar(m_findBar);
     anchors_findbar.setAnchor(Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
     anchors_findbar.setAnchor(Qt::AnchorHorizontalCenter, m_centralWidget, Qt::AnchorHorizontalCenter);
     anchors_findbar.setBottomMargin(1);
