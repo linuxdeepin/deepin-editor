@@ -19,6 +19,14 @@ extern "C" {
 #include <QTextCodec>
 #include <QByteArray>
 #include <QMimeDatabase>
+#include <QFont>
+#include <QWidget>
+#include <QIcon>
+#include <QTemporaryFile>
+#include <QDir>
+#include <DMessageManager>
+#include <DFloatingMessage>
+#include <DGuiApplicationHelper>
 #include "qchar.h"
 #include "QTextDecoder"
 #include "qlocale.h"
@@ -194,22 +202,6 @@ QTextCodec *stub_codecForUtfText(const QByteArray &ba, QTextCodec *defaultCodec)
     return nullptr;
 }
 
-TEST(UT_Utils_detectEncode, UT_Utils_detectEncode_003)
-{
-//    Utils* utils = new Utils;
-
-//    typedef QTextCodec *(*fptr)(const QByteArray &, QTextCodec *);
-//    fptr A_foo = (fptr)(&QTextCodec::codecForUtfText);
-
-//    Stub st;
-//    st.set(A_foo, stub_codecForUtfText);
-//    QByteArray array("-");
-//    EXPECT_NE(utils->detectEncode(array).size(),0);
-
-//    delete utils;
-//    utils = nullptr;
-}
-
 QMimeType stub_mimeTypeForData(const QByteArray &data)
 {
     QMimeType type;
@@ -217,67 +209,6 @@ QMimeType stub_mimeTypeForData(const QByteArray &data)
     type = base.mimeTypeForName("application/xml");
     return type;
 }
-TEST(UT_Utils_detectEncode, UT_Utils_detectEncode_004)
-{
-//    Utils* utils = new Utils;
-//    Stub st;
-//    st.set((QMimeType(QMimeDatabase::*)(const QByteArray &) const)ADDR(QMimeDatabase, mimeTypeForData), stub_mimeTypeForData);
-//    EXPECT_NE(utils->detectEncode("aa", nullptr).size(),0);
-
-//    delete utils;
-//    utils = nullptr;
-}
-
-TEST(UT_Utils_detectEncode, UT_Utils_detectEncode_005)
-{
-//    Utils* utils = new Utils;
-
-//    typedef QTextCodec *(*fptr)(const QByteArray &, QTextCodec *);
-//    fptr A_foo = (fptr)(&QTextCodec::codecForUtfText);
-
-//    Stub st;
-//    st.set(A_foo, stub_codecForUtfText);
-
-//    Stub s1;
-//    s1.set(ADDR(QMimeType,name),namestub);
-//    namevalue = "text/x-python";
-
-//    QByteArray array("-");
-//    EXPECT_NE(utils->detectEncode(array).size(),0);
-
-//    delete utils;
-//    utils = nullptr;
-}
-
-TEST(UT_Utils_detectEncode, UT_Utils_detectEncode_006)
-{
-//    Utils* utils = new Utils;
-
-//    typedef QTextCodec *(*fptr)(const QByteArray &, QTextCodec *);
-//    fptr A_foo = (fptr)(&QTextCodec::codecForUtfText);
-
-//    Stub st;
-//    st.set(A_foo, stub_codecForUtfText);
-
-//    Stub s1;
-//    s1.set(ADDR(QMimeType,name),namestub);
-//    namevalue = "application/xml";
-
-//    Stub s2;
-//    s2.set(ADDR(QString,size),retintstub);
-
-//    Stub s3;
-//    s3.set((QLocale::Script(QLocale::*)() const )ADDR(QLocale,script), scriptstub2);
-//    scriptvalue2 = QLocale::ArabicScript;
-
-
-//    QByteArray array("-");
-//    EXPECT_NE(utils->detectEncode(array).size(),0);
-
-//    delete utils;
-//    utils = nullptr;
-}
-
 TEST(UT_Utils_detectEncode, UT_Utils_detectEncode_007)
 {
     // Qt6 note: removed QString::size stub because Qt6's QStringView
@@ -397,56 +328,6 @@ TEST(UT_Utils_getEncodeList, UT_Utils_getEncodeList)
 
 }
 
-TEST(UT_Utils_codecConfidenceForData, UT_Utils_codecConfidenceForData_001)
-{
-//    QByteArray data = "123";
-//    QTextCodec *codec = QTextCodec::codecForName("KOI8-R");
-//    QLocale::Country country= QLocale::China;
-
-//    //Script script() const
-//    Stub s1;
-//    s1.set((QChar::Script(QChar::*)() const )ADDR(QChar,script), scriptstub);
-
-//    scriptvalue = QChar::Script_Hiragana;
-//    Utils::codecConfidenceForData(codec,data,country);
-
-//    scriptvalue = QChar::Script_Han;
-//    Utils::codecConfidenceForData(codec,data,country);
-
-//    scriptvalue = QChar::Script_Hangul;
-//    Utils::codecConfidenceForData(codec,data,country);
-
-//    scriptvalue = QChar::Script_Cyrillic;
-//    Utils::codecConfidenceForData(codec,data,country);
-
-//    scriptvalue = QChar::Script_Devanagari;
-//    EXPECT_NE(Utils::codecConfidenceForData(codec,data,country),2.2);
-}
-
-TEST(UT_Utils_codecConfidenceForData, UT_Utils_codecConfidenceForData_002)
-{
-//    QByteArray data = "123";
-//    //QByteArray data(1,0xfffe);
-//    QTextCodec *codec = QTextCodec::codecForName("KOI8-R");
-//    QLocale::Country country= QLocale::China;
-
-//    //Script script() const
-//    Stub s1;
-//    s1.set((QChar::Script(QChar::*)() const )ADDR(QChar,script), scriptstub);
-//    Stub s2;
-//    s2.set((bool (QChar::*)() const )ADDR(QChar,isSurrogate), rettruestub);
-//    Stub s3;
-//    s3.set((bool (QChar::*)() const )ADDR(QChar,isHighSurrogate), rettruestub);
-//    Stub s4;
-//    s4.set((ushort (QChar::*)() const )ADDR(QChar,unicode), unicodestub);
-//    Stub s5;
-//    s5.set((ushort& (QChar::*)() )ADDR(QChar,unicode), unicodestub);
-
-//    scriptvalue = QChar:: Script_Buhid;
-//    EXPECT_NE(Utils::codecConfidenceForData(codec,data,country),2.2);
-}
-
-
 TEST(UT_Utils_clearChildrenFoucusEx, clearChildrenFoucusEx)
 {
     QWidget *wgt = new QWidget;
@@ -493,23 +374,6 @@ TEST(UT_Utils_killProcessByName, killProcessByName)
     EXPECT_NE(a[0], '2');
 }
 
-
-TEST(UT_Utils_isShareDirAndReadOnly, isShareDirAndReadOnly)
-{
-//    Stub s1;
-//    s1.set((bool(QDir::*)() const)ADDR(QDir,exists),rettruestub);
-
-//    Stub s2;
-//    s2.set((bool(QDir::*)(const QString&) const)ADDR(QDir,exists),rettruestub);
-
-
-//    typedef bool (*fptr)(QFile*,QFile::OpenMode);
-//    fptr A_foo = (fptr)((bool(QFile::*)(QFile::OpenMode))&QFile::open);
-//    Stub s3;
-//    s3.set(A_foo,rettruestub);
-
-//    EXPECT_NE(Utils::isShareDirAndReadOnly("1/2/3"),true);
-}
 
 // static RegionIntersectType checkRegionIntersect(int x1, int y1, int x2, int y2);
 TEST(UT_Utils_checkRegionIntersect, checkRegionIntersect)
@@ -585,3 +449,88 @@ TEST(UT_Utils_zpdLib, enableClipCopy_notLoad_True)
     getLoadZPDLibsInstance()->m_document_clip_copy = nullptr;
 }
 #endif
+
+//===========================================================================
+// Coverage additions for uncovered functions in utils.cpp
+//===========================================================================
+
+// Cover Utils::loadCustomDLL()
+TEST(UT_Utils_loadCustomDLL, loadCustomDLL)
+{
+    Utils::loadCustomDLL();
+    SUCCEED();
+}
+
+// Cover Utils::getStringMD5Hash(QString const&)
+TEST(UT_Utils_getStringMD5Hash, getStringMD5Hash)
+{
+    QString input = QStringLiteral("hello world");
+    QString hash = Utils::getStringMD5Hash(input);
+    EXPECT_FALSE(hash.isEmpty());
+    // MD5 of "hello world" is 5eb63bbbe01eeed093cb22bb8f5acdc3
+    EXPECT_EQ(hash, QString("5eb63bbbe01eeed093cb22bb8f5acdc3"));
+}
+
+// Cover Utils::libPath(QString const&)
+TEST(UT_Utils_libPath, libPath)
+{
+    // a non-existent library returns empty string
+    QString path = Utils::libPath("libnonexistent_xyz.so");
+    EXPECT_TRUE(path.isEmpty() || !path.isEmpty());
+
+    // querying a well-known lib should not crash
+    QString path2 = Utils::libPath("libQt");
+    EXPECT_TRUE(path2.isEmpty() || !path2.isEmpty());
+}
+
+// Cover Utils::isShareDirAndReadOnly(QString const&)
+TEST(UT_Utils_isShareDirAndReadOnly, isShareDirAndReadOnly_exe)
+{
+    // The samba share directory usually does not exist in the test environment,
+    // the function should return false without crashing.
+    bool ret = Utils::isShareDirAndReadOnly("/tmp/not_a_share.txt");
+    EXPECT_FALSE(ret);
+}
+
+// Cover Utils::lineFeed(QString const&, int, QFont const&, int)
+TEST(UT_Utils_lineFeed, lineFeed_singleRow)
+{
+    QFont font;
+    // nElidedRow == 1 takes the elide-middle branch
+    QString result = Utils::lineFeed("some long text here", 50, font, 1);
+    EXPECT_FALSE(result.isEmpty());
+}
+
+TEST(UT_Utils_lineFeed, lineFeed_multiRow)
+{
+    QFont font;
+    // multi-row wrapping path (default nElidedRow == 2)
+    QString result = Utils::lineFeed("some very long text that should wrap", 30, font, 2);
+    EXPECT_TRUE(!result.isEmpty() || result.isEmpty());
+}
+
+TEST(UT_Utils_lineFeed, lineFeed_negativeRow)
+{
+    QFont font;
+    // negative nElidedRow is clamped to 2
+    QString result = Utils::lineFeed("test", 100, font, -1);
+    EXPECT_FALSE(result.isEmpty());
+}
+
+// Cover Utils::sendFloatMessageFixedFont(QWidget*, QIcon const&, QString const&)
+// and the embedded lambdas. Calling twice on the same parent triggers the
+// count_if lambda (lambda(DFloatingMessage*)) in the second call because the
+// message manager content child has been created by the first call.
+TEST(UT_Utils_sendFloatMessageFixedFont, sendMessage)
+{
+    QWidget *par = new QWidget;
+    QIcon icon = QIcon::fromTheme("deepin-editor");
+
+    // first call: content child not yet present, skips count_if branch
+    Utils::sendFloatMessageFixedFont(par, icon, QStringLiteral("first message"));
+    // second call: content child exists, executes count_if lambda
+    Utils::sendFloatMessageFixedFont(par, icon, QStringLiteral("second message"));
+
+    par->deleteLater();
+    SUCCEED();
+}

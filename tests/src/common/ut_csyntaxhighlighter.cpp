@@ -61,11 +61,38 @@ TEST_F(test_CSyntaxHighlighter, highlightBlock)
     EXPECT_EQ(pCSyntaxHighlighter->m_bHighlight,false);
     EXPECT_NE(m_pTextEdit,nullptr);
     EXPECT_NE(pCSyntaxHighlighter,nullptr);
-
     pCSyntaxHighlighter->deleteLater();
     m_pTextEdit->deleteLater();
 
+
+
     
+}
+
+// Cover CSyntaxHighlighter::setInvalidCharHighlight(bool)
+TEST_F(test_CSyntaxHighlighter, setInvalidCharHighlight_enable)
+{
+    TextEdit *m_pTextEdit = new TextEdit();
+    CSyntaxHighlighter *pCSyntaxHighlighter = new CSyntaxHighlighter(m_pTextEdit->document());
+    pCSyntaxHighlighter->setInvalidCharHighlight(true);
+
+    EXPECT_EQ(pCSyntaxHighlighter->m_bInvalidCharHighlight, true);
+    EXPECT_EQ(pCSyntaxHighlighter->m_bHighlight, true);
+
+    pCSyntaxHighlighter->deleteLater();
+    m_pTextEdit->deleteLater();
+}
+
+TEST_F(test_CSyntaxHighlighter, setInvalidCharHighlight_disable)
+{
+    TextEdit *m_pTextEdit = new TextEdit();
+    CSyntaxHighlighter *pCSyntaxHighlighter = new CSyntaxHighlighter(m_pTextEdit->document());
+    pCSyntaxHighlighter->setInvalidCharHighlight(false);
+
+    EXPECT_EQ(pCSyntaxHighlighter->m_bInvalidCharHighlight, false);
+
+    pCSyntaxHighlighter->deleteLater();
+    m_pTextEdit->deleteLater();
 }
 
 TEST_F(test_CSyntaxHighlighter, highlightBlock1)

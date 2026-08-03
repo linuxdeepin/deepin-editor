@@ -10,6 +10,11 @@
 #include <DSettingsOption>
 #include <DSettings>
 #include <QStandardPaths>
+#include <QComboBox>
+#include <QFontDatabase>
+#include <QDir>
+#include <QTemporaryFile>
+#include <QTimer>
 // #include <DtkCores>
 #include "src/stub.h"
 
@@ -442,3 +447,150 @@ TEST(UT_Setting_KeySequenceEdit, UT_KeySequenceEdit_option)
 //    Settings set;
 //    set.createDialog("ba", "bb", true);
 //}
+
+//===========================================================================
+// Coverage additions for uncovered functions in settings.cpp
+//===========================================================================
+
+// Cover CustemBackend::CustemBackend(QString const&, QObject*),
+// doSetOption, doSync, keys, getOption and ~CustemBackend (both variants).
+TEST(UT_CustemBackend, AllMethods)
+{
+    QString tmpPath = QDir::tempPath() + "/ut_custem_backend.conf";
+    // remove leftover config from previous runs
+    QFile::remove(tmpPath);
+
+    CustemBackend *backend = new CustemBackend(tmpPath, nullptr);
+    ASSERT_NE(backend, nullptr);
+    ASSERT_NE(backend->m_settings, nullptr);
+
+    // doSetOption writes a value
+    backend->doSetOption("test.key", QVariant("test_value"));
+
+    // doSync flushes to disk
+    backend->doSync();
+
+    // keys should now contain the key we just wrote
+    QStringList keyList = backend->keys();
+    EXPECT_TRUE(keyList.contains("test.key"));
+
+    // getOption reads it back
+    QVariant val = backend->getOption("test.key");
+    EXPECT_EQ(val.toString(), QString("test_value"));
+
+    // destructor deletes m_settings (covers both deleting & complete dtor)
+    delete backend;
+}
+
+// Cover Settings::setSavePathId(int) and round-trip with getSavePathId().
+TEST(UT_Setting_setSavePathId, setSavePathId)
+{
+    Settings *s = Settings::instance();
+    s->setSavePathId(2);
+    EXPECT_EQ(s->getSavePathId(), 2);
+
+    s->setSavePathId(0);
+    EXPECT_EQ(s->getSavePathId(), 0);
+}
+
+// Cover Settings::~Settings() with a clean new/delete pair.
+TEST(UT_Setting_Destructor, Destructor)
+{
+    Settings *s = new Settings();
+    ASSERT_NE(s, nullptr);
+    delete s;
+    SUCCEED();
+}
+
+// Cover the lambda {lambda(QVariant)#1} inside createSavingPathWgt by
+// emitting the option's valueChanged signal after widget creation.
+TEST(UT_Setting_createSavingPathWgt, LambdaValueChange)
+{
+    Settings *s = Settings::instance();
+    auto option = s->settings->option("advance.open_save_setting.savingpathwgt");
+    ASSERT_NE(option, nullptr);
+
+    QWidget *w = Settings::createSavingPathWgt(option);
+    // trigger the connected lambda {lambda(QVariant)#1}
+    option->setValue(1);
+
+    if (w)
+        w->deleteLater();
+}
+
+// Cover the lambdas inside createFontComBoBoxHandle:
+//   {lambda(QVariant)#1}  -> option valueChanged
+//   {lambda(QString const&)#2} -> comboBox currentTextChanged
+TEST(UT_Setting_createFontComBoBoxHandle, Lambdas)
+{
+    Settings *s = Settings::instance();
+    DTK_CORE_NAMESPACE::DSettingsOption *option = new DTK_CORE_NAMESPACE::DSettingsOption();
+    option->setValue(QFontDatabase::systemFont(QFontDatabase::FixedFont).family());
+
+    auto widgetPair = s->createFontComBoBoxHandle(option);
+
+    // trigger lambda #1 (option valueChanged handler)
+    option->setValue(QFontDatabase::systemFont(QFontDatabase::GeneralFont).family());
+
+    // trigger lambda #2 (comboBox currentTextChanged handler)
+    QComboBox *combo = nullptr;
+    if (widgetPair.second) {
+        combo = qobject_cast<QComboBox *>(widgetPair.second);
+        if (!combo)
+            combo = widgetPair.second->findChild<QComboBox *>();
+    }
+    if (combo) {
+        combo->setCurrentText(QStringLiteral("Sans Serif"));
+    }
+
+    if (widgetPair.second)
+        widgetPair.second->deleteLater();
+    option->deleteLater();
+}
+
+// Cover the lambda {lambda(QKeySequence const&)#1} inside
+// createKeySequenceEditHandle by emitting editingFinished with a sequence.
+// Since DDialog::exec() is virtual, we subclass it and override exec() to
+// return 0 (cancel) immediately WITHOUT running a nested event loop. A
+// real exec() event loop would process accumulated DeferredDelete events
+// from previous tests (e.g. destroying the Settings singleton mid-test),
+// causing a SEGV inside QObject::~QObject().
+class NoLoopDDialog : public DDialog
+{
+public:
+    using DDialog::DDialog;
+    int exec() override { return 0; }
+};
+
+static DDialog *stub_createDialog(Settings *, const QString &, const QString &, const bool &)
+{
+    return new NoLoopDDialog();
+}
+
+TEST(UT_Setting_createKeySequenceEditHandle, LambdaEditingFinished)
+{
+    Settings *s = Settings::instance();
+
+    auto option = s->settings->option("shortcuts.window.newwindow");
+    ASSERT_NE(option, nullptr);
+
+    auto widgetPair = Settings::createKeySequenceEditHandle(option);
+
+    // Stub createDialog (non-virtual member) so any conflict dialog auto-closes.
+    Stub stub;
+    stub.set(ADDR(Settings, createDialog), stub_createDialog);
+
+    // KeySequenceEdit lacks a Q_OBJECT macro so qobject_cast cannot be used;
+    // the second widget of the pair is the edit widget itself.
+    KeySequenceEdit *edit = nullptr;
+    if (widgetPair.second) {
+        edit = static_cast<KeySequenceEdit *>(widgetPair.second);
+    }
+    if (edit) {
+        // emit editingFinished -> triggers the connected lambda
+        emit edit->editingFinished(QKeySequence(QStringLiteral("Ctrl+T")));
+    }
+
+    if (widgetPair.second)
+        widgetPair.second->deleteLater();
+}
