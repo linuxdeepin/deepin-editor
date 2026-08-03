@@ -291,53 +291,8 @@ int detect_stub_out_of_memory()
     return CHARDET_OUT_OF_MEMORY;
 }
 
-TEST(UT_ChartDet_DetectingTextCoding, UT_ChartDet_DetectingTextCoding_002)
-{
-//    DetectCode *pDetectCode = new DetectCode;
-//    QByteArray newContent("我是中文");
-//    QString detectedResult;
-//    float chardetconfidence = 0;
-
-//    Stub stub;
-//    stub.set(detect, detect_stub_out_of_memory);
-//    int iRet = pDetectCode->ChartDet_DetectingTextCoding(newContent, detectedResult, chardetconfidence);
-
-//    ASSERT_TRUE(iRet == CHARDET_OUT_OF_MEMORY);
-//    delete pDetectCode;
-//    pDetectCode = nullptr;
-}
-
-
 int detect_stub_null_object()
 {
     return CHARDET_NULL_OBJECT;
 }
 
-TEST(UT_ChartDet_DetectingTextCoding, UT_ChartDet_DetectingTextCoding_003)
-{
-//    DetectCode *pDetectCode = new DetectCode;
-//    QByteArray newContent("我是中文");
-//    QString detectedResult;
-//    float chardetconfidence = 0;
-
-//    Stub stub;
-//    stub.set(detect, detect_stub_null_object);
-//    int iRet = pDetectCode->ChartDet_DetectingTextCoding(newContent, detectedResult, chardetconfidence);
-
-//    ASSERT_TRUE(iRet == CHARDET_NULL_OBJECT);
-//    delete pDetectCode;
-//    pDetectCode = nullptr;
-}
-
-TEST(UT_ChartDet_DetectingTextCoding, UT_ChartDet_DetectingTextCoding_004)
-{
-//    DetectCode *pDetectCode = new DetectCode;
-//    QByteArray newContent("我是中文");
-//    QString detectedResult;
-//    float chardetconfidence = 0;
-//    int iRet = pDetectCode->ChartDet_DetectingTextCoding(newContent, detectedResult, chardetconfidence);
-
-//    ASSERT_TRUE(iRet == CHARDET_SUCCESS);
-//    delete pDetectCode;
-//    pDetectCode = nullptr;
-}

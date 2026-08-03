@@ -89,36 +89,6 @@ TEST_F(test_insertblockbytextcommond, undo)
 }
 
 
-TEST_F(test_insertblockbytextcommond, treat)
-{
-//    Window* window = new Window;
-//    EditWrapper* wrapper = new EditWrapper(window);
-//    QString text = "tt";
-//    for(int i=0;i<1024*1024;i++)
-//        text += "tt";
-
-//    QTextCursor cursor;
-//    cursor.insertText(text);
-//    cursor.movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
-//    TextEdit* edit = new TextEdit(window);
-//    edit->m_wrapper = wrapper;
-//    edit->setTextCursor(cursor);
-//    InsertBlockByTextCommand* com = new InsertBlockByTextCommand(text,edit,wrapper);
-
-//    Stub s1;
-//    s1.set(ADDR(Window,setPrintEnabled),retintstub);
-
-//    com->treat();
-
-//    EXPECT_NE(edit,nullptr);
-//    delete com;
-//    com=nullptr;
-//    edit->deleteLater();
-//    wrapper->deleteLater();
-//    window->deleteLater();
-}
-
-
 TEST_F(test_insertblockbytextcommond, insertByBlock)
 {
     QString text = "tt";

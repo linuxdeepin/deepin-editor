@@ -78,3 +78,17 @@ TEST_F(test_leftareaoftextedit, codeFlodAreaPaintEvent)
     leftArea->deleteLater();
     textEdit->deleteLater();
 }
+
+//TextEdit* getEdit();
+TEST_F(test_leftareaoftextedit, getEdit)
+{
+    TextEdit *textEdit = new TextEdit;
+    LeftAreaTextEdit *leftArea = new LeftAreaTextEdit(textEdit);
+
+    TextEdit *got = leftArea->getEdit();
+    ASSERT_TRUE(got != nullptr);
+    EXPECT_EQ(got, textEdit);
+
+    leftArea->deleteLater();
+    textEdit->deleteLater();
+}

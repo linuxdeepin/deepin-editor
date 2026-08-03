@@ -102,3 +102,61 @@ TEST(UT_FlashTween___runX, UT_FlashTween___runX)
     a->m_timerX->deleteLater();
     a->m_timerY->deleteLater();
 }
+
+// ---------------------------------------------------------------------------
+// Appended tests that actually exercise the previously uncovered functions
+// ---------------------------------------------------------------------------
+
+// FlashTween::sinusoidalEaseOut(double,double,double,double) -- static private
+TEST(UT_FlashTween_sinusoidalEaseOut, sinusoidalEaseOut)
+{
+    qreal result = FlashTween::sinusoidalEaseOut(0.0, 0.0, 100.0, 100.0);
+    EXPECT_NEAR(result, 0.0, 0.001);
+
+    qreal mid = FlashTween::sinusoidalEaseOut(50.0, 0.0, 100.0, 100.0);
+    EXPECT_GT(mid, 0.0);
+
+    qreal end = FlashTween::sinusoidalEaseOut(100.0, 0.0, 100.0, 100.0);
+    EXPECT_NEAR(end, 100.0, 0.001);
+}
+
+// FlashTween::__runX() -- private slot, invoked directly via -fno-access-control
+TEST(UT_FlashTween___runX_Invoke, __runX)
+{
+    FlashTween *a = new FlashTween();
+    FunSlideInertial cb = [](qreal) {};
+    // startX initializes m_fSlideGestureX / m_timerX / tween parameters
+    a->startX(0.0, 0.0, 100.0, 100.0, cb);
+    ASSERT_TRUE(a->activeX());
+
+    a->__runX();   // process one frame
+    // after one frame the current time advances and last value is updated
+    EXPECT_GE(a->m_lastValueX, 0.0);
+
+    delete a;
+}
+
+// FlashTween::__runY() -- private slot
+TEST(UT_FlashTween___runY_Invoke, __runY)
+{
+    FlashTween *a = new FlashTween();
+    FunSlideInertial cb = [](qreal) {};
+    a->startY(0.0, 0.0, 100.0, 100.0, cb);
+    ASSERT_TRUE(a->activeY());
+
+    a->__runY();   // process one frame
+    EXPECT_GE(a->m_lastValueY, 0.0);
+
+    delete a;
+}
+
+// FlashTween::~FlashTween()
+TEST(UT_FlashTween_Destructor, destructor)
+{
+    FlashTween *a = new FlashTween();
+    ASSERT_TRUE(a->m_timerX != nullptr);
+    ASSERT_TRUE(a->m_timerY != nullptr);
+
+    delete a;   // destructor deletes both timers
+    a = nullptr;
+}
