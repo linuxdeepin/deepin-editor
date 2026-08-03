@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
 
 {
     qputenv("QT_QPA_PLATFORM","offscreen");
+    qputenv("QT_LOGGING_RULES", "*.debug=false;*.info=false");
     DApplication app(argc, argv);
 
     testing::InitGoogleTest(&argc, argv);

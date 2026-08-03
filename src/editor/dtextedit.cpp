@@ -5607,6 +5607,11 @@ void TextEdit::setTextFinished()
     m_nLines = blockCount();
     m_lastLeftAreaBlockCount = m_nLines;
 
+    if (!m_settings) {
+        qDebug() << "Set text finished, m_settings is null, skip";
+        return;
+    }
+
     if (!m_listBookmark.isEmpty()) {
         qDebug() << "Set text finished, m_listBookmark is not empty";
         return;

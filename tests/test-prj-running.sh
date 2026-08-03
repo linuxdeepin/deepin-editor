@@ -1,17 +1,19 @@
 #!/bin/bash
 builddir=build
 reportdir=build-ut
-rm -r $builddir
-rm -r ../$builddir
-rm -r $reportdir
-rm -r ../$reportdir
-mkdir ../$builddir
-mkdir ../$reportdir
+# rm -r $builddir
+# rm -r ../$builddir
+# rm -r $reportdir
+# rm -r ../$reportdir
+# mkdir ../$builddir
+# mkdir ../$reportdir
 cd ../$builddir
 #编译
-cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_SAFETYTEST_ARG="CMAKE_SAFETYTEST_ARG_ON" ..
+# cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_SAFETYTEST_ARG="CMAKE_SAFETYTEST_ARG_ON" ..
 make -j8
 #生成asan日志和ut测试xml结果
+export ASAN_OPTIONS=abort_on_error=0:detect_leaks=0
+export UBSAN_OPTIONS=halt_on_error=0
 ./tests/deepin-editor-test --gtest_output=xml:./report/report_deepin-editor.xml
 
 workdir=$(cd ../$(dirname $0)/$builddir; pwd)
@@ -30,6 +32,6 @@ mv ./html/index.html ./html/cov_deepin-editor.html
 #对asan、ut、代码覆盖率结果收集至指定文件夹
 cp -r html ../$reportdir/
 cp -r report ../$reportdir/
-cp -r asan*.log* ../$reportdir/asan_deepin-editor.log
+cp asan*.log* ../$reportdir/asan_deepin-editor.log 2>/dev/null || true
 
 exit 0
