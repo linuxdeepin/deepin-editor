@@ -200,3 +200,39 @@ TEST_F(test_colorselectwidget, checkEventFilter)
     delete event;event=nullptr;
 
 }
+
+// 测试 initWidget 内 lambda #1: 点击默认颜色按钮 (DPushButton::clicked)
+TEST_F(test_colorselectwidget, checkButtonClickedLambda)
+{
+    ColorSelectWdg *colorSelctWidget = new ColorSelectWdg("this is a test");
+    ASSERT_NE(colorSelctWidget->m_pButton, nullptr);
+
+    QSignalSpy spy(colorSelctWidget, &ColorSelectWdg::sigColorSelected);
+    // 触发按钮 clicked，调用 connect 注册的 lambda
+    colorSelctWidget->m_pButton->click();
+    EXPECT_EQ(spy.count(), 1);
+
+    colorSelctWidget->deleteLater();
+}
+
+// 测试 initWidget 内 lambda #2: 点击单个颜色标签 (ColorLabel::sigColorClicked)
+TEST_F(test_colorselectwidget, checkColorLabelClickedLambda)
+{
+    ColorSelectWdg *colorSelctWidget = new ColorSelectWdg("this is a test");
+    ASSERT_GE(colorSelctWidget->m_colorLabels.size(), 2);
+
+    QSignalSpy spy(colorSelctWidget, &ColorSelectWdg::sigColorSelected);
+
+    // 点击第二个颜色标签(非默认选中)，触发其 mousePressEvent 发出 sigColorClicked，
+    // 进而调用 ColorSelectWdg 中 connect 注册的 lambda
+    ColorLabel *label = colorSelctWidget->m_colorLabels.at(1);
+    QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonPress, QPointF(), QPointF(),
+                                         Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    label->mousePressEvent(event);
+    // 默认选中的第一个标签应被取消选中
+    EXPECT_FALSE(colorSelctWidget->m_colorLabels.at(0)->isSelected());
+    EXPECT_EQ(spy.count(), 1);
+
+    delete event;
+    colorSelctWidget->deleteLater();
+}

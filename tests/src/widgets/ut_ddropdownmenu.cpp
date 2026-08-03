@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -9,6 +9,9 @@
 #include <QFlags>
 #include <QSignalSpy>
 #include <QColor>
+#include <QActionGroup>
+#include <DGuiApplicationHelper>
+DGUI_USE_NAMESPACE
 
 // 测试函数 DDropdownMenu::setFontEx
 TEST_F(test_ddropdownmenu, setFontEx)
@@ -204,68 +207,6 @@ TEST_F(test_ddropdownmenu, OnFontChangedSlot)
 }
 
 // 测试函数 DDropdownMenu::eventFilter
-TEST_F(test_ddropdownmenu, eventFilter)
-{
-    //    do {
-    //        // 场景1: enter键的keypress事件
-    //        DDropdownMenu *dropMenu = new DDropdownMenu();
-    //        QSignalBlocker signalBlock(dropMenu);
-    //        QKeyEvent *event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
-    //        bool result = dropMenu->eventFilter(dropMenu->m_pToolButton, event);
-    //        EXPECT_TRUE(result);
-    //        delete event;
-    //        delete dropMenu;
-    //    } while (false);
-
-    //    do {
-    //        // 场景2: Key_Left键的keypress事件
-    //        DDropdownMenu *dropMenu = new DDropdownMenu();
-    //        QSignalBlocker signalBlock(dropMenu);
-    //        QKeyEvent *event = new QKeyEvent(QEvent::KeyPress, Qt::Key_Left, Qt::NoModifier);
-    //        bool result = dropMenu->eventFilter(dropMenu->m_pToolButton, event);
-    //        EXPECT_FALSE(result);
-    //        delete event;
-    //        delete dropMenu;
-    //    } while (false);
-
-    //    do {
-    //        // 场景3: MouseButtonPress事件
-    //        DDropdownMenu *dropMenu = new DDropdownMenu();
-    //        QSignalBlocker signalBlock(dropMenu);
-    //        QSignalSpy spy(dropMenu, &DDropdownMenu::requestContextMenu);
-    //        QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonPress, QPointF(),
-    //                                             Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-    //        bool result = dropMenu->eventFilter(dropMenu->m_pToolButton, event);
-    //        EXPECT_FALSE(result);
-    //        delete event;
-    //        delete dropMenu;
-    //    } while (false);
-
-    //    do {
-    //        // 场景4: LeftButton的MouseButtonRelease事件
-    //        DDropdownMenu *dropMenu = new DDropdownMenu();
-    //        QSignalBlocker signalBlock(dropMenu);
-    //        QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonRelease, QPointF(),
-    //                                             Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-    //        bool result = dropMenu->eventFilter(dropMenu->m_pToolButton, event);
-    //        EXPECT_TRUE(result);
-    //        delete event;
-    //        delete dropMenu;
-    //    } while (false);
-
-    //    do {
-    //        // 场景5: 非LeftButton的MouseButtonRelease事件
-    //        DDropdownMenu *dropMenu = new DDropdownMenu();
-    //        QSignalBlocker signalBlock(dropMenu);
-    //        QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonRelease, QPointF(),
-    //                                             Qt::RightButton, Qt::RightButton, Qt::NoModifier);
-    //        bool result = dropMenu->eventFilter(dropMenu->m_pToolButton, event);
-    //        EXPECT_TRUE(result);
-    //        delete event;
-    //        delete dropMenu;
-    //    } while (false);
-}
-
 // 测试函数 DDropdownMenu::setSvgColor
 TEST_F(test_ddropdownmenu, setSvgColor)
 {
@@ -293,4 +234,103 @@ TEST_F(test_ddropdownmenu, SetSVGBackColor)
     EXPECT_NE(dropMenu,nullptr);
     dropMenu->deleteLater();
 
+}
+
+// Stub: 阻塞 exec() 弹窗，直接返回空
+static QAction *stub_QMenu_exec_noarg()
+{
+    return nullptr;
+}
+
+// 测试函数 DDropdownMenu::slotRequestMenu
+TEST_F(test_ddropdownmenu, slotRequestMenu)
+{
+    DDropdownMenu *dropMenu = new DDropdownMenu();
+
+    Stub stub;
+    stub.set((QAction * (QMenu::*)()) ADDR(QMenu, exec), stub_QMenu_exec_noarg);
+
+    // 场景1: request 为 true
+    dropMenu->slotRequestMenu(true);
+    // 场景2: request 为 false
+    dropMenu->slotRequestMenu(false);
+
+    EXPECT_NE(dropMenu, nullptr);
+    dropMenu->deleteLater();
+}
+
+// 测试函数 DDropdownMenu::getCurrentText
+TEST_F(test_ddropdownmenu, getCurrentText)
+{
+    DDropdownMenu *dropMenu = new DDropdownMenu();
+    dropMenu->setText("GB18030");
+    EXPECT_EQ(dropMenu->getCurrentText().toStdString(), "GB18030");
+
+    dropMenu->deleteLater();
+}
+
+// 测试 createEncodeMenu 内 lambda #1: DMenu::triggered
+TEST_F(test_ddropdownmenu, createEncodeMenuLambda)
+{
+    DDropdownMenu *encMenu = DDropdownMenu::createEncodeMenu();
+    ASSERT_NE(encMenu, nullptr);
+
+    QSignalSpy spy(encMenu, &DDropdownMenu::currentActionChanged);
+    QAction *action = new QAction("GBK");
+    // 直接触发 DMenu 的 triggered 信号，调用 createEncodeMenu 中注册的 lambda
+    emit encMenu->m_menu->triggered(action);
+    // m_text("UTF-8") != action->text()，应发出 currentActionChanged
+    EXPECT_EQ(spy.count(), 1);
+
+    delete action;
+    encMenu->deleteLater();
+}
+
+// 测试 createHighLightMenu 内 lambda #1: noHlAction::triggered(bool)
+TEST_F(test_ddropdownmenu, createHighLightMenuNoneLambda)
+{
+    DDropdownMenu *hlMenu = DDropdownMenu::createHighLightMenu();
+    ASSERT_NE(hlMenu, nullptr);
+    ASSERT_FALSE(hlMenu->m_menu->actions().isEmpty());
+
+    // noHlAction("None") 是 m_pMenu 的第一个 action
+    QAction *noneAction = hlMenu->m_menu->actions().first();
+    QSignalSpy spy(hlMenu, &DDropdownMenu::currentActionChanged);
+    // 直接触发 triggered(true)，调用 createHighLightMenu 中 noHlAction 注册的 lambda
+    emit noneAction->triggered(true);
+    EXPECT_EQ(spy.count(), 1);
+
+    hlMenu->deleteLater();
+}
+
+// 测试 createHighLightMenu 内 lambda #2: QActionGroup::triggered(QAction*)
+TEST_F(test_ddropdownmenu, createHighLightMenuActionGroupLambda)
+{
+    DDropdownMenu *hlMenu = DDropdownMenu::createHighLightMenu();
+    ASSERT_NE(hlMenu, nullptr);
+    ASSERT_NE(hlMenu->m_actionGroup, nullptr);
+
+    QSignalSpy spy(hlMenu, &DDropdownMenu::currentActionChanged);
+    QAction *action = new QAction("");
+    // 直接触发 QActionGroup 的 triggered 信号，调用 createHighLightMenu 中 actionGroup 注册的 lambda
+    emit hlMenu->m_actionGroup->triggered(action);
+    // defName 为空，def 无效，走 else 分支设置文本为 None
+    EXPECT_EQ(hlMenu->getCurrentText().toStdString(), "None");
+
+    delete action;
+    hlMenu->deleteLater();
+}
+
+// 测试构造函数 lambda #1: DGuiApplicationHelper::sizeModeChanged
+TEST_F(test_ddropdownmenu, constructorSizeModeLambda)
+{
+    DDropdownMenu *dropMenu = new DDropdownMenu();
+    ASSERT_NE(dropMenu, nullptr);
+
+    // 直接触发 sizeModeChanged 信号，调用构造函数中注册的 lambda
+    DGuiApplicationHelper *helper = DGuiApplicationHelper::instance();
+    emit helper->sizeModeChanged(DGuiApplicationHelper::CompactMode);
+
+    EXPECT_NE(dropMenu, nullptr);
+    dropMenu->deleteLater();
 }

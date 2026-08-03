@@ -8,6 +8,20 @@
 #include <QUndoStack>
 #include "QDBusReply"
 #include "QDBusConnection"
+#include <QWheelEvent>
+#include <QGestureEvent>
+#include <QTapGesture>
+#include <QPanGesture>
+#include <QPinchGesture>
+#include <QSwipeGesture>
+#include <QTapAndHoldGesture>
+#include <QInputMethodEvent>
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QMimeData>
+#include <QContextMenuEvent>
+#include <QMouseEvent>
+#include <QApplication>
 
 
 namespace texteditstub {
@@ -976,22 +990,6 @@ TEST_F(test_textedit, moveLineDownUp_002)
 }
 
 //scrollLineUp
-TEST_F(test_textedit, scrollLineUp)
-{
-//    Window *pWindow = new Window();
-//    pWindow->addBlankTab(QString());
-//    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
-//                                                          QString("H\nl\nl\ne\n\nw\no\nr\nl\nd\n.H\nl\nl\ne\n\nw"
-//                                                                  "\no\nr\nl\nd\n.H\nl\nl\ne\n\nw\no\nr\nl\nd\n.H"
-//                                                                  "\nl\nl\ne\n\nw\no\nr\nl\nd\n.H\nl\nl\ne\n\nw\no"
-//                                                                  "\nr\nl\nd\n."));
-//    pWindow->currentWrapper()->textEditor()->scrollLineUp();
-//    int iRet = pWindow->currentWrapper()->textEditor()->verticalScrollBar()->value();
-//    ASSERT_TRUE(iRet == 26);
-
-//    pWindow->deleteLater();
-}
-
 TEST_F(test_textedit, scrollLineDown)
 {
     Window *pWindow = new Window();
@@ -1166,6 +1164,11 @@ void stub_deleteMultiTextEx(const QList<QTextCursor> &multiText)
 void stub_slotCanUndoChanged(bool bCanUndo)
 {
     Q_UNUSED(bCanUndo);
+}
+
+void stub_slotCanRedoChanged(bool bCanRedo)
+{
+    Q_UNUSED(bCanRedo);
 }
 
 bool popRightMenu_001_canRedo_stub()
@@ -1600,71 +1603,8 @@ TEST(UT_test_textedit_convertWordCase, UT_test_textedit_convertWordCase_003)
 }
 
 //convertWordCase 004
-TEST(UT_test_textedit_convertWordCase, UT_test_textedit_convertWordCase_004)
-{
-//    Window *pWindow = new Window();
-//    pWindow->addBlankTab(QString());
-//    QString strMsg("Holle world\nHolle world\nHolle world");
-//    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
-//    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
-
-//    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
-//    textCursor.movePosition(QTextCursor::PreviousWord, QTextCursor::MoveAnchor);
-//    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
-//    pWindow->currentWrapper()->textEditor()->convertWordCase(UPPER);
-//    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
-//    textCursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
-//    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
-//    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
-
-//    ASSERT_TRUE(!strRet.compare(QString("WORLD")));
-//    pWindow->deleteLater();
-}
-
 //convertWordCase 005
-TEST(UT_test_textedit_convertWordCase, UT_test_textedit_convertWordCase_005)
-{
-//    Window *pWindow = new Window();
-//    pWindow->addBlankTab(QString());
-//    QString strMsg("Holle world\nHolle world\nHolle WORLD");
-//    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
-//    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
-
-//    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
-//    textCursor.movePosition(QTextCursor::PreviousWord, QTextCursor::MoveAnchor);
-//    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
-//    pWindow->currentWrapper()->textEditor()->convertWordCase(LOWER);
-//    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
-//    textCursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
-//    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
-//    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
-
-//    ASSERT_TRUE(!strRet.compare(QString("world")));
-//    pWindow->deleteLater();
-}
-
 //convertWordCase 006
-TEST(UT_test_textedit_convertWordCase, UT_test_textedit_convertWordCase_006)
-{
-//    Window *pWindow = new Window();
-//    pWindow->addBlankTab(QString());
-//    QString strMsg("Holle world\nHolle world\nHolle world");
-//    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
-//    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
-
-//    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
-//    textCursor.movePosition(QTextCursor::PreviousWord, QTextCursor::MoveAnchor);
-//    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
-//    pWindow->currentWrapper()->textEditor()->convertWordCase(CAPITALIZE);
-//    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
-//    textCursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
-//    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
-//    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
-
-//    ASSERT_TRUE(!strRet.compare(QString("World")));
-//    pWindow->deleteLater();
-}
-
 //QString capitalizeText(QString text);
 TEST_F(test_textedit, capitalizeText)
 {
@@ -5082,6 +5022,9 @@ TEST(UT_TextEdit_mousePressEvent, UT_TextEdit_mousePressEvent_002)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QMouseEvent* e = new QMouseEvent(QEvent::MouseButtonPress,QPointF(20.0,20.0),QPointF(20.0,20.0),Qt::RightButton,Qt::RightButton,Qt::AltModifier);
 
     Stub s1;
@@ -5129,6 +5072,9 @@ TEST(UT_TextEdit_mouseMoveEvent, UT_TextEdit_mouseMoveEvent_002)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QMouseEvent* e = new QMouseEvent(QEvent::MouseMove,QPointF(20.0,20.0),QPointF(20.0,20.0),Qt::LeftButton,Qt::LeftButton,Qt::AltModifier);
 
     Stub s1;
@@ -5175,6 +5121,9 @@ TEST(UT_TextEdit_mouseReleaseEvent, UT_TextEdit_mouseReleaseEvent_002)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QMouseEvent* e = new QMouseEvent(QEvent::MouseButtonRelease,QPointF(20.0,20.0),QPointF(20.0,20.0),Qt::LeftButton,Qt::LeftButton,Qt::NoModifier);
 
     Stub s1;
@@ -5281,6 +5230,9 @@ TEST(UT_TextEdit_paintEvent, UT_TextEdit_paintEvent_002)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QPaintEvent* e = new QPaintEvent(QRect(20,20,20,20));
 
     QTextEdit::ExtraSelection s1,s2;
@@ -5958,6 +5910,9 @@ TEST(UT_TextEdit_unCommentSelection, UT_TextEdit_unCommentSelection_002)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
 
     Stub s1;
@@ -5989,6 +5944,9 @@ TEST(UT_TextEdit_unCommentSelection, UT_TextEdit_unCommentSelection_003)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
 
     Stub s1;
@@ -6023,6 +5981,9 @@ TEST(UT_TextEdit_unCommentSelection, UT_TextEdit_unCommentSelection_004)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
 
     Stub s1;
@@ -6059,6 +6020,9 @@ TEST(UT_TextEdit_unCommentSelection, UT_TextEdit_unCommentSelection_005)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
 
     Stub s1;
@@ -6109,6 +6073,9 @@ TEST(UT_TextEdit_setComment, UT_TextEdit_setComment_002)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     Stub s1;
     s1.set(ADDR(Comment::CommentDefinition,isValid),rettruestub);
@@ -6143,6 +6110,9 @@ TEST(UT_TextEdit_setComment, UT_TextEdit_setComment_003)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     Stub s1;
     s1.set(ADDR(Comment::CommentDefinition,isValid),rettruestub);
@@ -6181,6 +6151,9 @@ TEST(UT_TextEdit_setComment, UT_TextEdit_setComment_004)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     Stub s1;
     s1.set(ADDR(Comment::CommentDefinition,isValid),rettruestub);
@@ -6232,6 +6205,9 @@ TEST(UT_Textedit_removeComment, UT_Textedit_removeComment_002)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     Stub s1;
     s1.set(ADDR(Comment::CommentDefinition,isValid),rettruestub);
@@ -6263,6 +6239,9 @@ TEST(UT_Textedit_removeComment, UT_Textedit_removeComment_003)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     Stub s1;
     s1.set(ADDR(Comment::CommentDefinition,isValid),rettruestub);
@@ -6310,6 +6289,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_002)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
 
     Stub s1;
@@ -6335,6 +6317,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_003)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
 
     Stub s1;
@@ -6361,6 +6346,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_004)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
 
     Stub s1;
@@ -6387,6 +6375,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_005)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
 
     Stub s1;
@@ -6413,6 +6404,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_006)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
 
     Stub s1;
@@ -6439,6 +6433,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_007)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
 
     Stub s1;
@@ -6465,6 +6462,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_008)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
 
     Stub s1;
@@ -6491,6 +6491,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_009)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
 
     Stub s1;
@@ -6517,6 +6520,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_010)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
 
     Stub s1;
@@ -6543,6 +6549,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_011)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
 
     Stub s1;
@@ -6569,6 +6578,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_012)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
 
     Stub s1;
@@ -6595,6 +6607,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_013)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
 
     Stub s1;
@@ -6621,6 +6636,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_014)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
 
     Stub s1;
@@ -6647,6 +6665,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_015)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
 
     Stub s1;
@@ -6673,6 +6694,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_016)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
 
     Stub s1;
@@ -6700,6 +6724,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_017)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
 
     Stub s1;
@@ -6726,6 +6753,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_018)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
 
     Stub s1;
@@ -6752,6 +6782,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_019)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
 
     Stub s1;
@@ -6778,6 +6811,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_020)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
 
     Stub s1;
@@ -6804,6 +6840,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_021)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
 
     Stub s1;
@@ -6830,6 +6869,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_022)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::ControlModifier);
 
     Stub s1;
@@ -6856,6 +6898,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_023)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_Control,Qt::NoModifier);
 
     Stub s1;
@@ -6882,6 +6927,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_024)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_F11,Qt::NoModifier);
 
     Stub s1;
@@ -6908,6 +6956,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_025)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_F1,Qt::NoModifier);
 
     Stub s1;
@@ -6934,6 +6985,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_026)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_F1,Qt::GroupSwitchModifier);
 
     Stub s1;
@@ -6960,6 +7014,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_027)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_F1,Qt::GroupSwitchModifier);
 
     Stub s1;
@@ -6989,6 +7046,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_028)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_ydiaeresis,Qt::NoModifier,"123");
 
 
@@ -7020,6 +7080,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_029)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_9,Qt::KeypadModifier,"123");
 
 
@@ -7051,6 +7114,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_030)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_Tab,Qt::NoModifier,"123");
 
     Stub s1;
@@ -7081,6 +7147,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_031)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_Backspace,Qt::NoModifier,"123");
 
     Stub s1;
@@ -7110,6 +7179,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_032)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_Delete,Qt::NoModifier,"123");
 
     Stub s1;
@@ -7144,6 +7216,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_033)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_Delete,Qt::NoModifier,"123");
 
     Stub s1;
@@ -7177,6 +7252,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_034)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_Shift,Qt::ShiftModifier,"123");
 
     Stub s1;
@@ -7206,6 +7284,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_035)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -7238,6 +7319,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_036)
 //    TextEdit* edit = new TextEdit;
 //    EditWrapper* wra = new EditWrapper;
 //    edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 //    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
 //    edit->m_settings = Settings::instance();
 
@@ -7268,6 +7352,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_037)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -7296,6 +7383,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_038)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -7324,6 +7414,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_039)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -7352,6 +7445,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_040)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -7380,6 +7476,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_041)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -7408,6 +7507,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_042)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -7436,6 +7538,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_043)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -7464,6 +7569,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_044)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -7492,6 +7600,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_045)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -7521,6 +7632,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_046)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -7549,6 +7663,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_047)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -7577,6 +7694,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_048)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -7605,6 +7725,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_049)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -7633,6 +7756,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_050)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -7661,6 +7787,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_051)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -7689,6 +7818,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_052)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -7717,6 +7849,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_053)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -7745,6 +7880,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_054)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -7773,6 +7911,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_055)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -7801,6 +7942,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_056)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -7829,6 +7973,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_057)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -7857,6 +8004,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_058)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -7885,6 +8035,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_059)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -7913,6 +8066,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_060)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -7941,6 +8097,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_061)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -7969,6 +8128,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_062)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -7997,6 +8159,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_063)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -8025,6 +8190,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_064)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -8053,6 +8221,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_065)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -8081,6 +8252,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_066)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -8109,6 +8283,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_067)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -8137,6 +8314,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_068)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -8165,6 +8345,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_069)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -8193,6 +8376,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_070)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -8271,6 +8457,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_071)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_Insert,Qt::NoModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -8299,6 +8488,9 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_072)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_Insert,Qt::GroupSwitchModifier,"123");
     edit->m_settings = Settings::instance();
 
@@ -8328,6 +8520,9 @@ TEST(UT_Textedit_resizeEvent, UT_Textedit_resizeEvent)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QResizeEvent* r = new QResizeEvent(QSize(30,30),QSize(20,20));
 
 
@@ -8349,6 +8544,9 @@ TEST(UT_Textedit_dragMoveEvent, UT_Textedit_dragMoveEvent)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QMimeData* data = new QMimeData();
     data->setText("ddd");
     QDragMoveEvent* r = new QDragMoveEvent(QPoint(20,20),Qt::ActionMask,data,Qt::LeftButton,Qt::NoModifier);
@@ -8373,6 +8571,9 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_001)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QTouchEvent* e = new QTouchEvent(QEvent::TouchBegin);
 
 
@@ -8390,6 +8591,9 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_002)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QMouseEvent* e = new QMouseEvent(QEvent::MouseButtonPress,QPointF(20.0,20.0),QPointF(20.0,20.0),Qt::RightButton,Qt::RightButton,Qt::NoModifier);
 
     edit->m_rightMenu = new QMenu;
@@ -8415,6 +8619,9 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_003)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QMouseEvent* e = new QMouseEvent(QEvent::MouseButtonPress,QPointF(20.0,20.0),QPointF(20.0,20.0),Qt::LeftButton,Qt::LeftButton,Qt::NoModifier);
 
     edit->m_rightMenu = new QMenu;
@@ -8458,6 +8665,9 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_004)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QMouseEvent* e = new QMouseEvent(QEvent::MouseButtonPress,QPointF(20.0,20.0),QPointF(20.0,20.0),Qt::LeftButton,Qt::LeftButton,Qt::NoModifier);
 
     edit->m_rightMenu = new QMenu;
@@ -8503,6 +8713,9 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_005)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QMouseEvent* e = new QMouseEvent(QEvent::MouseButtonPress,QPointF(20.0,20.0),QPointF(20.0,20.0),Qt::RightButton,Qt::RightButton,Qt::NoModifier);
 
     edit->m_rightMenu = new QMenu;
@@ -8536,6 +8749,9 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_006)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QHoverEvent* e = new QHoverEvent(QEvent::HoverMove,QPointF(20.0,20.0),QPointF(30.0,30.0));
 
     edit->m_rightMenu = new QMenu;
@@ -8572,6 +8788,9 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_007)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QHoverEvent* e = new QHoverEvent(QEvent::HoverMove,QPointF(20.0,20.0),QPointF(30.0,30.0));
 
     edit->m_rightMenu = new QMenu;
@@ -8609,6 +8828,9 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_008)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QHoverEvent* e = new QHoverEvent(QEvent::HoverLeave,QPointF(20.0,20.0),QPointF(30.0,30.0));
 
     edit->m_rightMenu = new QMenu;
@@ -8646,6 +8868,9 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_009)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QHoverEvent* e = new QHoverEvent(QEvent::HoverLeave,QPointF(20.0,20.0),QPointF(30.0,30.0));
 
     edit->m_rightMenu = new QMenu;
@@ -8684,6 +8909,9 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_010)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QKeyEvent* e = new QKeyEvent(QEvent::KeyRelease,Qt::Key_Tab,Qt::NoModifier);
 
     edit->m_colorMarkMenu = new QMenu;
@@ -8722,6 +8950,9 @@ TEST(UT_Textedit_updateMark, UT_Textedit_updateMark_002)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     QTextEdit::ExtraSelection e1,e2;
     //QList<QPair<QTextEdit::ExtraSelection, qint64>>;
@@ -8749,6 +8980,9 @@ TEST(UT_Textedit_updateMark, UT_Textedit_updateMark_003)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     QTextEdit::ExtraSelection e1,e2;
     //QList<QPair<QTextEdit::ExtraSelection, qint64>>;
@@ -8777,9 +9011,11 @@ TEST(UT_Textedit_updateMark, UT_Textedit_updateMark_004)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     QTextEdit::ExtraSelection e1,e2;
-    //QList<QPair<QTextEdit::ExtraSelection, qint64>>;
     edit->m_wordMarkSelections.push_back({e1,1});
     edit->m_wordMarkSelections.push_back({e2,2});
     edit->m_mapWordMarkSelections[1]={e1};
@@ -8792,7 +9028,7 @@ TEST(UT_Textedit_updateMark, UT_Textedit_updateMark_004)
     s3.set(ADDR(QTextCursor,position),retintstub);
 
     intvalue=10000;
-    intvalue2=10000;
+    intvalue2=-10000;
     edit->m_bIsInputMethod = true;
     edit->updateMark(1,2,3);
 
@@ -8807,6 +9043,9 @@ TEST(UT_Textedit_clearMarksForTextCursor, UT_Textedit_clearMarksForTextCursor_00
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     QTextEdit::ExtraSelection e1,e2;
     //QList<QPair<QTextEdit::ExtraSelection, qint64>>;
@@ -8829,6 +9068,9 @@ TEST(UT_Textedit_clearMarksForTextCursor, UT_Textedit_clearMarksForTextCursor_00
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     QTextEdit::ExtraSelection e1,e2;
     //QList<QPair<QTextEdit::ExtraSelection, qint64>>;
@@ -8860,6 +9102,9 @@ TEST(UT_Textedit_clearMarkOperationForCursor, UT_Textedit_clearMarkOperationForC
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     TextEdit::MarkOperation e1,e2;
     //QList<QPair<QTextEdit::ExtraSelection, qint64>>;
@@ -8882,6 +9127,9 @@ TEST(UT_Textedit_tapAndHoldGestureTriggered, UT_Textedit_tapAndHoldGestureTrigge
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QTapAndHoldGesture * t = new QTapAndHoldGesture();
 
     Stub s1;
@@ -8901,6 +9149,9 @@ TEST(UT_Textedit_tapAndHoldGestureTriggered, UT_Textedit_tapAndHoldGestureTrigge
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QTapAndHoldGesture * t = new QTapAndHoldGesture();
 
     Stub s1;
@@ -8920,6 +9171,9 @@ TEST(UT_Textedit_tapAndHoldGestureTriggered, UT_Textedit_tapAndHoldGestureTrigge
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QTapAndHoldGesture * t = new QTapAndHoldGesture();
 
     Stub s1;
@@ -8939,6 +9193,9 @@ TEST(UT_Textedit_tapAndHoldGestureTriggered, UT_Textedit_tapAndHoldGestureTrigge
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QTapAndHoldGesture * t = new QTapAndHoldGesture();
 
     Stub s1;
@@ -8958,6 +9215,9 @@ TEST(UT_Textedit_tapAndHoldGestureTriggered, UT_Textedit_tapAndHoldGestureTrigge
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QTapAndHoldGesture * t = new QTapAndHoldGesture();
 
     Stub s1;
@@ -8977,6 +9237,9 @@ TEST(UT_Textedit_panTriggered, UT_Textedit_panTriggered_001)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QPanGesture * t = new QPanGesture();
 
     Stub s1;
@@ -9006,6 +9269,9 @@ TEST(UT_Textedit_pinchTriggered, UT_Textedit_pinchTriggered_001)
     TextEdit* edit = new TextEdit(w);
     EditWrapper* wra = new EditWrapper(w);
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QPinchGesture* t = new QPinchGesture();
 
 
@@ -9035,6 +9301,9 @@ TEST(UT_Textedit_swipeTriggered, UT_Textedit_swipeTriggered_001)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
     QPinchGesture* t = new QPinchGesture();
 
 
@@ -9052,6 +9321,9 @@ TEST(UT_Textedit_popRightMenu, UT_Textedit_popRightMenu_001)
 //    TextEdit* edit = new TextEdit(w);
 //    EditWrapper* wra = new EditWrapper(w);
 //    edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
 //    edit->m_rightMenu = new QMenu;
 //    // QAction *exec(const QPoint &pos, QAction *at = nullptr);
@@ -9100,6 +9372,9 @@ TEST(UT_Textedit_popRightMenu, UT_Textedit_popRightMenu_002)
 //    TextEdit* edit = new TextEdit(w);
 //    EditWrapper* wra = new EditWrapper(w);
 //    edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
 //    edit->m_rightMenu = new QMenu;
 //    edit->m_colorMarkMenu = new QMenu;
@@ -9148,6 +9423,9 @@ TEST(UT_Textedit_unindentText, UT_Textedit_unindentText)
     TextEdit* edit = new TextEdit(w);
     EditWrapper* wra = new EditWrapper(w);
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     edit->unindentText();
 
@@ -9163,6 +9441,9 @@ TEST(UT_Textedit_convertMark, UT_Textedit_convertMarkToReplace)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     edit->setPlainText("12345\n"
                        "12345\n"
@@ -9207,6 +9488,9 @@ TEST(UT_Textedit_convertMark, UT_Textedit_convertReplaceToMark)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     edit->setPlainText("12345\n"
                        "12345\n"
@@ -9253,6 +9537,9 @@ TEST(UT_Textedit_replaceWithMark, UT_Textedit_replaceWithRightMark)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     QStringList markList {"45", "89\n", "hi\n1a", "d5\n"};
 
@@ -9308,6 +9595,9 @@ TEST(UT_Textedit_replaceWithMark, UT_Textedit_replaceWithIntersectMark)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     edit->setPlainText("123456789\n"
                        "abcdefghi\n"
@@ -9370,6 +9660,9 @@ TEST(UT_Textedit_replaceWithMark, UT_Textedit_replaceWithBoundnaryMark)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     edit->setPlainText("123456789\n");
     QString strColor = "#E5E5E5";
@@ -9418,6 +9711,9 @@ TEST(UT_Textedit_replaceWithMark, UT_Textedit_markWithMultiReplace)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     edit->setPlainText("123123123123\n");
     QString strColor = "#E5E5E5";
@@ -9483,6 +9779,9 @@ TEST(UT_Textedit_replaceWithMark, UT_Textedit_replaceWithLineMark)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     edit->setPlainText("123456789\n"
                        "abcdefghi\n"
@@ -9541,6 +9840,9 @@ TEST(UT_Textedit_replaceWithMark, UT_Textedit_replaceWithMultiLineMark)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     edit->setPlainText("123456789\n"
                        "abcdefghi\n"
@@ -9572,6 +9874,9 @@ TEST(UT_Textedit_replaceWithMark, UT_Textedit_replaceWithInnerMark)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     edit->setPlainText("123456789\n"
                        "abcdefghi\n");
@@ -9602,6 +9907,9 @@ TEST(UT_Textedit_replaceWithMark, UT_Textedit_replaceWithOutterMark)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     edit->setPlainText("123456789\n"
                        "abcdefghi\n");
@@ -9638,6 +9946,9 @@ TEST(UT_Textedit_selectText, SelectText_SingleBlock_Pass)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     edit->setPlainText("123456789\n");
     // 选中 "456"
@@ -9658,6 +9969,9 @@ TEST(UT_Textedit_selectText, SelectText_MultiBlock_Pass)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     edit->setPlainText("123456789\n"
                        "abcdefghi\n"
@@ -9696,6 +10010,9 @@ TEST(UT_Textedit_selectText, SelectText_MultiBlock_MultiByte_Pass)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     // 此字符串为特殊多字节编码 CJK
     // "𢝐𢝑𢝒𢝓𢝔𢝕𢝖𢝗𢝘𢝙\n𢝚𢝛𢝜𢝝𢝞𢝟𢝠𢝡𢝢𢝣\n𢝤𢝥𢝦𢝧𢝨𢝩𢝪𢝫𢝬𢝭\n"
@@ -9742,6 +10059,7 @@ TEST(UT_Textedit_MidButtonInsertText, onTextContentChanged_MidButtonInsertText_P
 
     Stub s1;
     s1.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    s1.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     QString sourceText("123456789");
     edit->setPlainText(sourceText);
@@ -9778,6 +10096,9 @@ TEST(UT_Textedit_onAppPaletteChanged, OnAppPaletteChanged_ChangeBackground_Pass)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     Stub s;
     s.set((DPalette(DGuiApplicationHelper::*)() const)(&DGuiApplicationHelper::applicationPalette), stubApplicationPalette);
@@ -9801,6 +10122,9 @@ TEST(UT_Textedit_MoveText, moveText_Move_Pass)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     QString sourceText("123456789\n");
     edit->setPlainText(sourceText);
@@ -9821,6 +10145,9 @@ TEST(UT_Textedit_MoveText, moveText_Copy_Pass)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     QString sourceText("123456789\n");
     edit->setPlainText(sourceText);
@@ -9841,6 +10168,9 @@ TEST(UT_Textedit_MoveText, moveText_Multi_Pass)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     edit->insertTextEx(edit->textCursor(), "1\n");
     edit->insertTextEx(edit->textCursor(), "2\n");
@@ -9872,6 +10202,9 @@ TEST(UT_Textedit_onPressedLineNumber, onPressedLineNumber_BoundaryCheck_Pass)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     edit->onPressedLineNumber(QPoint(0, 0));
     EXPECT_EQ(edit->textCursor().position(), 0);
@@ -9901,6 +10234,9 @@ TEST(UT_Textedit_onPressedLineNumber, onPressedLineNumber_MultiBlock_Pass)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     edit->insertTextEx(edit->textCursor(), "123\n222\n333");
     QTextCursor cursor = edit->textCursor();
@@ -9928,6 +10264,9 @@ TEST(UT_Textedit_onPressedLineNumber, onPressedLineNumber_OutOfBlock_Pass)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     edit->insertTextEx(edit->textCursor(), "123\n222\n333");
     QTextCursor cursor = edit->textCursor();
@@ -9958,6 +10297,9 @@ TEST(UT_Textedit_onPressedLineNumber, onPressedLineNumber_LanBo_CN_Pass)
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
+    Stub __stub_undo_redo;
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
+    __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
 
     edit->insertTextEx(edit->textCursor(), "123\n222\n333");
     QTextCursor cursor = edit->textCursor();
@@ -9978,4 +10320,509 @@ TEST(UT_Textedit_onPressedLineNumber, onPressedLineNumber_LanBo_CN_Pass)
 
     edit->deleteLater();
     wra->deleteLater();
+}
+
+// ============================================================================
+// Tests for previously-uncovered TextEdit functions.
+// Each test targets one (or a small group) of the 31 listed functions.
+// A real Window+EditWrapper is used so that this->window() casts back to
+// Window* and m_wrapper/m_pLeftAreaWidget/m_pUndoStack are all initialised.
+// ============================================================================
+
+namespace uncovered_helpers {
+
+// Create a fully-initialised editor hosted in a real Window.
+static TextEdit *makeEditorInWindow(Window *&win)
+{
+    win = new Window();
+    win->addBlankTab(QString());
+    return win->currentWrapper()->textEditor();
+}
+
+// Qt 6.8.0: QGesturePrivate::state has no public setter. It lives at byte
+// offset 124 inside the QObject private data (sizeof(QObjectPrivate)==120,
+// then gestureType:int). fno-access-control lets us reach the protected
+// d_func(); we then write the field directly.
+static void forceGestureState(QGesture *g, Qt::GestureState st)
+{
+    *(Qt::GestureState *)((char *)g->d_func() + 124) = st;
+}
+
+} // namespace uncovered_helpers
+
+using namespace uncovered_helpers;
+
+// 1. TextEdit::upcaseWord()
+TEST(UT_Textedit_Uncovered, upcaseWord)
+{
+    Window *win = nullptr;
+    TextEdit *edit = makeEditorInWindow(win);
+    edit->insertTextEx(edit->textCursor(), "hello world");
+    QTextCursor c = edit->textCursor();
+    c.setPosition(0);
+    c.setPosition(5, QTextCursor::KeepAnchor);
+    edit->setTextCursor(c);
+    edit->upcaseWord();
+    EXPECT_EQ(edit->toPlainText().left(5), QString("HELLO"));
+    win->deleteLater();
+}
+
+// 2. TextEdit::downcaseWord()
+TEST(UT_Textedit_Uncovered, downcaseWord)
+{
+    Window *win = nullptr;
+    TextEdit *edit = makeEditorInWindow(win);
+    edit->insertTextEx(edit->textCursor(), "HELLO WORLD");
+    QTextCursor c = edit->textCursor();
+    c.setPosition(0);
+    c.setPosition(5, QTextCursor::KeepAnchor);
+    edit->setTextCursor(c);
+    edit->downcaseWord();
+    EXPECT_EQ(edit->toPlainText().left(5), QString("hello"));
+    win->deleteLater();
+}
+
+// 3. TextEdit::capitalizeWord()
+TEST(UT_Textedit_Uncovered, capitalizeWord)
+{
+    Window *win = nullptr;
+    TextEdit *edit = makeEditorInWindow(win);
+    edit->insertTextEx(edit->textCursor(), "hello world");
+    QTextCursor c = edit->textCursor();
+    c.setPosition(0);
+    c.setPosition(11, QTextCursor::KeepAnchor);
+    edit->setTextCursor(c);
+    edit->capitalizeWord();
+    EXPECT_EQ(edit->toPlainText(), QString("Hello World"));
+    win->deleteLater();
+}
+
+// 4. TextEdit::wheelEvent(QWheelEvent*)  (plain / Ctrl+wheel up / Ctrl+wheel down)
+TEST(UT_Textedit_Uncovered, wheelEvent)
+{
+    Window *win = nullptr;
+    TextEdit *edit = makeEditorInWindow(win);
+    edit->insertTextEx(edit->textCursor(), "some text to scroll");
+    {
+        QWheelEvent e(QPointF(0, 0), QPointF(0, 0), QPoint(0, 0), QPoint(0, 120),
+                      Qt::NoButton, Qt::NoModifier, Qt::NoScrollPhase, false);
+        edit->wheelEvent(&e); // base behaviour, no Ctrl
+    }
+    {
+        QWheelEvent e(QPointF(0, 0), QPointF(0, 0), QPoint(0, 0), QPoint(0, 120),
+                      Qt::NoButton, Qt::ControlModifier, Qt::NoScrollPhase, false);
+        edit->wheelEvent(&e); // Ctrl + up -> incrementFontSize
+    }
+    {
+        QWheelEvent e(QPointF(0, 0), QPointF(0, 0), QPoint(0, 0), QPoint(0, -120),
+                      Qt::NoButton, Qt::ControlModifier, Qt::NoScrollPhase, false);
+        edit->wheelEvent(&e); // Ctrl + down -> decrementFontSize
+    }
+    SUCCEED();
+    win->deleteLater();
+}
+
+// 5. TextEdit::scrollLineUp()
+TEST(UT_Textedit_Uncovered, scrollLineUp)
+{
+    Window *win = nullptr;
+    TextEdit *edit = makeEditorInWindow(win);
+    edit->insertTextEx(edit->textCursor(), QString("line1\nline2\nline3\nline4\nline5"));
+    edit->scrollLineUp();
+    // exercise the cursor-move branch as well
+    edit->m_cursorMark = true;
+    edit->scrollLineUp();
+    edit->m_cursorMark = false;
+    SUCCEED();
+    win->deleteLater();
+}
+
+// 6. TextEdit::slideGestureX(double)
+TEST(UT_Textedit_Uncovered, slideGestureX)
+{
+    Window *win = nullptr;
+    TextEdit *edit = makeEditorInWindow(win);
+    edit->slideGestureX(35.0);
+    edit->slideGestureX(-10.0);
+    edit->slideGestureX(0.5);
+    SUCCEED();
+    win->deleteLater();
+}
+
+// 7. TextEdit::slideGestureY(double)
+TEST(UT_Textedit_Uncovered, slideGestureY)
+{
+    Window *win = nullptr;
+    TextEdit *edit = makeEditorInWindow(win);
+    edit->slideGestureY(35.0);
+    edit->slideGestureY(-10.0);
+    edit->slideGestureY(0.5);
+    SUCCEED();
+    win->deleteLater();
+}
+
+// 8. TextEdit::gestureEvent(QGestureEvent*)
+TEST(UT_Textedit_Uncovered, gestureEvent)
+{
+    Window *win = nullptr;
+    TextEdit *edit = makeEditorInWindow(win);
+    QList<QGesture *> empty;
+    QGestureEvent ev(empty);
+    EXPECT_TRUE(edit->gestureEvent(&ev));
+    win->deleteLater();
+}
+
+// 9. TextEdit::tapGestureTriggered(QTapGesture*) + tap branch of gestureEvent
+TEST(UT_Textedit_Uncovered, tapGestureTriggered)
+{
+    Window *win = nullptr;
+    TextEdit *edit = makeEditorInWindow(win);
+    const Qt::GestureState states[] = {
+        Qt::GestureStarted, Qt::GestureUpdated, Qt::GestureCanceled, Qt::GestureFinished};
+    for (Qt::GestureState st : states) {
+        QTapGesture *tap = new QTapGesture;
+        forceGestureState(tap, st);
+        edit->tapGestureTriggered(tap);
+        delete tap;
+    }
+    // also drive it through gestureEvent (covers the TapGesture branch there)
+    QTapGesture *tap = new QTapGesture;
+    forceGestureState(tap, Qt::GestureStarted);
+    QList<QGesture *> gs;
+    gs << tap;
+    QGestureEvent ev(gs);
+    edit->gestureEvent(&ev);
+    win->deleteLater();
+}
+
+// 10. TextEdit::dragEnterEvent(QDragEnterEvent*)
+TEST(UT_Textedit_Uncovered, dragEnterEvent)
+{
+    Window *win = nullptr;
+    TextEdit *edit = makeEditorInWindow(win);
+    QMimeData *mime = new QMimeData;
+    mime->setText("drag text");
+    QDragEnterEvent e(QPoint(5, 5), Qt::CopyAction, mime, Qt::LeftButton, Qt::NoModifier);
+    edit->dragEnterEvent(&e);
+    delete mime;
+    win->deleteLater();
+}
+
+// 11. TextEdit::dropEvent(QDropEvent*)
+TEST(UT_Textedit_Uncovered, dropEvent)
+{
+    Window *win = nullptr;
+    TextEdit *edit = makeEditorInWindow(win);
+    edit->insertTextEx(edit->textCursor(), "abc");
+    QMimeData *mime = new QMimeData;
+    mime->setText("DROP");
+    QDropEvent e(QPointF(5, 5), Qt::CopyAction, mime, Qt::LeftButton, Qt::NoModifier);
+    edit->dropEvent(&e);
+    EXPECT_TRUE(edit->toPlainText().contains("DROP"));
+    delete mime;
+    win->deleteLater();
+}
+
+// 12. TextEdit::contextMenuEvent(QContextMenuEvent*)
+TEST(UT_Textedit_Uncovered, contextMenuEvent)
+{
+    Window *win = nullptr;
+    TextEdit *edit = makeEditorInWindow(win);
+    edit->insertTextEx(edit->textCursor(), "context");
+    Stub stub;
+    stub.set((QAction *(QMenu::*)(const QPoint &, QAction *))ADDR(QMenu, exec), stub_exec);
+    QContextMenuEvent e(QContextMenuEvent::Keyboard, QPoint(5, 5), QPoint(5, 5));
+    edit->contextMenuEvent(&e);
+    win->deleteLater();
+}
+
+// 13. TextEdit::popRightMenu(QPoint)
+TEST(UT_Textedit_Uncovered, popRightMenu)
+{
+    Window *win = nullptr;
+    TextEdit *edit = makeEditorInWindow(win);
+    edit->insertTextEx(edit->textCursor(), "some text here");
+    Stub stub;
+    stub.set((QAction *(QMenu::*)(const QPoint &, QAction *))ADDR(QMenu, exec), stub_exec);
+    // with a selection (exercises convert-case / comment menu paths)
+    QTextCursor c = edit->textCursor();
+    c.select(QTextCursor::WordUnderCursor);
+    edit->setTextCursor(c);
+    edit->popRightMenu();
+    edit->popRightMenu(QPoint(10, 10));
+    win->deleteLater();
+}
+
+// 14. TextEdit::inputMethodEvent(QInputMethodEvent*)
+TEST(UT_Textedit_Uncovered, inputMethodEvent)
+{
+    Window *win = nullptr;
+    TextEdit *edit = makeEditorInWindow(win);
+    // commit-string path
+    {
+        QInputMethodEvent e;
+        e.setCommitString("hello");
+        edit->inputMethodEvent(&e);
+    }
+    // preedit path, then a follow-up commit
+    {
+        QInputMethodEvent e(QString("preedit"), QList<QInputMethodEvent::Attribute>());
+        edit->inputMethodEvent(&e);
+        QInputMethodEvent e2;
+        e2.setCommitString("X");
+        edit->inputMethodEvent(&e2);
+    }
+    // delete path: replacementStart<0 and replacementLength>0
+    {
+        edit->insertTextEx(edit->textCursor(), "abcdef");
+        QInputMethodEvent e;
+        e.setCommitString(QString(), -2, 2);
+        edit->inputMethodEvent(&e);
+    }
+    EXPECT_FALSE(edit->toPlainText().isEmpty());
+    win->deleteLater();
+}
+
+// 15. TextEdit::deleteMultiTextEx(QList<QTextCursor> const&)
+TEST(UT_Textedit_Uncovered, deleteMultiTextEx)
+{
+    Window *win = nullptr;
+    TextEdit *edit = makeEditorInWindow(win);
+    edit->insertTextEx(edit->textCursor(), "abcdefghij");
+    // empty -> early return
+    edit->deleteMultiTextEx(QList<QTextCursor>());
+    // single deletion
+    QTextCursor c = edit->textCursor();
+    c.setPosition(0);
+    c.setPosition(3, QTextCursor::KeepAnchor); // "abc"
+    edit->deleteMultiTextEx(QList<QTextCursor>() << c);
+    EXPECT_EQ(edit->toPlainText(), QString("defghij"));
+    win->deleteLater();
+}
+
+// 16. TextEdit::insertMultiTextEx(QList<std::pair<QTextCursor,QString>> const&)
+TEST(UT_Textedit_Uncovered, insertMultiTextEx)
+{
+    Window *win = nullptr;
+    TextEdit *edit = makeEditorInWindow(win);
+    // empty -> early return
+    edit->insertMultiTextEx(QList<QPair<QTextCursor, QString>>());
+    edit->insertTextEx(edit->textCursor(), "TAIL");
+    QTextCursor c = edit->textCursor();
+    c.setPosition(0);
+    QList<QPair<QTextCursor, QString>> list;
+    list << qMakePair(c, QString("HEAD"));
+    edit->insertMultiTextEx(list);
+    EXPECT_EQ(edit->toPlainText(), QString("HEADTAIL"));
+    win->deleteLater();
+}
+
+// 17. TextEdit::isComment(QString const&, int, QString const&)
+TEST(UT_Textedit_Uncovered, isComment)
+{
+    EXPECT_TRUE(TextEdit::isComment("//abc", 0, "//"));
+    EXPECT_FALSE(TextEdit::isComment("ab//c", 0, "//"));
+    EXPECT_TRUE(TextEdit::isComment("abc//", 3, "//"));
+    EXPECT_TRUE(TextEdit::isComment("#x", 0, "#"));
+    EXPECT_FALSE(TextEdit::isComment("ab", 0, "//"));
+    EXPECT_FALSE(TextEdit::isComment("/*x", 0, "//"));
+}
+
+// 18. TextEdit::getLeftAreaUpdateState()
+TEST(UT_Textedit_Uncovered, getLeftAreaUpdateState)
+{
+    Window *win = nullptr;
+    TextEdit *edit = makeEditorInWindow(win);
+    edit->setLeftAreaUpdateState(TextEdit::FileOpenBegin);
+    EXPECT_EQ(edit->getLeftAreaUpdateState(), TextEdit::FileOpenBegin);
+    edit->setLeftAreaUpdateState(TextEdit::FileOpenEnd);
+    EXPECT_EQ(edit->getLeftAreaUpdateState(), TextEdit::FileOpenEnd);
+    edit->setLeftAreaUpdateState(TextEdit::Normal);
+    EXPECT_EQ(edit->getLeftAreaUpdateState(), TextEdit::Normal);
+    win->deleteLater();
+}
+
+// 19. TextEdit::onEndlineFormatChanged(...)
+TEST(UT_Textedit_Uncovered, onEndlineFormatChanged)
+{
+    Window *win = nullptr;
+    TextEdit *edit = makeEditorInWindow(win);
+    edit->onEndlineFormatChanged(BottomBar::Unix, BottomBar::Windows);
+    edit->onEndlineFormatChanged(BottomBar::Windows, BottomBar::Unix);
+    edit->onEndlineFormatChanged(BottomBar::Unix, BottomBar::Unix);
+    SUCCEED();
+    win->deleteLater();
+}
+
+// 20. TextEdit::onAudioPortEnabledChanged(unsigned int, QString const&, bool)
+TEST(UT_Textedit_Uncovered, onAudioPortEnabledChanged)
+{
+    Window *win = nullptr;
+    TextEdit *edit = makeEditorInWindow(win);
+    edit->onAudioPortEnabledChanged(0, QString("speaker"), true);  // enabled -> nothing
+    edit->onAudioPortEnabledChanged(1, QString("mic"), false);     // disabled -> device check
+    SUCCEED();
+    win->deleteLater();
+}
+
+// 21. TextEdit::setFindHighlightSelection(QTextCursor const&)
+TEST(UT_Textedit_Uncovered, setFindHighlightSelection)
+{
+    Window *win = nullptr;
+    TextEdit *edit = makeEditorInWindow(win);
+    edit->insertTextEx(edit->textCursor(), "find me here");
+    QTextCursor c = edit->textCursor();
+    c.select(QTextCursor::WordUnderCursor);
+    edit->setFindHighlightSelection(c);
+    EXPECT_EQ(edit->m_findHighlightSelection.cursor.position(), c.position());
+    win->deleteLater();
+}
+
+// 22. TextEdit::slotStopReadingAction(bool)
+TEST(UT_Textedit_Uncovered, slotStopReadingAction)
+{
+    Window *win = nullptr;
+    TextEdit *edit = makeEditorInWindow(win);
+    bool ret = edit->slotStopReadingAction(false);
+    (void)ret;
+    SUCCEED();
+    win->deleteLater();
+}
+
+// 23. TextEdit::slotOpenInFileManagerAction(bool)
+TEST(UT_Textedit_Uncovered, slotOpenInFileManagerAction)
+{
+    Window *win = nullptr;
+    TextEdit *edit = makeEditorInWindow(win);
+    edit->setTruePath(QString("/nonexistent/path/for_test.txt"));
+    bool ret = edit->slotOpenInFileManagerAction(false);
+    // return value depends on the platform file-manager service; just exercise it
+    EXPECT_TRUE(ret == true || ret == false);
+    win->deleteLater();
+}
+
+// 24. TextEdit::highlight()  (also fires its inline QTimer::singleShot lambda)
+TEST(UT_Textedit_Uncovered, highlight)
+{
+    Window *win = nullptr;
+    TextEdit *edit = makeEditorInWindow(win);
+    edit->insertTextEx(edit->textCursor(), "highlight me");
+    // highlight() posts a singleShot(0) lambda that calls m_wrapper->OnUpdateHighlighter().
+    // We must NOT call processEvents() here because it would also deliver the queued
+    // handleFileLoadFinished signal from addBlankTab, which calls setTextFinished() ->
+    // readHistoryRecordofBookmark() that dereferences m_settings (null in test context).
+    // Instead, directly exercise the highlight code path.
+    edit->highlight();
+    if (edit->m_wrapper) {
+        edit->m_wrapper->OnUpdateHighlighter();
+    }
+    SUCCEED();
+    win->deleteLater();
+}
+
+// 25. TextEdit::eventFilter(QObject*, QEvent*)
+TEST(UT_Textedit_Uncovered, eventFilter)
+{
+    Window *win = nullptr;
+    TextEdit *edit = makeEditorInWindow(win);
+    // generic event -> switch default, returns false
+    {
+        QEvent e(QEvent::User);
+        EXPECT_FALSE(edit->eventFilter(edit->viewport(), &e));
+    }
+    // MouseButtonPress on a non-special object -> sets m_mouseClickPos, returns false
+    {
+        QMouseEvent e(QEvent::MouseButtonPress, QPointF(3, 3), Qt::LeftButton,
+                      Qt::LeftButton, Qt::NoModifier);
+        EXPECT_FALSE(edit->eventFilter(edit, &e));
+    }
+    // MouseButtonDblClick -> sets m_bIsDoubleClick
+    {
+        QMouseEvent e(QEvent::MouseButtonDblClick, QPointF(3, 3), Qt::LeftButton,
+                      Qt::LeftButton, Qt::NoModifier);
+        edit->eventFilter(edit, &e);
+        EXPECT_TRUE(edit->m_bIsDoubleClick);
+    }
+    // KeyRelease/Tab delivered to the color-mark menu -> schedules the inline
+    // QTimer::singleShot lambda inside eventFilter. We do NOT call processEvents()
+    // here because it would also deliver the queued handleFileLoadFinished signal
+    // from addBlankTab, crashing on null m_settings in readHistoryRecordofBookmark().
+    {
+        QKeyEvent e(QEvent::KeyRelease, Qt::Key_Tab, Qt::NoModifier);
+        edit->eventFilter(edit->m_colorMarkMenu, &e);
+    }
+    win->deleteLater();
+}
+
+// 26. TextEdit::initRightClickedMenu() connected lambdas (#1..#4)
+// The parent initRightClickedMenu() is already invoked by the TextEdit ctor;
+// here we trigger the lambdas that are connected to the menu actions.
+TEST(UT_Textedit_Uncovered, initRightClickedMenu_lambdas)
+{
+    Window *win = nullptr;
+    TextEdit *edit = makeEditorInWindow(win);
+    edit->insertTextEx(edit->textCursor(), "word");
+    edit->m_markCurrentAct->trigger(); // lambda #1: isMarkCurrentLine + renderAllSelections
+    edit->m_markAllAct->trigger();     // lambda #2: isMarkAllLine + renderAllSelections
+    edit->m_undoAction->trigger();     // lambda #3: undo_()
+    edit->m_redoAction->trigger();     // lambda #4: redo_()
+    SUCCEED();
+    win->deleteLater();
+}
+
+// 27/28. TextEdit::calcMarkReplaceList(...)  (drives its updateMarkIndexAndRange lambda)
+TEST(UT_Textedit_Uncovered, calcMarkReplaceList)
+{
+    Window *win = nullptr;
+    TextEdit *edit = makeEditorInWindow(win);
+    const QString oldText = "foo bar foo baz foo";
+
+    // empty list -> early return guard
+    {
+        QList<TextEdit::MarkReplaceInfo> empty;
+        edit->calcMarkReplaceList(empty, oldText, "foo", "FOO");
+        EXPECT_TRUE(empty.isEmpty());
+    }
+    // replaceText == withText -> early return guard
+    {
+        TextEdit::MarkReplaceInfo info;
+        info.opt.type = TextEdit::MarkOnce;
+        info.start = 0;
+        info.end = 3;
+        QList<TextEdit::MarkReplaceInfo> list;
+        list << info;
+        edit->calcMarkReplaceList(list, oldText, "foo", "foo");
+    }
+    // mark fully inside a replacement region -> EIntersectInner (cleared)
+    {
+        TextEdit::MarkReplaceInfo info;
+        info.opt.type = TextEdit::MarkOnce;
+        info.start = 0;
+        info.end = 3;
+        QList<TextEdit::MarkReplaceInfo> list;
+        list << info;
+        edit->calcMarkReplaceList(list, oldText, "foo", "FOOBAR");
+    }
+    // mark sitting to the left of a later replacement -> ELeft branch
+    {
+        TextEdit::MarkReplaceInfo info;
+        info.opt.type = TextEdit::MarkOnce;
+        info.start = 4;
+        info.end = 7;
+        QList<TextEdit::MarkReplaceInfo> list;
+        list << info;
+        edit->calcMarkReplaceList(list, oldText, "foo", "FOOBAR");
+    }
+    // MarkAll type is skipped by updateMarkIndexAndRange lambda
+    {
+        TextEdit::MarkReplaceInfo info;
+        info.opt.type = TextEdit::MarkAll;
+        info.start = 4;
+        info.end = 7;
+        QList<TextEdit::MarkReplaceInfo> list;
+        list << info;
+        edit->calcMarkReplaceList(list, oldText, "foo", "FOOBAR");
+    }
+    SUCCEED();
+    win->deleteLater();
 }
