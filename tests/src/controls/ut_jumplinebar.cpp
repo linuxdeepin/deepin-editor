@@ -112,3 +112,14 @@ TEST_F(test_jumplinebar, slotFocusChanged)
 
     delete jumpLineBar;jumpLineBar=nullptr;
 }
+
+//int getLineCount();
+TEST_F(test_jumplinebar, getLineCount)
+{
+    JumpLineBar *jumpLineBar = new JumpLineBar();
+    // activeInput stores the line count internally
+    jumpLineBar->activeInput("aa", 1, 1, 100, 1);
+    EXPECT_EQ(jumpLineBar->getLineCount(), 100);
+
+    delete jumpLineBar;jumpLineBar=nullptr;
+}

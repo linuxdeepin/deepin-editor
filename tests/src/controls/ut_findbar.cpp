@@ -195,3 +195,28 @@ TEST_F(test_findbar, keyPressEvent)
     delete e1; e1 = nullptr;
     delete e2; e2 = nullptr;
 }
+
+// void handleSwitchToReplace();
+TEST_F(test_findbar, handleSwitchToReplace)
+{
+    FindBar *findBar = new FindBar();
+    bool signalReceived = false;
+    QObject::connect(findBar, &FindBar::sigSwitchToReplaceBar, [&]() { signalReceived = true; });
+
+    EXPECT_NO_FATAL_FAILURE(findBar->handleSwitchToReplace());
+    EXPECT_EQ(signalReceived, true);
+
+    findBar->deleteLater();
+}
+
+// QString getCurrentSearchText() const;
+TEST_F(test_findbar, getCurrentSearchText)
+{
+    FindBar *findBar = new FindBar();
+    EXPECT_EQ(findBar->getCurrentSearchText(), QString(""));
+
+    findBar->m_editLine->lineEdit()->setText("searchkeyword");
+    EXPECT_EQ(findBar->getCurrentSearchText(), QString("searchkeyword"));
+
+    findBar->deleteLater();
+}

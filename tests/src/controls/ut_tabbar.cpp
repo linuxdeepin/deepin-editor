@@ -7,6 +7,10 @@
 #include "../src/widgets/window.h"
 #include "../src/editor/editwrapper.h"
 #include <QMouseEvent>
+#include <QAction>
+#include <DMenu>
+#include <DGuiApplicationHelper>
+DGUI_USE_NAMESPACE
 #include "src/stub.h"
 
 
@@ -41,29 +45,7 @@ TEST(UT_Tabbar_Tabbar, UT_Tabbar_Tabbar)
 
 }
 
-TEST(UT_Tabbar_openFilesInWindow, UT_Tabbar_openFilesInWindow)
-{
-//    Tabbar * tab = new Tabbar();
-//    tab->addTab(".cache/deepin/deepin-editor","aabb");
-
-//    EXPECT_NE(tab,nullptr);
-//    EXPECT_EQ(tab->currentIndex(),0);
-
-//    tab->deleteLater();
-}
-
 //addTabWithIndex
-TEST(UT_Tabbar_addTabWithIndex, UT_Tabbar_addTabWithIndex)
-{
-//    Tabbar * tab = new Tabbar();
-//    tab->addTabWithIndex(0,".cache/deepin/deepin-editor","aabb");
-
-//    EXPECT_NE(tab,nullptr);
-//    EXPECT_NE(tab->tabToolTip(0),"aabb");
-
-//    tab->deleteLater();
-}
-
 //closeTab
 TEST(UT_Tabbar_closeTab, UT_Tabbar_closeTab)
 {
@@ -158,34 +140,7 @@ TEST(UT_Tabbar_closeOtherTabsExceptFile, UT_Tabbar_closeOtherTabsExceptFile)
 }
 
 //void updateTab(int index, const QString &filePath, const QString &tabName);
-TEST(UT_Tabbar_updateTab, UT_Tabbar_updateTab)
-{
-//    Tabbar * tab = new Tabbar();
-//    tab->addTab("/.cache/deepin/deepin-editor","aa");
-//    EXPECT_EQ(tab->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
-
-//    tab->updateTab(0,"/.cache/deepin/deepin-editor","aa");
-
-//    EXPECT_NE(tab,nullptr);
-//    tab->deleteLater();
-}
-
 //void previousTab();
-TEST(UT_Tabbar_previousTab, UT_Tabbar_previousTab)
-{
-//    Tabbar * tab = new Tabbar();
-//    tab->addTab("/.cache/deepin/deepin-editor","aa");
-//    EXPECT_EQ(tab->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
-//    tab->previousTab();
-
-//    tab->addTab("/.cache/deepin/deepin-editor","bb");
-//    tab->previousTab();
-
-//    EXPECT_NE(tab,nullptr);
-
-//    tab->deleteLater();
-
-}
 //void nextTab();
 TEST(UT_Tabbar_nextTab, UT_Tabbar_nextTab)
 {
@@ -314,33 +269,6 @@ TEST(UT_Tabbar_setDNDColor, UT_Tabbar_setDNDColor)
 }
 //bool canInsertFromMimeData(int index, const QMimeData *source) const;
 //bool eventFilter(QObject *, QEvent *event);
-TEST(UT_Tabbar_eventFilter, UT_Tabbar_eventFilter)
-{
-//    Window* window = new Window;
-//    EditWrapper* wrapper = new EditWrapper(window);
-//    TextEdit* edit = new TextEdit(wrapper);
-//    edit->m_wrapper = wrapper;
-//    window->m_wrappers["12"]=wrapper;
-//    Tabbar * tab = new Tabbar(window);
-
-//    tab->addTab("/.cache/deepin/deepin-editor","aa");
-//    EXPECT_EQ(tab->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
-
-//    QMouseEvent *e = new QMouseEvent(QEvent::MouseButtonPress,QPointF(76,29),Qt::RightButton,Qt::RightButton,Qt::NoModifier);
-
-//    Stub s1;
-//    s1.set((QAction* (QMenu::*)(const QPoint& , QAction *))ADDR(QMenu,exec),retintstub);
-
-//    tab->eventFilter(tab,e);
-
-//    EXPECT_NE(tab,nullptr);
-
-//    tab->deleteLater();
-//    window->deleteLater();
-//    wrapper->deleteLater();
-//    edit->deleteLater();
-}
-
 //QSize minimumTabSizeHint(int index) const;
 TEST(UT_Tabbar_minimumTabSizeHint, UT_Tabbar_minimumTabSizeHint)
 {
@@ -771,4 +699,118 @@ TEST(UT_Tabbar_resizeEvent, UT_Tabbar_resizeEvent)
 
 }
 
+// ===================== Appended tests for uncovered functions =====================
+
+namespace {
+QAction *stub_QMenu_exec_null(const QPoint &, QAction *)
+{
+    return nullptr;
+}
+
+int stub_DTabBar_tabAt_zero(const QPoint &)
+{
+    return 0;
+}
+}
+
+// void previousTab();
+TEST(UT_Tabbar_previousTab_Append, UT_Tabbar_previousTab)
+{
+    Tabbar *tab = new Tabbar();
+    tab->addTab("/.cache/deepin/deepin-editor", "aa");
+    tab->addTab("/.cache/deepin/deepin-editor2", "bb");
+    EXPECT_EQ(tab->count(), 2);
+    EXPECT_EQ(tab->currentIndex(), 1);
+
+    // currentIndex > 0, decrement to 0
+    tab->previousTab();
+    EXPECT_EQ(tab->currentIndex(), 0);
+
+    // currentIndex <= 0, wrap around to count - 1
+    tab->previousTab();
+    EXPECT_EQ(tab->currentIndex(), 1);
+
+    EXPECT_NE(tab, nullptr);
+    tab->deleteLater();
+}
+
+// void showTabs();
+TEST(UT_Tabbar_showTabs_Append, UT_Tabbar_showTabs)
+{
+    Tabbar *tab = new Tabbar();
+    tab->m_closeLeftTabAction = new QAction(tab);
+    tab->m_closeRightTabAction = new QAction(tab);
+    tab->addTab("/.cache/deepin/deepin-editor", "aa");
+
+    EXPECT_NO_FATAL_FAILURE(tab->showTabs());
+    // currentIndex 0 <= 0, left action disabled
+    EXPECT_EQ(tab->m_closeLeftTabAction->isEnabled(), false);
+    // currentIndex 0 >= count - 1, right action disabled
+    EXPECT_EQ(tab->m_closeRightTabAction->isEnabled(), false);
+
+    EXPECT_NE(tab, nullptr);
+    tab->deleteLater();
+}
+
+// bool eventFilter(QObject *, QEvent *event) - triggers all 5 action lambdas
+TEST(UT_Tabbar_eventFilter_Append, UT_Tabbar_eventFilter)
+{
+    Tabbar *tab = new Tabbar();
+
+    Stub s;
+    s.set(ADDR(DTabBar, tabAt), stub_DTabBar_tabAt_zero);
+    s.set(static_cast<QAction *(QMenu::*)(const QPoint &, QAction *)>(&QMenu::exec), stub_QMenu_exec_null);
+
+    QMouseEvent *e = new QMouseEvent(QEvent::MouseButtonPress, QPointF(5, 5),
+                                     QPointF(5, 5), QPointF(5, 5),
+                                     Qt::RightButton, Qt::RightButton, Qt::NoModifier);
+
+    // Right button press on a tab -> builds menu and connects 5 lambdas, calls tr()
+    EXPECT_EQ(tab->eventFilter(tab, e), true);
+
+    ASSERT_NE(tab->m_closeTabAction, nullptr);
+    ASSERT_NE(tab->m_closeOtherTabAction, nullptr);
+    ASSERT_NE(tab->m_closeLeftTabAction, nullptr);
+    ASSERT_NE(tab->m_closeRightTabAction, nullptr);
+    ASSERT_NE(tab->m_closeAllunModifiedTabAction, nullptr);
+
+    // Trigger each connected lambda
+    EXPECT_NO_FATAL_FAILURE(tab->m_closeTabAction->trigger());
+    EXPECT_NO_FATAL_FAILURE(tab->m_closeOtherTabAction->trigger());
+    EXPECT_NO_FATAL_FAILURE(tab->m_closeLeftTabAction->trigger());
+    EXPECT_NO_FATAL_FAILURE(tab->m_closeRightTabAction->trigger());
+    EXPECT_NO_FATAL_FAILURE(tab->m_closeAllunModifiedTabAction->trigger());
+
+    s.reset(ADDR(DTabBar, tabAt));
+    s.reset(static_cast<QAction *(QMenu::*)(const QPoint &, QAction *)>(&QMenu::exec));
+
+    EXPECT_NE(tab, nullptr);
+    delete e;
+    tab->deleteLater();
+}
+
+// Tabbar constructor lambda connected to DGuiApplicationHelper::sizeModeChanged
+TEST(UT_Tabbar_ConstructorSizeModeLambda, UT_Tabbar_ConstructorSizeModeLambda)
+{
+    Tabbar *tab = new Tabbar();
+    auto helper = DGuiApplicationHelper::instance();
+    auto origMode = helper->sizeMode();
+
+    EXPECT_NO_FATAL_FAILURE(helper->setSizeMode(origMode == DGuiApplicationHelper::NormalMode
+                                                    ? DGuiApplicationHelper::CompactMode
+                                                    : DGuiApplicationHelper::NormalMode));
+    helper->setSizeMode(origMode); // restore
+
+    EXPECT_NE(tab, nullptr);
+    tab->deleteLater();
+}
+
+// Tabbar::tr - Q_OBJECT generated translator, exercised explicitly
+TEST(UT_Tabbar_tr, UT_Tabbar_tr)
+{
+    Tabbar *tab = new Tabbar();
+    EXPECT_FALSE(tab->tr("Close tab").isEmpty());
+    EXPECT_FALSE(tab->tr("Close other tabs").isEmpty());
+    tab->deleteLater();
+}
 

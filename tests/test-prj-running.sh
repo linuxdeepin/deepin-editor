@@ -1,15 +1,15 @@
 #!/bin/bash
 builddir=build
 reportdir=build-ut
-# rm -r $builddir
-# rm -r ../$builddir
-# rm -r $reportdir
-# rm -r ../$reportdir
-# mkdir ../$builddir
-# mkdir ../$reportdir
+rm -r $builddir
+rm -r ../$builddir
+rm -r $reportdir
+rm -r ../$reportdir
+mkdir ../$builddir
+mkdir ../$reportdir
 cd ../$builddir
 #编译
-# cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_SAFETYTEST_ARG="CMAKE_SAFETYTEST_ARG_ON" ..
+cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_SAFETYTEST_ARG="CMAKE_SAFETYTEST_ARG_ON" ..
 make -j8
 #生成asan日志和ut测试xml结果
 export ASAN_OPTIONS=abort_on_error=0:detect_leaks=0
