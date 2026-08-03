@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -6,6 +6,21 @@
 
 #include <QPushButton>
 #include <QPaintEvent>
+#include <QAction>
+#include "../../src/widgets/window.h"
+#include "../../src/editor/editwrapper.h"
+#include "../stub.h"
+
+// Stub: 强制 getFileLoading 返回 true，覆盖编码 lambda 的回退分支
+static bool stub_getFileLoading_true()
+{
+    return true;
+}
+
+// Stub: reloadFileHighlight 空实现，避免外部副作用
+static void stub_reloadFileHighlight(QString)
+{
+}
 
 // 测试函数 BottomBar::updatePosition
 TEST_F(TestBottomBar, checkUpdatePosition)
@@ -161,4 +176,72 @@ TEST_F(TestBottomBar, checkPaintEvent)
     EXPECT_NE(bottomBar,nullptr);
     bottomBar->deleteLater();
 
+}
+
+// 测试函数 BottomBar::onFormatMenuTrigged
+TEST_F(TestBottomBar, checkOnFormatMenuTrigged)
+{
+    // 使用无 parent 的 BottomBar(m_pWrapper=nullptr)，覆盖提前返回分支(不触碰 m_pWrapper)
+    // 场景1: action 为空，提前返回
+    bottomBar->onFormatMenuTrigged(nullptr);
+
+    // 场景2: action 的格式与当前一致(Unix)，提前返回
+    QAction sameAction;
+    sameAction.setProperty(FormatActionType, BottomBar::EndlineFormat::Unix);
+    bottomBar->onFormatMenuTrigged(&sameAction);
+    EXPECT_EQ(bottomBar->getEndlineFormat(), BottomBar::EndlineFormat::Unix);
+}
+
+// 测试函数 BottomBar::slotSetTextEditFocus
+TEST_F(TestBottomBar, checkSlotSetTextEditFocus)
+{
+    // 仅在此处创建唯一的 Window：源码中 anchors_findbar 为函数内静态变量，
+    // 多个 Window 实例会触发其析构冲突，故整个用例集只创建一个 Window 并有意泄漏。
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    BottomBar *bar = pWindow->currentWrapper()->m_pBottomBar;
+    ASSERT_NE(bar, nullptr);
+
+    // 触发槽函数，通过真实的 window 发出 pressEsc 信号
+    bar->slotSetTextEditFocus();
+}
+
+// 测试构造函数 lambda #1: 切换编码 (currentActionChanged on m_pEncodeMenu)
+TEST_F(TestBottomBar, checkEncodeMenuLambda)
+{
+    // 独立的 EditWrapper 作为 BottomBar 的 parent(即 m_pWrapper)，避免依赖 Window
+    EditWrapper *wrapper = new EditWrapper;
+    BottomBar *bar = wrapper->m_pBottomBar;
+    ASSERT_NE(bar, nullptr);
+
+    // getFileLoading 返回 true 触发回退分支
+    Stub stub;
+    stub.set(ADDR(EditWrapper, getFileLoading), stub_getFileLoading_true);
+
+    QString previousText = bar->m_pEncodeMenu->getCurrentText();
+    QAction action("GBK");
+    emit bar->m_pEncodeMenu->currentActionChanged(&action);
+    // 回退分支：文本应保持为之前的值
+    EXPECT_EQ(bar->m_pEncodeMenu->getCurrentText(), previousText);
+
+    delete wrapper;
+}
+
+// 测试构造函数 lambda #2: 切换文件类型 (currentActionChanged on m_pHighlightMenu)
+TEST_F(TestBottomBar, checkHighlightMenuLambda)
+{
+    EditWrapper *wrapper = new EditWrapper;
+    BottomBar *bar = wrapper->m_pBottomBar;
+    ASSERT_NE(bar, nullptr);
+
+    // 避免 reloadFileHighlight 产生外部副作用
+    Stub stub;
+    stub.set(ADDR(EditWrapper, reloadFileHighlight), stub_reloadFileHighlight);
+
+    QAction action("C++");
+    emit bar->m_pHighlightMenu->currentActionChanged(&action);
+    // lambda 将高亮菜单文本设置为 action 的文本
+    EXPECT_EQ(bar->m_pHighlightMenu->getCurrentText(), QString("C++"));
+
+    delete wrapper;
 }

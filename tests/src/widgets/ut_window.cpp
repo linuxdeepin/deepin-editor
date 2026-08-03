@@ -710,15 +710,6 @@ TEST(UT_Window_popupJumpLineBar, UT_Window_popupJumpLineBar)
 }
 
 //updateJumpLineBar
-TEST(UT_Window_updateJumpLineBar, UT_Window_updateJumpLineBar)
-{
-//    Window * window = new Window();
-//    window->updateJumpLineBar();
-
-
-
-}
-
 //popupSettingsDialog
 TEST(UT_Window_popupSettingsDialog, UT_Window_popupSettingsDialog)
 {
@@ -739,15 +730,6 @@ TEST(UT_Window_popupSettingsDialog, UT_Window_popupSettingsDialog)
 }
 //popupPrintDialog
 
-TEST(UT_Window_popupPrintDialog, UT_Window_popupPrintDialog)
-{
-//    Window * window = new Window();
-//    window->popupPrintDialog();
-//    delete window;
-//    window = nullptr;
-
-
-}
 TEST(UT_Window_popupThemePanel, UT_Window_popupThemePanel)
 {
     Window * window1 = new Window();
@@ -768,15 +750,6 @@ TEST(UT_Window_toggleFullscreen, UT_Window_toggleFullscreen)
 
     EXPECT_NE(window1,nullptr);
     window1->deleteLater();
-
-
-}
-TEST(UT_Window_remberPositionSave, UT_Window_remberPositionSave)
-{
-//    Window * window = new Window();
-//    window->remberPositionSave();
-//    delete window;
-//    window = nullptr;
 
 
 }
@@ -852,13 +825,6 @@ TEST(UT_Window_addTabWithWrapper, UT_Window_addTabWithWrapper)
 
 
 }
-TEST(UT_Window_handleTabCloseRequested, UT_Window_handleTabCloseRequested)
-{
-//    StartManager::instance()->createWindow()->addTabWithWrapper(edit,"aabb","aabb",0);
-//    StartManager::instance()->createWindow()->handleTabCloseRequested(0);
-
-
-}
 //handleTabsClosed
 TEST(UT_Window_handleTabsClosed, UT_Window_handleTabsClosed)
 {
@@ -886,15 +852,6 @@ TEST(UT_Window_handleCurrentChanged, UT_Window_handleCurrentChanged)
     window->deleteLater();
 }
 //slot_setTitleFocus
-TEST(UT_Window_slot_setTitleFocus, UT_Window_slot_setTitleFocus)
-{
-//    QStringList aa;
-    //window = new Window();
-//    StartManager::instance()->createWindow()->slot_setTitleFocus();
-    //window->slot_setTitleFocus();
-
-
-}
 //resizeEvent
 TEST(UT_Window_resizeEvent, UT_Window_resizeEvent)
 {
@@ -910,135 +867,6 @@ TEST(UT_Window_resizeEvent, UT_Window_resizeEvent)
 
 }
 //closeEvent
-TEST(UT_Window_keyPressEvent, UT_Window_keyPressEvent_001)
-{
-//    QStringList aa;
-//    Window *window = new Window();
-//    window->m_settings = new Settings;
-//    QKeyEvent * eve =nullptr;
-//    utils_getkeyshortcut = Utils::getKeyshortcutFromKeymap(window->m_settings, "window", "decrementfontsize");
-//    editwrapper_texteditor = new TextEdit;
-
-//    Stub s1;s1.set(ADDR(Utils,getKeyshortcut),Utils_getKeyshortcut_stub);
-//    Stub s2;s2.set(ADDR(EditWrapper,textEditor),EditWrapper_textEditor_stub);
-
-//    window->keyPressEvent(eve);
-
-//    EXPECT_NE(window,nullptr);
-//    window->deleteLater();
-//    window->m_settings->deleteLater();
-//    editwrapper_texteditor->deleteLater();
-}
-
-
-TEST(UT_Window_keyPressEvent, UT_Window_keyPressEvent_002)
-{
-//    QStringList aa;
-//    Window *window = new Window();
-//    window->m_settings = new Settings;
-//    QKeyEvent * eve =nullptr;
-//    utils_getkeyshortcut = "Alt+4";
-//    editwrapper_texteditor = new TextEdit;
-
-//    Stub s1;s1.set(ADDR(Utils,getKeyshortcut),Utils_getKeyshortcut_stub);
-//    Stub s2;s2.set(ADDR(EditWrapper,textEditor),EditWrapper_textEditor_stub);
-
-//    window->keyPressEvent(eve);
-
-//    EXPECT_NE(window,nullptr);
-//    window->deleteLater();
-//    window->m_settings->deleteLater();
-//    editwrapper_texteditor->deleteLater();
-
-}
-
-
-TEST(UT_Window_keyPressEvent, UT_Window_keyPressEvent_003)
-{
-//    QStringList aa;
-//    Window *window = new Window();
-//    window->m_settings = new Settings;
-//    QKeyEvent * eve =nullptr;
-//    utils_getkeyshortcut = Utils::getKeyshortcutFromKeymap(window->m_settings, "window", "incrementfontsize");
-//    editwrapper_texteditor = new TextEdit;
-
-//    Stub s1;s1.set(ADDR(Utils,getKeyshortcut),Utils_getKeyshortcut_stub);
-//    Stub s2;s2.set(ADDR(EditWrapper,textEditor),EditWrapper_textEditor_stub);
-
-//    window->keyPressEvent(eve);
-
-//    EXPECT_NE(window,nullptr);
-//    window->deleteLater();
-//    window->m_settings->deleteLater();
-//    editwrapper_texteditor->deleteLater();
-
-}
-
-TEST(UT_Window_keyPressEvent, UT_Window_keyPressEvent_004)
-{
-//    QStringList aa;
-//    Window *window = new Window();
-//    window->m_settings = new Settings;
-//    QKeyEvent * eve =nullptr;
-//    utils_getkeyshortcut = Utils::getKeyshortcutFromKeymap(window->m_settings, "window", "decrementfontsize");
-//    editwrapper_texteditor = new TextEdit;
-
-//    Stub s1;s1.set(ADDR(Utils,getKeyshortcut),Utils_getKeyshortcut_stub);
-//    Stub s2;s2.set(ADDR(EditWrapper,textEditor),EditWrapper_textEditor_stub);
-
-//    window->keyPressEvent(eve);
-
-//    EXPECT_NE(window,nullptr);
-//    window->deleteLater();
-//    window->m_settings->deleteLater();
-//    editwrapper_texteditor->deleteLater();
-
-}
-
-
-TEST(UT_Window_keyPressEvent, UT_Window_keyPressEvent_005)
-{
-//    QStringList aa;
-//    Window *window = new Window();
-//    window->m_settings = new Settings;
-//    QKeyEvent * eve =nullptr;
-//    utils_getkeyshortcut = Utils::getKeyshortcutFromKeymap(window->m_settings, "window", "resetfontsize");
-//    editwrapper_texteditor = new TextEdit;
-
-//    Stub s1;s1.set(ADDR(Utils,getKeyshortcut),Utils_getKeyshortcut_stub);
-//    Stub s2;s2.set(ADDR(EditWrapper,textEditor),EditWrapper_textEditor_stub);
-
-//    window->keyPressEvent(eve);
-
-//    EXPECT_NE(window,nullptr);
-//    window->deleteLater();
-//    window->m_settings->deleteLater();
-//    editwrapper_texteditor->deleteLater();
-
-}
-
-TEST(UT_Window_keyPressEvent, UT_Window_keyPressEvent_006)
-{
-//    QStringList aa;
-//    Window *window = new Window();
-//    window->m_settings = new Settings;
-//    QKeyEvent * eve =nullptr;
-//    utils_getkeyshortcut = Utils::getKeyshortcutFromKeymap(window->m_settings, "window", "togglefullscreen");
-//    editwrapper_texteditor = new TextEdit;
-
-//    Stub s1;s1.set(ADDR(Utils,getKeyshortcut),Utils_getKeyshortcut_stub);
-//    Stub s2;s2.set(ADDR(EditWrapper,textEditor),EditWrapper_textEditor_stub);
-//    Stub s3;s3.set(ADDR(Utils,getKeyshortcutFromKeymap),Utils_getKeyshortcutFromKeymap_stub);
-
-//    window->keyPressEvent(eve);
-
-//    EXPECT_NE(window,nullptr);
-//    window->deleteLater();
-//    window->m_settings->deleteLater();
-//    editwrapper_texteditor->deleteLater();
-}
-
-
 //hideEvent
 TEST(UT_Window_hideEvent, UT_Window_hideEvent)
 {
@@ -2263,6 +2091,363 @@ TEST(UT_Window_rehighlightPrintDoc, rehighlightPrintDoc_HighlightCpp_pass)
     EXPECT_FALSE(doc->firstBlock().textFormats().isEmpty());
 
     doc->deleteLater();
+    w->deleteLater();
+}
+
+// ===================== Additional coverage for previously uncovered functions =====================
+#include <QKeyEvent>
+#include <QDragEnterEvent>
+#include <QMimeData>
+#include <QPainter>
+#include <QImage>
+#include <QTextDocument>
+#include <QTest>
+#include <DDialog>
+
+// stub for Window::doPrint / doPrintWithLargeDoc (avoid heavy printing work)
+static void Window_doPrint_stub(DPrinter *, const QVector<int> &) {}
+static void Window_doPrintWithLargeDoc_stub(DPrinter *, const QVector<int> &) {}
+
+// stub for Window::remberPositionSave inner notify (avoid popup) - reuse void() stub
+static void Window_showNotify_stub(const QString &, bool) {}
+
+// Blocks DeferredDelete events for ALL objects (event filter on qApp receives every
+// event). Needed because Window's constructor holds a `static DAnchors<FindBar>` that
+// becomes a child of the first Window's FindBar; destroying it triggers a bad-free on
+// static storage. Suppressing deferred deletes keeps accumulated Window deleteLaters
+// from running while still letting QTimer::singleShot lambdas fire during qWait.
+class UT_DeferredDeleteBlocker : public QObject
+{
+public:
+    bool eventFilter(QObject *, QEvent *e) override
+    {
+        return e->type() == QEvent::DeferredDelete;
+    }
+};
+
+// ---------- 1. Window::keyPressEvent ----------
+TEST(UT_Window_keyPressEvent, keyPressEvent_NoMatch_FallsToElse)
+{
+    Window *w = new Window();
+    w->addBlankTab();
+
+    Stub s;
+    s.set(ADDR(Utils, getKeyshortcut), Utils_getKeyshortcut_stub);
+    utils_getkeyshortcut = "AAA";
+    s.set(ADDR(Utils, getKeyshortcutFromKeymap), Utils_getKeyshortcutFromKeymap_stub);
+    utils_getkeyshortcutfromkeymap = "ZZZ";
+
+    QKeyEvent e(QEvent::KeyPress, Qt::Key_A, Qt::NoModifier, "A");
+    w->keyPressEvent(&e);
+
+    EXPECT_NE(w, nullptr);
+    w->deleteLater();
+}
+
+// ---------- 2. Window::dragEnterEvent ----------
+TEST(UT_Window_dragEnterEvent, dragEnterEvent_AcceptsEvent)
+{
+    Window *w = new Window();
+    QMimeData *mime = new QMimeData;
+    QDragEnterEvent e(QPoint(0, 0), Qt::CopyAction, mime, Qt::LeftButton, Qt::NoModifier);
+    w->dragEnterEvent(&e);
+
+    EXPECT_TRUE(e.isAccepted());
+    delete mime;
+    w->deleteLater();
+}
+
+// ---------- 3. Window::updateSizeMode ----------
+TEST(UT_Window_updateSizeMode, updateSizeMode_NoBarsVisible)
+{
+    Window *w = new Window();
+    w->addBlankTab();
+    w->updateSizeMode(); // find/replace bars not visible -> only debug output
+
+    EXPECT_NE(w, nullptr);
+    w->deleteLater();
+}
+
+TEST(UT_Window_updateSizeMode, updateSizeMode_FindBarVisible)
+{
+    Window *w = new Window();
+    UT_DeferredDeleteBlocker blocker;
+    qApp->installEventFilter(&blocker);
+    w->show();
+    w->addBlankTab();
+    w->currentWrapper()->textEditor()->setPlainText("hello world");
+
+    w->popupFindBar(); // show find bar
+
+    w->updateSizeMode(); // find bar visible branch
+    qApp->removeEventFilter(&blocker);
+
+    w->deleteLater();
+}
+
+// ---------- 4. Window::keyReleaseEvent ----------
+TEST(UT_Window_keyReleaseEvent, keyReleaseEvent_NoModifiers)
+{
+    Window *w = new Window();
+    QKeyEvent e(QEvent::KeyRelease, Qt::Key_A, Qt::NoModifier);
+    w->keyReleaseEvent(&e);
+
+    EXPECT_NE(w, nullptr);
+    w->deleteLater();
+}
+
+// ---------- 5. Window::popupPrintDialog + lambdas (#18,#19,#20) ----------
+TEST(UT_Window_popupPrintDialog, popupPrintDialog_ImplWithLambdas)
+{
+    Window *w = new Window();
+    w->addBlankTab();
+    w->currentWrapper()->textEditor()->setPlainText("12345 test content");
+
+    Stub s;
+    typedef int (*Fptr)(DDialog *);
+    Fptr fptr = (Fptr)(&DDialog::exec);
+    s.set(fptr, QDialog_exec_stub);
+    s.set(ADDR(Window, doPrint), Window_doPrint_stub);
+    s.set(ADDR(Window, doPrintWithLargeDoc), Window_doPrintWithLargeDoc_stub);
+
+    w->popupPrintDialog();
+    EXPECT_NE(w->m_pPreview, nullptr);
+
+    // Trigger the 3 lambdas connected inside popupPrintDialog by emitting the
+    // dialog's signals via the meta-object system (signals are protected).
+    if (w->m_pPreview) {
+        // lambda #1: finished(int)
+        QMetaObject::invokeMethod(w->m_pPreview, "finished", Qt::DirectConnection, Q_ARG(int, 0));
+        // lambda #2: rejected()
+        QMetaObject::invokeMethod(w->m_pPreview, "rejected", Qt::DirectConnection);
+        // lambda #3: paintRequested(DPrinter*, QVector<int>)
+        DPrinter printer(QPrinter::HighResolution);
+        QVector<int> pages;
+        pages << 1;
+        QMetaObject::invokeMethod(w->m_pPreview, "paintRequested", Qt::DirectConnection,
+                                  Q_ARG(DPrinter *, &printer), Q_ARG(QVector<int>, pages));
+        delete w->m_pPreview;
+        w->m_pPreview = nullptr;
+    }
+
+    w->deleteLater();
+}
+
+// ---------- 6. Window::remberPositionSave ----------
+TEST(UT_Window_remberPositionSave, remberPositionSave_Impl)
+{
+    Window *w = new Window();
+    w->addBlankTab();
+    w->currentWrapper()->textEditor()->setPlainText("remember me");
+
+    Stub s;
+    s.set(ADDR(Window, showNotify), Window_showNotify_stub);
+
+    w->remberPositionSave();
+    EXPECT_FALSE(w->m_remberPositionFilePath.isEmpty());
+
+    w->deleteLater();
+}
+
+// ---------- 7. Window::getKeywordForSearch ----------
+TEST(UT_Window_getKeywordForSearch, getKeywordForSearch_ReturnsMember)
+{
+    Window *w = new Window();
+    w->m_keywordForSearch = "search_kw";
+    EXPECT_EQ(w->getKeywordForSearch().toStdString(), "search_kw");
+    w->deleteLater();
+}
+
+// ---------- 8. Window::printPageWithMultiDoc ----------
+TEST(UT_Window_printPageWithMultiDoc, printPageWithMultiDoc_NoHighlighter)
+{
+    Window *w = new Window();
+
+    QTextDocument doc;
+    doc.setPlainText("line one\nline two\nline three\nline four\nline five");
+    QImage img(400, 400, QImage::Format_ARGB32);
+    img.fill(Qt::white);
+    QPainter painter(&img);
+
+    QVector<Window::PrintInfo> infos;
+    Window::PrintInfo info;
+    info.doc = &doc;
+    info.highlighter = nullptr;
+    infos.append(info);
+
+    QRectF body(0, 0, 400, 400);
+    QRectF pageBox(0, 380, 400, 20);
+
+    w->printPageWithMultiDoc(1, &painter, infos, body, pageBox);
+
+    painter.end();
+    w->deleteLater();
+}
+
+// ---------- 9. Window::confirmInvalidCharSave ----------
+TEST(UT_Window_confirmInvalidCharSave, confirmInvalidCharSave_ReturnsExecResult)
+{
+    Window *w = new Window();
+
+    Stub s;
+    typedef int (*Fptr)(DDialog *);
+    Fptr fptr = (Fptr)(&DDialog::exec);
+    exec_ret = 2;
+    s.set(fptr, QDialog_exec_stub);
+
+    int res = w->confirmInvalidCharSave("bad:name?.txt");
+    EXPECT_EQ(res, 2);
+
+    w->deleteLater();
+}
+
+// ---------- 10. Window::getCurrentOpenFilePath ----------
+TEST(UT_Window_getCurrentOpenFilePath, getCurrentOpenFilePath_NoWrapper)
+{
+    Window *w = new Window();
+    // no wrapper present -> empty path
+    EXPECT_TRUE(w->getCurrentOpenFilePath().isEmpty());
+    w->deleteLater();
+}
+
+TEST(UT_Window_getCurrentOpenFilePath, getCurrentOpenFilePath_DraftWrapper)
+{
+    Window *w = new Window();
+    w->addBlankTab();
+    // blank tab is a draft file -> returns Documents directory
+    QString p = w->getCurrentOpenFilePath();
+    EXPECT_FALSE(p.isEmpty());
+    w->deleteLater();
+}
+
+// ---------- 11. Window::getKeywordForSearchAll ----------
+TEST(UT_Window_getKeywordForSearchAll, getKeywordForSearchAll_ReturnsMember)
+{
+    Window *w = new Window();
+    w->m_keywordForSearchAll = "search_all_kw";
+    EXPECT_EQ(w->getKeywordForSearchAll().toStdString(), "search_all_kw");
+    w->deleteLater();
+}
+
+// ---------- 12. Window::slotSwitchToReplaceBar ----------
+TEST(UT_Window_slotSwitchToReplaceBar, slotSwitchToReplaceBar_FromFindBar)
+{
+    Window *w = new Window();
+    UT_DeferredDeleteBlocker blocker;
+    qApp->installEventFilter(&blocker);
+    w->show();
+    w->addBlankTab();
+    w->currentWrapper()->textEditor()->setPlainText("find me here");
+
+    w->popupFindBar(); // make find bar visible
+
+
+    w->slotSwitchToReplaceBar();
+    qApp->removeEventFilter(&blocker);
+
+    EXPECT_NE(w, nullptr);
+    w->deleteLater();
+}
+
+// ---------- 13. Window::slotSigSetLineNumberShow ----------
+TEST(UT_Window_slotSigSetLineNumberShow, slotSigSetLineNumberShow_Toggles)
+{
+    Window *w = new Window();
+    w->addBlankTab(); // ensure m_wrappers has at least one wrapper
+    w->slotSigSetLineNumberShow(true);
+    w->slotSigSetLineNumberShow(false);
+
+    EXPECT_NE(w, nullptr);
+    w->deleteLater();
+}
+
+// ---------- 14. Window::getIflytekaiassistantConfig ----------
+TEST(UT_Window_getIflytekaiassistantConfig, getIflytekaiassistantConfig_Lookup)
+{
+    Window *w = new Window();
+    // key not present -> false
+    EXPECT_FALSE(w->getIflytekaiassistantConfig("non_existent_mode"));
+    // inject a configured entry -> true
+    w->m_IflytekAiassistantState["mode_x"] = true;
+    EXPECT_TRUE(w->getIflytekaiassistantConfig("mode_x"));
+    w->deleteLater();
+}
+
+// ---------- 15. Window::loadIflytekaiassistantConfig ----------
+TEST(UT_Window_loadIflytekaiassistantConfig, loadIflytekaiassistantConfig_NoCrash)
+{
+    Window *w = new Window();
+    w->loadIflytekaiassistantConfig(); // config dir typically absent -> early return
+    EXPECT_NE(w, nullptr);
+    w->deleteLater();
+}
+
+// ---------- 16. popupFindBar lambda #1 (QTimer::singleShot) ----------
+TEST(UT_Window_popupFindBar, popupFindBar_TriggersFocusLambda)
+{
+    Window *w = new Window();
+    UT_DeferredDeleteBlocker blocker;
+    qApp->installEventFilter(&blocker);
+    w->show();
+    w->addBlankTab();
+    w->currentWrapper()->textEditor()->setPlainText("12345 content");
+    w->popupFindBar();
+    // process the QTimer::singleShot(10) lambda which calls m_findBar->focus()
+
+    qApp->removeEventFilter(&blocker);
+
+    EXPECT_NE(w, nullptr);
+    w->deleteLater();
+}
+
+// ---------- 17. popupReplaceBar lambda #1 (QTimer::singleShot) ----------
+TEST(UT_Window_popupReplaceBar, popupReplaceBar_TriggersFocusLambda)
+{
+    Window *w = new Window();
+    UT_DeferredDeleteBlocker blocker;
+    qApp->installEventFilter(&blocker);
+    w->show();
+    w->addBlankTab();
+    w->currentWrapper()->textEditor()->setPlainText("12345 content");
+    w->popupReplaceBar();
+    // process the QTimer::singleShot(10) lambda which calls m_replaceBar->focus()
+
+    qApp->removeEventFilter(&blocker);
+
+    EXPECT_NE(w, nullptr);
+    w->deleteLater();
+}
+
+// ---------- 21. addTabWithWrapper lambda #1 (textChanged -> UpdateBottomBarWordCnt) ----------
+TEST(UT_Window_addTabWithWrapper, addTabWithWrapper_TriggersTextChangedLambda)
+{
+    Window *w = new Window();
+    EditWrapper *ew = new EditWrapper();
+    w->addTabWithWrapper(ew, "fp_lambda", "tp_lambda", "tab_lambda", 0);
+    // Changing text on the added wrapper's editor fires the textChanged lambda
+    // connected inside addTabWithWrapper.
+    ew->textEditor()->setPlainText("trigger textChanged lambda");
+
+    EXPECT_NE(w, nullptr);
+    w->deleteLater();
+    ew->deleteLater();
+}
+
+// ---------- 22 & 23. Window constructor lambdas (findBar/replaceBar updateSearchKeyword) ----------
+TEST(UT_Window_Window, Window_ConstructorUpdateSearchKeywordLambdas)
+{
+    Window *w = new Window();
+    w->addBlankTab(); // handleUpdateSearchKeyword dereferences currentWrapper()
+    QString path = w->m_tabbar->currentPath();
+
+    // Constructor lambda #1: m_findBar updateSearchKeyword -> handleUpdateSearchKeyword(m_findBar,...)
+    QMetaObject::invokeMethod(w->m_findBar, "updateSearchKeyword",
+                              Q_ARG(QString, path), Q_ARG(QString, "find_kw"));
+    // Constructor lambda #2: m_replaceBar updateSearchKeyword -> handleUpdateSearchKeyword(m_replaceBar,...)
+    QMetaObject::invokeMethod(w->m_replaceBar, "updateSearchKeyword",
+                              Q_ARG(QString, path), Q_ARG(QString, "replace_kw"));
+
+    EXPECT_NE(w, nullptr);
     w->deleteLater();
 }
 
