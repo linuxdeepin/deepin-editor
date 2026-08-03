@@ -1454,3 +1454,251 @@ TEST(UT_Editwrapper_reloadFileHighlight, reloadFileHighlight_SingleLineText_Succ
     wra->deleteLater();
     window->deleteLater();
 }
+
+// ============================================================================
+// Appended tests for previously uncovered EditWrapper / ParseFileEvent functions
+// ============================================================================
+
+#include <QEvent>
+#include <QTextCodec>
+#include <QFile>
+
+// Mirror of the private ParseFileEvent class declared inside editwrapper.cpp.
+// Only declarations are provided here; the definitions (constructor, destructor,
+// clone) live in editwrapper.cpp and are linked in. Layout matches the source.
+class ParseFileEvent : public QEvent
+{
+public:
+    enum Type {
+        EParseFile = QEvent::User + 1024,
+    };
+
+    ParseFileEvent();
+    virtual ~ParseFileEvent();
+    ParseFileEvent *clone();
+
+    int             m_alreadyReadOffset = 0;
+    QByteArray      m_contentData;
+    QTextCursor     m_cursor;
+    QTextCodec      *m_codec = nullptr;
+};
+
+// ParseFileEvent::ParseFileEvent() (covered by new) + clone() + deleting destructor
+TEST(UT_Editwrapper_ParseFileEvent, construct_clone_destroy)
+{
+    ParseFileEvent *e = new ParseFileEvent();
+    ASSERT_TRUE(e != nullptr);
+    e->m_contentData = QByteArray("hello world");
+    e->m_codec = QTextCodec::codecForName("UTF-8");
+
+    ParseFileEvent *c = e->clone();
+    ASSERT_TRUE(c != nullptr);
+    EXPECT_EQ(c->m_contentData, e->m_contentData);
+    EXPECT_EQ(c->m_alreadyReadOffset, e->m_alreadyReadOffset);
+
+    delete c;   // deleting destructor
+    delete e;   // deleting destructor
+}
+
+// ParseFileEvent complete-object destructor variant (stack-local destruction)
+TEST(UT_Editwrapper_ParseFileEvent, stack_local_destructor)
+{
+    {
+        ParseFileEvent e;
+        e.m_contentData = "stack";
+        e.m_codec = QTextCodec::codecForName("UTF-8");
+    }
+    SUCCEED();
+}
+
+// EditWrapper::customEvent(QEvent*) with a non ParseFileEvent (early return path)
+TEST(UT_Editwrapper_customEvent, customEvent_UnrelatedEvent_NoOp)
+{
+    Window *window = new Window();
+    EditWrapper *wra = new EditWrapper(window);
+
+    QEvent e(QEvent::None);
+    wra->customEvent(&e);   // type does not match EParseFile, returns immediately
+
+    wra->deleteLater();
+    window->deleteLater();
+}
+
+// EditWrapper::customEvent(QEvent*) with a real ParseFileEvent (content < 1MB,
+// completes in a single step so no follow-up event is posted)
+TEST(UT_Editwrapper_customEvent, customEvent_ParseFileEvent)
+{
+    Window *window = new Window();
+    EditWrapper *wra = new EditWrapper(window);
+
+    ParseFileEvent *e = new ParseFileEvent();
+    e->m_contentData = QByteArray("test content for customEvent");
+    e->m_codec = QTextCodec::codecForName("UTF-8");
+    e->m_cursor = wra->m_pTextEdit->textCursor();
+
+    wra->customEvent(e);
+    EXPECT_TRUE(wra->m_bAsyncReadFileFinished);
+
+    // customEvent does not take ownership of the event object
+    delete e;
+
+    wra->deleteLater();
+    window->deleteLater();
+}
+
+// EditWrapper::isQuit()
+TEST(UT_Editwrapper_isQuit, isQuit)
+{
+    Window *window = new Window();
+    EditWrapper *wra = new EditWrapper(window);
+
+    EXPECT_FALSE(wra->isQuit());
+    wra->setQuitFlag();
+    EXPECT_TRUE(wra->isQuit());
+
+    wra->deleteLater();
+    window->deleteLater();
+}
+
+// EditWrapper::setLastModifiedTime(QString const&) + getLastModifiedTime() const
+TEST(UT_Editwrapper_LastModifiedTime, set_and_get)
+{
+    Window *window = new Window();
+    EditWrapper *wra = new EditWrapper(window);
+
+    // setLastModifiedTime parses the string via QDateTime::fromString; round-trip
+    // is verified regardless of whether the format is parseable.
+    wra->setLastModifiedTime("2023-01-02 03:04:05");
+    QDateTime stored = QDateTime::fromString(QString("2023-01-02 03:04:05"));
+    EXPECT_EQ(wra->getLastModifiedTime(), stored);
+
+    wra->deleteLater();
+    window->deleteLater();
+}
+
+// EditWrapper::invalidCharOriginalPath() const + isInvalidCharEditAllowed() const
+TEST(UT_Editwrapper_InvalidCharAccessors, default_values)
+{
+    Window *window = new Window();
+    EditWrapper *wra = new EditWrapper(window);
+
+    EXPECT_TRUE(wra->invalidCharOriginalPath().isEmpty());
+    EXPECT_FALSE(wra->isInvalidCharEditAllowed());
+
+    wra->deleteLater();
+    window->deleteLater();
+}
+
+// EditWrapper::setRestoreCursorPosition(int)
+TEST(UT_Editwrapper_setRestoreCursorPosition, setRestoreCursorPosition)
+{
+    Window *window = new Window();
+    EditWrapper *wra = new EditWrapper(window);
+
+    wra->setRestoreCursorPosition(5);
+    EXPECT_EQ(wra->m_nRestoreCursorPosition, 5);
+
+    wra->deleteLater();
+    window->deleteLater();
+}
+
+// EditWrapper::getPlainTextContent(QByteArray&)
+TEST(UT_Editwrapper_getPlainTextContent, getPlainTextContent)
+{
+    Window *window = new Window();
+    EditWrapper *wra = new EditWrapper(window);
+    wra->m_pTextEdit->setPlainText("some text content");
+
+    QByteArray data;
+    wra->getPlainTextContent(data);
+    EXPECT_EQ(data, QByteArray("some text content"));
+
+    wra->deleteLater();
+    window->deleteLater();
+}
+
+// EditWrapper::updateHighlighterAll()
+TEST(UT_Editwrapper_updateHighlighterAll, no_highlighter_early_return)
+{
+    Window *window = new Window();
+    EditWrapper *wra = new EditWrapper(window);
+    wra->m_pTextEdit->setPlainText("aaa\nbbb");
+
+    wra->updateHighlighterAll();   // no syntax highlighter present -> early return
+    EXPECT_FALSE(wra->m_bHighlighterAll);
+
+    wra->deleteLater();
+    window->deleteLater();
+}
+
+// EditWrapper::onEditAnyway()
+TEST(UT_Editwrapper_onEditAnyway, onEditAnyway)
+{
+    Window *window = new Window();
+    EditWrapper *wra = new EditWrapper(window);
+    wra->m_bInvalidCharPreview = true;
+
+    wra->onEditAnyway();
+    EXPECT_TRUE(wra->isInvalidCharEditAllowed());
+    EXPECT_FALSE(wra->m_pTextEdit->isReadOnly());
+
+    wra->deleteLater();
+    window->deleteLater();
+}
+
+// EditWrapper::onReadAllocError()
+TEST(UT_Editwrapper_onReadAllocError, onReadAllocError)
+{
+    Window *window = new Window();
+    EditWrapper *wra = new EditWrapper(window);
+
+    wra->onReadAllocError();
+    // toggles read-only mode and shows the warning notice; just ensure no crash
+    EXPECT_TRUE(wra->m_pWaringNotices != nullptr);
+
+    wra->deleteLater();
+    window->deleteLater();
+}
+
+// EditWrapper::exitInvalidCharPreview()
+TEST(UT_Editwrapper_exitInvalidCharPreview, exitInvalidCharPreview)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    EditWrapper *wra = pWindow->currentWrapper();
+    wra->m_bInvalidCharPreview = true;
+    wra->m_bInvalidCharEditAllowed = true;
+    wra->m_sInvalidCharOriginalPath = "/tmp/ut_some_path.txt";
+
+    wra->exitInvalidCharPreview();
+    EXPECT_FALSE(wra->m_bInvalidCharPreview);
+    EXPECT_FALSE(wra->isInvalidCharEditAllowed());
+    EXPECT_TRUE(wra->invalidCharOriginalPath().isEmpty());
+
+    pWindow->deleteLater();
+}
+
+// EditWrapper::forceSaveInvalidCharFile() (success path with a writable path)
+namespace editwrapper_force {
+void writeEncodeHistoryRecord_stub() {}
+}
+
+TEST(UT_Editwrapper_forceSaveInvalidCharFile, save_success)
+{
+    Stub s;
+    s.set(ADDR(TextEdit, writeEncodeHistoryRecord), editwrapper_force::writeEncodeHistoryRecord_stub);
+
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    EditWrapper *wra = pWindow->currentWrapper();
+    wra->m_pTextEdit->setPlainText("force save content");
+    wra->m_sInvalidCharOriginalPath = "/tmp/ut_forceSaveInvalidCharFile.txt";
+
+    bool ok = wra->forceSaveInvalidCharFile();
+    EXPECT_TRUE(ok);
+    EXPECT_FALSE(wra->m_bInvalidCharPreview);
+
+    QFile::remove("/tmp/ut_forceSaveInvalidCharFile.txt");
+
+    pWindow->deleteLater();
+}
