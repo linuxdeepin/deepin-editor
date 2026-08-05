@@ -55,6 +55,7 @@ Tabbar::Tabbar(QWidget *parent)
     : DTabBar(parent)
 {
     qDebug() << "Tabbar constructor start";
+    setAccessibleName("EditorTabbar");
     m_rightClickTab = -1;
 
     installEventFilter(this);

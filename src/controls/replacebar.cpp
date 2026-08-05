@@ -54,6 +54,18 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     m_layout->addWidget(m_closeButton);
     this->setLayout(m_layout);
 
+    // AT-SPI accessibility
+    setAccessibleName("ReplaceBar");
+    m_replaceLabel->setAccessibleName("ReplaceLabel");
+    m_replaceLine->setAccessibleName("ReplaceFindInput");
+    m_withLabel->setAccessibleName("WithLabel");
+    m_withLine->setAccessibleName("ReplaceWithInput");
+    m_replaceButton->setAccessibleName("ReplaceButton");
+    m_replaceSkipButton->setAccessibleName("SkipButton");
+    m_replaceRestButton->setAccessibleName("ReplaceRestButton");
+    m_replaceAllButton->setAccessibleName("ReplaceAllButton");
+    m_closeButton->setAccessibleName("ReplaceBarCloseButton");
+
     // Make button don't grab keyboard focus after click it.
     #if 0
     m_replaceButton->setFocusPolicy(Qt::NoFocus);

@@ -58,6 +58,15 @@ FindBar::FindBar(QWidget *parent)
     m_layout->addWidget(m_closeButton);
     this->setLayout(m_layout);
 
+    // AT-SPI accessibility
+    setAccessibleName("FindBar");
+    m_findLabel->setAccessibleName("FindLabel");
+    m_editLine->setAccessibleName("FindInput");
+    m_findPrevButton->setAccessibleName("FindPrevButton");
+    m_findNextButton->setAccessibleName("FindNextButton");
+    m_replaceButton->setAccessibleName("SwitchToReplaceButton");
+    m_closeButton->setAccessibleName("FindBarCloseButton");
+
     // Make button don't grab keyboard focus after click it.
     // m_findNextButton->setFocusPolicy(Qt::NoFocus);
     // m_findPrevButton->setFocusPolicy(Qt::NoFocus);

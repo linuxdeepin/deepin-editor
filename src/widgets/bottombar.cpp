@@ -101,6 +101,18 @@ BottomBar::BottomBar(QWidget *parent)
     layout->addWidget(pVerticalLine3);
     layout->addWidget(m_pHighlightMenu);
 
+    // AT-SPI accessibility
+    setAccessibleName("BottomBar");
+    m_pPositionLabel->setAccessibleName("PositionLabel");
+    m_pCharCountLabel->setAccessibleName("CharCountLabel");
+    m_pCursorStatus->setAccessibleName("CursorStatusLabel");
+    m_pEncodeMenu->setAccessibleName("EncodeMenu");
+    m_pHighlightMenu->setAccessibleName("HighlightMenu");
+    m_scaleLabel->setAccessibleName("ScaleLabel");
+    m_formatMenu->setAccessibleName("FormatMenu");
+    m_progressLabel->setAccessibleName("ProgressLabel");
+    m_progressBar->setAccessibleName("ProgressBar");
+
     //切换编码
     connect(m_pEncodeMenu, &DDropdownMenu::currentActionChanged, this,[this](QAction* pAct){
         qInfo() << "Encoding changed to:" << pAct->text();

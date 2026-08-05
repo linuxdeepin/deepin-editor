@@ -190,6 +190,10 @@ TextEdit::TextEdit(QWidget *parent)
     // Don't blink the cursor when selecting text
     // Recover blink when not selecting text.
     connect(this, &TextEdit::selectionChanged, this, &TextEdit::slotSelectionChanged, Qt::QueuedConnection);
+
+    // AT-SPI accessibility
+    setAccessibleName("TextEditor");
+
     qDebug() << "TextEdit initialized";
 }
 

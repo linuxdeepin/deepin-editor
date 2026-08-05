@@ -356,6 +356,9 @@ Window::Window(DMainWindow *parent)
     // 适配紧凑模式更新，注意 Qt::QueuedConnection 需要在其他子组件更新后触发
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, &Window::updateSizeMode, Qt::QueuedConnection);
 #endif
+    // AT-SPI accessibility
+    setAccessibleName("EditorWindow");
+
     qDebug() << "Window constructor end";
 }
 
@@ -561,6 +564,7 @@ void Window::initTitlebar()
 
     DIconButton *addButton = m_tabbar->findChild<DIconButton *>("AddButton");
     addButton->setFocusPolicy(Qt::NoFocus);
+    addButton->setAccessibleName("AddTabButton");
     DIconButton *optionBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowOptionButton");
     optionBtn->setFocusPolicy(Qt::NoFocus);
     DIconButton *minBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowMinButton");

@@ -65,6 +65,12 @@ JumpLineBar::JumpLineBar(DFloatingWidget *parent)
     connect(m_pSpinBoxInput->lineEdit(), &QLineEdit::textChanged, this, &JumpLineBar::handleLineChanged, Qt::QueuedConnection);
     connect(m_closeButton, &DIconButton::clicked, this, &JumpLineBar::close, Qt::QueuedConnection);
 
+    // AT-SPI accessibility
+    setAccessibleName("JumpLineBar");
+    m_label->setAccessibleName("JumpLineLabel");
+    m_pSpinBoxInput->setAccessibleName("JumpLineInput");
+    m_closeButton->setAccessibleName("JumpLineCloseButton");
+
 #ifdef DTKWIDGET_CLASS_DSizeMode
     // 初始化布局模式
     updateSizeMode();

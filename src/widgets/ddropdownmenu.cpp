@@ -67,6 +67,9 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     layout->setContentsMargins(0,0,0,0);
     this->setLayout(layout);
 
+    // AT-SPI accessibility
+    m_pToolButton->setAccessibleName("DropdownMenuButton");
+
     connect(this, &DDropdownMenu::requestContextMenu, this, &DDropdownMenu::slotRequestMenu);
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))

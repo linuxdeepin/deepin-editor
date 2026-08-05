@@ -116,6 +116,9 @@ EditWrapper::EditWrapper(Window *window, QWidget *parent)
     mainLayout->setSpacing(0);
     setLayout(mainLayout);
 
+    // AT-SPI accessibility
+    setAccessibleName("EditWrapper");
+
     connect(m_pTextEdit, &TextEdit::cursorModeChanged, this, &EditWrapper::handleCursorModeChanged);
     connect(m_pWaringNotices, &WarningNotices::reloadBtnClicked, this, &EditWrapper::reloadModifyFile);
     connect(m_pWaringNotices, &WarningNotices::saveAsBtnClicked, m_pWindow, &Window::saveAsFile);

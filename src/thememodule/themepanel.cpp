@@ -41,6 +41,10 @@ ThemePanel::ThemePanel(QWidget *parent)
         m_themeView->setCurrentIndex(idx);
         m_themeView->scrollTo(idx);
     });
+
+    // AT-SPI accessibility
+    setAccessibleName("ThemePanel");
+
     qDebug() << "ThemePanel initialized";
 }
 
