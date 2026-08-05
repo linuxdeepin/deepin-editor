@@ -78,6 +78,11 @@ Files: tests/at/*.md
 Copyright: UnionTech Software Technology Co., Ltd.
 License: CC-BY-4.0
 
+# AT-SPI scan report
+Files: at-spi-scan-report.md
+Copyright: UnionTech Software Technology Co., Ltd.
+License: CC-BY-4.0
+
 # encoding
 Files: src/common/encoding.*
 Copyright: 2014-2020 Pedram Pourang (aka Tsu Jan) <tsujan2000@gmail.com>
