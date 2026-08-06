@@ -74,12 +74,7 @@ Copyright: UnionTech Software Technology Co., Ltd.
 License: CC-BY-4.0
 
 # AT test documents
-Files: tests/at/*.md
-Copyright: UnionTech Software Technology Co., Ltd.
-License: CC-BY-4.0
-
-# AT-SPI scan report
-Files: at-spi-scan-report.md
+Files: tests/at/*.md tests/at/spi/*.md
 Copyright: UnionTech Software Technology Co., Ltd.
 License: CC-BY-4.0
 
