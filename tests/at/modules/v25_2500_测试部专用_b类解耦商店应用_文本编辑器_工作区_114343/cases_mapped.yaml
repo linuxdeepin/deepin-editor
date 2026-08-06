@@ -1,3 +1,24 @@
+# === 格式范例 ===
+# metadata:
+#   generated_at: "2024-01-01T00:00:00"
+#   source: "input.xlsx"
+# cases:
+#   - id: "case-id"
+#     name: "用例名称"
+#     status: active
+#     annotation:
+#       测试界面: "主窗口"
+#       测试功能: "功能点"
+#       前置条件: "应用已启动"
+#       AT元素引用: "文本编辑器主窗口"
+#     steps:
+#       - step_type: action
+#         action: session_start
+#         command: deepin-editor
+#       - step_type: assert
+#         action: assert_element
+#         selector: {name: "查找"}
+# === 格式范例结束 ===
 metadata:
   generated_at: '2026-07-30T03:10:00'
   source: 统信桌面操作系统 V25-文本编辑器-用例.xlsx
@@ -582,9 +603,33 @@ cases:
   module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
 - id: case_1592739
   name: 重做
-  status: unsupported
-  reason: 右键菜单重做项动态显示状态和文本恢复结果不可稳定断言
-  steps: []
+  status: active
+  steps:
+  - step_type: action
+    description: 打开文本编辑器
+    action: session_start
+    command: deepin-editor
+  - step_type: action
+    description: 输入用于重做的文本
+    action: keyboard_type
+    text: redo workspace text
+  - step_type: action
+    description: 执行撤销
+    action: keyboard_hot_key
+    key: ctrl+z
+  - step_type: action
+    description: 执行重做
+    action: keyboard_hot_key
+    key: ctrl+y
+  - step_type: action
+    description: 打开查找功能验证重做后仍可交互
+    action: keyboard_hot_key
+    key: ctrl+f
+  - step_type: assert
+    description: 验证查找栏可见
+    action: assert_element
+    selector:
+      name: 查找
   annotation:
     测试界面: 主窗口-工作区
     测试功能: 重做
@@ -594,7 +639,7 @@ cases:
 - id: case_1592731
   name: 转换大写
   status: unsupported
-  reason: 需鼠标框选文本并验证内容大小写变化，当前无稳定文本值断言
+  reason: 运行时编辑区无稳定 AT-SPI name 可作为右键菜单目标，大小写转换仍不可稳定自动化
   steps: []
   annotation:
     测试界面: 主窗口-工作区
@@ -605,7 +650,7 @@ cases:
 - id: case_1592729
   name: 转换小写
   status: unsupported
-  reason: 需鼠标框选文本并验证内容大小写变化，当前无稳定文本值断言
+  reason: 运行时编辑区无稳定 AT-SPI name 可作为右键菜单目标，大小写转换仍不可稳定自动化
   steps: []
   annotation:
     测试界面: 主窗口-工作区

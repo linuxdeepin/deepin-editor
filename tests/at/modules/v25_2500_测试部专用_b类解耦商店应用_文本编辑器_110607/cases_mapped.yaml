@@ -108,12 +108,12 @@ cases:
       - step_type: action
         description: "点击替换按钮切换至替换弹窗"
         action: element_action
-        selector: {name: "替换", role: "push button"}
+        selector: {name: "替换", role: "menu item"}
         do: click
       - step_type: assert
         description: "验证替换弹窗正常显示"
         action: assert_element
-        selector: {name: "替换", role: "push button"}
+        selector: {name: "替换", role: "menu item"}
 
   - id: case_1919209
     name: "查找替换-替换弹窗填充选中内容及状态保留"
@@ -152,12 +152,12 @@ cases:
       - step_type: action
         description: "点击替换按钮切换至替换弹窗"
         action: element_action
-        selector: {name: "替换", role: "push button"}
+        selector: {name: "替换", role: "menu item"}
         do: click
       - step_type: assert
         description: "验证成功切换至替换弹窗"
         action: assert_element
-        selector: {name: "替换", role: "push button"}
+        selector: {name: "替换", role: "menu item"}
       - step_type: action
         description: "快捷键 Ctrl+H 直接触发替换功能"
         action: keyboard_hot_key
@@ -165,7 +165,7 @@ cases:
       - step_type: assert
         description: "验证弹出替换弹窗"
         action: assert_element
-        selector: {name: "替换", role: "push button"}
+        selector: {name: "替换", role: "menu item"}
 
   - id: case_1919205
     name: "查找替换-已选中文本时点击替换按钮切换至替换弹窗（代入选中文本）"
@@ -200,12 +200,12 @@ cases:
       - step_type: action
         description: "点击查找弹窗中的替换按钮"
         action: element_action
-        selector: {name: "替换", role: "push button"}
+        selector: {name: "替换", role: "menu item"}
         do: click
       - step_type: assert
         description: "验证替换弹窗正常显示"
         action: assert_element
-        selector: {name: "替换", role: "push button"}
+        selector: {name: "替换", role: "menu item"}
 
   - id: case_1875739
     name: "替换（右键菜单）"

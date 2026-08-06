@@ -11,7 +11,7 @@ setup:
   wait: 3.0
 suites:
 - id: case_1934897_s1
-  name: 打开 bashrc 安全替代测试文件
+  name: 【bug转用例】修改编辑保存bashrc文件
   description: ''
   tags: []
   steps:
@@ -31,7 +31,7 @@ suites:
       name: 查找
       role: menu item
 - id: case_1919211_s1
-  name: 打开文本编辑器
+  name: 查找替换-多匹配项中特定选中状态保留
   description: ''
   tags: []
   steps:
@@ -48,7 +48,7 @@ suites:
   - action: element_action
     selector:
       name: 替换
-      role: push button
+      role: menu item
     do: click
   assert_steps:
   - action: assert_element
@@ -58,9 +58,9 @@ suites:
   - action: assert_element
     selector:
       name: 替换
-      role: push button
+      role: menu item
 - id: case_1919207_s1
-  name: 打开文本编辑器
+  name: 查找替换-替换按钮切换后与Ctrl+H触发功能一致性验证
   description: ''
   tags: []
   steps:
@@ -69,7 +69,7 @@ suites:
   - action: element_action
     selector:
       name: 替换
-      role: push button
+      role: menu item
     do: click
   - action: keyboard_hot_key
     key: ctrl+h
@@ -81,13 +81,13 @@ suites:
   - action: assert_element
     selector:
       name: 替换
-      role: push button
+      role: menu item
   - action: assert_element
     selector:
       name: 替换
-      role: push button
+      role: menu item
 - id: case_1919205_s1
-  name: 打开文本编辑器
+  name: 查找替换-已选中文本时点击替换按钮切换至替换弹窗（代入选中文本）
   description: ''
   tags: []
   steps:
@@ -100,7 +100,7 @@ suites:
   - action: element_action
     selector:
       name: 替换
-      role: push button
+      role: menu item
     do: click
   assert_steps:
   - action: assert_element
@@ -110,9 +110,9 @@ suites:
   - action: assert_element
     selector:
       name: 替换
-      role: push button
+      role: menu item
 - id: case_1704765_s1
-  name: 打开文本编辑器
+  name: 【玲珑】【文本编辑器】玲珑应用，基本功能测试
   description: ''
   tags: []
   steps:

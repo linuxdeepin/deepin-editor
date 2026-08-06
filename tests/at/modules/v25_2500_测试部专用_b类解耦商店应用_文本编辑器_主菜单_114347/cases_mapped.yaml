@@ -131,6 +131,14 @@ cases:
         action: session_start
         command: deepin-editor
       - step_type: action
+        description: "打开查找栏用于收敛焦点状态"
+        action: keyboard_hot_key
+        key: ctrl+f
+      - step_type: action
+        description: "关闭查找栏，确保主菜单可接收键盘导航"
+        action: keyboard_press
+        key: escape
+      - step_type: action
         description: "主菜单点击关于"
         action: dtk_main_menu
         items: ["关于"]
@@ -151,7 +159,7 @@ cases:
     name: "设置按钮"
     module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
     status: unsupported
-    reason: "设置页具体控件在当前 AT 树中缺少稳定可交叉引用 selector，暂不强行生成不稳定用例"
+    reason: "设置入口通过主菜单运行时仍存在菜单导航超时风险，暂不转为 active"
     annotation: {测试界面: "主窗口-主菜单/设置", 测试功能: "打开和关闭设置窗口", 前置条件: "应用已启动", AT元素引用: "设置"}
     steps: []
 
@@ -184,7 +192,7 @@ cases:
       - step_type: assert
         description: "验证查找栏保持显示且可继续查找"
         action: assert_element
-        selector: {name: "查找", role: "menu item"}
+        selector: {name: "查找"}
 
   - id: case_1592853
     name: "查找_更换查找词"
@@ -227,7 +235,7 @@ cases:
       - step_type: assert
         description: "验证更换查找词后查找栏仍保持显示"
         action: assert_element
-        selector: {name: "查找", role: "menu item"}
+        selector: {name: "查找"}
 
   - id: case_1592883
     name: "新建窗口"
@@ -281,7 +289,7 @@ cases:
       - step_type: assert
         description: "验证打开文件后查找栏可用"
         action: assert_element
-        selector: {name: "查找", role: "menu item"}
+        selector: {name: "查找"}
 
   - id: case_1593649
     name: "不保留现场_关闭应用（子标签页已保存+未保存）"

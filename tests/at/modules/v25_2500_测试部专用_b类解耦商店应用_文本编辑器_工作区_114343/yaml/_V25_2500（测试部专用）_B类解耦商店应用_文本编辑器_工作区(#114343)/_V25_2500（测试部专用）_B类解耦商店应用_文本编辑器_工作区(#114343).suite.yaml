@@ -11,7 +11,7 @@ setup:
   wait: 3.0
 suites:
 - id: case_1593169_s1
-  name: 打开文本编辑器
+  name: +标签
   description: ''
   tags: []
   steps:
@@ -23,7 +23,7 @@ suites:
       name: DTabBarAddButton
       role: button
 - id: case_1593219_s1
-  name: 打开文本编辑器
+  name: 【快捷键优化】“重做”快捷键恢复为“Ctrl+Y”
   description: ''
   tags: []
   steps:
@@ -41,7 +41,7 @@ suites:
       name: 查找
       role: menu item
 - id: case_1593015_s1
-  name: 打开文本编辑器
+  name: 文件查找【快捷键】
   description: ''
   tags: []
   steps:
@@ -61,7 +61,7 @@ suites:
       name: 查找
       role: menu item
 - id: case_1592893_s1
-  name: 打开文本编辑器
+  name: 全选复制粘贴回车交互【快捷键】
   description: ''
   tags: []
   steps:
@@ -85,7 +85,7 @@ suites:
       name: 查找
       role: menu item
 - id: case_1592835_s1
-  name: 打开文本编辑器
+  name: 输入内容
   description: ''
   tags: []
   steps:
@@ -99,7 +99,7 @@ suites:
       name: 查找
       role: menu item
 - id: case_1592749_s1
-  name: 打开文本编辑器
+  name: 全选
   description: ''
   tags: []
   steps:
@@ -117,7 +117,7 @@ suites:
       name: 查找
       role: menu item
 - id: case_1592637_s1
-  name: 打开文本编辑器
+  name: 替换_查询结果包含大小写
   description: ''
   tags: []
   steps:
@@ -130,5 +130,22 @@ suites:
     selector:
       name: 替换
       role: menu item
+- id: case_1592739_s1
+  name: 重做
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_type
+    text: redo workspace text
+  - action: keyboard_hot_key
+    key: ctrl+z
+  - action: keyboard_hot_key
+    key: ctrl+y
+  - action: keyboard_hot_key
+    key: ctrl+f
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 查找
 teardown:
 - action: session_stop

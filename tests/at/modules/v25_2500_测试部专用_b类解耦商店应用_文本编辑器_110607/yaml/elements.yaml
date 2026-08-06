@@ -4,7 +4,7 @@ elements:
     role: menu item
   替换:
     name: 替换
-    role: push button
+    role: menu item
   n0:
     name: DMainWindow
     role: frame

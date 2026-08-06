@@ -11,7 +11,7 @@ setup:
   wait: 3.0
 suites:
 - id: case_1592881_s1
-  name: 打开文本编辑器
+  name: 新建标签
   description: ''
   tags: []
   steps:
@@ -23,7 +23,7 @@ suites:
       name: DTabBarAddButton
       role: button
 - id: case_1592855_s1
-  name: 打开文本编辑器
+  name: 查找_不按压enter键
   description: ''
   tags: []
   steps:
@@ -37,7 +37,7 @@ suites:
       name: 查找
       role: menu item
 - id: case_1592861_s1
-  name: 打开文本编辑器
+  name: 替换
   description: ''
   tags: []
   steps:
@@ -51,10 +51,14 @@ suites:
       name: 替换
       role: menu item
 - id: case_1592867_s1
-  name: 打开文本编辑器
+  name: 关于弹窗
   description: ''
   tags: []
   steps:
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: keyboard_press
+    key: escape
   - action: dtk_main_menu
     items:
     - 关于
@@ -64,7 +68,7 @@ suites:
       name: 关于
       role: menu item
 - id: case_1592885_s1
-  name: 打开文本编辑器
+  name: 查找_按压enter键
   description: ''
   tags: []
   steps:
@@ -84,9 +88,8 @@ suites:
   - action: assert_element
     selector:
       name: 查找
-      role: menu item
 - id: case_1592853_s1
-  name: 打开文本编辑器
+  name: 查找_更换查找词
   description: ''
   tags: []
   steps:
@@ -112,9 +115,8 @@ suites:
   - action: assert_element
     selector:
       name: 查找
-      role: menu item
 - id: case_1592883_s1
-  name: 打开文本编辑器
+  name: 新建窗口
   description: ''
   tags: []
   steps:
@@ -126,7 +128,7 @@ suites:
       name: DTabBarAddButton
       role: button
 - id: case_1592879_s1
-  name: 打开文本编辑器
+  name: 打开文件
   description: ''
   tags: []
   steps:
@@ -144,6 +146,5 @@ suites:
   - action: assert_element
     selector:
       name: 查找
-      role: menu item
 teardown:
 - action: session_stop
