@@ -1381,8 +1381,17 @@ TEST(UT_Editwrapper_loadContent, UT_Editwrapper_loadContent_001)
     Window* window = new Window();
     EditWrapper* wra = new EditWrapper(window);
 
+    // loadContent() determines the file size via `strContent.length()` where
+    // strContent is a QByteArray, so the size must be faked on QByteArray, not
+    // QString. Stubbing QString::length globally corrupts every QString in the
+    // process: QDebug::operator<<(const QString&) (qdebug.h) calls t.length(),
+    // which then makes qDebug read past the string buffer and triggers a
+    // heap-buffer-overflow (e.g. when DDropdownMenu::setText prints the endline
+    // text). QByteArray::length is safe to stub here because qDebug prints a
+    // QByteArray through size() and the actual data reads in loadContent use
+    // size()/d->size rather than length().
     Stub s1;
-    s1.set(ADDR(QString,length),retintstub);
+    s1.set(ADDR(QByteArray,length),retintstub);
 
     intvalue = 41*1024*1024;
     wra->loadContent("ddd");
@@ -1398,8 +1407,11 @@ TEST(UT_Editwrapper_loadContent, UT_Editwrapper_loadContent_002)
     Window* window = new Window();
     EditWrapper* wra = new EditWrapper(window);
 
+    // See UT_Editwrapper_loadContent_001: stub QByteArray::length (the real
+    // type of strContent) instead of QString::length to avoid corrupting all
+    // QString operations (which makes qDebug abort on a heap-buffer-overflow).
     Stub s1;
-    s1.set(ADDR(QString,length),retintstub);
+    s1.set(ADDR(QByteArray,length),retintstub);
 
     intvalue = 10*1024;
     wra->loadContent("ddd");
