@@ -314,8 +314,10 @@ TEST_F(test_ddropdownmenu, createHighLightMenuActionGroupLambda)
     QAction *action = new QAction("");
     // 直接触发 QActionGroup 的 triggered 信号，调用 createHighLightMenu 中 actionGroup 注册的 lambda
     emit hlMenu->m_actionGroup->triggered(action);
-    // defName 为空，def 无效，走 else 分支设置文本为 None
-    EXPECT_EQ(hlMenu->getCurrentText().toStdString(), "None");
+    // defName 为空，def 无效，走 else 分支设置文本为 tr("None")。源码用的是
+    // DDropdownMenu::tr("None")（可翻译），在 zh_CN 环境下会被译为“无”，硬编码比较
+    // 英文 "None" 会在中文环境下失败。这里用同一翻译函数取期望值，做到与 locale 无关。
+    EXPECT_EQ(hlMenu->getCurrentText().toStdString(), DDropdownMenu::tr("None").toStdString());
 
     delete action;
     hlMenu->deleteLater();

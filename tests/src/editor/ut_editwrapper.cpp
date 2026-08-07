@@ -6,6 +6,7 @@
 #include "qfile.h"
 #include <KSyntaxHighlighting/SyntaxHighlighter>
 #include "DSettingsOption"
+#include "../../src/common/text_file_saver.h"
 
 namespace editwrapperstub {
 
@@ -196,13 +197,13 @@ TEST(UT_Editwrapper_saveFile, UT_Editwrapper_saveFile_004)
 
     Stub stubNotices;
     stubNotices.set(ADDR(EditWrapper, hideWarningNotices), hideWarningNotices_stub);
-    typedef bool (*Fptr2)(QFile*,QFile::OpenMode);
-    Fptr2 A_foo = (Fptr2)((bool(QFile::*)(QFile::OpenMode))&QFile::open);
+    // 源码已将保存逻辑重构为 TextFileSaver：saveFile() 直接返回 TextFileSaver::save()
+    // 的结果。空路径时 TextFileSaver::save() 在 QFile::open 之前即因路径为空返回 false，
+    // 旧的对 QFile::open / QByteArray::isEmpty 的打桩已失效（且对 QByteArray 这类模板
+    // 方法打桩会触发未对齐写 UB）。改为直接打桩 TextFileSaver::save 隔离文件 IO，
+    // 验证 saveFile 正确转发保存结果。
     Stub s1;
-    s1.set(A_foo,rettruestub);
-
-    Stub s2;
-    s2.set(ADDR(QByteArray,isEmpty),rettruestub);
+    s1.set(ADDR(TextFileSaver, save), rettruestub);
 
     bool bRet = pWindow->currentWrapper()->saveFile();
     EXPECT_TRUE(bRet);
@@ -219,18 +220,10 @@ TEST(UT_Editwrapper_saveFile, UT_Editwrapper_saveFile_005)
 
     Stub stubNotices;
     stubNotices.set(ADDR(EditWrapper, hideWarningNotices), hideWarningNotices_stub);
-    typedef bool (*Fptr2)(QFile*,QFile::OpenMode);
-    Fptr2 A_foo = (Fptr2)((bool(QFile::*)(QFile::OpenMode))&QFile::open);
+    // 同 UT_Editwrapper_saveFile_004：源码已重构为 TextFileSaver，旧打桩失效。
     Stub s1;
-    s1.set(A_foo,rettruestub);
+    s1.set(ADDR(TextFileSaver, save), rettruestub);
 
-    Stub s2;
-    s2.set(ADDR(QByteArray,isEmpty),retfalsestub);
-
-    Stub s3;
-    s3.set(ADDR(QByteArray,size),retintstub);
-
-    intvalue=0;
     bool bRet = pWindow->currentWrapper()->saveFile();
     EXPECT_TRUE(bRet);
 
@@ -322,15 +315,16 @@ TEST(UT_Editwrapper_saveAsFile, UT_Editwrapper_saveAsFile_003)
     Stub s1;
     s1.set(fptr,retintstub);
 
-    Stub s2;
-    s2.set(ADDR(QString,isEmpty),retfalsestub);
     Stub s3;
     s3.set(ADDR(QFileDialog,selectedFiles),retstringliststub);
 
-    typedef bool (*Fptr2)(QFile*,QFile::OpenMode);
-    Fptr2 A_foo = (Fptr2)((bool(QFile::*)(QFile::OpenMode))&QFile::open);
+    // 源码已重构为 TextFileSaver：saveAsFile() 经弹窗拿到目标路径后调用
+    // TextFileSaver::save() 写盘。旧的对 QFile::open 的打桩只会让 open 返回 true 而
+    // 设备并未真正打开，后续 write 失败导致保存返回 false；全局 stub QString::isEmpty
+    // 还会干扰弹窗/主题等逻辑。改为打桩 TextFileSaver::save 直接返回成功，隔离文件 IO，
+    // 验证弹窗流程与路径校验逻辑（newFilePath 非空则继续保存并返回 true）。
     Stub s4;
-    s4.set(A_foo,rettruestub);
+    s4.set(ADDR(TextFileSaver, save), rettruestub);
 
     bool bRet = pWindow->currentWrapper()->saveAsFile();
 
@@ -883,6 +877,11 @@ TEST(UT_Editwrapper_handleFileLoadFinished, UT_Editwrapper_handleFileLoadFinishe
     setPrintEnabled_stub.set(ADDR(Window, setPrintEnabled), handleFileLoadFinished_001_setPrintEnabled_stub);
     Stub setTextFinished_stub;
     setTextFinished_stub.set(ADDR(TextEdit, setTextFinished), handleFileLoadFinished_001_setTextFinished_stub);
+    // 源码在 error 分支增加了“文件不存在则按新建文件静默处理（不进入只读）”的守卫：
+    // 仅当 QFileInfo::exists(getTruePath()) 为真时才调用 onReadAllocError() 进入只读模式。
+    // 空白标签页的真实路径是尚未落盘的 blank_file，不存在，故守卫会跳过只读设置，使本
+    // 用例失败。这里把真实路径指向已存在的 Makefile，让 error 分支按既有预期进入只读。
+    pWindow->currentWrapper()->textEditor()->m_qstrTruePath = filePath;
     pWindow->currentWrapper()->handleFileLoadFinished(encode, retFileContent, true);
     EXPECT_FALSE(pWindow->currentWrapper()->textEditor()->getReadOnlyPermission());
     EXPECT_TRUE(pWindow->currentWrapper()->textEditor()->getReadOnlyMode());

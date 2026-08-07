@@ -345,10 +345,15 @@ TEST_F(test_textedit, slotValueChanged)
     QString strMassege("Holle world.Holle world.Holle world.Holle world.Holle world.Holle world.Holle world.Holle world.Holle world.");
     pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(), strMassege);
     pWindow->currentWrapper()->textEditor()->setLineWrapMode(QPlainTextEdit::NoWrap);
-    int iRetBefore = pWindow->currentWrapper()->textEditor()->horizontalScrollBar()->value();
+    // 主动把水平滚动条拉到最右，确保 iRetBefore 为非零确定值。原实现依赖插入文本后
+    // 视口自动滚动，但无显示（offscreen）环境下是否自动滚动取决于几何布局，导致该用例
+    // 时过时不过（iRetBefore 可能为 0，slotValueChanged->selectTextInView 又置 0，两者相等）。
+    QScrollBar *pHBar = pWindow->currentWrapper()->textEditor()->horizontalScrollBar();
+    pHBar->setValue(pHBar->maximum());
+    int iRetBefore = pHBar->value();
     pWindow->currentWrapper()->textEditor()->m_isSelectAll = true;
     pWindow->currentWrapper()->textEditor()->slotValueChanged(true);
-    int iRetAfter = pWindow->currentWrapper()->textEditor()->horizontalScrollBar()->value();
+    int iRetAfter = pHBar->value();
     ASSERT_TRUE(iRetBefore != iRetAfter);
 
     pWindow->deleteLater();
@@ -1776,7 +1781,10 @@ TEST(UT_test_textedit_replaceAll, UT_test_textedit_replaceAll_003)
 
     ASSERT_TRUE(!strRetAfter.compare(QString("Holle Holle\nHolle Holle")));
 
-    pWindow->currentWrapper()->textEditor()->replaceAll(QString("holle"), QString("World"));
+    // 源码已将 replaceAll 的默认大小写敏感度从 CaseInsensitive 改为 CaseSensitive
+    // (commit d6017c54，修复 BUG-282071)。本步用小写 "holle" 匹配大写 "Holle"，
+    // 需显式传入 Qt::CaseInsensitive 才能复现原意，否则默认区分大小写会 0 次替换。
+    pWindow->currentWrapper()->textEditor()->replaceAll(QString("holle"), QString("World"), Qt::CaseInsensitive);
     strRetAfter = QString(pWindow->currentWrapper()->textEditor()->toPlainText());
     ASSERT_TRUE(!strRetAfter.compare(QString("World World\nWorld World")));
 
@@ -2610,10 +2618,16 @@ TEST(UT_test_textedit_lineNumberAreaPaintEvent, UT_test_textedit_lineNumberAreaP
     pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
 
     DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::ColorType::DarkType);
+    // 测试环境未安装 deepin_dark.theme / deepin.theme，主题加载失败使 m_lineNumbersColor
+    // 为无效 QColor，QColor::setAlphaF 对无效颜色是空操作，导致 alphaF() 不为 0.2。
+    // 这里先置为有效颜色，确保 lineNumberAreaPaintEvent 暗色分支的 setAlphaF(0.2) 生效，
+    // 从而只验证绘制事件本身的分支逻辑，不依赖主题文件是否安装。
+    pWindow->currentWrapper()->textEditor()->m_lineNumbersColor = QColor(Qt::gray);
     QPaintEvent *pPaintEvent;
     pWindow->currentWrapper()->textEditor()->lineNumberAreaPaintEvent(pPaintEvent);
-
-    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_lineNumbersColor.alphaF() == 0.2);
+    // Qt6 中 QColor::alphaF() 返回 float（Qt5 返回 qreal/double），与双精度字面量 0.2 比较
+    // 会因 float↔double 精度差异恒为 false。改用 float 字面量 0.2f 比较。
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_lineNumbersColor.alphaF() == 0.2f);
     pWindow->deleteLater();
 }
 
@@ -3760,6 +3774,10 @@ TEST(UT_test_textedit_lineNumberAreaWidth, UT_test_textedit_lineNumberAreaWidth_
 
     QFontMetrics fm(pWindow->currentWrapper()->textEditor()->m_fontLineNumberArea);
     int calcWitdh = fm.horizontalAdvance(QLatin1Char('9')) * 2;
+    // 与源码 lineNumberAreaWidth() 的返回值保持一致：return w > 15 ? w : 15;
+    // （最小宽度 15 的下限钳制自 2022 年起即存在）。否则当字体度量使原始宽度 < 15
+    // （本机 advance('9')*2 == 14）时，iRet 被钳为 15 而 calcWitdh 仍为 14，断言失败。
+    calcWitdh = calcWitdh > 15 ? calcWitdh : 15;
 
     EXPECT_EQ(iRet, calcWitdh);
     pWindow->deleteLater();

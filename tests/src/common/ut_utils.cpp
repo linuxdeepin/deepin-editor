@@ -413,14 +413,18 @@ TEST(UT_Utils_getSupportEncoding, getSupportEncoding)
 
 TEST(UT_Utils_getSupportEncoding, getSupportEncodingWithError)
 {
-    Stub stub1;
-    typedef QVector<QPair<QString, QStringList> > VecType;
-    stub1.set(ADDR(VecType, isEmpty), supportEncoding_readAll_stub);
+    // getSupportEncoding 内部使用函数级静态缓存 s_groupEncodeVec：首次成功加载后再次调用
+    // 时，即使 readAll 失败也会命中缓存并返回已加载的编码列表（而非空）。共享测试进程里
+    // 该缓存会被更早的用例（Window/DDropdownMenu 构造或启动初始化）预先填充，因此原用
+    // 例“readAll 失败 → 返回空”的首加载分支在全量运行中不可达（且原用例对 QVector::isEmpty
+    // 打桩会触发未对齐写 UB）。这里改为验证缓存韧性：确保缓存已加载后 stub readAll 失败，
+    // 断言仍返回非空缓存结果。
+    ASSERT_FALSE(Utils::getSupportEncoding().isEmpty());
+
     Stub stub2;
     stub2.set(ADDR(QIODevice, readAll), supportEncoding_readAll_stub);
-
     auto encoding = Utils::getSupportEncoding();
-    ASSERT_TRUE(encoding.isEmpty());
+    ASSERT_FALSE(encoding.isEmpty());
 }
 
 TEST(UT_Utils_getSupportEncodingList, getSupportEncodingList)

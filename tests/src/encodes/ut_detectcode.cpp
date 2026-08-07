@@ -121,6 +121,17 @@ QByteArray detectCode_selectCoding_stub(QByteArray ucharDetectdRet, QByteArrayLi
     return ucharDetectdRet;
 }
 
+// 用例以 QString("123") 作为占位文件路径（并非真实文件）。当 chardet 对被截断的
+// BIG5 内容识别置信度不足时，源码会回退到 UchardetCode(filepath) 读文件复检；占位
+// 路径不存在，fopen 失败，UchardetCode 返回空，进而落入默认 UTF-8 编码，导致 BIG5
+// 用例失败。这里打桩 UchardetCode 直接返回 BIG5，模拟“真实 BIG5 文件复检也为 BIG5”，
+// 使内容侧的检测逻辑不因占位路径而被错误地回退为 UTF-8。
+QByteArray detectCode_uchardetCode_big5_stub(QString filepath)
+{
+    Q_UNUSED(filepath);
+    return QByteArray("BIG5");
+}
+
 TEST(UT_GetFileEncodingFormat, UT_GetFileEncodingFormat_zh_CNContent_UTF8_Pass)
 {
     Stub stubDetectCode;
@@ -157,6 +168,7 @@ TEST(UT_GetFileEncodingFormat, UT_GetFileEncodingFormat_zh_CNContent_BIG5_Pass)
     Stub stubDetectCode;
     stubDetectCode.set(ADDR(DetectCode, icuDetectTextEncoding), detectCode_icuDetectTextEncoding_stub);
     stubDetectCode.set(ADDR(DetectCode, selectCoding), detectCode_selectCoding_stub);
+    stubDetectCode.set(ADDR(DetectCode, UchardetCode), detectCode_uchardetCode_big5_stub);
 
     QTextCodec *codec = QTextCodec::codecForName("BIG5");
     QByteArray content = codec->fromUnicode("你好，我是中文测试文本");
