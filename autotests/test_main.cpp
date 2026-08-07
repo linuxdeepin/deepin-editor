@@ -3,17 +3,18 @@
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <QGuiApplication>
+#include <QApplication>
 
 // deepin-editor unit tests exercise Qt GUI-layer code paths (QFontDatabase,
-// QPainter, QTextDocument, etc.) that require a QGuiApplication to exist.
-// We construct an offscreen QGuiApplication once before running the tests.
+// QPainter, QTextDocument, QPlainTextEdit/QWidget, etc.) that require a
+// QApplication to exist. We construct an offscreen QApplication once before
+// running the tests.
 int main(int argc, char **argv)
 {
     // Force the offscreen platform if the caller did not set one, so the test
     // binary is usable on headless hosts / CI without an X server.
     qputenv("QT_QPA_PLATFORM", QByteArrayLiteral("offscreen"));
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     ::testing::InitGoogleTest(&argc, argv);
     ::testing::InitGoogleMock(&argc, argv);
