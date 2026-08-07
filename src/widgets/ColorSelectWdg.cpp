@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -6,6 +6,7 @@
 #include "../common/utils.h"
 #include "../common/settings.h"
 #include <QPainter>
+#include <QEvent>
 #include <DSettingsOption>
 #include <DFontSizeManager>
 
@@ -39,44 +40,97 @@ void ColorLabel::paintEvent(QPaintEvent *event)
     Q_UNUSED(event)
 
     int distance = 2;
-
     QRect r = rect();
 
     QPainter painter(this);
-    painter.setRenderHints(QPainter::Antialiasing |QPainter::SmoothPixmapTransform | QPainter::Qt4CompatiblePainting);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::Qt4CompatiblePainting);
 
+    if (m_bPressed) {
+        // press: 内圆微缩 + 颜色加深，模拟按压
+        QRectF pressedRect = r.adjusted(distance, distance, -distance, -distance);
+        QPainterPath pressedPath;
+        pressedPath.addEllipse(pressedRect);
+        painter.fillPath(pressedPath, m_color.darker(130));
+        if (m_bSelected) {
+            QPainterPath ring;
+            ring.addEllipse(r.adjusted(distance / 2, distance / 2, -distance / 2, -distance / 2));
+            QPainterPath outerPath;
+            outerPath.addEllipse(r);
+            ring = outerPath - ring;
+            painter.fillPath(ring, m_color);
+        }
+    } else if (m_bHover) {
+        // hover: 外圈光晕，圆略微放大
+        QRectF hoverRect = r.adjusted(distance, distance, -distance, -distance);
+        QPainterPath hoverPath;
+        hoverPath.addEllipse(hoverRect);
+        painter.fillPath(hoverPath, m_color);
+        if (m_bSelected) {
+            QPainterPath ring;
+            ring.addEllipse(r.adjusted(distance, distance, -distance, -distance));
+            QPainterPath outerPath;
+            outerPath.addEllipse(r);
+            ring = outerPath - ring;
+            painter.fillPath(ring, m_color);
+        }
+    } else {
+        // normal: 原有逻辑
+        QPainterPath bigCircle;
+        bigCircle.addEllipse(r);
 
-    QPainterPath bigCircle;
-    bigCircle.addEllipse(r);
+        QPainterPath smallCircle;
+        smallCircle.addEllipse(r.adjusted(2 * distance, 2 * distance, -2 * distance, -2 * distance));
 
-    QPainterPath smallCircle;
-    smallCircle.addEllipse(r.adjusted(2*distance,2*distance,-2*distance,-2*distance));
+        // 先画小圆
+        painter.fillPath(smallCircle, m_color);
 
-    //先画小圆
-    painter.fillPath(smallCircle,m_color);
-
-
-    //如果点击选择画　圆环
-    if(m_bSelected){
-        r = rect();
-        QPainterPath sencondCircle;
-        sencondCircle.addEllipse(r.adjusted(distance,distance,-distance,-distance));
-        //大圆减小圆等于圆环
-        QPainterPath path = bigCircle - sencondCircle;
-        painter.fillPath(path,m_color);
+        // 如果点击选择画圆环
+        if (m_bSelected) {
+            r = rect();
+            QPainterPath sencondCircle;
+            sencondCircle.addEllipse(r.adjusted(distance, distance, -distance, -distance));
+            // 大圆减小圆等于圆环
+            QPainterPath path = bigCircle - sencondCircle;
+            painter.fillPath(path, m_color);
+        }
     }
 
     painter.end();
 }
 
+void ColorLabel::enterEvent(QEvent *event)
+{
+    DWidget::enterEvent(event);
+    m_bHover = true;
+    update();
+}
+
+void ColorLabel::leaveEvent(QEvent *event)
+{
+    DWidget::leaveEvent(event);
+    m_bHover = false;
+    m_bPressed = false;
+    update();
+}
+
 void ColorLabel::mousePressEvent(QMouseEvent *e)
 {
-    //没有选择点击有效
-    if(e->button() == Qt::LeftButton){
-       m_bSelected = true;
-       update();
-       emit sigColorClicked(m_bSelected,m_color);
+    if (e->button() == Qt::LeftButton) {
+        m_bPressed = true;
+        update();
     }
+    DWidget::mousePressEvent(e);
+}
+
+void ColorLabel::mouseReleaseEvent(QMouseEvent *e)
+{
+    if (e->button() == Qt::LeftButton && m_bPressed) {
+        m_bPressed = false;
+        m_bSelected = true;
+        update();
+        emit sigColorClicked(m_bSelected, m_color);
+    }
+    DWidget::mouseReleaseEvent(e);
 }
 
 ColorSelectWdg::ColorSelectWdg(QString text,QWidget *parent):DWidget (parent),m_text(text)
