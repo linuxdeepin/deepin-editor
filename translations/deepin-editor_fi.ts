@@ -1389,17 +1389,17 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="1321"/>
         <source>Don&apos;t Save</source>
-        <translation type="unfinished"/>
+        <translation>Älä tallenna</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1322"/>
         <source>Save As</source>
-        <translation type="unfinished"/>
+        <translation>Tallenna...</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1323"/>
         <source>Save Anyway</source>
-        <translation type="unfinished"/>
+        <translation>Tallenna silti</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1521"/>
