@@ -1379,12 +1379,12 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="1317"/>
         <source>Invalid characters detected while saving &quot;%1&quot;</source>
-        <translation type="unfinished"/>
+        <translation>Virheellisiä merkkejä havaittu tallennettaessa &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1318"/>
         <source>If you force save this file, it may cause file corruption. Still want to save?</source>
-        <translation type="unfinished"/>
+        <translation>Jos pakotat tiedoston tallentamisen, se voi aiheuttaa tiedoston hajoamisen. Haluatko silti tallentaa?</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1321"/>
