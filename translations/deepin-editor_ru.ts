@@ -103,7 +103,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="1020"/>
         <source>The file contains invalid characters (NUL). Preview mode is read-only.</source>
-        <translation type="unfinished"/>
+        <translation>Файл содержит недопустимые символы (NUL). Режим предварительного просмотра доступен только для чтения.</translation>
     </message>
 </context>
 <context>
@@ -142,7 +142,7 @@
     <message>
         <location filename="../src/controls/linebar.cpp" line="117"/>
         <source>第%1/%2项</source>
-        <translation type="unfinished"/>
+        <translation>Совпадение: %1 из %2</translation>
     </message>
 </context>
 <context>
@@ -1251,7 +1251,7 @@
     <message>
         <location filename="../src/controls/warningnotices.cpp" line="26"/>
         <source>Edit Anyway</source>
-        <translation type="unfinished"/>
+        <translation>Редактировать в любом случае</translation>
     </message>
 </context>
 <context>
@@ -1387,17 +1387,17 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="1317"/>
         <source>Invalid characters detected while saving &quot;%1&quot;</source>
-        <translation type="unfinished"/>
+        <translation>При сохранении файла «%1» обнаружены недопустимые символы</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1318"/>
         <source>If you force save this file, it may cause file corruption. Still want to save?</source>
-        <translation type="unfinished"/>
+        <translation>Если вы принудительно сохраните этот файл, это может привести к его повреждению. Все равно хотите сохранить?</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1321"/>
         <source>Don&apos;t Save</source>
-        <translation type="unfinished"/>
+        <translation>Не сохранять</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1322"/>
