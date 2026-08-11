@@ -100,6 +100,11 @@
         <source>The file cannot be read, which may be too large or has been damaged!</source>
         <translation>El fitxer no es pot llegir. Pot ser massa gros o estar malmès!</translation>
     </message>
+    <message>
+        <location filename="../src/editor/editwrapper.cpp" line="1020"/>
+        <source>The file contains invalid characters (NUL). Preview mode is read-only.</source>
+        <translation>El fitxer conté caràcters no vàlids (NUL). El mode de previsualització és de només lectura.</translation>
+    </message>
 </context>
 <context>
     <name>FindBar</name>
@@ -130,6 +135,14 @@
         <location filename="../src/controls/jumplinebar.cpp" line="45"/>
         <source>Go to Line: </source>
         <translation>Ves a la línia:</translation>
+    </message>
+</context>
+<context>
+    <name>LineBar</name>
+    <message>
+        <location filename="../src/controls/linebar.cpp" line="117"/>
+        <source>第%1/%2项</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1235,6 +1248,11 @@
         <source>Reload</source>
         <translation>Torna-ho a carregar</translation>
     </message>
+    <message>
+        <location filename="../src/controls/warningnotices.cpp" line="26"/>
+        <source>Edit Anyway</source>
+        <translation>Edita&apos;l tanmateix</translation>
+    </message>
 </context>
 <context>
     <name>Window</name>
@@ -1365,6 +1383,36 @@
         <location filename="../src/widgets/window.cpp" line="3544"/>
         <source>Discard</source>
         <translation>Descarta</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1317"/>
+        <source>Invalid characters detected while saving &quot;%1&quot;</source>
+        <translation>S&apos;han detectat caràcters no vàlids en desar %1</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1318"/>
+        <source>If you force save this file, it may cause file corruption. Still want to save?</source>
+        <translation>Si forceu el desament d&apos;aquest fitxer, es podria corrompre. Voleu desar-lo tanmateix?</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1321"/>
+        <source>Don&apos;t Save</source>
+        <translation>No el desis</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1322"/>
+        <source>Save As</source>
+        <translation>Desa com a</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1323"/>
+        <source>Save Anyway</source>
+        <translation>Desa&apos;l tanmateix</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1521"/>
+        <source>Cannot save as the original file in preview mode. Please choose a different path.</source>
+        <translation>No es pot desar com el fitxer original en el mode de previsualització. Si us plau, trieu una ubicació diferent.</translation>
     </message>
 </context>
 </TS>
