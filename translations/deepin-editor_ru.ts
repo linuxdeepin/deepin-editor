@@ -1402,17 +1402,17 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="1322"/>
         <source>Save As</source>
-        <translation type="unfinished"/>
+        <translation>Сохранить как</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1323"/>
         <source>Save Anyway</source>
-        <translation type="unfinished"/>
+        <translation>«Сохранить всё равно»</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1521"/>
         <source>Cannot save as the original file in preview mode. Please choose a different path.</source>
-        <translation type="unfinished"/>
+        <translation>В режиме предварительного просмотра невозможно сохранить файл под исходным именем. Пожалуйста, выберите другой путь.</translation>
     </message>
 </context>
 </TS>
