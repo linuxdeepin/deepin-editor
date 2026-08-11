@@ -1,8 +1,9 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "ut_replacebar.h"
+#include <QApplication>
 #include <QKeyEvent>
 test_replacebar::test_replacebar()
 {
@@ -198,4 +199,37 @@ TEST_F(test_replacebar, keyPressEvent)
     rep->deleteLater();
 
     
+}
+
+//slotUpdateMatchCount 只更新 m_replaceLine，不更新 m_withLine
+TEST_F(test_replacebar, slotUpdateMatchCount_OnlyReplaceLine)
+{
+    ReplaceBar *replaceBar = new ReplaceBar();
+    replaceBar->show();
+    qApp->processEvents();
+    replaceBar->m_replaceLine->m_matchCountLabel->hide();
+    replaceBar->m_withLine->m_matchCountLabel->hide();
+
+    replaceBar->slotUpdateMatchCount(5, 10);
+
+    EXPECT_EQ(replaceBar->m_replaceLine->m_matchCountLabel->text().toStdString(), "第5/10项");
+    EXPECT_TRUE(replaceBar->m_replaceLine->m_matchCountLabel->isVisible());
+    EXPECT_FALSE(replaceBar->m_withLine->m_matchCountLabel->isVisible());
+
+    replaceBar->deleteLater();
+}
+
+//slotUpdateMatchCount (0,0) 隐藏 m_replaceLine
+TEST_F(test_replacebar, slotUpdateMatchCount_ZeroHide)
+{
+    ReplaceBar *replaceBar = new ReplaceBar();
+    replaceBar->show();
+    qApp->processEvents();
+    replaceBar->slotUpdateMatchCount(5, 10);
+
+    replaceBar->slotUpdateMatchCount(0, 0);
+
+    EXPECT_FALSE(replaceBar->m_replaceLine->m_matchCountLabel->isVisible());
+
+    replaceBar->deleteLater();
 }

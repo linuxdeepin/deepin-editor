@@ -56,6 +56,7 @@ public Q_SLOTS:
     void handleReplaceNext();
     void handleReplaceRest();
     void handleSkip();
+    void slotUpdateMatchCount(int current, int total);
 
 protected:
     void hideEvent(QHideEvent *event);
