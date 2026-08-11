@@ -140,6 +140,7 @@ void ReplaceBar::replaceClose()
 {
     qDebug() << "replaceClose";
     searched = false;
+    m_replaceLine->setMatchCount(0, 0);
     hide();
     emit sigReplacebarClose();
     qDebug() << "replaceClose end";
@@ -149,6 +150,12 @@ void ReplaceBar::handleContentChanged()
 {
     qDebug() << "handleContentChanged";
     updateSearchKeyword(m_replaceFile, m_replaceLine->lineEdit()->text());
+}
+
+void ReplaceBar::slotUpdateMatchCount(int current, int total)
+{
+    qDebug() << "ReplaceBar slotUpdateMatchCount current:" << current << "total:" << total;
+    m_replaceLine->setMatchCount(current, total);
 }
 
 void ReplaceBar::handleReplaceNext()

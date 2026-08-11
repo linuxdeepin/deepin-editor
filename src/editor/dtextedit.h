@@ -210,6 +210,8 @@ public:
                                       Qt::CaseSensitivity caseFlag = Qt::CaseInsensitive);
     void updateHighlightLineSelection();
     bool updateKeywordSelections(QString keyword, QTextCharFormat charFormat, QList<QTextEdit::ExtraSelection> &listSelection);
+    QList<int> scanAllMatchPositions(const QString &keyword, Qt::CaseSensitivity caseFlag = Qt::CaseInsensitive) const;
+    int findCurrentMatchIndex() const;
     bool updateKeywordSelectionsInView(QString keyword, QTextCharFormat charFormat, QList<QTextEdit::ExtraSelection> *listSelection,
                                        Qt::CaseSensitivity caseFlag = Qt::CaseInsensitive);
     bool searchKeywordSeletion(QString keyword, QTextCursor cursor, bool findNext,
@@ -481,6 +483,7 @@ signals:
     void popupNotify(QString notify, bool warning = false);
     void signal_readingPath();
     void signal_setTitleFocus();
+    void findMatchCountChanged(int current, int total);
 public slots:
     /**
      * @author liumaochuan ut000616
@@ -640,12 +643,17 @@ public:
 private:
     EditWrapper *m_wrapper;
     QPropertyAnimation *m_scrollAnimation {nullptr};
+    void updateMatchCount(const QString &keyword, Qt::CaseSensitivity caseFlag);
+    void invalidateMatchCountCache();
 
     QList<QTextEdit::ExtraSelection> m_findMatchSelections;///< “查找”的字符格式（所有查找的字符）
     QTextEdit::ExtraSelection m_beginBracketSelection;
     QTextEdit::ExtraSelection m_endBracketSelection;
     QTextEdit::ExtraSelection m_currentLineSelection;///< 光标所在当前行的样式
     QTextEdit::ExtraSelection m_findHighlightSelection;///< “查找”的字符格式（当前位置字符）
+    QList<int> m_allMatchPositions;///< 查找匹配位置缓存（升序）
+    QString m_countedKeyword;///< 已缓存的查找关键字
+    Qt::CaseSensitivity m_countedCase = Qt::CaseInsensitive;///< 已缓存的查找大小写设置
     // 不再使用
     //QTextEdit::ExtraSelection m_wordUnderCursorSelection;
     QList<QPair<QTextEdit::ExtraSelection, qint64>> m_wordMarkSelections;///< 记录标记的列表（分行记录）

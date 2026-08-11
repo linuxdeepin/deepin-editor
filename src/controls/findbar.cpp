@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -126,6 +126,7 @@ void FindBar::activeInput(QString text, QString file, int row, int column, int s
 void FindBar::findCancel()
 {
     qDebug() << "Find operation cancelled";
+    m_editLine->setMatchCount(0, 0);
     QWidget::hide();
     emit sigFindbarClose();
     qDebug() << "Find bar hidden and close signal emitted";
@@ -269,6 +270,12 @@ void FindBar::handleSwitchToReplace()
     qDebug() << "handleSwitchToReplace - switching from find bar to replace bar";
     emit sigSwitchToReplaceBar();
     qDebug() << "Switch to replace bar signal emitted";
+}
+
+void FindBar::slotUpdateMatchCount(int current, int total)
+{
+    qDebug() << "slotUpdateMatchCount current:" << current << "total:" << total;
+    m_editLine->setMatchCount(current, total);
 }
 
 QString FindBar::getCurrentSearchText() const

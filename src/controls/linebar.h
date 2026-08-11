@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -7,6 +7,10 @@
 
 #include "dlineedit.h"
 
+#include <DIconButton>
+#include <DStyle>
+
+#include <QLabel>
 #include <QTimer>
 
 DWIDGET_USE_NAMESPACE
@@ -17,6 +21,8 @@ class LineBar : public DLineEdit
 
 public:
     explicit LineBar(DLineEdit *parent = 0);
+
+    void setMatchCount(int current, int total);
 
 public slots:
     void handleTextChangeTimer();
@@ -35,10 +41,15 @@ signals:
 protected:
     virtual void focusOutEvent(QFocusEvent *e);
     virtual void keyPressEvent(QKeyEvent *e);
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
+    void updateRightWidgetsGeometry();
+
     QTimer *m_autoSaveTimer;
     int m_autoSaveInternal;
+    QLabel *m_matchCountLabel;
+    DIconButton *m_clearButton;
 };
 
 #endif

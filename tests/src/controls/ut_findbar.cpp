@@ -4,6 +4,7 @@
 
 #include "ut_findbar.h"
 #include "../../src/controls/findbar.h"
+#include <QApplication>
 #include <QFocusEvent>
 #include <QEvent>
 
@@ -217,6 +218,37 @@ TEST_F(test_findbar, getCurrentSearchText)
 
     findBar->m_editLine->lineEdit()->setText("searchkeyword");
     EXPECT_EQ(findBar->getCurrentSearchText(), QString("searchkeyword"));
+
+    findBar->deleteLater();
+}
+
+//slotUpdateMatchCount 转发到内部 m_editLine
+TEST_F(test_findbar, slotUpdateMatchCount_Forward)
+{
+    FindBar *findBar = new FindBar();
+    findBar->show();
+    qApp->processEvents();
+    findBar->m_editLine->m_matchCountLabel->hide();
+
+    findBar->slotUpdateMatchCount(3, 7);
+
+    EXPECT_EQ(findBar->m_editLine->m_matchCountLabel->text().toStdString(), "第3/7项");
+    EXPECT_TRUE(findBar->m_editLine->m_matchCountLabel->isVisible());
+
+    findBar->deleteLater();
+}
+
+//slotUpdateMatchCount (0,0) 隐藏
+TEST_F(test_findbar, slotUpdateMatchCount_ZeroHide)
+{
+    FindBar *findBar = new FindBar();
+    findBar->show();
+    qApp->processEvents();
+    findBar->slotUpdateMatchCount(3, 7);
+
+    findBar->slotUpdateMatchCount(0, 0);
+
+    EXPECT_FALSE(findBar->m_editLine->m_matchCountLabel->isVisible());
 
     findBar->deleteLater();
 }

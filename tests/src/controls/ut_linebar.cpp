@@ -4,6 +4,7 @@
 
 #include "ut_linebar.h"
 #include "../../src/controls/linebar.h"
+#include <QApplication>
 #include <QFocusEvent>
 #include <QEvent>
 #include <DGuiApplicationHelper>
@@ -121,5 +122,106 @@ TEST_F(test_linebar, ConstructorSizeModeLambda)
     helper->setSizeMode(origMode); // restore
 
     EXPECT_NE(lineBar, nullptr);
+    lineBar->deleteLater();
+}
+
+//setMatchCount 显示文本和可见性
+TEST_F(test_linebar, setMatchCount_Display)
+{
+    LineBar *lineBar = new LineBar();
+    lineBar->show();
+    qApp->processEvents();
+
+    lineBar->setMatchCount(5, 10);
+
+    EXPECT_EQ(lineBar->m_matchCountLabel->text().toStdString(), "第5/10项");
+    EXPECT_TRUE(lineBar->m_matchCountLabel->isVisible());
+
+    lineBar->deleteLater();
+}
+
+//setMatchCount total==0 隐藏
+TEST_F(test_linebar, setMatchCount_HideOnZero)
+{
+    LineBar *lineBar = new LineBar();
+    lineBar->show();
+    qApp->processEvents();
+    lineBar->setMatchCount(5, 10);
+
+    lineBar->setMatchCount(0, 0);
+
+    EXPECT_FALSE(lineBar->m_matchCountLabel->isVisible());
+
+    lineBar->deleteLater();
+}
+
+//setMatchCount 0/N 场景
+TEST_F(test_linebar, setMatchCount_ZeroCurrent)
+{
+    LineBar *lineBar = new LineBar();
+    lineBar->show();
+    qApp->processEvents();
+
+    lineBar->setMatchCount(0, 5);
+
+    EXPECT_EQ(lineBar->m_matchCountLabel->text().toStdString(), "第0/5项");
+    EXPECT_TRUE(lineBar->m_matchCountLabel->isVisible());
+
+    lineBar->deleteLater();
+}
+
+//m_matchCountLabel 已无 stylesheet hack，验证不再包含 padding-left
+TEST_F(test_linebar, m_matchCountLabel_NoStyleSheetHack)
+{
+    LineBar *lineBar = new LineBar();
+
+    EXPECT_FALSE(lineBar->m_matchCountLabel->styleSheet().contains("padding-left"));
+
+    lineBar->deleteLater();
+}
+
+//自绘清除按钮：有文本时显示，无文本时隐藏
+TEST_F(test_linebar, clearButton_VisibilityWithText)
+{
+    LineBar *lineBar = new LineBar();
+    lineBar->show();
+    qApp->processEvents();
+
+    // 初始无文本，清除按钮应隐藏
+    lineBar->handleTextChanged("");
+    EXPECT_FALSE(lineBar->m_clearButton->isVisible());
+
+    // 有文本时清除按钮应显示
+    lineBar->handleTextChanged("hello");
+    EXPECT_TRUE(lineBar->m_clearButton->isVisible());
+
+    // 清空文本后清除按钮应再次隐藏
+    lineBar->handleTextChanged("");
+    EXPECT_FALSE(lineBar->m_clearButton->isVisible());
+
+    lineBar->deleteLater();
+}
+
+//setMatchCount label 文本与可见性（含 0/N 场景）
+TEST_F(test_linebar, setMatchCount_LabelTextAndVisibility)
+{
+    LineBar *lineBar = new LineBar();
+    lineBar->show();
+    qApp->processEvents();
+
+    // 正常计数
+    lineBar->setMatchCount(3, 10);
+    EXPECT_EQ(lineBar->m_matchCountLabel->text().toStdString(), "第3/10项");
+    EXPECT_TRUE(lineBar->m_matchCountLabel->isVisible());
+
+    // 0/N 场景
+    lineBar->setMatchCount(0, 5);
+    EXPECT_EQ(lineBar->m_matchCountLabel->text().toStdString(), "第0/5项");
+    EXPECT_TRUE(lineBar->m_matchCountLabel->isVisible());
+
+    // total==0 隐藏
+    lineBar->setMatchCount(0, 0);
+    EXPECT_FALSE(lineBar->m_matchCountLabel->isVisible());
+
     lineBar->deleteLater();
 }

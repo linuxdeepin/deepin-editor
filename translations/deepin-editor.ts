@@ -140,6 +140,14 @@
     </message>
 </context>
 <context>
+    <name>LineBar</name>
+    <message>
+        <location filename="../src/controls/linebar.cpp" line="117"/>
+        <source>第%1/%2项</source>
+        <translation>Match %1 of %2</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <location filename="../src/editorapplication.cpp" line="12"/>

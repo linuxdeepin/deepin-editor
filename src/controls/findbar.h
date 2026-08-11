@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -62,6 +62,7 @@ public Q_SLOTS:
     void handleFindNext();
     void handleFindPrev();
     void handleSwitchToReplace();
+    void slotUpdateMatchCount(int current, int total);
 
 protected:
     void hideEvent(QHideEvent *event) override;

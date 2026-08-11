@@ -22,6 +22,7 @@
 #include <QContextMenuEvent>
 #include <QMouseEvent>
 #include <QApplication>
+#include <QSignalSpy>
 
 
 namespace texteditstub {
@@ -10843,4 +10844,183 @@ TEST(UT_Textedit_Uncovered, calcMarkReplaceList)
     }
     SUCCEED();
     win->deleteLater();
+}
+
+//scanAllMatchPositions 基础计数
+TEST(UT_test_textedit_scanAllMatchPositions, UT_test_textedit_scanAllMatchPositions_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("hello world\nhello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    QList<int> positions = pWindow->currentWrapper()->textEditor()->scanAllMatchPositions(QString("world"));
+
+    ASSERT_EQ(positions.size(), 2);
+    ASSERT_EQ(positions[0], 6);
+    ASSERT_EQ(positions[1], 18);
+    pWindow->deleteLater();
+}
+
+//scanAllMatchPositions 空关键字返回空列表
+TEST(UT_test_textedit_scanAllMatchPositions, UT_test_textedit_scanAllMatchPositions_Empty)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("hello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    QList<int> positions = pWindow->currentWrapper()->textEditor()->scanAllMatchPositions(QString());
+
+    ASSERT_TRUE(positions.isEmpty());
+    pWindow->deleteLater();
+}
+
+//scanAllMatchPositions 大小写敏感
+TEST(UT_test_textedit_scanAllMatchPositions, UT_test_textedit_scanAllMatchPositions_CaseSensitive)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    QList<int> positionsCI = pWindow->currentWrapper()->textEditor()->scanAllMatchPositions(QString("Hello"), Qt::CaseInsensitive);
+    ASSERT_EQ(positionsCI.size(), 2);
+
+    QList<int> positionsCS = pWindow->currentWrapper()->textEditor()->scanAllMatchPositions(QString("Hello"), Qt::CaseSensitive);
+    ASSERT_EQ(positionsCS.size(), 1);
+    ASSERT_EQ(positionsCS[0], 12);
+    pWindow->deleteLater();
+}
+
+//scanAllMatchPositions 无匹配返回空列表
+TEST(UT_test_textedit_scanAllMatchPositions, UT_test_textedit_scanAllMatchPositions_NoMatch)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("hello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    QList<int> positions = pWindow->currentWrapper()->textEditor()->scanAllMatchPositions(QString("xyz"));
+
+    ASSERT_TRUE(positions.isEmpty());
+    pWindow->deleteLater();
+}
+
+//findCurrentMatchIndex 命中：缓存预置 + cursor 落在第 2 个位置
+TEST(UT_test_textedit_findCurrentMatchIndex, UT_test_textedit_findCurrentMatchIndex_Hit)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    TextEdit *editor = pWindow->currentWrapper()->textEditor();
+    QString strMsg("hello world\nhello world");
+    QTextCursor textCursor = editor->textCursor();
+    editor->insertTextEx(textCursor, strMsg);
+
+    editor->m_allMatchPositions = editor->scanAllMatchPositions(QString("world"));
+    QTextCursor c = editor->textCursor();
+    c.setPosition(18);
+    editor->m_findHighlightSelection.cursor = c;
+
+    ASSERT_EQ(editor->findCurrentMatchIndex(), 2);
+    pWindow->deleteLater();
+}
+
+//findCurrentMatchIndex 未命中：cursor 位置不在列表
+TEST(UT_test_textedit_findCurrentMatchIndex, UT_test_textedit_findCurrentMatchIndex_Miss)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    TextEdit *editor = pWindow->currentWrapper()->textEditor();
+    editor->insertPlainText("hello world\nhello world");
+
+    editor->m_allMatchPositions = editor->scanAllMatchPositions(QString("world"));
+    QTextCursor c = editor->textCursor();
+    c.setPosition(3);
+    editor->m_findHighlightSelection.cursor = c;
+
+    ASSERT_EQ(editor->findCurrentMatchIndex(), 0);
+    pWindow->deleteLater();
+}
+
+//findCurrentMatchIndex 空缓存返回 0
+TEST(UT_test_textedit_findCurrentMatchIndex, UT_test_textedit_findCurrentMatchIndex_EmptyCache)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    TextEdit *editor = pWindow->currentWrapper()->textEditor();
+    editor->m_allMatchPositions.clear();
+
+    ASSERT_EQ(editor->findCurrentMatchIndex(), 0);
+    pWindow->deleteLater();
+}
+
+//invalidateMatchCountCache 清空缓存字段
+TEST(UT_test_textedit_invalidateMatchCountCache, UT_test_textedit_invalidateMatchCountCache_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    TextEdit *editor = pWindow->currentWrapper()->textEditor();
+    editor->m_allMatchPositions.append(1);
+    editor->m_allMatchPositions.append(2);
+    editor->m_countedKeyword = "abc";
+
+    editor->invalidateMatchCountCache();
+
+    ASSERT_TRUE(editor->m_allMatchPositions.isEmpty());
+    ASSERT_TRUE(editor->m_countedKeyword.isEmpty());
+    pWindow->deleteLater();
+}
+
+//updateMatchCount emit 验证（缓存命中）
+TEST(UT_test_textedit_updateMatchCount, UT_test_textedit_updateMatchCount_Emit)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    TextEdit *editor = pWindow->currentWrapper()->textEditor();
+    editor->insertPlainText("hello\nhello\nhello");
+
+    QSignalSpy spy(editor, &TextEdit::findMatchCountChanged);
+    editor->updateMatchCount(QString("hello"), Qt::CaseInsensitive);
+
+    ASSERT_EQ(spy.count(), 1);
+    QList<QVariant> args = spy.takeFirst();
+    ASSERT_EQ(args.at(1).toInt(), 3);
+    pWindow->deleteLater();
+}
+
+//updateMatchCount 空关键字 emit (0,0)
+TEST(UT_test_textedit_updateMatchCount, UT_test_textedit_updateMatchCount_Empty)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    TextEdit *editor = pWindow->currentWrapper()->textEditor();
+
+    QSignalSpy spy(editor, &TextEdit::findMatchCountChanged);
+    editor->updateMatchCount(QString(), Qt::CaseInsensitive);
+
+    ASSERT_EQ(spy.count(), 1);
+    QList<QVariant> args = spy.takeFirst();
+    ASSERT_EQ(args.at(0).toInt(), 0);
+    ASSERT_EQ(args.at(1).toInt(), 0);
+    pWindow->deleteLater();
+}
+
+//updateMatchCount 无双重 emit：highlightKeyword 后只 emit 1 次
+TEST(UT_test_textedit_updateMatchCount, UT_test_textedit_updateMatchCount_NoDoubleEmit)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    TextEdit *editor = pWindow->currentWrapper()->textEditor();
+    editor->insertPlainText("hello world\nhello world");
+
+    QSignalSpy spy(editor, &TextEdit::findMatchCountChanged);
+    editor->highlightKeyword(QString("world"), 0);
+
+    ASSERT_EQ(spy.count(), 1);
+    pWindow->deleteLater();
 }
