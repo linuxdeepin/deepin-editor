@@ -100,6 +100,8 @@ EditWrapper::EditWrapper(Window *window, QWidget *parent)
 
     m_bQuit = false;
     m_pWaringNotices->hide();
+    m_pTextEdit->setAccessibleName("TextEditor");
+    m_pBottomBar->setAccessibleName("EditorBottomBar");
     // Init layout and widgets.
     QHBoxLayout *m_layout = new QHBoxLayout;
     m_pLeftAreaTextEdit = m_pTextEdit->getLeftAreaWidget();

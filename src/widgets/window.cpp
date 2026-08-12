@@ -252,8 +252,11 @@ Window::Window(DMainWindow *parent)
     m_centralLayout->setContentsMargins(0, 0, 0, 0);
     m_centralLayout->setSpacing(0);
 
+    m_centralWidget->setAccessibleName("CentralWidget");
+    m_editorWidget->setAccessibleName("EditorStack");
     m_centralLayout->addWidget(m_editorWidget);
     setWindowIcon(QIcon::fromTheme("deepin-editor"));
+    setAccessibleName("MainWindow");
     setCentralWidget(m_centralWidget);
 
     // Init titlebar.
@@ -525,15 +528,25 @@ void Window::initTitlebar()
 {
     qDebug() << "initTitlebar called";
     QAction *newWindowAction(new QAction(tr("New window"), this));
+    newWindowAction->setObjectName("NewWindow");
     QAction *newTabAction(new QAction(tr("New tab"), this));
+    newTabAction->setObjectName("NewTab");
     QAction *openFileAction(new QAction(tr("Open file"), this));
+    openFileAction->setObjectName("OpenFile");
     QAction *saveAction(new QAction(tr("Save"), this));
+    saveAction->setObjectName("Save");
     QAction *saveAsAction(new QAction(tr("Save as"), this));
+    saveAsAction->setObjectName("SaveAs");
     QAction *printAction(new QAction(tr("Print"), this));
+    printAction->setObjectName("Print");
     QAction *switchThemeAction(new QAction(tr("Switch theme"), this));
+    switchThemeAction->setObjectName("SwitchTheme");
     QAction *settingAction(new QAction(tr("Settings"), this));
+    settingAction->setObjectName("Settings");
     QAction *findAction(new QAction(QApplication::translate("TextEdit", "Find"), this));
+    findAction->setObjectName("Find");
     QAction *replaceAction(new QAction(QApplication::translate("TextEdit", "Replace"), this));
+    replaceAction->setObjectName("Replace");
 
     m_menu->addAction(newWindowAction);
     m_menu->addAction(newTabAction);
@@ -561,16 +574,22 @@ void Window::initTitlebar()
 
     DIconButton *addButton = m_tabbar->findChild<DIconButton *>("AddButton");
     addButton->setFocusPolicy(Qt::NoFocus);
+    addButton->setAccessibleName("AddTab");
     DIconButton *optionBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowOptionButton");
     optionBtn->setFocusPolicy(Qt::NoFocus);
+    optionBtn->setAccessibleName("OptionMenu");
     DIconButton *minBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowMinButton");
     minBtn->setFocusPolicy(Qt::NoFocus);
+    minBtn->setAccessibleName("Minimize");
     DIconButton *quitFullBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowQuitFullscreenButton");
     quitFullBtn->setFocusPolicy(Qt::NoFocus);
+    quitFullBtn->setAccessibleName("QuitFullscreen");
     DIconButton *maxBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowMaxButton");
     maxBtn->setFocusPolicy(Qt::NoFocus);
+    maxBtn->setAccessibleName("Maximize");
     DIconButton *closeBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowCloseButton");
     closeBtn->setFocusPolicy(Qt::NoFocus);
+    closeBtn->setAccessibleName("Close");
 
     connect(m_tabbar, &DTabBar::tabBarDoubleClicked, titlebar(), &DTitlebar::doubleClicked, Qt::QueuedConnection);
 
@@ -1353,6 +1372,7 @@ int Window::confirmInvalidCharSave(const QString &fileName)
         tr("Invalid characters detected while saving \"%1\"").arg(fileName),
         tr("If you force save this file, it may cause file corruption. Still want to save?"),
         this);
+    dialog->setAccessibleName("InvalidCharSaveDialog");
     dialog->setIcon(QIcon::fromTheme("dialog-warning"));
     dialog->addButton(tr("Don't Save"), false, DDialog::ButtonNormal);
     dialog->addButton(tr("Save As"), true, DDialog::ButtonRecommend);

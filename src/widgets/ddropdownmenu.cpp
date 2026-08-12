@@ -56,6 +56,7 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     svg_render.render(&painter,QRect(0,0,8,5));
     m_arrowPixmap = pixmap;
     m_pToolButton->setIcon(createIcon());
+    m_pToolButton->setAccessibleName("DropdownToolButton");
 
     //设置字体
     int fontsize = DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T9);

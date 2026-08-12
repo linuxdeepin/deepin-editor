@@ -383,45 +383,78 @@ void TextEdit::initRightClickedMenu()
     qDebug() << "Initializing right clicked menu";
     // Init menu.
     m_rightMenu = new DMenu();
+    m_rightMenu->setAccessibleName("EditorContextMenu");
     m_undoAction = new QAction(tr("Undo"), this);
+    m_undoAction->setObjectName("Undo");
     m_redoAction = new QAction(tr("Redo"), this);
+    m_redoAction->setObjectName("Redo");
     m_cutAction = new QAction(tr("Cut"), this);
+    m_cutAction->setObjectName("Cut");
     m_copyAction = new QAction(tr("Copy"), this);
+    m_copyAction->setObjectName("Copy");
     m_pasteAction = new QAction(tr("Paste"), this);
+    m_pasteAction->setObjectName("Paste");
     m_deleteAction = new QAction(tr("Delete"), this);
+    m_deleteAction->setObjectName("Delete");
     m_selectAllAction = new QAction(tr("Select All"), this);
+    m_selectAllAction->setObjectName("SelectAll");
     m_findAction = new QAction(tr("Find"), this);
+    m_findAction->setObjectName("Find");
     m_replaceAction = new QAction(tr("Replace"), this);
+    m_replaceAction->setObjectName("Replace");
     m_jumpLineAction = new QAction(tr("Go to Line"), this);
+    m_jumpLineAction->setObjectName("GoToLine");
     m_enableReadOnlyModeAction = new QAction(tr("Turn on Read-Only mode"), this);
+    m_enableReadOnlyModeAction->setObjectName("EnableReadOnly");
     m_disableReadOnlyModeAction = new QAction(tr("Turn off Read-Only mode"), this);
+    m_disableReadOnlyModeAction->setObjectName("DisableReadOnly");
     m_fullscreenAction = new QAction(tr("Fullscreen"), this);
+    m_fullscreenAction->setObjectName("Fullscreen");
     m_exitFullscreenAction = new QAction(tr("Exit fullscreen"), this);
+    m_exitFullscreenAction->setObjectName("ExitFullscreen");
     m_openInFileManagerAction = new QAction(tr("Display in file manager"), this);
+    m_openInFileManagerAction->setObjectName("DisplayInFileManager");
     m_toggleCommentAction = new QAction(tr("Add Comment"), this);
+    m_toggleCommentAction->setObjectName("ToggleComment");
     m_voiceReadingAction = new QAction(tr("Text to Speech"), this);
+    m_voiceReadingAction->setObjectName("TextToSpeech");
     m_dictationAction = new QAction(tr("Speech to Text"), this);
+    m_dictationAction->setObjectName("SpeechToText");
     m_translateAction = new QAction(tr("Translate"), this);
+    m_translateAction->setObjectName("Translate");
     m_columnEditAction = new QAction(tr("Column Mode"), this);
+    m_columnEditAction->setObjectName("ColumnMode");
     m_addBookMarkAction = new QAction(tr("Add bookmark"), this);
+    m_addBookMarkAction->setObjectName("AddBookmark");
     m_cancelBookMarkAction = new QAction(tr("Remove Bookmark"), this);
+    m_cancelBookMarkAction->setObjectName("RemoveBookmark");
     m_preBookMarkAction = new QAction(tr("Previous bookmark"), this);
+    m_preBookMarkAction->setObjectName("PreviousBookmark");
     m_nextBookMarkAction = new QAction(tr("Next bookmark"), this);
+    m_nextBookMarkAction->setObjectName("NextBookmark");
     m_clearBookMarkAction = new QAction(tr("Remove All Bookmarks"), this);
+    m_clearBookMarkAction->setObjectName("ClearAllBookmarks");
     m_flodAllLevel = new QAction(tr("Fold All"), this);
+    m_flodAllLevel->setObjectName("FoldAll");
     m_flodCurrentLevel = new QAction(tr("Fold Current Level"), this);
+    m_flodCurrentLevel->setObjectName("FoldCurrentLevel");
     m_unflodAllLevel = new QAction(tr("Unfold All"), this);
+    m_unflodAllLevel->setObjectName("UnfoldAll");
     m_unflodCurrentLevel = new QAction(tr("Unfold Current Level"), this);
+    m_unflodCurrentLevel->setObjectName("UnfoldCurrentLevel");
 
     //yanyuhan
     //颜色标记、折叠/展开、书签、列编辑、设置注释、取消注释;
     //点击颜色标记菜单，显示二级菜单，包括：标记、清除上次标记、清除标记、标记所有;
     m_colorMarkMenu = new DMenu(tr("Color Mark"));
+    m_colorMarkMenu->setAccessibleName("ColorMarkMenu");
 
     // 为颜色标记Menu，增加事件过滤
     m_colorMarkMenu->installEventFilter(this);
     m_cancleMarkAllLine = new QAction(tr("Clear All Marks"), this);
+    m_cancleMarkAllLine->setObjectName("ClearAllMarks");
     m_cancleLastMark = new QAction(tr("Clear Last Mark"), this);
+    m_cancleLastMark->setObjectName("ClearLastMark");
 
     //添加当前颜色选择控件　梁卫东
     ColorSelectWdg *pColorsSelectWdg = new ColorSelectWdg(QString(), this);
@@ -431,6 +464,7 @@ void TextEdit::initRightClickedMenu()
     m_actionColorStyles->setDefaultWidget(pColorsSelectWdg);
 
     m_markCurrentAct = new QAction(tr("Mark"), this);
+    m_markCurrentAct->setObjectName("MarkCurrentLine");
     connect(m_markCurrentAct, &QAction::triggered, this, [this, pColorsSelectWdg]() {
         qDebug() << "Marking current line";
         isMarkCurrentLine(true, pColorsSelectWdg->getDefaultColor().name());
@@ -444,6 +478,7 @@ void TextEdit::initRightClickedMenu()
     m_actionAllColorStyles->setDefaultWidget(pColorsAllSelectWdg);
 
     m_markAllAct = new QAction(tr("Mark All"), this);
+    m_markAllAct->setObjectName("MarkAll");
     connect(m_markAllAct, &QAction::triggered, this, [this, pColorsAllSelectWdg]() {
         qDebug() << "Marking all lines";
         m_strMarkAllLineColorName = pColorsAllSelectWdg->getDefaultColor().name();

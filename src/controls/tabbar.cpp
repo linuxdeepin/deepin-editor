@@ -63,6 +63,7 @@ Tabbar::Tabbar(QWidget *parent)
     qApp->installEventFilter(this);
 #endif
 
+    setAccessibleName("EditorTabBar");
     setMovable(true);
     setTabsClosable(true);
     setVisibleAddButton(true);
@@ -672,14 +673,20 @@ bool Tabbar::eventFilter(QObject *watched, QEvent *event)
             // popup right menu on tab.
             if (m_rightClickTab >= 0) {
                 m_rightMenu = new DMenu;
-                //m_rightMenu->setStyle(QStyleFactory::create("dlight"));
+                m_rightMenu->setAccessibleName("TabContextMenu");
 
                 m_closeTabAction = new QAction(tr("Close tab"), this);
+                m_closeTabAction->setObjectName("CloseTab");
                 m_closeOtherTabAction = new QAction(tr("Close other tabs"), this);
+                m_closeOtherTabAction->setObjectName("CloseOtherTabs");
                 m_moreWaysCloseMenu = new DMenu(tr("More options"), this);
+                m_moreWaysCloseMenu->setAccessibleName("MoreCloseOptions");
                 m_closeLeftTabAction = new QAction(tr("Close tabs to the left"), this);
+                m_closeLeftTabAction->setObjectName("CloseTabsToLeft");
                 m_closeRightTabAction = new QAction(tr("Close tabs to the right"), this);
+                m_closeRightTabAction->setObjectName("CloseTabsToRight");
                 m_closeAllunModifiedTabAction = new QAction(tr("Close unmodified tabs"), this);
+                m_closeAllunModifiedTabAction->setObjectName("CloseUnmodifiedTabs");
 
                 m_moreWaysCloseMenu->addAction(m_closeLeftTabAction);
                 m_moreWaysCloseMenu->addAction(m_closeRightTabAction);

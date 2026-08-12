@@ -37,12 +37,18 @@ BottomBar::BottomBar(QWidget *parent)
     qDebug() << "BottomBar constructor";
     QFont font;
     m_pPositionLabel->setFont(font);
+    m_pPositionLabel->setAccessibleName("PositionLabel");
     m_pCharCountLabel->setFont(font);
+    m_pCharCountLabel->setAccessibleName("CharCountLabel");
     m_pCursorStatus->setFont(font);
+    m_pCursorStatus->setAccessibleName("CursorStatus");
     m_scaleLabel->setFont(font);
+    m_scaleLabel->setAccessibleName("ScaleLabel");
     m_progressLabel->setFont(font);
+    m_progressLabel->setAccessibleName("ProgressLabel");
     m_progressLabel->setText(tr("Loading:"));
     m_progressBar->setRange(0,100);
+    m_progressBar->setAccessibleName("ProgressBar");
     m_progressBar->setTextVisible(false);
     m_progressBar->setMinimumWidth(80);
     QHBoxLayout* progressLayout = new QHBoxLayout;
