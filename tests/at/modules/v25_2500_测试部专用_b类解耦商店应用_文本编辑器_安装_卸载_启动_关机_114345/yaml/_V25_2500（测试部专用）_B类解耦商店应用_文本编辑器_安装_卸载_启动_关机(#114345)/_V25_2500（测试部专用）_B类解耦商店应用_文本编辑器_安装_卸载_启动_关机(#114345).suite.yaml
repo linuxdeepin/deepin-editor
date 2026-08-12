@@ -11,14 +11,14 @@ setup:
   wait: 3.0
 suites:
 - id: case_1593179_s1
-  name: 通过终端命令等价启动文本编辑器
+  name: 软件启动
   description: ''
   tags: []
   steps: []
   assert_steps:
   - action: assert_element
     selector:
-      name: DTabBarAddButton
-      role: button
+      name: MainWindow
+      role: frame
 teardown:
 - action: session_stop

@@ -1,15 +1,15 @@
 elements:
-  DTabBarAddButton:
-    name: DTabBarAddButton
-    role: button
+  MainWindow:
+    name: MainWindow
+    role: frame
   查找:
     name: 查找
     role: menu item
   替换:
     name: 替换
     role: menu item
-  关于:
-    name: 关于
+  帮助:
+    name: 帮助
     role: menu item
   n0:
     name: DMainWindow

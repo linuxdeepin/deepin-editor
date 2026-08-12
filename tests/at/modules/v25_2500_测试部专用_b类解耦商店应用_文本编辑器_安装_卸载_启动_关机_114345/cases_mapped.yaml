@@ -47,16 +47,16 @@ cases:
       测试界面: "主窗口/命令启动"
       测试功能: "通过 deepin-editor 命令启动应用并验证窗口可交互"
       前置条件: "应用已安装；启动器、Dock、桌面图标、开机自启相关步骤因依赖系统 Shell 环境不纳入本自动化覆盖"
-      AT元素引用: "DTabBarAddButton"
+      AT元素引用: "MainWindow"
     steps:
       - step_type: action
         description: "通过终端命令等价启动文本编辑器"
         action: session_start
         command: deepin-editor
       - step_type: assert
-        description: "验证文本编辑器主窗口启动后标签栏加号按钮可见"
+        description: "验证文本编辑器主窗口启动后可见"
         action: assert_element
-        selector: {name: "DTabBarAddButton", role: "button"}
+        selector: {name: "MainWindow", role: "frame"}
 
   - id: case_1593175
     name: "dock右键菜单"

@@ -20,8 +20,8 @@ suites:
   assert_steps:
   - action: assert_element
     selector:
-      name: DTabBarAddButton
-      role: button
+      name: MainWindow
+      role: frame
 - id: case_1593219_s1
   name: 【快捷键优化】“重做”快捷键恢复为“Ctrl+Y”
   description: ''

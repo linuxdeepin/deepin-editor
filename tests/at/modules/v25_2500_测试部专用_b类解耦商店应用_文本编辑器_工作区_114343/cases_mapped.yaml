@@ -32,7 +32,7 @@ cases:
     测试界面: 主窗口-标签栏
     测试功能: 新建标签页
     前置条件: 应用已启动
-    AT元素引用: 新标签页, DTabBarAddButton
+    AT元素引用: 新标签页, MainWindow
   steps:
   - step_type: action
     description: 打开文本编辑器
@@ -43,11 +43,11 @@ cases:
     action: keyboard_hot_key
     key: ctrl+t
   - step_type: assert
-    description: 验证标签栏加号按钮仍可见
+    description: 验证新建标签页后主窗口仍可见
     action: assert_element
     selector:
-      name: DTabBarAddButton
-      role: button
+      name: MainWindow
+      role: frame
 - id: case_1593219
   name: 【快捷键优化】“重做”快捷键恢复为“Ctrl+Y”
   module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)

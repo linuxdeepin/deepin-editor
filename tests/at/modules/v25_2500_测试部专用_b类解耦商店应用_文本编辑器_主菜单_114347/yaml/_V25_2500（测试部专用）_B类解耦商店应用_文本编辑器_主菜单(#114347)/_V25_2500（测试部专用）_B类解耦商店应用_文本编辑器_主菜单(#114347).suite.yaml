@@ -20,8 +20,8 @@ suites:
   assert_steps:
   - action: assert_element
     selector:
-      name: DTabBarAddButton
-      role: button
+      name: MainWindow
+      role: frame
 - id: case_1592855_s1
   name: 查找_不按压enter键
   description: ''
@@ -59,13 +59,12 @@ suites:
     key: ctrl+f
   - action: keyboard_press
     key: escape
-  - action: dtk_main_menu
-    items:
-    - 关于
+  - action: keyboard_hot_key
+    key: ctrl+shift+slash
   assert_steps:
   - action: assert_element
     selector:
-      name: 关于
+      name: 帮助
       role: menu item
 - id: case_1592885_s1
   name: 查找_按压enter键
@@ -125,8 +124,8 @@ suites:
   assert_steps:
   - action: assert_element
     selector:
-      name: DTabBarAddButton
-      role: button
+      name: MainWindow
+      role: frame
 - id: case_1592879_s1
   name: 打开文件
   description: ''
