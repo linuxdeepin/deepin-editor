@@ -133,7 +133,7 @@ cases:
       - step_type: action
         description: "在编辑区右键打开右键菜单"
         action: mouse_right_click
-        selector: {name: "DMainWindow", role: "frame"}
+        selector: {name: "MainWindow", role: "frame"}
       - step_type: action
         description: "通过键盘导航到右键菜单中的替换项"
         action: keyboard_press

@@ -11,7 +11,7 @@ setup:
   wait: 3.0
 suites:
 - id: case_1919201_s1
-  name: 打开文本编辑器
+  name: 查找替换-查找弹窗中替换按钮可见性验证（未选中文本）
   description: ''
   tags: []
   steps:
@@ -23,7 +23,7 @@ suites:
       name: 查找
       role: menu item
 - id: case_1593491_s1
-  name: 打开文本编辑器，默认新开空白文档
+  name: 字数展示_UI
   description: ''
   tags: []
   steps:
@@ -37,7 +37,7 @@ suites:
       name: 查找
       role: menu item
 - id: case_1919203_s1
-  name: 打开文本编辑器
+  name: 查找替换-点击替换按钮切换至替换弹窗（未选中文本）
   description: ''
   tags: []
   steps:
@@ -55,7 +55,7 @@ suites:
       name: 查找
       role: menu item
 - id: case_1919209_s1
-  name: 打开文本编辑器
+  name: 查找替换-替换弹窗填充选中内容及状态保留
   description: ''
   tags: []
   steps:
@@ -69,7 +69,7 @@ suites:
     key: ctrl+a
   - action: mouse_right_click
     selector:
-      name: DMainWindow
+      name: MainWindow
       role: frame
   - action: keyboard_press
     key: down
@@ -93,7 +93,7 @@ suites:
       name: 替换
       role: menu item
 - id: case_1593667_s1
-  name: 打开临时代码文件
+  name: 保存编码文件场景补充
   description: ''
   tags: []
   steps:
@@ -107,7 +107,7 @@ suites:
       name: 查找
       role: menu item
 - id: case_1593171_s1
-  name: 打开文本编辑器
+  name: 最小化后从启动器打开应用
   description: ''
   tags: []
   steps:
@@ -119,7 +119,7 @@ suites:
       name: 查找
       role: menu item
 - id: case_1593091_s1
-  name: 打开 .crt 临时测试文件
+  name: 打开.crt格式文件
   description: ''
   tags: []
   steps:
@@ -139,7 +139,7 @@ suites:
       name: 查找
       role: menu item
 - id: case_1593089_s1
-  name: 打开 .md 临时测试文件
+  name: 打开.md文本类型格式文件
   description: ''
   tags: []
   steps:
@@ -161,7 +161,7 @@ suites:
       name: 查找
       role: menu item
 - id: case_1593045_s1
-  name: 打开文本编辑器
+  name: 设置【快捷键】
   description: ''
   tags: []
   steps:
@@ -179,7 +179,7 @@ suites:
       name: 帮助
       role: menu item
 - id: case_1592865_s1
-  name: 打开文本编辑器
+  name: 退出
   description: ''
   tags: []
   steps:

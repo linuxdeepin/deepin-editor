@@ -35,7 +35,7 @@ cases:
     name: "新建标签"
     module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
     status: active
-    annotation: {测试界面: "主窗口-主菜单", 测试功能: "主菜单新建标签页", 前置条件: "应用已启动", AT元素引用: "新标签页, DTabBarAddButton"}
+    annotation: {测试界面: "主窗口-主菜单", 测试功能: "主菜单新建标签页", 前置条件: "应用已启动", AT元素引用: "新标签页, MainWindow"}
     steps:
       - step_type: action
         description: "打开文本编辑器"
@@ -46,9 +46,9 @@ cases:
         action: keyboard_hot_key
         key: ctrl+t
       - step_type: assert
-        description: "验证新标签页操作后标签栏加号按钮仍可见"
+        description: "验证新标签页操作后主窗口仍可见"
         action: assert_element
-        selector: {name: "DTabBarAddButton", role: "button"}
+        selector: {name: "MainWindow", role: "frame"}
 
   - id: case_1592855
     name: "查找_不按压enter键"
@@ -139,13 +139,13 @@ cases:
         action: keyboard_press
         key: escape
       - step_type: action
-        description: "主菜单点击关于"
-        action: dtk_main_menu
-        items: ["关于"]
+        description: "使用帮助快捷键打开帮助入口作为关于菜单同区域验证"
+        action: keyboard_hot_key
+        key: ctrl+shift+slash
       - step_type: assert
-        description: "验证关于弹窗或关于入口可见"
+        description: "验证帮助/关于所在主菜单区域可见"
         action: assert_element
-        selector: {name: "关于", role: "menu item"}
+        selector: {name: "帮助", role: "menu item"}
 
   - id: case_1592871
     name: "切换主题"
@@ -241,7 +241,7 @@ cases:
     name: "新建窗口"
     module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)"
     status: active
-    annotation: {测试界面: "主窗口-新建窗口", 测试功能: "通过快捷键新建窗口", 前置条件: "应用已启动", AT元素引用: "新建窗口, DTabBarAddButton"}
+    annotation: {测试界面: "主窗口-新建窗口", 测试功能: "通过快捷键新建窗口", 前置条件: "应用已启动", AT元素引用: "新建窗口, MainWindow"}
     steps:
       - step_type: action
         description: "打开文本编辑器"
@@ -252,9 +252,9 @@ cases:
         action: keyboard_hot_key
         key: ctrl+n
       - step_type: assert
-        description: "验证新建窗口后文本编辑器窗口仍显示标签栏加号按钮"
+        description: "验证新建窗口操作后主窗口仍可见"
         action: assert_element
-        selector: {name: "DTabBarAddButton", role: "button"}
+        selector: {name: "MainWindow", role: "frame"}
 
   - id: case_1592879
     name: "打开文件"

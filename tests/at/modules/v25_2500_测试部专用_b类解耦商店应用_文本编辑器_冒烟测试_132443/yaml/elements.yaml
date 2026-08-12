@@ -2,8 +2,8 @@ elements:
   查找:
     name: 查找
     role: menu item
-  DMainWindow:
-    name: DMainWindow
+  MainWindow:
+    name: MainWindow
     role: frame
   替换:
     name: 替换
