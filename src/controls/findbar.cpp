@@ -32,11 +32,17 @@ FindBar::FindBar(QWidget *parent)
     m_layout->setSpacing(10);
     m_layout->setAlignment(Qt::AlignVCenter);
     m_findLabel = new QLabel(tr("Find"));
+    m_findLabel->setAccessibleName("FindLabel");
     m_editLine = new LineBar();
+    m_editLine->setAccessibleName("FindInput");
     m_findPrevButton = new QPushButton(tr("Previous"));
+    m_findPrevButton->setAccessibleName("FindPrevious");
     m_findNextButton = new QPushButton(tr("Next"));
+    m_findNextButton->setAccessibleName("FindNext");
     m_replaceButton = new QPushButton(tr("Replace"));
+    m_replaceButton->setAccessibleName("SwitchToReplace");
     m_closeButton = new DIconButton(DStyle::SP_CloseButton);
+    m_closeButton->setAccessibleName("CloseFind");
     m_closeButton->setIconSize(QSize(30, 30));
     m_closeButton->setFixedSize(30, 30);
     m_closeButton->setEnabledCircle(true);

@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -40,12 +40,15 @@ JumpLineBar::JumpLineBar(DFloatingWidget *parent)
     m_closeButton->setFixedSize(30, 30);
     m_closeButton->setEnabledCircle(true);
     m_closeButton->setFlat(true);
+    m_closeButton->setAccessibleName("CloseJumpLine");
 
     m_label = new QLabel();
     m_label->setText(tr("Go to Line: "));
+    m_label->setAccessibleName("GoToLineLabel");
     // 按文本长度计算显示宽度，不同语言下翻译文本长度不一，需完整显示
     m_label->setFixedWidth(fontMetrics().horizontalAdvance(m_label->text()));
     m_pSpinBoxInput = new DSpinBox;
+    m_pSpinBoxInput->setAccessibleName("LineNumberInput");
     m_pSpinBoxInput->setFixedSize(s_nJumpLineBarSpinBoxWidth, s_nJumpLineBarSPinBoxHeight);
     m_pSpinBoxInput->lineEdit()->clear();
     m_pSpinBoxInput->setButtonSymbols(QAbstractSpinBox::NoButtons);

@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -20,6 +20,7 @@ ThemePanel::ThemePanel(QWidget *parent)
 {
     qDebug() << "ThemePanel constructor";
     // init view.
+    m_themeView->setAccessibleName("ThemeListView");
     m_themeView->setModel(m_themeModel);
     m_themeView->setItemDelegate(new ThemeItemDelegate(this));
 

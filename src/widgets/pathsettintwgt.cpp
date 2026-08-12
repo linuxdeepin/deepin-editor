@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -69,10 +69,15 @@ void PathSettingWgt::init()
     m_group = new QButtonGroup(this);
     layout->setContentsMargins(0,0,0,0);
     m_curFileBox = new DCheckBox(this);
+    m_curFileBox->setAccessibleName("SamePathAsCurrentFile");
     m_lastOptBox = new DCheckBox(this);
+    m_lastOptBox->setAccessibleName("RememberLastPath");
     m_customBox = new DCheckBox(this);
+    m_customBox->setAccessibleName("CustomizeDefaultPath");
     m_customEdit = new DLineEdit(this);
+    m_customEdit->setAccessibleName("CustomPathInput");
     m_customBtn = new DSuggestButton(this);
+    m_customBtn->setAccessibleName("BrowseCustomPath");
     // 获取DTK提供的选取按钮，保持和 DFileChooserEdit 相同的设置
     m_customBtn->setFixedSize(36, 36);
     m_customBtn->setIconSize(QSize(24, 24));
