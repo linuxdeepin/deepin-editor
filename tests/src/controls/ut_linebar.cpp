@@ -225,3 +225,20 @@ TEST_F(test_linebar, setMatchCount_LabelTextAndVisibility)
 
     lineBar->deleteLater();
 }
+
+// Constructor lambda #1: m_clearButton clicked -> lineEdit()->clear()
+TEST_F(test_linebar, ClearButtonClickedLambda)
+{
+    LineBar *lineBar = new LineBar();
+
+    // Put text in the line edit
+    lineBar->setText("hello");
+
+    // Click the clear button to fire the constructor lambda directly
+    // (no processEvents needed - click() is synchronous DirectConnection)
+    lineBar->m_clearButton->click();
+
+    EXPECT_TRUE(lineBar->lineEdit()->text().isEmpty());
+
+    lineBar->deleteLater();
+}

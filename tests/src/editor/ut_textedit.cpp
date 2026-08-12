@@ -23,6 +23,7 @@
 #include <QMouseEvent>
 #include <QApplication>
 #include <QSignalSpy>
+#include <QTest>
 
 
 namespace texteditstub {
@@ -10144,6 +10145,7 @@ TEST(UT_Textedit_MoveText, moveText_Move_Pass)
     Stub __stub_undo_redo;
     __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
     __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
+    __stub_undo_redo.set(ADDR(Window, updateModifyStatus), stub_updateModifyStatus);
 
     QString sourceText("123456789\n");
     edit->setPlainText(sourceText);
@@ -10167,6 +10169,7 @@ TEST(UT_Textedit_MoveText, moveText_Copy_Pass)
     Stub __stub_undo_redo;
     __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
     __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
+    __stub_undo_redo.set(ADDR(Window, updateModifyStatus), stub_updateModifyStatus);
 
     QString sourceText("123456789\n");
     edit->setPlainText(sourceText);
@@ -10190,6 +10193,7 @@ TEST(UT_Textedit_MoveText, moveText_Multi_Pass)
     Stub __stub_undo_redo;
     __stub_undo_redo.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoChanged);
     __stub_undo_redo.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanRedoChanged);
+    __stub_undo_redo.set(ADDR(Window, updateModifyStatus), stub_updateModifyStatus);
 
     edit->insertTextEx(edit->textCursor(), "1\n");
     edit->insertTextEx(edit->textCursor(), "2\n");
@@ -11023,4 +11027,87 @@ TEST(UT_test_textedit_updateMatchCount, UT_test_textedit_updateMatchCount_NoDoub
 
     ASSERT_EQ(spy.count(), 1);
     pWindow->deleteLater();
+}
+
+// Blocks all events except Timer so processEvents fires timer lambdas without
+// triggering stale callbacks (MetaCall, DeferredDelete, etc.) from earlier tests.
+class TE_DeferredDeleteBlocker : public QObject
+{
+public:
+    bool eventFilter(QObject *, QEvent *e) override
+    {
+        return e->type() != QEvent::Timer;
+    }
+};
+
+// highlight() internal QTimer::singleShot(0,...) lambda
+// Finds the singleShot timer created by highlight() and emits its timeout
+// signal directly — avoids processEvents which would fire stale timers from
+// earlier tests, causing bad_function_call exceptions.
+TEST(UT_test_textedit_highlight, highlight_TriggersLambda)
+{
+    TextEdit *edit = new TextEdit;
+    EditWrapper *wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    edit->highlight();
+    // Fire the singleShot timer's lambda by emitting timeout directly
+    for (QTimer *t : edit->findChildren<QTimer *>()) {
+        if (t->isSingleShot()) {
+            QMetaObject::invokeMethod(t, "timeout", Qt::DirectConnection);
+            break;
+        }
+    }
+
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+// eventFilter color mark menu Tab key: QTimer::singleShot(0,...) lambda
+TEST(UT_test_textedit_eventFilter, eventFilter_ColorMarkMenuTabLambda)
+{
+    TextEdit *edit = new TextEdit;
+    EditWrapper *wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    edit->m_colorMarkMenu = new QMenu;
+    QKeyEvent *e = new QKeyEvent(QEvent::KeyRelease, Qt::Key_Tab, Qt::NoModifier);
+
+    edit->eventFilter(edit->m_colorMarkMenu, e);
+
+    // Fire the singleShot timer's lambda by emitting timeout directly
+    for (QTimer *t : edit->findChildren<QTimer *>()) {
+        if (t->isSingleShot()) {
+            QMetaObject::invokeMethod(t, "timeout", Qt::DirectConnection);
+            break;
+        }
+    }
+
+    delete e;
+    delete edit->m_colorMarkMenu;
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+// calcMarkReplaceList internal std::sort comparator lambda (needs >= 2 elements)
+TEST(UT_test_textedit_calcMarkReplaceList, calcMarkReplaceList_SortLambda)
+{
+    TextEdit *edit = new TextEdit;
+
+    QList<TextEdit::MarkReplaceInfo> replaceList;
+    TextEdit::MarkReplaceInfo info1;
+    info1.start = 10;
+    info1.end = 20;
+    info1.opt.type = TextEdit::MarkOnce;
+    TextEdit::MarkReplaceInfo info2;
+    info2.start = 5;
+    info2.end = 15;
+    info2.opt.type = TextEdit::MarkOnce;
+    replaceList << info1 << info2;
+
+    edit->calcMarkReplaceList(replaceList, "old text", "replace", "with", 0, Qt::CaseSensitive);
+
+    // sort lambda should have been called to order by start
+    EXPECT_LE(replaceList[0].start, replaceList[1].start);
+    edit->deleteLater();
 }

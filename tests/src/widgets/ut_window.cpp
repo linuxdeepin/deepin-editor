@@ -2102,6 +2102,7 @@ TEST(UT_Window_rehighlightPrintDoc, rehighlightPrintDoc_HighlightCpp_pass)
 #include <QImage>
 #include <QTextDocument>
 #include <QTest>
+#include <QThread>
 #include <DDialog>
 
 // stub for Window::doPrint / doPrintWithLargeDoc (avoid heavy printing work)
@@ -2392,7 +2393,13 @@ TEST(UT_Window_popupFindBar, popupFindBar_TriggersFocusLambda)
     w->addBlankTab();
     w->currentWrapper()->textEditor()->setPlainText("12345 content");
     w->popupFindBar();
-    // process the QTimer::singleShot(10) lambda which calls m_findBar->focus()
+    // Fire the singleShot(10) timer's lambda directly via meta-object
+    for (QTimer *t : w->findChildren<QTimer *>()) {
+        if (t->isSingleShot()) {
+            QMetaObject::invokeMethod(t, "timeout", Qt::DirectConnection);
+            break;
+        }
+    }
 
     qApp->removeEventFilter(&blocker);
 
@@ -2410,7 +2417,13 @@ TEST(UT_Window_popupReplaceBar, popupReplaceBar_TriggersFocusLambda)
     w->addBlankTab();
     w->currentWrapper()->textEditor()->setPlainText("12345 content");
     w->popupReplaceBar();
-    // process the QTimer::singleShot(10) lambda which calls m_replaceBar->focus()
+    // Fire the singleShot(10) timer's lambda directly via meta-object
+    for (QTimer *t : w->findChildren<QTimer *>()) {
+        if (t->isSingleShot()) {
+            QMetaObject::invokeMethod(t, "timeout", Qt::DirectConnection);
+            break;
+        }
+    }
 
     qApp->removeEventFilter(&blocker);
 

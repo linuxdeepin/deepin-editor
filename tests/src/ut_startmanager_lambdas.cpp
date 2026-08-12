@@ -18,7 +18,7 @@
 #include <QDir>
 #include <QObject>
 #include <QMetaObject>
-#include <QTest>
+#include <QThread>
 #include <gtest/gtest.h>
 
 namespace sm_lambda_stub {
@@ -37,6 +37,17 @@ int recoverFileStub(Window *) { return 0; }
 } // namespace sm_lambda_stub
 
 using namespace sm_lambda_stub;
+
+// Blocks DeferredDelete events so qWait can fire timer lambdas without
+// processing accumulated deleteLater calls from earlier tests.
+class SM_DeferredDeleteBlocker : public QObject
+{
+public:
+    bool eventFilter(QObject *, QEvent *e) override
+    {
+        return e->type() == QEvent::DeferredDelete;
+    }
+};
 
 // 创建一个全新的 StartManager 单例。
 // 既有测试对单例调用 deleteLater() 会积压 DeferredDelete 事件，在本文件 qWait 期间
@@ -95,7 +106,13 @@ TEST(UT_StartManager_openFilesInTab, openFilesInTab_SingleShotLambda)
 
     startManager->openFilesInTab(QStringList("somefile.txt"));
 
-
+    // Fire the singleShot(50) timer's lambda by emitting timeout directly
+    for (QTimer *t : startManager->findChildren<QTimer *>()) {
+        if (t->isSingleShot()) {
+            QMetaObject::invokeMethod(t, "timeout", Qt::DirectConnection);
+            break;
+        }
+    }
 
     EXPECT_TRUE(startManager->m_windows.count() > 0);
 }
@@ -115,5 +132,11 @@ TEST(UT_StartManager_slotCloseWindow, slotCloseWindow_SingleShotLambda)
 
     startManager->slotCloseWindow();
 
-
+    // Fire the singleShot(1000) timer's lambda by emitting timeout directly
+    for (QTimer *t : startManager->findChildren<QTimer *>()) {
+        if (t->isSingleShot()) {
+            QMetaObject::invokeMethod(t, "timeout", Qt::DirectConnection);
+            break;
+        }
+    }
 }
