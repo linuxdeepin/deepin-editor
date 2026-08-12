@@ -100,3 +100,41 @@ TEST_F(test_warningnotices, ConstructorFontChangedLambda)
 
     notices->deleteLater();
 }
+
+// void setSaveAsBtn();
+TEST_F(test_warningnotices, setSaveAsBtn)
+{
+    WarningNotices *notices = new WarningNotices(DFloatingMessage::ResidentType);
+    EXPECT_NO_FATAL_FAILURE(notices->setSaveAsBtn());
+    EXPECT_EQ(notices->m_saveAsBtn->isHidden(), false);
+    EXPECT_EQ(notices->m_reloadBtn->isHidden(), true);
+    notices->deleteLater();
+}
+
+// void slotreloadBtnClicked();
+TEST_F(test_warningnotices, slotreloadBtnClicked)
+{
+    WarningNotices *notices = new WarningNotices(DFloatingMessage::ResidentType);
+    bool signalReceived = false;
+    QObject::connect(notices, &WarningNotices::reloadBtnClicked, [&]() { signalReceived = true; });
+
+    notices->show();
+    EXPECT_NO_FATAL_FAILURE(notices->slotreloadBtnClicked());
+    EXPECT_EQ(signalReceived, true);
+
+    notices->deleteLater();
+}
+
+// void slotsaveAsBtnClicked();
+TEST_F(test_warningnotices, slotsaveAsBtnClicked)
+{
+    WarningNotices *notices = new WarningNotices(DFloatingMessage::ResidentType);
+    bool signalReceived = false;
+    QObject::connect(notices, &WarningNotices::saveAsBtnClicked, [&]() { signalReceived = true; });
+
+    notices->show();
+    EXPECT_NO_FATAL_FAILURE(notices->slotsaveAsBtnClicked());
+    EXPECT_EQ(signalReceived, true);
+
+    notices->deleteLater();
+}

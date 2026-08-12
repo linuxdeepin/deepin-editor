@@ -6,6 +6,7 @@
 #include "../../src/thememodule/themepanel.h"
 #include <QPaintEvent>
 #include <QWidget>
+#include <QPropertyAnimation>
 
 class TestThemePanel : public ThemePanel
 {
@@ -67,8 +68,20 @@ TEST(UT_ThemePanel, popup)
 {
     QWidget parent;
     parent.resize(800, 600);
-    ThemePanel panel(&parent);
-    panel.popup();  // 启动动画，valueChanged 触发 adjustScrollbarMargins lambda
+    parent.show();
+    ThemePanel *panel = new ThemePanel(&parent);
+    panel->show();
+
+    panel->popup();  // creates QPropertyAnimation connected to valueChanged lambda
+
+    // Emit valueChanged directly on the animation to fire the lambda,
+    // avoiding processEvents which would trigger stale callbacks from earlier tests.
+    for (QPropertyAnimation *anim : panel->findChildren<QPropertyAnimation *>()) {
+        emit anim->valueChanged(QVariant(panel->geometry()));
+        break;
+    }
+
+    delete panel;
     SUCCEED();
 }
 

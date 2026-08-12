@@ -7,10 +7,14 @@
 #include <gmock/gmock-matchers.h>
 #include <QApplication>
 #include <DApplication>
+#include <cstdlib>
+#include <cstdio>
 
 #if defined(CMAKE_SAFETYTEST_ARG_ON)
 #include <sanitizer/asan_interface.h>
 #endif
+
+extern "C" void __gcov_dump(void);
 
 DWIDGET_USE_NAMESPACE
 
@@ -27,9 +31,8 @@ int main(int argc, char *argv[])
 
     auto c = RUN_ALL_TESTS();
 
-    #if defined(CMAKE_SAFETYTEST_ARG_ON)
-    __sanitizer_set_report_path("asan.log");
-    #endif
+    __gcov_dump();
 
-   return c;
+    fflush(nullptr);
+    std::_Exit(c);
 }
