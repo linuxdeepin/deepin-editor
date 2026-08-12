@@ -1029,7 +1029,7 @@
         <location filename="../src/editor/dtextedit.cpp" line="2868"/>
         <location filename="../src/editor/dtextedit.cpp" line="2870"/>
         <source>Please install UOS AI from the app store first.</source>
-        <translation>请前往应用商店安装“UOS AI”后再使用</translation>
+        <translation>请前往应用商店安装“小U同学”后再使用</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="292"/>
