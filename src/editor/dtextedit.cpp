@@ -139,12 +139,6 @@ TextEdit::TextEdit(QWidget *parent)
             break;
     }
     
-    // 连接音频设备状态变化信号
-    dbus.sessionBus().connect("com.deepin.daemon.Audio",
-                            "/com/deepin/daemon/Audio", "com.deepin.daemon.Audio",
-                            "PortEnabledChanged",
-                            this, SLOT(onAudioPortEnabledChanged(quint32, QString, bool)));
-
     //初始化右键菜单
     initRightClickedMenu();
 
@@ -8275,35 +8269,4 @@ bool TextEdit::checkAudioInputDevice()
     }
 
     return false;
-}
-
-void TextEdit::onAudioPortEnabledChanged(quint32 cardId, const QString &portName, bool enabled)
-{
-    Q_UNUSED(cardId)
-    Q_UNUSED(portName)
-    
-    // 只处理设备被禁用的情况
-    if (!enabled) {
-        // 检查是否还有可用的输出设备和输入设备
-        bool hasOutputDevice = checkAudioOutputDevice();
-        bool hasInputDevice = checkAudioInputDevice();
-        
-        // 如果所有输出设备都被禁用，显示输出设备提示
-        if (!hasOutputDevice) {
-#ifdef DTKWIDGET_CLASS_DSizeMode
-            Utils::sendFloatMessageFixedFont(this, QIcon(":/images/warning.svg"), tr("No audio output device was detected. Please ensure your speakers or headphones are properly connected and try again."));
-#else
-            DMessageManager::instance()->sendMessage(this, QIcon(":/images/warning.svg"), tr("No audio output device was detected. Please ensure your speakers or headphones are properly connected and try again."));
-#endif
-        }
-        
-        // 如果所有输入设备都被禁用，显示输入设备提示
-        if (!hasInputDevice) {
-#ifdef DTKWIDGET_CLASS_DSizeMode
-            Utils::sendFloatMessageFixedFont(this, QIcon(":/images/warning.svg"), tr("No audio input device was detected. Please ensure your speakers or headphones are properly connected and try again."));
-#else
-            DMessageManager::instance()->sendMessage(this, QIcon(":/images/warning.svg"), tr("No audio input device was detected. Please ensure your speakers or headphones are properly connected and try again."));
-#endif
-        }
-    }
 }
