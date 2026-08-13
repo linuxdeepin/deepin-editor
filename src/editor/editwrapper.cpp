@@ -4,6 +4,7 @@
 
 #include "editwrapper.h"
 #include "leftareaoftextedit.h"
+#include "markdownpreview.h"
 #include "drecentmanager.h"
 
 #include <unistd.h>
@@ -18,6 +19,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QEvent>
+#include <QSplitter>
 
 #include <DSettings>
 #include <DSettingsOption>
@@ -103,16 +105,41 @@ EditWrapper::EditWrapper(Window *window, QWidget *parent)
     m_pTextEdit->setAccessibleName("TextEditor");
     m_pBottomBar->setAccessibleName("EditorBottomBar");
     // Init layout and widgets.
-    QHBoxLayout *m_layout = new QHBoxLayout;
     m_pLeftAreaTextEdit = m_pTextEdit->getLeftAreaWidget();
-    m_layout->setContentsMargins(0, 0, 0, 0);
-    m_layout->setSpacing(0);
-    m_layout->addWidget(m_pLeftAreaTextEdit);
-    m_layout->addWidget(m_pTextEdit);
     m_pTextEdit->setWrapper(this);
 
+    // 编辑器容器：行号/标记区 + 文本编辑区，保持原有布局
+    QWidget *editorContainer = new QWidget(this);
+    QHBoxLayout *editorLayout = new QHBoxLayout(editorContainer);
+    editorLayout->setContentsMargins(0, 0, 0, 0);
+    editorLayout->setSpacing(0);
+    editorLayout->addWidget(m_pLeftAreaTextEdit);
+    editorLayout->addWidget(m_pTextEdit);
+
+    // 编辑区与 Markdown 预览分栏，默认只显示编辑区
+    m_pEditSplitter = new QSplitter(Qt::Horizontal, this);
+    m_pEditSplitter->setObjectName("EditSplitter");
+    m_pEditSplitter->setChildrenCollapsible(false);
+    m_pEditSplitter->setHandleWidth(1);
+    m_pEditSplitter->addWidget(editorContainer);
+    m_pEditSplitter->setStretchFactor(0, 1);
+
+    // Qt5 构建下预览不可用（QTextDocument::setMarkdown 需要 Qt >= 6.5）
+    if (MarkdownPreview::isSupported()) {
+        m_pMarkdownPreview = new MarkdownPreview(this);
+        m_pMarkdownPreview->setVisible(false);
+        m_pEditSplitter->addWidget(m_pMarkdownPreview);
+        m_pEditSplitter->setStretchFactor(1, 1);
+        // 编辑内容变化时实时刷新预览
+        connect(m_pTextEdit, &QPlainTextEdit::textChanged, this, [this]() {
+            if (m_pMarkdownPreview != nullptr && m_pMarkdownPreview->isVisible()) {
+                m_pMarkdownPreview->updatePreview(m_pTextEdit->toPlainText());
+            }
+        });
+    }
+
     QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->addLayout(m_layout);
+    mainLayout->addWidget(m_pEditSplitter);
     mainLayout->addWidget(m_pBottomBar);
     mainLayout->setContentsMargins(0, 0, 0, 0);
     mainLayout->setSpacing(0);
@@ -780,6 +807,10 @@ void EditWrapper::updatePath(const QString &file, QString qstrTruePath)
     qDebug() << "EditWrapper updatePath, m_pTextEdit->setFilePath(file)";
     m_pTextEdit->setTruePath(qstrTruePath);
     qDebug() << "EditWrapper updatePath, m_pTextEdit->setTruePath(qstrTruePath)";
+    // Markdown 文件打开时自动显示可视化预览
+    if (m_pMarkdownPreview != nullptr) {
+        setMarkdownPreviewVisible(MarkdownPreview::isMarkdownFile(file));
+    }
 }
 
 bool EditWrapper::isModified()
@@ -1480,6 +1511,27 @@ QString EditWrapper::filePath()
 {
     qDebug() << "EditWrapper filePath";
     return  m_pTextEdit->getFilePath();
+}
+
+void EditWrapper::setMarkdownPreviewVisible(bool visible)
+{
+    if (m_pMarkdownPreview == nullptr) {
+        return;
+    }
+    m_pMarkdownPreview->setVisible(visible);
+    if (visible) {
+        m_pMarkdownPreview->updatePreview(m_pTextEdit->toPlainText());
+        // 保证初次显示时左右分栏比例合理（编辑区 55% / 预览 45%）
+        if (m_pEditSplitter != nullptr && m_pEditSplitter->width() > 0) {
+            const int total = m_pEditSplitter->width();
+            m_pEditSplitter->setSizes({total * 55 / 100, total * 45 / 100});
+        }
+    }
+}
+
+bool EditWrapper::isMarkdownPreviewVisible() const
+{
+    return m_pMarkdownPreview != nullptr && m_pMarkdownPreview->isVisible();
 }
 
 TextEdit *EditWrapper::textEditor()

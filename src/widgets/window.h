@@ -102,6 +102,8 @@ public:
     void popupThemePanel();
 
     void toggleFullscreen();
+    // Markdown 可视化预览开关（仅当前文件为 markdown 时可用）
+    void toggleMarkdownPreview();
 
     void remberPositionSave();
     void remberPositionRestore();
@@ -287,6 +289,11 @@ private:
     bool m_bBatchAddingPendingTabs = false;       // 批量添加 pending 标签页期间，阻止 handleCurrentChanged 触发加载
 
     DMenu *m_menu {nullptr};
+    // Markdown 预览开关菜单项，状态随当前标签页同步
+    QAction *m_markdownPreviewAction {nullptr};
+
+    // 刷新 Markdown 预览开关的可用性与勾选状态
+    void updateMarkdownPreviewActionState();
 
     QStringList m_closeFileHistory;
 
