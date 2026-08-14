@@ -142,7 +142,7 @@
     <message>
         <location filename="../src/controls/linebar.cpp" line="117"/>
         <source>第%1/%2项</source>
-        <translation type="unfinished"/>
+        <translation>Dopasowanie %1 z %2</translation>
     </message>
 </context>
 <context>
