@@ -8431,7 +8431,10 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         }
 
         //列编辑 删除撤销重做
-        if (modifiers == Qt::NoModifier && (e->key() == Qt::Key_Backspace)) {
+        // 修复 BUG-373675：输入法大写 A 状态下 Shift+Backspace 的 e->text() 非空，
+        // 会被下方 Shift 符号插入分支当作文本插入而产生乱码字符。
+        // 将 Shift+Backspace 纳入删除分支，使其与普通 Backspace 一致地删除前一个字符。
+        if ((modifiers == Qt::NoModifier || modifiers == Qt::ShiftModifier) && (e->key() == Qt::Key_Backspace)) {
             flushDeferredCursorUpdate();
             if (m_isSelectAll)
                 QPlainTextEdit::selectAll();
