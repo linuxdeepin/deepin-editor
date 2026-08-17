@@ -14,6 +14,7 @@
 #include <QPropertyAnimation>
 #include <DSettingsOption>
 #include <DAboutDialog>
+#include <QJsonArray>
 //#include <DSettings>
 
 DWIDGET_USE_NAMESPACE
@@ -26,6 +27,8 @@ enum BackupInterval {
 
 // 用于配置文件书签的标识
 static const QString s_bookMarkKey = "advance.editor.bookmark";
+// 用于配置文件标记颜色的标识
+static const QString s_markColorKey = "advance.editor.markcolor";
 
 StartManager *StartManager::m_instance = nullptr;
 
@@ -61,6 +64,8 @@ StartManager::StartManager(QObject *parent)
     m_qlistTemFile = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();
     // 初始化书签信息记录表
     initBookmark();
+    // 初始化标记颜色信息记录表
+    initMarkColor();
 
     //按时间自动备份（5分钟）
     m_pTimer = new QTimer;
@@ -190,6 +195,10 @@ void StartManager::autoBackupFile()
                 m_bookmarkTable.remove(localPath);
             }
 
+            //记录标记颜色
+            QList<TextEdit::MarkReplaceInfo> markColorList = wrapper->textEditor()->getMarkColorInfo();
+            recordMarkColor(localPath, markColorList);
+
             //记录活动页
             if (m_windows.value(var)->isActiveWindow()) {
                 if (wrapper == m_windows.value(var)->currentWrapper()) {
@@ -223,6 +232,8 @@ void StartManager::autoBackupFile()
     Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->setValue(m_qlistTemFile);
     // 备份书签信息
     saveBookmark();
+    // 备份标记颜色信息
+    saveMarkColor();
 }
 
 int StartManager::recoverFile(Window *window)
@@ -650,6 +661,8 @@ void StartManager::slotCloseWindow()
     if (m_windows.isEmpty()) {
         // 保存书签信息
         saveBookmark();
+        // 保存标记颜色信息
+        saveMarkColor();
 
         QDir path = QDir::currentPath();
         if (!path.exists()) {
@@ -830,6 +843,115 @@ void StartManager::recordBookmark(const QString &localPath, const QList<int> &bo
 QList<int> StartManager::findBookmark(const QString &localPath)
 {
     return m_bookmarkTable.value(localPath);
+}
+
+/**
+ * @brief 主动更新记录文件 \a localPath 的标记颜色信息，空列表会清除该文件的记录。
+ * @param localPath 文件路径
+ * @param markColor 标记颜色信息（含绝对位置）
+ */
+void StartManager::recordMarkColor(const QString &localPath, const QList<TextEdit::MarkReplaceInfo> &markColor)
+{
+    if (markColor.isEmpty()) {
+        // 无标记颜色，移除历史记录
+        m_markColorTable.remove(localPath);
+    } else {
+        m_markColorTable.insert(localPath, markColor);
+    }
+}
+
+/**
+ * @return 返回文件 \a localPath 的标记颜色记录
+ */
+QList<TextEdit::MarkReplaceInfo> StartManager::findMarkColor(const QString &localPath)
+{
+    return m_markColorTable.value(localPath);
+}
+
+/**
+ * @brief 从配置文件中获取全局的标记颜色信息，包括已关闭的所有文件标记颜色，
+ *      会遍历每条记录并判断文件是否存在，若文件被删除或移动，则不再记录对应信息。
+ */
+void StartManager::initMarkColor()
+{
+    // 遍历标记颜色信息列表
+    QStringList markColorInfoList = Settings::instance()->settings->value(s_markColorKey).toStringList();
+    for (const QString &markColorInfo : markColorInfoList) {
+        QJsonParseError readError;
+        QJsonDocument doc = QJsonDocument::fromJson(markColorInfo.toUtf8(), &readError);
+        if (QJsonParseError::NoError == readError.error
+                && !doc.isNull()) {
+            QJsonObject obj = doc.object();
+            QString filePath = obj.value("localPath").toString();
+
+            // 判断文件是否仍存在，若不存在，则不保留标记颜色信息
+            if (!filePath.isEmpty()
+                    && QFileInfo::exists(filePath)) {
+                QList<TextEdit::MarkReplaceInfo> markList;
+                QJsonArray marksArray = obj.value("marks").toArray();
+                for (const QJsonValue &markValue : marksArray) {
+                    QJsonObject markObj = markValue.toObject();
+                    TextEdit::MarkReplaceInfo info;
+                    info.opt.type = static_cast<TextEdit::MarkOperationType>(markObj.value("type").toInt());
+                    info.opt.color = markObj.value("color").toString();
+                    info.opt.matchText = markObj.value("matchText").toString();
+                    info.start = markObj.value("start").toInt();
+                    info.end = markObj.value("end").toInt();
+                    info.time = static_cast<qint64>(markObj.value("time").toDouble());
+                    markList.append(info);
+                }
+
+                if (!markList.isEmpty()) {
+                    // 文件存在且标记颜色非空，缓存标记颜色信息
+                    m_markColorTable.insert(filePath, markList);
+                }
+            }
+        }
+    }
+}
+
+/**
+ * @brief 将当前记录的所有文件的标记颜色信息转换为 Json 数据列表记录到配置信息中，
+ *      被删除或移动文件的标记颜色将被销毁。
+ */
+void StartManager::saveMarkColor()
+{
+    QStringList recordInfo;
+    // 遍历记录
+    for (auto itr = m_markColorTable.begin(); itr != m_markColorTable.end();) {
+        if (!QFileInfo::exists(itr.key())
+                || itr.value().isEmpty()) {
+            // 文件不存在或无标记颜色则销毁记录
+            itr = m_markColorTable.erase(itr);
+        } else {
+            QJsonObject obj;
+            obj.insert("localPath", itr.key());
+
+            // 遍历标记颜色信息并组合
+            QJsonArray marksArray;
+            const auto &markList = itr.value();
+            for (const TextEdit::MarkReplaceInfo &info : markList) {
+                QJsonObject markObj;
+                markObj.insert("type", static_cast<int>(info.opt.type));
+                markObj.insert("color", info.opt.color);
+                markObj.insert("matchText", info.opt.matchText);
+                markObj.insert("start", info.start);
+                markObj.insert("end", info.end);
+                // time 为 qint64，超过 int 范围时用 double 保证精度
+                markObj.insert("time", static_cast<double>(info.time));
+                marksArray.append(markObj);
+            }
+            obj.insert("marks", marksArray);
+
+            QJsonDocument doc(obj);
+            recordInfo.append(doc.toJson(QJsonDocument::Compact));
+
+            ++itr;
+        }
+    }
+
+    // 将标记颜色信息保存至配置文件
+    Settings::instance()->settings->option(s_markColorKey)->setValue(recordInfo);
 }
 
 void StartManager::initBlockShutdown()

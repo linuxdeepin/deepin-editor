@@ -69,6 +69,11 @@ public:
     // 查找文件对应的书签记录
     QList<int> findBookmark(const QString &localPath);
 
+    // 主动更新记录标记颜色信息
+    void recordMarkColor(const QString &localPath, const QList<TextEdit::MarkReplaceInfo> &markColor);
+    // 查找文件对应的标记颜色记录
+    QList<TextEdit::MarkReplaceInfo> findMarkColor(const QString &localPath);
+
     // 延迟释放堆内存
     void delayMallocTrim();
 
@@ -105,6 +110,10 @@ private:
     void initBookmark();
     // 保存书签信息
     void saveBookmark();
+    // 初始化标记颜色信息
+    void initMarkColor();
+    // 保存标记颜色信息
+    void saveMarkColor();
 
 private:
     static StartManager *m_instance;
@@ -119,6 +128,7 @@ private:
     QScopedPointer<Entry> m_pEntry;
     QStringList m_qlistTemFile;                 ///< 备份信息列表
     QHash<QString, QList<int>> m_bookmarkTable; ///< 书签标记信息表
+    QHash<QString, QList<TextEdit::MarkReplaceInfo>> m_markColorTable; ///< 标记颜色信息表
     QTimer *m_pTimer;
     QBasicTimer m_DelayTimer;   ///< 延迟备份定时器
     QString m_blankFileDir;     ///< 新建文件目录
