@@ -4768,6 +4768,37 @@ void TextEdit::setBookMarkList(QList<int> bookMarkList)
     m_listBookmark = bookMarkList;
 }
 
+QList<TextEdit::MarkReplaceInfo> TextEdit::getMarkColorInfo()
+{
+    // 将当前标记操作转换为含绝对位置的替换信息，作为持久化载体
+    return convertMarkToReplace(m_markOperations);
+}
+
+void TextEdit::setMarkColorList(const QList<MarkReplaceInfo> &markInfo)
+{
+    // 持久化数据仅含绝对位置，需用当前文档构造有效光标后再交由既有逻辑恢复
+    QList<QPair<MarkOperation, qint64>> markList;
+    const int docLen = document()->characterCount();
+    for (const auto &info : markInfo) {
+        MarkOperation markOpt;
+        markOpt.type = info.opt.type;
+        markOpt.color = info.opt.color;
+        markOpt.matchText = info.opt.matchText;
+
+        // 用当前文档构造有效光标，避免持久化数据中光标无文档导致恢复失败
+        markOpt.cursor = QTextCursor(document());
+        // 限制位置在当前文档范围内，文件被外部修改后不致越界
+        int start = qBound(0, static_cast<int>(info.start), docLen);
+        int end = qBound(0, static_cast<int>(info.end), docLen);
+        markOpt.cursor.setPosition(start);
+        markOpt.cursor.setPosition(end, QTextCursor::KeepAnchor);
+
+        markList.append(qMakePair(markOpt, info.time));
+    }
+
+    manualUpdateAllMark(markList);
+}
+
 void TextEdit::updateSaveIndex()
 {
     m_lastSaveIndex = m_pUndoStack->index();
