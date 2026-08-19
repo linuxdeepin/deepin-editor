@@ -42,6 +42,15 @@ StartManager *StartManager::instance()
     return m_instance;
 }
 
+StartManager::~StartManager()
+{
+    qDebug() << "Enter StartManager destructor";
+    // 单例被销毁（应用退出/测试 deleteLater）后置空，避免 instance() 返回悬空指针
+    if (m_instance == this) {
+        m_instance = nullptr;
+    }
+}
+
 StartManager::StartManager(QObject *parent)
     : QObject(parent)
 {
@@ -615,7 +624,8 @@ void StartManager::openFilesInTab(QStringList files)
                 qDebug() << "No windows exist, creating first window for file";
                 Window *window = createWindow(true);
                 window->showCenterWindow(true);
-                QTimer::singleShot(50, [ = ] {
+                // 以 window 为 context：窗口在延时期间被销毁则不触发，避免悬空调用
+                QTimer::singleShot(50, window, [ = ] {
                     qDebug() << "Delayed file opening for:" << resolvedFile;
                     recoverFile(window);
                     window->addTab(resolvedFile);
@@ -671,7 +681,10 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
         qDebug() << "Window position out of desktop, adjusting y";
     }
 
-    QRect startRect(startPos, Tabbar::sm_pDragPixmap->rect().size());
+    // 拖拽 pixmap 仅在真实鼠标拖拽时创建；编程式触发（如 handleTabDroped 回退）下可能为空，回退为窗口尺寸
+    const QSize dragStartSize = Tabbar::sm_pDragPixmap ? Tabbar::sm_pDragPixmap->rect().size()
+                                                       : pWindow->rect().size();
+    QRect startRect(startPos, dragStartSize);
     //QRect startRect(startPos, QSize(0,0));
     QRect endRect(startPos, pWindow->rect().size());
     pWindow->move(startPos);
@@ -701,11 +714,18 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
 #endif
 
     QParallelAnimationGroup *group = new QParallelAnimationGroup;
+    // 动画约 200ms 后才使用 buffer；期间源标签页可能已被关闭销毁，用 QPointer 防悬空（UAF 崩溃根源）
+    QPointer<EditWrapper> bufferGuard(buffer);
     connect(group, &QParallelAnimationGroup::finished, this, [/*window,geometry,Opacity,group,*/ = ]() {
-        pWindow->show();
-        pWindow->showCenterWindow(false);
         geometry->deleteLater();
         group->deleteLater();
+        if (bufferGuard.isNull()) {
+            qDebug() << "createWindowFromWrapper: buffer destroyed during animation, drop tear-off";
+            return;
+        }
+
+        pWindow->show();
+        pWindow->showCenterWindow(false);
 
         pWindow->addTabWithWrapper(buffer, filePath, qstrTruePath, tabName);
         pWindow->currentWrapper()->updateModifyStatus(isModifyed);
@@ -805,7 +825,8 @@ void StartManager::slotCloseWindow()
         // 导致被附加到上一文本编辑器进程
         QDBusConnection::sessionBus().unregisterService("com.deepin.Editor");
 
-        QTimer::singleShot(1000, [this]() {
+        // 以 this 为 context：StartManager 在延时期间被销毁则不触发（测试中会 deleteLater 单例）
+        QTimer::singleShot(1000, this, [this]() {
             this->delayMallocTrim();
             QApplication::quit();
         });
