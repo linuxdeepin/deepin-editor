@@ -41,7 +41,10 @@ int main(int argc, char *argv[])
     }
     qDebug() << "XDG_CURRENT_DESKTOP set to:" << qgetenv("XDG_CURRENT_DESKTOP");
     QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
-    qDebug() << "Qt::AA_UseOpenGLES attribute set";
+    // QWebEngineView 硬性前提：共享 GL 上下文必须在 QApplication 构造前设置，
+    // 否则 Markdown 渲染视图无法创建共享上下文导致白屏（Qt6 文档要求）
+    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+    qDebug() << "Qt::AA_UseOpenGLES / AA_ShareOpenGLContexts attributes set";
 
     EditorApplication app(argc, argv);
     qInfo() << "Application instance created, version:" << app.applicationVersion();

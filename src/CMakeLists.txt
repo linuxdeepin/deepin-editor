@@ -3,8 +3,8 @@ if (NOT (${CMAKE_BUILD_TYPE} MATCHES "Debug"))
 endif ()
 
 # Sources files
-file(GLOB HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/*.h"  "encodes/*.h" "common/*.h" "controls/*.h" "editor/*.h"  "thememodule/*.h" "widgets/*.h" "basepub/*.h")
-file(GLOB SRCS "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp" "encodes/*.cpp" "common/*.cpp" "controls/*.cpp" "editor/*.cpp"  "thememodule/*.cpp" "widgets/*.cpp" "basepub/*.c")
+file(GLOB HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/*.h"  "encodes/*.h" "common/*.h" "controls/*.h" "editor/*.h" "editor/markdown/*.h"  "thememodule/*.h" "widgets/*.h" "basepub/*.h")
+file(GLOB SRCS "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp" "encodes/*.cpp" "common/*.cpp" "controls/*.cpp" "editor/*.cpp" "editor/markdown/*.cpp"  "thememodule/*.cpp" "widgets/*.cpp" "basepub/*.c")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/encodes)
@@ -39,7 +39,7 @@ configure_file(
 # Find the library
 find_package(PkgConfig REQUIRED)
 
-set(qt_required_components Gui Widgets DBus Concurrent PrintSupport Svg Xml)
+set(qt_required_components Gui Widgets DBus Concurrent PrintSupport Svg Xml WebEngineWidgets WebChannel)
 if (QT_DESIRED_VERSION MATCHES 6)
     list(APPEND qt_required_components Core5Compat)
 endif()
@@ -56,6 +56,8 @@ set(LINK_LIBS
     Qt${QT_VERSION_MAJOR}::Concurrent
     Qt${QT_VERSION_MAJOR}::PrintSupport
     Qt${QT_VERSION_MAJOR}::DBus
+    Qt${QT_VERSION_MAJOR}::WebEngineWidgets
+    Qt${QT_VERSION_MAJOR}::WebChannel
     Dtk${DTK_VERSION_MAJOR}::Widget
     Dtk${DTK_VERSION_MAJOR}::Core
     KF${KF_VERSION_MAJOR}::Codecs
