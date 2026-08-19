@@ -1,6 +1,10 @@
-// Copyright (C) 2016 The Qt Company Ltd.
-// Copyright (C) 2016 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com, author Milian Wolff <milian.wolff@kdab.com>
-// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
+// SPDX-FileCopyrightText: 2016 The Qt Company Ltd.
+// SPDX-FileCopyrightText: 2016 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+//
+// 本文件源自 Qt 附带的 qwebchannel.js（Qt Commercial / LGPL-3.0-only /
+// GPL-2.0-only / GPL-3.0-only 多许可），按 GPL-3.0-or-later 选项引入本项目。
 
 "use strict";
 
