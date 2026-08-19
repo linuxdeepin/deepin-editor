@@ -13,6 +13,7 @@ Build-Depends:
  qt6-tools-dev,
  qt6-base-private-dev,
  qt6-svg-dev,
+ qt6-webengine-dev,
  libdtk6widget-dev,
  libdtk6gui-dev,
  libdtk6core-dev,
