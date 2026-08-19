@@ -1,0 +1,18 @@
+Qt Commercial License Agreement
+
+This file is covered by the LicenseRef-Qt-Commercial custom license
+identifier used in Qt source files vendored into this repository
+(e.g. src/editor/markdown/web/qwebchannel.js).
+
+The Qt Commercial License is a commercial license agreement provided
+by The Qt Company. Its terms are not distributed as open source text.
+If you have a valid Qt commercial license agreement, you may use the
+covered files under that agreement.
+
+For the full license text and purchasing information, refer to:
+https://www.qt.io/licensing/
+
+Alternatively, the covered files are also available under the
+open source licenses stated in their SPDX-License-Identifier tags
+(LGPL-3.0-only, GPL-2.0-only or GPL-3.0-only), whose texts are
+included in this LICENSES directory.
