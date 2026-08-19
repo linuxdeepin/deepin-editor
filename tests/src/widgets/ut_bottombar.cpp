@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include <QPaintEvent>
 #include <QAction>
+#include <QSignalSpy>
 #include "../../src/widgets/window.h"
 #include "../../src/editor/editwrapper.h"
 #include "../stub.h"
@@ -51,18 +52,6 @@ TEST_F(TestBottomBar, checkSetEncodeName)
 {
     auto bottomBar = new BottomBar;
     bottomBar->setEncodeName("UTF-8");
-
-
-    EXPECT_NE(bottomBar,nullptr);
-    bottomBar->deleteLater();
-}
-
-// 测试函数 BottomBar::setCursorStatus
-TEST_F(TestBottomBar, checkSetCursorStatus)
-{
-    auto bottomBar = new BottomBar;
-    bottomBar->setCursorStatus("INSERT");
-    EXPECT_EQ(bottomBar->m_pCursorStatus->text(),"INSERT");
 
 
     EXPECT_NE(bottomBar,nullptr);
@@ -244,4 +233,54 @@ TEST_F(TestBottomBar, checkHighlightMenuLambda)
     EXPECT_EQ(bar->m_pHighlightMenu->getCurrentText(), QString("C++"));
 
     delete wrapper;
+}
+
+// 视图模式 combobox（§8.2）：setViewMode 同步折叠态文案与选中项
+TEST_F(TestBottomBar, checkViewModeMenu_SetViewMode)
+{
+    auto bottomBar = new BottomBar;
+    ASSERT_NE(bottomBar->m_pViewModeMenu, nullptr);
+
+    bottomBar->setViewMode(ViewMode::LivePreview);
+    EXPECT_EQ(bottomBar->m_pViewModeMenu->getCurrentText(), QString("实时预览"));
+    EXPECT_TRUE(bottomBar->m_actLivePreview->isChecked());
+
+    bottomBar->setViewMode(ViewMode::ReadView);
+    EXPECT_EQ(bottomBar->m_pViewModeMenu->getCurrentText(), QString("查看视图"));
+    EXPECT_TRUE(bottomBar->m_actReadView->isChecked());
+
+    bottomBar->setViewMode(ViewMode::Edit);
+    EXPECT_EQ(bottomBar->m_pViewModeMenu->getCurrentText(), QString("编辑模式"));
+    EXPECT_TRUE(bottomBar->m_actEditView->isChecked());
+
+    bottomBar->deleteLater();
+}
+
+// 视图模式 combobox（§8.2）：setMarkdownAvailable(false) 仅置灰「实时预览」
+TEST_F(TestBottomBar, checkViewModeMenu_SetMarkdownAvailable)
+{
+    auto bottomBar = new BottomBar;
+
+    bottomBar->setMarkdownAvailable(false);
+    EXPECT_FALSE(bottomBar->m_actLivePreview->isEnabled());
+    EXPECT_TRUE(bottomBar->m_actEditView->isEnabled());
+    EXPECT_TRUE(bottomBar->m_actReadView->isEnabled());
+
+    bottomBar->setMarkdownAvailable(true);
+    EXPECT_TRUE(bottomBar->m_actLivePreview->isEnabled());
+
+    bottomBar->deleteLater();
+}
+
+// 视图模式 combobox（§8.2）：点击菜单项上抛 viewModeRequested
+TEST_F(TestBottomBar, checkViewModeMenu_ActionTriggerEmitsRequested)
+{
+    auto bottomBar = new BottomBar;
+    QSignalSpy spy(bottomBar, &BottomBar::viewModeRequested);
+
+    bottomBar->m_actReadView->trigger();
+    ASSERT_EQ(spy.count(), 1);
+    EXPECT_EQ(spy.takeFirst().at(0).value<ViewMode>(), ViewMode::ReadView);
+
+    bottomBar->deleteLater();
 }
