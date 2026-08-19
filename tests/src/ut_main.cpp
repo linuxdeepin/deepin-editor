@@ -25,6 +25,8 @@ int main(int argc, char *argv[])
 {
     qputenv("QT_QPA_PLATFORM","offscreen");
     qputenv("QT_LOGGING_RULES", "*.debug=false;*.info=false");
+    // 与生产 main.cpp 一致：WebEngine 渲染视图需要共享 GL 上下文（须在 QApplication 前设置）
+    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
     DApplication app(argc, argv);
 
     testing::InitGoogleTest(&argc, argv);
