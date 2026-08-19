@@ -235,6 +235,10 @@ int Settings::getSavePathId()
 Settings::~Settings()
 {
     qDebug() << "Destroying Settings instance";
+    // 单例被销毁后置空，避免 instance() 返回悬空指针（测试中可能 deleteLater 单例）
+    if (s_pSetting == this) {
+        s_pSetting = nullptr;
+    }
     if (m_backend != nullptr) {
         qDebug() << "Cleaning up settings backend";
         delete m_backend;

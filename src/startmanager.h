@@ -11,6 +11,7 @@
 #include "dbus/com_deepin_dde_daemon_dock.h"
 #include "dbus/com_deepin_dde_daemon_dock_entry.h"
 #include <QObject>
+#include <QPointer>
 
 using Dock          = com::deepin::dde::daemon::Dock;
 using Entry         = com::deepin::dde::daemon::Entry;
@@ -30,6 +31,7 @@ public:
 
     static StartManager *instance();
     explicit StartManager(QObject *parent = nullptr);
+    ~StartManager();
     bool checkPath(const QString &file);
     bool ifKlu();
 
