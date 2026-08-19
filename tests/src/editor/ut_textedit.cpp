@@ -11111,3 +11111,69 @@ TEST(UT_test_textedit_calcMarkReplaceList, calcMarkReplaceList_SortLambda)
     EXPECT_LE(replaceList[0].start, replaceList[1].start);
     edit->deleteLater();
 }
+
+// —— 右键菜单「视图模式」二级菜单（§8.1）：替换原只读模式互斥项 ——
+
+// 动作创建：三个子项存在，默认「编辑模式」选中、「实时预览」置灰（初始非 md）
+TEST(UT_Textedit_ViewModeMenu, ActionsCreated_DefaultState)
+{
+    TextEdit *edit = new TextEdit;
+    ASSERT_NE(edit->m_viewModeMenu, nullptr);
+    ASSERT_NE(edit->m_actEditView, nullptr);
+    ASSERT_NE(edit->m_actReadView, nullptr);
+    ASSERT_NE(edit->m_actLivePreview, nullptr);
+
+    EXPECT_TRUE(edit->m_actEditView->isChecked());
+    EXPECT_FALSE(edit->m_actReadView->isChecked());
+    EXPECT_FALSE(edit->m_actLivePreview->isChecked());
+    // 非 md 默认：仅「实时预览」置灰
+    EXPECT_TRUE(edit->m_actEditView->isEnabled());
+    EXPECT_TRUE(edit->m_actReadView->isEnabled());
+    EXPECT_FALSE(edit->m_actLivePreview->isEnabled());
+
+    edit->deleteLater();
+}
+
+// 状态同步：updateViewModeActions 刷新选中态与置灰规则
+TEST(UT_Textedit_ViewModeMenu, UpdateViewModeActions_SyncsCheckedAndEnabled)
+{
+    TextEdit *edit = new TextEdit;
+
+    edit->updateViewModeActions(ViewMode::LivePreview, true);
+    EXPECT_TRUE(edit->m_actLivePreview->isChecked());
+    EXPECT_TRUE(edit->m_actLivePreview->isEnabled());
+
+    edit->updateViewModeActions(ViewMode::ReadView, false);
+    EXPECT_TRUE(edit->m_actReadView->isChecked());
+    EXPECT_FALSE(edit->m_actLivePreview->isEnabled());
+
+    edit->updateViewModeActions(ViewMode::Edit, false);
+    EXPECT_TRUE(edit->m_actEditView->isChecked());
+
+    edit->deleteLater();
+}
+
+// 点击子项上抛 viewModeRequested（EditWrapper 连线后驱动 setViewMode）
+TEST(UT_Textedit_ViewModeMenu, ActionTriggerEmitsViewModeRequested)
+{
+    TextEdit *edit = new TextEdit;
+    QSignalSpy spy(edit, &TextEdit::viewModeRequested);
+
+    edit->m_actReadView->trigger();
+    ASSERT_EQ(spy.count(), 1);
+    EXPECT_EQ(spy.takeFirst().at(0).value<ViewMode>(), ViewMode::ReadView);
+
+    edit->deleteLater();
+}
+
+// viewModeActions()：供渲染视图右键菜单复用同一组动作（§8.1）
+TEST(UT_Textedit_ViewModeMenu, ViewModeActionsAccessor)
+{
+    TextEdit *edit = new TextEdit;
+    QList<QAction *> actions = edit->viewModeActions();
+    ASSERT_EQ(actions.size(), 3);
+    EXPECT_EQ(actions.at(0), edit->m_actEditView);
+    EXPECT_EQ(actions.at(1), edit->m_actReadView);
+    EXPECT_EQ(actions.at(2), edit->m_actLivePreview);
+    edit->deleteLater();
+}

@@ -97,13 +97,14 @@ TEST(UT_Setting_Settings, UT_Setting_Settings_002)
                           .arg(qApp->organizationName())
                           .arg(qApp->applicationName());
     QSettingBackend *m_backend = new QSettingBackend(figPath);
-    m_setting->~Settings();
-    EXPECT_NE(m_backend,nullptr);
+    EXPECT_NE(m_backend, nullptr);
+
+    // 析构验证改为一次 delete：显式调用 ~Settings() 后再 deleteLater 会二次析构（UB，全量用例段错误根源）
+    delete m_setting;
 
     if (m_backend != nullptr) {
         m_backend->deleteLater();
     }
-    m_setting->deleteLater();
 }
 
 //static Settings* instance();
@@ -124,7 +125,7 @@ TEST(UT_Setting_dtkThemeWorkaround, UT_Setting_dtkThemeWorkaround)
     Settings->dtkThemeWorkaround(pWindow, DEEPIN_THEME);
     EXPECT_NE(pWindow, nullptr);
 
-    Settings->deleteLater();
+    // 不再 deleteLater 单例：销毁进程级 Settings 会导致后续 instance() 悬空（历史崩溃源）
     pWindow->deleteLater();
 }
 
@@ -183,7 +184,7 @@ TEST(UT_Setting_setSettingDialog, UT_Setting_setSettingDialog)
     EXPECT_NE(widget,nullptr);
     widget->deleteLater();
     dialog->deleteLater();
-    pSettings->deleteLater();
+    // 不 deleteLater 单例：已存在的 Window/TextEdit 缓存 m_settings 裸指针，单例回收会使它们悬空
 }
 
 //private:
