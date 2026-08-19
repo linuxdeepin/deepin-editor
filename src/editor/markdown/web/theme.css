@@ -1,0 +1,142 @@
+/* SPDX-FileCopyrightText: 2026 UnionTech Software Technology Co., Ltd. */
+/* SPDX-License-Identifier: GPL-3.0-or-later */
+
+/* theme.css —— Milkdown 渲染区主题（§4.8 视觉规范） */
+
+:root {
+    --bg: #ffffff;
+    --fg: #1f1f1f;
+    --fg-secondary: #595959;
+    --code-bg: #f5f5f5;
+    --code-fg: #1f1f1f;
+    --border: #e0e0e0;
+    --content-max-width: 800px;
+    --content-center: 1;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* §4.8.1 内容区布局：800px 居中 + 20px 边距 */
+/* 居中由 max-width + margin:auto 完成；padding 用固定 20px。
+   不可写 max(20px, calc((100% - 800px)/2))：百分比 padding 相对包含块（视口）解析，
+   与元素自身 max-width 叠加会把内容宽压成负值（最大化时内容被挤压成极窄列） */
+#app {
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-sizing: border-box;
+}
+
+/* §4.8.2 字号字重 */
+.milkdown h1 { font-size: 26px; font-weight: 700; margin: 1em 0 0.5em; }
+.milkdown h2 { font-size: 22px; font-weight: 700; margin: 1em 0 0.5em; }
+.milkdown h3 { font-size: 18px; font-weight: 700; margin: 1em 0 0.5em; }
+.milkdown h4 { font-size: 16px; font-weight: 700; margin: 1em 0 0.5em; }
+.milkdown h5 { font-size: 14px; font-weight: 700; margin: 1em 0 0.5em; }
+.milkdown h6 { font-size: 13px; font-weight: 700; margin: 1em 0 0.5em; }
+
+/* 正文 14px normal，继承 body */
+.milkdown p, .milkdown li, .milkdown td, .milkdown th { font-size: 14px; font-weight: 400; }
+
+/* §4.8.3 说明文字 12px / normal / opacity 0.7 */
+.milkdown blockquote,
+.milkdown figcaption,
+.milkdown .footnote,
+.milkdown .image-caption {
+    font-size: 12px;
+    font-weight: 400;
+    opacity: 0.7;
+}
+
+/* 深色主题下用 fg-secondary 替代纯 opacity，保证可读性 */
+[data-theme="dark"] .milkdown blockquote,
+[data-theme="dark"] .milkdown figcaption,
+[data-theme="dark"] .milkdown .footnote,
+[data-theme="dark"] .milkdown .image-caption {
+    opacity: 1;
+    color: var(--fg-secondary);
+}
+
+/* blockquote 引用样式 */
+.milkdown blockquote {
+    border-left: 3px solid var(--border);
+    padding: 0.5em 1em;
+    margin: 1em 0;
+    background: transparent;
+}
+
+/* §4.8.5 表格 */
+.table-wrapper { container-type: inline-size; overflow-x: auto; }
+.table-wrapper table { width: 100%; border-collapse: collapse; margin: 1em 0; }
+.table-wrapper td, .table-wrapper th {
+    min-width: 100px;
+    max-width: 240px;
+    height: 46px;
+    padding: 0 20px;
+    text-align: left;
+    vertical-align: middle;
+    word-break: break-word;
+    white-space: normal;
+    border: 1px solid var(--border);
+    box-sizing: border-box;
+}
+.table-wrapper th { font-weight: 700; }
+@container (max-width: 600px) {
+    .table-wrapper td, .table-wrapper th { max-width: 180px; }
+}
+
+/* §4.8.6 代码块 */
+.milkdown pre {
+    background: var(--code-bg);
+    color: var(--code-fg);
+    border-radius: 6px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    font-family: "Noto Sans Mono", "DejaVu Sans Mono", "Courier New", monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 1em 0;
+}
+.milkdown pre code { background: transparent; padding: 0; }
+.milkdown :not(pre) > code {
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: "Noto Sans Mono", "DejaVu Sans Mono", "Courier New", monospace;
+    font-size: 0.9em;
+}
+
+/* §4.8.7 图片 */
+.milkdown img {
+    display: block;
+    max-width: 258px;
+    max-height: 400px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    object-fit: contain;
+    margin: 1em 0;
+}
+
+/* 链接 */
+.milkdown a { color: #1a73e8; text-decoration: none; }
+.milkdown a:hover { text-decoration: underline; }
+
+/* 分割线 */
+.milkdown hr { border: none; border-top: 1px solid var(--border); margin: 2em 0; }
+
+/* 任务列表 */
+.milkdown ul:has(input[type="checkbox"]), .milkdown ol:has(input[type="checkbox"]) { list-style: none; padding-left: 1.5em; }
+.milkdown li:has(input[type="checkbox"]) { display: flex; align-items: center; gap: 8px; }
+
+/* 只读模式去除编辑光标 */
+.milkdown .ProseMirror { outline: none; caret-color: transparent; }
+.milkdown-read-only .ProseMirror { cursor: default; }
