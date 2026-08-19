@@ -8,6 +8,11 @@ Files: .github/* .obs/workflows.yml
 Copyright: UnionTech Software Technology Co., Ltd.
 License: CC0-1.0
 
+# ci generated lint report (not tracked in git)
+Files: reuse_lint_report.md
+Copyright: None
+License: CC0-1.0
+
 # gitignore
 Files: .gitignore 
 Copyright: None
