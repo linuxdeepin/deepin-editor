@@ -30,6 +30,12 @@
 #include "../encodes/detectcode.h"
 #include "../widgets/window.h"
 #include "../widgets/pathsettintwgt.h"
+#include "markdown/markdownview.h"
+#include "markdown/markdownlogic.h"
+#include "markdown/viewmodefsm.h"
+#include "markdown/scrollsync.h"
+#include <DMenu>
+#include <QCursor>
 
 DCORE_USE_NAMESPACE
 
@@ -103,22 +109,69 @@ EditWrapper::EditWrapper(Window *window, QWidget *parent)
     m_pTextEdit->setAccessibleName("TextEditor");
     m_pBottomBar->setAccessibleName("EditorBottomBar");
     // Init layout and widgets.
-    QHBoxLayout *m_layout = new QHBoxLayout;
+    // 三页视图栈（§4.4）：Page0 编辑页 / Page1 查看视图渲染页 / Page2 实时阅览分栏（懒创建）
+    m_viewStack = new QStackedWidget(this);
+    m_pEditPage = new QWidget(m_viewStack);
+    QHBoxLayout *m_layout = new QHBoxLayout(m_pEditPage);
     m_pLeftAreaTextEdit = m_pTextEdit->getLeftAreaWidget();
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->setSpacing(0);
     m_layout->addWidget(m_pLeftAreaTextEdit);
     m_layout->addWidget(m_pTextEdit);
     m_pTextEdit->setWrapper(this);
+    m_viewStack->addWidget(m_pEditPage);
+    // Page1：查看视图渲染页（m_pMarkdownView 创建后加入）
+    m_pReadPage = new QWidget(m_viewStack);
+    QVBoxLayout *readLayout = new QVBoxLayout(m_pReadPage);
+    readLayout->setContentsMargins(0, 0, 0, 0);
+    readLayout->setSpacing(0);
+    m_viewStack->addWidget(m_pReadPage);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->addLayout(m_layout);
+    mainLayout->addWidget(m_viewStack);
     mainLayout->addWidget(m_pBottomBar);
     mainLayout->setContentsMargins(0, 0, 0, 0);
     mainLayout->setSpacing(0);
     setLayout(mainLayout);
 
-    connect(m_pTextEdit, &TextEdit::cursorModeChanged, this, &EditWrapper::handleCursorModeChanged);
+    // Markdown 内容同步（§4.5）：非 Edit 模式下 textChanged → RenderThrottle(300ms 节流：
+    // 前沿立即 + 连续输入期间每 300ms 刷新) → renderer
+    connect(m_pTextEdit, &QPlainTextEdit::textChanged, this, [this]() {
+        if (m_viewMode != ViewMode::Edit)
+            m_renderThrottle.noteContent(m_pTextEdit->toPlainText());
+    });
+    connect(&m_renderThrottle, &RenderThrottle::renderRequested, this, [this](const QString &md) {
+        if (!m_pRenderer)
+            return;
+        // 图片路径改写：渲染页从 qrc:/ 加载，相对图片路径须按 md 文件目录转 file:// 绝对 URL
+        const QString baseDir = QFileInfo(m_pTextEdit->getFilePath()).absolutePath();
+        m_pRenderer->setMarkdown(MarkdownLogic::resolveImagePaths(md, baseDir));
+    });
+    // 滚动同步（§4.6）：左栏为主驱动，LivePreview 下按比例转发右栏
+    connect(m_pTextEdit->verticalScrollBar(), &QScrollBar::valueChanged, this, [this](int value) {
+        if (m_bScrollSyncing || m_viewMode != ViewMode::LivePreview || !m_pRenderer)
+            return;
+        auto sb = m_pTextEdit->verticalScrollBar();
+        m_pRenderer->scrollToRatio(ScrollSync::ratioFromScrollBar(value, sb->minimum(), sb->maximum()));
+    });
+    // 视图模式入口（§8.2）：combobox 请求切换；状态变化回写入口选中态/置灰
+    connect(m_pBottomBar, &BottomBar::viewModeRequested, this, [this](ViewMode mode) {
+        setViewMode(mode);
+    });
+    connect(this, &EditWrapper::viewModeChanged, m_pBottomBar, [this](ViewMode mode) {
+        m_pBottomBar->setViewMode(mode);
+    });
+    connect(this, &EditWrapper::markdownAvailabilityChanged, m_pBottomBar, &BottomBar::setMarkdownAvailable);
+    // 视图模式入口（§8.1）：右键菜单请求切换；状态变化回写选中态/置灰
+    connect(m_pTextEdit, &TextEdit::viewModeRequested, this, [this](ViewMode mode) {
+        setViewMode(mode);
+    });
+    connect(this, &EditWrapper::viewModeChanged, m_pTextEdit, [this](ViewMode mode) {
+        m_pTextEdit->updateViewModeActions(mode, m_isMarkdown);
+    });
+    connect(this, &EditWrapper::markdownAvailabilityChanged, m_pTextEdit, [this](bool) {
+        m_pTextEdit->updateViewModeActions(m_viewMode, m_isMarkdown);
+    });
     connect(m_pWaringNotices, &WarningNotices::reloadBtnClicked, this, &EditWrapper::reloadModifyFile);
     connect(m_pWaringNotices, &WarningNotices::saveAsBtnClicked, m_pWindow, &Window::saveAsFile);
     connect(m_pWaringNotices, &WarningNotices::editAnywayBtnClicked, this, &EditWrapper::onEditAnyway);
@@ -510,6 +563,9 @@ void EditWrapper::reloadFileHighlight(QString definitionName)
         qDebug() << "EditWrapper reloadFileHighlight, m_pTextEdit->setSyntaxDefinition(m_Definition)";
         m_pTextEdit->setSyntaxDefinition(m_Definition);
     }
+
+    // 语言切换钩子（§4.4）：刷新 Markdown 识别；识别丢失时按 FSM 回退（不强切默认视图）
+    updateMarkdownRecognition(m_pTextEdit->getFilePath(), definitionName);
     qDebug() << "EditWrapper reloadFileHighlight, exit";
 }
 
@@ -970,26 +1026,6 @@ void EditWrapper::showNotify(const QString &message, bool warning)
 }
 
 
-void EditWrapper::handleCursorModeChanged(TextEdit::CursorMode mode)
-{
-    qDebug() << "EditWrapper handleCursorModeChanged, mode:" << mode;
-    switch (mode) {
-    case TextEdit::Insert:
-        qDebug() << "EditWrapper handleCursorModeChanged, mode is Insert";
-        m_pBottomBar->setCursorStatus(tr("INSERT"));
-        break;
-    case TextEdit::Overwrite:
-        qDebug() << "EditWrapper handleCursorModeChanged, mode is Overwrite";
-        m_pBottomBar->setCursorStatus(tr("OVERWRITE"));
-        break;
-    case TextEdit::Readonly:
-        qDebug() << "EditWrapper handleCursorModeChanged, mode is Readonly";
-        m_pBottomBar->setCursorStatus(tr("R/O"));
-        break;
-    }
-    qDebug() << "EditWrapper handleCursorModeChanged, exit";
-}
-
 /**
  * @brief 处理文件预加载服务
  * @param encode    文件编码
@@ -1226,6 +1262,10 @@ void EditWrapper::OnThemeChangeSlot(QString theme)
 
     m_pTextEdit->setTheme(theme);
     qDebug() << "EditWrapper OnThemeChangeSlot, m_pTextEdit->setTheme(theme)";
+
+    // Markdown 渲染视图跟随主题（§4.7：themeMap 序列化为 CSS 变量注入渲染页）
+    if (m_pRenderer)
+        m_pRenderer->applyTheme(jsonMap);
 }
 
 void EditWrapper::UpdateBottomBarWordCnt(int cnt)
@@ -1744,6 +1784,10 @@ void EditWrapper::reinitOnFileLoad(const QByteArray &encode)
         DRecentManager::addItem(m_pTextEdit->getFilePath(), data);
     }
 
+    // Markdown 识别 + 默认视图（§4.4：md → LivePreview，其他 → Edit；§5.1 时序）
+    updateMarkdownRecognition(m_pTextEdit->getFilePath(), m_Definition.name());
+    setViewMode(ViewModeFsm::resolveDefaultMode(m_isMarkdown));
+
     // 初始化设置编码
     m_sCurEncode = encode;
     m_sFirstEncode = encode;
@@ -1779,4 +1823,192 @@ void EditWrapper::clearDoubleCharaterEncode()
         emit sigClearDoubleCharaterEncode();
     }
     qDebug() << "EditWrapper clearDoubleCharaterEncode, exit";
+}
+
+//
+// —— Markdown 视图模式（§4.4）：判定/回退全部委托 ViewModeFsm / MarkdownLogic，不写 if-else ——
+//
+bool EditWrapper::setViewMode(ViewMode mode)
+{
+    // FSM 校验：任意文件可切 Edit/ReadView；仅 md 可切 LivePreview；Wysiwyg 阶段二不可达
+    if (!ViewModeFsm::canSwitchTo(mode, m_isMarkdown))
+        return false;
+
+    m_viewMode = mode;
+
+    // 非 md 的「查看视图」＝纯文本只读（沿用原只读模式语义，不进渲染页，§4.4）
+    if (ViewModeFsm::isReadOnlyTextMode(m_viewMode, m_isMarkdown)) {
+        if (!m_pTextEdit->getReadOnlyMode()) {
+            m_pTextEdit->toggleReadOnlyMode(true);
+            m_bReadOnlyByViewMode = true;
+        }
+        m_viewStack->setCurrentWidget(m_pEditPage);
+        emit viewModeChanged(m_viewMode);
+        return true;
+    }
+
+    // 离开纯文本只读时恢复可编辑（仅当只读是视图模式设置的）
+    if (m_bReadOnlyByViewMode) {
+        m_pTextEdit->toggleReadOnlyMode(false);
+        m_bReadOnlyByViewMode = false;
+    }
+
+    // 懒创建渲染页与分栏，并按模式切换 StackedWidget 页（§4.4）
+    ensureMarkdownViewCreated();
+    if (m_viewMode == ViewMode::ReadView) {
+        // 查看视图：渲染视图独占 Page1（从分栏挪回）
+        // 注意：跨父级 reparent（addWidget 到另一容器）后 QWidget 会被置为显式隐藏，
+        // 必须显式 show() 恢复，否则渲染视图 0 宽不可见
+        if (m_pMarkdownView && m_pMarkdownView->parentWidget() != m_pReadPage) {
+            static_cast<QVBoxLayout *>(m_pReadPage->layout())->addWidget(m_pMarkdownView);
+            m_pMarkdownView->show();
+        }
+        m_viewStack->setCurrentWidget(m_pReadPage);
+    } else if (m_viewMode == ViewMode::LivePreview) {
+        ensureLiveSplitterCreated();
+        // 左栏＝编辑页（同一实例，不重建）、右栏＝渲染视图。
+        // 同上：reparent 后必须显式 show()，否则左栏被 QSplitter 分配 0 宽（仅右栏可见）
+        if (m_pEditPage->parentWidget() != m_pLiveSplitter) {
+            m_pLiveSplitter->insertWidget(0, m_pEditPage);
+            m_pEditPage->show();
+        }
+        if (m_pMarkdownView && m_pMarkdownView->parentWidget() != m_pLiveSplitter) {
+            m_pLiveSplitter->insertWidget(1, m_pMarkdownView);
+            m_pMarkdownView->show();
+        }
+        m_pLiveSplitter->setStretchFactor(0, 1);
+        m_pLiveSplitter->setStretchFactor(1, 1);
+        m_viewStack->setCurrentWidget(m_pLiveSplitter);
+        // 显式对半分配：先切页再设尺寸（此时 splitter 宽度真实）；未显示时以 400 兜底，
+        // QSplitter 在后续 resize 会按存储比例缩放
+        const int w = qMax(m_pLiveSplitter->width(), 400);
+        m_pLiveSplitter->setSizes({w / 2, w / 2});
+    } else {
+        // 编辑模式：编辑页回到 Page0（可能此前被挪进分栏）
+        if (m_pEditPage->parentWidget() != m_viewStack)
+            m_viewStack->insertWidget(0, m_pEditPage);
+        m_viewStack->setCurrentWidget(m_pEditPage);
+    }
+
+    // 渲染参数：实时阅览右栏自适应（0＝不限宽不居中）；查看视图 800px 居中（§4.8.1）
+    if (m_pRenderer) {
+        m_pRenderer->setMode(static_cast<int>(MarkdownView::Mode::ReadOnly));
+        m_pRenderer->setLayout(m_viewMode == ViewMode::LivePreview ? 0 : 800,
+                               m_viewMode == ViewMode::ReadView);
+    }
+
+    // 首切立即渲染（§4.5：不等 300ms 去抖）；未 ready 时由 RenderThrottle 缓存、ready 后 flush
+    m_renderThrottle.setReady(m_pRenderer && m_pRenderer->isReady());
+    m_renderThrottle.noteContent(m_pTextEdit->toPlainText());
+    m_renderThrottle.flushNow();
+
+    // 进入 LivePreview：同步当前滚动比例到右栏（§5.2）
+    if (m_viewMode == ViewMode::LivePreview && m_pRenderer) {
+        auto sb = m_pTextEdit->verticalScrollBar();
+        m_pRenderer->scrollToRatio(ScrollSync::ratioFromScrollBar(sb->value(), sb->minimum(), sb->maximum()));
+    }
+
+    emit viewModeChanged(m_viewMode);
+    return true;
+}
+
+void EditWrapper::updateMarkdownRecognition(const QString &fileName, const QString &definitionName)
+{
+    // 识别规则（definition 名优先，其次扩展名）见 MarkdownLogic
+    const bool wasMarkdown = m_isMarkdown;
+    m_isMarkdown = MarkdownLogic::isMarkdown(fileName, definitionName);
+
+    if (m_isMarkdown != wasMarkdown)
+        emit markdownAvailabilityChanged(m_isMarkdown);
+
+    // 语言切走（md → 非 md）：LivePreview 回退 Edit，ReadView/Edit 保持
+    const ViewMode fallback = ViewModeFsm::fallbackWhenMarkdownLost(m_viewMode);
+    if (!m_isMarkdown && fallback != m_viewMode) {
+        setViewMode(fallback);
+        return;
+    }
+
+    // 语言切到（非 md → md，2026-08-19）：Edit 自动跃迁 LivePreview（对齐「md 默认实时预览」，
+    // 新建文件手动切语言为 Markdown 即入实时预览）。仅识别结果变化时触发，
+    // 不打断用户在 md 下手动选择的 Edit 模式。
+    const ViewMode elevate = ViewModeFsm::elevateWhenMarkdownGained(m_viewMode);
+    if (m_isMarkdown && m_isMarkdown != wasMarkdown && elevate != m_viewMode) {
+        setViewMode(elevate);
+        return;
+    }
+
+    // ReadView 的实现随识别结果切换（§4.4）：md＝渲染页，非 md＝纯文本只读。
+    // 模式本身不变，仅重落到正确实现（语言在 ReadView 下切走/切回都适用）
+    if (m_isMarkdown != wasMarkdown && m_viewMode == ViewMode::ReadView)
+        setViewMode(ViewMode::ReadView);
+}
+
+void EditWrapper::setMarkdownRendererForTest(IMarkdownRenderer *renderer)
+{
+    m_pRenderer = renderer;
+    m_pRendererInjected = (renderer != nullptr);
+}
+
+void EditWrapper::ensureMarkdownViewCreated()
+{
+    // 已注入测试渲染器或已创建真实视图：直接复用
+    if (m_pRenderer)
+        return;
+
+    // 纯文本只读模式（ReadView + 非 md）不进渲染页
+    if (ViewModeFsm::isReadOnlyTextMode(m_viewMode, m_isMarkdown))
+        return;
+
+    m_pMarkdownView = new MarkdownView(this);
+    m_pMarkdownView->setMinimumWidth(200);   // 防止分栏右栏被压缩到不可见
+#if !defined(QT_TESTCASE_SOURCEDIR)
+    // 生产：构造后立即 init()（load qrc 页面 + 注册 WebChannel，§4.1 构造分离约定）。
+    // 单测编译单元（-DQT_TESTCASE_SOURCEDIR）跳过，避免在测试进程拉起 WebEngine 渲染进程。
+    m_pMarkdownView->init();
+#endif
+    // ready 后解除 RenderThrottle 缓存并 flush 首次内容
+    connect(m_pMarkdownView, &MarkdownView::ready, this, [this]() {
+        m_renderThrottle.setReady(true);
+    });
+    // 反向滚动同步（§4.6 双向）：右栏用户滚动 → 按比例驱动左栏 TextEdit；
+    // 护栏防回环（左栏 valueChanged 触发时跳过转发）
+    connect(m_pMarkdownView, &MarkdownView::scrollRatioChanged, this, [this](double ratio) {
+        if (m_viewMode != ViewMode::LivePreview)
+            return;
+        auto sb = m_pTextEdit->verticalScrollBar();
+        if (sb->maximum() <= sb->minimum())
+            return;
+        const double clamped = ScrollSync::clampRatio(ratio);
+        const int target = sb->minimum()
+                           + qRound(clamped * (sb->maximum() - sb->minimum()));
+        if (target == sb->value())
+            return;
+        m_bScrollSyncing = true;
+        sb->setValue(target);
+        m_bScrollSyncing = false;
+    });
+    // 渲染视图右键菜单（§8.1）：ReadView/LivePreview 右栏上右键不再落入 Chromium 默认菜单，
+    // 弹「视图模式」子菜单（复用 TextEdit 动作，同一份选中态/置灰同步）
+    m_pMarkdownView->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(m_pMarkdownView, &QWidget::customContextMenuRequested, this, [this](const QPoint &) {
+        DMenu menu(m_pMarkdownView);
+        DMenu *pViewMenu = new DMenu(QObject::tr("视图模式"), &menu);
+        pViewMenu->addActions(m_pTextEdit->viewModeActions());
+        menu.addMenu(pViewMenu);
+        menu.exec(QCursor::pos());
+    });
+    // 主题注入（§4.7）：创建即应用当前主题，深浅色与编辑器一致
+    QString themePath = Settings::instance()->settings->option("advance.editor.theme")->value().toString();
+    m_pMarkdownView->applyTheme(Utils::getThemeMapFromPath(themePath));
+    static_cast<QVBoxLayout *>(m_pReadPage->layout())->addWidget(m_pMarkdownView);
+    m_pRenderer = m_pMarkdownView;
+}
+
+void EditWrapper::ensureLiveSplitterCreated()
+{
+    if (m_pLiveSplitter)
+        return;
+    m_pLiveSplitter = new QSplitter(Qt::Horizontal, m_viewStack);
+    m_pLiveSplitter->setChildrenCollapsible(false);
+    m_viewStack->addWidget(m_pLiveSplitter);
 }
