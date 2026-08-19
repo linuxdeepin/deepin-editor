@@ -24,8 +24,14 @@
 #include <KSyntaxHighlighting/SyntaxHighlighter>
 #include <KSyntaxHighlighting/Repository>
 #include <KSyntaxHighlighting/Theme>
+#include <QStackedWidget>
+#include <QSplitter>
+#include "markdown/viewmode.h"
+#include "markdown/renderthrottle.h"
 
 class Window;
+class MarkdownView;
+class IMarkdownRenderer;
 class EditWrapper : public QWidget
 {
     Q_OBJECT
@@ -99,7 +105,6 @@ public:
     void setTextChangeFlag(bool bFlag);
     void setLineNumberShow(bool bIsShow, bool bIsFirstShow = false);
     void setShowBlankCharacter(bool ok);
-    void handleCursorModeChanged(TextEdit::CursorMode mode);
     void clearDoubleCharaterEncode();
     //
     BottomBar *bottomBar();
@@ -129,8 +134,27 @@ public:
     void exitInvalidCharPreview();
     bool forceSaveInvalidCharFile();
 
+    // —— Markdown 视图模式（阶段三）：判定/切换委托 ViewModeFsm / MarkdownLogic ——
+    // 切换视图模式：FSM 校验通过返回 true 并发 viewModeChanged；被拒返回 false 且模式不变
+    bool setViewMode(ViewMode mode);
+    // 当前视图模式（默认 Edit）
+    inline ViewMode viewMode() const
+    { return m_viewMode; }
+    // 当前文件是否为 Markdown（识别结果见 MarkdownLogic）
+    inline bool isMarkdownFile() const
+    { return m_isMarkdown; }
+    // 文件加载/高亮语言变更时刷新 Markdown 识别；识别结果变化时发 markdownAvailabilityChanged，
+    // 丢失 md 且当前处于 LivePreview 时按 FSM 回退到 Edit
+    void updateMarkdownRecognition(const QString &fileName, const QString &definitionName);
+    // 测试注入 Mock 渲染器：注入后 ensureMarkdownViewCreated 不再创建真实 MarkdownView
+    void setMarkdownRendererForTest(IMarkdownRenderer *renderer);
+
 signals:
     void sigClearDoubleCharaterEncode();
+    // 视图模式切换成功后发出
+    void viewModeChanged(ViewMode mode);
+    // Markdown 识别结果变化（true 可用 / false 不可用）
+    void markdownAvailabilityChanged(bool available);
 
 protected:
     // 处理文件加载事件
@@ -143,6 +167,10 @@ private:
     int GetCorrectUnicode1(const QByteArray &ba);
     // 文件加载时重新初始化部分设置
     void reinitOnFileLoad(const QByteArray &encode);
+    // 懒创建 MarkdownView 渲染页（ReadView/LivePreview 且非纯文本只读模式时），已注入测试渲染器则跳过
+    void ensureMarkdownViewCreated();
+    // 懒创建实时阅览分栏（Page2：左编辑页 + 右渲染视图）
+    void ensureLiveSplitterCreated();
 
     Q_SLOT void onReadAllocError();
 
@@ -199,6 +227,32 @@ private:
     bool m_bInvalidCharPreview = false;
     bool m_bInvalidCharEditAllowed = false;
     QString m_sInvalidCharOriginalPath;
+
+    // —— Markdown 视图模式状态（阶段三）——
+    // 当前文件是否为 md（决定 ReadView/LivePreview 是否可用）
+    bool m_isMarkdown = false;
+    // 当前视图模式，默认编辑视图
+    ViewMode m_viewMode = ViewMode::Edit;
+    // 懒创建的渲染页（首次进入 ReadView/LivePreview 时 new；测试注入后保持 nullptr）
+    MarkdownView *m_pMarkdownView = nullptr;
+    // 上层统一依赖的渲染接口（真实实现为 m_pMarkdownView，或测试注入的 Mock）
+    IMarkdownRenderer *m_pRenderer = nullptr;
+    // 是否已注入测试渲染器
+    bool m_pRendererInjected = false;
+    // 三页视图栈（§4.4）：Page0 编辑页 / Page1 查看视图渲染页 / Page2 实时阅览分栏
+    QStackedWidget *m_viewStack = nullptr;
+    // Page0：[LeftArea|TextEdit] 原有编辑布局容器（LivePreview 时整体挪入分栏左栏，实例不变）
+    QWidget *m_pEditPage = nullptr;
+    // Page1：查看视图渲染页（m_pMarkdownView 独占）
+    QWidget *m_pReadPage = nullptr;
+    // Page2：实时阅览分栏（懒创建）
+    QSplitter *m_pLiveSplitter = nullptr;
+    // 内容渲染去抖（§4.5：300ms 去抖/首切立即/相同跳过/ready 前缓存）
+    RenderThrottle m_renderThrottle;
+    // 只读是「查看视图(非 md)」设置的，切回 Edit 时需恢复
+    bool m_bReadOnlyByViewMode = false;
+    // 滚动同步防回环护栏（§4.6）：应用一侧同步时置位，另一侧的 valueChanged 跳过
+    bool m_bScrollSyncing = false;
 };
 
 #endif
