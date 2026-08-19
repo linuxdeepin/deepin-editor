@@ -12,6 +12,7 @@
 #include "bottombar.h"
 #include "../common/utils.h"
 #include "../editor/editwrapper.h"
+#include "../editor/markdown/viewmode.h"
 #include "../widgets/window.h"
 #include "../editor/replaceallcommond.h"
 
@@ -24,7 +25,6 @@ BottomBar::BottomBar(QWidget *parent)
       m_pWrapper(static_cast<EditWrapper *>(parent)),
       m_pPositionLabel(new DLabel),
       m_pCharCountLabel(new DLabel),
-      m_pCursorStatus(new DLabel),
       m_pEncodeMenu(DDropdownMenu::createEncodeMenu()),
       m_pHighlightMenu(DDropdownMenu::createHighLightMenu()),
       m_rowStr(tr("Row")),
@@ -40,8 +40,6 @@ BottomBar::BottomBar(QWidget *parent)
     m_pPositionLabel->setAccessibleName("PositionLabel");
     m_pCharCountLabel->setFont(font);
     m_pCharCountLabel->setAccessibleName("CharCountLabel");
-    m_pCursorStatus->setFont(font);
-    m_pCursorStatus->setAccessibleName("CursorStatus");
     m_scaleLabel->setFont(font);
     m_scaleLabel->setAccessibleName("ScaleLabel");
     m_progressLabel->setFont(font);
@@ -58,7 +56,6 @@ BottomBar::BottomBar(QWidget *parent)
 
     DFontSizeManager::instance()->bind(m_pPositionLabel, DFontSizeManager::T9);
     DFontSizeManager::instance()->bind(m_pCharCountLabel, DFontSizeManager::T9);
-    DFontSizeManager::instance()->bind(m_pCursorStatus, DFontSizeManager::T9);
     DFontSizeManager::instance()->bind(m_scaleLabel, DFontSizeManager::T9);
     DFontSizeManager::instance()->bind(m_progressLabel, DFontSizeManager::T9);
 
@@ -67,6 +64,32 @@ BottomBar::BottomBar(QWidget *parent)
 #endif
 
     initFormatMenu();
+
+    // —— Markdown 视图模式 combobox（§8.2，与编码格式菜单同型）——
+    m_pViewModeMenu = new DDropdownMenu();
+    m_pViewModeMenu->setAccessibleName("ViewModeMenu");
+    DMenu *pViewModeDMenu = new DMenu(m_pViewModeMenu);
+    QActionGroup *pViewModeGroup = new QActionGroup(m_pViewModeMenu);
+    m_actEditView = pViewModeDMenu->addAction(tr("Edit Mode"));
+    m_actReadView = pViewModeDMenu->addAction(tr("Read View"));
+    m_actLivePreview = pViewModeDMenu->addAction(tr("Live Preview"));
+    m_actEditView->setCheckable(true);
+    m_actReadView->setCheckable(true);
+    m_actLivePreview->setCheckable(true);
+    m_actEditView->setData(static_cast<int>(ViewMode::Edit));
+    m_actReadView->setData(static_cast<int>(ViewMode::ReadView));
+    m_actLivePreview->setData(static_cast<int>(ViewMode::LivePreview));
+    m_actEditView->setChecked(true);
+    pViewModeGroup->addAction(m_actEditView);
+    pViewModeGroup->addAction(m_actReadView);
+    pViewModeGroup->addAction(m_actLivePreview);
+    // 默认非 md（含新建标签）：仅「实时预览」置灰（§4.4 置灰规则）
+    m_actLivePreview->setEnabled(false);
+    connect(pViewModeDMenu, &DMenu::triggered, this, [this](QAction *action) {
+        emit viewModeRequested(static_cast<ViewMode>(action->data().toInt()));
+    });
+    m_pViewModeMenu->setCurrentTextOnly(tr("Edit Mode"));
+    m_pViewModeMenu->setMenu(pViewModeDMenu);
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setContentsMargins(29, 1, 10, 0);
@@ -81,7 +104,6 @@ BottomBar::BottomBar(QWidget *parent)
     m_progressBar->hide();
     m_progressLabel->hide();
 
-    m_pCursorStatus->setText(qApp->translate("EditWrapper", "INSERT"));
     m_pPositionLabel->setText(QString("%1 %2  %3 %4").arg(m_rowStr, "1",m_columnStr, "1"));
 
     m_pCharCountLabel->setText(m_chrCountStr.arg("0"));
@@ -98,7 +120,7 @@ BottomBar::BottomBar(QWidget *parent)
     layout->addStretch();
     layout->addWidget(m_scaleLabel);
     layout->addStretch();
-    layout->addWidget(m_pCursorStatus);
+    layout->addWidget(m_pViewModeMenu);
     layout->addSpacing(10);
     layout->addWidget(pVerticalLine1);
     layout->addWidget(m_pEncodeMenu);
@@ -175,33 +197,28 @@ void BottomBar::setEncodeName(const QString &name)
     m_pEncodeMenu->setCurrentTextOnly(name);
 }
 
-void BottomBar::setCursorStatus(const QString &text)
-{
-    m_pCursorStatus->setText(text);
-}
-
 void BottomBar::setPalette(const QPalette &palette)
 {
     DPalette paPositionLabel  = DGuiApplicationHelper::instance()->applicationPalette();
     DPalette paCharCountLabel = DGuiApplicationHelper::instance()->applicationPalette();
-    DPalette paCursorStatus = DGuiApplicationHelper::instance()->applicationPalette();
     DPalette paEncodeMenu = DGuiApplicationHelper::instance()->applicationPalette();
     DPalette paHighlightMenu = DGuiApplicationHelper::instance()->applicationPalette();
+    DPalette paViewModeMenu = DGuiApplicationHelper::instance()->applicationPalette();
 
     QColor colorFont = paPositionLabel.textTips().color();
 
     paPositionLabel.setColor(DPalette::WindowText, colorFont);
     paCharCountLabel.setColor(DPalette::WindowText, colorFont);
-    paCursorStatus.setColor(DPalette::WindowText, colorFont);
     paEncodeMenu.setColor(DPalette::WindowText, colorFont);
     paHighlightMenu.setColor(DPalette::WindowText, colorFont);
+    paViewModeMenu.setColor(DPalette::WindowText, colorFont);
 
 
     m_pPositionLabel->setPalette(paPositionLabel);
     m_pCharCountLabel->setPalette(paCharCountLabel);
-    m_pCursorStatus->setPalette(paCursorStatus);
     m_pEncodeMenu->getButton()->setPalette(paEncodeMenu);
     m_pHighlightMenu->getButton()->setPalette(paHighlightMenu);
+    m_pViewModeMenu->getButton()->setPalette(paViewModeMenu);
     m_scaleLabel->setPalette(paPositionLabel);
     m_formatMenu->getButton()->setPalette(paEncodeMenu);
 
@@ -209,6 +226,7 @@ void BottomBar::setPalette(const QPalette &palette)
     m_pEncodeMenu->setTheme(theme);
     m_pHighlightMenu->setTheme(theme);
     m_formatMenu->setTheme(theme);
+    m_pViewModeMenu->setTheme(theme);
 
     QWidget::setPalette(palette);
 }
@@ -298,7 +316,6 @@ bool BottomBar::eventFilter(QObject *watched, QEvent *event)
         QFont font = qApp->font();
         m_pPositionLabel->setFont(font);
         m_pCharCountLabel->setFont(font);
-        m_pCursorStatus->setFont(font);
         m_scaleLabel->setFont(font);
         m_progressLabel->setFont(font);
         return false;
@@ -459,4 +476,36 @@ int BottomBar::defaultHeight()
 #else
     return s_BottomBarHeight;
 #endif
+}
+
+// —— Markdown 视图模式入口（§8.2）——
+void BottomBar::setViewMode(ViewMode mode)
+{
+    QAction *action = nullptr;
+    QString name;
+    switch (mode) {
+    case ViewMode::ReadView:
+        action = m_actReadView;
+        name = tr("Read View");
+        break;
+    case ViewMode::LivePreview:
+        action = m_actLivePreview;
+        name = tr("Live Preview");
+        break;
+    case ViewMode::Edit:
+    case ViewMode::Wysiwyg:
+    default:
+        action = m_actEditView;
+        name = tr("Edit Mode");
+        break;
+    }
+    if (action && !action->isChecked())
+        action->setChecked(true);
+    m_pViewModeMenu->setCurrentTextOnly(name);
+}
+
+void BottomBar::setMarkdownAvailable(bool ok)
+{
+    // 非 md 文件：仅「实时预览」置灰（§4.4 置灰规则）
+    m_actLivePreview->setEnabled(ok);
 }

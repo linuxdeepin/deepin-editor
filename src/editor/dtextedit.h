@@ -16,6 +16,7 @@
 #include "inserttextundocommand.h"
 #include "deletetextundocommand.h"
 #include "../widgets/bottombar.h"
+#include "markdown/viewmode.h"
 #include <QUndoStack>
 
 #include <KSyntaxHighlighting/Definition>
@@ -263,6 +264,11 @@ public:
     void setReadOnlyPermission(bool permission);
     bool getReadOnlyPermission();
     bool getReadOnlyMode();
+    // 右键菜单「视图模式」入口（§8.1）：刷新子项选中态与非 md 置灰规则
+    void updateViewModeActions(ViewMode mode, bool isMarkdown);
+    // 视图模式动作组（编辑/查看/实时预览），供渲染视图右键菜单等复用同一份状态（§8.1）
+    QList<QAction *> viewModeActions() const
+    { return QList<QAction *>() << m_actEditView << m_actReadView << m_actLivePreview; }
     void hideRightMenu();
     void flodOrUnflodAllLevel(bool isFlod);
     void flodOrUnflodCurrentLevel(bool isFlod);
@@ -484,6 +490,8 @@ signals:
     void signal_readingPath();
     void signal_setTitleFocus();
     void findMatchCountChanged(int current, int total);
+    // 右键菜单「视图模式」请求切换（EditWrapper 校验后经 viewModeChanged 回写状态，§8.1）
+    void viewModeRequested(ViewMode mode);
 public slots:
     /**
      * @author liumaochuan ut000616
@@ -687,8 +695,11 @@ private:
     QAction *m_findAction;
     QAction *m_replaceAction;
     QAction *m_jumpLineAction;
-    QAction *m_enableReadOnlyModeAction;
-    QAction *m_disableReadOnlyModeAction;
+    // —— 右键菜单「视图模式」二级菜单（§8.1，替换原只读模式互斥项）——
+    DMenu *m_viewModeMenu = nullptr;
+    QAction *m_actEditView = nullptr;
+    QAction *m_actReadView = nullptr;
+    QAction *m_actLivePreview = nullptr;
     QAction *m_fullscreenAction;
     QAction *m_exitFullscreenAction;
     QAction *m_openInFileManagerAction;
