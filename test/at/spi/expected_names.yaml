@@ -214,11 +214,6 @@ elements:
     role: "label"
     description: "字符计数"
 
-  - id: "CursorStatus"
-    name: "CursorStatus"
-    role: "label"
-    description: "光标状态(INSERT/OVERWRITE)"
-
   - id: "ScaleLabel"
     name: "ScaleLabel"
     role: "label"
@@ -396,15 +391,20 @@ elements:
     role: "menu item"
     description: "转到行"
 
-  - id: "EnableReadOnly"
-    name: "EnableReadOnly"
+  - id: "EditView"
+    name: "EditView"
     role: "menu item"
-    description: "开启只读模式"
+    description: "编辑模式"
 
-  - id: "DisableReadOnly"
-    name: "DisableReadOnly"
+  - id: "ReadView"
+    name: "ReadView"
     role: "menu item"
-    description: "关闭只读模式"
+    description: "查看视图"
+
+  - id: "LivePreview"
+    name: "LivePreview"
+    role: "menu item"
+    description: "实时预览"
 
   - id: "Fullscreen"
     name: "Fullscreen"

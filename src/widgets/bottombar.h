@@ -17,6 +17,8 @@
 #define FormatActionType "format-action-type"
 
 class EditWrapper;
+enum class ViewMode;
+
 class BottomBar : public QWidget
 {
     Q_OBJECT
@@ -35,7 +37,6 @@ public:
     void updatePosition(int row, int column);
     void updateWordCount(int charactorCount);
     void setEncodeName(const QString &name);
-    void setCursorStatus(const QString &text);
     void setPalette(const QPalette &palette);
     void updateSize(int size, bool bIsFindOrReplace);
     void setChildEnabled(bool enabled);
@@ -43,6 +44,10 @@ public:
     void setChildrenFocus(bool ok,QWidget* preOrderWidget = nullptr);
     void setScaleLabelText(qreal fontSize);
     void setProgress(int progress);
+
+    // —— Markdown 视图模式入口（§8.2）：折叠态显示当前视图名；非 md 仅置灰「实时预览」 ——
+    void setViewMode(ViewMode mode);
+    void setMarkdownAvailable(bool ok);
 
     DDropdownMenu* getEncodeMenu();
     DDropdownMenu* getHighlightMenu();
@@ -55,6 +60,10 @@ protected:
     void paintEvent(QPaintEvent *);
     bool eventFilter(QObject *, QEvent *) override;
 
+signals:
+    // 用户经 combobox 请求切换视图模式（EditWrapper 校验后经 viewModeChanged 回写状态）
+    void viewModeRequested(ViewMode mode);
+
 private:
     void initFormatMenu();
     Q_SLOT void onFormatMenuTrigged(QAction* action);
@@ -64,7 +73,6 @@ private:
     EditWrapper *m_pWrapper {nullptr};
     DLabel *m_pPositionLabel {nullptr};
     DLabel *m_pCharCountLabel {nullptr};
-    DLabel *m_pCursorStatus {nullptr};
     DDropdownMenu *m_pEncodeMenu {nullptr};
     DDropdownMenu *m_pHighlightMenu {nullptr};
     QString m_rowStr {QString()};
@@ -78,6 +86,12 @@ private:
     EndlineFormat m_endlineFormat = EndlineFormat::Unix;
     QAction* m_unixAction = nullptr;
     QAction* m_windowsAction = nullptr;
+
+    // —— Markdown 视图模式 combobox（§8.2，与编码格式菜单同型）——
+    DDropdownMenu *m_pViewModeMenu {nullptr};
+    QAction *m_actEditView {nullptr};
+    QAction *m_actReadView {nullptr};
+    QAction *m_actLivePreview {nullptr};
 
 
 public slots:

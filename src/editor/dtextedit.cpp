@@ -18,6 +18,7 @@
 #include "changemarkcommand.h"
 #include "endlineformatcommond.h"
 #include <QSet>
+#include <QActionGroup>
 #include <algorithm>
 
 #include <KSyntaxHighlighting/definition.h>
@@ -404,10 +405,13 @@ void TextEdit::initRightClickedMenu()
     m_replaceAction->setObjectName("Replace");
     m_jumpLineAction = new QAction(tr("Go to Line"), this);
     m_jumpLineAction->setObjectName("GoToLine");
-    m_enableReadOnlyModeAction = new QAction(tr("Turn on Read-Only mode"), this);
-    m_enableReadOnlyModeAction->setObjectName("EnableReadOnly");
-    m_disableReadOnlyModeAction = new QAction(tr("Turn off Read-Only mode"), this);
-    m_disableReadOnlyModeAction->setObjectName("DisableReadOnly");
+    // 右键菜单「视图模式」二级菜单（§8.1，替换原只读模式互斥项；原语义并入「查看视图」）
+    m_actEditView = new QAction(tr("Edit Mode"), this);
+    m_actEditView->setObjectName("EditView");
+    m_actReadView = new QAction(tr("Read View"), this);
+    m_actReadView->setObjectName("ReadView");
+    m_actLivePreview = new QAction(tr("Live Preview"), this);
+    m_actLivePreview->setObjectName("LivePreview");
     m_fullscreenAction = new QAction(tr("Fullscreen"), this);
     m_fullscreenAction->setObjectName("Fullscreen");
     m_exitFullscreenAction = new QAction(tr("Exit fullscreen"), this);
@@ -506,8 +510,6 @@ void TextEdit::initRightClickedMenu()
     connect(m_jumpLineAction, &QAction::triggered, this, &TextEdit::clickJumpLineAction);
     connect(m_fullscreenAction, &QAction::triggered, this, &TextEdit::clickFullscreenAction);
     connect(m_exitFullscreenAction, &QAction::triggered, this, &TextEdit::clickFullscreenAction);
-    connect(m_enableReadOnlyModeAction, &QAction::triggered, this, &TextEdit::toggleReadOnlyMode);
-    connect(m_disableReadOnlyModeAction, &QAction::triggered, this, &TextEdit::toggleReadOnlyMode);
     connect(m_openInFileManagerAction, &QAction::triggered, this, &TextEdit::slotOpenInFileManagerAction);
     connect(m_addComment, &QAction::triggered, this, &TextEdit::slotAddComment);
     connect(m_cancelComment, &QAction::triggered, this, &TextEdit::slotCancelComment);
@@ -536,6 +538,25 @@ void TextEdit::initRightClickedMenu()
     m_convertCaseMenu->addAction(m_upcaseAction);
     m_convertCaseMenu->addAction(m_downcaseAction);
     m_convertCaseMenu->addAction(m_capitalizeAction);
+
+    // Init view mode sub menu（§8.1：三子项互斥可选；默认「编辑模式」选中、「实时预览」置灰）
+    m_viewModeMenu = new DMenu(tr("View Mode"), this);
+    QActionGroup *pViewModeGroup = new QActionGroup(this);
+    m_actEditView->setCheckable(true);
+    m_actReadView->setCheckable(true);
+    m_actLivePreview->setCheckable(true);
+    m_actEditView->setData(static_cast<int>(ViewMode::Edit));
+    m_actReadView->setData(static_cast<int>(ViewMode::ReadView));
+    m_actLivePreview->setData(static_cast<int>(ViewMode::LivePreview));
+    pViewModeGroup->addAction(m_actEditView);
+    pViewModeGroup->addAction(m_actReadView);
+    pViewModeGroup->addAction(m_actLivePreview);
+    m_viewModeMenu->addActions(pViewModeGroup->actions());
+    m_actEditView->setChecked(true);
+    m_actLivePreview->setEnabled(false);   // 初始非 md：仅「实时预览」置灰
+    connect(m_actEditView, &QAction::triggered, this, [this]() { emit viewModeRequested(ViewMode::Edit); });
+    connect(m_actReadView, &QAction::triggered, this, [this]() { emit viewModeRequested(ViewMode::ReadView); });
+    connect(m_actLivePreview, &QAction::triggered, this, [this]() { emit viewModeRequested(ViewMode::LivePreview); });
 
     connect(m_upcaseAction, &QAction::triggered, this, &TextEdit::upcaseWord);
     connect(m_downcaseAction, &QAction::triggered, this, &TextEdit::downcaseWord);
@@ -672,16 +693,8 @@ void TextEdit::popRightMenu(QPoint pos)
     }
 
     m_rightMenu->addSeparator();
-    if (m_bReadOnlyPermission == false) {
-        qDebug() << "Adding read only mode action";
-        if (m_readOnlyMode) {
-            qDebug() << "Adding disable read only mode action";
-            m_rightMenu->addAction(m_disableReadOnlyModeAction);
-        } else {
-            qDebug() << "Adding enable read only mode action";
-            m_rightMenu->addAction(m_enableReadOnlyModeAction);
-        }
-    }
+    // 视图模式二级菜单（§8.1）：入口始终显示；原只读模式互斥项移除（语义并入「查看视图」）
+    m_rightMenu->addMenu(m_viewModeMenu);
 
     m_rightMenu->addAction(m_openInFileManagerAction);
     m_rightMenu->addSeparator();
@@ -5057,6 +5070,29 @@ void TextEdit::setReadOnlyPermission(bool permission)
     }
     SendtoggleReadOnlyMode();
     qDebug() << "Set read only permission completed";
+}
+
+// 右键菜单「视图模式」入口（§8.1）：由 EditWrapper 在 viewModeChanged/markdownAvailabilityChanged 时回写
+void TextEdit::updateViewModeActions(ViewMode mode, bool isMarkdown)
+{
+    QAction *action = nullptr;
+    switch (mode) {
+    case ViewMode::ReadView:
+        action = m_actReadView;
+        break;
+    case ViewMode::LivePreview:
+        action = m_actLivePreview;
+        break;
+    case ViewMode::Edit:
+    case ViewMode::Wysiwyg:
+    default:
+        action = m_actEditView;
+        break;
+    }
+    if (action && !action->isChecked())
+        action->setChecked(true);
+    // 置灰规则（§4.4）：非 md 文件仅「实时预览」置灰，编辑/查看始终可用
+    m_actLivePreview->setEnabled(isMarkdown);
 }
 
 void TextEdit::SendtoggleReadmessage()
