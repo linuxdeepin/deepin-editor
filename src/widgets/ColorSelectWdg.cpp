@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -45,8 +45,7 @@ void ColorLabel::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event)
 
-    int distance = 2;
-
+    const int distance = 2;
     QRect r = rect();
 
     QPainter painter(this);
@@ -56,41 +55,95 @@ void ColorLabel::paintEvent(QPaintEvent *event)
 #endif
     );
 
+    if (m_bPressed) {
+        // press: 内圆微缩 + 颜色加深，模拟按压
+        QPainterPath pressedPath;
+        pressedPath.addEllipse(r.adjusted(distance, distance, -distance, -distance));
+        painter.fillPath(pressedPath, m_color.darker(130));
 
-    QPainterPath bigCircle;
-    bigCircle.addEllipse(r);
+        if (m_bSelected) {
+            QPainterPath outerPath;
+            outerPath.addEllipse(r);
+            QPainterPath innerPath;
+            innerPath.addEllipse(r.adjusted(distance / 2, distance / 2,
+                                             -distance / 2, -distance / 2));
+            painter.fillPath(outerPath - innerPath, m_color);
+        }
+    } else if (m_bHover) {
+        // hover: 圆略微放大
+        QPainterPath hoverPath;
+        hoverPath.addEllipse(r.adjusted(distance, distance, -distance, -distance));
+        painter.fillPath(hoverPath, m_color);
 
-    QPainterPath smallCircle;
-    smallCircle.addEllipse(r.adjusted(2*distance,2*distance,-2*distance,-2*distance));
+        if (m_bSelected) {
+            QPainterPath outerPath;
+            outerPath.addEllipse(r);
+            QPainterPath innerPath;
+            innerPath.addEllipse(r.adjusted(distance, distance, -distance, -distance));
+            painter.fillPath(outerPath - innerPath, m_color);
+        }
+    } else {
+        // normal: 原有逻辑
+        QPainterPath outerPath;
+        outerPath.addEllipse(r);
+        QPainterPath innerPath;
+        innerPath.addEllipse(r.adjusted(2 * distance, 2 * distance,
+                                        -2 * distance, -2 * distance));
+        painter.fillPath(innerPath, m_color);
 
-    //先画小圆
-    painter.fillPath(smallCircle,m_color);
-
-
-    //如果点击选择画　圆环
-    if(m_bSelected){
-        r = rect();
-        QPainterPath sencondCircle;
-        sencondCircle.addEllipse(r.adjusted(distance,distance,-distance,-distance));
-        //大圆减小圆等于圆环
-        QPainterPath path = bigCircle - sencondCircle;
-        painter.fillPath(path,m_color);
+        if (m_bSelected) {
+            QPainterPath selectedInnerPath;
+            selectedInnerPath.addEllipse(r.adjusted(distance, distance,
+                                                     -distance, -distance));
+            painter.fillPath(outerPath - selectedInnerPath, m_color);
+        }
     }
 
     painter.end();
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+void ColorLabel::enterEvent(QEvent *event)
+#else
+void ColorLabel::enterEvent(QEnterEvent *event)
+#endif
+{
+    DWidget::enterEvent(event);
+    m_bHover = true;
+    update();
+}
+
+void ColorLabel::leaveEvent(QEvent *event)
+{
+    DWidget::leaveEvent(event);
+    m_bHover = false;
+    m_bPressed = false;
+    update();
+}
+
 void ColorLabel::mousePressEvent(QMouseEvent *e)
 {
     qDebug() << "ColorLabel mouse press event";
-    //没有选择点击有效
-    if(e->button() == Qt::LeftButton){
-       m_bSelected = true;
-       update();
-       emit sigColorClicked(m_bSelected,m_color);
-       qDebug() << "ColorLabel mouse press event, color selected state updated to:" << m_bSelected;
+    if (e->button() == Qt::LeftButton) {
+        m_bPressed = true;
+        update();
     }
+    DWidget::mousePressEvent(e);
     qDebug() << "ColorLabel mouse press event end";
+}
+
+void ColorLabel::mouseReleaseEvent(QMouseEvent *e)
+{
+    qDebug() << "ColorLabel mouse release event";
+    if (e->button() == Qt::LeftButton && m_bPressed) {
+        m_bPressed = false;
+        m_bSelected = true;
+        update();
+        emit sigColorClicked(m_bSelected, m_color);
+        qDebug() << "ColorLabel mouse release event, color selected state updated to:" << m_bSelected;
+    }
+    DWidget::mouseReleaseEvent(e);
+    qDebug() << "ColorLabel mouse release event end";
 }
 
 ColorSelectWdg::ColorSelectWdg(QString text,QWidget *parent):DWidget (parent),m_text(text)

@@ -56,7 +56,6 @@ TEST_F(test_colorlabel, checkGetColor)
 // 测试函数 ColorLabel::paintEvent
 TEST_F(test_colorlabel, checkPaintEvent)
 {
-
     auto colorLabel = new ColorLabel(QColor("#FF0000"));
     colorLabel->setColorSelected(true);
     QPaintEvent event(colorLabel->rect());
@@ -64,15 +63,18 @@ TEST_F(test_colorlabel, checkPaintEvent)
     EXPECT_NE(colorLabel,nullptr);
     colorLabel->deleteLater();
 
-
-
     colorLabel = new ColorLabel(QColor("#FF0000"));
     colorLabel->setColorSelected(false);
     QPaintEvent event2(colorLabel->rect());
     colorLabel->paintEvent(&event2);
     EXPECT_NE(colorLabel,nullptr);
-    colorLabel->deleteLater();
 
+    colorLabel->m_bHover = true;
+    colorLabel->paintEvent(&event2);
+    colorLabel->m_bHover = false;
+    colorLabel->m_bPressed = true;
+    colorLabel->paintEvent(&event2);
+    colorLabel->deleteLater();
 }
 
 // 测试函数 ColorLabel::mousePressEvent
@@ -82,31 +84,58 @@ TEST_F(test_colorlabel, checkMousePressEvent)
     // 场景1: LeftButtonPress
     auto colorLabel = new ColorLabel(QColor("#FF0000"));
     QSignalSpy spy(colorLabel, &ColorLabel::sigColorClicked);
-    QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonPress, QPointF(), QPointF(),
-                                         Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-    colorLabel->mousePressEvent(event);
+    QMouseEvent pressEvent(QEvent::MouseButtonPress, QPointF(), QPointF(),
+                           Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    colorLabel->mousePressEvent(&pressEvent);
+    EXPECT_TRUE(colorLabel->m_bPressed);
+    EXPECT_EQ(spy.count(), 0);
+
+    QMouseEvent releaseEvent(QEvent::MouseButtonRelease, QPointF(), QPointF(),
+                             Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
+    colorLabel->mouseReleaseEvent(&releaseEvent);
+    EXPECT_FALSE(colorLabel->m_bPressed);
+    EXPECT_TRUE(colorLabel->isSelected());
     EXPECT_EQ(spy.count(), 1);
 
     EXPECT_NE(colorLabel,nullptr);
     colorLabel->deleteLater();
-    EXPECT_NE(event,nullptr);
-    delete event;event=nullptr;
 
 
 
     // 场景2: 非LeftButtonPress
     colorLabel = new ColorLabel(QColor("#FF0000"));
     QSignalSpy spy2(colorLabel, &ColorLabel::sigColorClicked);
-    event = new QMouseEvent(QEvent::MouseButtonPress, QPointF(), QPointF(),
-                            Qt::RightButton, Qt::RightButton, Qt::NoModifier);
-    colorLabel->mousePressEvent(event);
+    QMouseEvent rightPressEvent(QEvent::MouseButtonPress, QPointF(), QPointF(),
+                                Qt::RightButton, Qt::RightButton, Qt::NoModifier);
+    colorLabel->mousePressEvent(&rightPressEvent);
+    EXPECT_FALSE(colorLabel->m_bPressed);
     EXPECT_EQ(spy2.count(), 0);
 
     EXPECT_NE(colorLabel,nullptr);
     colorLabel->deleteLater();
-    EXPECT_NE(event,nullptr);
-    delete event;event=nullptr;
 
+}
+
+// 测试函数 ColorLabel::enterEvent/leaveEvent
+TEST_F(test_colorlabel, checkHoverState)
+{
+    auto colorLabel = new ColorLabel(QColor("#FF0000"));
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    QEvent enterEvent(QEvent::Enter);
+#else
+    QEnterEvent enterEvent(QPointF{}, QPointF{}, QPointF{});
+#endif
+    colorLabel->enterEvent(&enterEvent);
+    EXPECT_TRUE(colorLabel->m_bHover);
+
+    colorLabel->m_bPressed = true;
+    QEvent leaveEvent(QEvent::Leave);
+    colorLabel->leaveEvent(&leaveEvent);
+    EXPECT_FALSE(colorLabel->m_bHover);
+    EXPECT_FALSE(colorLabel->m_bPressed);
+
+    colorLabel->deleteLater();
 }
 
 // 测试函数 ColorSelectWdg::initWidget
@@ -223,16 +252,20 @@ TEST_F(test_colorselectwidget, checkColorLabelClickedLambda)
 
     QSignalSpy spy(colorSelctWidget, &ColorSelectWdg::sigColorSelected);
 
-    // 点击第二个颜色标签(非默认选中)，触发其 mousePressEvent 发出 sigColorClicked，
+    // 点击第二个颜色标签(非默认选中)，按下时显示反馈，释放时发出 sigColorClicked，
     // 进而调用 ColorSelectWdg 中 connect 注册的 lambda
     ColorLabel *label = colorSelctWidget->m_colorLabels.at(1);
-    QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonPress, QPointF(), QPointF(),
-                                         Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-    label->mousePressEvent(event);
+    QMouseEvent pressEvent(QEvent::MouseButtonPress, QPointF(), QPointF(),
+                           Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    label->mousePressEvent(&pressEvent);
+    EXPECT_EQ(spy.count(), 0);
+
+    QMouseEvent releaseEvent(QEvent::MouseButtonRelease, QPointF(), QPointF(),
+                             Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
+    label->mouseReleaseEvent(&releaseEvent);
     // 默认选中的第一个标签应被取消选中
     EXPECT_FALSE(colorSelctWidget->m_colorLabels.at(0)->isSelected());
     EXPECT_EQ(spy.count(), 1);
 
-    delete event;
     colorSelctWidget->deleteLater();
 }
