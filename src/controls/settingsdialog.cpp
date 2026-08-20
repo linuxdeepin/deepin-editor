@@ -41,6 +41,7 @@ void GenerateSettingTranslate()
     auto shortcuts_window_escapeName = QObject::tr("Exit");
     auto shortcuts_window_displayshortcutsName = QObject::tr("Display shortcuts");
     auto shortcuts_window_printName = QObject::tr("Print");
+    auto shortcuts_window_togglemarkdownpreviewName = QObject::tr("Toggle markdown preview");
     auto group_editorName = QObject::tr("Editor");
     auto shortcuts_editor_indentlineName = QObject::tr("Increase indent");
     auto shortcuts_editor_backindentlineName = QObject::tr("Decrease indent");

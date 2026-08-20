@@ -26,6 +26,8 @@
 #include <KSyntaxHighlighting/Theme>
 
 class Window;
+class MarkdownPreview;
+class QSplitter;
 class EditWrapper : public QWidget
 {
     Q_OBJECT
@@ -108,6 +110,10 @@ public:
     Window *window();
     void updateHighlighterAll();
 
+    // Markdown 可视化预览开关（Qt5 构建下预览不可用，调用无效果）
+    void setMarkdownPreviewVisible(bool visible);
+    bool isMarkdownPreviewVisible() const;
+
     //get and set m_tModifiedDateTime
     QDateTime getLastModifiedTime() const;
     void setLastModifiedTime(const QString &time);
@@ -175,6 +181,10 @@ private:
     BottomBar *m_pBottomBar = nullptr;
     //
     WarningNotices *m_pWaringNotices = nullptr;
+    //
+    MarkdownPreview *m_pMarkdownPreview = nullptr;
+    // 编辑区与 Markdown 预览的分栏容器
+    QSplitter *m_pEditSplitter = nullptr;
 
     QDateTime m_tModifiedDateTime;
     //退出

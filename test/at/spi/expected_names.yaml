@@ -79,6 +79,17 @@ elements:
     role: "menu item"
     description: "替换"
 
+  - id: "MarkdownPreview"
+    name: "MarkdownPreview"
+    role: "menu item"
+    description: "Markdown 预览开关"
+
+  # Markdown Preview
+  - id: "MarkdownPreviewView"
+    name: "MarkdownPreviewView"
+    role: "text"
+    description: "Markdown 可视化预览区"
+
   # Titlebar Buttons
   - id: "AddTab"
     name: "AddTab"

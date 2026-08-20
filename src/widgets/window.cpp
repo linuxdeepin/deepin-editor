@@ -4,6 +4,7 @@
 
 #include "window.h"
 #include "pathsettintwgt.h"
+#include "../editor/markdownpreview.h"
 #include <DTitlebar>
 #include <DAnchors>
 #include <DSettingsWidgetFactory>
@@ -477,6 +478,8 @@ void Window::updateSaveAsFileName(QString strOldFilePath, QString strNewFilePath
 
     m_wrappers.remove(strOldFilePath);
     m_wrappers.insert(strNewFilePath, wrapper);
+    // 另存为可能改变文件类型，刷新 Markdown 预览开关状态
+    updateMarkdownPreviewActionState();
     qDebug() << "updateSaveAsFileName end";
 }
 
@@ -539,6 +542,11 @@ void Window::initTitlebar()
     saveAsAction->setObjectName("SaveAs");
     QAction *printAction(new QAction(tr("Print"), this));
     printAction->setObjectName("Print");
+    QAction *markdownPreviewAction(new QAction(tr("Markdown preview"), this));
+    markdownPreviewAction->setObjectName("MarkdownPreview");
+    markdownPreviewAction->setCheckable(true);
+    markdownPreviewAction->setEnabled(false);
+    m_markdownPreviewAction = markdownPreviewAction;
     QAction *switchThemeAction(new QAction(tr("Switch theme"), this));
     switchThemeAction->setObjectName("SwitchTheme");
     QAction *settingAction(new QAction(tr("Settings"), this));
@@ -557,6 +565,7 @@ void Window::initTitlebar()
     m_menu->addAction(saveAction);
     m_menu->addAction(saveAsAction);
     m_menu->addAction(printAction);
+    m_menu->addAction(markdownPreviewAction);
     //此接口不可删除，预留的编辑器内部主题选择接口
     //m_menu->addAction(switchThemeAction);
     m_menu->addSeparator();
@@ -627,6 +636,7 @@ void Window::initTitlebar()
     connect(saveAction, &QAction::triggered, this, &Window::saveFile);
     connect(saveAsAction, &QAction::triggered, this, &Window::saveAsFile);
     connect(printAction, &QAction::triggered, this, &Window::popupPrintDialog);
+    connect(markdownPreviewAction, &QAction::triggered, this, &Window::toggleMarkdownPreview);
     connect(settingAction, &QAction::triggered, this, &Window::popupSettingsDialog);
     connect(switchThemeAction, &QAction::triggered, this, &Window::popupThemePanel);
     qDebug() << "initTitlebar end";
@@ -3553,6 +3563,9 @@ void Window::handleCurrentChanged(const int &index)
         currentWrapper()->bottomBar()->show();
         currentWrapper()->bottomBar()->updateSize(BottomBar::defaultHeight(), false);
     }
+
+    // 同步 Markdown 预览菜单项状态（可用性 + 勾选状态）
+    updateMarkdownPreviewActionState();
     qDebug() << "handleCurrentChanged end";
 }
 
@@ -4515,6 +4528,9 @@ void Window::keyPressEvent(QKeyEvent *e)
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "print")) {
         qDebug() << "key press event popup print dialog";
         popupPrintDialog();
+    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "togglemarkdownpreview")) {
+        qDebug() << "key press event toggle markdown preview";
+        toggleMarkdownPreview();
     } else {
         qDebug() << "key press event post event to window widget";
         // Post event to window widget if match Alt+0 ~ Alt+9
@@ -4652,6 +4668,29 @@ void Window::setPrintEnabled(bool enabled)
             return;
         }
     }
+}
+
+void Window::toggleMarkdownPreview()
+{
+    EditWrapper *wrapper = currentWrapper();
+    if (wrapper == nullptr || !MarkdownPreview::isSupported()
+            || !MarkdownPreview::isMarkdownFile(wrapper->filePath())) {
+        return;
+    }
+    wrapper->setMarkdownPreviewVisible(!wrapper->isMarkdownPreviewVisible());
+    updateMarkdownPreviewActionState();
+}
+
+void Window::updateMarkdownPreviewActionState()
+{
+    if (m_markdownPreviewAction == nullptr) {
+        return;
+    }
+    EditWrapper *wrapper = currentWrapper();
+    const bool isMarkdown = (wrapper != nullptr) && MarkdownPreview::isSupported()
+            && MarkdownPreview::isMarkdownFile(wrapper->filePath());
+    m_markdownPreviewAction->setEnabled(isMarkdown);
+    m_markdownPreviewAction->setChecked(isMarkdown && wrapper->isMarkdownPreviewVisible());
 }
 
 QStackedWidget *Window::getStackedWgt()
