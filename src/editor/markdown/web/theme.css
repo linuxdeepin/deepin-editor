@@ -10,8 +10,13 @@
     --code-bg: #f5f5f5;
     --code-fg: #1f1f1f;
     --border: #e0e0e0;
+    --link: #0058de;
     --content-max-width: 800px;
     --content-center: 1;
+}
+
+[data-theme="dark"] {
+    --link: #024cca;
 }
 
 html, body {
@@ -47,7 +52,8 @@ html, body {
 /* 正文 14px normal，继承 body */
 .milkdown p, .milkdown li, .milkdown td, .milkdown th { font-size: 14px; font-weight: 400; }
 
-/* §4.8.3 说明文字 12px / normal / opacity 0.7 */
+/* §4.8.3 说明文字 12px / normal / opacity 0.7
+   opacity 相对继承的 --fg：浅色=70% 黑，深色=70% 白，无需深浅色特判 */
 .milkdown blockquote,
 .milkdown figcaption,
 .milkdown .footnote,
@@ -55,15 +61,6 @@ html, body {
     font-size: 12px;
     font-weight: 400;
     opacity: 0.7;
-}
-
-/* 深色主题下用 fg-secondary 替代纯 opacity，保证可读性 */
-[data-theme="dark"] .milkdown blockquote,
-[data-theme="dark"] .milkdown figcaption,
-[data-theme="dark"] .milkdown .footnote,
-[data-theme="dark"] .milkdown .image-caption {
-    opacity: 1;
-    color: var(--fg-secondary);
 }
 
 /* blockquote 引用样式 */
@@ -126,8 +123,8 @@ html, body {
     margin: 1em 0;
 }
 
-/* 链接 */
-.milkdown a { color: #1a73e8; text-decoration: none; }
+/* 链接：浅色 rgba(0,88,222,1)，深色 rgba(2,76,202,1) */
+.milkdown a { color: var(--link); text-decoration: none; }
 .milkdown a:hover { text-decoration: underline; }
 
 /* 分割线 */
