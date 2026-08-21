@@ -72,9 +72,31 @@ html, body {
     background: transparent;
 }
 
-/* §4.8.5 表格 */
-.table-wrapper { container-type: inline-size; overflow-x: auto; }
+/* §4.8.5 表格：.table-block（空表头条 + 表格容器）
+   表头：36px 高 / 圆角 12px 12px 0 0 / rgba(0,0,0,0.05) 底，无内容
+   高度用 min-height：内容随行数增高（固定高度会截断表格） */
+.table-block {
+    width: 502px;
+    max-width: 100%;
+    min-height: 222px;
+    box-sizing: border-box;
+    border: 1px solid rgba(229, 229, 229, 1);
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.3);
+    margin: 1em 0;
+}
+.table-block-header {
+    height: 36px;
+    border-radius: 12px 12px 0 0;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+.table-block .table-wrapper {
+    container-type: inline-size;
+    overflow-x: auto;
+    border-radius: 0 0 12px 12px;
+}
 .table-wrapper table { width: 100%; border-collapse: collapse; margin: 1em 0; }
+.table-block .table-wrapper table { margin: 0; }
 .table-wrapper td, .table-wrapper th {
     min-width: 100px;
     max-width: 240px;
@@ -92,17 +114,85 @@ html, body {
     .table-wrapper td, .table-wrapper th { max-width: 180px; }
 }
 
-/* §4.8.6 代码块 */
+/* §4.8.6 代码块：782px 宽 / 208px 高 / 圆角 10px / 半透明底
+   高度用 min-height：内容须能随行数增高超出视口，表头吸顶才有意义（固定高度会截断内容） */
+.code-block {
+    width: 782px;
+    max-width: 100%;
+    min-height: 208px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    margin: 1em 0;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* 操作表头：折叠箭头 + 语言标签 + 复制按钮；块内容超出视口滚动时吸顶保持可见 */
+.code-block-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    flex: 0 0 auto;
+    height: 32px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    padding: 0 10px 0 6px;
+    border-radius: 10px 10px 0 0;
+    /* 半透明蒙层叠在不透明底色上：静止时等效 rgba(0,0,0,0.05)，吸顶时能遮住下方滚过的代码 */
+    background-color: var(--bg);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05));
+}
+
+/* 折叠按钮：无背景，两段折线箭头（SVG currentColor 随此颜色） */
+.code-block-toggle {
+    border: none;
+    background: none;
+    padding: 4px 6px;
+    line-height: 0;
+    color: #000;
+    cursor: pointer;
+}
+.code-block-toggle svg { display: block; }
+
+/* 语言标签：黑色 14px */
+.code-block-lang {
+    color: #000;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.code-block-copy {
+    margin-left: auto;
+    border: none;
+    background: none;
+    padding: 4px 8px;
+    line-height: 0;
+    color: rgba(0, 0, 0, 0.7);
+    cursor: pointer;
+}
+.code-block-copy svg { display: block; }
+.code-block-copy:hover { color: rgba(0, 0, 0, 1); }
+
 .milkdown pre {
     background: var(--code-bg);
     color: var(--code-fg);
-    border-radius: 6px;
+    border-radius: 10px;
     padding: 12px 16px;
     overflow-x: auto;
     font-family: "Noto Sans Mono", "DejaVu Sans Mono", "Courier New", monospace;
     font-size: 13px;
     line-height: 1.5;
     margin: 1em 0;
+}
+/* 包裹进 .code-block 后：背景/圆角/外边距由 wrapper 承担 */
+.code-block pre {
+    flex: 1 1 auto;
+    margin: 0;
+    background: transparent;
+    border-radius: 0 0 10px 10px;
 }
 .milkdown pre code { background: transparent; padding: 0; }
 .milkdown :not(pre) > code {
@@ -111,6 +201,43 @@ html, body {
     border-radius: 3px;
     font-family: "Noto Sans Mono", "DejaVu Sans Mono", "Courier New", monospace;
     font-size: 0.9em;
+}
+
+/* 折叠态：隐藏代码区，块区显示“已折叠xx行代码  展开”提示行（不在表头内） */
+.code-block.collapsed { min-height: 0; }
+.code-block.collapsed pre { display: none; }
+.code-block-collapsed {
+    display: none;
+    align-items: center;
+    gap: 4px;
+    padding: 10px 16px;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.5);
+    border-radius: 0 0 10px 10px;
+}
+.code-block.collapsed .code-block-collapsed { display: flex; }
+.code-block-expand { color: rgba(0, 0, 0, 0.7); cursor: pointer; }
+.code-block-expand:hover { color: rgba(0, 0, 0, 1); }
+
+/* 深色主题：黑系颜色按同透明度镜像为白系 */
+[data-theme="dark"] .code-block {
+    border-color: rgba(255, 255, 255, 0.08);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+[data-theme="dark"] .code-block-header {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05));
+}
+[data-theme="dark"] .code-block-toggle,
+[data-theme="dark"] .code-block-lang { color: #fff; }
+[data-theme="dark"] .code-block-copy { color: rgba(255, 255, 255, 0.7); }
+[data-theme="dark"] .code-block-copy:hover { color: rgba(255, 255, 255, 1); }
+[data-theme="dark"] .code-block-collapsed { color: rgba(255, 255, 255, 0.5); }
+[data-theme="dark"] .code-block-expand { color: rgba(255, 255, 255, 0.7); }
+[data-theme="dark"] .code-block-expand:hover { color: rgba(255, 255, 255, 1); }
+[data-theme="dark"] .table-block-header { background-color: rgba(255, 255, 255, 0.05); }
+[data-theme="dark"] .table-block {
+    border-color: var(--border);
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* §4.8.7 图片 */

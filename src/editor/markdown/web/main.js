@@ -18,7 +18,7 @@ import { clipboard } from "@milkdown/kit/plugin/clipboard";
 import { replaceAll } from "@milkdown/kit/utils";
 import { mathPlugins, normalizeMathDelimiters } from "./milkdownMathPlugins.js";
 import { setupBridge } from "./bridge.js";
-import { enhance } from "./renderEnhancer.js";
+import { enhance, retranslateCodeBlocks } from "./renderEnhancer.js";
 
 import "katex/dist/katex.min.css";
 import "./theme.css";
@@ -155,6 +155,7 @@ async function boot() {
         onApplyTheme: applyTheme,
         onSetLayout: applyLayout,
         onScrollToRatio: scrollToRatio,
+        onRetranslate: () => retranslateCodeBlocks(document.getElementById(ROOT_ID)),
     });
 
     console.log("[md] boot done, bridge=", typeof window.bridge, "onReady=", window.bridge ? typeof window.bridge.onReady : "n/a");

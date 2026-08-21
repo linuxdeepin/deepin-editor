@@ -24,8 +24,22 @@
 class MarkdownBridge : public QObject
 {
     Q_OBJECT
+    // JS 侧 UI 文案（QWebChannel 会把 Q_PROPERTY 同步到 bridge.<name>）：
+    // 翻译走 Qt linguist，语言切换后经 retranslate 槽更新（JS 侧收到 propertyChanged 信号）
+    Q_PROPERTY(QString collapseTooltip READ collapseTooltip NOTIFY retranslated)
+    Q_PROPERTY(QString expandTooltip READ expandTooltip NOTIFY retranslated)
+    Q_PROPERTY(QString copyTooltip READ copyTooltip NOTIFY retranslated)
+    Q_PROPERTY(QString expandText READ expandText NOTIFY retranslated)
+    Q_PROPERTY(QString collapsedLinesText READ collapsedLinesText NOTIFY retranslated)
 public:
     explicit MarkdownBridge(QObject *parent = nullptr) : QObject(parent) {}
+
+    QString collapseTooltip() const { return tr("Collapse code block"); }
+    QString expandTooltip() const { return tr("Expand code block"); }
+    QString copyTooltip() const { return tr("Copy code"); }
+    QString expandText() const { return tr("Expand"); }
+    // %1 为行数；JS 侧 String.prototype.replace("%1", n) 填充
+    QString collapsedLinesText() const { return tr("%1 line(s) of code collapsed"); }
 
 public slots:
     // JS → C++
@@ -34,12 +48,16 @@ public slots:
     void onScrollRatio(double ratio) { emit scrollRatioChanged(ratio); }
     void onOpenLink(const QString &url) { emit openLinkRequested(url); }
 
+    // 语言切换后由宿主调用：NOTIFY 信号触发 JS 侧全部属性重取
+    void retranslate() { emit retranslated(); }
+
 signals:
     // C++ → JS（JS 端 bridge.{signal}.connect(function(...){...}) 接收）
     void ready();
     void contentChanged(const QString &md);
     void scrollRatioChanged(double ratio);
     void openLinkRequested(const QString &url);
+    void retranslated();
 
     void setMarkdownRequested(const QString &md);
     void setModeRequested(bool editable);
