@@ -45303,6 +45303,11 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     b.scrollToRatioRequested.connect(function(ratio) {
       h.onScrollToRatio(ratio);
     });
+    if (h.onRetranslate && b.retranslated) {
+      b.retranslated.connect(function() {
+        h.onRetranslate();
+      });
+    }
   }
   function setupBridge(handlers2) {
     pendingHandlers = handlers2;
@@ -45310,19 +45315,151 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
   }
   initChannel();
   const TABLE_WRAPPER_CLASS = "table-wrapper";
+  const CODE_BLOCK_CLASS = "code-block";
+  const ARROW_UP_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7 L5 3 L9 7"/></svg>';
+  const ARROW_DOWN_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3 L5 7 L9 3"/></svg>';
+  const COPY_ICON_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="4.5" width="8" height="8" rx="1.5"/><path d="M9.5 4.5 V3 a1.5 1.5 0 0 0 -1.5 -1.5 H3 a1.5 1.5 0 0 0 -1.5 1.5 V8 a1.5 1.5 0 0 0 1.5 1.5 H4.5"/></svg>';
+  const CHECK_ICON_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7.5 L5.5 10.5 L11.5 3.5"/></svg>';
+  const COPY_FEEDBACK_MS = 2e3;
+  const FALLBACK_TEXTS = {
+    collapseTooltip: "Collapse code block",
+    expandTooltip: "Expand code block",
+    copyTooltip: "Copy code",
+    expandText: "Expand",
+    collapsedLinesText: "%1 line(s) of code collapsed"
+  };
+  function uiText(key2) {
+    const b = window.bridge;
+    return b && typeof b[key2] === "string" && b[key2].length > 0 ? b[key2] : FALLBACK_TEXTS[key2];
+  }
+  function retranslateCodeBlocks(root2) {
+    if (!root2) return;
+    root2.querySelectorAll("." + CODE_BLOCK_CLASS).forEach((wrapper) => {
+      const pre = wrapper.querySelector("pre");
+      const lineCount = pre ? countCodeLines(pre.textContent) : 0;
+      wrapper.querySelector(".code-block-collapsed > span:first-child").textContent = uiText("collapsedLinesText").replace("%1", lineCount);
+      wrapper.querySelector(".code-block-expand").textContent = uiText("expandText");
+      const collapsed = wrapper.classList.contains("collapsed");
+      const toggle = wrapper.querySelector(".code-block-toggle");
+      toggle.setAttribute("aria-label", collapsed ? uiText("expandTooltip") : uiText("collapseTooltip"));
+      const copy2 = wrapper.querySelector(".code-block-copy");
+      copy2.title = uiText("copyTooltip");
+      copy2.setAttribute("aria-label", uiText("copyTooltip"));
+    });
+  }
   function wrapTables(root2) {
     if (!root2) return;
     const tables = root2.querySelectorAll("table");
     tables.forEach((table) => {
-      if (table.parentElement && table.parentElement.classList.contains(TABLE_WRAPPER_CLASS)) return;
+      if (table.closest("." + TABLE_WRAPPER_CLASS)) return;
+      const block = document.createElement("div");
+      block.className = "table-block";
+      const header = document.createElement("div");
+      header.className = "table-block-header";
       const wrapper = document.createElement("div");
       wrapper.className = TABLE_WRAPPER_CLASS;
-      table.parentNode.insertBefore(wrapper, table);
+      table.parentNode.insertBefore(block, table);
+      block.appendChild(header);
+      block.appendChild(wrapper);
       wrapper.appendChild(table);
+    });
+  }
+  function countCodeLines(text2) {
+    const lines = String(text2 || "").split("\n");
+    while (lines.length && lines[lines.length - 1].trim() === "") lines.pop();
+    return lines.length;
+  }
+  function detectLanguage(pre) {
+    const lang = pre.getAttribute("data-language");
+    if (lang && lang.length > 0) return lang;
+    const code2 = pre.querySelector("code");
+    if (code2) {
+      const m = code2.className.match(/(?:^|\s)language-([\w#+-]+)/);
+      if (m) return m[1];
+    }
+    return "";
+  }
+  function copyTextToClipboard(text2) {
+    const ta = document.createElement("textarea");
+    ta.value = text2;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    let ok2 = false;
+    try {
+      ok2 = document.execCommand("copy");
+    } catch (e) {
+      ok2 = false;
+    }
+    document.body.removeChild(ta);
+    return ok2;
+  }
+  function setCollapsed(wrapper, toggleBtn, collapsed) {
+    wrapper.classList.toggle("collapsed", collapsed);
+    toggleBtn.innerHTML = collapsed ? ARROW_DOWN_SVG : ARROW_UP_SVG;
+    toggleBtn.setAttribute("aria-label", collapsed ? uiText("expandTooltip") : uiText("collapseTooltip"));
+  }
+  function enhanceCodeBlocks(root2) {
+    if (!root2) return;
+    root2.querySelectorAll("pre").forEach((pre) => {
+      if (pre.closest("." + CODE_BLOCK_CLASS)) return;
+      const lang = detectLanguage(pre);
+      const codeEl = pre.querySelector("code");
+      const lineCount = countCodeLines(codeEl ? codeEl.textContent : pre.textContent);
+      const wrapper = document.createElement("div");
+      wrapper.className = CODE_BLOCK_CLASS;
+      const header = document.createElement("div");
+      header.className = "code-block-header";
+      const toggleBtn = document.createElement("button");
+      toggleBtn.type = "button";
+      toggleBtn.className = "code-block-toggle";
+      toggleBtn.innerHTML = ARROW_UP_SVG;
+      toggleBtn.setAttribute("aria-label", uiText("collapseTooltip"));
+      const langLabel = document.createElement("span");
+      langLabel.className = "code-block-lang";
+      langLabel.textContent = lang;
+      const copyBtn = document.createElement("button");
+      copyBtn.type = "button";
+      copyBtn.className = "code-block-copy";
+      copyBtn.innerHTML = COPY_ICON_SVG;
+      copyBtn.title = uiText("copyTooltip");
+      copyBtn.setAttribute("aria-label", uiText("copyTooltip"));
+      header.appendChild(toggleBtn);
+      header.appendChild(langLabel);
+      header.appendChild(copyBtn);
+      const hint = document.createElement("div");
+      hint.className = "code-block-collapsed";
+      const hintText = document.createElement("span");
+      hintText.textContent = uiText("collapsedLinesText").replace("%1", lineCount);
+      const expandBtn = document.createElement("span");
+      expandBtn.className = "code-block-expand";
+      expandBtn.textContent = uiText("expandText");
+      hint.appendChild(hintText);
+      hint.appendChild(expandBtn);
+      pre.parentNode.insertBefore(wrapper, pre);
+      wrapper.appendChild(header);
+      wrapper.appendChild(hint);
+      wrapper.appendChild(pre);
+      toggleBtn.addEventListener("click", () => {
+        setCollapsed(wrapper, toggleBtn, !wrapper.classList.contains("collapsed"));
+      });
+      expandBtn.addEventListener("click", () => {
+        setCollapsed(wrapper, toggleBtn, false);
+      });
+      copyBtn.addEventListener("click", () => {
+        const ok2 = copyTextToClipboard(codeEl ? codeEl.textContent : pre.textContent);
+        copyBtn.innerHTML = ok2 ? CHECK_ICON_SVG : COPY_ICON_SVG;
+        setTimeout(() => {
+          copyBtn.innerHTML = COPY_ICON_SVG;
+        }, COPY_FEEDBACK_MS);
+      });
     });
   }
   function enhance(root2) {
     wrapTables(root2);
+    enhanceCodeBlocks(root2);
   }
   const ROOT_ID = "app";
   let editor = null;
@@ -45429,7 +45566,8 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       },
       onApplyTheme: applyTheme,
       onSetLayout: applyLayout,
-      onScrollToRatio: scrollToRatio
+      onScrollToRatio: scrollToRatio,
+      onRetranslate: () => retranslateCodeBlocks(document.getElementById(ROOT_ID))
     });
     console.log("[md] boot done, bridge=", typeof window.bridge, "onReady=", window.bridge ? typeof window.bridge.onReady : "n/a");
     if (window.bridge && typeof window.bridge.onReady === "function") {
