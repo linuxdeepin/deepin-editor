@@ -24,7 +24,7 @@ set(APP_QRC "../src/deepin-editor.qrc")
 find_package(PkgConfig REQUIRED)
 
 
-set(qt_required_components Gui Widgets DBus Concurrent PrintSupport Svg Xml Test WebEngineWidgets WebChannel)
+set(qt_required_components Gui Widgets DBus Concurrent PrintSupport Svg Xml Test WebEngineWidgets WebChannel OpenGLWidgets)
 if (QT_DESIRED_VERSION MATCHES 6)
     list(APPEND qt_required_components Core5Compat)
 endif()
@@ -44,6 +44,7 @@ set(LINK_LIBS
     Qt${QT_VERSION_MAJOR}::Test
     Qt${QT_VERSION_MAJOR}::WebEngineWidgets
     Qt${QT_VERSION_MAJOR}::WebChannel
+    Qt${QT_VERSION_MAJOR}::OpenGLWidgets
     Dtk${DTK_VERSION_MAJOR}::Widget
     Dtk${DTK_VERSION_MAJOR}::Core
     KF${KF_VERSION_MAJOR}::Codecs
