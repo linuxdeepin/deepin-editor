@@ -205,6 +205,8 @@ html, body {
 /* 折叠态：隐藏代码区，块区显示“已折叠xx行代码  展开”提示行（不在表头内） */
 .code-block.collapsed { min-height: 0; }
 .code-block.collapsed pre { display: none; }
+/* 空代码块：撤销 208px 设计最小高度，表头下仅保留一行空白 */
+.code-block.empty { min-height: 0; }
 .code-block-collapsed {
     display: none;
     align-items: center;

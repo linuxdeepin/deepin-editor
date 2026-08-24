@@ -20,6 +20,7 @@
 #include <QElapsedTimer>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJsonArray>
 #include <QWebEnginePage>
 #include <functional>
 
@@ -117,6 +118,52 @@ TEST(IT_MarkdownViewSmoke, DISABLED_ExternalLinkClick_DelegatedToBrowser)
             << "openLinkRequested not emitted (click interception broken)";
     EXPECT_EQ(linkSpy.takeFirst().at(0).toString(),
               QStringLiteral("https://www.deepin.org/index.shtml"));
+}
+
+// 端到端：空代码块不得被 min-height 208px 撑出大空白（enhance 加 empty 类，
+// CSS 降 min-height），表头下仅保留一行空白；非空块仍保持设计最小高度
+TEST(IT_MarkdownViewSmoke, DISABLED_EmptyCodeBlock_NoMinHeightBlank)
+{
+    MarkdownView v;
+    SpyPage *page = new SpyPage(&v);
+    v.setPage(page);
+    v.init();
+    QSignalSpy readySpy(v.bridge(), &MarkdownBridge::ready);
+    ASSERT_TRUE(waitFor([&readySpy]() { return readySpy.count() > 0; }, 15000))
+            << "WebEngine page not ready in 15s";
+
+    // 空代码块 + 非空代码块各一个
+    v.setMarkdown(QStringLiteral("# t\n\n```cpp\n```\n\ntext\n\n```js\nlet a = 1;\n```\n"));
+    QTest::qWait(2000);   // 等渲染 + enhance 后处理（setTimeout(0)）
+
+    QString json;
+    bool ok = false;
+    v.page()->runJavaScript(
+        QStringLiteral("JSON.stringify(Array.from(document.querySelectorAll('.code-block')).map(w=>"
+                       "({cls:w.className, h:Math.round(w.getBoundingClientRect().height), "
+                       "preH:Math.round(w.querySelector('pre').getBoundingClientRect().height)})))"),
+        [&json, &ok](const QVariant &result) { json = result.toString(); ok = true; });
+    ASSERT_TRUE(waitFor([&ok]() { return ok; }, 5000));
+    qInfo() << "[smoke] code blocks:" << json;
+
+    const auto doc = QJsonDocument::fromJson(json.toUtf8());
+    ASSERT_TRUE(doc.isArray()) << "no .code-block rendered";
+    const auto blocks = doc.array();
+    ASSERT_EQ(blocks.size(), 2) << "expected empty + non-empty blocks";
+
+    // 空块：带 empty 类；总高 = 表头(32) + pre 一行(约44) < 100，无 208px 空白
+    const auto emptyBlock = blocks.at(0).toObject();
+    EXPECT_TRUE(emptyBlock.value(QStringLiteral("cls")).toString()
+                .contains(QLatin1String("empty")))
+            << "empty code block not marked with 'empty' class";
+    EXPECT_LT(emptyBlock.value(QStringLiteral("h")).toInt(), 100)
+            << "empty code block still padded to min-height";
+
+    // 非空块：无 empty 类，仍满足设计最小高度 208px
+    const auto filledBlock = blocks.at(1).toObject();
+    EXPECT_FALSE(filledBlock.value(QStringLiteral("cls")).toString()
+                 .contains(QLatin1String("empty")));
+    EXPECT_GE(filledBlock.value(QStringLiteral("h")).toInt(), 208);
 }
 
 // 端到端时序复现（初始对齐）：ready 之前发出的 scrollToRatio 不得丢失，
