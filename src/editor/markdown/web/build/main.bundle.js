@@ -45410,6 +45410,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       const lineCount = countCodeLines(codeEl ? codeEl.textContent : pre.textContent);
       const wrapper = document.createElement("div");
       wrapper.className = CODE_BLOCK_CLASS;
+      if (lineCount === 0) wrapper.classList.add("empty");
       const header = document.createElement("div");
       header.className = "code-block-header";
       const toggleBtn = document.createElement("button");

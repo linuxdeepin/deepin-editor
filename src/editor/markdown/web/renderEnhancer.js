@@ -128,6 +128,9 @@ export function enhanceCodeBlocks(root) {
 
         const wrapper = document.createElement("div");
         wrapper.className = CODE_BLOCK_CLASS;
+        // 空代码块（0 行）：加 empty 类，CSS 撤销 min-height 208px 设计最小高度，
+        // 表头下仅保留 pre 自身的一行空白，避免大块空白
+        if (lineCount === 0) wrapper.classList.add("empty");
 
         const header = document.createElement("div");
         header.className = "code-block-header";
