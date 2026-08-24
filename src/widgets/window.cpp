@@ -28,6 +28,7 @@
 #include <DPrintPreviewDialog>
 #include <QGuiApplication>
 #include <QWindow>
+#include <QOpenGLWidget>
 #include <DWidgetUtil>
 #include <QTextDocumentFragment>
 #include <dprintpreviewwidget.h>
@@ -258,6 +259,15 @@ Window::Window(DMainWindow *parent)
     setWindowIcon(QIcon::fromTheme("deepin-editor"));
     setAccessibleName("MainWindow");
     setCentralWidget(m_centralWidget);
+
+    // RHI 预置控件：MarkdownView(QWebEngineView) 内含 QQuickWidget（RHI 控件），若在
+    // 窗口已显示后才构造进入窗口层级，Qt 会以 GL visual 销毁重建顶层原生窗口（X11 下
+    // 表现为先闪一个窗口再出现主界面）。预置一个隐藏的 QOpenGLWidget 即可使顶层窗口
+    // 自创建起走 RHI 合成（Qt 对 QOpenGLWidget/QQuickWidget 的判定在构造期即生效），
+    // 后续 MarkdownView 任意时刻进入均无需重建原生窗口。
+    QOpenGLWidget *rhiPrimer = new QOpenGLWidget(this);
+    rhiPrimer->setGeometry(0, 0, 0, 0);
+    rhiPrimer->hide();
 
     // Init titlebar.
     if (titlebar()) {

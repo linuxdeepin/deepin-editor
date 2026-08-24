@@ -1959,6 +1959,12 @@ void EditWrapper::ensureMarkdownViewCreated()
     if (ViewModeFsm::isReadOnlyTextMode(m_viewMode, m_isMarkdown))
         return;
 
+    // A/B 验证补丁：Edit 模式渲染页无用途（仅 ReadView/LivePreview 挂载），
+    // 延迟到真正切换时创建，避免纯文本文件也拉起 QWebEngineView（触发顶层窗口
+    // raster→RHI 重建造成"闪现窗口"）
+    if (m_viewMode == ViewMode::Edit)
+        return;
+
     m_pMarkdownView = new MarkdownView(this);
     m_pMarkdownView->setMinimumWidth(200);   // 防止分栏右栏被压缩到不可见
 #if !defined(QT_TESTCASE_SOURCEDIR)
