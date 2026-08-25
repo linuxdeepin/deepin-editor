@@ -26,13 +26,13 @@
         <location filename="../src/widgets/bottombar.cpp" line="91"/>
         <location filename="../src/widgets/bottombar.cpp" line="499"/>
         <source>Edit Mode</source>
-        <translation type="unfinished"/>
+        <translation>Modo de edição</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="74"/>
         <location filename="../src/widgets/bottombar.cpp" line="489"/>
         <source>Read View</source>
-        <translation type="unfinished"/>
+        <translation>Modo de leitura</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="75"/>
@@ -1220,12 +1220,12 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="409"/>
         <source>Edit Mode</source>
-        <translation type="unfinished"/>
+        <translation>Modo de edição</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="411"/>
         <source>Read View</source>
-        <translation type="unfinished"/>
+        <translation>Modo de leitura</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="413"/>
