@@ -186,7 +186,7 @@
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="42"/>
         <source>%1 line(s) of code collapsed</source>
-        <translation type="unfinished"/>
+        <translation>%1 linha(s) de código recolhida(s)</translation>
     </message>
 </context>
 <context>
@@ -228,7 +228,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="2001"/>
         <source>视图模式</source>
-        <translation type="unfinished"/>
+        <translation>Modo de exibição</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="11"/>
@@ -1186,7 +1186,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="543"/>
         <source>View Mode</source>
-        <translation type="unfinished"/>
+        <translation>Modo de exibição</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3531"/>
