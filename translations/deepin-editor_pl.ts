@@ -171,17 +171,17 @@
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="38"/>
         <source>Expand code block</source>
-        <translation type="unfinished"/>
+        <translation>Rozwiń blok kodu</translation>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="39"/>
         <source>Copy code</source>
-        <translation type="unfinished"/>
+        <translation>Kopiuj kod</translation>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="40"/>
         <source>Expand</source>
-        <translation type="unfinished"/>
+        <translation>Rozwiń</translation>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="42"/>
@@ -1186,7 +1186,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="543"/>
         <source>View Mode</source>
-        <translation type="unfinished"/>
+        <translation>Tryb widoku</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3531"/>
@@ -1225,12 +1225,12 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="411"/>
         <source>Read View</source>
-        <translation type="unfinished"/>
+        <translation>Widok czytania</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="413"/>
         <source>Live Preview</source>
-        <translation type="unfinished"/>
+        <translation>Podgląd na żywo</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="535"/>
