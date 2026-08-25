@@ -171,17 +171,17 @@
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="38"/>
         <source>Expand code block</source>
-        <translation type="unfinished"/>
+        <translation>Expandir bloco de código</translation>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="39"/>
         <source>Copy code</source>
-        <translation type="unfinished"/>
+        <translation>Copiar código</translation>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="40"/>
         <source>Expand</source>
-        <translation type="unfinished"/>
+        <translation>Expandir</translation>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="42"/>
