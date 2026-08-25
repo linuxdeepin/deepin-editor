@@ -33,6 +33,38 @@ int main(int argc, char *argv[])
     qDebug() << "Application starting with arguments:" << QCoreApplication::arguments();
     DCORE_USE_NAMESPACE
     PerformanceMonitor::initializeAppStart();
+
+    // —— QtWebEngine 架构适配（参考 deepin-manual dman.cpp，须在 QApplication 构造前设置）——
+    // 注意：qputenv 是整体覆盖而非追加，后续设置会覆盖先前值，因此各架构只在此处
+    // 一次性设置完整 flags，不要在别处重复设置。
+    const bool isWaylandSession = []() {
+        const auto env = QProcessEnvironment::systemEnvironment();
+        return env.value(QStringLiteral("XDG_SESSION_TYPE")) == QLatin1String("wayland")
+               || env.value(QStringLiteral("WAYLAND_DISPLAY")).contains(QLatin1String("wayland"), Qt::CaseInsensitive);
+    }();
+#ifdef __sw_64__
+    // sw_64（申威）：V8 JIT 不支持，必须 jitless 纯解释执行，否则渲染进程崩溃；
+    // 合并 --disable-gpu 一次性设置，避免被分段设置覆盖（参考 deepin-manual bug-347387）
+    qputenv("QTWEBENGINE_CHROMIUM_FLAGS", "--disable-gpu --single-process --js-flags=--jitless");
+    qDebug() << "Set QTWEBENGINE_CHROMIUM_FLAGS for sw_64: --disable-gpu --single-process --js-flags=--jitless";
+#else
+    // 通用（含 x86/arm64/loongarch64/mips）：禁用 GPU 合成走软件渲染，
+    // 规避国产平台显卡驱动兼容问题（参考 deepin-manual 全架构处理）
+    qputenv("QTWEBENGINE_CHROMIUM_FLAGS", "--disable-gpu");
+    qDebug() << "Set QTWEBENGINE_CHROMIUM_FLAGS=--disable-gpu";
+#  ifndef __mips__
+    // 非 Wayland 会话追加 --single-process（渲染进程并入主进程，加快首屏并规避
+    // 欧拉 root 下 no-sandbox 报错）；mips 上实测有问题须禁用（deepin-manual de2df4a4）
+    if (!isWaylandSession) {
+        qputenv("QTWEBENGINE_CHROMIUM_FLAGS", "--disable-gpu --single-process");
+        qDebug() << "Non-Wayland session, set --single-process additionally";
+    }
+#  endif
+#endif
+    // 龙芯（mips 内核）平台 DTK 若强制 raster widgets 会导致 WebEngine GL 窗口异常，
+    // 显式关闭（deepin-manual 同款处理，无副作用）
+    qputenv("DTK_FORCE_RASTER_WIDGETS", "FALSE");
+
     if (!QString(qgetenv("XDG_CURRENT_DESKTOP")).toLower().startsWith("deepin")) {
         qDebug() << "XDG_CURRENT_DESKTOP not set to Deepin, setting environment variable";
         setenv("XDG_CURRENT_DESKTOP", "Deepin", 1);
