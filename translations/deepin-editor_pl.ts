@@ -26,19 +26,19 @@
         <location filename="../src/widgets/bottombar.cpp" line="91"/>
         <location filename="../src/widgets/bottombar.cpp" line="499"/>
         <source>Edit Mode</source>
-        <translation type="unfinished"/>
+        <translation>Tryb edycji</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="74"/>
         <location filename="../src/widgets/bottombar.cpp" line="489"/>
         <source>Read View</source>
-        <translation type="unfinished"/>
+        <translation>Widok czytania</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="75"/>
         <location filename="../src/widgets/bottombar.cpp" line="493"/>
         <source>Live Preview</source>
-        <translation type="unfinished"/>
+        <translation>Podgląd na żywo</translation>
     </message>
 </context>
 <context>
@@ -166,7 +166,7 @@
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="37"/>
         <source>Collapse code block</source>
-        <translation type="unfinished"/>
+        <translation>Zwiń blok kodu</translation>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="38"/>
@@ -186,7 +186,7 @@
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="42"/>
         <source>%1 line(s) of code collapsed</source>
-        <translation type="unfinished"/>
+        <translation>Zwinięto %1 linii(e) kodu</translation>
     </message>
 </context>
 <context>
@@ -228,7 +228,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="2001"/>
         <source>视图模式</source>
-        <translation type="unfinished"/>
+        <translation>Tryb widoku</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="11"/>
@@ -1220,7 +1220,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="409"/>
         <source>Edit Mode</source>
-        <translation type="unfinished"/>
+        <translation>Tryb edycji</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="411"/>
