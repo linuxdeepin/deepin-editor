@@ -242,15 +242,15 @@ TEST_F(TestBottomBar, checkViewModeMenu_SetViewMode)
     ASSERT_NE(bottomBar->m_pViewModeMenu, nullptr);
 
     bottomBar->setViewMode(ViewMode::LivePreview);
-    EXPECT_EQ(bottomBar->m_pViewModeMenu->getCurrentText(), QString("实时预览"));
+    EXPECT_EQ(bottomBar->m_pViewModeMenu->getCurrentText(), bottomBar->m_actLivePreview->text());
     EXPECT_TRUE(bottomBar->m_actLivePreview->isChecked());
 
     bottomBar->setViewMode(ViewMode::ReadView);
-    EXPECT_EQ(bottomBar->m_pViewModeMenu->getCurrentText(), QString("查看视图"));
+    EXPECT_EQ(bottomBar->m_pViewModeMenu->getCurrentText(), bottomBar->m_actReadView->text());
     EXPECT_TRUE(bottomBar->m_actReadView->isChecked());
 
     bottomBar->setViewMode(ViewMode::Edit);
-    EXPECT_EQ(bottomBar->m_pViewModeMenu->getCurrentText(), QString("编辑模式"));
+    EXPECT_EQ(bottomBar->m_pViewModeMenu->getCurrentText(), bottomBar->m_actEditView->text());
     EXPECT_TRUE(bottomBar->m_actEditView->isChecked());
 
     bottomBar->deleteLater();
