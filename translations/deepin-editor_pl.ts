@@ -1210,7 +1210,7 @@
         <location filename="../src/editor/dtextedit.cpp" line="9583"/>
         <location filename="../src/editor/dtextedit.cpp" line="9585"/>
         <source>No audio input device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
-        <translation>Nie znaleziono wejściowego urządzenia audio. Upewnij się, że Twoje słuchawki lub głośniki są podłączone prawidłowo i spróbuj ponownie.</translation>
+        <translation>Nie znaleziono wejściowego urządzenia audio. Upewnij się, że Twoje słuchawki lub mikrofon są podłączone prawidłowo i spróbuj ponownie.</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="534"/>
