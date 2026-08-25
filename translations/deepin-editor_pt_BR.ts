@@ -38,7 +38,7 @@
         <location filename="../src/widgets/bottombar.cpp" line="75"/>
         <location filename="../src/widgets/bottombar.cpp" line="493"/>
         <source>Live Preview</source>
-        <translation type="unfinished"/>
+        <translation>Pré-visualização em tempo real</translation>
     </message>
 </context>
 <context>
@@ -166,7 +166,7 @@
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="37"/>
         <source>Collapse code block</source>
-        <translation type="unfinished"/>
+        <translation>Recolher bloco de código</translation>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="38"/>
@@ -1230,7 +1230,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="413"/>
         <source>Live Preview</source>
-        <translation type="unfinished"/>
+        <translation>Pré-visualização em tempo real</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="535"/>
