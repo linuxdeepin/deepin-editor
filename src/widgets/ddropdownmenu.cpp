@@ -57,6 +57,7 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     m_arrowPixmap = pixmap;
     m_pToolButton->setIcon(createIcon());
     m_pToolButton->setAccessibleName("DropdownToolButton");
+    m_pToolButton->setObjectName("PToolButton");
 
     //设置字体
     int fontsize = DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T9);
@@ -224,6 +225,10 @@ void DDropdownMenu::setMenu(DMenu *menu)
     qDebug() << "DDropdownMenu setMenu";
     deleteMenu();
     m_menu = menu;
+    if (m_menu != nullptr) {
+        m_menu->setObjectName("DropdownMenu");
+        m_menu->setAccessibleName("DropdownMenu");
+    }
 }
 
 void DDropdownMenu::deleteMenu()
@@ -242,6 +247,7 @@ void DDropdownMenu::setMenuActionGroup(QActionGroup *actionGroup)
     qDebug() << "DDropdownMenu setMenuActionGroup";
     deleteMenuActionGroup();
     m_actionGroup = actionGroup;
+    m_actionGroup->setObjectName("ActionGroup");
     qDebug() << "DDropdownMenu setMenuActionGroup end";
 }
 
@@ -329,6 +335,7 @@ DDropdownMenu *DDropdownMenu::createEncodeMenu()
                     m_pEncodeMenu->m_pActUtf8 = act;
                     act->setCheckable(true);
                     act->setChecked(true);
+                    m_pEncodeMenu->m_pActUtf8->setObjectName("PActUtf8");
                } else {
                     qDebug() << "Adding other action";
                     act->setCheckable(false);

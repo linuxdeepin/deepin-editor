@@ -219,6 +219,8 @@ Window::Window(DMainWindow *parent)
       m_themePath(Settings::instance()->settings->option("advance.editor.theme")->value().toString())
 {
     qDebug() << "Window constructor called";
+    m_tabbar->setObjectName("Tabbar");
+    m_tabbar->setAccessibleName("Tabbar");
 
     qRegisterMetaType<TextEdit *>("TextEdit");
     m_rootSaveDBus = new DBusDaemon::dbus("com.deepin.editor.daemon", "/", QDBusConnection::systemBus(), this);
@@ -559,6 +561,8 @@ void Window::initTitlebar()
     replaceAction->setObjectName("Replace");
 
     m_menu->addAction(newWindowAction);
+    m_menu->setObjectName("Menu_2");
+    m_menu->setAccessibleName("Menu_2");
     m_menu->addAction(newTabAction);
     m_menu->addAction(openFileAction);
     m_menu->addSeparator();

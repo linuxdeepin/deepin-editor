@@ -21,6 +21,7 @@ ThemePanel::ThemePanel(QWidget *parent)
     qDebug() << "ThemePanel constructor";
     // init view.
     m_themeView->setAccessibleName("ThemeListView");
+    m_themeView->setObjectName("ThemeView");
     m_themeView->setModel(m_themeModel);
     m_themeView->setItemDelegate(new ThemeItemDelegate(this));
 

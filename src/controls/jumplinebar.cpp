@@ -36,6 +36,7 @@ JumpLineBar::JumpLineBar(DFloatingWidget *parent)
     m_layout->setSpacing(5);
     qDebug() << "Base layout initialized";
     m_closeButton = new DIconButton(DStyle::SP_CloseButton);
+    m_closeButton->setObjectName("JumpCloseButton");
     m_closeButton->setIconSize(QSize(30, 30));
     m_closeButton->setFixedSize(30, 30);
     m_closeButton->setEnabledCircle(true);
@@ -48,6 +49,7 @@ JumpLineBar::JumpLineBar(DFloatingWidget *parent)
     // 按文本长度计算显示宽度，不同语言下翻译文本长度不一，需完整显示
     m_label->setFixedWidth(fontMetrics().horizontalAdvance(m_label->text()));
     m_pSpinBoxInput = new DSpinBox;
+    m_pSpinBoxInput->setObjectName("PSpinBoxInput");
     m_pSpinBoxInput->setAccessibleName("LineNumberInput");
     m_pSpinBoxInput->setFixedSize(s_nJumpLineBarSpinBoxWidth, s_nJumpLineBarSPinBoxHeight);
     m_pSpinBoxInput->lineEdit()->clear();

@@ -107,6 +107,7 @@ EditWrapper::EditWrapper(Window *window, QWidget *parent)
     m_bQuit = false;
     m_pWaringNotices->hide();
     m_pTextEdit->setAccessibleName("TextEditor");
+    m_pTextEdit->setObjectName("PTextEdit");
     m_pBottomBar->setAccessibleName("EditorBottomBar");
     // Init layout and widgets.
     // 三页视图栈（§4.4）：Page0 编辑页 / Page1 查看视图渲染页 / Page2 实时阅览分栏（懒创建）

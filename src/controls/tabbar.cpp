@@ -680,6 +680,7 @@ bool Tabbar::eventFilter(QObject *watched, QEvent *event)
                 m_closeOtherTabAction = new QAction(tr("Close other tabs"), this);
                 m_closeOtherTabAction->setObjectName("CloseOtherTabs");
                 m_moreWaysCloseMenu = new DMenu(tr("More options"), this);
+                m_moreWaysCloseMenu->setObjectName("MoreWaysCloseMenu");
                 m_moreWaysCloseMenu->setAccessibleName("MoreCloseOptions");
                 m_closeLeftTabAction = new QAction(tr("Close tabs to the left"), this);
                 m_closeLeftTabAction->setObjectName("CloseTabsToLeft");
@@ -775,6 +776,7 @@ bool Tabbar::eventFilter(QObject *watched, QEvent *event)
                 });
 
                 m_rightMenu->addAction(m_closeTabAction);
+                m_rightMenu->setObjectName("RightMenu");
                 m_rightMenu->addAction(m_closeOtherTabAction);
                 m_rightMenu->addMenu(m_moreWaysCloseMenu);
                 //yanyuhan 只有一个标签页时不显示更多方式关闭
