@@ -33,6 +33,8 @@ ShowFlodCodeWidget::ShowFlodCodeWidget(DWidget *parent)
     this->setGraphicsEffect(effert);
     QVBoxLayout *pSubLayout = new QVBoxLayout();
     m_pContentEdit = new DPlainTextEdit(this);
+    m_pContentEdit->setObjectName("PContentEdit");
+    m_pContentEdit->setAccessibleName("PContentEdit");
     m_pContentEdit->setWordWrapMode(QTextOption::WrapAnywhere);
     m_pContentEdit->setFrameStyle(0);
     m_pContentEdit->setReadOnly(true);

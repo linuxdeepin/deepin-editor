@@ -43,6 +43,8 @@ LineBar::LineBar(DLineEdit *parent)
     m_matchCountLabel->hide();
 
     m_clearButton = new DIconButton(QStyle::SP_LineEditClearButton, lineEdit());
+    m_clearButton->setObjectName("ClearButton");
+    m_clearButton->setAccessibleName("ClearButton");
     m_clearButton->setFixedSize(s_nClearButtonSize, s_nClearButtonSize);
     m_clearButton->setIconSize(QSize(s_nClearButtonSize, s_nClearButtonSize));
     m_clearButton->setFocusPolicy(Qt::NoFocus);

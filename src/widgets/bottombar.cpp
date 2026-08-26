@@ -409,7 +409,9 @@ void BottomBar::initFormatMenu()
     m_formatMenu->setMenuActionGroup(actionGroup);
 
     m_unixAction = menu->addAction("Unix");
+    m_unixAction->setObjectName("UnixAction");
     m_windowsAction = menu->addAction("Windows");
+    m_windowsAction->setObjectName("WindowsAction");
     m_unixAction->setProperty(FormatActionType,EndlineFormat::Unix);
     m_windowsAction->setProperty(FormatActionType,EndlineFormat::Windows);
     actionGroup->addAction(m_unixAction);

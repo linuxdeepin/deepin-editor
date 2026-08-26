@@ -67,6 +67,7 @@ void PathSettingWgt::init()
     qDebug() << "PathSettingWgt init";
     QVBoxLayout* layout = new QVBoxLayout(this);
     m_group = new QButtonGroup(this);
+    m_group->setObjectName("Group");
     layout->setContentsMargins(0,0,0,0);
     m_curFileBox = new DCheckBox(this);
     m_curFileBox->setAccessibleName("SamePathAsCurrentFile");
