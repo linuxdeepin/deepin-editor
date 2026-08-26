@@ -197,6 +197,8 @@ void ColorSelectWdg::initWidget()
     if(!m_text.isEmpty()){
         qDebug() << "ColorSelectWdg initWidget, text is not empty, creating button";
         m_pButton = new DPushButton(m_text,this);
+        m_pButton->setObjectName("PButton");
+        m_pButton->setAccessibleName("PButton");
         m_pButton->setMinimumSize(80,25);
         m_pButton->setFlat(true);
         connect(m_pButton,&QPushButton::clicked,this,[this](){

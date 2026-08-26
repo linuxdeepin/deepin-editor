@@ -23,10 +23,13 @@ WarningNotices::WarningNotices(MessageType notifyType, QWidget *parent)
 
     setIcon(QIcon(":/images/warning.svg"));
     m_reloadBtn = new QPushButton(tr("Reload"), this);
+    m_reloadBtn->setObjectName("ReloadBtn");
     m_reloadBtn->setAccessibleName("ReloadFile");
     m_saveAsBtn = new QPushButton(qApp->translate("Window", "Save as"), this);
+    m_saveAsBtn->setObjectName("SaveAsBtn");
     m_saveAsBtn->setAccessibleName("WarningSaveAs");
     m_editAnywayBtn = new QPushButton(tr("Edit Anyway"), this);
+    m_editAnywayBtn->setObjectName("EditAnywayBtn");
     m_editAnywayBtn->setAccessibleName("EditAnyway");
     m_reloadBtn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_saveAsBtn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);

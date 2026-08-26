@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -33,6 +33,8 @@ ShowFlodCodeWidget::ShowFlodCodeWidget(DWidget *parent)
     this->setGraphicsEffect(effert);
     QVBoxLayout *pSubLayout = new QVBoxLayout();
     m_pContentEdit = new DPlainTextEdit(this);
+    m_pContentEdit->setObjectName("PContentEdit");
+    m_pContentEdit->setAccessibleName("PContentEdit");
     m_pContentEdit->setWordWrapMode(QTextOption::WrapAnywhere);
     m_pContentEdit->setFrameStyle(0);
     m_pContentEdit->setReadOnly(true);

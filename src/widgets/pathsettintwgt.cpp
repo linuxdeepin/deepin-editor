@@ -67,16 +67,22 @@ void PathSettingWgt::init()
     qDebug() << "PathSettingWgt init";
     QVBoxLayout* layout = new QVBoxLayout(this);
     m_group = new QButtonGroup(this);
+    m_group->setObjectName("Group");
     layout->setContentsMargins(0,0,0,0);
     m_curFileBox = new DCheckBox(this);
+    m_curFileBox->setObjectName("CurFileBox");
     m_curFileBox->setAccessibleName("SamePathAsCurrentFile");
     m_lastOptBox = new DCheckBox(this);
+    m_lastOptBox->setObjectName("LastOptBox");
     m_lastOptBox->setAccessibleName("RememberLastPath");
     m_customBox = new DCheckBox(this);
+    m_customBox->setObjectName("CustomBox");
     m_customBox->setAccessibleName("CustomizeDefaultPath");
     m_customEdit = new DLineEdit(this);
+    m_customEdit->setObjectName("CustomEdit");
     m_customEdit->setAccessibleName("CustomPathInput");
     m_customBtn = new DSuggestButton(this);
+    m_customBtn->setObjectName("CustomBtn");
     m_customBtn->setAccessibleName("BrowseCustomPath");
     // 获取DTK提供的选取按钮，保持和 DFileChooserEdit 相同的设置
     m_customBtn->setFixedSize(36, 36);
