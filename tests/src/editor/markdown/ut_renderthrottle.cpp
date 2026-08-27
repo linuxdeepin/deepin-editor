@@ -26,19 +26,24 @@ TEST_F(UT_RenderThrottle, DefaultNotReady)
     EXPECT_FALSE(t.isReady());
 }
 
-// 300ms 内多次输入：前沿渲染首个内容 + 后沿渲染最新内容（共 2 次，各自延迟 ≤300ms）
+// 冷却窗口内多次输入：前沿渲染首个内容 + 后沿渲染最新内容（共 2 次，各自延迟 ≤300ms）
+// 注：输入必须背靠背同步调用——同步调用之间事件循环不运转，300ms 定时器不可能触发，
+// 从而保证 b/c 确定性地落在冷却窗口内。若用 qWait 分隔输入，高负载（ASan+gcov 全量
+// 运行）下 qWait 超时会使输入落到冷却期外而成为新前沿，得到 3 次渲染（时序抖动，非缺陷）
 TEST_F(UT_RenderThrottle, MultipleInputs_Within300ms_LeadingAndTrailing)
 {
     RenderThrottle t;
     t.setReady(true);
     QSignalSpy spy(&t, &RenderThrottle::renderRequested);
 
-    t.noteContent(QStringLiteral("a"));
-    QTest::qWait(100);
-    t.noteContent(QStringLiteral("b"));
-    QTest::qWait(100);
-    t.noteContent(QStringLiteral("c"));
-    QTest::qWait(350);   // 等后沿补发完成
+    t.noteContent(QStringLiteral("a"));   // 前沿：立即渲染 "a"，进入 300ms 冷却
+    ASSERT_EQ(spy.count(), 1);
+    t.noteContent(QStringLiteral("b"));   // 冷却期内累积
+    t.noteContent(QStringLiteral("c"));   // pending 更新为最新 "c"
+
+    // 轮询等待后沿补发（单次 qWait 在事件循环被饿死时可能错过定时器投递）
+    for (int i = 0; i < 250 && spy.count() < 2; ++i)
+        QTest::qWait(20);
 
     ASSERT_EQ(spy.count(), 2);                       // 前沿 "a" + 后沿 "c"
     EXPECT_EQ(spy.takeFirst().at(0).toString(), QStringLiteral("a"));
