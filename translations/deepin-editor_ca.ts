@@ -26,19 +26,19 @@
         <location filename="../src/widgets/bottombar.cpp" line="91"/>
         <location filename="../src/widgets/bottombar.cpp" line="499"/>
         <source>Edit Mode</source>
-        <translation type="unfinished"/>
+        <translation>Mode d&apos;edició</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="74"/>
         <location filename="../src/widgets/bottombar.cpp" line="489"/>
         <source>Read View</source>
-        <translation type="unfinished"/>
+        <translation>Vista de lectura</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="75"/>
         <location filename="../src/widgets/bottombar.cpp" line="493"/>
         <source>Live Preview</source>
-        <translation type="unfinished"/>
+        <translation>Vista prèvia en temps real</translation>
     </message>
 </context>
 <context>
@@ -166,27 +166,27 @@
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="37"/>
         <source>Collapse code block</source>
-        <translation type="unfinished"/>
+        <translation>Replega el bloc de codi</translation>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="38"/>
         <source>Expand code block</source>
-        <translation type="unfinished"/>
+        <translation>Expandeix el bloc de codi</translation>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="39"/>
         <source>Copy code</source>
-        <translation type="unfinished"/>
+        <translation>Copia el codi</translation>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="40"/>
         <source>Expand</source>
-        <translation type="unfinished"/>
+        <translation>Expandeix</translation>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="42"/>
         <source>%1 line(s) of code collapsed</source>
-        <translation type="unfinished"/>
+        <translation>%1 línia/es de codi plegada/es</translation>
     </message>
 </context>
 <context>
@@ -228,7 +228,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="2001"/>
         <source>视图模式</source>
-        <translation type="unfinished"/>
+        <translation>Mode de visualització</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="11"/>
@@ -1186,7 +1186,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="543"/>
         <source>View Mode</source>
-        <translation type="unfinished"/>
+        <translation>Mode de visualització</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3531"/>
@@ -1204,13 +1204,13 @@
         <location filename="../src/editor/dtextedit.cpp" line="9574"/>
         <location filename="../src/editor/dtextedit.cpp" line="9576"/>
         <source>No audio output device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
-        <translation type="unfinished"/>
+        <translation>No s&apos;ha detectat cap dispositiu de sortida d&apos;àudio. Assegureu-vos que els altaveus o els auriculars estiguin connectats correctament i torneu-ho a provar.</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="9583"/>
         <location filename="../src/editor/dtextedit.cpp" line="9585"/>
         <source>No audio input device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
-        <translation type="unfinished"/>
+        <translation>No s&apos;ha detectat cap dispositiu d&apos;entrada d&apos;àudio. Assegureu-vos que els altaveus o els auriculars estiguin connectats correctament i torneu-ho a provar.</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="534"/>
@@ -1220,17 +1220,17 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="409"/>
         <source>Edit Mode</source>
-        <translation type="unfinished"/>
+        <translation>Mode d&apos;edició</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="411"/>
         <source>Read View</source>
-        <translation type="unfinished"/>
+        <translation>Vista de lectura</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="413"/>
         <source>Live Preview</source>
-        <translation type="unfinished"/>
+        <translation>Vista prèvia en temps real</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="535"/>
