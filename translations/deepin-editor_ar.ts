@@ -28,19 +28,19 @@
         <location filename="../src/widgets/bottombar.cpp" line="91"/>
         <location filename="../src/widgets/bottombar.cpp" line="499"/>
         <source>Edit Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>وضع التحرير</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="74"/>
         <location filename="../src/widgets/bottombar.cpp" line="489"/>
         <source>Read View</source>
-        <translation type="unfinished"></translation>
+        <translation>عرض القراءة</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="75"/>
         <location filename="../src/widgets/bottombar.cpp" line="493"/>
         <source>Live Preview</source>
-        <translation type="unfinished"></translation>
+        <translation>معاينة مباشرة</translation>
     </message>
 </context>
 <context>
@@ -87,7 +87,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="1121"/>
         <source>The file contains invalid characters (NUL). Preview mode is read-only.</source>
-        <translation type="unfinished"></translation>
+        <translation>يحتوي الملف على أحرف غير صالحة (NUL). وضع المعاينة للقراءة فقط.</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="337"/>
@@ -147,7 +147,7 @@
     <message>
         <location filename="../src/controls/linebar.cpp" line="144"/>
         <source>第%1/%2项</source>
-        <translation type="unfinished"></translation>
+        <translation>العنصر %1/%2</translation>
     </message>
 </context>
 <context>
@@ -168,27 +168,27 @@
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="37"/>
         <source>Collapse code block</source>
-        <translation type="unfinished"></translation>
+        <translation>طي كتلة الكود</translation>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="38"/>
         <source>Expand code block</source>
-        <translation type="unfinished"></translation>
+        <translation>توسيع كتلة الكود</translation>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="39"/>
         <source>Copy code</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخ الكود</translation>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="40"/>
         <source>Expand</source>
-        <translation type="unfinished"></translation>
+        <translation>توسيع</translation>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="42"/>
         <source>%1 line(s) of code collapsed</source>
-        <translation type="unfinished"></translation>
+        <translation>تم طي %1 سطر(أسطر) من الكود</translation>
     </message>
 </context>
 <context>
@@ -230,7 +230,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="2001"/>
         <source>视图模式</source>
-        <translation type="unfinished"></translation>
+        <translation>وضع العرض</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="11"/>
@@ -1188,7 +1188,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="543"/>
         <source>View Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>وضع العرض</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3531"/>
@@ -1206,13 +1206,13 @@
         <location filename="../src/editor/dtextedit.cpp" line="9574"/>
         <location filename="../src/editor/dtextedit.cpp" line="9576"/>
         <source>No audio output device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>لم يتم اكتشاف جهاز إخراج صوت. يرجى التأكد من توصيل السماعات أو سماعات الرأس بشكل صحيح والمحاولة مرة أخرى.</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="9583"/>
         <location filename="../src/editor/dtextedit.cpp" line="9585"/>
         <source>No audio input device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>لم يتم اكتشاف جهاز إدخال صوت. يرجى التأكد من توصيل السماعات أو سماعات الرأس بشكل صحيح والمحاولة مرة أخرى.</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="534"/>
@@ -1222,17 +1222,17 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="409"/>
         <source>Edit Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>وضع التحرير</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="411"/>
         <source>Read View</source>
-        <translation type="unfinished"></translation>
+        <translation>عرض القراءة</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="413"/>
         <source>Live Preview</source>
-        <translation type="unfinished"></translation>
+        <translation>معاينة مباشرة</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="535"/>
@@ -1306,7 +1306,7 @@
     <message>
         <location filename="../src/controls/warningnotices.cpp" line="29"/>
         <source>Edit Anyway</source>
-        <translation type="unfinished"></translation>
+        <translation>تحرير على أي حال</translation>
     </message>
 </context>
 <context>
@@ -1381,27 +1381,27 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="1381"/>
         <source>Invalid characters detected while saving &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>تم اكتشاف أحرف غير صالحة أثناء حفظ "%1"</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1382"/>
         <source>If you force save this file, it may cause file corruption. Still want to save?</source>
-        <translation type="unfinished"></translation>
+        <translation>إذا قمت بفرض حفظ هذا الملف، فقد يتسبب في تلف الملف. هل تريد الحفظ؟</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1386"/>
         <source>Don&apos;t Save</source>
-        <translation type="unfinished"></translation>
+        <translation>عدم الحفظ</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1387"/>
         <source>Save As</source>
-        <translation type="unfinished"></translation>
+        <translation>حفظ باسم</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1388"/>
         <source>Save Anyway</source>
-        <translation type="unfinished"></translation>
+        <translation>حفظ على أي حال</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1456"/>
@@ -1424,7 +1424,7 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="1569"/>
         <source>Cannot save as the original file in preview mode. Please choose a different path.</source>
-        <translation type="unfinished"></translation>
+        <translation>لا يمكن الحفظ كالملف الأصلي في وضع المعاينة. يرجى اختيار مسار مختلف.</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1667"/>
