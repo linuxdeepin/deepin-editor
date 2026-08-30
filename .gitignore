@@ -58,3 +58,10 @@ tasks/
 src/resources/settings.json
 obj-x86_64-linux-gnu/
 AGENTS.md
+
+# Qt Autotest Generator artifacts
+build-autotests/
+autotests/.results/
+autotests/.reports/
+autotests/.ut-session.json
+.codebase-memory/
