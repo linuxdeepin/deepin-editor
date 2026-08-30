@@ -871,8 +871,8 @@ QSize Tabbar::tabSizeHint(int index) const
     if (index >= 0) {
         int total = this->width();
         // 计算每个tab宽度：标签数未溢出时使用固定最大宽度，溢出时等分
-        const int maxTabWidth = 160;
-        const int minTabWidth = 110;
+        const int maxTabWidth = 200;
+        const int minTabWidth = (index == currentIndex()) ? 160 : 110;
         int tabCount = DTabBar::count();
         int tabWidth = maxTabWidth;
 
@@ -907,9 +907,9 @@ QSize Tabbar::maximumTabSizeHint(int index) const
     qDebug() << "Enter maximumTabSizeHint, index:" << index;
     Q_UNUSED(index)
 #ifdef DTKWIDGET_CLASS_DSizeMode
-    return QSize(160, DGuiApplicationHelper::isCompactMode() ? s_TabbarHeightCompact : s_TabbarHeight);
+    return QSize(200, DGuiApplicationHelper::isCompactMode() ? s_TabbarHeightCompact : s_TabbarHeight);
 #else
-    return QSize(160, 40);
+    return QSize(200, 40);
 #endif
     qDebug() << "Exit maximumTabSizeHint";
 }

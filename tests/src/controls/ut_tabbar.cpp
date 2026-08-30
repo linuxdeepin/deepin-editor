@@ -291,7 +291,7 @@ TEST(UT_Tabbar_maximumTabSizeHint, UT_Tabbar_maximumTabSizeHint)
     Tabbar * tab = new Tabbar();
     tab->addTab("/.cache/deepin/deepin-editor","aa");
 
-    EXPECT_EQ(tab->maximumTabSizeHint(0),QSize(160, 40));
+    EXPECT_EQ(tab->maximumTabSizeHint(0),QSize(200, 40));
 
     EXPECT_NE(tab,nullptr);
 
@@ -813,4 +813,3 @@ TEST(UT_Tabbar_tr, UT_Tabbar_tr)
     EXPECT_FALSE(tab->tr("Close other tabs").isEmpty());
     tab->deleteLater();
 }
-
