@@ -817,52 +817,52 @@
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="379"/>
         <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
-        <translation type="unfinished"/>
+        <translation>Installera ”UOS AI” från App Store innan du använder funktionen</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="381"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation type="unfinished"/>
+        <translation>Ingen ljudinmatningsenhet upptäcktes. Kontrollera och försök igen</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="383"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation type="unfinished"/>
+        <translation>Ingen ljudutmatningsenhet upptäcktes. Kontrollera och försök igen</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="74"/>
         <source>File path is empty</source>
-        <translation type="unfinished"/>
+        <translation>Filsökvägen är tom</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="153"/>
         <source>Insufficient memory to load document content</source>
-        <translation type="unfinished"/>
+        <translation>Otillräckligt minne för att läsa in dokumentinnehållet</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="178"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation type="unfinished"/>
+        <translation>Otillräckligt minne för kodningskonvertering</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="184"/>
         <source>Encoding conversion failed</source>
-        <translation type="unfinished"/>
+        <translation>Kodningskonverteringen misslyckades</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="190"/>
         <source>Converted content is empty</source>
-        <translation type="unfinished"/>
+        <translation>Det konverterade innehållet är tomt</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="208"/>
         <source>Memory allocation failed</source>
-        <translation type="unfinished"/>
+        <translation>Minnesallokeringen misslyckades</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="212"/>
         <source>Error occurred: %1</source>
-        <translation type="unfinished"/>
+        <translation>Ett fel inträffade: %1</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="216"/>
@@ -942,19 +942,19 @@
     <message>
         <location filename="../src/common/settings.cpp" line="491"/>
         <source>This shortcut conflicts with system shortcut %1</source>
-        <translation type="unfinished"/>
+        <translation>Den här genvägen står i konflikt med systemgenvägen %1</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="494"/>
         <source>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</source>
-        <translation type="unfinished"/>
+        <translation>Den här genvägen står i konflikt med %1. Klicka på Ersätt för att aktivera genvägen omedelbart</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="689"/>
         <location filename="../src/common/settings.cpp" line="702"/>
         <location filename="../src/common/settings.cpp" line="711"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
-        <translation type="unfinished"/>
+        <translation>Genvägen %1 är ogiltig. Ange en annan.</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="743"/>
@@ -1136,37 +1136,37 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="441"/>
         <source>Fold All</source>
-        <translation type="unfinished"/>
+        <translation>Fäll ihop alla</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="443"/>
         <source>Fold Current Level</source>
-        <translation type="unfinished"/>
+        <translation>Fäll ihop aktuell nivå</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="445"/>
         <source>Unfold All</source>
-        <translation type="unfinished"/>
+        <translation>Fäll ut alla</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="447"/>
         <source>Unfold Current Level</source>
-        <translation type="unfinished"/>
+        <translation>Fäll ut aktuell nivå</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="453"/>
         <source>Color Mark</source>
-        <translation type="unfinished"/>
+        <translation>Färgmarkering</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="458"/>
         <source>Clear All Marks</source>
-        <translation type="unfinished"/>
+        <translation>Rensa alla markeringar</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="460"/>
         <source>Clear Last Mark</source>
-        <translation type="unfinished"/>
+        <translation>Rensa senaste markeringen</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="470"/>
@@ -1186,7 +1186,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="543"/>
         <source>View Mode</source>
-        <translation type="unfinished"/>
+        <translation>Visningsläge</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3531"/>
@@ -1198,19 +1198,19 @@
         <location filename="../src/editor/dtextedit.cpp" line="3656"/>
         <location filename="../src/editor/dtextedit.cpp" line="3658"/>
         <source>Press ALT and click lines to edit in column mode</source>
-        <translation type="unfinished"/>
+        <translation>Tryck på ALT och klicka på rader för att redigera i kolumnläge</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="9574"/>
         <location filename="../src/editor/dtextedit.cpp" line="9576"/>
         <source>No audio output device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
-        <translation type="unfinished"/>
+        <translation>Ingen ljudutmatningsenhet upptäcktes. Kontrollera att högtalarna eller hörlurarna är korrekt anslutna och försök igen.</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="9583"/>
         <location filename="../src/editor/dtextedit.cpp" line="9585"/>
         <source>No audio input device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
-        <translation type="unfinished"/>
+        <translation>Ingen ljudinmatningsenhet upptäcktes. Kontrollera att mikrofonen är korrekt ansluten och försök igen.</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="534"/>
@@ -1304,7 +1304,7 @@
     <message>
         <location filename="../src/controls/warningnotices.cpp" line="29"/>
         <source>Edit Anyway</source>
-        <translation type="unfinished"/>
+        <translation>Redigera ändå</translation>
     </message>
 </context>
 <context>
@@ -1407,7 +1407,7 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="2511"/>
         <source>Current location remembered</source>
-        <translation type="unfinished"/>
+        <translation>Aktuell plats har sparats</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2591"/>
@@ -1442,32 +1442,32 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="1381"/>
         <source>Invalid characters detected while saving &quot;%1&quot;</source>
-        <translation type="unfinished"/>
+        <translation>Ogiltiga tecken upptäcktes när ”%1” sparades</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1382"/>
         <source>If you force save this file, it may cause file corruption. Still want to save?</source>
-        <translation type="unfinished"/>
+        <translation>Om du tvingar fram sparning av filen kan den skadas. Vill du ändå spara?</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1386"/>
         <source>Don&apos;t Save</source>
-        <translation type="unfinished"/>
+        <translation>Spara inte</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1387"/>
         <source>Save As</source>
-        <translation type="unfinished"/>
+        <translation>Spara som</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1388"/>
         <source>Save Anyway</source>
-        <translation type="unfinished"/>
+        <translation>Spara ändå</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1569"/>
         <source>Cannot save as the original file in preview mode. Please choose a different path.</source>
-        <translation type="unfinished"/>
+        <translation>Det går inte att spara som originalfilen i förhandsvisningsläge. Välj en annan sökväg.</translation>
     </message>
 </context>
 </TS>
