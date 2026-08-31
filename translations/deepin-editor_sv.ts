@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sv">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="sv">
 <context>
     <name>BottomBar</name>
     <message>
@@ -28,19 +26,19 @@
         <location filename="../src/widgets/bottombar.cpp" line="91"/>
         <location filename="../src/widgets/bottombar.cpp" line="499"/>
         <source>Edit Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Redigeringsläge</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="74"/>
         <location filename="../src/widgets/bottombar.cpp" line="489"/>
         <source>Read View</source>
-        <translation type="unfinished"></translation>
+        <translation>Läsvy</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="75"/>
         <location filename="../src/widgets/bottombar.cpp" line="493"/>
         <source>Live Preview</source>
-        <translation type="unfinished"></translation>
+        <translation>Direktförhandsvisning</translation>
     </message>
 </context>
 <context>
@@ -85,11 +83,6 @@
         <translation>Förkasta</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="1121"/>
-        <source>The file contains invalid characters (NUL). Preview mode is read-only.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/editor/editwrapper.cpp" line="337"/>
         <location filename="../src/editor/editwrapper.cpp" line="705"/>
         <source>You do not have permission to save %1</source>
@@ -109,6 +102,11 @@
         <location filename="../src/editor/editwrapper.cpp" line="1806"/>
         <source>The file cannot be read, which may be too large or has been damaged!</source>
         <translation>Filen kan inte läsas, den kan vara för stor eller ha skadats!</translation>
+    </message>
+    <message>
+        <location filename="../src/editor/editwrapper.cpp" line="1121"/>
+        <source>The file contains invalid characters (NUL). Preview mode is read-only.</source>
+        <translation>Filen innehåller ogiltiga tecken (NUL). Förhandsvisningsläget är skrivskyddat.</translation>
     </message>
 </context>
 <context>
@@ -147,7 +145,7 @@
     <message>
         <location filename="../src/controls/linebar.cpp" line="144"/>
         <source>第%1/%2项</source>
-        <translation type="unfinished"></translation>
+        <translation>Träff %1 av %2</translation>
     </message>
 </context>
 <context>
@@ -168,27 +166,27 @@
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="37"/>
         <source>Collapse code block</source>
-        <translation type="unfinished"></translation>
+        <translation>Fäll ihop kodblock</translation>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="38"/>
         <source>Expand code block</source>
-        <translation type="unfinished"></translation>
+        <translation>Fäll ut kodblock</translation>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="39"/>
         <source>Copy code</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera kod</translation>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="40"/>
         <source>Expand</source>
-        <translation type="unfinished"></translation>
+        <translation>Fäll ut</translation>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="42"/>
         <source>%1 line(s) of code collapsed</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 kodrad(er) är hopfällda</translation>
     </message>
 </context>
 <context>
@@ -230,7 +228,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="2001"/>
         <source>视图模式</source>
-        <translation type="unfinished"></translation>
+        <translation>Visningsläge</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="11"/>
@@ -473,22 +471,22 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="59"/>
         <source>Swap line up</source>
-        <translation type="unfinished"></translation>
+        <translation>Flytta upp rad</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="60"/>
         <source>Swap line down</source>
-        <translation type="unfinished"></translation>
+        <translation>Flytta ned rad</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="61"/>
         <source>Scroll up one line</source>
-        <translation type="unfinished"></translation>
+        <translation>Rulla upp en rad</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="62"/>
         <source>Scroll down one line</source>
-        <translation type="unfinished"></translation>
+        <translation>Rulla ned en rad</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="63"/>
@@ -543,22 +541,22 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="73"/>
         <source>Delete backward word</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort föregående ord</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="74"/>
         <source>Delete forward word</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort nästa ord</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="75"/>
         <source>Forward over a pair</source>
-        <translation type="unfinished"></translation>
+        <translation>Framåt över ett par</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="76"/>
         <source>Backward over a pair</source>
-        <translation type="unfinished"></translation>
+        <translation>Bakåt över ett par</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="77"/>
@@ -583,7 +581,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="81"/>
         <source>Transpose character</source>
-        <translation type="unfinished"></translation>
+        <translation>Byt plats på tecken</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="82"/>
@@ -688,12 +686,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="106"/>
         <source>Word wrap</source>
-        <translation type="unfinished"></translation>
+        <translation>Radbrytning</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="107"/>
         <source>Code folding flag</source>
-        <translation type="unfinished"></translation>
+        <translation>Markering för kodvikning</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="108"/>
@@ -708,17 +706,17 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="110"/>
         <source>Show whitespaces and tabs</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa blanksteg och tabbar</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="111"/>
         <source>Highlight current line</source>
-        <translation type="unfinished"></translation>
+        <translation>Markera aktuell rad</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="112"/>
         <source>Color mark</source>
-        <translation type="unfinished"></translation>
+        <translation>Färgmarkering</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="115"/>
@@ -819,52 +817,52 @@
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="379"/>
         <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="381"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="383"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="74"/>
         <source>File path is empty</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="153"/>
         <source>Insufficient memory to load document content</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="178"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="184"/>
         <source>Encoding conversion failed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="190"/>
         <source>Converted content is empty</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="208"/>
         <source>Memory allocation failed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="212"/>
         <source>Error occurred: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="216"/>
@@ -909,9 +907,9 @@
     <name>S:</name>
     <message>
         <location filename="../third/libiconv-1.16/src/iconv.c" line="103"/>
-        <source></source>
+        <source/>
         <comment>The first line of the short usage message.</comment>
-        <translation></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -944,19 +942,19 @@
     <message>
         <location filename="../src/common/settings.cpp" line="491"/>
         <source>This shortcut conflicts with system shortcut %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="494"/>
         <source>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="689"/>
         <location filename="../src/common/settings.cpp" line="702"/>
         <location filename="../src/common/settings.cpp" line="711"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="743"/>
@@ -1138,37 +1136,37 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="441"/>
         <source>Fold All</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="443"/>
         <source>Fold Current Level</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="445"/>
         <source>Unfold All</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="447"/>
         <source>Unfold Current Level</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="453"/>
         <source>Color Mark</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="458"/>
         <source>Clear All Marks</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="460"/>
         <source>Clear Last Mark</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="470"/>
@@ -1188,7 +1186,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="543"/>
         <source>View Mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3531"/>
@@ -1200,19 +1198,19 @@
         <location filename="../src/editor/dtextedit.cpp" line="3656"/>
         <location filename="../src/editor/dtextedit.cpp" line="3658"/>
         <source>Press ALT and click lines to edit in column mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="9574"/>
         <location filename="../src/editor/dtextedit.cpp" line="9576"/>
         <source>No audio output device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="9583"/>
         <location filename="../src/editor/dtextedit.cpp" line="9585"/>
         <source>No audio input device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="534"/>
@@ -1222,17 +1220,17 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="409"/>
         <source>Edit Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Redigeringsläge</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="411"/>
         <source>Read View</source>
-        <translation type="unfinished"></translation>
+        <translation>Läsvy</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="413"/>
         <source>Live Preview</source>
-        <translation type="unfinished"></translation>
+        <translation>Direktförhandsvisning</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="535"/>
@@ -1306,7 +1304,7 @@
     <message>
         <location filename="../src/controls/warningnotices.cpp" line="29"/>
         <source>Edit Anyway</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1379,31 +1377,6 @@
         <translation>Vill du spara denna filen?</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1381"/>
-        <source>Invalid characters detected while saving &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/window.cpp" line="1382"/>
-        <source>If you force save this file, it may cause file corruption. Still want to save?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/window.cpp" line="1386"/>
-        <source>Don&apos;t Save</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/window.cpp" line="1387"/>
-        <source>Save As</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/window.cpp" line="1388"/>
-        <source>Save Anyway</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/widgets/window.cpp" line="1456"/>
         <source>You do not have permission to save %1</source>
         <translation>Du har ej behörighet för att spara %1</translation>
@@ -1422,11 +1395,6 @@
         <translation>Spara fil</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1569"/>
-        <source>Cannot save as the original file in preview mode. Please choose a different path.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/widgets/window.cpp" line="1667"/>
         <source>Encoding</source>
         <translation>Kodning</translation>
@@ -1439,7 +1407,7 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="2511"/>
         <source>Current location remembered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2591"/>
@@ -1470,6 +1438,36 @@
         <location filename="../src/widgets/window.cpp" line="3949"/>
         <source>Discard</source>
         <translation>Förkasta</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1381"/>
+        <source>Invalid characters detected while saving &quot;%1&quot;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1382"/>
+        <source>If you force save this file, it may cause file corruption. Still want to save?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1386"/>
+        <source>Don&apos;t Save</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1387"/>
+        <source>Save As</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1388"/>
+        <source>Save Anyway</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1569"/>
+        <source>Cannot save as the original file in preview mode. Please choose a different path.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>
