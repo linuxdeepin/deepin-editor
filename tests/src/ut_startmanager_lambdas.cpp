@@ -19,6 +19,9 @@
 #include <QObject>
 #include <QMetaObject>
 #include <QThread>
+#include <QTest>
+#include <QApplication>
+#include <QCoreApplication>
 #include <gtest/gtest.h>
 
 namespace sm_lambda_stub {
@@ -33,6 +36,8 @@ StartManager::FileTabInfo getFileTabInfoNotFoundStub()
 }
 
 int recoverFileStub(Window *) { return 0; }
+
+void quitNoop() { return; }
 
 } // namespace sm_lambda_stub
 
@@ -104,15 +109,17 @@ TEST(UT_StartManager_openFilesInTab, openFilesInTab_SingleShotLambda)
     Stub s5;
     s5.set(ADDR(Window, showCenterWindow), returnstub);
 
+    // Install DeferredDelete blocker to prevent use-after-free from
+    // accumulated deleteLater events from earlier tests during qWait.
+    SM_DeferredDeleteBlocker blocker;
+    qApp->installEventFilter(&blocker);
+
     startManager->openFilesInTab(QStringList("somefile.txt"));
 
-    // Fire the singleShot(50) timer's lambda by emitting timeout directly
-    for (QTimer *t : startManager->findChildren<QTimer *>()) {
-        if (t->isSingleShot()) {
-            QMetaObject::invokeMethod(t, "timeout", Qt::DirectConnection);
-            break;
-        }
-    }
+    // The singleShot(50, window, ...) timer fires naturally during qWait.
+    QTest::qWait(80);
+
+    qApp->removeEventFilter(&blocker);
 
     EXPECT_TRUE(startManager->m_windows.count() > 0);
 }
@@ -130,13 +137,19 @@ TEST(UT_StartManager_slotCloseWindow, slotCloseWindow_SingleShotLambda)
     Stub s3;
     s3.set(ADDR(QList<Window *>, isEmpty), returntruestub);
 
+    // Install DeferredDelete blocker to prevent use-after-free from
+    // accumulated deleteLater events from earlier tests during qWait.
+    // Stub QCoreApplication::quit so the timer lambda's quit() call
+    // does not corrupt qApp for subsequent tests.
+    Stub s4;
+    s4.set(ADDR(QCoreApplication, quit), quitNoop);
+
+    SM_DeferredDeleteBlocker blocker;
+    qApp->installEventFilter(&blocker);
+
     startManager->slotCloseWindow();
 
-    // Fire the singleShot(1000) timer's lambda by emitting timeout directly
-    for (QTimer *t : startManager->findChildren<QTimer *>()) {
-        if (t->isSingleShot()) {
-            QMetaObject::invokeMethod(t, "timeout", Qt::DirectConnection);
-            break;
-        }
-    }
+    QTest::qWait(1100);
+
+    qApp->removeEventFilter(&blocker);
 }
