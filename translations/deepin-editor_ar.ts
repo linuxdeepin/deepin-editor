@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ar">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ar">
 <context>
     <name>BottomBar</name>
     <message>
@@ -85,11 +83,6 @@
         <translation>إلغاء</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="1121"/>
-        <source>The file contains invalid characters (NUL). Preview mode is read-only.</source>
-        <translation>يحتوي الملف على أحرف غير صالحة (NUL). وضع المعاينة للقراءة فقط.</translation>
-    </message>
-    <message>
         <location filename="../src/editor/editwrapper.cpp" line="337"/>
         <location filename="../src/editor/editwrapper.cpp" line="705"/>
         <source>You do not have permission to save %1</source>
@@ -109,6 +102,11 @@
         <location filename="../src/editor/editwrapper.cpp" line="1806"/>
         <source>The file cannot be read, which may be too large or has been damaged!</source>
         <translation>لا يمكن قراءة الملف ، وربما يكون كبيرًا جدًا أو تم تلفه!</translation>
+    </message>
+    <message>
+        <location filename="../src/editor/editwrapper.cpp" line="1121"/>
+        <source>The file contains invalid characters (NUL). Preview mode is read-only.</source>
+        <translation>يحتوي الملف على أحرف غير صالحة (NUL). وضع المعاينة للقراءة فقط.</translation>
     </message>
 </context>
 <context>
@@ -909,9 +907,9 @@
     <name>S:</name>
     <message>
         <location filename="../third/libiconv-1.16/src/iconv.c" line="103"/>
-        <source></source>
+        <source/>
         <comment>The first line of the short usage message.</comment>
-        <translation></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1379,31 +1377,6 @@
         <translation>هل تريد حفظ هذا الملف؟</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1381"/>
-        <source>Invalid characters detected while saving &quot;%1&quot;</source>
-        <translation>تم اكتشاف أحرف غير صالحة أثناء حفظ "%1"</translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/window.cpp" line="1382"/>
-        <source>If you force save this file, it may cause file corruption. Still want to save?</source>
-        <translation>إذا قمت بفرض حفظ هذا الملف، فقد يتسبب في تلف الملف. هل تريد الحفظ؟</translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/window.cpp" line="1386"/>
-        <source>Don&apos;t Save</source>
-        <translation>عدم الحفظ</translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/window.cpp" line="1387"/>
-        <source>Save As</source>
-        <translation>حفظ باسم</translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/window.cpp" line="1388"/>
-        <source>Save Anyway</source>
-        <translation>حفظ على أي حال</translation>
-    </message>
-    <message>
         <location filename="../src/widgets/window.cpp" line="1456"/>
         <source>You do not have permission to save %1</source>
         <translation>لا تملك الإذن لحفظ 1%</translation>
@@ -1420,11 +1393,6 @@
         <location filename="../src/widgets/window.cpp" line="1713"/>
         <source>Save File</source>
         <translation>حفظ الملف</translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/window.cpp" line="1569"/>
-        <source>Cannot save as the original file in preview mode. Please choose a different path.</source>
-        <translation>لا يمكن الحفظ كالملف الأصلي في وضع المعاينة. يرجى اختيار مسار مختلف.</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1667"/>
@@ -1470,6 +1438,36 @@
         <location filename="../src/widgets/window.cpp" line="3949"/>
         <source>Discard</source>
         <translation>إلغاء</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1381"/>
+        <source>Invalid characters detected while saving &quot;%1&quot;</source>
+        <translation>تم اكتشاف أحرف غير صالحة أثناء حفظ &quot;%1&quot;</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1382"/>
+        <source>If you force save this file, it may cause file corruption. Still want to save?</source>
+        <translation>إذا قمت بفرض حفظ هذا الملف، فقد يتسبب في تلف الملف. هل تريد الحفظ؟</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1386"/>
+        <source>Don&apos;t Save</source>
+        <translation>عدم الحفظ</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1387"/>
+        <source>Save As</source>
+        <translation>حفظ باسم</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1388"/>
+        <source>Save Anyway</source>
+        <translation>حفظ على أي حال</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1569"/>
+        <source>Cannot save as the original file in preview mode. Please choose a different path.</source>
+        <translation>لا يمكن الحفظ كالملف الأصلي في وضع المعاينة. يرجى اختيار مسار مختلف.</translation>
     </message>
 </context>
 </TS>
