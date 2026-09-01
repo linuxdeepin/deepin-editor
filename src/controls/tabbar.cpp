@@ -67,6 +67,7 @@ Tabbar::Tabbar(QWidget *parent)
     setMovable(true);
     setTabsClosable(true);
     setVisibleAddButton(true);
+    setUsesScrollButtons(false);
     setDragable(true);
     setAcceptDrops(true);
     // setStartDragDistance(40);
