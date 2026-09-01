@@ -909,7 +909,7 @@
         <location filename="../third/libiconv-1.16/src/iconv.c" line="103"/>
         <source/>
         <comment>The first line of the short usage message.</comment>
-        <translation type="unfinished"/>
+        <translation></translation>
     </message>
 </context>
 <context>
