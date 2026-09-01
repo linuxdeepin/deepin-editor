@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -61,7 +61,10 @@ TEST(UT_EditorApplication_pressSpace, notify_001)
     bool bRet = app->notify(btn, e);
     ASSERT_TRUE(bRet == true);
 
-    btn->deleteLater();
+    // Intentionally leak btn: pressSpace() 会调度 80ms 定时器并裸捕获 btn，
+    // 若在此销毁会使延迟 lambda 悬空（heap-use-after-free）。
+    // 不能用 qWait 等待定时器触发：二次 QApplication 实例处理事件会导致
+    // QSocketNotifier 无效套接字刷屏。泄漏对象可安全存活至定时器触发。
     delete e;
     e = nullptr;
     app->deleteLater();
@@ -81,7 +84,7 @@ TEST(UT_EditorApplication_pressSpace, notify_002)
     bool bRet = app->notify(btn, e);
     ASSERT_TRUE(bRet == true);
 
-    btn->deleteLater();
+    // 同 notify_001：故意泄漏 btn，避免 pressSpace 延迟 lambda 悬空
     delete e;
     e = nullptr;
     app->deleteLater();
@@ -141,7 +144,7 @@ TEST(UT_EditorApplication_pressSpace, pressSpace)
     QString strRetAppName = app->applicationName();
     ASSERT_TRUE(!strRetOrNmae.compare(QString("deepin")) && !strRetAppName.compare(QString("deepin-editor")));
 
-    btn->deleteLater();
+    // 同 notify_001：故意泄漏 btn，避免 pressSpace 延迟 lambda 悬空
     app->deleteLater();
 }
 

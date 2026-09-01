@@ -11075,6 +11075,11 @@ TEST(UT_test_textedit_eventFilter, eventFilter_ColorMarkMenuTabLambda)
 
     edit->eventFilter(edit->m_colorMarkMenu, e);
 
+    // Deliver the deferred QTimer::singleShot(0, ...) invocation posted to
+    // `edit` while the menu is still alive, so no dangling dereference can
+    // fire later inside another test's event loop.
+    QCoreApplication::sendPostedEvents(edit, 0);
+
     // Fire the singleShot timer's lambda by emitting timeout directly
     for (QTimer *t : edit->findChildren<QTimer *>()) {
         if (t->isSingleShot()) {
@@ -11085,6 +11090,7 @@ TEST(UT_test_textedit_eventFilter, eventFilter_ColorMarkMenuTabLambda)
 
     delete e;
     delete edit->m_colorMarkMenu;
+    edit->m_colorMarkMenu = nullptr;
     edit->deleteLater();
     wra->deleteLater();
 }

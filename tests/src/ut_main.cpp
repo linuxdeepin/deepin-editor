@@ -53,11 +53,13 @@ int main(int argc, char *argv[])
     quitStub.set(ADDR(QCoreApplication, quit), quitNoop);
 
     // Install SIGALRM handler so coverage data is preserved if the test suite hangs.
-    // The alarm fires after 240s, dumps gcov data, and exits.
+    // The alarm fires after 3600s, dumps gcov data, and exits. The full suite
+    // (1291+ tests) needs ~300s; 3600s keeps hang protection without killing
+    // a normal run (CI total timeout is 7200s).
     signal(SIGALRM, alarmHandler);
     signal(SIGABRT, crashHandler);
     signal(SIGSEGV, crashHandler);
-    alarm(150);
+    alarm(3600);
 
     testing::InitGoogleTest(&argc, argv);
 

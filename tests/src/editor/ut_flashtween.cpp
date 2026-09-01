@@ -13,7 +13,8 @@ UT_FlashTween::UT_FlashTween()
 TEST(UT_FlashTween_startX, UT_FlashTween_startX)
 {
     FlashTween *a = new FlashTween();
-    FunSlideInertial b;
+    // 传入有效空操作回调，避免空 std::function 在定时器触发时抛出 bad_function_call
+    FunSlideInertial b = [](qreal) {};
     a->startX(1.1,1.1,1.1,1.1,b);
     int iRet = a->m_timerX->interval();
     ASSERT_TRUE(a->m_timerX->interval() == 15);
@@ -25,7 +26,8 @@ TEST(UT_FlashTween_startX, UT_FlashTween_startX)
 TEST(UT_FlashTween_startY, UT_FlashTween_startY)
 {
     FlashTween *a = new FlashTween();
-    FunSlideInertial b;
+    // 传入有效空操作回调，避免空 std::function 在定时器触发时抛出 bad_function_call
+    FunSlideInertial b = [](qreal) {};
     a->startY(1.1,1.1,1.1,1.1,b);
     int iRet = a->m_timerY->interval();
     ASSERT_TRUE(a->m_timerY->interval() == 15);
@@ -42,6 +44,10 @@ TEST(UT_FlashTween_activeX, UT_FlashTween_activeX)
     bool bRet = a->activeX();
     ASSERT_TRUE(bRet == true);
 
+    // 停止 0ms 循环定时器：回调 m_fSlideGestureX 为空 std::function，
+    // 若残留到后续测试的事件循环中触发会抛出 bad_function_call
+    a->m_timerX->stop();
+
     a->deleteLater();
 }
 
@@ -53,6 +59,9 @@ TEST(UT_FlashTween_activeY, UT_FlashTween_activeY)
     a->m_timerY->start();
     bool bRet = a->activeY();
     ASSERT_TRUE(bRet == true);
+
+    // 同 activeX：停止 0ms 循环定时器，避免空回调在后续测试中触发
+    a->m_timerY->stop();
 
     a->deleteLater();
 }
