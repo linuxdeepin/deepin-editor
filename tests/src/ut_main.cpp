@@ -7,8 +7,12 @@
 #include <gmock/gmock-matchers.h>
 #include <QApplication>
 #include <DApplication>
+#include <QCoreApplication>
+#include "src/stub.h"
 #include <cstdlib>
 #include <cstdio>
+#include <csignal>
+#include <unistd.h>
 
 #if defined(CMAKE_SAFETYTEST_ARG_ON)
 #include <sanitizer/asan_interface.h>
@@ -18,7 +22,21 @@ extern "C" void __gcov_dump(void);
 
 DWIDGET_USE_NAMESPACE
 
-//#include <QTest>
+static void quitNoop() { return; }
+
+static void alarmHandler(int)
+{
+    __gcov_dump();
+    fflush(nullptr);
+    std::_Exit(1);
+}
+
+static void crashHandler(int sig)
+{
+    __gcov_dump();
+    fflush(nullptr);
+    std::_Exit(sig);
+}
 
 int main(int argc, char *argv[])
 
@@ -29,9 +47,23 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
     DApplication app(argc, argv);
 
+    // Stub QCoreApplication::quit globally to prevent tests from calling quit()
+    // and corrupting the process state (slotCloseWindow timer calls quit()).
+    Stub quitStub;
+    quitStub.set(ADDR(QCoreApplication, quit), quitNoop);
+
+    // Install SIGALRM handler so coverage data is preserved if the test suite hangs.
+    // The alarm fires after 240s, dumps gcov data, and exits.
+    signal(SIGALRM, alarmHandler);
+    signal(SIGABRT, crashHandler);
+    signal(SIGSEGV, crashHandler);
+    alarm(150);
+
     testing::InitGoogleTest(&argc, argv);
 
     auto c = RUN_ALL_TESTS();
+
+    alarm(0);  // Cancel the alarm
 
     __gcov_dump();
 
