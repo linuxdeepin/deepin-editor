@@ -37,7 +37,10 @@ TEST(UT_EditorApplication_pressSpace, pressSpace_Lambda)
         }
     }
 
-    delete btn;
+    // Intentionally leak btn: pressSpace() 的 80ms singleShot lambda 裸捕获 btn，
+    // 若在此销毁会使延迟 lambda 悬空（heap-use-after-free）；上面通过 findChildren
+    // 触发 timeout 的手法对 Qt 6.9 的 QDeferredInvokeEvent 实现无效，真正的
+    // lambda 仍处于挂起状态，会在后续测试的事件循环中触发。
     app->deleteLater();
     SUCCEED();
 }

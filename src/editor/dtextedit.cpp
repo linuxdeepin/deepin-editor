@@ -7258,10 +7258,10 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                 int handleKey = keyEvent->key();
 
                 // 使用Timer进行后续处理，避免在此处处理后，和基类的处理造成混淆
-                QTimer::singleShot(0, this, [ = ]() {
+                QTimer::singleShot(0, this, [this, handleKey, menuGuard = QPointer<DMenu>(m_colorMarkMenu)]() {
                     // 仅当 menu 可见时进行处理，当前仅处理Tab键
-                    if (m_colorMarkMenu->isVisible() && handleKey == Qt::Key_Tab) {
-                        QAction *currentAction = m_colorMarkMenu->activeAction();
+                    if (menuGuard && menuGuard->isVisible() && handleKey == Qt::Key_Tab) {
+                        QAction *currentAction = menuGuard->activeAction();
                         QAction *nextAction = nullptr;
                         int currentIndex = -1;
 
@@ -7318,7 +7318,7 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
 
                         // 为找到的新item设置focus
                         if (nextAction != nullptr) {
-                            m_colorMarkMenu->setActiveAction(nextAction);
+                            menuGuard->setActiveAction(nextAction);
                         } else {
                             qWarning() << " can not find valid item , need check 'Mark Color Menu' tab order setting!";
                         }

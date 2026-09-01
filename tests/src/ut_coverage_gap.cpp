@@ -356,10 +356,10 @@ TEST(UT_CoverageGap_EditorApp, Notify_QCheckBox)
     EXPECT_TRUE(ret);
     QTest::qWait(100);  // let pressSpace timer fire
 
-    delete checkbox;
     delete e;
-    // Intentionally leak app: destroying a second QApplication sets qApp=null,
-    // breaking all subsequent tests. Process exits via _Exit() anyway.
+    // Intentionally leak checkbox AND app: pressSpace() 的 80ms 定时器裸捕获该控件，
+    // 负载高时定时器可能在 qWait 结束、控件销毁之后才触发（悬空指针）；
+    // 销毁第二个 QApplication 会置空 qApp，破坏后续所有测试。
 }
 
 TEST(UT_CoverageGap_EditorApp, Notify_QComboBox)
@@ -374,9 +374,8 @@ TEST(UT_CoverageGap_EditorApp, Notify_QComboBox)
     EXPECT_TRUE(ret);
     QTest::qWait(100);
 
-    delete combo;
     delete e;
-    // Intentionally leak app (see above).
+    // Intentionally leak combo AND app (see Notify_QCheckBox).
 }
 
 // Stub functions for triggering catch blocks in saveToFile
