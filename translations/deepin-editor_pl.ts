@@ -847,17 +847,17 @@
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="184"/>
         <source>Encoding conversion failed</source>
-        <translation>Konwersja kodowania zakończyła się niepowodzeniem</translation>
+        <translation>Wystąpił błąd podczas zmiany kodowania</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="190"/>
         <source>Converted content is empty</source>
-        <translation>Za konwertowanym zawartością jest pusta</translation>
+        <translation>Przekonwertowana zawartość jest pusta</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="208"/>
         <source>Memory allocation failed</source>
-        <translation>Alokacja pamięci zakończyła się niepowodzeniem</translation>
+        <translation>Błąd alokacji pamięci</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="212"/>
