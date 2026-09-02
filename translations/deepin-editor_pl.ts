@@ -817,7 +817,7 @@
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="379"/>
         <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
-        <translation>Proszę zainstalować &apos;UOS AI&apos; z sklepu z aplikacjami przed użyciem</translation>
+        <translation>Najpierw zainstaluj aplikację &apos;UOS AI&apos; w sklepie App Store.</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="381"/>
