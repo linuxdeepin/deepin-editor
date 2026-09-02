@@ -837,12 +837,12 @@
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="153"/>
         <source>Insufficient memory to load document content</source>
-        <translation>Niewystarczająca pamięć do załadowania zawartości dokumentu</translation>
+        <translation>Za mało pamięci do załadowania treści dokumentu</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="178"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation>Niewystarczająca pamięć do konwersji kodowania</translation>
+        <translation>Za mało pamięci na konwersję kodowania</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="184"/>
