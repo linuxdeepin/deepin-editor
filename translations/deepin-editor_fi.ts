@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="fi">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="fi">
 <context>
     <name>BottomBar</name>
     <message>
@@ -26,29 +24,29 @@
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="73"/>
         <location filename="../src/widgets/bottombar.cpp" line="91"/>
-        <location filename="../src/widgets/bottombar.cpp" line="499"/>
+        <location filename="../src/widgets/bottombar.cpp" line="501"/>
         <source>Edit Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Muokkaustila</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="74"/>
-        <location filename="../src/widgets/bottombar.cpp" line="489"/>
+        <location filename="../src/widgets/bottombar.cpp" line="491"/>
         <source>Read View</source>
-        <translation type="unfinished"></translation>
+        <translation>Lukunäkymä</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="75"/>
-        <location filename="../src/widgets/bottombar.cpp" line="493"/>
+        <location filename="../src/widgets/bottombar.cpp" line="495"/>
         <source>Live Preview</source>
-        <translation type="unfinished"></translation>
+        <translation>Esikatselu</translation>
     </message>
 </context>
 <context>
     <name>DDropdownMenu</name>
     <message>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="363"/>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="421"/>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="426"/>
+        <location filename="../src/widgets/ddropdownmenu.cpp" line="370"/>
+        <location filename="../src/widgets/ddropdownmenu.cpp" line="428"/>
+        <location filename="../src/widgets/ddropdownmenu.cpp" line="433"/>
         <source>None</source>
         <translation>Tyhjä</translation>
     </message>
@@ -56,59 +54,59 @@
 <context>
     <name>EditWrapper</name>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="355"/>
-        <location filename="../src/editor/editwrapper.cpp" line="429"/>
-        <location filename="../src/editor/editwrapper.cpp" line="595"/>
-        <location filename="../src/editor/editwrapper.cpp" line="887"/>
+        <location filename="../src/editor/editwrapper.cpp" line="356"/>
+        <location filename="../src/editor/editwrapper.cpp" line="430"/>
+        <location filename="../src/editor/editwrapper.cpp" line="596"/>
+        <location filename="../src/editor/editwrapper.cpp" line="888"/>
         <source>Save</source>
         <translation>Tallenna</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="590"/>
+        <location filename="../src/editor/editwrapper.cpp" line="591"/>
         <source>Do you want to save this file?</source>
         <translation>Haluatko tallentaa tämän tiedoston?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="427"/>
-        <location filename="../src/editor/editwrapper.cpp" line="593"/>
+        <location filename="../src/editor/editwrapper.cpp" line="428"/>
+        <location filename="../src/editor/editwrapper.cpp" line="594"/>
         <source>Cancel</source>
         <translation>Peru</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="424"/>
+        <location filename="../src/editor/editwrapper.cpp" line="425"/>
         <source>Encoding changed. Do you want to save the file now?</source>
         <translation>Koodaus muutettu. Haluatko tallentaa tiedoston nyt?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="594"/>
+        <location filename="../src/editor/editwrapper.cpp" line="595"/>
         <source>Discard</source>
         <translation>Hylkää</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="1121"/>
-        <source>The file contains invalid characters (NUL). Preview mode is read-only.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/editor/editwrapper.cpp" line="337"/>
-        <location filename="../src/editor/editwrapper.cpp" line="705"/>
+        <location filename="../src/editor/editwrapper.cpp" line="338"/>
+        <location filename="../src/editor/editwrapper.cpp" line="706"/>
         <source>You do not have permission to save %1</source>
         <translation>Sinulla ei ole lupaa tallentaa %1</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="987"/>
+        <location filename="../src/editor/editwrapper.cpp" line="988"/>
         <source>File removed on the disk. Save it now?</source>
         <translation>Tiedosto on poistettu. Tallenna se nyt?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="993"/>
+        <location filename="../src/editor/editwrapper.cpp" line="994"/>
         <source>File has changed on disk. Reload?</source>
         <translation>Tiedosto on muuttunut. Päivitä?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="1806"/>
+        <location filename="../src/editor/editwrapper.cpp" line="1807"/>
         <source>The file cannot be read, which may be too large or has been damaged!</source>
         <translation>Tiedostoa ei voi lukea, se voi olla liian suuri tai vahingoittunut!</translation>
+    </message>
+    <message>
+        <location filename="../src/editor/editwrapper.cpp" line="1122"/>
+        <source>The file contains invalid characters (NUL). Preview mode is read-only.</source>
+        <translation>Tiedosto sisältää virheellisiä merkkejä (NUL). Esikatselu on vain luku -tilassa.</translation>
     </message>
 </context>
 <context>
@@ -119,17 +117,17 @@
         <translation>Etsi</translation>
     </message>
     <message>
-        <location filename="../src/controls/findbar.cpp" line="38"/>
+        <location filename="../src/controls/findbar.cpp" line="39"/>
         <source>Previous</source>
         <translation>Edellinen</translation>
     </message>
     <message>
-        <location filename="../src/controls/findbar.cpp" line="40"/>
+        <location filename="../src/controls/findbar.cpp" line="42"/>
         <source>Next</source>
         <translation>Seuraava</translation>
     </message>
     <message>
-        <location filename="../src/controls/findbar.cpp" line="42"/>
+        <location filename="../src/controls/findbar.cpp" line="45"/>
         <source>Replace</source>
         <translation>Korvaa</translation>
     </message>
@@ -137,7 +135,7 @@
 <context>
     <name>JumpLineBar</name>
     <message>
-        <location filename="../src/controls/jumplinebar.cpp" line="46"/>
+        <location filename="../src/controls/jumplinebar.cpp" line="47"/>
         <source>Go to Line: </source>
         <translation>Siirry riville:</translation>
     </message>
@@ -145,9 +143,9 @@
 <context>
     <name>LineBar</name>
     <message>
-        <location filename="../src/controls/linebar.cpp" line="144"/>
+        <location filename="../src/controls/linebar.cpp" line="146"/>
         <source>第%1/%2项</source>
-        <translation type="unfinished"></translation>
+        <translation>Osumia %1/%2</translation>
     </message>
 </context>
 <context>
@@ -168,43 +166,43 @@
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="37"/>
         <source>Collapse code block</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="38"/>
         <source>Expand code block</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="39"/>
         <source>Copy code</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="40"/>
         <source>Expand</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="42"/>
         <source>%1 line(s) of code collapsed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>PathSettingWgt</name>
     <message>
-        <location filename="../src/widgets/pathsettintwgt.cpp" line="90"/>
+        <location filename="../src/widgets/pathsettintwgt.cpp" line="96"/>
         <source>Remember the last used path</source>
         <translation>Muista viimeksi käytetty polku</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pathsettintwgt.cpp" line="91"/>
+        <location filename="../src/widgets/pathsettintwgt.cpp" line="97"/>
         <source>Same path as the current file</source>
         <translation>Sama polku kuin nykyisessä tiedostossa</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pathsettintwgt.cpp" line="92"/>
+        <location filename="../src/widgets/pathsettintwgt.cpp" line="98"/>
         <source>Customize the default path</source>
         <translation>Mukauta oletuspolkua</translation>
     </message>
@@ -217,20 +215,20 @@
         <translation>Tekstieditori</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="357"/>
-        <location filename="../src/editor/editwrapper.cpp" line="897"/>
-        <location filename="../src/editor/editwrapper.cpp" line="912"/>
-        <location filename="../src/widgets/window.cpp" line="1528"/>
-        <location filename="../src/widgets/window.cpp" line="1556"/>
-        <location filename="../src/widgets/window.cpp" line="1715"/>
-        <location filename="../src/widgets/window.cpp" line="1732"/>
+        <location filename="../src/editor/editwrapper.cpp" line="358"/>
+        <location filename="../src/editor/editwrapper.cpp" line="898"/>
+        <location filename="../src/editor/editwrapper.cpp" line="913"/>
+        <location filename="../src/widgets/window.cpp" line="1532"/>
+        <location filename="../src/widgets/window.cpp" line="1560"/>
+        <location filename="../src/widgets/window.cpp" line="1719"/>
+        <location filename="../src/widgets/window.cpp" line="1736"/>
         <source>Encoding</source>
         <translation>Koodaus</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="2001"/>
+        <location filename="../src/editor/editwrapper.cpp" line="2002"/>
         <source>视图模式</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="11"/>
@@ -266,7 +264,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="18"/>
         <location filename="../src/controls/settingsdialog.cpp" line="96"/>
-        <location filename="../src/widgets/window.cpp" line="2581"/>
+        <location filename="../src/widgets/window.cpp" line="2585"/>
         <source>Window</source>
         <translation>Ikkuna</translation>
     </message>
@@ -811,8 +809,8 @@
         <translation>Tiedostoa ei tallennettu</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1716"/>
-        <location filename="../src/widgets/window.cpp" line="1733"/>
+        <location filename="../src/widgets/window.cpp" line="1720"/>
+        <location filename="../src/widgets/window.cpp" line="1737"/>
         <source>Line Endings</source>
         <translation>Rivin loppu</translation>
     </message>
@@ -880,38 +878,29 @@
         <translation>Etsi</translation>
     </message>
     <message>
-        <location filename="../src/controls/replacebar.cpp" line="36"/>
+        <location filename="../src/controls/replacebar.cpp" line="37"/>
         <source>Replace With</source>
         <translation>Korvaa</translation>
     </message>
     <message>
-        <location filename="../src/controls/replacebar.cpp" line="40"/>
+        <location filename="../src/controls/replacebar.cpp" line="42"/>
         <source>Replace</source>
         <translation>Korvaa</translation>
     </message>
     <message>
-        <location filename="../src/controls/replacebar.cpp" line="42"/>
+        <location filename="../src/controls/replacebar.cpp" line="45"/>
         <source>Skip</source>
         <translation>Ohita</translation>
     </message>
     <message>
-        <location filename="../src/controls/replacebar.cpp" line="44"/>
+        <location filename="../src/controls/replacebar.cpp" line="48"/>
         <source>Replace Rest</source>
         <translation>Korvaa loput</translation>
     </message>
     <message>
-        <location filename="../src/controls/replacebar.cpp" line="46"/>
+        <location filename="../src/controls/replacebar.cpp" line="51"/>
         <source>Replace All</source>
         <translation>Korvaa kaikki</translation>
-    </message>
-</context>
-<context>
-    <name>S:</name>
-    <message>
-        <location filename="../third/libiconv-1.16/src/iconv.c" line="103"/>
-        <source></source>
-        <comment>The first line of the short usage message.</comment>
-        <translation></translation>
     </message>
 </context>
 <context>
@@ -985,32 +974,32 @@
 <context>
     <name>Tabbar</name>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="678"/>
+        <location filename="../src/controls/tabbar.cpp" line="679"/>
         <source>Close tab</source>
         <translation>Sulje välilehti</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="680"/>
+        <location filename="../src/controls/tabbar.cpp" line="681"/>
         <source>Close other tabs</source>
         <translation>Sulje välilehdet</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="682"/>
+        <location filename="../src/controls/tabbar.cpp" line="683"/>
         <source>More options</source>
         <translation>Lisää vaihtoehtoja</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="684"/>
+        <location filename="../src/controls/tabbar.cpp" line="686"/>
         <source>Close tabs to the left</source>
         <translation>Sulje välilehdet vasemmalla</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="686"/>
+        <location filename="../src/controls/tabbar.cpp" line="688"/>
         <source>Close tabs to the right</source>
         <translation>Sulje välilehdet oikealla</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="688"/>
+        <location filename="../src/controls/tabbar.cpp" line="690"/>
         <source>Close unmodified tabs</source>
         <translation>Sulje muuttumattomat välilehdet</translation>
     </message>
@@ -1054,13 +1043,13 @@
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="402"/>
-        <location filename="../src/widgets/window.cpp" line="556"/>
+        <location filename="../src/widgets/window.cpp" line="558"/>
         <source>Find</source>
         <translation>Etsi</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="404"/>
-        <location filename="../src/widgets/window.cpp" line="558"/>
+        <location filename="../src/widgets/window.cpp" line="560"/>
         <source>Replace</source>
         <translation>Korvaa</translation>
     </message>
@@ -1188,7 +1177,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="543"/>
         <source>View Mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3531"/>
@@ -1206,13 +1195,13 @@
         <location filename="../src/editor/dtextedit.cpp" line="9574"/>
         <location filename="../src/editor/dtextedit.cpp" line="9576"/>
         <source>No audio output device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="9583"/>
         <location filename="../src/editor/dtextedit.cpp" line="9585"/>
         <source>No audio input device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="534"/>
@@ -1222,17 +1211,17 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="409"/>
         <source>Edit Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Muokkaustila</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="411"/>
         <source>Read View</source>
-        <translation type="unfinished"></translation>
+        <translation>Lukunäkymä</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="413"/>
         <source>Live Preview</source>
-        <translation type="unfinished"></translation>
+        <translation>Esikatselu</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="535"/>
@@ -1304,172 +1293,172 @@
         <translation>Päivitä</translation>
     </message>
     <message>
-        <location filename="../src/controls/warningnotices.cpp" line="29"/>
+        <location filename="../src/controls/warningnotices.cpp" line="31"/>
         <source>Edit Anyway</source>
-        <translation type="unfinished"></translation>
+        <translation>Muokkaa silti</translation>
     </message>
 </context>
 <context>
     <name>Window</name>
     <message>
-        <location filename="../src/controls/warningnotices.cpp" line="27"/>
-        <location filename="../src/widgets/window.cpp" line="548"/>
+        <location filename="../src/controls/warningnotices.cpp" line="28"/>
+        <location filename="../src/widgets/window.cpp" line="550"/>
         <source>Save as</source>
         <translation>Tallenna nimellä</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="540"/>
+        <location filename="../src/widgets/window.cpp" line="542"/>
         <source>New window</source>
         <translation>Uusi ikkuna</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="542"/>
+        <location filename="../src/widgets/window.cpp" line="544"/>
         <source>New tab</source>
         <translation>Uusi välilehti</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="544"/>
+        <location filename="../src/widgets/window.cpp" line="546"/>
         <source>Open file</source>
         <translation>Avaa tiedosto</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="546"/>
-        <location filename="../src/widgets/window.cpp" line="3950"/>
+        <location filename="../src/widgets/window.cpp" line="548"/>
+        <location filename="../src/widgets/window.cpp" line="3954"/>
         <source>Save</source>
         <translation>Tallenna</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="550"/>
+        <location filename="../src/widgets/window.cpp" line="552"/>
         <source>Print</source>
         <translation>Tulosta</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="552"/>
+        <location filename="../src/widgets/window.cpp" line="554"/>
         <source>Switch theme</source>
         <translation>Vaihda teema</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="554"/>
-        <location filename="../src/widgets/window.cpp" line="2641"/>
+        <location filename="../src/widgets/window.cpp" line="556"/>
+        <location filename="../src/widgets/window.cpp" line="2645"/>
         <source>Settings</source>
         <translation>Asetukset</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="696"/>
-        <location filename="../src/widgets/window.cpp" line="4250"/>
+        <location filename="../src/widgets/window.cpp" line="700"/>
+        <location filename="../src/widgets/window.cpp" line="4254"/>
         <source>Read-Only</source>
         <translation>Luettavissa</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="719"/>
+        <location filename="../src/widgets/window.cpp" line="723"/>
         <source>You do not have permission to open %1</source>
         <translation>Sinulla ei ole lupaa avata %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="773"/>
-        <location filename="../src/widgets/window.cpp" line="3266"/>
+        <location filename="../src/widgets/window.cpp" line="777"/>
+        <location filename="../src/widgets/window.cpp" line="3270"/>
         <source>Invalid file: %1</source>
         <translation>Virheellinen tiedosto: %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="957"/>
-        <location filename="../src/widgets/window.cpp" line="1050"/>
-        <location filename="../src/widgets/window.cpp" line="3217"/>
+        <location filename="../src/widgets/window.cpp" line="961"/>
+        <location filename="../src/widgets/window.cpp" line="1054"/>
+        <location filename="../src/widgets/window.cpp" line="3221"/>
         <source>Do you want to save this file?</source>
         <translation>Haluatko tallentaa tämän tiedoston?</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1381"/>
-        <source>Invalid characters detected while saving &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/window.cpp" line="1382"/>
-        <source>If you force save this file, it may cause file corruption. Still want to save?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/window.cpp" line="1386"/>
-        <source>Don&apos;t Save</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/window.cpp" line="1387"/>
-        <source>Save As</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/window.cpp" line="1388"/>
-        <source>Save Anyway</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/window.cpp" line="1456"/>
+        <location filename="../src/widgets/window.cpp" line="1460"/>
         <source>You do not have permission to save %1</source>
         <translation>Sinulla ei ole lupaa tallentaa %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1428"/>
-        <location filename="../src/widgets/window.cpp" line="1478"/>
+        <location filename="../src/widgets/window.cpp" line="1432"/>
+        <location filename="../src/widgets/window.cpp" line="1482"/>
         <source>Saved successfully</source>
         <translation>Tallennus onnistui</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1520"/>
-        <location filename="../src/widgets/window.cpp" line="1665"/>
-        <location filename="../src/widgets/window.cpp" line="1713"/>
+        <location filename="../src/widgets/window.cpp" line="1524"/>
+        <location filename="../src/widgets/window.cpp" line="1669"/>
+        <location filename="../src/widgets/window.cpp" line="1717"/>
         <source>Save File</source>
         <translation>Tallenna tiedosto</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1569"/>
-        <source>Cannot save as the original file in preview mode. Please choose a different path.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/window.cpp" line="1667"/>
+        <location filename="../src/widgets/window.cpp" line="1671"/>
         <source>Encoding</source>
         <translation>Koodaus</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1957"/>
+        <location filename="../src/widgets/window.cpp" line="1961"/>
         <source>Read-Only mode is on</source>
         <translation>Lukutila on päällä</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="2511"/>
+        <location filename="../src/widgets/window.cpp" line="2515"/>
         <source>Current location remembered</source>
         <translation>Nykyinen sijainti muistetaan</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="2591"/>
+        <location filename="../src/widgets/window.cpp" line="2595"/>
         <source>Ctrl+&apos;=&apos;</source>
         <translation>Ctrl+&apos;=&apos;</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="2594"/>
+        <location filename="../src/widgets/window.cpp" line="2598"/>
         <source>Ctrl+&apos;-&apos;</source>
         <translation>Ctrl+&apos;-&apos;</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="2623"/>
+        <location filename="../src/widgets/window.cpp" line="2627"/>
         <source>Editor</source>
         <translation>Editori</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="3436"/>
+        <location filename="../src/widgets/window.cpp" line="3440"/>
         <source>Untitled %1</source>
         <translation>Nimetön %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="3948"/>
+        <location filename="../src/widgets/window.cpp" line="3952"/>
         <source>Cancel</source>
         <translation>Peru</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="3949"/>
+        <location filename="../src/widgets/window.cpp" line="3953"/>
         <source>Discard</source>
         <translation>Hylkää</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1385"/>
+        <source>Invalid characters detected while saving &quot;%1&quot;</source>
+        <translation>Virheellisiä merkkejä havaittu tallennettaessa &quot;%1&quot;</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1386"/>
+        <source>If you force save this file, it may cause file corruption. Still want to save?</source>
+        <translation>Jos pakotat tiedoston tallentamisen, se voi aiheuttaa tiedoston hajoamisen. Haluatko silti tallentaa?</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1390"/>
+        <source>Don&apos;t Save</source>
+        <translation>Älä tallenna</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1391"/>
+        <source>Save As</source>
+        <translation>Tallenna...</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1392"/>
+        <source>Save Anyway</source>
+        <translation>Tallenna silti</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1573"/>
+        <source>Cannot save as the original file in preview mode. Please choose a different path.</source>
+        <translation>Ei voida tallentaa alkuperäisenä tiedostona esikatselutilassa. Valitse toinen polku.</translation>
     </message>
 </context>
 </TS>
