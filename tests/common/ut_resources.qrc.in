@@ -1,0 +1,12 @@
+<!--
+SPDX-FileCopyrightText: 2026 UnionTech Software Technology Co., Ltd.
+SPDX-License-Identifier: CC0-1.0
+-->
+<RCC>
+  <qresource prefix="/">
+    <file alias="qss/test.qss">@TEST_DATA_DIR@/test.qss</file>
+    <file alias="svg/test.svg">@TEST_DATA_DIR@/test.svg</file>
+    <file alias="encodes/encodes.ini">@TEST_DATA_DIR@/encodes.ini</file>
+    <file alias="resources/settings.json">@TEST_DATA_DIR@/settings.json</file>
+  </qresource>
+</RCC>
