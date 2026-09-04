@@ -1195,7 +1195,7 @@
         <location filename="../src/editor/dtextedit.cpp" line="9574"/>
         <location filename="../src/editor/dtextedit.cpp" line="9576"/>
         <source>No audio output device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
-        <translation type="unfinished"/>
+        <translation>Äänilaitetta ei havaittu. Varmista, että kaiuttimet tai kuulokkeet on kytketty ja yritä uudelleen.</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="9583"/>
