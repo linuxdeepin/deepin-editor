@@ -166,7 +166,7 @@
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="37"/>
         <source>Collapse code block</source>
-        <translation>Kutista koodilohko</translation>
+        <translation>Tiivistä koodilohko</translation>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="38"/>
@@ -186,7 +186,7 @@
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="42"/>
         <source>%1 line(s) of code collapsed</source>
-        <translation type="unfinished"/>
+        <translation>(%1 riviä) koodia tiivistetty</translation>
     </message>
 </context>
 <context>
