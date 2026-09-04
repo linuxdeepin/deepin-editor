@@ -62,6 +62,7 @@ add_definitions(-DKF5_HIGHLIGHT_PATH=\"${KF5_HIGHLIGHT_INSTALL_PATH}\")
 
 add_subdirectory(src)
 
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+option(BUILD_TESTS "Build unit tests" ON)
+if(BUILD_TESTS)
     add_subdirectory(tests)
 endif()

@@ -1,159 +1,50 @@
-# Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-#
-# Author:     zhangteng <zhangteng@uniontech.com>
-#
-# Maintainer: zhangteng <zhangteng@uniontech.com>
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-ADD_COMPILE_OPTIONS(-fno-access-control)
-set(CMAKE_CXX_FLAGS "-g -fprofile-arcs -ftest-coverage")
-set(APP_QRC "../src/deepin-editor.qrc")
+cmake_minimum_required(VERSION 3.16)
+project(deepin-editor-tests VERSION 1.0.0 LANGUAGES CXX)
 
-# Find the library
-find_package(PkgConfig REQUIRED)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
+include(UnitTestUtils)
 
-set(qt_required_components Gui Widgets DBus Concurrent PrintSupport Svg Xml Test WebEngineWidgets WebChannel OpenGLWidgets)
-if (QT_DESIRED_VERSION MATCHES 6)
-    list(APPEND qt_required_components Core5Compat)
-endif()
-find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS ${qt_required_components})
-find_package(Dtk${DTK_VERSION_MAJOR} REQUIRED COMPONENTS Widget Core)
-find_package(KF${KF_VERSION_MAJOR}Codecs REQUIRED)
-find_package(KF${KF_VERSION_MAJOR}SyntaxHighlighting REQUIRED)
+enable_testing()
 
-set(LINK_LIBS
-    Qt${QT_VERSION_MAJOR}::Gui
-    Qt${QT_VERSION_MAJOR}::Widgets
-    Qt${QT_VERSION_MAJOR}::Xml
-    Qt${QT_VERSION_MAJOR}::Svg
-    Qt${QT_VERSION_MAJOR}::Concurrent
-    Qt${QT_VERSION_MAJOR}::PrintSupport
-    Qt${QT_VERSION_MAJOR}::DBus
-    Qt${QT_VERSION_MAJOR}::Test
-    Qt${QT_VERSION_MAJOR}::WebEngineWidgets
-    Qt${QT_VERSION_MAJOR}::WebChannel
-    Qt${QT_VERSION_MAJOR}::OpenGLWidgets
-    Dtk${DTK_VERSION_MAJOR}::Widget
-    Dtk${DTK_VERSION_MAJOR}::Core
-    KF${KF_VERSION_MAJOR}::Codecs
-    KF${KF_VERSION_MAJOR}::SyntaxHighlighting
-)
-
-if (QT_DESIRED_VERSION MATCHES 6)
-    list(APPEND LINK_LIBS Qt${QT_DESIRED_VERSION}::Core5Compat)
-else()
-    include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
-endif()
-
+# Google Test (system package: libgtest-dev 1.12.1)
 find_package(GTest REQUIRED)
+include(GoogleTest)
+
+# 代码覆盖率：Debug 模式下启用 gcov 插桩
+# test-prj-running.sh 的 lcov 采集步骤依赖此标志采集覆盖率数据
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -O0")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lgcov")
+    message(STATUS "UT: Code coverage enabled (gcov instrumentation)")
+endif()
+
+# Third-party packages (detected from project)
+# Qt 6.8.0 + DTK6 + KF6 + ICU + chardet，与 src/CMakeLists.txt 保持一致
+find_package(Qt6 REQUIRED COMPONENTS
+    Core Gui Widgets DBus Concurrent PrintSupport Svg Xml
+    WebEngineWidgets WebChannel OpenGLWidgets Core5Compat)
+find_package(Dtk6 REQUIRED COMPONENTS Widget Core)
+find_package(KF6Codecs REQUIRED)
+find_package(KF6SyntaxHighlighting REQUIRED)
 find_package(ICU COMPONENTS i18n uc REQUIRED)
-
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
-include_directories(${CMAKE_CURRENT_LIST_DIR}/../src/editor)
-include_directories(${CMAKE_CURRENT_LIST_DIR}/../src/editor/markdown)
-include_directories(${GTEST_INCLUDE_DIRS})
-include_directories(src)
-link_libraries(uchardet)
-link_libraries(chardet)
-
+find_package(PkgConfig REQUIRED)
 pkg_check_modules(chardet REQUIRED chardet)
 include_directories(${chardet_INCLUDE_DIRS})
-link_directories(${chardet_LIBRARY_DIRS})
 
-set(PROJECT_NAME_TEST
-    ${PROJECT_NAME}-test)
+# Test subdirectories
+add_subdirectory(editor_markdown)
+add_subdirectory(common)
+add_subdirectory(startmanager)
+add_subdirectory(common2)
+add_subdirectory(daemon_ut)
+add_subdirectory(thememodule)
+add_subdirectory(editor_areas)
+add_subdirectory(editor_undo)
+add_subdirectory(editor_wrapper)
+add_subdirectory(editor_core)
+add_subdirectory(controls_ut)
+add_subdirectory(widgets_ut)
+add_subdirectory(app_ut)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-inline")
-
-#Include all app own subdirectorys
-
-
-file(GLOB_RECURSE INTRODUCTION_SRC_TEST ${CMAKE_CURRENT_LIST_DIR}/../src/*.cpp ${CMAKE_CURRENT_LIST_DIR}/../src/basepub/*.c)
-#file(GLOB_RECURSE INTRODUCTION_SRC_TEST ${CMAKE_CURRENT_LIST_DIR}/../src/*.)
-#file(GLOB_RECURSE INTRODUCTION_SRC_TEST1 ${CMAKE_CURRENT_LIST_DIR}/src/*.)
-file(GLOB_RECURSE INTRODUCTION_SRC_TEST1 ${CMAKE_CURRENT_LIST_DIR}/src/*.cpp *.theme)
-#file(GLOB_RECURSE INTRODUCTION_SRC_TEST1 ${CMAKE_CURRENT_LIST_DIR}/src/*.theme)
-file(GLOB_RECURSE INTRODUCTION_SRC_TEST2 ${CMAKE_CURRENT_LIST_DIR}/../src/*.h)
-
-list(REMOVE_ITEM INTRODUCTION_SRC_TEST "${CMAKE_CURRENT_LIST_DIR}/../src/main.cpp")
-list(REMOVE_ITEM INTRODUCTION_SRC_TEST "${CMAKE_CURRENT_LIST_DIR}/../src/dedit/main.cpp")
-list(REMOVE_ITEM INTRODUCTION_SRC_TEST "${CMAKE_CURRENT_LIST_DIR}/../src/common/encoding.cpp")
-
-
-# 生成测试可执行程序
-add_executable(${PROJECT_NAME_TEST}
-    ${INTRODUCTION_SRC_TEST2}
-    ${INTRODUCTION_SRC_TEST}
-    ${INTRODUCTION_SRC_TEST1}
-    ${APP_QRC}
-    )
-
-# 生成测试可执行程序的依赖库
-target_link_libraries(${PROJECT_NAME_TEST}
-        gmock gmock_main gtest gtest_main
-    ${LINK_LIBS}
-    ${GSTREAMER_LIBRARIES}
-    ${LIBDMR_LIBRARIES}
-    ${GTEST_LIBRARIES}
-    ${GTEST_MAIN_LIBRARIES}
-    ${chardet_LIBRARY_DIRS}
-    ICU::i18n
-    ICU::uc
-    -lpthread
-    -lm
-    dl
-    uchardet
-    chardet
-)
-
-#以下注释
-add_custom_target(test
-#    #执行mkdir -p 创建 coverageResult
-#    COMMAND mkdir -p test/coverageResult
-#    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-)
-#
-add_custom_command(TARGET test
-    COMMAND echo " =================== CREAT LCOV REPROT BEGIN ==================== "
-
-    COMMAND ${CMAKE_BINARY_DIR}/tests/${PROJECT_NAME_TEST}
-
-    COMMAND echo " =================== TEST END ==================== "
-)
-
-##'make test'命令依赖与我们的测试程序f
-add_dependencies(test ${PROJECT_NAME_TEST})
-#
-## 设置添加gocv相关信息的输出
-#set(CMAKE_CXX_FLAGS "-g -fprofile-arcs -ftest-coverage")
-
-#ASAN安全性检测标志
-set(CMAKE_SAFETYTEST "${CMAKE_SAFETYTEST_ARG}")
-if(CMAKE_SAFETYTEST STREQUAL "")
-    set(CMAKE_SAFETYTEST "CMAKE_SAFETYTEST_ARG_OFF")
-endif()
-
-#代码覆盖率开关
-if(CMAKE_COVERAGE_ARG STREQUAL "CMAKE_COVERAGE_ARG_ON")
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall -fprofile-arcs -ftest-coverage")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -fprofile-arcs -ftest-coverage")
-endif()
-
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D${CMAKE_SAFETYTEST}")
-if(CMAKE_SAFETYTEST STREQUAL "CMAKE_SAFETYTEST_ARG_ON")
-  #安全测试选项
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=undefined,address -O2")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize=undefined,address -O2")
-endif()
+message(STATUS "UT: Unit tests configuration complete")
