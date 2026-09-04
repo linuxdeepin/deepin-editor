@@ -1177,7 +1177,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="543"/>
         <source>View Mode</source>
-        <translation type="unfinished"/>
+        <translation>Katselutila</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3531"/>
