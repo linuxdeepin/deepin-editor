@@ -58,3 +58,11 @@ tasks/
 src/resources/settings.json
 obj-x86_64-linux-gnu/
 AGENTS.md
+
+# Unit test artifacts
+build-ut/
+tests/.results/
+tests/.reports/
+tests/.ut-session.json
+__pycache__/
+
