@@ -228,7 +228,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="2002"/>
         <source>视图模式</source>
-        <translation type="unfinished"/>
+        <translation>Katselutila</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="11"/>
@@ -1195,13 +1195,13 @@
         <location filename="../src/editor/dtextedit.cpp" line="9574"/>
         <location filename="../src/editor/dtextedit.cpp" line="9576"/>
         <source>No audio output device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
-        <translation>Äänilaitetta ei havaittu. Varmista, että kaiuttimet tai kuulokkeet on kytketty ja yritä uudelleen.</translation>
+        <translation>Äänilaitetta ulos ei havaittu. Varmista, että kaiuttimet tai kuulokkeet on kytketty ja yritä uudelleen.</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="9583"/>
         <location filename="../src/editor/dtextedit.cpp" line="9585"/>
         <source>No audio input device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
-        <translation type="unfinished"/>
+        <translation>Äänilaitetta sisään ei havaittu. Varmista, että kaiuttimet tai kuulokkeet on kytketty ja yritä uudelleen.</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="534"/>
