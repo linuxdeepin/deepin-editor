@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -55,7 +55,7 @@ private:
     int m_jumpFileScrollOffset;
     int m_rowBeforeJump;
     int m_columnBeforeJump;
-    int m_lineCount;
+    int m_lineCount = 0;
     QColor m_backgroundColor;
     DIconButton *m_closeButton=nullptr;
 };

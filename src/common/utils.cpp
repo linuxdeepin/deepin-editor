@@ -696,6 +696,12 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
     // e.g. application/schema+json inherits from application/json
     if (mime.isValid()) {
         for (const QString &supported : SupportedTextMimeTypes) {
+            // 万能二进制类型不参与 inherits() 判定：
+            // 几乎所有二进制 mime（如 image/png）都继承自 application/octet-stream，
+            // 若参与判定会导致二进制文件被误放行为可打开的文本类型
+            if (supported == QLatin1String("application/octet-stream")) {
+                continue;
+            }
             if (mime.inherits(supported)) {
                 qDebug() << "mimeType inherits from supported type:" << supported;
                 return true;
@@ -1015,7 +1021,9 @@ bool Utils::isShareDirAndReadOnly(const QString &filePath)
             if (file.open(QIODevice::ReadOnly)) {
                 QString fileContent = file.readAll();
                 qDebug() << "fileContent:" << fileContent;
-                if (fileContent.contains(":R"))
+                // 精确匹配权限字段 ":R"：后跟逗号、行尾或文件末尾，
+                // 避免 contains(":R") 子串误命中 ":RW" 等可写配置
+                if (fileContent.contains(QRegularExpression(":R(,|\\n|$)")))
                     ret = true;
                 file.close();
             } else {

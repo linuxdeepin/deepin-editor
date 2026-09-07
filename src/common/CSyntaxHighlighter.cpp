@@ -22,6 +22,9 @@ void CSyntaxHighlighter::setEnableHighlight(bool isEnable)
 {
     qDebug() << "CSyntaxHighlighter::setEnableHighlight()" << isEnable;
     m_bHighlight = isEnable;
+    // 开关变更后重新高亮，避免旧格式残留至下次文档变更，
+    // 与 setInvalidCharHighlight 的自动 rehighlight 行为保持一致
+    rehighlight();
 }
 
 void CSyntaxHighlighter::setInvalidCharHighlight(bool enable)

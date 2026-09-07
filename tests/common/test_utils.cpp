@@ -640,14 +640,14 @@ TEST_F(UtilsTest, IsMimeTypeSupport_PubSuffix_ReturnsTrue)
     EXPECT_TRUE(path.endsWith(QString::fromLatin1(".pub"))); // 后缀白名单路径
 }
 
-TEST_F(UtilsTest, IsMimeTypeSupport_PngContent_ReturnsTrueViaOctetStreamInherit)
+TEST_F(UtilsTest, IsMimeTypeSupport_PngContent_ReturnsFalseAfterOctetStreamGuard)
 {
-    // Arrange：PNG 魔数（白名单含 application/octet-stream，PNG 继承自它）
+    // Arrange：PNG 魔数（内容探测为 image/png，继承自 application/octet-stream）
     const QString path = tempFile(QString::fromLatin1("image.bin"),
                                   QByteArray::fromHex("89504e470d0a1a0a0000000d49484452"));
 
-    // Act / Assert：按源码 inherits 逻辑，二进制根类型被放行（记录源行为）
-    EXPECT_TRUE(Utils::isMimeTypeSupport(path));
+    // Act / Assert：octet-stream 不再参与 inherits() 判定，二进制图片被判为不支持
+    EXPECT_FALSE(Utils::isMimeTypeSupport(path));
     EXPECT_EQ(QFileInfo(path).size(), 16); // 探测基于该 16 字节内容
 }
 
@@ -1024,9 +1024,10 @@ INSTANTIATE_TEST_SUITE_P(
                 ShareDirCase{ true, false, false, QByteArray(), false },            // 共享名不存在
                 ShareDirCase{ true, true, false, QByteArray(), false },             // 打开失败
                 ShareDirCase{ true, true, true, QByteArray("path=/x:R,other"), true },  // 只读标记
-                // 源码用 contains(":R") 子串判断，":RW" 同样命中（记录源行为）
-                ShareDirCase{ true, true, true, QByteArray("path=/x:RW"), true },
-                ShareDirCase{ true, true, true, QByteArray("path=/x:W"), false }));     // 无 ":R" 子串
+                // 精确匹配后 ":RW"（可写）不再被误判为只读
+                ShareDirCase{ true, true, true, QByteArray("path=/x:RW"), false },
+                ShareDirCase{ true, true, true, QByteArray("path=/x:R"), true },     // 行尾 ":R"
+                ShareDirCase{ true, true, true, QByteArray("path=/x:W"), false }));     // 无 ":R" 标记
 
 // ===========================================================================
 // getSystemLan / getSystemVersion / isWayland

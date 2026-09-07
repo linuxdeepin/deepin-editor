@@ -88,7 +88,6 @@ private:
     int m_labelWidth = 23;
     int m_labelHeight = 23;
     DPushButton* m_pButton = nullptr;
-    DLabel* m_pLabel = nullptr;
     QString m_text;
     QColor m_defaultColor;
     QString m_textColor;

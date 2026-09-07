@@ -1093,8 +1093,13 @@ bool Window::closeTab(const QString &filePath)
                         m_tabbar->closeCurrentTab(filePath);
                         QFile(filePath).remove();
                     } else {
-                        qDebug() << "File save failed, not closing tab";
-                        saveAsFile();
+                        qDebug() << "File save failed, fall to save as";
+                        // 另存被拒/失败时保留标签页并返回 false，
+                        // 防止调用方（如 closeAllFiles）误认为关闭成功而丢失未保存修改
+                        if (!saveAsFile()) {
+                            qWarning() << "Save as file cancelled or failed, keep tab open";
+                            return false;
+                        }
                     }
                 } else {
                     qDebug() << "File is not a backup file, saving normally";
@@ -1103,8 +1108,11 @@ bool Window::closeTab(const QString &filePath)
                         removeWrapper(filePath, true);
                         m_tabbar->closeCurrentTab(filePath);
                     } else {
-                        qDebug() << "File save failed, not closing tab";
-                        saveAsFile();
+                        qDebug() << "File save failed, fall to save as";
+                        if (!saveAsFile()) {
+                            qWarning() << "Save as file cancelled or failed, keep tab open";
+                            return false;
+                        }
                     }
                 }
             }
@@ -1703,16 +1711,16 @@ QString Window::saveBlankFileToDisk()
 bool Window::saveAsOtherTabFile(EditWrapper *wrapper)
 {
     qDebug() << "Enter saveAsOtherTabFile";
+    // 判空必须前置于任何 wrapper 成员访问，否则空指针解引用
+    if (!wrapper) {
+        qWarning() << "Wrapper is null, cannot save as other tab file";
+        return false;
+    }
     QString filePath = wrapper->textEditor()->getFilePath();
     bool isDraft = Utils::isDraftFile(filePath);
     QFileInfo fileInfo(filePath);
     int index = m_tabbar->indexOf(filePath);
     QString strTabText = m_tabbar->tabText(index);
-
-    if (!wrapper) {
-        qWarning() << "Wrapper is null, cannot save as other tab file";
-        return false;
-    }
 
     DFileDialog dialog(this, tr("Save File"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
@@ -2346,8 +2354,14 @@ void Window::updateSizeMode()
 void Window::popupPrintDialog()
 {
     qDebug() << "Enter popupPrintDialog";
+    // 无打开文件时直接返回，避免 currentWrapper() 空指针解引用
+    if (!currentWrapper()) {
+        qWarning() << "No open file, cannot print";
+        return;
+    }
+
     //大文本加载过程不允许打印操作
-    if (currentWrapper() && currentWrapper()->getFileLoading()) {
+    if (currentWrapper()->getFileLoading()) {
         qDebug() << "File is loading, cannot print";
         return;
     }

@@ -284,19 +284,7 @@ QColor ColorSelectWdg::getDefaultColor()
 
 bool ColorSelectWdg::eventFilter(QObject *object, QEvent *event)
 {
-    if(object == m_pLabel){
-        if(event->type() == QEvent::MouseButtonPress){
-            QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-            if(mouseEvent->button() == Qt::LeftButton){
-                //发送选择信号
-                emit this->sigColorSelected(true,m_defaultColor);
-                qDebug() << "ColorSelectWdg eventFilter, left button pressed, sending sigColorSelected signal";
-                return true;
-            }
-        }
-        qDebug() << "ColorSelectWdg eventFilter, event not handled";
-        return false;
-    }
-
-    return DWidget::eventFilter(object,event);
+    // 默认标记颜色的选择已由 m_pButton 的 clicked 信号实现，
+    // 原先针对 m_pLabel 的过滤分支为死代码（该成员从未被赋值），已移除
+    return DWidget::eventFilter(object, event);
 }
