@@ -225,7 +225,10 @@ TEST_F(UtilsTest, ApplyQss_RegisteredQss_AppliesFileContent)
     Utils::applyQss(&w, QString::fromLatin1("test.qss"));
 
     // Assert
-    EXPECT_EQ(w.styleSheet(), QString::fromLatin1("QWidget { color: red; background-color: blue; }\n"));
+    // test.qss 为满足 REUSE 规范带有 SPDX 版权注释头，applyQss 会原样读入整个文件，
+    // 且 Qt6 QWidget::styleSheet() 返回规范化内容（无尾部换行）——
+    // 严格相等断言对文件头与格式归一化敏感，改为断言规则内容存在
+    EXPECT_TRUE(w.styleSheet().contains(QString::fromLatin1("QWidget { color: red; background-color: blue; }")));
     EXPECT_TRUE(w.styleSheet().contains(QString::fromLatin1("color: red")));
 }
 
