@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -109,7 +109,10 @@ void FlashTween::__runX()
     }
     else {
         qDebug() << "FlashTween X animation completed";
-        m_timerX->stop();
+        // 与 __runY 的防御风格保持一致
+        if (m_timerX != nullptr) {
+            m_timerX->stop();
+        }
     }
     qDebug() << "FlashTween X animation completed";
 }

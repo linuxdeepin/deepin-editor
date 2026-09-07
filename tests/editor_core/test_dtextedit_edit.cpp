@@ -1127,9 +1127,16 @@ TEST_F(TextEditTest, GetWordAtCursor_MidWord_ReturnsPrefix)
     EXPECT_EQ(edit->toPlainText(), QString("typing"));
 }
 
-// 注：getWordAtCursor 空文档分支存在源码缺陷（characterCount() 恒 >= 1，
-// 守卫 !characterCount() 永不命中，空文档调用会在 toPlainText().at(0) 越界
-// 触发 Q_ASSERT），已记录 defects，不构造空文档用例。
+// getWordAtCursor 空文档分支已修复（守卫改用 document()->isEmpty()），补充空文档用例
+TEST_F(TextEditTest, GetWordAtCursor_EmptyDocument_ReturnsEmpty)
+{
+    // Arrange：空文档（原守卫 characterCount() 恒 >= 1 永不命中，会越界断言崩溃）
+    setDocText(QString(""));
+
+    // Act/Assert：空文档直接返回空串，不再崩溃
+    EXPECT_EQ(edit->getWordAtCursor(), QString(""));
+    EXPECT_EQ(edit->toPlainText(), QString(""));
+}
 
 // ---------------- 注释（封闭语法定义 *.utlang） ----------------
 

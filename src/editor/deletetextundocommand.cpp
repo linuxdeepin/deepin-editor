@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -22,6 +22,9 @@ DeleteTextUndoCommand::DeleteTextUndoCommand(QTextCursor textcursor, TextEdit *e
         m_sInsertText = m_textCursor.selectedText();
     } else {
         qDebug() << "m_textCursor.hasSelection() is false";
+        // 无选区删除的是光标前一个字符，m_beginPos 记录被删字符位置（光标-1），
+        // 否则 undo 会把字符重插到原位置之后一位
+        m_beginPos = m_textCursor.position() - 1;
         int pos = m_textCursor.positionInBlock() - 1;
         if (pos >= 0) {
             qDebug() << "pos >= 0";
@@ -193,10 +196,12 @@ void DeleteTextUndoCommand2::undo()
     } else {
         qDebug() << "m_ColumnEditSelections.isEmpty() is false";
         int cnt = m_ColumnEditSelections.size();
-        for (int i = 0; i < cnt; i++) {
-            m_ColumnEditSelections[i].cursor.setPosition(m_beginPostion);
+        // 逆序恢复：redo 按序删除时记录的各选区位置在"全部删除后"的坐标系中有效，
+        // 逆序插入（先恢复靠后的选区）不会使靠前选区的记录位置发生偏移
+        for (int i = cnt - 1; i >= 0; i--) {
+            m_ColumnEditSelections[i].cursor.setPosition(m_selectBeginPosList.value(i));
             m_ColumnEditSelections[i].cursor.insertText(m_selectTextList[i]);
-            m_ColumnEditSelections[i].cursor.setPosition(m_beginPostion);
+            m_ColumnEditSelections[i].cursor.setPosition(m_selectBeginPosList.value(i));
             m_edit->setTextCursor(m_ColumnEditSelections[i].cursor);
         }
     }
@@ -243,8 +248,10 @@ void DeleteTextUndoCommand2::redo()
     } else {
         qDebug() << "m_ColumnEditSelections.isEmpty() is false";
         int cnt = m_ColumnEditSelections.size();
+        // 每个选区记录各自的起始位置，供 undo 恢复使用（ redo/undo 严格交替，先清空防御重复累积）
+        m_selectBeginPosList.clear();
         for (int i = 0; i < cnt; i++) {
-            m_beginPostion = m_ColumnEditSelections[i].cursor.selectionStart();
+            m_selectBeginPosList.append(m_ColumnEditSelections[i].cursor.selectionStart());
             m_ColumnEditSelections[i].cursor.deletePreviousChar();
             m_edit->setTextCursor(m_ColumnEditSelections[i].cursor);
         }

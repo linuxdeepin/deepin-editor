@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017-2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -37,7 +37,7 @@ QSize LineNumberArea::sizeHint() const
 void LineNumberArea::mousePressEvent(QMouseEvent *e)
 {
     qDebug() << "LineNumberArea mousePressEvent at position:" << e->pos();
-//    m_pressPoint = e->pos();
+    m_pressPoint = e->pos();
 //    m_leftAreaWidget->update();
     m_leftAreaWidget->getEdit()->onPressedLineNumber(e->pos());
     QWidget::mousePressEvent(e);

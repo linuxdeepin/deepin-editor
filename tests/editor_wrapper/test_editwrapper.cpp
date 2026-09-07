@@ -667,17 +667,22 @@ TEST_F(EditWrapperTest, UpdatePath_EmptyTruePath_FallsBackToFile)
 
 TEST_F(EditWrapperTest, LastModifiedTime_TextDateRoundTrip_PreservesTime)
 {
-    // Arrange: 生产契约（window.cpp）——传入 QDateTime::toString() 的 TextDate 文本。
-    // 注：源码 setLastModifiedTime 使用 fromString 默认格式重载（locale 相关），
-    // ISO 字符串（含 'T'）无法解析，疑似源码健壮性缺陷，已记 defects 不改源码。
+    // Arrange: 生产契约（window.cpp）——写入侧已改为 toString(Qt::ISODate)；
+    // 解析侧优先 ISODate、回退默认 TextDate（兼容历史记录）。
     const QDateTime stamp(QDate(2020, 5, 5), QTime(12, 30, 0));
 
-    // Act
-    m_wrapper->setLastModifiedTime(stamp.toString());
+    // Act: ISO 格式（新契约）
+    m_wrapper->setLastModifiedTime(stamp.toString(Qt::ISODate));
 
-    // Assert: 按 toString() 往返契约恢复同一时刻
+    // Assert: 精确恢复同一时刻
     EXPECT_EQ(m_wrapper->getLastModifiedTime(), stamp);
     EXPECT_FALSE(m_wrapper->getLastModifiedTime().isNull());
+
+    // Act: TextDate 格式（历史记录兼容回退）
+    m_wrapper->setLastModifiedTime(stamp.toString());
+
+    // Assert: 同样恢复同一时刻
+    EXPECT_EQ(m_wrapper->getLastModifiedTime(), stamp);
 }
 
 TEST_F(EditWrapperTest, DraftAndBackupFile_VariousPaths_DetectCorrectly)

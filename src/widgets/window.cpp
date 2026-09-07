@@ -3064,7 +3064,7 @@ void Window::backupFile()
         } else {
             jsonObject.insert("modify", wrapper->isModified());
         }
-        jsonObject.insert("lastModifiedTime", wrapper->getLastModifiedTime().toString());
+        jsonObject.insert("lastModifiedTime", wrapper->getLastModifiedTime().toString(Qt::ISODate));
         QList<int> bookmarkList = wrapper->textEditor()->getBookmarkInfo();
         if (!bookmarkList.isEmpty()) {
             qInfo() << "bookmarkList is not empty";

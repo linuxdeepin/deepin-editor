@@ -1434,7 +1434,13 @@ QDateTime EditWrapper::getLastModifiedTime() const
 void EditWrapper::setLastModifiedTime(const QString &time)
 {
     qDebug() << "EditWrapper setLastModifiedTime, time:" << time;
-    m_tModifiedDateTime = QDateTime::fromString(time);
+    // 与写入侧 toString(Qt::ISODate) 对称的显式格式解析；
+    // 兼容历史记录中的默认 TextDate 格式，避免依赖 locale 相关默认重载
+    QDateTime dt = QDateTime::fromString(time, Qt::ISODate);
+    if (!dt.isValid()) {
+        dt = QDateTime::fromString(time);
+    }
+    m_tModifiedDateTime = dt;
 }
 void EditWrapper::updateModifyStatus(bool bModified)
 {

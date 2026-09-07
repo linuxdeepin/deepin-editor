@@ -709,20 +709,8 @@ TEST_F(TextEditTest, ContainsExtraSelection_MatchingCursorAndFormat_ReturnsTrue)
     EXPECT_FALSE(edit->containsExtraSelection(list, diff));
 }
 
-TEST_F(TextEditTest, AppendExtraSelection_NoOpImplementation_NoCrash)
-{
-    // Arrange：当前实现为 Q_UNUSED 空壳（保留待统一清理）
-    QList<QTextEdit::ExtraSelection> out;
-    QTextEdit::ExtraSelection sel;
-
-    // Act
-    edit->appendExtraSelection(QList<QTextEdit::ExtraSelection>(), sel,
-                               QString("#ff0000"), &out);
-
-    // Assert：空实现不产生输出
-    EXPECT_TRUE(out.isEmpty());
-    EXPECT_EQ(edit->m_wordMarkSelections.size(), 0); // 空实现不动内部状态
-}
+// 注：原 AppendExtraSelection_NoOpImplementation_NoCrash 直测的空壳方法
+// 已随缺陷修复删除（D-045，源码自述"没有使用的方法，应该去除"）。
 
 // ---------------- handleCursorMarkChanged / setHighLineCurrentLine（M17） ----------------
 

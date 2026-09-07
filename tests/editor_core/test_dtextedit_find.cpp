@@ -154,25 +154,8 @@ TEST_F(TextEditTest, ReplaceAll_TwoMarksSorted_ComparatorAndOffsetsApplied)
     EXPECT_EQ(edit->toPlainText(), QString("mm X nn X"));
 }
 
-TEST_F(TextEditTest, SetCursorKeywordSeletoin_DirectDrive_MovesToMatch)
-{
-    // Arrange：建立查找选区（该方法为当前无调用方的私有遗留代码，白盒直测）
-    setDocText(QString("one two three"));
-    ASSERT_TRUE(edit->highlightKeyword(QString("two"), 0));
-    const int firstMatchPos = edit->m_findMatchSelections.first().cursor.position();
-
-    // Act：findNext=true 从 0 起 → 跳到首个匹配
-    const bool moved = edit->setCursorKeywordSeletoin(0, true);
-
-    // Assert
-    EXPECT_TRUE(moved);
-    EXPECT_EQ(edit->getPosition(), firstMatchPos);
-
-    // Act：findNext=false 从文档尾 → 回到最后一个匹配
-    const bool movedBack = edit->setCursorKeywordSeletoin(edit->toPlainText().size(), false);
-    // Assert
-    EXPECT_TRUE(movedBack);
-}
+// 注：原 SetCursorKeywordSeletoin_DirectDrive_MovesToMatch 直测的私有方法
+// 为无调用方死代码，已随缺陷修复删除（D-043）。
 
 TEST_F(TextEditTest, ReplaceAll_MarkCoveredByReplace_Removed)
 {
