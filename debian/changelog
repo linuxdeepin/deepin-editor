@@ -1,3 +1,16 @@
+deepin-editor (6.6.2) unstable; urgency=medium
+
+  * fix(tests): make ApplyQss assertion tolerant to SPDX header
+  * fix(build): disable unit tests in linglong package build
+  * chore: update version to 6.6.1
+  * chore: update version to 6.5.59
+  * fix(peripheral): fix peripheral module defects from unit test scan
+  * fix(common): fix common/controls/widgets defects from unit test scan
+  * fix(editor): fix core defects found by unit test scan
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Mon, 07 Sep 2026 16:25:59 +0800
+
+
 deepin-editor (6.6.1) unstable; urgency=medium
 
   * fix(ut): fix null pointer crash and static variable bug in source
