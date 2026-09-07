@@ -392,36 +392,26 @@ TEST_F(ColorSelectWdgTest, ColorSelectWdg_LabelClick_ExclusivelySelects)
 }
 
 // ------------------------------------------------------------
-// eventFilter（注意：m_pLabel 源码中从未赋值，恒为 nullptr —— 记录缺陷）
+// eventFilter（原 m_pLabel 死分支已随缺陷修复删除，D-048：
+// 该成员从未赋值，默认色选择由 m_pButton 的 clicked 信号实现）
 // ------------------------------------------------------------
 
-TEST_F(ColorSelectWdgTest, ColorSelectWdg_EventFilter_NullObjectBranches)
+TEST_F(ColorSelectWdgTest, ColorSelectWdg_EventFilter_DelegatesToBase)
 {
     // Arrange
     ColorSelectWdg w(QStringLiteral("Mark"));
     QSignalSpy spy(&w, &ColorSelectWdg::sigColorSelected);
 
-    // Act: object==nullptr（等值于未初始化的 m_pLabel）+ 左键
+    // Act: 任意 object 均透传基类，不再有死分支拦截
     QMouseEvent leftClick(QEvent::MouseButtonPress, QPointF(1, 1), QPointF(1, 1),
                           Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-    bool retLeft = w.eventFilter(nullptr, &leftClick);
+    bool retNull = w.eventFilter(nullptr, &leftClick);
+    EXPECT_FALSE(retNull);
 
-    // Assert: 左键分支 → 发默认色信号并拦截
-    EXPECT_TRUE(retLeft);
-    ASSERT_EQ(spy.count(), 1);
-    EXPECT_EQ(spy.at(0).at(1).value<QColor>(), w.getDefaultColor());
-
-    // Act: 右键分支 → 放行不发信号
-    QSignalSpy spy2(&w, &ColorSelectWdg::sigColorSelected);
-    QMouseEvent rightClick(QEvent::MouseButtonPress, QPointF(1, 1), QPointF(1, 1),
-                           Qt::RightButton, Qt::RightButton, Qt::NoModifier);
-    bool retRight = w.eventFilter(nullptr, &rightClick);
-    EXPECT_FALSE(retRight);
-    EXPECT_EQ(spy2.count(), 0);
-
-    // Act: object 非 null（不等于 m_pLabel）→ 基类放行
     QObject stranger;
     bool retStranger = w.eventFilter(&stranger, &leftClick);
     EXPECT_FALSE(retStranger);
-    EXPECT_EQ(spy2.count(), 0);
+
+    // Assert: 不经按钮点击不发射默认色信号
+    EXPECT_EQ(spy.count(), 0);
 }

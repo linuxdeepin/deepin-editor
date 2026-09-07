@@ -772,13 +772,15 @@ void Settings::removeLockFiles()
     int removedCount = 0;
     for (auto name: nameList) {
         if (name.contains(".lock") || name.contains(".rmlock")) {
-            qDebug() << "Removing lock file:" << name;
-            QFile file(name);
-            if (file.remove()) {
-                qDebug() << "Removed lock file:" << name;
+            // entryList 返回裸文件名，必须拼绝对路径后再删除，
+            // 否则删除落点依赖进程当前工作目录，正常启动场景清理必然失效
+            const QString lockFile = dir.absoluteFilePath(name);
+            qDebug() << "Removing lock file:" << lockFile;
+            if (QFile::remove(lockFile)) {
+                qDebug() << "Removed lock file:" << lockFile;
                 removedCount++;
             } else {
-                qWarning() << "Failed to remove lock file:" << name;
+                qWarning() << "Failed to remove lock file:" << lockFile;
             }
         }
     }

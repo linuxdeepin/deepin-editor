@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -182,7 +182,10 @@ IflytekAiAssistant::CallStatus IflytekAiAssistant::checkValid()
             m_status = isCopilotEnabled(m_copilot);
             if (NoUserAgreement == m_status) {
                 qDebug() << "user agreement not agreed!";
-                launchCopilotChat(m_copilot);
+                // 感知拉起结果，失败时输出告警日志，便于问题定位
+                if (launchCopilotChat(m_copilot) != Enable) {
+                    qWarning() << "Launch copilot chat window failed!";
+                }
             }
         } break;
         default:

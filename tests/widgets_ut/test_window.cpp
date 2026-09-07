@@ -935,13 +935,14 @@ TEST_F(WindowTest, CloseTab_ModifiedNormal_SaveFail_FallsToSaveAs)
     m_ddialogResult = 2;
     m_qdialogResult = QDialog::Rejected; // DFileDialog::exec → 拒绝
 
-    // Act: 源码在 saveAsFile 失败后仍继续走清理并返回 true（记录源码行为）
+    // Act: 修复后 saveAsFile 被拒 → closeTab 返回 false 并保留标签页
     const bool ret = m_win->closeTab(path);
     QApplication::processEvents();
 
-    // Assert: 走到 saveAsFile 兜底（QDialog::exec 被拒）+ 标签被清理
-    EXPECT_TRUE(ret);
+    // Assert: 走到 saveAsFile 兜底（QDialog::exec 被拒）+ 返回 false 保留标签
+    EXPECT_FALSE(ret);
     EXPECT_GE(m_qdialogExecCalls, 1);
+    EXPECT_NE(m_win->wrapper(path), nullptr);
 }
 
 TEST_F(WindowTest, CloseTab_ModifiedBackup_SaveSuccess_RemovesTemFile)
@@ -2299,11 +2300,11 @@ TEST_F(WindowTest, AddTemFileTab_MissingFile_EarlyReturn)
     EXPECT_TRUE(m_win->m_wrappers.isEmpty());
 }
 
-TEST_F(WindowTest, AddTemFileTab_PngInheritsOctetStream_TreatedAsSupported)
+TEST_F(WindowTest, AddTemFileTab_PngRejected_AfterOctetStreamInheritGuard)
 {
-    // Arrange: 真实 PNG 文件。实测 image/png 经 mime.inherits("application/octet-stream")
-    // 兜底被判"受支持"（octet-stream 在 SupportedTextMimeTypes 白名单且为所有 mime 的
-    // 祖先）——addTemFileTab 的"不支持提示"分支对常规文件不可达（缺陷已记录 session）。
+    // Arrange: 真实 PNG 文件。image/png 经 inherits("application/octet-stream")
+    // 兜底原本会被误判为"受支持"；修复后 octet-stream 不参与 inherits 判定，
+    // PNG 走"不支持提示"分支。
     QImage img(2, 2, QImage::Format_RGB32);
     img.fill(Qt::red);
     const QString binPath = m_tempDir->filePath(QStringLiteral("blob.png"));
@@ -2313,11 +2314,10 @@ TEST_F(WindowTest, AddTemFileTab_PngInheritsOctetStream_TreatedAsSupported)
     m_win->addTemFileTab(binPath, QStringLiteral("blob"), binPath, QString());
     QApplication::processEvents();
 
-    // Assert: 走受支持分支创建 blob 标签（无无效提示）
-    EXPECT_EQ(m_iconMsgCalls, 0);
+    // Assert: 不支持分支给出提示；无 wrapper 时会先补一个空白标签，不创建 PNG 的 wrapper
+    EXPECT_GE(m_iconMsgCalls, 1);
     EXPECT_EQ(m_tabbar->count(), 1);
-    EXPECT_EQ(m_tabbar->currentName(), QString("blob"));
-    EXPECT_NE(m_win->wrapper(binPath), nullptr);
+    EXPECT_EQ(m_win->wrapper(binPath), nullptr);
 }
 
 TEST_F(WindowTest, AddTemFileTab_SupportedTempFile_CreatesWrapperAndTab)

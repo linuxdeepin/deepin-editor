@@ -531,14 +531,14 @@ QMimeData *Tabbar::createMimeDataFromTab(int index, const QStyleOptionTab &optio
 
     if (wrapper && wrapper->getFileLoading()) return nullptr;
 
-    QMimeData *mimeData = new QMimeData;
-    mimeData->setParent(window);
-
     if (!wrapper) {
         //m_tabbar->closeCurrentTab();
         qDebug() << "wrapper is null";
         return nullptr;
     }
+
+    QMimeData *mimeData = new QMimeData;
+    mimeData->setParent(window);
 
     mimeData->setProperty("wrapper", QVariant::fromValue(static_cast<void *>(wrapper)));
     mimeData->setProperty("isModified", wrapper->isModified());
@@ -673,7 +673,11 @@ bool Tabbar::eventFilter(QObject *watched, QEvent *event)
 
             // popup right menu on tab.
             if (m_rightClickTab >= 0) {
-                m_rightMenu = new DMenu;
+                // 释放上一次的菜单实例，避免重复右键导致内存泄漏
+                if (m_rightMenu) {
+                    m_rightMenu->deleteLater();
+                }
+                m_rightMenu = new DMenu(this);
                 m_rightMenu->setAccessibleName("TabContextMenu");
 
                 m_closeTabAction = new QAction(tr("Close tab"), this);
@@ -765,7 +769,10 @@ bool Tabbar::eventFilter(QObject *watched, QEvent *event)
 //                            closeTab(this->indexOf(m_tabPaths.value(i)));
 //                        }
 //                    }
-                    for (auto path : m_tabPaths)
+                    // 遍历副本：closeTab 会经 handleTabIsRemoved 同步修改 m_tabPaths，
+                    // 直接遍历原容器将导致迭代器失效
+                    const QStringList tabPaths = m_tabPaths;
+                    for (auto path : tabPaths)
                     {
                         EditWrapper *wrapper = window->wrapper(path);//路径获取文件
                         if (!wrapper->isModified()) {

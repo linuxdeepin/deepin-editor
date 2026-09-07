@@ -212,11 +212,8 @@ TEST_F(TextFileSaverTest, Save_MemoryInsufficientDocument_ReturnsFalse)
     EXPECT_FALSE(ret);
     EXPECT_EQ(obj->errorString(), QStringLiteral("Insufficient memory to load document content"));
     EXPECT_EQ(memCallCount, 1);
-    // 文件已先被打开截断，应为空文件
-    QFile f(filePath(QStringLiteral("mem1.txt")));
-    ASSERT_TRUE(f.open(QIODevice::ReadOnly));
-    EXPECT_EQ(f.size(), 0);
-    f.close();
+    // 修复后前置校验先于文件打开，目标文件不应被创建/截断
+    EXPECT_FALSE(QFile::exists(filePath(QStringLiteral("mem1.txt"))));
 }
 
 // B4

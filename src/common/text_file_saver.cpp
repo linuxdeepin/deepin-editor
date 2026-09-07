@@ -139,13 +139,8 @@ bool TextFileSaver::saveToFile(QFileDevice &file)
 {
     qDebug() << "Entering saveToFile";
     try {
-        qDebug() << "Attempting to open file for writing:" << m_filePath;
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-            m_errorString = file.errorString();
-            qWarning() << "Failed to open file:" << m_errorString;
-            return false;
-        }
-        qDebug() << "file opened";
+        // 先完成前置校验（内存检查等），再打开/截断目标文件，
+        // 避免校验失败时目标文件已被 Truncate 清空
         auto characterCount = m_document->characterCount();
         // Check memory for document content (QChar is 2 bytes)
         qlonglong docMemoryNeeded = characterCount * 2;
@@ -154,6 +149,14 @@ bool TextFileSaver::saveToFile(QFileDevice &file)
             qWarning() << m_errorString << "- needed:" << docMemoryNeeded << "bytes";
             return false;
         }
+
+        qDebug() << "Attempting to open file for writing:" << m_filePath;
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            m_errorString = file.errorString();
+            qWarning() << "Failed to open file:" << m_errorString;
+            return false;
+        }
+        qDebug() << "file opened";
         qDebug() << "memory sufficient";
         QString content = m_document->toPlainText();
         if (m_useCRLF) {
@@ -203,6 +206,8 @@ bool TextFileSaver::saveToFile(QFileDevice &file)
         }
 
         qDebug() << "File saved successfully:" << m_filePath;
+        // 成功保存后清空历史错误信息，保证 errorString() 不返回上次失败内容
+        m_errorString.clear();
         return true;
     } catch (const std::bad_alloc &) {
         m_errorString = QObject::tr("Memory allocation failed");
