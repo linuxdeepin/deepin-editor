@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -17,9 +17,9 @@ public:
     explicit PerformanceMonitor();
 
     static void initializeAppStart();
-    static void initializAppFinish();
+    static void initializeAppFinish();
     static void closeAppStart();
-    static void closeAPPFinish();
+    static void closeAppFinish();
     static void openFileStart();
     static void openFileFinish(const QString &strFileName, qint64 iFileSize);
 

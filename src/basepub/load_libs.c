@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022-2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -40,8 +40,14 @@ static LoadLibs *newClass(void)
 
     pLibs->m_document_clip_copy = (uos_document_clip_copy)dlsym(handle, "document_clip_copy");
     PrintError();
+    if (pLibs->m_document_clip_copy == NULL) {
+        fprintf(stderr, "Error: dlsym resolve document_clip_copy failed\n");
+    }
     pLibs->m_document_close = (uos_document_close)dlsym(handle, "document_close");
     PrintError();
+    if (pLibs->m_document_close == NULL) {
+        fprintf(stderr, "Error: dlsym resolve document_close failed\n");
+    }
 
     assert(pLibs != NULL);
     return pLibs;
@@ -74,6 +80,10 @@ void setLibNames(LoadLibNames tmp)
     if(tmp.chZPDDLL == NULL) {
         g_ldnames.chZPDDLL = NULL;
     } else {
+        // 重复调用时先释放旧的分配，避免内存泄漏
+        if (g_ldnames.chZPDDLL != NULL) {
+            free(g_ldnames.chZPDDLL);
+        }
         g_ldnames.chZPDDLL = ( char*)malloc(strlen(tmp.chZPDDLL)+1);
         strcpy(g_ldnames.chZPDDLL,tmp.chZPDDLL);
     }

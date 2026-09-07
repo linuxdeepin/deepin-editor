@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -33,7 +33,7 @@ void PerformanceMonitor::initializeAppStart()
     qDebug() << "Application start timestamp recorded:" << initializeAppStartMs;
 }
 
-void PerformanceMonitor::initializAppFinish()
+void PerformanceMonitor::initializeAppFinish()
 {
     QDateTime current = QDateTime::currentDateTime();
     qDebug() << qPrintable(LOG_FLAG)
@@ -52,7 +52,7 @@ void PerformanceMonitor::closeAppStart()
     qDebug() << "Application close process started, timestamp:" << closeAppStartMs;
 }
 
-void PerformanceMonitor::closeAPPFinish()
+void PerformanceMonitor::closeAppFinish()
 {
     QDateTime current = QDateTime::currentDateTime();
     qDebug() << qPrintable(LOG_FLAG)
@@ -83,5 +83,5 @@ void PerformanceMonitor::openFileFinish(const QString &strFileName, qint64 iFile
     openFileFinishMs = current.toMSecsSinceEpoch();
     qint64 time = openFileFinishMs - openFileStartMs;
     float fFilesize = iFileSize;
-    qInfo() << qPrintable(QString("%1 filename=%2 filezise=%3M opentime=%4ms #(Open file time)").arg(GRAB_POINT_OPEN_FILE_TIME).arg(strFileName).arg(QString::number(fFilesize/(1024*1024), 'f', 6)).arg(time));
+    qInfo() << qPrintable(QString("%1 filename=%2 filesize=%3M opentime=%4ms #(Open file time)").arg(GRAB_POINT_OPEN_FILE_TIME).arg(strFileName).arg(QString::number(fFilesize/(1024*1024), 'f', 6)).arg(time));
 }

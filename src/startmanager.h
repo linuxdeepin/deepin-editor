@@ -42,10 +42,10 @@ public:
     bool isMultiWindow();
 
     /**
-     * @brief isTemFilesEmpty 是否需要备份
-     * @return　true or false
+     * @brief hasEmptyTemFile 历史临时文件记录列表中是否存在空串项
+     * @return　存在空串项返回 true；列表为空或全部有效返回 false
      */
-    bool isTemFilesEmpty();
+    bool hasEmptyTemFile();
 
     /**
      * @brief autoBackupFile 自动备份

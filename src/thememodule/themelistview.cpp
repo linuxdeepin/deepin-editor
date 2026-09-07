@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -38,13 +38,9 @@ void ThemeListView::adjustScrollbarMargins()
     QEvent event(QEvent::LayoutRequest);
     QApplication::sendEvent(this, &event);
 
-    if (!verticalScrollBar()->visibleRegion().isEmpty()) {
-        qDebug() << "Setting viewport margins with scrollbar";
-        setViewportMargins(0, 0,5, 0);
-    } else {
-        qDebug() << "Setting viewport margins without scrollbar";
-        setViewportMargins(0, 0, 5, 0);
-    }
+    // 原先 if/else 两分支 margins 完全相同，条件判断无实际效果，已简化；
+    // 预留右侧 5px 给竖向滚动条
+    setViewportMargins(0, 0, 5, 0);
 }
 
 bool ThemeListView::eventFilter(QObject *, QEvent *event)

@@ -19,7 +19,7 @@
 //     （StubExt::get_ctor_addr + placement-new QObject 最小初始化）
 //
 // 方法覆盖清单（30 方法，含 3 个 private 经间接覆盖）：
-// instance/~StartManager/StartManager/checkPath/ifKlu/isMultiWindow/isTemFilesEmpty/
+// instance/~StartManager/StartManager/checkPath/ifKlu/isMultiWindow/hasEmptyTemFile/
 // autoBackupFile/recoverFile/openFilesInWindow/openFilesInTab/createWindowFromWrapper/
 // loadTheme/createWindow/initWindowPosition/popupExistTabs/getFileTabInfo/
 // slotCheckUnsaveTab/closeAboutForWindow/slotCreatNewwindow/slotCloseWindow/
@@ -30,7 +30,7 @@
 // | 1 | 每个公开方法 ≥1 用例 | 完成（见用例映射） |
 // | 2 | 等价类划分（环境变量组合/书签串/临时文件列表/JSON 记录形态） | 完成 |
 // | 3 | 边界值（空列表/空串/INT 极值/20 窗口上限/tabIndex 越界） | 完成 |
-// | 4 | TEST_P ≥3 组（ifKlu 环境组合/isTemFilesEmpty 列表形态/analyzeBookmakeInfo 串形态） | 完成 |
+// | 4 | TEST_P ≥3 组（ifKlu 环境组合/hasEmptyTemFile 列表形态/analyzeBookmakeInfo 串形态） | 完成 |
 // | 5 | 分支清单 → 用例映射 | 见下方 |
 // | 6 | if/switch/early-return 全分支 | 完成（除 3 处标注 GUI/构造约束不可达分支） |
 // | 7 | 异常路径 EXPECT_THROW 精确匹配 | N/A（方法无 throw，Qt 风格 bool/错误码） |
@@ -45,7 +45,7 @@
 // checkPath: B5 wrapper 非空→popup+false；B6 全空→true
 // ifKlu: B7 XDG_SESSION_TYPE==wayland→true；B8 WAYLAND_DISPLAY 含 wayland→true；B9 否则 false
 // isMultiWindow: B10 count>1→true；B11 否则 false
-// isTemFilesEmpty: B12 存在空串项→true；B13 否则 false
+// hasEmptyTemFile: B12 存在空串项→true；B13 否则 false
 // autoBackupFile: B14 拖拽→早退；B15 autoBackupDir 不存在→mkpath；B16 存在且 backup 非空→清空；
 //   B17 getFileLoading→continue；B18 tabIndex<0→continue；B19 书签非空→insert；B20 空→remove；
 //   B21 活动窗口且 currentWrapper→focus；B22 草稿→saveTemFile(filePath)；B23 modified→saveTemFile(autoBackup 名)；
@@ -402,7 +402,7 @@ protected:
         stub.set_lamda(&Utils::activeWindowFromDock,
                        [this](quintptr) -> bool { return dockActivate; });
 
-        stub.set_lamda(&PerformanceMonitor::closeAPPFinish, []() -> void {});
+        stub.set_lamda(&PerformanceMonitor::closeAppFinish, []() -> void {});
 
         // QApplication::quit 拦截（slotCloseWindow 延迟退出路径，防真实退出测试进程）
         stub.set_lamda(&QCoreApplication::quit, [this]() -> void { ++quitCalls; });
@@ -717,7 +717,7 @@ INSTANTIATE_TEST_SUITE_P(
         IfKluCase{ "", "", false }));                  // B9：均未设置
 
 // ============================================================
-// isMultiWindow / isTemFilesEmpty
+// isMultiWindow / hasEmptyTemFile
 // ============================================================
 
 TEST_F(StartManagerTest, IsMultiWindow_SingleWindow_ReturnsFalse)
@@ -751,7 +751,7 @@ TEST_P(IsTemFilesEmptyTest, IsTemFilesEmpty_ListVariants_ReturnsExpected)
     obj->m_qlistTemFile = c.files;
 
     // Act
-    bool ret = obj->isTemFilesEmpty();
+    bool ret = obj->hasEmptyTemFile();
 
     // Assert：期望边 + 列表不被修改（强异常安全）
     EXPECT_EQ(ret, c.expected);
@@ -1941,8 +1941,8 @@ TEST_F(StartManagerTest, OpenFilesInWindow_NewFile_CreatesWindowAndTab)
 
 TEST_F(StartManagerTest, OpenFilesInTab_EmptyNoWindowsNoTemFiles_AddsBlankTab)
 {
-    // Arrange：无窗口 + 临时记录含空串占位（isTemFilesEmpty=true → 不走恢复）+ blank 目录无文件
-    // 注：isTemFilesEmpty() 语义为"列表含空串项"（源码 143-156），空列表返回 false 走恢复空转
+    // Arrange：无窗口 + 临时记录含空串占位（hasEmptyTemFile=true → 不走恢复）+ blank 目录无文件
+    // 注：hasEmptyTemFile() 语义为"列表含空串项"（源码 143-156），空列表返回 false 走恢复空转
     obj->m_qlistTemFile = QStringList { QString() };
     Window *newWin = qobjFake<Window>();
     int blankCalls = 0;
@@ -2015,7 +2015,7 @@ TEST_F(StartManagerTest, OpenFilesInTab_RecoveryFoundNothing_AddsBlankTab)
 
 TEST_F(StartManagerTest, OpenFilesInTab_BlankFilesExist_RemovesThenAddsBlankTab)
 {
-    // Arrange：临时记录含空串占位（isTemFilesEmpty=true → 走清理分支）+ blank 目录存在遗留 blank_file
+    // Arrange：临时记录含空串占位（hasEmptyTemFile=true → 走清理分支）+ blank 目录存在遗留 blank_file
     obj->m_qlistTemFile = QStringList { QString() };
     QDir().mkpath(obj->m_blankFileDir);
     QString stale = QDir(obj->m_blankFileDir).filePath("blank_file_0");

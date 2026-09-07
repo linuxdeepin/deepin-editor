@@ -49,6 +49,11 @@ StartManager::~StartManager()
     if (m_instance == this) {
         m_instance = nullptr;
     }
+    // 释放登录管理 DBus 接口，避免泄漏
+    if (m_pLoginManager) {
+        delete m_pLoginManager;
+        m_pLoginManager = nullptr;
+    }
 }
 
 StartManager::StartManager(QObject *parent)
@@ -140,9 +145,9 @@ bool StartManager::isMultiWindow()
     return false;
 }
 
-bool StartManager::isTemFilesEmpty()
+bool StartManager::hasEmptyTemFile()
 {
-    qDebug() << "Enter isTemFilesEmpty";
+    qDebug() << "Enter hasEmptyTemFile";
     bool bIsEmpty = false;
 
     for (auto temFile : m_qlistTemFile) {
@@ -151,7 +156,7 @@ bool StartManager::isTemFilesEmpty()
         }
     }
 
-    qDebug() << "Exit isTemFilesEmpty, return" << bIsEmpty;
+    qDebug() << "Exit hasEmptyTemFile, return" << bIsEmpty;
     return bIsEmpty;
 }
 
@@ -567,7 +572,7 @@ void StartManager::openFilesInTab(QStringList files)
             Window *window = createWindow(true);
             window->showCenterWindow(true);
 
-            if (!isTemFilesEmpty()) {
+            if (!hasEmptyTemFile()) {
                 qDebug() << "Temporary files exist, attempting to recover";
                 int recoveredCount = recoverFile(window);
                 qDebug() << "Recovered" << recoveredCount << "files";
@@ -808,16 +813,16 @@ void StartManager::slotCloseWindow()
         QDir path = QDir::currentPath();
         if (!path.exists()) {
             return ;
-            qInfo() << "Window closed, remaining windows:" << m_windows.size();
-            qDebug() << "Exit slotCloseWindow";
         }
         path.setFilter(QDir::Files);
         QStringList nameList = path.entryList();
         foreach (auto name, nameList) {
             if (name.contains("tabPaths.txt")) {
                 qDebug() << "Delete tabPaths.txt";
-                QFile file(name);
-                file.remove();
+                // entryList 返回裸文件名，拼绝对路径后再删除，避免落点依赖进程工作目录
+                if (!QFile::remove(path.absoluteFilePath(name))) {
+                    qWarning() << "Failed to remove tabPaths.txt:" << path.absoluteFilePath(name);
+                }
             }
         }
 
@@ -831,7 +836,7 @@ void StartManager::slotCloseWindow()
             QApplication::quit();
         });
 
-        PerformanceMonitor::closeAPPFinish();
+        PerformanceMonitor::closeAppFinish();
     }
     qDebug() << "Exit slotCloseWindow";
 }
