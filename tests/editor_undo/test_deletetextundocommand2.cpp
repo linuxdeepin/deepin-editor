@@ -166,7 +166,7 @@ TEST_F(DeleteTextUndoCommand2Test, Redo_ColumnSingleSelection_ReversibleBothWays
 // 源码行为注记（defect 候选，见批次报告）：redo 列编辑循环里 m_beginPostion 被
 // 每个选区覆盖，undo 循环对所有选区统一使用最后写入值，导致多选区场景文本被
 // 恢复到最后一个选区起点而非各自起点；本用例按实际行为断言并保留可逆性失败的证据。
-TEST_F(DeleteTextUndoCommand2Test, Redo_ColumnMultiSelection_UndoUsesLastBeginPos)
+TEST_F(DeleteTextUndoCommand2Test, Redo_ColumnMultiSelection_UndoRestoresEachPosition)
 {
     // Arrange：两个列选区 [0,1) 与 [3,4)
     edit->setPlainText("aa\nbb");
@@ -181,10 +181,9 @@ TEST_F(DeleteTextUndoCommand2Test, Redo_ColumnMultiSelection_UndoUsesLastBeginPo
     // Assert：redo 删除两个选区内容
     EXPECT_EQ(docText(), QString("a\nb"));
 
-    // Act & Assert：undo 将两段文本都插到最后一个选区起点 position=3（实际行为）
+    // Act & Assert：修复后 undo 按各自选区起点恢复
     cmd.undo();
-    EXPECT_EQ(docText(), QString("a\nbab"));                   // 非 "aa\nbb"：见 defect 注记
-    EXPECT_NE(docText(), QString("aa\nbb"));
+    EXPECT_EQ(docText(), QString("aa\nbb"));
 }
 
 // ---- R2/U2 列编辑裸光标（块中/块首）：ctor2 捕获前字符与 "\n" 两分支 ----

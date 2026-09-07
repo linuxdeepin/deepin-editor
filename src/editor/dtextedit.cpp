@@ -2617,9 +2617,9 @@ bool TextEdit::updateKeywordSelectionsInView(QString keyword, QTextCharFormat ch
             }
             lastMatchPos = currentMatchPos;
 
-            // 调整为不区分大小写
+            // 匹配大小写不敏感（defaultCaseSensitive = Qt::CaseInsensitive），
+            // 查找小写 f 时大写 F 同样会入高亮列表
             Qt::CaseSensitivity option = defaultCaseSensitive;
-            /* 查找字符时，查找到完全相等的时候才高亮，如查找小写f时，大写的F不高亮 */
             if (!extra.cursor.selectedText().compare(keyword, option) || keyword.contains(endLine, option)) {
                 qDebug() << "Updating keyword selections in view with selected text";
                 listSelection->append(extra);
@@ -3092,55 +3092,6 @@ void TextEdit::setSyntaxDefinition(KSyntaxHighlighting::Definition def)
 {
     qDebug() << "Setting syntax definition";
     m_commentDefinition.setComments(def.singleLineCommentMarker(), def.multiLineCommentMarker().first,  def.multiLineCommentMarker().second);
-}
-
-bool TextEdit::setCursorKeywordSeletoin(int position, bool findNext)
-{
-    qDebug() << "Setting cursor keyword seletion";
-    int offsetLines = 3;
-
-    if (findNext) {
-        qDebug() << "Setting cursor keyword seletion with find next";
-        for (int i = 0; i < m_findMatchSelections.size(); i++) {
-            if (m_findMatchSelections[i].cursor.position() > position) {
-                qDebug() << "Setting cursor keyword seletion with find next and position greater than position";
-                m_findHighlightSelection.cursor = m_findMatchSelections[i].cursor;
-
-                jumpToLine(m_findMatchSelections[i].cursor.blockNumber() + offsetLines, false);
-
-                QTextCursor cursor = textCursor();
-                cursor.setPosition(m_findMatchSelections[i].cursor.position());
-
-                // Update cursor.
-                setTextCursor(cursor);
-
-                qDebug() << "Setting cursor keyword seletion return true";
-                return true;
-            }
-        }
-    } else {
-        qDebug() << "Setting cursor keyword seletion with find previous";
-        for (int i = m_findMatchSelections.size() - 1; i >= 0; i--) {
-            if (m_findMatchSelections[i].cursor.position() < position) {
-                qDebug() << "Setting cursor keyword seletion with find previous and position less than position";
-                m_findHighlightSelection.cursor = m_findMatchSelections[i].cursor;
-
-                jumpToLine(m_findMatchSelections[i].cursor.blockNumber() + offsetLines, false);
-
-                QTextCursor cursor = textCursor();
-                cursor.setPosition(m_findMatchSelections[i].cursor.position());
-
-                // Update cursor.
-                setTextCursor(cursor);
-
-                qDebug() << "Setting cursor keyword seletion return true";
-                return true;
-            }
-        }
-    }
-
-    qDebug() << "Setting cursor keyword seletion return false";
-    return false;
 }
 
 bool TextEdit::shouldDeferCursorHeavyUpdate(const QTextCursor &cursor, const QString &text) const
@@ -3687,6 +3638,8 @@ void TextEdit::slotNextBookMarkAction(bool checked)
     if (index == -1 && !m_listBookmark.isEmpty()) {
         qDebug() << "Slot next book mark action with index -1";
         jumpToLine(m_listBookmark.last(), false);
+        // 无书签命中时跳至末个书签后直接返回，避免落入下方 if/else 二次跳转
+        return;
     }
 
     if (index == m_listBookmark.count() - 1) {
@@ -3924,7 +3877,6 @@ QTextCursor TextEdit::findCursor(const QString &substr, const QString &text, int
         qDebug() << "Find failed - text not found";
         return QTextCursor();
     }
-    qDebug() << "Finding text completed";
 }
 
 /**
@@ -4792,8 +4744,10 @@ void TextEdit::slot_translate()
 QString TextEdit::getWordAtCursor()
 {
     qDebug() << "Get word at cursor";
-    if (!characterCount()) {
-        qDebug() << "Get word at cursor, characterCount() is 0";
+    // QTextDocument::characterCount() 恒 >= 1（含结尾分隔符），不能作为空文档判据；
+    // 空文档下 toPlainText().at(0) 会触发 QString 越界断言
+    if (document()->isEmpty()) {
+        qDebug() << "Get word at cursor, document is empty";
         return "";
     } else {
         qDebug() << "Get word at cursor, characterCount() is not 0";
@@ -5861,6 +5815,12 @@ QStringList TextEdit::readHistoryRecordofFilePath(QString key)
 void TextEdit::writeEncodeHistoryRecord()
 {
     qDebug() << "Write encode history record";
+    // EditWrapper 可能脱离 Window 独立构造（m_settings 未注入），
+    // 使用前判空，与 setTextFinished 的空判保护保持一致
+    if (!m_settings || !m_settings->settings) {
+        qWarning() << "Write encode history record, m_settings is null, skip";
+        return;
+    }
     QString history = m_settings->settings->option("advance.editor.browsing_encode_history")->value().toString();
 
     QStringList pathList = readHistoryRecordofFilePath("advance.editor.browsing_encode_history");
@@ -7179,6 +7139,8 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
         if (object == m_pLeftAreaWidget->m_pBookMarkArea) {
             m_nBookMarkHoverLine = line;
             m_pLeftAreaWidget->m_pBookMarkArea->update();
+            // 与下方折叠区 HoverMove 分支的返回策略保持一致：事件已处理，不再透传基类
+            return true;
         } else if (object == m_pLeftAreaWidget->m_pFlodArea) {
             m_markFoldHighLightSelections.clear();
             renderAllSelections();
@@ -7386,336 +7348,6 @@ bool TextEdit::containsExtraSelection(QList<QTextEdit::ExtraSelection> listSelec
         }
     }
     return false;
-}
-
-void TextEdit::appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSelections
-                                    , QTextEdit::ExtraSelection selection, QString strColor
-                                    , QList<QTextEdit::ExtraSelection> *listSelections)
-{
-// 没有使用的方法，应该去除，降低维护成本
-// 由于需要处理对应的单元测试，暂时不完全移除此函数，后期将统一进行处理
-#if 1
-    // 去除参数未使用警告
-    Q_UNUSED(wordMarkSelections)
-    Q_UNUSED(selection)
-    Q_UNUSED(strColor)
-    Q_UNUSED(listSelections)
-#else
-    //如果文档中有标记
-    if (wordMarkSelections.count() > 0) {
-        bool bIsContains = false;///< 是否占用已有标记
-        int nWordMarkSelectionStart = 0,///< 已有标记起始位置
-            nSelectionStart = 0,///< 标记起始位置
-            nWordMarkSelectionEnd = 0,///< 已有标记结束位置
-            nSelectionEnd = 0;///< 标记结束位置
-
-        //按大小确定标记的起始和结束位置
-        if (selection.cursor.selectionStart() > selection.cursor.selectionEnd()) {
-            nSelectionStart = selection.cursor.selectionEnd();
-            nSelectionEnd = selection.cursor.selectionStart();
-        } else {
-            nSelectionStart = selection.cursor.selectionStart();
-            nSelectionEnd = selection.cursor.selectionEnd();
-        }
-
-        for (int i = 0; i < wordMarkSelections.count(); i++) {
-
-            //按大小确定已有标记的起始和结束位置
-            if (wordMarkSelections.value(i).cursor.selectionStart() > wordMarkSelections.value(i).cursor.selectionEnd()) {
-                nWordMarkSelectionStart = wordMarkSelections.value(i).cursor.selectionEnd();
-                nWordMarkSelectionEnd = wordMarkSelections.value(i).cursor.selectionStart();
-            } else {
-                nWordMarkSelectionStart = wordMarkSelections.value(i).cursor.selectionStart();
-                nWordMarkSelectionEnd = wordMarkSelections.value(i).cursor.selectionEnd();
-            }
-
-            //如果被已有标记包含
-            if ((nWordMarkSelectionStart <= nSelectionStart && nWordMarkSelectionEnd > nSelectionEnd)
-                    || (nWordMarkSelectionStart < nSelectionStart && nWordMarkSelectionEnd >= nSelectionEnd)) {
-
-                bIsContains = true;
-                selection.format.setBackground(QColor(strColor));
-
-                //如果标记格式不相同
-                if (wordMarkSelections.value(i).format != selection.format) {
-                    int nRemPos = 0;///< 标记插入位置
-
-                    //移除已有标记
-                    for (int j = 0; j < wordMarkSelections.count(); j++) {
-                        if (m_wordMarkSelections.value(j).cursor == wordMarkSelections.value(i).cursor
-                                && m_wordMarkSelections.value(j).format == wordMarkSelections.value(i).format) {
-
-                            m_wordMarkSelections.removeAt(j);
-                            nRemPos = j;
-                            break;
-                        }
-                    }
-
-                    //重新记录标记
-                    selection.cursor.setPosition(nWordMarkSelectionStart, QTextCursor::MoveAnchor);
-                    selection.cursor.setPosition(nSelectionStart, QTextCursor::KeepAnchor);
-                    selection.format.setBackground(wordMarkSelections.value(i).format.background());
-
-                    bool bIsInsert = false;///< 标记是否将原有标记分成两段
-
-                    //如果第一段存在
-                    if (selection.cursor.selectedText() != "") {
-                        bIsInsert = true;
-                        m_wordMarkSelections.insert(nRemPos, selection);
-                    }
-
-                    QTextEdit::ExtraSelection preSelection;
-                    preSelection.format = selection.format;
-                    preSelection.cursor = selection.cursor;
-
-                    selection.cursor.setPosition(nSelectionEnd, QTextCursor::MoveAnchor);
-                    selection.cursor.setPosition(nWordMarkSelectionEnd, QTextCursor::KeepAnchor);
-
-                    //如果第二段存在
-                    if (selection.cursor.selectedText() != "") {
-                        if (bIsInsert) {
-                            m_wordMarkSelections.insert(nRemPos + 1, selection);
-                        } else {
-                            m_wordMarkSelections.insert(nRemPos, selection);
-                        }
-                    }
-
-                    //从记录标记的表中替换原有标记（按标记动作记录）
-                    QList<QTextEdit::ExtraSelection> selecList;
-                    bool bIsFind = false;///< 是否有包含该标记的标记动作
-
-                    for (int j = 0; j < m_mapWordMarkSelections.count(); j++) {
-                        auto list = m_mapWordMarkSelections.value(j);
-
-                        for (int k = 0; k < list.count(); k++) {
-                            if (list.value(k).cursor == wordMarkSelections.value(i).cursor
-                                    && list.value(k).format == wordMarkSelections.value(i).format) {
-
-                                list.removeAt(k);
-                                selecList = list;
-                                bIsInsert = false;
-
-                                if (preSelection.cursor.selectedText() != "") {
-                                    bIsInsert = true;
-                                    selecList.insert(k, preSelection);
-                                }
-
-                                if (selection.cursor.selectedText() != "") {
-                                    if (bIsInsert) {
-                                        selecList.insert(k + 1, selection);
-                                    } else {
-                                        selecList.insert(k, selection);
-                                    }
-                                }
-
-                                bIsFind = true;
-                                break;
-                            }
-                        }
-
-                        if (bIsFind) {
-                            m_mapWordMarkSelections.remove(j);
-                            m_mapWordMarkSelections.insert(j, selecList);
-                            break;
-                        }
-                    }
-
-                    //记录新添加的标记
-                    selection.cursor.setPosition(nSelectionStart, QTextCursor::MoveAnchor);
-                    selection.cursor.setPosition(nSelectionEnd, QTextCursor::KeepAnchor);
-                    selection.format.setBackground(QColor(strColor));
-                    m_wordMarkSelections.append(selection);
-                    listSelections->append(selection);
-                }
-            } else if (nWordMarkSelectionStart >= nSelectionStart && nWordMarkSelectionEnd <= nSelectionEnd) { //如果标记包含已有标记
-                bIsContains = true;
-                selection.format.setBackground(QColor(strColor));
-
-                //移除已有标记
-                for (int j = 0; j < wordMarkSelections.count(); j++) {
-                    if (m_wordMarkSelections.value(j).cursor == wordMarkSelections.value(i).cursor
-                            && m_wordMarkSelections.value(j).format == wordMarkSelections.value(i).format) {
-                        m_wordMarkSelections.removeAt(j);
-                        break;
-                    }
-                }
-
-                //记录新添加的标记
-                m_wordMarkSelections.append(selection);
-
-                //如果标记格式不相同
-                if (wordMarkSelections.value(i).format != selection.format) {
-
-                    QList<QTextEdit::ExtraSelection> selecList;
-                    bool bIsFind = false;///< 是否有包含该标记的标记动作
-
-                    //从记录标记的表中替换原有标记（按标记动作记录）
-                    for (int j = 0; j < m_mapWordMarkSelections.count(); j++) {
-                        auto list = m_mapWordMarkSelections.value(j);
-                        for (int k = 0; k < list.count(); k++) {
-                            if (list.value(k).cursor == wordMarkSelections.value(i).cursor
-                                    && list.value(k).format == wordMarkSelections.value(i).format) {
-
-                                list.removeAt(k);
-                                selecList = list;
-                                bIsFind = true;
-                                break;
-                            }
-                        }
-
-                        if (bIsFind) {
-                            m_mapWordMarkSelections.remove(j);
-                            m_mapWordMarkSelections.insert(j, selecList);
-                            break;
-                        }
-                    }
-                }
-
-                listSelections->append(selection);
-            } else if (nWordMarkSelectionEnd < nSelectionEnd && nWordMarkSelectionStart < nSelectionStart
-                       && nWordMarkSelectionEnd > nSelectionStart) { //如果添加的标记占有原有标记的后段部分
-
-                selection.format.setBackground(QColor(strColor));
-                int nRemPos = 0;///< 标记插入位置
-
-                //移除已有标记
-                for (int j = 0; j < wordMarkSelections.count(); j++) {
-                    if (m_wordMarkSelections.value(j).cursor == wordMarkSelections.value(i).cursor
-                            && m_wordMarkSelections.value(j).format == wordMarkSelections.value(i).format) {
-                        m_wordMarkSelections.removeAt(j);
-                        nRemPos = j;
-                        break;
-                    }
-                }
-
-                //如果标记格式不相同
-                if (wordMarkSelections.value(i).format != selection.format) {
-
-                    //从记录标记的表中替换原有标记（分行记录）
-                    selection.cursor.setPosition(nWordMarkSelectionStart, QTextCursor::MoveAnchor);
-                    selection.cursor.setPosition(nSelectionStart, QTextCursor::KeepAnchor);
-                    selection.format.setBackground(wordMarkSelections.value(i).format.background());
-                    m_wordMarkSelections.insert(nRemPos, selection);
-
-                    QList<QTextEdit::ExtraSelection> selecList;
-                    bool bIsFind = false;///< 是否有包含该标记的标记动作
-
-                    //从记录标记的表中替换原有标记（按标记动作记录）
-                    for (int j = 0; j < m_mapWordMarkSelections.count(); j++) {
-                        auto list = m_mapWordMarkSelections.value(j);
-                        for (int k = 0; k < list.count(); k++) {
-                            if (list.value(k).cursor == wordMarkSelections.value(i).cursor
-                                    && list.value(k).format == wordMarkSelections.value(i).format) {
-                                list.removeAt(k);
-                                selecList = list;
-                                selecList.insert(k, selection);
-                                bIsFind = true;
-                                break;
-                            }
-                        }
-
-                        if (bIsFind) {
-                            m_mapWordMarkSelections.remove(j);
-                            m_mapWordMarkSelections.insert(j, selecList);
-                            break;
-                        }
-                    }
-
-                    //记录新添加的标记
-                    selection.cursor.setPosition(nSelectionStart, QTextCursor::MoveAnchor);
-                    selection.cursor.setPosition(nSelectionEnd, QTextCursor::KeepAnchor);
-                    selection.format.setBackground(QColor(strColor));
-                    m_wordMarkSelections.append(selection);
-                } else { //如果标记格式相同
-                    selection.cursor.setPosition(nWordMarkSelectionStart, QTextCursor::MoveAnchor);
-                    selection.cursor.setPosition(nSelectionEnd, QTextCursor::KeepAnchor);
-                    m_wordMarkSelections.insert(nRemPos, selection);
-                }
-
-                if (!bIsContains) {
-                    listSelections->append(selection);
-                }
-
-                bIsContains = true;
-            } else if (nWordMarkSelectionEnd > nSelectionEnd && nWordMarkSelectionStart > nSelectionStart
-                       && nWordMarkSelectionStart < nSelectionEnd) { //如果添加的标记占有原有标记的前段部分
-
-                selection.format.setBackground(QColor(strColor));
-                int nRemPos = 0;///< 标记插入位置
-
-                //移除已有标记
-                for (int j = 0; j < wordMarkSelections.count(); j++) {
-                    if (m_wordMarkSelections.value(j).cursor == wordMarkSelections.value(i).cursor
-                            && m_wordMarkSelections.value(j).format == wordMarkSelections.value(i).format) {
-                        m_wordMarkSelections.removeAt(j);
-                        nRemPos = j;
-                        break;
-                    }
-                }
-
-                //如果标记格式不相同
-                if (wordMarkSelections.value(i).format != selection.format) {
-
-                    //从记录标记的表中替换原有标记（分行记录）
-                    selection.cursor.setPosition(nSelectionEnd, QTextCursor::MoveAnchor);
-                    selection.cursor.setPosition(nWordMarkSelectionEnd, QTextCursor::KeepAnchor);
-                    selection.format.setBackground(wordMarkSelections.value(i).format.background());
-                    m_wordMarkSelections.insert(nRemPos, selection);
-
-                    QList<QTextEdit::ExtraSelection> selecList;
-                    bool bIsFind = false;
-
-                    //从记录标记的表中替换原有标记（按标记动作记录）
-                    for (int j = 0; j < m_mapWordMarkSelections.count(); j++) {
-                        auto list = m_mapWordMarkSelections.value(j);
-                        for (int k = 0; k < list.count(); k++) {
-                            if (list.value(k).cursor == wordMarkSelections.value(i).cursor
-                                    && list.value(k).format == wordMarkSelections.value(i).format) {
-                                list.removeAt(k);
-                                selecList = list;
-                                selecList.insert(k, selection);
-                                bIsFind = true;
-                                break;
-                            }
-                        }
-
-                        if (bIsFind) {
-                            m_mapWordMarkSelections.remove(j);
-                            m_mapWordMarkSelections.insert(j, selecList);
-                            break;
-                        }
-                    }
-
-                    //记录新添加的标记
-                    selection.cursor.setPosition(nSelectionStart, QTextCursor::MoveAnchor);
-                    selection.cursor.setPosition(nSelectionEnd, QTextCursor::KeepAnchor);
-                    selection.format.setBackground(QColor(strColor));
-                    m_wordMarkSelections.append(selection);
-                } else { //如果标记格式相同
-                    selection.cursor.setPosition(nSelectionStart, QTextCursor::MoveAnchor);
-                    selection.cursor.setPosition(nWordMarkSelectionEnd, QTextCursor::KeepAnchor);
-                    m_wordMarkSelections.insert(nRemPos, selection);
-                }
-
-                if (!bIsContains) {
-                    listSelections->append(selection);
-                }
-                bIsContains = true;
-            }
-        }
-
-        if (!bIsContains) {
-            selection.format.setBackground(QColor(strColor));
-            m_wordMarkSelections.append(selection);
-            listSelections->append(selection);
-        }
-
-    } else { //如果文档中没有标记
-        selection.format.setBackground(QColor(strColor));
-        m_wordMarkSelections.append(selection);
-        listSelections->append(selection);
-    }
-#endif
 }
 
 void TextEdit::onSelectionArea()
@@ -8316,7 +7948,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
 //            setReadOnly(false);
             toggleReadOnlyMode();
             return;
-        } else if (key == "Shfit+J") {
+        } else if (key == "Shift+J") {
             scrollLineUp();
             return;
         } else if (key == "Shift+K") {
@@ -8683,6 +8315,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "downcaseword")) {
             downcaseWord();
+            return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "capitalizeword")) {
             capitalizeWord();
             return;

@@ -1448,7 +1448,7 @@ TEST_F(TextEditTest, EventFilter_HoverMoveBookmark_SetsHoverLine)
     QHoverEvent ev(QEvent::HoverMove, QPointF(2, 20), QPointF(2, 18), Qt::NoModifier);
     edit->eventFilter(edit->getLeftAreaWidget()->m_pBookMarkArea, &ev);
 
-    // Assert：悬停行被记录（书签分支不拦截事件，透传基类返回 false）
+    // Assert：悬停行被记录（修复后书签分支与折叠区一致：拦截事件返回 true）
     EXPECT_EQ(edit->m_nBookMarkHoverLine, expectedLine);
     EXPECT_GT(expectedLine, 0); // 悬停行基于真实布局换算
 }

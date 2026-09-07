@@ -78,7 +78,7 @@ TEST_F(DragInsertTextUndoCommandTest, Redo_CursorAtDropTarget_SkipsRepositionBra
 // "\r\n" 计 2 个 QChar；QTextDocument 插入时把 "\r\n" 折叠为单个段落分隔符，
 // undo 计算 [begin, begin+4) 越界，setPosition 拒绝移动导致选区为空，deleteChar
 // 前向删除单字符 → 撤销结果错误（"line\nb" 而非 "line"）。按实际行为断言留证。
-TEST_F(DragInsertTextUndoCommandTest, Ctor_CrlfText_InsertFoldsButUndoOvershoots)
+TEST_F(DragInsertTextUndoCommandTest, Ctor_CrlfText_NormalizedAndUndoExact)
 {
     // Arrange
     edit->setPlainText("line");
@@ -88,13 +88,12 @@ TEST_F(DragInsertTextUndoCommandTest, Ctor_CrlfText_InsertFoldsButUndoOvershoots
     // Act
     cmd.redo();
 
-    // Assert：插入侧由 QTextDocument 折叠 "\r\n"，文档得到单个换行
+    // Assert：构造侧已归一化 "\r\n"，文档得到单个换行
     EXPECT_EQ(docText(), QString("linea\nb"));
 
-    // Act & Assert：undo 侧长度按 4 计算越界，仅前向删除一个字符（实际行为）
+    // Act & Assert：修复后 undo 长度按归一化文本计算，精确恢复
     cmd.undo();
-    EXPECT_EQ(docText(), QString("line\nb"));                  // 非 "line"：见 defect 注记
-    EXPECT_NE(docText(), QString("line"));
+    EXPECT_EQ(docText(), QString("line"));
 }
 
 // ---- CT/R1 输入等价类：ASCII / 中文 / emoji ----

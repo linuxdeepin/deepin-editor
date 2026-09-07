@@ -411,17 +411,6 @@ public:
      */
     bool containsExtraSelection(QList<QTextEdit::ExtraSelection> listSelections, QTextEdit::ExtraSelection selection);
 
-    /**
-     * @author liumaochuan ut000616
-     * @brief appendExtraSelection 在指定字符格式列表添加指定字符格式
-     * @param wordMarkSelections 指定字符格式列表
-     * @param selection 指定字符格式
-     * @param markColor 指定字符颜色格式
-     * @param listSelections 添加的指定字符格式列表
-     */
-    void appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSelections, QTextEdit::ExtraSelection selection
-                              , QString strColor, QList<QTextEdit::ExtraSelection> *listSelections);
-
     void setCursorStart(int pos);
     void writeEncodeHistoryRecord();
     QStringList readEncodeHistoryRecord();
@@ -603,7 +592,6 @@ private:
 
     //去除"*{*" "*}*" "*{*}*"跳过当做普通文本处理不折叠　梁卫东２０２０－０９－０１　１７：１６：４１
     bool blockContainStrBrackets(int line);
-    bool setCursorKeywordSeletoin(int position, bool findNext);
     void updateHighlightBrackets(const QChar &openChar, const QChar &closeChar);
 
     bool getNeedControlLine(int line, bool isVisable);

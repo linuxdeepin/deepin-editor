@@ -45,8 +45,6 @@ public:
     EditWrapper(Window *window = nullptr, QWidget *parent = nullptr);
     ~EditWrapper();
 
-    //清除焦点　梁卫东　２０２０－０９－１４　１１：００：５０
-    void clearAllFocus();
     void setQuitFlag();
     bool isQuit();
     bool getFileLoading();
@@ -99,10 +97,7 @@ public:
 
     void hideWarningNotices();
     void checkForReload();
-    void initToastPosition();
     void showNotify(const QString &message, bool warning = false);
-    bool getTextChangeFlag();
-    void setTextChangeFlag(bool bFlag);
     void setLineNumberShow(bool bIsShow, bool bIsFirstShow = false);
     void setShowBlankCharacter(bool ok);
     void clearDoubleCharaterEncode();
@@ -163,8 +158,6 @@ protected:
 private:
     // 类似setPlainText(QString) 接口支持大文本加载 不卡顿 秒退出 梁卫东 2020年11月11日16:56:27
     void loadContent(const QByteArray &);
-    void handleHightlightChanged(const QString &name);
-    int GetCorrectUnicode1(const QByteArray &ba);
     // 文件加载时重新初始化部分设置
     void reinitOnFileLoad(const QByteArray &encode);
     // 懒创建 MarkdownView 渲染页（ReadView/LivePreview 且非纯文本只读模式时），已注入测试渲染器则跳过

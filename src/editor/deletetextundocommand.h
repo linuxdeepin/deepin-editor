@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -45,6 +45,9 @@ private:
     QTextCursor m_textCursor;
     QString m_sInsertText;
     QList<QString> m_selectTextList;
+    // 列编辑时每个选区各自的起始位置（与 m_selectTextList 一一对应），
+    // 避免用单一成员值承载所有选区导致多选区 undo 恢复错位
+    QList<int> m_selectBeginPosList;
     QList<QTextEdit::ExtraSelection> m_ColumnEditSelections;
     QPlainTextEdit* m_edit;
     int m_beginPostion {0};

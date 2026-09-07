@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -247,6 +247,9 @@ DragInsertTextUndoCommand::DragInsertTextUndoCommand(const QTextCursor &textcurs
 {
     qDebug() << "DragInsertTextUndoCommand created, text size:" << text.size()
                           << "cursor pos:" << textcursor.position() << "edit:" << edit;
+    // 与 InsertText/MidButton 命令保持一致：归一化 CRLF，
+    // 否则 undo 以含 \r 的长度计算删除区间会越界，导致恢复不完整
+    m_sInsertText.replace("\r\n", "\n");
     m_beginPostion = m_textCursor.selectionStart();
 }
 

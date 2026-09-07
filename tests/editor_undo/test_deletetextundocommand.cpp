@@ -75,8 +75,7 @@ TEST_F(DeleteTextUndoCommandTest, Redo_NoSelectionMidBlock_DeletesPreviousChar)
     // Assert：deletePreviousChar 删除 'b'
     EXPECT_EQ(docText(), QString("ac"));
     cmd.undo();
-    EXPECT_EQ(docText(), QString("acb"));                      // 非 "abc"：见 defect 注记
-    EXPECT_NE(docText(), QString("abc"));
+    EXPECT_EQ(docText(), QString("abc"));                       // 修复后恢复到原位置
 }
 
 // ---- CT1(块首)+R1/U1：块首删除的是上一行换行符（行合并）；undo 重插位置同 defect 注记 ----
@@ -94,8 +93,7 @@ TEST_F(DeleteTextUndoCommandTest, Redo_NoSelectionAtBlockStart_DeletesNewline)
     EXPECT_EQ(docText(), QString("abcd"));
     EXPECT_EQ(edit->document()->blockCount(), 1);
     cmd.undo();
-    EXPECT_EQ(docText(), QString("abc\nd"));                   // 非 "ab\ncd"：同 defect 注记
-    EXPECT_NE(docText(), QString("ab\ncd"));
+    EXPECT_EQ(docText(), QString("ab\ncd"));                   // 修复后恢复到原位置
 }
 
 // ---- CT2(真)+R2/U2：列编辑多选区 ----
