@@ -1,4 +1,4 @@
-deepin-editor (6.5.59) unstable; urgency=medium
+deepin-editor (6.6.1) unstable; urgency=medium
 
   * fix(ut): fix null pointer crash and static variable bug in source
   * test(editor): extend TextEdit and Window tests, fix crashes
