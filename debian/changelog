@@ -1,3 +1,66 @@
+deepin-editor (6.5.59) unstable; urgency=medium
+
+  * fix(ut): fix null pointer crash and static variable bug in source
+  * test(editor): extend TextEdit and Window tests, fix crashes
+  * test(editor): add unit tests for editor command classes
+  * fix(editor): update SPDX year to 2026 for new test files
+  * test(editor): extend tests and remove empty stubs
+  * fix(editor): update SPDX year range end to 2026 for modified files
+  * test(common): extend existing tests for better coverage
+  * fix(common): update SPDX year range end to 2026 for modified files
+  * test(common): add unit tests for common and encodes modules
+  * fix(common): update SPDX year to 2026 for new detectcode helpers file
+  * test(modules): add unit tests for dbus, theme, widgets and startmanager
+  * test(editor): fix heap-buffer-overflow crash in UT_Editwrapper_loadContent
+  * test: fix 11 failing unit tests for deepin-editor (Qt6/TextFileSaver refactor)
+  * test(editor): fix heap-buffer-overflow crash in UT_Textedit_MoveText
+  * fix(editor): handle Shift+Backspace as backspace in keyPressEvent
+  * feat(build): add WebEngine build infra for markdown render
+  * feat(markdown): add pure logic layer for view mode and render
+  * chore(debian): add qt6-webengine-dev to build dependencies
+  * feat(markdown): add milkdown web renderer source
+  * chore(markdown): vendor web deps and build artifacts
+  * chore(markdown): fix reuse lint for vendored qwebchannel licenses
+  * chore(markdown): use project-standard SPDX header for qwebchannel.js
+  * feat(markdown): add MarkdownView render service with mdimg scheme
+  * feat(markdown): integrate three-view orchestration in EditWrapper
+  * feat(markdown): add view-mode entries in context menu and bottom bar
+  * fix(editor): harden StartManager teardown and singleton lifetime
+  * fix(editor): harden StartManager teardown and singleton lifetime
+  * test(markdown): add unit tests for pure logic layer
+  * test(markdown): add tests for bridge, view and webengine smoke
+  * test(markdown): add EditWrapper orchestration tests and update UI tests
+  * fix(markdown): use light text colors in dark theme rendering
+  * feat(markdown): add code block and table header with i18n
+  * fix(markdown): remove blank padding of empty code block in render view
+  * fix(editor): fix flash window when opening markdown files
+  * feat(editor): add WebEngine arch-specific flags for sw_64/mips
+  * chore(i18n): update translations and complete zh_CN/zh_HK/zh_TW
+  * fix(markdown): unify table border color and fix rounded corner gaps
+  * test(markdown): fix flaky RenderThrottle leading/trailing edge case
+  * test: add coverage gap tests and crash handlers for deepin-editor
+  * test: fix unit test crashes and alarm timeout breaking CI pipeline
+  * test: remove outdated ut sources superseded by restructured tests
+  * test: add test stub headers and coverage report generator
+  * test: add test build infra and daemon/start-manager tests
+  * test: add unit tests for application, controls and widgets
+  * test: add unit tests for common modules
+  * test: add unit tests for editor core, areas and wrapper
+  * test: add unit tests for markdown and theme modules
+  * test: add unit tests for undo/redo commands
+  * feat(editor): add search match count display in find/replace bars
+  * test(at): fix editor find and replace AT selectors
+  * test(at): adapt editor AT selectors for accessibility update
+  * feat(accessibility): add AT-SPI accessible names to UI controls
+  * feat: add AT-SPI accessible names for interactive widgets
+  * feat(test): add ut-summary.json generation for test results and coverage
+  * fix(editor): add hover and press states to color mark icons
+  * fix: update Arabic (ar) translations
+  * fix: update Arabic (ar) translations
+  * fix(tabbar): disable scroll buttons in tab bar
+
+ -- Liu Zhangjian <liuzhangjian@uniontech.com>  Mon, 07 Sep 2026 11:23:27 +0800
+
 deepin-editor (6.5.58) unstable; urgency=medium
 
   * chore: Update version to 6.5.58
