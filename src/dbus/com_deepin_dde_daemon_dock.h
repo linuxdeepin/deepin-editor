@@ -43,6 +43,10 @@ private:
 
 Q_DECLARE_METATYPE(DockRect)
 
+// 注册 DockRect 的 Qt/DBus 元类型（实现位于 com_deepin_dde_daemon_dock.cpp，
+// 与 types/windowinfomap.h 的 registerWindowInfoMapMetaType 声明风格保持一致）
+void registerDockRectMetaType();
+
 class ComDeepinDdeDaemonDockInterface: public QDBusAbstractInterface
 {
     Q_OBJECT

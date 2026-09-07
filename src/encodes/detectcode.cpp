@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -1001,8 +1001,9 @@ bool DetectCode::convertEncodingTextCodec(QByteArray &inputStr,
         outStr = convertData.toUtf8();
     }
 
-    // 手动添加 UTF BOM 信息
-    outStr.append(gs_byteOrderMark.value(toCode));
+    // 手动添加 UTF BOM 信息：BOM 必须写在转换结果之前（BOM+data），
+    // 与上方 iconv 主路径的字节序保持一致，否则 UTF-16 目标产生 "data+BOM" 错误序列
+    outStr.prepend(gs_byteOrderMark.value(toCode));
     qDebug() << "Exit convertEncodingTextCodec, output size:" << outStr.size();
     return true;
 }

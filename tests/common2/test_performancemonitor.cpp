@@ -5,9 +5,9 @@
  * PerformanceMonitor 单元测试
  *
  * 分支清单（来源：PerformanceMonitor 六个静态打点方法）
- * B1 : initializeAppStart/initializAppFinish → 记录时间差并输出 POINT-01 startduration
- * B2 : closeAppStart/closeAPPFinish           → POINT-02 closeduration
- * B3 : openFileStart/openFileFinish(file,size)→ POINT-04 filename/filezise/opentime
+ * B1 : initializeAppStart/initializeAppFinish → 记录时间差并输出 POINT-01 startduration
+ * B2 : closeAppStart/closeAppFinish           → POINT-02 closeduration
+ * B3 : openFileStart/openFileFinish(file,size)→ POINT-04 filename/filesize/opentime
  * B4 : 构造函数                                → 仅 qDebug
  *
  * 用例映射：
@@ -114,7 +114,7 @@ TEST_F(PerformanceMonitorTest, InitializeApp_StartThenFinish_LogsPoint01Duration
     pushTime(2000);
     // Act
     PerformanceMonitor::initializeAppStart();
-    PerformanceMonitor::initializAppFinish();
+    PerformanceMonitor::initializeAppFinish();
     // Assert
     EXPECT_TRUE(logsContain(QStringLiteral("[GRABPOINT] POINT-01 startduration=1000ms")));
     EXPECT_TRUE(logsContain(QStringLiteral("start to initialize app")));
@@ -124,12 +124,12 @@ TEST_F(PerformanceMonitorTest, InitializeApp_StartThenFinish_LogsPoint01Duration
 // B2
 TEST_F(PerformanceMonitorTest, CloseApp_StartThenFinish_LogsPoint02Duration)
 {
-    // Arrange: closeAppStart 仅取一次当前时间；closeAPPFinish 取两次（赋值+日志格式化）
+    // Arrange: closeAppStart 仅取一次当前时间；closeAppFinish 取两次（赋值+日志格式化）
     timeQueue.append(3000);
     pushTime(4500);
     // Act
     PerformanceMonitor::closeAppStart();
-    PerformanceMonitor::closeAPPFinish();
+    PerformanceMonitor::closeAppFinish();
     // Assert
     EXPECT_TRUE(logsContain(QStringLiteral("[GRABPOINT] POINT-02 closeduration=1500ms")));
     EXPECT_TRUE(logsContain(QStringLiteral("finish to close app")));
@@ -148,7 +148,7 @@ TEST_F(PerformanceMonitorTest, OpenFile_StartThenFinish_LogsPoint04Info)
     // Assert
     EXPECT_TRUE(logsContain(QStringLiteral("[GRABPOINT] POINT-04")));
     EXPECT_TRUE(logsContain(QStringLiteral("filename=test-doc.txt")));
-    EXPECT_TRUE(logsContain(QStringLiteral("filezise=2.000000M")));
+    EXPECT_TRUE(logsContain(QStringLiteral("filesize=2.000000M")));
     EXPECT_TRUE(logsContain(QStringLiteral("opentime=500ms")));
     EXPECT_EQ(timeCalls, 4);
 }

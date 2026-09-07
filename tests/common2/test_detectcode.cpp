@@ -337,8 +337,8 @@ INSTANTIATE_TEST_SUITE_P(
         TextCodecCase{QByteArray::fromHex("D6D0CEC4"), QStringLiteral("GB18030"), QStringLiteral("UTF-8"), true, QStringLiteral("中文").toUtf8()},
         TextCodecCase{QByteArrayLiteral("abc"), QStringLiteral("UTF-8"), QStringLiteral("UT-NONE-T"), false, QByteArrayLiteral("")},
         TextCodecCase{QByteArray::fromHex("D6D0"), QStringLiteral("UT-NONE-F"), QStringLiteral("UTF-8"), false, QByteArrayLiteral("")},
-        // QTextCodec 路径 BOM 附加在转换数据之后（尾部）
-        TextCodecCase{QByteArrayLiteral("hi"), QStringLiteral("UTF-8"), QStringLiteral("UTF-16LE"), true, QByteArray::fromHex("68006900FFFE")}));
+        // QTextCodec 路径 BOM 前置（BOM+data，与 iconv 主路径字节序一致）
+        TextCodecCase{QByteArrayLiteral("hi"), QStringLiteral("UTF-8"), QStringLiteral("UTF-16LE"), true, QByteArray::fromHex("FFFE68006900")}));
 
 // ---------------- ChartDet_DetectingTextCoding（真实 chardet） ----------------
 

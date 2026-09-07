@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -50,6 +50,11 @@ int ThemeListModel::rowCount(const QModelIndex &parent) const
 
 QVariant ThemeListModel::data(const QModelIndex &index, int role) const
 {
+    // 按 QAbstractItemModel 契约校验索引有效性，无效索引返回 QVariant()
+    if (!index.isValid() || index.row() < 0 || index.row() >= m_themes.size()) {
+        qWarning() << "Invalid index for row:" << index.row();
+        return QVariant();
+    }
     qDebug() << "Getting data for row:" << index.row() << "role:" << role;
     const int r = index.row();
 

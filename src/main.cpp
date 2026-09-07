@@ -167,7 +167,7 @@ int main(int argc, char *argv[])
         dbus.registerObject("/com/deepin/Editor", startManager, QDBusConnection::ExportScriptableSlots);
         qDebug() << "DBus object registered at /com/deepin/Editor";
 
-        PerformanceMonitor::initializAppFinish();
+        PerformanceMonitor::initializeAppFinish();
         qDebug() << "Entering main event loop";
         return app.exec();
     }

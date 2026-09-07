@@ -85,6 +85,12 @@ void ThemePanel::setBackground(const QString &color)
 void ThemePanel::popup()
 {
     qDebug() << "Showing theme panel with animation";
+    // parent 非 Window（或为空）时 m_window 无效，直接早退避免空指针解引用
+    if (!m_window) {
+        qWarning() << "Theme panel has no host window, skip popup";
+        QWidget::show();
+        return;
+    }
     QWidget::show();
     QWidget::raise();
 
@@ -107,6 +113,12 @@ void ThemePanel::popup()
 void ThemePanel::hide()
 {
     qDebug() << "Hiding theme panel with animation";
+    // parent 非 Window（或为空）时 m_window 无效，直接早退避免空指针解引用
+    if (!m_window) {
+        qWarning() << "Theme panel has no host window, hide directly";
+        QWidget::hide();
+        return;
+    }
     QRect rect = geometry();
     QRect windowRect = m_window->geometry();
     QPropertyAnimation *animation = new QPropertyAnimation(this, "geometry");

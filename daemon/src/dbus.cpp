@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -41,7 +41,18 @@ bool DBus::saveFile(const QByteArray &path, const QByteArray &text, const QByteA
         QTextStream out(&file);
         out.setCodec(encoding);
         out << text;
+        // 检查写入与落盘状态，磁盘错误（ENOSPC、配额等）不得静默上报成功
+        out.flush();
+        if (out.status() != QTextStream::Ok) {
+            qWarning() << "Write stream failed:" << file.errorString();
+            file.close();
+            return false;
+        }
         file.close();
+        if (file.error() != QFile::NoError) {
+            qWarning() << "Flush to disk failed:" << file.errorString();
+            return false;
+        }
 
         return true;
     } else{
