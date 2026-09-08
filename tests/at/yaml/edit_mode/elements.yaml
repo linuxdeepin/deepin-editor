@@ -1,0 +1,16 @@
+elements:
+  MainWindow:
+    name: MainWindow
+    role: frame
+  TextEditor:
+    name: TextEditor
+    role: text
+  ViewModeMenu:
+    name: ViewModeMenu
+    role: combo box
+  EditorBottomBar:
+    name: EditorBottomBar
+    role: panel
+  Tabbar:
+    name: Tabbar
+    role: page tab list

@@ -1,0 +1,53 @@
+name: edit_mode_suite
+app: deepin-editor
+description: ''
+module: edit_mode
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-editor
+  wait: 3.0
+suites:
+- id: readonly_mode_s1
+  name: 只读模式
+  description: 验证切换到查看视图后输入被阻止，再通过右键菜单切回编辑模式后可正常输入
+  tags: []
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+t
+  - action: element_action
+    selector:
+      name: ViewModeMenu
+      role: combo box
+    do: click
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: enter
+  - wait: 1.0
+  - action: keyboard_type
+    text: read only
+  - action: element_action
+    selector:
+      name: TextEditor
+      role: text
+    do: right_click
+  - wait: 0.5
+  - action: keyboard_press
+    key: right
+  - action: keyboard_press
+    key: enter
+  - wait: 1.0
+  - action: keyboard_type
+    text: edit
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: TextEditor
+      role: text
+  - action: assert_ocr_exists
+    text: edit
+teardown:
+- action: session_stop
