@@ -2155,7 +2155,8 @@
                         },
                         {
                             "key": "open_save_custom_path",
-                            "hide": true
+                            "hide": true,
+                            "default": ""
                         }
                     ]
 

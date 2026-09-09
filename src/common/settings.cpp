@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -271,8 +271,8 @@ QWidget* Settings::createSavingPathWgt(QObject* obj)
     });
 
     auto custompath = s_pSetting->settings->option("advance.open_save_setting.open_save_custom_path");
-    connect(custompath, &Dtk::Core::DSettingsOption::valueChanged, [=](QVariant var){
-        //pathwgt->setEditText(var.toString());
+    connect(custompath, &Dtk::Core::DSettingsOption::valueChanged, pathwgt, [=](QVariant var){
+        pathwgt->setEditText(var.toString());
     });
 
     return optionWidget.second;
