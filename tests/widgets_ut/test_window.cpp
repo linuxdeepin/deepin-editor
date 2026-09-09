@@ -1774,6 +1774,33 @@ TEST_F(WindowTest, SlotReplacebarClose_ShowsBottomBar)
     EXPECT_NE(m_win->currentWrapper(), nullptr);
 }
 
+TEST_F(WindowTest, SlotFindbarClose_NoWrapper_NoCrash)
+{
+    // Act: 异步关闭查找栏时当前 wrapper 可能已被切换/销毁，应安全早退
+    m_win->slotFindbarClose();
+
+    // Assert
+    EXPECT_EQ(m_win->currentWrapper(), nullptr);
+}
+
+TEST_F(WindowTest, SlotReplacebarClose_NoWrapper_NoCrash)
+{
+    // Act: 异步关闭替换栏时当前 wrapper 可能已被切换/销毁，应安全早退
+    m_win->slotReplacebarClose();
+
+    // Assert
+    EXPECT_EQ(m_win->currentWrapper(), nullptr);
+}
+
+TEST_F(WindowTest, UpdateSizeMode_NoWrapper_NoCrash)
+{
+    // Act: 窗口尺寸变化回调可能早于编辑区创建，应安全早退
+    m_win->updateSizeMode();
+
+    // Assert
+    EXPECT_EQ(m_win->currentWrapper(), nullptr);
+}
+
 TEST_F(WindowTest, SlotSwitchToReplaceBar_FromVisibleFindBar_CarriesText)
 {
     // Arrange: 查找栏可见并输入关键词
