@@ -2336,15 +2336,27 @@ void Window::rehighlightPrintDoc(QTextDocument *doc, CSyntaxHighlighter *highlig
 void Window::updateSizeMode()
 {
     qDebug() << "Update size mode";
+    EditWrapper *wrapper = currentWrapper();
+    if (!wrapper) {
+        qWarning() << "No current wrapper, skip size mode update";
+        return;
+    }
+
+    BottomBar *bottomBar = wrapper->bottomBar();
+    if (!bottomBar) {
+        qWarning() << "No bottom bar, skip size mode update";
+        return;
+    }
+
     if (m_findBar && m_findBar->isVisible()) {
         qDebug() << "Find bar is visible, updating its position";
-        currentWrapper()->bottomBar()->updateSize(m_findBar->height() + 8, true);
+        bottomBar->updateSize(m_findBar->height() + 8, true);
         m_findBar->move(QPoint(4, height() - m_findBar->height() - 4));
     }
 
     if (m_replaceBar && m_replaceBar->isVisible()) {
         qDebug() << "Replace bar is visible, updating its position";
-        currentWrapper()->bottomBar()->updateSize(m_replaceBar->height() + 8, true);
+        bottomBar->updateSize(m_replaceBar->height() + 8, true);
         m_replaceBar->move(QPoint(4, height() - m_replaceBar->height() - 4));
     }
 
@@ -3666,15 +3678,29 @@ void Window::slotFindbarClose()
 {
     qDebug() << "slotFindbarClose";
     EditWrapper *wrapper = currentWrapper();
-
-    if (wrapper->bottomBar()->isHidden()) {
-        qDebug() << "bottom bar is hidden, show it";
-        wrapper->bottomBar()->show();
+    if (!wrapper) {
+        qWarning() << "No current wrapper, ignore find bar close";
+        return;
     }
 
-    wrapper->bottomBar()->updateSize(BottomBar::defaultHeight(), false);
-    currentWrapper()->textEditor()->setFocus();
-    currentWrapper()->textEditor()->tellFindBarClose();
+    BottomBar *bottomBar = wrapper->bottomBar();
+    if (!bottomBar) {
+        qWarning() << "No bottom bar, ignore find bar close";
+        return;
+    }
+
+    if (bottomBar->isHidden()) {
+        qDebug() << "bottom bar is hidden, show it";
+        bottomBar->show();
+    }
+
+    bottomBar->updateSize(BottomBar::defaultHeight(), false);
+    if (auto *textEditor = wrapper->textEditor()) {
+        textEditor->setFocus();
+        textEditor->tellFindBarClose();
+    } else {
+        qWarning() << "No text editor, ignore find bar close focus update";
+    }
     qDebug() << "slotFindbarClose end";
 }
 
@@ -3682,15 +3708,29 @@ void Window::slotReplacebarClose()
 {
     qDebug() << "slotReplacebarClose";
     EditWrapper *wrapper = currentWrapper();
-
-    if (wrapper->bottomBar()->isHidden()) {
-        qDebug() << "bottom bar is hidden, show it";
-        wrapper->bottomBar()->show();
+    if (!wrapper) {
+        qWarning() << "No current wrapper, ignore replace bar close";
+        return;
     }
 
-    wrapper->bottomBar()->updateSize(BottomBar::defaultHeight(), false);
-    currentWrapper()->textEditor()->setFocus();
-    currentWrapper()->textEditor()->tellFindBarClose();
+    BottomBar *bottomBar = wrapper->bottomBar();
+    if (!bottomBar) {
+        qWarning() << "No bottom bar, ignore replace bar close";
+        return;
+    }
+
+    if (bottomBar->isHidden()) {
+        qDebug() << "bottom bar is hidden, show it";
+        bottomBar->show();
+    }
+
+    bottomBar->updateSize(BottomBar::defaultHeight(), false);
+    if (auto *textEditor = wrapper->textEditor()) {
+        textEditor->setFocus();
+        textEditor->tellFindBarClose();
+    } else {
+        qWarning() << "No text editor, ignore replace bar close focus update";
+    }
     qDebug() << "slotReplacebarClose end";
 }
 
