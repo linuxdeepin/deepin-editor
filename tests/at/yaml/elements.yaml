@@ -1,0 +1,7 @@
+elements:
+  ViewModeMenu:
+    name: ViewModeMenu
+  EditorStack:
+    name: EditorStack
+  Tabbar:
+    accessible_id: Tabbar

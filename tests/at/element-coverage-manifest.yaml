@@ -1,0 +1,20 @@
+version: '1.0'
+source: at-case-authoring:element-map.yaml
+scan_total: 2
+elements:
+  Tabbar:
+    role: page tab
+    ui_name: 标签页
+    desc: 标签页栏，用于多标签页切换
+    locator: accessible_id
+  EditorStack:
+    role: layered pane
+    ui_name: 编辑区
+    desc: 文本编辑区域，显示和输入文本内容
+    locator: name
+transient_items:
+- name: ViewModeMenu
+  role: menu
+  ui_name: 编辑模式菜单
+  desc: 底部视图模式下拉菜单(DDropdownMenu)，切换编辑/只读/实时预览
+unresolved: []

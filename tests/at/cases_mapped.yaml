@@ -1,0 +1,41 @@
+version: '1.0'
+cases:
+- id: suite_编辑模式_001_s1
+  name: 只读模式_切换视图后输入
+  module: 编辑模式
+  steps:
+  - step_type: action
+    action: keyboard_hot_key
+    key: ctrl+t
+  - step_type: action
+    action: dtk_dropdown_menu
+    selector:
+      name: ViewModeMenu
+    items:
+    - 查看视图
+  - step_type: action
+    action: keyboard_type
+    text: read only
+  - step_type: action
+    action: dtk_context_menu
+    selector:
+      context_trigger:
+        name: EditorStack
+      name: EditorStack
+    items:
+    - 视图模式
+    - 编辑模式
+  - step_type: action
+    action: keyboard_type
+    text: edit
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: EditorStack
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: Tabbar
+  - step_type: assert
+    action: assert_ocr_exists
+    text: edit

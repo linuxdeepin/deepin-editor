@@ -1,0 +1,13 @@
+scan_total: 2
+transient_items:
+- name: ViewModeMenu
+  role: menu
+  ui_name: 编辑模式菜单
+  locator: name
+unreachable: 0
+denominator: 2
+covered: 2
+uncovered: 0
+coverage: 100.0
+passed: true
+uncovered_elements: []

@@ -1,0 +1,50 @@
+name: 编辑模式_suite
+app: deepin-editor
+module: 编辑模式
+setup:
+- action: session_start
+  command: deepin-editor
+  wait: 3.0
+suites:
+- id: suite_编辑模式_001_s1
+  name: 只读模式_切换视图后输入
+  description: ''
+  steps:
+  - step_type: action
+    action: keyboard_hot_key
+    key: ctrl+t
+  - step_type: action
+    action: dtk_dropdown_menu
+    selector:
+      name: ViewModeMenu
+    items:
+    - 查看视图
+  - step_type: action
+    action: keyboard_type
+    text: read only
+  - step_type: action
+    action: dtk_context_menu
+    selector:
+      context_trigger:
+        name: EditorStack
+      name: EditorStack
+    items:
+    - 视图模式
+    - 编辑模式
+  - step_type: action
+    action: keyboard_type
+    text: edit
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: EditorStack
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: Tabbar
+  - step_type: assert
+    action: assert_ocr_exists
+    text: edit
+teardown:
+- action: session_stop
