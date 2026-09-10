@@ -517,3 +517,34 @@ elements:
     name: "ClearAllBookmarks"
     role: "menu item"
     description: "清除所有书签"
+
+  # V6.6 new elements
+  - id: "MatchCountLabel"
+    name: "MatchCountLabel"
+    role: "label"
+    description: "查找结果计数（第X/Y项）"
+
+  - id: "MarkdownView"
+    name: "MarkdownView"
+    role: "panel"
+    description: "Markdown渲染视图"
+
+  - id: "ViewModeMenu"
+    name: "ViewModeMenu"
+    role: "combo box"
+    description: "底部视图模式下拉菜单"
+
+  - id: "ViewModeContextMenu"
+    name: "ViewModeContextMenu"
+    role: "menu"
+    description: "右键菜单视图模式子菜单"
+
+  - id: "HighlightMenu"
+    name: "HighlightMenu"
+    role: "combo box"
+    description: "语法高亮下拉菜单"
+
+  - id: "ClearButton"
+    name: "ClearButton"
+    role: "button"
+    description: "查找输入框清除按钮"

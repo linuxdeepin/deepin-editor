@@ -1,0 +1,73 @@
+elements:
+  MainWindow:
+    name: MainWindow
+    role: frame
+  TextEditor:
+    name: TextEditor
+    role: text
+  MarkdownView:
+    name: MarkdownView
+    role: panel
+  MatchCountLabel:
+    name: MatchCountLabel
+    role: label
+  FindInput:
+    name: FindInput
+    role: text
+  FindPrevious:
+    name: FindPrevious
+    role: button
+  FindNext:
+    name: FindNext
+    role: button
+  SwitchToReplace:
+    name: SwitchToReplace
+    role: button
+  CloseFind:
+    name: CloseFind
+    role: button
+  ClearButton:
+    name: ClearButton
+    role: button
+  ReplaceFindInput:
+    name: ReplaceFindInput
+    role: text
+  ReplaceWithInput:
+    name: ReplaceWithInput
+    role: text
+  ReplaceNext:
+    name: ReplaceNext
+    role: button
+  ReplaceAll:
+    name: ReplaceAll
+    role: button
+  CloseReplace:
+    name: CloseReplace
+    role: button
+  PositionLabel:
+    name: PositionLabel
+    role: label
+  CharCountLabel:
+    name: CharCountLabel
+    role: label
+  ViewModeMenu:
+    name: ViewModeMenu
+    role: combo box
+  HighlightMenu:
+    name: HighlightMenu
+    role: combo box
+  EditorContextMenu:
+    name: EditorContextMenu
+    role: menu
+  ViewModeContextMenu:
+    name: ViewModeContextMenu
+    role: menu
+  EditView:
+    name: EditView
+    role: menu item
+  ReadView:
+    name: ReadView
+    role: menu item
+  LivePreview:
+    name: LivePreview
+    role: menu item

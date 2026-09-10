@@ -1,0 +1,546 @@
+# 标准用例（at-case-authoring 模式 A）
+# V6.6 文本编辑器详细需求：查找结果索引与总数显示 + Markdown 文档渲染
+# 需求来源：文本编辑器V6.6详细需求说明书（皮富文，2026-07-07）
+
+app: deepin-editor
+element_map: element-map.yaml
+
+cases:
+  # ============================================================
+  # 模块一：查找结果展示索引与总数显示
+  # ============================================================
+
+  - id: "v6.6-find-001"
+    title: 【查找】查找匹配_显示索引与总数
+    module: 查找结果索引
+    priority: "1"
+    precondition:
+      - "文本编辑器已启动；编辑区有包含多次出现的文本"
+    steps:
+      - "在文本编辑区输入：hello world hello test hello"
+      - "按Ctrl+F"
+      - "在查找输入框输入：hello"
+      - "按Enter"
+    expected:
+      - "查找输入框内显示第1/3项"
+      - "编辑区高亮第一个匹配项"
+    manual: false
+
+  - id: "v6.6-find-002"
+    title: 【查找】无匹配结果_不显示计数
+    module: 查找结果索引
+    priority: "1"
+    precondition:
+      - "文本编辑器已启动；编辑区有文本"
+    steps:
+      - "在文本编辑区输入：hello world"
+      - "按Ctrl+F"
+      - "在查找输入框输入：xyznotexist"
+      - "按Enter"
+    expected:
+      - "查找输入框不显示计数标签"
+      - "查找输入框显示红色警告状态"
+    manual: false
+
+  - id: "v6.6-find-003"
+    title: 【查找】切换下一项_索引实时更新
+    module: 查找结果索引
+    priority: "1"
+    precondition:
+      - "文本编辑器已启动；编辑区有多次匹配的文本"
+    steps:
+      - "在文本编辑区输入：hello world hello test hello"
+      - "按Ctrl+F"
+      - "在查找输入框输入：hello"
+      - "按Enter"
+      - "点击查找下一个按钮"
+    expected:
+      - "计数标签从第1/3项变为第2/3项"
+    manual: false
+
+  - id: "v6.6-find-004"
+    title: 【查找】切换上一项_索引实时更新
+    module: 查找结果索引
+    priority: "1"
+    precondition:
+      - "文本编辑器已启动；编辑区有多次匹配的文本；已执行查找并定位到第2项"
+    steps:
+      - "在文本编辑区输入：hello world hello test hello"
+      - "按Ctrl+F"
+      - "在查找输入框输入：hello"
+      - "按Enter"
+      - "点击查找下一个按钮"
+      - "点击查找上一个按钮"
+    expected:
+      - "计数标签从第2/3项变为第1/3项"
+    manual: false
+
+  - id: "v6.6-find-005"
+    title: 【查找】编辑文本_总数实时更新
+    module: 查找结果索引
+    priority: "1"
+    precondition:
+      - "文本编辑器已启动；已执行查找且查找栏打开"
+    steps:
+      - "在文本编辑区输入：hello world hello"
+      - "按Ctrl+F"
+      - "在查找输入框输入：hello"
+      - "按Enter"
+      - "按Escape关闭查找栏"
+      - "在文本编辑区末尾输入：hello hello"
+    expected:
+      - "重新打开查找栏后计数标签显示第1/4项"
+    manual: false
+
+  - id: "v6.6-find-006"
+    title: 【替换】替换操作_总数更新
+    module: 查找结果索引
+    priority: "1"
+    precondition:
+      - "文本编辑器已启动；编辑区有多次匹配的文本"
+    steps:
+      - "在文本编辑区输入：hello world hello test hello"
+      - "按Ctrl+H"
+      - "在替换查找输入框输入：hello"
+      - "在替换为输入框输入：hi"
+      - "点击替换下一个按钮"
+    expected:
+      - "计数标签总数从3变为2"
+      - "编辑区第一个hello被替换为hi"
+    manual: false
+
+  - id: "v6.6-find-007"
+    title: 【替换】全部替换_总数归零
+    module: 查找结果索引
+    priority: "1"
+    precondition:
+      - "文本编辑器已启动；编辑区有多次匹配的文本"
+    steps:
+      - "在文本编辑区输入：hello world hello test hello"
+      - "按Ctrl+H"
+      - "在替换查找输入框输入：hello"
+      - "在替换为输入框输入：hi"
+      - "点击全部替换按钮"
+    expected:
+      - "计数标签隐藏或显示第0/0项"
+      - "编辑区所有hello被替换为hi"
+    manual: false
+
+  - id: "v6.6-find-008"
+    title: 【人工】查找性能_大文件查找计数
+    module: 查找结果索引
+    priority: "2"
+    precondition:
+      - "文本编辑器已启动；编辑区有10000行文本"
+    steps:
+      - "在文本编辑区输入10000行包含hello的文本"
+      - "按Ctrl+F"
+      - "在查找输入框输入：hello"
+      - "按Enter"
+    expected:
+      - "计数标签在2秒内显示匹配总数"
+    manual: true
+    reason: 性能/资源-大文件查找耗时
+
+  # ============================================================
+  # 模块二：支持 Markdown 文档渲染
+  # ============================================================
+
+  - id: "v6.6-md-001"
+    title: 【Markdown】新建文件_纯文本不渲染
+    module: Markdown渲染
+    priority: "1"
+    precondition:
+      - "文本编辑器已启动；默认新建空白文件"
+    steps:
+      - "在文本编辑区输入：# 标题"
+      - "在文本编辑区输入：- 列表项"
+    expected:
+      - "编辑区显示纯文本# 标题"
+      - "编辑区显示纯文本- 列表项"
+      - "无Markdown渲染效果"
+    manual: false
+
+  - id: "v6.6-md-002"
+    title: 【Markdown】新建文件_实时预览置灰
+    module: Markdown渲染
+    priority: "1"
+    precondition:
+      - "文本编辑器已启动；默认新建空白文件（非Markdown）"
+    steps:
+      - "在文本编辑区右键"
+      - "在右键菜单中选择视图模式子菜单"
+    expected:
+      - "视图模式子菜单中实时预览项为不可用状态"
+      - "编辑模式和查看视图项为可选状态"
+    manual: false
+
+  - id: "v6.6-md-003"
+    title: 【Markdown】打开md文件_自动识别实时预览
+    module: Markdown渲染
+    priority: "1"
+    precondition:
+      - "文本编辑器已启动；系统中存在test.md文件"
+    steps:
+      - "创建临时md文件/tmp/v66_md_test.md"
+      - "在文件中写入# Test Heading"
+      - "在文本编辑器中打开该md文件"
+    expected:
+      - "文件被识别为Markdown格式"
+      - "默认进入实时阅览视图"
+      - "左侧显示源码右侧显示渲染预览"
+    manual: false
+
+  - id: "v6.6-md-004"
+    title: 【Markdown】手动切换语言_激活实时预览
+    module: Markdown渲染
+    priority: "1"
+    precondition:
+      - "文本编辑器已启动；默认新建空白文件（非Markdown）"
+    steps:
+      - "点击高亮菜单"
+      - "在高亮菜单中选择Markdown"
+      - "在文本编辑区右键"
+      - "在右键菜单中选择视图模式子菜单"
+    expected:
+      - "视图模式子菜单中实时预览项变为可选状态"
+      - "编辑器自动切换到实时阅览视图"
+    manual: false
+
+  - id: "v6.6-md-005"
+    title: 【Markdown】右键菜单_切换查看视图
+    module: Markdown渲染
+    priority: "1"
+    precondition:
+      - "文本编辑器已打开md文件；当前处于实时阅览视图"
+    steps:
+      - "创建临时md文件/tmp/v66_md_test.md并写入# Test Heading"
+      - "在文本编辑器中打开该md文件"
+      - "在文本编辑区右键"
+      - "在右键菜单中选择视图模式子菜单"
+      - "在视图模式子菜单中选择查看视图"
+    expected:
+      - "编辑器切换到查看视图"
+      - "编辑区变为只读状态"
+      - "显示渲染后的Markdown内容"
+    manual: false
+
+  - id: "v6.6-md-006"
+    title: 【Markdown】右键菜单_切换编辑视图
+    module: Markdown渲染
+    priority: "1"
+    precondition:
+      - "文本编辑器已打开md文件；当前处于查看视图"
+    steps:
+      - "创建临时md文件/tmp/v66_md_test.md并写入# Test Heading"
+      - "在文本编辑器中打开该md文件"
+      - "在文本编辑区右键"
+      - "在右键菜单中选择视图模式子菜单"
+      - "在视图模式子菜单中选择查看视图"
+      - "在文本编辑区右键"
+      - "在右键菜单中选择视图模式子菜单"
+      - "在视图模式子菜单中选择编辑模式"
+    expected:
+      - "编辑器切换回编辑视图"
+      - "编辑区恢复可编辑状态"
+      - "显示Markdown源码"
+    manual: false
+
+  - id: "v6.6-md-007"
+    title: 【Markdown】右键菜单_切换实时预览
+    module: Markdown渲染
+    priority: "1"
+    precondition:
+      - "文本编辑器已打开md文件；当前处于编辑视图"
+    steps:
+      - "创建临时md文件/tmp/v66_md_test.md并写入# Test Heading"
+      - "在文本编辑器中打开该md文件"
+      - "在文本编辑区右键"
+      - "在右键菜单中选择视图模式子菜单"
+      - "在视图模式子菜单中选择编辑模式"
+      - "在文本编辑区右键"
+      - "在右键菜单中选择视图模式子菜单"
+      - "在视图模式子菜单中选择实时预览"
+    expected:
+      - "编辑器切换到实时阅览视图"
+      - "左侧显示源码右侧显示渲染预览"
+    manual: false
+
+  - id: "v6.6-md-008"
+    title: 【Markdown】底部菜单_切换查看视图
+    module: Markdown渲染
+    priority: "1"
+    precondition:
+      - "文本编辑器已打开md文件；当前处于实时阅览视图"
+    steps:
+      - "创建临时md文件/tmp/v66_md_test.md并写入# Test Heading"
+      - "在文本编辑器中打开该md文件"
+      - "点击视图模式菜单"
+      - "在视图模式菜单中选择查看视图"
+    expected:
+      - "编辑器切换到查看视图"
+      - "底部视图模式菜单显示查看视图"
+    manual: false
+
+  - id: "v6.6-md-009"
+    title: 【人工】Markdown底部菜单_切换编辑视图
+    module: Markdown渲染
+    priority: "1"
+    precondition:
+      - "文本编辑器已打开md文件；当前处于查看视图"
+    steps:
+      - "创建临时md文件/tmp/v66_md_test.md并写入# Test Heading"
+      - "在文本编辑器中打开该md文件"
+      - "点击视图模式菜单"
+      - "在视图模式菜单中选择查看视图"
+      - "点击视图模式菜单"
+      - "在视图模式菜单中选择编辑模式"
+    expected:
+      - "编辑器切换回编辑视图"
+      - "底部视图模式菜单显示编辑模式"
+    manual: true
+    reason: 环境-DDropdownMenu 在 AT-SPI 坐标为 (0,0,0,0) 无法程序化点击，需人工验证
+
+  - id: "v6.6-md-010"
+    title: 【人工】Markdown底部菜单_切换实时预览
+    module: Markdown渲染
+    priority: "1"
+    precondition:
+      - "文本编辑器已打开md文件；当前处于编辑视图"
+    steps:
+      - "创建临时md文件/tmp/v66_md_test.md并写入# Test Heading"
+      - "在文本编辑器中打开该md文件"
+      - "点击视图模式菜单"
+      - "在视图模式菜单中选择编辑模式"
+      - "点击视图模式菜单"
+      - "在视图模式菜单中选择实时预览"
+    expected:
+      - "编辑器切换到实时阅览视图"
+      - "底部视图模式菜单显示实时预览"
+    manual: true
+    reason: 环境-DDropdownMenu 在 AT-SPI 坐标为 (0,0,0,0) 无法程序化点击，需人工验证
+
+  - id: "v6.6-md-011"
+    title: 【Markdown】查看视图_只读模式
+    module: Markdown渲染
+    priority: "1"
+    precondition:
+      - "文本编辑器已打开md文件；当前处于查看视图"
+    steps:
+      - "创建临时md文件/tmp/v66_md_test.md并写入# Test Heading"
+      - "在文本编辑器中打开该md文件"
+      - "在文本编辑区右键"
+      - "在右键菜单中选择视图模式子菜单"
+      - "在视图模式子菜单中选择查看视图"
+      - "在文本编辑区输入：modified text"
+    expected:
+      - "输入内容不被接受"
+      - "编辑区保持只读状态"
+    manual: false
+
+  - id: "v6.6-md-012"
+    title: 【Markdown】非md文件_实时预览置灰
+    module: Markdown渲染
+    priority: "1"
+    precondition:
+      - "文本编辑器已启动；默认新建txt文件"
+    steps:
+      - "点击视图模式菜单"
+    expected:
+      - "视图模式菜单中实时预览项为不可用状态"
+    manual: false
+
+  - id: "v6.6-md-013"
+    title: 【Markdown】标题语法_编辑视图输入
+    module: Markdown渲染
+    priority: "2"
+    precondition:
+      - "文本编辑器已打开md文件；当前处于编辑视图"
+    steps:
+      - "创建临时md文件/tmp/v66_md_test.md"
+      - "在文本编辑器中打开该md文件"
+      - "在文本编辑区输入：# 一级标题"
+      - "在文本编辑区输入：## 二级标题"
+      - "在文本编辑区输入：### 三级标题"
+    expected:
+      - "编辑区显示# 一级标题源码"
+      - "编辑区显示## 二级标题源码"
+      - "编辑区显示### 三级标题源码"
+    manual: false
+
+  - id: "v6.6-md-014"
+    title: 【Markdown】列表语法_编辑视图输入
+    module: Markdown渲染
+    priority: "2"
+    precondition:
+      - "文本编辑器已打开md文件；当前处于编辑视图"
+    steps:
+      - "创建临时md文件/tmp/v66_md_test.md"
+      - "在文本编辑器中打开该md文件"
+      - "在文本编辑区输入：1. 有序项"
+      - "在文本编辑区输入：- 无序项"
+      - "在文本编辑区输入：- [ ] 任务项"
+    expected:
+      - "编辑区显示1. 有序项源码"
+      - "编辑区显示- 无序项源码"
+      - "编辑区显示- [ ] 任务项源码"
+    manual: false
+
+  - id: "v6.6-md-015"
+    title: 【Markdown】代码块语法_编辑视图输入
+    module: Markdown渲染
+    priority: "2"
+    precondition:
+      - "文本编辑器已打开md文件；当前处于编辑视图"
+    steps:
+      - "创建临时md文件/tmp/v66_md_test.md"
+      - "在文本编辑器中打开该md文件"
+      - "在文本编辑区输入：```python"
+      - "在文本编辑区输入：print(test_code)"
+      - "在文本编辑区输入：```"
+    expected:
+      - "编辑区显示代码块源码"
+    manual: false
+
+  - id: "v6.6-md-016"
+    title: 【Markdown】表格语法_编辑视图输入
+    module: Markdown渲染
+    priority: "2"
+    precondition:
+      - "文本编辑器已打开md文件；当前处于编辑视图"
+    steps:
+      - "创建临时md文件/tmp/v66_md_test.md"
+      - "在文本编辑器中打开该md文件"
+      - "在文本编辑区输入：| 名称 | 值 |"
+      - "在文本编辑区输入：| --- | --- |"
+      - "在文本编辑区输入：| A | 1 |"
+    expected:
+      - "编辑区显示表格源码"
+    manual: false
+
+  - id: "v6.6-md-017"
+    title: 【Markdown】常规语法_编辑视图输入
+    module: Markdown渲染
+    priority: "2"
+    precondition:
+      - "文本编辑器已打开md文件；当前处于编辑视图"
+    steps:
+      - "创建临时md文件/tmp/v66_md_test.md"
+      - "在文本编辑器中打开该md文件"
+      - "在文本编辑区输入：**粗体**"
+      - "在文本编辑区输入：*斜体*"
+      - "在文本编辑区输入：~~删除线~~"
+      - "在文本编辑区输入：> 引用"
+      - "在文本编辑区输入：---"
+    expected:
+      - "编辑区显示各语法源码"
+    manual: false
+
+  - id: "v6.6-md-018"
+    title: 【人工】实时阅览_滚动同步
+    module: Markdown渲染
+    priority: "1"
+    precondition:
+      - "文本编辑器已打开md文件；当前处于实时阅览视图"
+    steps:
+      - "创建包含多段内容的md文件"
+      - "在文本编辑器中打开该md文件"
+      - "在文本编辑区拖动滚动条向下滚动"
+    expected:
+      - "右侧预览区域随左侧滚动同步移动"
+      - "两侧内容位置对应"
+    manual: true
+    reason: 光标/选区形态-滚动条同步需视觉验证
+
+  - id: "v6.6-md-019"
+    title: 【人工】实时阅览_渲染性能
+    module: Markdown渲染
+    priority: "2"
+    precondition:
+      - "文本编辑器已打开md文件；当前处于实时阅览视图"
+    steps:
+      - "创建包含多段内容的md文件"
+      - "在文本编辑器中打开该md文件"
+      - "在文本编辑区输入：aaaaaabbbbbbccccccdddddd"
+    expected:
+      - "右侧预览区域在300ms内完成增量渲染刷新"
+      - "输入过程无明显卡顿"
+    manual: true
+    reason: 性能/资源-渲染延迟需计时验证
+
+  - id: "v6.6-md-020"
+    title: 【人工】查看视图_居中排版
+    module: Markdown渲染
+    priority: "2"
+    precondition:
+      - "文本编辑器已打开md文件；当前处于查看视图"
+    steps:
+      - "创建包含多段内容的md文件"
+      - "在文本编辑器中打开该md文件"
+      - "切换到查看视图"
+      - "将窗口宽度调整到大于最大渲染宽度"
+    expected:
+      - "渲染内容水平居中显示"
+      - "两侧自动留白"
+    manual: true
+    reason: 光标/选区形态-布局居中需视觉验证
+
+  - id: "v6.6-md-021"
+    title: 【人工】标题语法_渲染效果
+    module: Markdown渲染
+    priority: "2"
+    precondition:
+      - "文本编辑器已打开md文件；当前处于实时阅览或查看视图"
+    steps:
+      - "创建包含#到######各级标题的md文件"
+      - "在文本编辑器中打开该md文件"
+    expected:
+      - "一级至六级标题分别显示对应分级字号与样式"
+    manual: true
+    reason: 颜色/高亮/置灰-字号样式渲染需视觉验证
+
+  - id: "v6.6-md-022"
+    title: 【人工】列表语法_渲染效果
+    module: Markdown渲染
+    priority: "2"
+    precondition:
+      - "文本编辑器已打开md文件；当前处于实时阅览或查看视图"
+    steps:
+      - "创建包含有序列表、无序列表和任务列表的md文件"
+      - "在文本编辑器中打开该md文件"
+    expected:
+      - "有序列表显示数字编号"
+      - "无序列表显示符号标记"
+      - "任务列表显示复选框"
+    manual: true
+    reason: 颜色/高亮/置灰-列表样式渲染需视觉验证
+
+  - id: "v6.6-md-023"
+    title: 【人工】代码块语法_渲染效果
+    module: Markdown渲染
+    priority: "2"
+    precondition:
+      - "文本编辑器已打开md文件；当前处于实时阅览或查看视图"
+    steps:
+      - "创建包含单行代码和多行代码块的md文件"
+      - "在文本编辑器中打开该md文件"
+    expected:
+      - "单行代码显示等宽字体样式"
+      - "多行代码块显示语法高亮"
+    manual: true
+    reason: 颜色/高亮/置灰-语法高亮渲染需视觉验证
+
+  - id: "v6.6-md-024"
+    title: 【人工】表格语法_渲染效果
+    module: Markdown渲染
+    priority: "2"
+    precondition:
+      - "文本编辑器已打开md文件；当前处于实时阅览或查看视图"
+    steps:
+      - "创建包含标准表格语法的md文件"
+      - "在文本编辑器中打开该md文件"
+    expected:
+      - "表格边框对齐"
+      - "表头加粗显示"
+    manual: true
+    reason: 颜色/高亮/置灰-表格样式渲染需视觉验证

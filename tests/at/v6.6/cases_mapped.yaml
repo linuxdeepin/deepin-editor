@@ -1,0 +1,922 @@
+# cases_mapped.yaml — V6.6 文本编辑器 AT-SPI 测试用例映射产物
+# 来源：cases_standard.yaml → 语义映射（at-mapping-rules）
+# manual 用例标 unsupported + reason，不生成可执行 step
+
+metadata:
+  generated_at: "2026-09-10"
+  source: "文本编辑器V6.6详细需求说明书"
+  module: v6.6
+
+cases:
+  # ============================================================
+  # 模块一：查找结果展示索引与总数显示（8 例，7 active + 1 unsupported）
+  # ============================================================
+
+  - id: v6.6-find-001
+    name: 查找匹配_显示索引与总数
+    module: 查找结果索引
+    status: active
+    annotation:
+      测试界面: 主窗口-查找栏
+      测试功能: 查找结果索引与总数显示
+      前置条件: 文本编辑器已启动；编辑区有包含多次出现的文本
+      AT元素引用: FindInput, MatchCountLabel, TextEditor
+    steps:
+    - step_type: action
+      description: 在文本编辑区输入包含多次出现的文本
+      action: keyboard_type
+      text: 'hello world hello test hello'
+    - step_type: action
+      description: 按 Ctrl+F 打开查找栏
+      action: keyboard_hot_key
+      key: ctrl+f
+    - step_type: action
+      description: 在查找输入框输入查找词
+      action: keyboard_type
+      text: hello
+    - step_type: action
+      description: 按 Enter 触发查找
+      action: keyboard_press
+      key: enter
+    - step_type: assert
+      description: 验证查找结果计数标签可见
+      action: assert_element
+      selector:
+        name: MatchCountLabel
+        role: label
+    - step_type: assert
+      description: 验证计数标签显示第1/3项
+      action: assert_ocr_exists
+      text: 第1/3项
+
+  - id: v6.6-find-002
+    name: 无匹配结果_不显示计数
+    module: 查找结果索引
+    status: active
+    annotation:
+      测试界面: 主窗口-查找栏
+      测试功能: 无匹配结果时不显示计数
+      前置条件: 文本编辑器已启动；编辑区有文本
+      AT元素引用: FindInput, MatchCountLabel, TextEditor
+    steps:
+    - step_type: action
+      description: 在文本编辑区输入文本
+      action: keyboard_type
+      text: 'hello world'
+    - step_type: action
+      description: 按 Ctrl+F 打开查找栏
+      action: keyboard_hot_key
+      key: ctrl+f
+    - step_type: action
+      description: 在查找输入框输入不存在的词
+      action: keyboard_type
+      text: xyznotexist
+    - step_type: action
+      description: 按 Enter 触发查找
+      action: keyboard_press
+      key: enter
+    - step_type: assert
+      description: 验证计数标签不显示
+      action: assert_not_exists
+      selector:
+        name: MatchCountLabel
+        role: label
+
+  - id: v6.6-find-003
+    name: 切换下一项_索引实时更新
+    module: 查找结果索引
+    status: active
+    annotation:
+      测试界面: 主窗口-查找栏
+      测试功能: 切换下一项时索引实时更新
+      前置条件: 文本编辑器已启动；编辑区有多次匹配的文本
+      AT元素引用: FindNext, MatchCountLabel, FindInput
+    steps:
+    - step_type: action
+      description: 在文本编辑区输入包含多次出现的文本
+      action: keyboard_type
+      text: 'hello world hello test hello'
+    - step_type: action
+      description: 按 Ctrl+F 打开查找栏
+      action: keyboard_hot_key
+      key: ctrl+f
+    - step_type: action
+      description: 在查找输入框输入查找词
+      action: keyboard_type
+      text: hello
+    - step_type: action
+      description: 按 Enter 触发查找
+      action: keyboard_press
+      key: enter
+    - step_type: action
+      description: 点击查找下一个按钮
+      action: element_action
+      selector:
+        name: FindNext
+        role: button
+      do: click
+    - step_type: assert
+      description: 验证计数标签显示第2/3项
+      action: assert_element
+      selector:
+        name: MatchCountLabel
+        role: label
+    - step_type: assert
+      description: 验证OCR识别到第2/3项
+      action: assert_ocr_exists
+      text: 第2/3项
+
+  - id: v6.6-find-004
+    name: 切换上一项_索引实时更新
+    module: 查找结果索引
+    status: active
+    annotation:
+      测试界面: 主窗口-查找栏
+      测试功能: 切换上一项时索引实时更新
+      前置条件: 文本编辑器已启动；已执行查找并定位到第2项
+      AT元素引用: FindNext, FindPrevious, MatchCountLabel
+    steps:
+    - step_type: action
+      description: 在文本编辑区输入包含多次出现的文本
+      action: keyboard_type
+      text: 'hello world hello test hello'
+    - step_type: action
+      description: 按 Ctrl+F 打开查找栏
+      action: keyboard_hot_key
+      key: ctrl+f
+    - step_type: action
+      description: 在查找输入框输入查找词
+      action: keyboard_type
+      text: hello
+    - step_type: action
+      description: 按 Enter 触发查找
+      action: keyboard_press
+      key: enter
+    - step_type: action
+      description: 点击查找下一个按钮定位到第2项
+      action: element_action
+      selector:
+        name: FindNext
+        role: button
+      do: click
+    - step_type: action
+      description: 点击查找上一个按钮回到第1项
+      action: element_action
+      selector:
+        name: FindPrevious
+        role: button
+      do: click
+    - step_type: assert
+      description: 验证计数标签显示第1/3项
+      action: assert_element
+      selector:
+        name: MatchCountLabel
+        role: label
+    - step_type: assert
+      description: 验证OCR识别到第1/3项
+      action: assert_ocr_exists
+      text: 第1/3项
+
+  - id: v6.6-find-005
+    name: 编辑文本_总数实时更新
+    module: 查找结果索引
+    status: active
+    annotation:
+      测试界面: 主窗口-查找栏/编辑区
+      测试功能: 编辑文本后查找总数实时更新
+      前置条件: 文本编辑器已启动；已执行查找且查找栏打开
+      AT元素引用: MatchCountLabel, FindInput, TextEditor
+    steps:
+    - step_type: action
+      description: 在文本编辑区输入初始文本
+      action: keyboard_type
+      text: 'hello world hello'
+    - step_type: action
+      description: 按 Ctrl+F 打开查找栏
+      action: keyboard_hot_key
+      key: ctrl+f
+    - step_type: action
+      description: 在查找输入框输入查找词
+      action: keyboard_type
+      text: hello
+    - step_type: action
+      description: 按 Enter 触发查找
+      action: keyboard_press
+      key: enter
+    - step_type: action
+      description: 按 Escape 关闭查找栏
+      action: keyboard_press
+      key: escape
+    - step_type: action
+      description: 全选并替换编辑区内容增加匹配数
+      action: keyboard_hot_key
+      key: ctrl+a
+    - step_type: action
+      description: 输入新文本增加匹配数
+      action: keyboard_type
+      text: 'hello world hello test hello hello'
+    - step_type: action
+      description: 按 Ctrl+F 重新打开查找栏
+      action: keyboard_hot_key
+      key: ctrl+f
+    - step_type: action
+      description: 在查找输入框输入查找词
+      action: keyboard_type
+      text: hello
+    - step_type: action
+      description: 按 Enter 触发查找
+      action: keyboard_press
+      key: enter
+    - step_type: assert
+      description: 验证计数标签显示第1/4项
+      action: assert_element
+      selector:
+        name: MatchCountLabel
+        role: label
+    - step_type: assert
+      description: 验证OCR识别到第1/4项
+      action: assert_ocr_exists
+      text: 第1/4项
+
+  - id: v6.6-find-006
+    name: 替换操作_总数更新
+    module: 查找结果索引
+    status: active
+    annotation:
+      测试界面: 主窗口-替换栏
+      测试功能: 替换操作后总数更新
+      前置条件: 文本编辑器已启动；编辑区有多次匹配的文本
+      AT元素引用: ReplaceFindInput, ReplaceWithInput, ReplaceNext, MatchCountLabel
+    steps:
+    - step_type: action
+      description: 在文本编辑区输入包含多次出现的文本
+      action: keyboard_type
+      text: 'hello world hello test hello'
+    - step_type: action
+      description: 按 Ctrl+H 打开替换栏
+      action: keyboard_hot_key
+      key: ctrl+h
+    - step_type: action
+      description: 在替换查找输入框输入查找词
+      action: keyboard_type
+      text: hello
+    - step_type: action
+      description: 按 Tab 切换到替换为输入框
+      action: keyboard_press
+      key: tab
+    - step_type: action
+      description: 在替换为输入框输入替换词
+      action: keyboard_type
+      text: hi
+    - step_type: action
+      description: 点击替换下一个按钮
+      action: element_action
+      selector:
+        name: ReplaceNext
+        role: button
+      do: click
+    - step_type: assert
+      description: 验证计数标签显示第1/2项
+      action: assert_element
+      selector:
+        name: MatchCountLabel
+        role: label
+    - step_type: assert
+      description: 验证OCR识别到第1/2项
+      action: assert_ocr_exists
+      text: 第1/2项
+
+  - id: v6.6-find-007
+    name: 全部替换_总数归零
+    module: 查找结果索引
+    status: active
+    annotation:
+      测试界面: 主窗口-替换栏
+      测试功能: 全部替换后总数归零
+      前置条件: 文本编辑器已启动；编辑区有多次匹配的文本
+      AT元素引用: ReplaceFindInput, ReplaceWithInput, ReplaceAll
+    steps:
+    - step_type: action
+      description: 在文本编辑区输入包含多次出现的文本
+      action: keyboard_type
+      text: 'hello world hello test hello'
+    - step_type: action
+      description: 按 Ctrl+H 打开替换栏
+      action: keyboard_hot_key
+      key: ctrl+h
+    - step_type: action
+      description: 在替换查找输入框输入查找词
+      action: keyboard_type
+      text: hello
+    - step_type: action
+      description: 按 Tab 切换到替换为输入框
+      action: keyboard_press
+      key: tab
+    - step_type: action
+      description: 在替换为输入框输入替换词
+      action: keyboard_type
+      text: hi
+    - step_type: action
+      description: 点击全部替换按钮
+      action: element_action
+      selector:
+        name: ReplaceAll
+        role: button
+      do: click
+    - step_type: action
+      description: 按 Escape 关闭替换栏
+      action: keyboard_press
+      key: escape
+    - step_type: assert
+      description: 验证编辑区所有hello被替换为hi
+      action: assert_ocr_exists
+      text: 'hi world hi test hi'
+
+  - id: v6.6-find-008
+    name: 查找性能_大文件查找计数
+    module: 查找结果索引
+    status: unsupported
+    reason: 性能/资源-大文件查找耗时
+
+  # ============================================================
+  # 模块二：Markdown 文档渲染（24 例，12 active + 12 unsupported）
+  # ============================================================
+
+  - id: v6.6-md-001
+    name: 新建文件_纯文本不渲染
+    module: Markdown渲染
+    status: active
+    annotation:
+      测试界面: 主窗口-编辑区
+      测试功能: 新建非md文件不触发Markdown渲染
+      前置条件: 文本编辑器已启动；默认新建空白文件
+      AT元素引用: TextEditor
+    steps:
+    - step_type: action
+      description: 新建标签页
+      action: keyboard_hot_key
+      key: ctrl+t
+    - step_type: action
+      description: 在文本编辑区输入标题语法
+      action: keyboard_type
+      text: '# 标题'
+    - step_type: assert
+      description: 验证编辑区显示纯文本
+      action: assert_element
+      selector:
+        name: TextEditor
+        role: text
+    - step_type: assert
+      description: 验证OCR识别到# 标题纯文本
+      action: assert_ocr_exists
+      text: '# 标题'
+
+  - id: v6.6-md-002
+    name: 新建文件_实时预览不可用
+    module: Markdown渲染
+    status: active
+    annotation:
+      测试界面: 主窗口-右键菜单
+      测试功能: 非md文件实时预览菜单项不可选
+      前置条件: 文本编辑器已启动；默认新建空白文件（非Markdown）
+      AT元素引用: TextEditor
+    steps:
+    - step_type: action
+      description: 新建标签页
+      action: keyboard_hot_key
+      key: ctrl+t
+    - step_type: action
+      description: 右键编辑区打开视图模式子菜单
+      action: dtk_context_menu
+      selector:
+        name: TextEditor
+        role: text
+      menu:
+      - View Mode
+      - Live Preview
+    - step_type: assert
+      description: 验证编辑区仍可见（Live Preview未生效）
+      action: assert_element
+      selector:
+        name: TextEditor
+        role: text
+
+  - id: v6.6-md-003
+    name: 打开md文件_自动识别实时预览
+    module: Markdown渲染
+    status: active
+    annotation:
+      测试界面: 主窗口-编辑区/渲染区
+      测试功能: 打开md文件后自动进入实时阅览视图
+      前置条件: 文本编辑器已启动；系统中存在test.md文件
+      AT元素引用: MarkdownView, TextEditor
+    steps:
+    - step_type: action
+      description: 等待md文件加载和实时预览初始化
+      action: wait
+      wait: 1.0
+    - step_type: assert
+      description: 验证Markdown渲染视图可见
+      action: assert_element
+      selector:
+        name: MarkdownView
+        role: panel
+    - step_type: assert
+      description: 验证源码编辑区仍可见
+      action: assert_element
+      selector:
+        name: TextEditor
+        role: text
+
+  - id: v6.6-md-004
+    name: 手动切换语言_激活实时预览
+    module: Markdown渲染
+    status: active
+    annotation:
+      测试界面: 主窗口-底栏/编辑区
+      测试功能: 手动切换语言为Markdown后实时预览可用
+      前置条件: 文本编辑器已启动；默认新建空白文件（非Markdown）
+      AT元素引用: HighlightMenu, MarkdownView
+    steps:
+    - step_type: action
+      description: 新建标签页
+      action: keyboard_hot_key
+      key: ctrl+t
+    - step_type: action
+      description: 点击高亮菜单切换语言
+      action: element_action
+      selector:
+        name: HighlightMenu
+      do: click
+    - step_type: action
+      description: 输入markdown搜索语言
+      action: keyboard_type
+      text: markdown
+    - step_type: action
+      description: 确认选择
+      action: keyboard_press
+      key: enter
+    - step_type: action
+      description: 等待实时预览激活
+      action: wait
+      wait: 1.0
+    - step_type: assert
+      description: 验证Markdown渲染视图可见
+      action: assert_element
+      selector:
+        name: MarkdownView
+        role: panel
+
+  - id: v6.6-md-005
+    name: 右键菜单_切换查看视图
+    module: Markdown渲染
+    status: active
+    annotation:
+      测试界面: 主窗口-右键菜单/渲染区
+      测试功能: 通过右键菜单切换到查看视图
+      前置条件: 文本编辑器已打开md文件；当前处于实时阅览视图
+      AT元素引用: TextEditor, MarkdownView
+    steps:
+    - step_type: action
+      description: 右键编辑区选择查看视图
+      action: dtk_context_menu
+      selector:
+        name: TextEditor
+        role: text
+      menu:
+      - View Mode
+      - Read View
+    - step_type: action
+      description: 等待渲染视图切换
+      action: wait
+      wait: 1.0
+    - step_type: assert
+      description: 验证Markdown渲染视图可见（查看模式）
+      action: assert_element
+      selector:
+        name: MarkdownView
+        role: panel
+
+  - id: v6.6-md-006
+    name: 右键菜单_切换编辑视图
+    module: Markdown渲染
+    status: active
+    annotation:
+      测试界面: 主窗口-右键菜单/编辑区
+      测试功能: 从查看视图切换回编辑视图
+      前置条件: 文本编辑器已打开md文件；当前处于查看视图
+      AT元素引用: TextEditor
+    steps:
+    - step_type: action
+      description: 右键编辑区选择查看视图
+      action: dtk_context_menu
+      selector:
+        name: TextEditor
+        role: text
+      menu:
+      - View Mode
+      - Read View
+    - step_type: action
+      description: 等待视图切换
+      action: wait
+      wait: 0.5
+    - step_type: action
+      description: 右键编辑区选择编辑模式
+      action: dtk_context_menu
+      selector:
+        name: TextEditor
+        role: text
+      menu:
+      - View Mode
+      - Edit Mode
+    - step_type: assert
+      description: 验证编辑区可见（编辑模式）
+      action: assert_element
+      selector:
+        name: TextEditor
+        role: text
+
+  - id: v6.6-md-007
+    name: 右键菜单_切换实时预览
+    module: Markdown渲染
+    status: active
+    annotation:
+      测试界面: 主窗口-右键菜单/编辑区/渲染区
+      测试功能: 从编辑视图切换到实时阅览视图
+      前置条件: 文本编辑器已打开md文件；当前处于编辑视图
+      AT元素引用: TextEditor, MarkdownView
+    steps:
+    - step_type: action
+      description: 右键编辑区选择编辑模式
+      action: dtk_context_menu
+      selector:
+        name: TextEditor
+        role: text
+      menu:
+      - View Mode
+      - Edit Mode
+    - step_type: action
+      description: 等待视图切换
+      action: wait
+      wait: 0.5
+    - step_type: action
+      description: 右键编辑区选择实时预览
+      action: dtk_context_menu
+      selector:
+        name: TextEditor
+        role: text
+      menu:
+      - View Mode
+      - Live Preview
+    - step_type: action
+      description: 等待实时预览激活
+      action: wait
+      wait: 1.0
+    - step_type: assert
+      description: 验证Markdown渲染视图可见
+      action: assert_element
+      selector:
+        name: MarkdownView
+        role: panel
+    - step_type: assert
+      description: 验证源码编辑区仍可见
+      action: assert_element
+      selector:
+        name: TextEditor
+        role: text
+
+  - id: v6.6-md-008
+    name: 底部菜单_切换查看视图
+    module: Markdown渲染
+    status: active
+    annotation:
+      测试界面: 主窗口-底栏/渲染区
+      测试功能: 通过底部下拉菜单切换到查看视图
+      前置条件: 文本编辑器已打开md文件；当前处于实时阅览视图
+      AT元素引用: ViewModeMenu, MarkdownView
+    steps:
+    - step_type: action
+      description: 点击底部视图模式菜单
+      action: element_action
+      selector:
+        name: ViewModeMenu
+      do: click
+    - step_type: action
+      description: 按下方向键选择查看视图
+      action: keyboard_press
+      key: down
+    - step_type: action
+      description: 确认选择
+      action: keyboard_press
+      key: enter
+    - step_type: action
+      description: 等待渲染视图切换
+      action: wait
+      wait: 1.0
+    - step_type: assert
+      description: 验证Markdown渲染视图可见
+      action: assert_element
+      selector:
+        name: MarkdownView
+        role: panel
+
+  - id: v6.6-md-009
+    name: 底部菜单_切换编辑视图
+    module: Markdown渲染
+    status: unsupported
+    reason: 环境-ViewModeMenu/DDropdownMenu 坐标为 (0,0,0,0) AT-SPI 无法点击，且连续右键操作偶发超时
+
+  - id: v6.6-md-010
+    name: 底部菜单_切换实时预览
+    module: Markdown渲染
+    status: unsupported
+    reason: 环境-ViewModeMenu/DDropdownMenu 坐标为 (0,0,0,0) AT-SPI 无法点击，且连续右键操作偶发超时
+
+  - id: v6.6-md-011
+    name: 查看视图_只读模式
+    module: Markdown渲染
+    status: active
+    annotation:
+      测试界面: 主窗口-渲染区
+      测试功能: 查看视图下编辑区为只读状态
+      前置条件: 文本编辑器已打开md文件；当前处于查看视图
+      AT元素引用: TextEditor, MarkdownView
+    steps:
+    - step_type: action
+      description: 右键编辑区选择查看视图
+      action: dtk_context_menu
+      selector:
+        name: TextEditor
+        role: text
+      menu:
+      - View Mode
+      - Read View
+    - step_type: action
+      description: 等待渲染视图切换
+      action: wait
+      wait: 1.0
+    - step_type: action
+      description: 尝试在只读视图输入文本
+      action: keyboard_type
+      text: modified_text_should_not_appear
+    - step_type: assert
+      description: 验证Markdown渲染视图仍可见（输入未生效）
+      action: assert_element
+      selector:
+        name: MarkdownView
+        role: panel
+
+  - id: v6.6-md-012
+    name: 非md文件_实时预览不可用
+    module: Markdown渲染
+    status: active
+    annotation:
+      测试界面: 主窗口-底栏
+      测试功能: 非md文件底部视图模式菜单中实时预览不可选
+      前置条件: 文本编辑器已启动；默认新建txt文件
+      AT元素引用: ViewModeMenu, TextEditor
+    steps:
+    - step_type: action
+      description: 新建标签页
+      action: keyboard_hot_key
+      key: ctrl+t
+    - step_type: action
+      description: 点击底部视图模式菜单
+      action: element_action
+      selector:
+        name: ViewModeMenu
+      do: click
+    - step_type: assert
+      description: 验证编辑区可见（实时预览未激活）
+      action: assert_element
+      selector:
+        name: TextEditor
+        role: text
+
+  - id: v6.6-md-013
+    name: 标题语法_编辑视图输入
+    module: Markdown渲染
+    status: active
+    annotation:
+      测试界面: 主窗口-编辑区
+      测试功能: 在md文件编辑视图输入各级标题语法
+      前置条件: 文本编辑器已打开md文件；当前处于编辑视图
+      AT元素引用: TextEditor
+    steps:
+    - step_type: action
+      description: 右键编辑区切换到编辑模式
+      action: dtk_context_menu
+      selector:
+        name: TextEditor
+        role: text
+      menu:
+      - View Mode
+      - Edit Mode
+    - step_type: action
+      description: 输入各级标题语法
+      action: keyboard_type
+      text: '# 一级标题
+        ## 二级标题
+        ### 三级标题
+        #### 四级标题
+        ##### 五级标题
+        ###### 六级标题'
+    - step_type: assert
+      description: 验证编辑区可见
+      action: assert_element
+      selector:
+        name: TextEditor
+        role: text
+    - step_type: assert
+      description: 验证OCR识别到标题源码
+      action: assert_ocr_exists
+      text: '# 一级标题'
+
+  - id: v6.6-md-014
+    name: 列表语法_编辑视图输入
+    module: Markdown渲染
+    status: active
+    annotation:
+      测试界面: 主窗口-编辑区
+      测试功能: 在md文件编辑视图输入列表语法
+      前置条件: 文本编辑器已打开md文件；当前处于编辑视图
+      AT元素引用: TextEditor
+    steps:
+    - step_type: action
+      description: 右键编辑区切换到编辑模式
+      action: dtk_context_menu
+      selector:
+        name: TextEditor
+        role: text
+      menu:
+      - View Mode
+      - Edit Mode
+    - step_type: action
+      description: 输入列表语法
+      action: keyboard_type
+      text: '1. 有序项
+        - 无序项
+        - [ ] 任务项'
+    - step_type: assert
+      description: 验证编辑区可见
+      action: assert_element
+      selector:
+        name: TextEditor
+        role: text
+    - step_type: assert
+      description: 验证OCR识别到列表源码
+      action: assert_ocr_exists
+      text: '1. 有序项'
+
+  - id: v6.6-md-015
+    name: 代码块语法_编辑视图输入
+    module: Markdown渲染
+    status: active
+    annotation:
+      测试界面: 主窗口-编辑区
+      测试功能: 在md文件编辑视图输入代码块语法
+      前置条件: 文本编辑器已打开md文件；当前处于编辑视图
+      AT元素引用: TextEditor
+    steps:
+    - step_type: action
+      description: 右键编辑区切换到编辑模式
+      action: dtk_context_menu
+      selector:
+        name: TextEditor
+        role: text
+      menu:
+      - View Mode
+      - Edit Mode
+    - step_type: action
+      description: 输入代码块语法
+      action: keyboard_type
+      text: '```python
+        print(test_code)
+        ```'
+    - step_type: assert
+      description: 验证编辑区可见
+      action: assert_element
+      selector:
+        name: TextEditor
+        role: text
+    - step_type: assert
+      description: 验证OCR识别到代码内容
+      action: assert_ocr_exists
+      text: print(test_code)
+
+  - id: v6.6-md-016
+    name: 表格语法_编辑视图输入
+    module: Markdown渲染
+    status: active
+    annotation:
+      测试界面: 主窗口-编辑区
+      测试功能: 在md文件编辑视图输入表格语法
+      前置条件: 文本编辑器已打开md文件；当前处于编辑视图
+      AT元素引用: TextEditor
+    steps:
+    - step_type: action
+      description: 右键编辑区切换到编辑模式
+      action: dtk_context_menu
+      selector:
+        name: TextEditor
+        role: text
+      menu:
+      - View Mode
+      - Edit Mode
+    - step_type: action
+      description: 输入表格语法
+      action: keyboard_type
+      text: '| 名称 | 值 |
+        | --- | --- |
+        | A | 1 |'
+    - step_type: assert
+      description: 验证编辑区可见
+      action: assert_element
+      selector:
+        name: TextEditor
+        role: text
+    - step_type: assert
+      description: 验证OCR识别到表格行
+      action: assert_ocr_exists
+      text: '| A | 1 |'
+
+  - id: v6.6-md-017
+    name: 常规语法_编辑视图输入
+    module: Markdown渲染
+    status: active
+    annotation:
+      测试界面: 主窗口-编辑区
+      测试功能: 在md文件编辑视图输入粗体斜体等常规语法
+      前置条件: 文本编辑器已打开md文件；当前处于编辑视图
+      AT元素引用: TextEditor
+    steps:
+    - step_type: action
+      description: 右键编辑区切换到编辑模式
+      action: dtk_context_menu
+      selector:
+        name: TextEditor
+        role: text
+      menu:
+      - View Mode
+      - Edit Mode
+    - step_type: action
+      description: 输入常规Markdown语法
+      action: keyboard_type
+      text: '**粗体**
+        *斜体*
+        ~~删除线~~
+        > 引用
+        ---'
+    - step_type: assert
+      description: 验证编辑区可见
+      action: assert_element
+      selector:
+        name: TextEditor
+        role: text
+    - step_type: assert
+      description: 验证OCR识别到粗体源码
+      action: assert_ocr_exists
+      text: '**粗体**'
+
+  # —— 以下为不可自动化用例（manual），标 unsupported ——
+  - id: v6.6-md-018
+    name: 实时阅览_滚动同步
+    module: Markdown渲染
+    status: unsupported
+    reason: 光标/选区形态-滚动条同步需视觉验证
+
+  - id: v6.6-md-019
+    name: 实时阅览_渲染性能
+    module: Markdown渲染
+    status: unsupported
+    reason: 性能/资源-渲染延迟需计时验证
+
+  - id: v6.6-md-020
+    name: 查看视图_居中排版
+    module: Markdown渲染
+    status: unsupported
+    reason: 光标/选区形态-布局居中需视觉验证
+
+  - id: v6.6-md-021
+    name: 标题语法_渲染效果
+    module: Markdown渲染
+    status: unsupported
+    reason: 颜色/高亮/置灰-字号样式渲染需视觉验证
+
+  - id: v6.6-md-022
+    name: 列表语法_渲染效果
+    module: Markdown渲染
+    status: unsupported
+    reason: 颜色/高亮/置灰-列表样式渲染需视觉验证
+
+  - id: v6.6-md-023
+    name: 代码块语法_渲染效果
+    module: Markdown渲染
+    status: unsupported
+    reason: 颜色/高亮/置灰-语法高亮渲染需视觉验证
+
+  - id: v6.6-md-024
+    name: 表格语法_渲染效果
+    module: Markdown渲染
+    status: unsupported
+    reason: 颜色/高亮/置灰-表格样式渲染需视觉验证

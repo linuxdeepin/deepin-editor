@@ -1,0 +1,136 @@
+# 界面元素映射表（at-case-authoring V6.6）
+# 字段顺序固定：desc → ui_name → id_name → role
+# desc/ui_name 测试人员填；id_name/role 开发人员填
+
+app: deepin-editor
+version: "1.0"
+updated: 2026-09-10
+
+elements:
+  # —— 主窗口 ——
+  - desc: 文本编辑器主窗口
+    ui_name: 主窗口
+    id_name: MainWindow
+    role: frame
+
+  # —— 文本编辑区域 ——
+  - desc: 文本编辑区
+    ui_name: 文本编辑区
+    id_name: TextEditor
+    role: text
+
+  # —— Markdown 渲染视图 ——
+  - desc: Markdown 渲染预览区域（QWebEngineView）
+    ui_name: Markdown渲染视图
+    id_name: MarkdownView
+    role: panel
+
+  # —— 查找栏 ——
+  - desc: 查找输入框
+    ui_name: 查找输入框
+    id_name: FindInput
+    role: text
+
+  - desc: 查找上一个按钮
+    ui_name: 查找上一个
+    id_name: FindPrevious
+    role: button
+
+  - desc: 查找下一个按钮
+    ui_name: 查找下一个
+    id_name: FindNext
+    role: button
+
+  - desc: 切换到替换按钮
+    ui_name: 切换到替换
+    id_name: SwitchToReplace
+    role: button
+
+  - desc: 关闭查找栏按钮
+    ui_name: 关闭查找栏
+    id_name: CloseFind
+    role: button
+
+  - desc: 查找结果计数标签（第X/Y项）
+    ui_name: 查找结果计数
+    id_name: MatchCountLabel
+    role: label
+
+  - desc: 查找输入框清除按钮
+    ui_name: 清除按钮
+    id_name: ClearButton
+    role: button
+
+  # —— 替换栏 ——
+  - desc: 替换查找输入框
+    ui_name: 替换查找输入框
+    id_name: ReplaceFindInput
+    role: text
+
+  - desc: 替换为输入框
+    ui_name: 替换为输入框
+    id_name: ReplaceWithInput
+    role: text
+
+  - desc: 替换下一个按钮
+    ui_name: 替换下一个
+    id_name: ReplaceNext
+    role: button
+
+  - desc: 全部替换按钮
+    ui_name: 全部替换
+    id_name: ReplaceAll
+    role: button
+
+  - desc: 关闭替换栏按钮
+    ui_name: 关闭替换栏
+    id_name: CloseReplace
+    role: button
+
+  # —— 底部状态栏 ——
+  - desc: 光标位置标签
+    ui_name: 光标位置
+    id_name: PositionLabel
+    role: label
+
+  - desc: 字符计数标签
+    ui_name: 字符计数
+    id_name: CharCountLabel
+    role: label
+
+  - desc: 视图模式下拉菜单
+    ui_name: 视图模式菜单
+    id_name: ViewModeMenu
+    role: combo box
+
+  - desc: 语法高亮下拉菜单（用于切换语言模式）
+    ui_name: 高亮菜单
+    id_name: HighlightMenu
+    role: combo box
+
+  # —— 右键菜单 ——
+  - desc: 编辑器右键菜单
+    ui_name: 编辑器右键菜单
+    id_name: EditorContextMenu
+    role: menu
+
+  - desc: 右键菜单视图模式子菜单
+    ui_name: 视图模式子菜单
+    id_name: ViewModeContextMenu
+    role: menu
+
+  # —— 视图模式菜单项 ——
+  - desc: 编辑模式菜单项
+    ui_name: 编辑模式
+    id_name: EditView
+    role: menu item
+
+  - desc: 查看视图菜单项
+    ui_name: 查看视图
+    id_name: ReadView
+    role: menu item
+
+  - desc: 实时预览菜单项
+    ui_name: 实时预览
+    id_name: LivePreview
+    role: menu item

@@ -33,6 +33,7 @@ LineBar::LineBar(DLineEdit *parent)
 
     // label 和清除按钮直接 parent 到内嵌 lineEdit，覆盖在输入框内部
     m_matchCountLabel = new QLabel(lineEdit());
+    m_matchCountLabel->setAccessibleName("MatchCountLabel");
     int fontsize = DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T9);
     QFont labelFont = m_matchCountLabel->font();
     labelFont.setPixelSize(fontsize);
