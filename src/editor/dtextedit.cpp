@@ -541,6 +541,7 @@ void TextEdit::initRightClickedMenu()
 
     // Init view mode sub menu（§8.1：三子项互斥可选；默认「编辑模式」选中、「实时预览」置灰）
     m_viewModeMenu = new DMenu(tr("View Mode"), this);
+    m_viewModeMenu->setAccessibleName("ViewModeContextMenu");
     QActionGroup *pViewModeGroup = new QActionGroup(this);
     m_actEditView->setCheckable(true);
     m_actReadView->setCheckable(true);

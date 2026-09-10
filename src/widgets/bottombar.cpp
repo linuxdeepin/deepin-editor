@@ -65,6 +65,8 @@ BottomBar::BottomBar(QWidget *parent)
 
     initFormatMenu();
 
+    m_pHighlightMenu->setAccessibleName("HighlightMenu");
+
     // —— Markdown 视图模式 combobox（§8.2，与编码格式菜单同型）——
     m_pViewModeMenu = new DDropdownMenu();
     m_pViewModeMenu->setAccessibleName("ViewModeMenu");

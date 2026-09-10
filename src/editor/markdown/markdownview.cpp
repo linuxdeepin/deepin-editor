@@ -81,6 +81,7 @@ MarkdownView::MarkdownView(QWidget *parent)
     : QWebEngineView(parent)
     , m_bridge(new MarkdownBridge(this))
 {
+    setAccessibleName("MarkdownView");
     connect(m_bridge, &MarkdownBridge::ready, this, &MarkdownView::onBridgeReady);
     connect(m_bridge, &MarkdownBridge::contentChanged, this, &MarkdownView::contentChanged);
     connect(m_bridge, &MarkdownBridge::scrollRatioChanged, this, &MarkdownView::scrollRatioChanged);
