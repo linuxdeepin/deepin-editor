@@ -1,0 +1,8 @@
+scan_total: 1
+total: 1
+elements:
+  DropdownToolButton:
+    role: push button
+    source: src/widgets/ddropdownmenu.cpp
+    type: DDropdownMenu
+    name_source: accessible

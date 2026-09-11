@@ -1,0 +1,59 @@
+name: edit_mode_suite
+app: deepin-editor
+module: edit_mode
+setup:
+- action: session_start
+  command: deepin-editor
+  wait: 3.0
+suites:
+- id: case_encoding_switch_s1
+  name: 编码切换
+  description: ''
+  steps:
+  - step_type: action
+    action: keyboard_hot_key
+    key: ctrl+t
+  - step_type: action
+    action: mouse_click
+    selector:
+      name: DropdownToolButton
+      role: push button
+  - step_type: action
+    action: dtk_context_menu
+    selector:
+      name: DropdownToolButton
+      role: push button
+    items:
+    - 简体中文
+    - GB18030
+  - step_type: action
+    action: keyboard_type
+    text: UOS给世界更好的选择
+  - step_type: action
+    action: mouse_click
+    selector:
+      name: DropdownToolButton
+      role: push button
+  - step_type: action
+    action: dtk_context_menu
+    selector:
+      name: DropdownToolButton
+      role: push button
+    items:
+    - Unicode
+    - UTF-8
+  - step_type: action
+    action: keyboard_press
+    key: enter
+  - step_type: action
+    action: keyboard_hot_key
+    key: ctrl+s
+  - step_type: action
+    action: file_dialog_select
+    path: /tmp/test_encoding_switch.txt
+  assert_steps:
+  - step_type: assert
+    action: assert_file_exists
+    path: /tmp/test_encoding_switch.txt
+teardown:
+- action: session_stop
