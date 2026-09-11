@@ -1,0 +1,11 @@
+scan_total: 1
+unreachable: 0
+denominator: 1
+covered: 1
+uncovered: 0
+coverage: 100.0
+passed: true
+accessible_named: 1
+accessible_covered: 1
+accessible_coverage: 100.0
+uncovered_elements: []
