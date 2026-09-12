@@ -1,0 +1,7 @@
+elements:
+  PToolButton:
+    accessible_id: PToolButton
+  PActUtf8:
+    name: PActUtf8
+    role: menu item
+    accessible_id: PActUtf8
