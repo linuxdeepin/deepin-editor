@@ -1,0 +1,16 @@
+version: '1.0'
+source: at-case-authoring:element-map.yaml
+scan_total: 2
+elements:
+  PToolButton:
+    role: push button
+    ui_name: 编码菜单按钮
+    desc: 底部编码切换下拉菜单触发按钮(DDropdownMenu共享PToolButton)，来自定向需求
+    locator: accessible_id
+  PActUtf8:
+    role: menu item
+    ui_name: UTF-8编码选项
+    desc: 编码菜单中UTF-8选项QAction(setObjectName=PActUtf8)，来自定向需求
+    locator: accessible_id
+transient_items: []
+unresolved: []
