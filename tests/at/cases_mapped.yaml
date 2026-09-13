@@ -1,0 +1,40 @@
+version: '1.0'
+cases:
+- id: suite_enc_switch_001_s1
+  name: 编码切换
+  module: enc_switch
+  steps:
+  - step_type: action
+    action: keyboard_hot_key
+    key: ctrl+t
+  - step_type: action
+    action: dtk_dropdown_menu
+    selector:
+      accessible_id: PToolButton
+    items:
+    - GB18030
+  - step_type: action
+    action: keyboard_type
+    text: UOS给世界更好的选择
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: PActUtf8
+    do: click
+  - step_type: action
+    action: keyboard_press
+    key: enter
+  - step_type: action
+    action: keyboard_hot_key
+    key: ctrl+s
+  - step_type: action
+    action: file_dialog_select
+    path: /tmp/enc_switch_test.txt
+    wait: 3.0
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: PTextEdit
+  - step_type: assert
+    action: assert_file_exists
+    path: /tmp/enc_switch_test.txt

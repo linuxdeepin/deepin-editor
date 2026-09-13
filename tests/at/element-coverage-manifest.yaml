@@ -1,0 +1,26 @@
+version: '1.0'
+source: at-case-authoring:element-map.yaml
+scan_total: 3
+elements:
+  PToolButton:
+    role: push button
+    ui_name: UTF-8菜单
+    desc: 底部编码下拉菜单触发按钮（DDropdownMenu PToolButton）
+    locator: accessible_id
+  PActUtf8:
+    role: menu item
+    ui_name: UTF-8
+    desc: 编码菜单中 Unicode 组下的 UTF-8 选项（QAction，有 objectName）
+    locator: accessible_id
+  PTextEdit:
+    role: text
+    ui_name: 文本编辑区
+    desc: 文本编辑区域（TextEdit，键盘输入目标）
+    locator: accessible_id
+transient_items: []
+unresolved:
+- name: GB18030
+  role: menu item
+  ui_name: GB18030
+  desc: 编码菜单中简体中文组下的 GB18030 选项（QAction，无 setObjectName/setAccessibleName）
+  reason: id_name/object_name 未填 (TBD)，运行时无法按名定位
