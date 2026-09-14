@@ -1,0 +1,56 @@
+name: bianma_qiehuan_suite
+app: deepin-editor
+module: bianma_qiehuan
+setup:
+- action: session_start
+  command: deepin-editor
+  wait: 3.0
+suites:
+- id: case_encode_switch_s1
+  name: 编码切换
+  description: ''
+  steps:
+  - step_type: action
+    action: keyboard_hot_key
+    key: ctrl+t
+    wait: 1.0
+  - step_type: action
+    action: dtk_dropdown_menu
+    selector:
+      parent: EditorBottomBar
+      name: DropdownToolButton
+      role: push button
+      index: 1
+    items:
+    - 简体中文
+    - GB18030
+  - step_type: action
+    action: keyboard_type
+    text: UOS给世界更好的选择
+  - step_type: action
+    action: dtk_dropdown_menu
+    selector:
+      parent: EditorBottomBar
+      name: DropdownToolButton
+      role: push button
+      index: 1
+    items:
+    - Unicode
+    - UTF-8
+  - step_type: action
+    action: keyboard_press
+    key: enter
+  - step_type: action
+    action: keyboard_hot_key
+    key: ctrl+s
+    wait: 1.0
+  - step_type: action
+    action: file_dialog_select
+    path: /tmp/at_encode_switch_test.txt
+  assert_steps:
+  - step_type: assert
+    action: assert_file_exists
+    path: /tmp/at_encode_switch_test.txt
+    wait: 2.0
+teardown:
+- action: session_stop
