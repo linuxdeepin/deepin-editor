@@ -169,6 +169,7 @@ IflytekAiAssistant::CallStatus IflytekAiAssistant::checkValid()
 {
     qDebug() << "checkValid status:" << m_status;
     switch (m_status) {
+        case Invalid:
         case NotInstalled:
             m_status = copilotInstalled(m_copilot);
             if (Enable != m_status) {
@@ -378,6 +379,7 @@ QString IflytekAiAssistant::errorString(CallStatus ret) const
 {
     qDebug() << "errorString ret:" << ret;
     switch (ret) {
+        case Invalid:
         case NotInstalled:
             return QObject::tr("Please install 'UOS AI' from the App Store before using");
         case NoInputDevice:
