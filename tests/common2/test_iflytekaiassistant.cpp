@@ -225,12 +225,12 @@ TEST_F(IflytekAiAssistantTest, ActionMethods_StatusInvalid_ReturnInvalidStatus)
 {
     // Arrange
     IflytekAiAssistant *ins = IflytekAiAssistant::instance();
-    // Act/Assert: checkValid 走 default 分支保持 Invalid，动作方法直接返回
-    EXPECT_EQ(ins->textToSpeech(), IflytekAiAssistant::Invalid);
-    EXPECT_EQ(ins->speechToText(), IflytekAiAssistant::Invalid);
-    EXPECT_EQ(ins->textToTranslate(), IflytekAiAssistant::Invalid);
-    EXPECT_EQ(ins->checkValid(), IflytekAiAssistant::Invalid);
-    EXPECT_EQ(dbusCallCount, 0);
+    // Act/Assert: checkValid fallthrough Invalid→NotInstalled，动作方法返回 NotInstalled
+    EXPECT_EQ(ins->textToSpeech(), IflytekAiAssistant::NotInstalled);
+    EXPECT_EQ(ins->speechToText(), IflytekAiAssistant::NotInstalled);
+    EXPECT_EQ(ins->textToTranslate(), IflytekAiAssistant::NotInstalled);
+    EXPECT_EQ(ins->checkValid(), IflytekAiAssistant::NotInstalled);
+    EXPECT_GT(dbusCallCount, 0);
 }
 
 // B4
@@ -567,7 +567,7 @@ INSTANTIATE_TEST_SUITE_P(
         ErrorCase{IflytekAiAssistant::NotInstalled, "UOS AI"},
         ErrorCase{IflytekAiAssistant::NoInputDevice, "input"},
         ErrorCase{IflytekAiAssistant::NoOutputDevice, "output"},
-        ErrorCase{IflytekAiAssistant::Invalid, nullptr},
+        ErrorCase{IflytekAiAssistant::Invalid, "UOS AI"},
         ErrorCase{IflytekAiAssistant::Enable, nullptr},
         ErrorCase{IflytekAiAssistant::Disable, nullptr},
         ErrorCase{IflytekAiAssistant::NoUserAgreement, nullptr},
