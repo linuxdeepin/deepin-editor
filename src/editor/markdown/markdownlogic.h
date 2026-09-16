@@ -56,6 +56,12 @@ public:
         if (md.isEmpty() || baseDir.isEmpty())
             return md;
 
+        // 快速路径（性能，2026-09-16）：无 "![" 前缀必无图片语法，跳过全文正则扫描与
+        // 字符串重建——大文档（MB 级）下 globalMatch + 逐段拼接的开销不可忽略
+        if (!md.contains(QLatin1String("!["))
+                || !md.contains(QLatin1String("](")))
+            return md;
+
         static const QRegularExpression rx(
             QStringLiteral("!\\[([^\\]]*)\\]\\(([^)]+?)(\\s+\"[^\"]*\")?\\)"));
         QString result;

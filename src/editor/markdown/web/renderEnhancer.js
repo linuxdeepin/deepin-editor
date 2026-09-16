@@ -53,13 +53,21 @@ export function retranslateCodeBlocks(root) {
     });
 }
 
+// 自身或后代中选择：块级追加场景下目标元素（顶层 table/pre）可能是传入节点自身，
+// querySelectorAll 不含自身。容器根（#app div）永不自匹配，enhance() 行为不变。
+function selectInclusive(root, selector) {
+    const found = [];
+    if (typeof root.matches === "function" && root.matches(selector)) found.push(root);
+    root.querySelectorAll(selector).forEach((el) => found.push(el));
+    return found;
+}
+
 // 把每个 <table> 包裹为 .table-block > (.table-block-header + .table-wrapper > table)
 // .table-wrapper：横向滚动容器 + 容器查询锚点；.table-block-header：空表头装饰条
 // 幂等：已包裹的表格跳过
 export function wrapTables(root) {
     if (!root) return;
-    const tables = root.querySelectorAll("table");
-    tables.forEach((table) => {
+    selectInclusive(root, "table").forEach((table) => {
         if (table.closest("." + TABLE_WRAPPER_CLASS)) return;
         const block = document.createElement("div");
         block.className = "table-block";
@@ -119,7 +127,7 @@ function setCollapsed(wrapper, toggleBtn, collapsed) {
 // 幂等：已包裹的 pre 跳过
 export function enhanceCodeBlocks(root) {
     if (!root) return;
-    root.querySelectorAll("pre").forEach((pre) => {
+    selectInclusive(root, "pre").forEach((pre) => {
         if (pre.closest("." + CODE_BLOCK_CLASS)) return;
 
         const lang = detectLanguage(pre);
@@ -191,4 +199,14 @@ export function enhanceCodeBlocks(root) {
 export function enhance(root) {
     wrapTables(root);
     enhanceCodeBlocks(root);
+}
+
+// 渐进渲染追加块的后处理入口：仅处理新增节点。
+// 逐块对全树做 querySelectorAll 是 O(块数×总节点数)，大文档下会重新引入超线性。
+export function enhanceNodes(nodes) {
+    if (!nodes || nodes.length === 0) return;
+    nodes.forEach((node) => {
+        wrapTables(node);
+        enhanceCodeBlocks(node);
+    });
 }
