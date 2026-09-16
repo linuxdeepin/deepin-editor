@@ -472,7 +472,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     }
     return items;
   }
-  const hasOwnProperty$1 = {}.hasOwnProperty;
+  const hasOwnProperty = {}.hasOwnProperty;
   function combineExtensions(extensions) {
     const all2 = {};
     let index2 = -1;
@@ -484,13 +484,13 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
   function syntaxExtension(all2, extension2) {
     let hook;
     for (hook in extension2) {
-      const maybe = hasOwnProperty$1.call(all2, hook) ? all2[hook] : void 0;
+      const maybe = hasOwnProperty.call(all2, hook) ? all2[hook] : void 0;
       const left = maybe || (all2[hook] = {});
       const right = extension2[hook];
       let code2;
       if (right) {
         for (code2 in right) {
-          if (!hasOwnProperty$1.call(left, code2)) left[code2] = [];
+          if (!hasOwnProperty.call(left, code2)) left[code2] = [];
           const value = right[code2];
           constructs(
             // @ts-expect-error Looks like a list.
@@ -633,7 +633,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     tokenize: tokenizeContainer
   };
   function initializeDocument(effects) {
-    const self2 = this;
+    const self = this;
     const stack = [];
     let continued = 0;
     let childFlow;
@@ -643,37 +643,37 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     function start(code2) {
       if (continued < stack.length) {
         const item = stack[continued];
-        self2.containerState = item[1];
+        self.containerState = item[1];
         return effects.attempt(item[0].continuation, documentContinue, checkNewContainers)(code2);
       }
       return checkNewContainers(code2);
     }
     function documentContinue(code2) {
       continued++;
-      if (self2.containerState._closeFlow) {
-        self2.containerState._closeFlow = void 0;
+      if (self.containerState._closeFlow) {
+        self.containerState._closeFlow = void 0;
         if (childFlow) {
           closeFlow();
         }
-        const indexBeforeExits = self2.events.length;
+        const indexBeforeExits = self.events.length;
         let indexBeforeFlow = indexBeforeExits;
         let point2;
         while (indexBeforeFlow--) {
-          if (self2.events[indexBeforeFlow][0] === "exit" && self2.events[indexBeforeFlow][1].type === "chunkFlow") {
-            point2 = self2.events[indexBeforeFlow][1].end;
+          if (self.events[indexBeforeFlow][0] === "exit" && self.events[indexBeforeFlow][1].type === "chunkFlow") {
+            point2 = self.events[indexBeforeFlow][1].end;
             break;
           }
         }
         exitContainers(continued);
         let index2 = indexBeforeExits;
-        while (index2 < self2.events.length) {
-          self2.events[index2][1].end = {
+        while (index2 < self.events.length) {
+          self.events[index2][1].end = {
             ...point2
           };
           index2++;
         }
-        splice(self2.events, indexBeforeFlow + 1, 0, self2.events.slice(indexBeforeExits));
-        self2.events.length = index2;
+        splice(self.events, indexBeforeFlow + 1, 0, self.events.slice(indexBeforeExits));
+        self.events.length = index2;
         return checkNewContainers(code2);
       }
       return start(code2);
@@ -686,9 +686,9 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
         if (childFlow.currentConstruct && childFlow.currentConstruct.concrete) {
           return flowStart(code2);
         }
-        self2.interrupt = Boolean(childFlow.currentConstruct && !childFlow._gfmTableDynamicInterruptHack);
+        self.interrupt = Boolean(childFlow.currentConstruct && !childFlow._gfmTableDynamicInterruptHack);
       }
-      self2.containerState = {};
+      self.containerState = {};
       return effects.check(containerConstruct, thereIsANewContainer, thereIsNoNewContainer)(code2);
     }
     function thereIsANewContainer(code2) {
@@ -697,17 +697,17 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       return documentContinued(code2);
     }
     function thereIsNoNewContainer(code2) {
-      self2.parser.lazy[self2.now().line] = continued !== stack.length;
-      lineStartOffset = self2.now().offset;
+      self.parser.lazy[self.now().line] = continued !== stack.length;
+      lineStartOffset = self.now().offset;
       return flowStart(code2);
     }
     function documentContinued(code2) {
-      self2.containerState = {};
+      self.containerState = {};
       return effects.attempt(containerConstruct, containerContinue, flowStart)(code2);
     }
     function containerContinue(code2) {
       continued++;
-      stack.push([self2.currentConstruct, self2.containerState]);
+      stack.push([self.currentConstruct, self.containerState]);
       return documentContinued(code2);
     }
     function flowStart(code2) {
@@ -717,7 +717,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
         effects.consume(code2);
         return;
       }
-      childFlow = childFlow || self2.parser.flow(self2.now());
+      childFlow = childFlow || self.parser.flow(self.now());
       effects.enter("chunkFlow", {
         _tokenizer: childFlow,
         contentType: "flow",
@@ -736,21 +736,21 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
         effects.consume(code2);
         writeToChild(effects.exit("chunkFlow"));
         continued = 0;
-        self2.interrupt = void 0;
+        self.interrupt = void 0;
         return start;
       }
       effects.consume(code2);
       return flowContinue;
     }
     function writeToChild(token, endOfFile) {
-      const stream = self2.sliceStream(token);
+      const stream = self.sliceStream(token);
       if (endOfFile) stream.push(null);
       token.previous = childToken;
       if (childToken) childToken.next = token;
       childToken = token;
       childFlow.defineSkip(token.start);
       childFlow.write(stream);
-      if (self2.parser.lazy[token.start.line]) {
+      if (self.parser.lazy[token.start.line]) {
         let index2 = childFlow.events.length;
         while (index2--) {
           if (
@@ -762,14 +762,14 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
             return;
           }
         }
-        const indexBeforeExits = self2.events.length;
+        const indexBeforeExits = self.events.length;
         let indexBeforeFlow = indexBeforeExits;
         let seen;
         let point2;
         while (indexBeforeFlow--) {
-          if (self2.events[indexBeforeFlow][0] === "exit" && self2.events[indexBeforeFlow][1].type === "chunkFlow") {
+          if (self.events[indexBeforeFlow][0] === "exit" && self.events[indexBeforeFlow][1].type === "chunkFlow") {
             if (seen) {
-              point2 = self2.events[indexBeforeFlow][1].end;
+              point2 = self.events[indexBeforeFlow][1].end;
               break;
             }
             seen = true;
@@ -777,22 +777,22 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
         }
         exitContainers(continued);
         index2 = indexBeforeExits;
-        while (index2 < self2.events.length) {
-          self2.events[index2][1].end = {
+        while (index2 < self.events.length) {
+          self.events[index2][1].end = {
             ...point2
           };
           index2++;
         }
-        splice(self2.events, indexBeforeFlow + 1, 0, self2.events.slice(indexBeforeExits));
-        self2.events.length = index2;
+        splice(self.events, indexBeforeFlow + 1, 0, self.events.slice(indexBeforeExits));
+        self.events.length = index2;
       }
     }
     function exitContainers(size) {
       let index2 = stack.length;
       while (index2-- > size) {
         const entry = stack[index2];
-        self2.containerState = entry[1];
-        entry[0].exit.call(self2, effects);
+        self.containerState = entry[1];
+        entry[0].exit.call(self, effects);
       }
       stack.length = size;
     }
@@ -800,7 +800,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       childFlow.write([null]);
       childToken = void 0;
       childFlow = void 0;
-      self2.containerState._closeFlow = void 0;
+      self.containerState._closeFlow = void 0;
     }
   }
   function tokenizeContainer(effects, ok2, nok) {
@@ -1076,11 +1076,11 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     tokenize: tokenizeBlockQuoteStart
   };
   function tokenizeBlockQuoteStart(effects, ok2, nok) {
-    const self2 = this;
+    const self = this;
     return start;
     function start(code2) {
       if (code2 === 62) {
-        const state = self2.containerState;
+        const state = self.containerState;
         if (!state.open) {
           effects.enter("blockQuote", {
             _container: true
@@ -1108,11 +1108,11 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     }
   }
   function tokenizeBlockQuoteContinuation(effects, ok2, nok) {
-    const self2 = this;
+    const self = this;
     return contStart;
     function contStart(code2) {
       if (markdownSpace(code2)) {
-        return factorySpace(effects, contBefore, "linePrefix", self2.parser.constructs.disable.null.includes("codeIndented") ? void 0 : 4)(code2);
+        return factorySpace(effects, contBefore, "linePrefix", self.parser.constructs.disable.null.includes("codeIndented") ? void 0 : 4)(code2);
       }
       return contBefore(code2);
     }
@@ -1152,7 +1152,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     tokenize: tokenizeCharacterReference
   };
   function tokenizeCharacterReference(effects, ok2, nok) {
-    const self2 = this;
+    const self = this;
     let size = 0;
     let max;
     let test;
@@ -1194,7 +1194,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     function value(code2) {
       if (code2 === 59 && size) {
         const token = effects.exit("characterReferenceValue");
-        if (test === asciiAlphanumeric && !decodeNamedCharacterReference(self2.sliceSerialize(token))) {
+        if (test === asciiAlphanumeric && !decodeNamedCharacterReference(self.sliceSerialize(token))) {
           return nok(code2);
         }
         effects.enter("characterReferenceMarker");
@@ -1220,7 +1220,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     tokenize: tokenizeCodeFenced
   };
   function tokenizeCodeFenced(effects, ok2, nok) {
-    const self2 = this;
+    const self = this;
     const closeStart = {
       partial: true,
       tokenize: tokenizeCloseStart
@@ -1233,7 +1233,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       return beforeSequenceOpen(code2);
     }
     function beforeSequenceOpen(code2) {
-      const tail = self2.events[self2.events.length - 1];
+      const tail = self.events[self.events.length - 1];
       initialPrefix = tail && tail[1].type === "linePrefix" ? tail[2].sliceSerialize(tail[1], true).length : 0;
       marker = code2;
       effects.enter("codeFenced");
@@ -1256,7 +1256,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     function infoBefore(code2) {
       if (code2 === null || markdownLineEnding(code2)) {
         effects.exit("codeFencedFence");
-        return self2.interrupt ? ok2(code2) : effects.check(nonLazyContinuation$1, atNonLazyBreak, after)(code2);
+        return self.interrupt ? ok2(code2) : effects.check(nonLazyContinuation$1, atNonLazyBreak, after)(code2);
       }
       effects.enter("codeFencedFenceInfo");
       effects.enter("chunkString", {
@@ -1345,7 +1345,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       }
       function start2(code2) {
         effects2.enter("codeFencedFence");
-        return markdownSpace(code2) ? factorySpace(effects2, beforeSequenceClose, "linePrefix", self2.parser.constructs.disable.null.includes("codeIndented") ? void 0 : 4)(code2) : beforeSequenceClose(code2);
+        return markdownSpace(code2) ? factorySpace(effects2, beforeSequenceClose, "linePrefix", self.parser.constructs.disable.null.includes("codeIndented") ? void 0 : 4)(code2) : beforeSequenceClose(code2);
       }
       function beforeSequenceClose(code2) {
         if (code2 === marker) {
@@ -1376,7 +1376,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     }
   }
   function tokenizeNonLazyContinuation$1(effects, ok2, nok) {
-    const self2 = this;
+    const self = this;
     return start;
     function start(code2) {
       if (code2 === null) {
@@ -1388,7 +1388,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       return lineStart;
     }
     function lineStart(code2) {
-      return self2.parser.lazy[self2.now().line] ? nok(code2) : ok2(code2);
+      return self.parser.lazy[self.now().line] ? nok(code2) : ok2(code2);
     }
   }
   const codeIndented = {
@@ -1400,14 +1400,14 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     tokenize: tokenizeFurtherStart
   };
   function tokenizeCodeIndented(effects, ok2, nok) {
-    const self2 = this;
+    const self = this;
     return start;
     function start(code2) {
       effects.enter("codeIndented");
       return factorySpace(effects, afterPrefix, "linePrefix", 4 + 1)(code2);
     }
     function afterPrefix(code2) {
-      const tail = self2.events[self2.events.length - 1];
+      const tail = self.events[self.events.length - 1];
       return tail && tail[1].type === "linePrefix" && tail[2].sliceSerialize(tail[1], true).length >= 4 ? atBreak(code2) : nok(code2);
     }
     function atBreak(code2) {
@@ -1434,10 +1434,10 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     }
   }
   function tokenizeFurtherStart(effects, ok2, nok) {
-    const self2 = this;
+    const self = this;
     return furtherStart2;
     function furtherStart2(code2) {
-      if (self2.parser.lazy[self2.now().line]) {
+      if (self.parser.lazy[self.now().line]) {
         return nok(code2);
       }
       if (markdownLineEnding(code2)) {
@@ -1449,7 +1449,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       return factorySpace(effects, afterPrefix, "linePrefix", 4 + 1)(code2);
     }
     function afterPrefix(code2) {
-      const tail = self2.events[self2.events.length - 1];
+      const tail = self.events[self.events.length - 1];
       return tail && tail[1].type === "linePrefix" && tail[2].sliceSerialize(tail[1], true).length >= 4 ? ok2(code2) : markdownLineEnding(code2) ? furtherStart2(code2) : nok(code2);
     }
   }
@@ -1956,7 +1956,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     }
   }
   function tokenizeContinuation(effects, ok2, nok) {
-    const self2 = this;
+    const self = this;
     return startLookahead;
     function startLookahead(code2) {
       effects.exit("chunkContent");
@@ -1969,11 +1969,11 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       if (code2 === null || markdownLineEnding(code2)) {
         return nok(code2);
       }
-      const tail = self2.events[self2.events.length - 1];
-      if (!self2.parser.constructs.disable.null.includes("codeIndented") && tail && tail[1].type === "linePrefix" && tail[2].sliceSerialize(tail[1], true).length >= 4) {
+      const tail = self.events[self.events.length - 1];
+      if (!self.parser.constructs.disable.null.includes("codeIndented") && tail && tail[1].type === "linePrefix" && tail[2].sliceSerialize(tail[1], true).length >= 4) {
         return ok2(code2);
       }
-      return effects.interrupt(self2.parser.constructs.flow, nok, ok2)(code2);
+      return effects.interrupt(self.parser.constructs.flow, nok, ok2)(code2);
     }
   }
   function factoryDestination(effects, ok2, nok, type, literalType, literalMarkerType, rawType, stringType, max) {
@@ -2067,7 +2067,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     }
   }
   function factoryLabel(effects, ok2, nok, type, markerType, stringType) {
-    const self2 = this;
+    const self = this;
     let size = 0;
     let seen;
     return start;
@@ -2085,7 +2085,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       // which doesn’t need this.
       // Hidden footnotes hook.
       /* c8 ignore next 3 */
-      code2 === 94 && !size && "_hiddenFootnoteSupport" in self2.parser.constructs) {
+      code2 === 94 && !size && "_hiddenFootnoteSupport" in self.parser.constructs) {
         return nok(code2);
       }
       if (code2 === 93) {
@@ -2211,7 +2211,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     tokenize: tokenizeTitleBefore
   };
   function tokenizeDefinition(effects, ok2, nok) {
-    const self2 = this;
+    const self = this;
     let identifier;
     return start;
     function start(code2) {
@@ -2220,7 +2220,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     }
     function before(code2) {
       return factoryLabel.call(
-        self2,
+        self,
         effects,
         labelAfter,
         // Note: we don’t need to reset the way `markdown-rs` does.
@@ -2231,7 +2231,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       )(code2);
     }
     function labelAfter(code2) {
-      identifier = normalizeIdentifier(self2.sliceSerialize(self2.events[self2.events.length - 1][1]).slice(1, -1));
+      identifier = normalizeIdentifier(self.sliceSerialize(self.events[self.events.length - 1][1]).slice(1, -1));
       if (code2 === 58) {
         effects.enter("definitionMarker");
         effects.consume(code2);
@@ -2265,7 +2265,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     function afterWhitespace(code2) {
       if (code2 === null || markdownLineEnding(code2)) {
         effects.exit("definition");
-        self2.parser.defined.push(identifier);
+        self.parser.defined.push(identifier);
         return ok2(code2);
       }
       return nok(code2);
@@ -2488,7 +2488,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     return events;
   }
   function tokenizeHtmlFlow(effects, ok2, nok) {
-    const self2 = this;
+    const self = this;
     let marker;
     let closingTag;
     let buffer;
@@ -2517,7 +2517,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       if (code2 === 63) {
         effects.consume(code2);
         marker = 3;
-        return self2.interrupt ? ok2 : continuationDeclarationInside;
+        return self.interrupt ? ok2 : continuationDeclarationInside;
       }
       if (asciiAlpha(code2)) {
         effects.consume(code2);
@@ -2541,14 +2541,14 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       if (asciiAlpha(code2)) {
         effects.consume(code2);
         marker = 4;
-        return self2.interrupt ? ok2 : continuationDeclarationInside;
+        return self.interrupt ? ok2 : continuationDeclarationInside;
       }
       return nok(code2);
     }
     function commentOpenInside(code2) {
       if (code2 === 45) {
         effects.consume(code2);
-        return self2.interrupt ? ok2 : continuationDeclarationInside;
+        return self.interrupt ? ok2 : continuationDeclarationInside;
       }
       return nok(code2);
     }
@@ -2557,7 +2557,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       if (code2 === value.charCodeAt(index2++)) {
         effects.consume(code2);
         if (index2 === value.length) {
-          return self2.interrupt ? ok2 : continuation;
+          return self.interrupt ? ok2 : continuation;
         }
         return cdataOpenInside;
       }
@@ -2577,7 +2577,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
         const name = buffer.toLowerCase();
         if (!slash && !closingTag && htmlRawNames.includes(name)) {
           marker = 1;
-          return self2.interrupt ? ok2(code2) : continuation(code2);
+          return self.interrupt ? ok2(code2) : continuation(code2);
         }
         if (htmlBlockNames.includes(buffer.toLowerCase())) {
           marker = 6;
@@ -2585,10 +2585,10 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
             effects.consume(code2);
             return basicSelfClosing;
           }
-          return self2.interrupt ? ok2(code2) : continuation(code2);
+          return self.interrupt ? ok2(code2) : continuation(code2);
         }
         marker = 7;
-        return self2.interrupt && !self2.parser.lazy[self2.now().line] ? nok(code2) : closingTag ? completeClosingTagAfter(code2) : completeAttributeNameBefore(code2);
+        return self.interrupt && !self.parser.lazy[self.now().line] ? nok(code2) : closingTag ? completeClosingTagAfter(code2) : completeAttributeNameBefore(code2);
       }
       if (code2 === 45 || asciiAlphanumeric(code2)) {
         effects.consume(code2);
@@ -2600,7 +2600,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     function basicSelfClosing(code2) {
       if (code2 === 62) {
         effects.consume(code2);
-        return self2.interrupt ? ok2 : continuation;
+        return self.interrupt ? ok2 : continuation;
       }
       return nok(code2);
     }
@@ -2812,7 +2812,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     }
   }
   function tokenizeNonLazyContinuationStart(effects, ok2, nok) {
-    const self2 = this;
+    const self = this;
     return start;
     function start(code2) {
       if (markdownLineEnding(code2)) {
@@ -2824,7 +2824,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       return nok(code2);
     }
     function after(code2) {
-      return self2.parser.lazy[self2.now().line] ? nok(code2) : ok2(code2);
+      return self.parser.lazy[self.now().line] ? nok(code2) : ok2(code2);
     }
   }
   function tokenizeBlankLineBefore(effects, ok2, nok) {
@@ -2841,7 +2841,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     tokenize: tokenizeHtmlText
   };
   function tokenizeHtmlText(effects, ok2, nok) {
-    const self2 = this;
+    const self = this;
     let marker;
     let index2;
     let returnState;
@@ -3133,7 +3133,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       return lineEndingAfter;
     }
     function lineEndingAfter(code2) {
-      return markdownSpace(code2) ? factorySpace(effects, lineEndingAfterPrefix, "linePrefix", self2.parser.constructs.disable.null.includes("codeIndented") ? void 0 : 4)(code2) : lineEndingAfterPrefix(code2);
+      return markdownSpace(code2) ? factorySpace(effects, lineEndingAfterPrefix, "linePrefix", self.parser.constructs.disable.null.includes("codeIndented") ? void 0 : 4)(code2) : lineEndingAfterPrefix(code2);
     }
     function lineEndingAfterPrefix(code2) {
       effects.enter("htmlTextData");
@@ -3238,13 +3238,13 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     return events;
   }
   function tokenizeLabelEnd(effects, ok2, nok) {
-    const self2 = this;
-    let index2 = self2.events.length;
+    const self = this;
+    let index2 = self.events.length;
     let labelStart;
     let defined;
     while (index2--) {
-      if ((self2.events[index2][1].type === "labelImage" || self2.events[index2][1].type === "labelLink") && !self2.events[index2][1]._balanced) {
-        labelStart = self2.events[index2][1];
+      if ((self.events[index2][1].type === "labelImage" || self.events[index2][1].type === "labelLink") && !self.events[index2][1]._balanced) {
+        labelStart = self.events[index2][1];
         break;
       }
     }
@@ -3256,9 +3256,9 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       if (labelStart._inactive) {
         return labelEndNok(code2);
       }
-      defined = self2.parser.defined.includes(normalizeIdentifier(self2.sliceSerialize({
+      defined = self.parser.defined.includes(normalizeIdentifier(self.sliceSerialize({
         start: labelStart.end,
-        end: self2.now()
+        end: self.now()
       })));
       effects.enter("labelEnd");
       effects.enter("labelMarker");
@@ -3332,13 +3332,13 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     }
   }
   function tokenizeReferenceFull(effects, ok2, nok) {
-    const self2 = this;
+    const self = this;
     return referenceFull;
     function referenceFull(code2) {
-      return factoryLabel.call(self2, effects, referenceFullAfter, referenceFullMissing, "reference", "referenceMarker", "referenceString")(code2);
+      return factoryLabel.call(self, effects, referenceFullAfter, referenceFullMissing, "reference", "referenceMarker", "referenceString")(code2);
     }
     function referenceFullAfter(code2) {
-      return self2.parser.defined.includes(normalizeIdentifier(self2.sliceSerialize(self2.events[self2.events.length - 1][1]).slice(1, -1))) ? ok2(code2) : nok(code2);
+      return self.parser.defined.includes(normalizeIdentifier(self.sliceSerialize(self.events[self.events.length - 1][1]).slice(1, -1))) ? ok2(code2) : nok(code2);
     }
     function referenceFullMissing(code2) {
       return nok(code2);
@@ -3370,7 +3370,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     tokenize: tokenizeLabelStartImage
   };
   function tokenizeLabelStartImage(effects, ok2, nok) {
-    const self2 = this;
+    const self = this;
     return start;
     function start(code2) {
       effects.enter("labelImage");
@@ -3390,7 +3390,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       return nok(code2);
     }
     function after(code2) {
-      return code2 === 94 && "_hiddenFootnoteSupport" in self2.parser.constructs ? nok(code2) : ok2(code2);
+      return code2 === 94 && "_hiddenFootnoteSupport" in self.parser.constructs ? nok(code2) : ok2(code2);
     }
   }
   const labelStartLink = {
@@ -3399,7 +3399,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     tokenize: tokenizeLabelStartLink
   };
   function tokenizeLabelStartLink(effects, ok2, nok) {
-    const self2 = this;
+    const self = this;
     return start;
     function start(code2) {
       effects.enter("labelLink");
@@ -3410,7 +3410,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       return after;
     }
     function after(code2) {
-      return code2 === 94 && "_hiddenFootnoteSupport" in self2.parser.constructs ? nok(code2) : ok2(code2);
+      return code2 === 94 && "_hiddenFootnoteSupport" in self.parser.constructs ? nok(code2) : ok2(code2);
     }
   }
   const lineEnding = {
@@ -3480,16 +3480,16 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     tokenize: tokenizeIndent$1
   };
   function tokenizeListStart(effects, ok2, nok) {
-    const self2 = this;
-    const tail = self2.events[self2.events.length - 1];
+    const self = this;
+    const tail = self.events[self.events.length - 1];
     let initialSize = tail && tail[1].type === "linePrefix" ? tail[2].sliceSerialize(tail[1], true).length : 0;
     let size = 0;
     return start;
     function start(code2) {
-      const kind = self2.containerState.type || (code2 === 42 || code2 === 43 || code2 === 45 ? "listUnordered" : "listOrdered");
-      if (kind === "listUnordered" ? !self2.containerState.marker || code2 === self2.containerState.marker : asciiDigit(code2)) {
-        if (!self2.containerState.type) {
-          self2.containerState.type = kind;
+      const kind = self.containerState.type || (code2 === 42 || code2 === 43 || code2 === 45 ? "listUnordered" : "listOrdered");
+      if (kind === "listUnordered" ? !self.containerState.marker || code2 === self.containerState.marker : asciiDigit(code2)) {
+        if (!self.containerState.type) {
+          self.containerState.type = kind;
           effects.enter(kind, {
             _container: true
           });
@@ -3498,7 +3498,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
           effects.enter("listItemPrefix");
           return code2 === 42 || code2 === 45 ? effects.check(thematicBreak$1, nok, atMarker)(code2) : atMarker(code2);
         }
-        if (!self2.interrupt || code2 === 49) {
+        if (!self.interrupt || code2 === 49) {
           effects.enter("listItemPrefix");
           effects.enter("listItemValue");
           return inside(code2);
@@ -3511,7 +3511,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
         effects.consume(code2);
         return inside;
       }
-      if ((!self2.interrupt || size < 2) && (self2.containerState.marker ? code2 === self2.containerState.marker : code2 === 41 || code2 === 46)) {
+      if ((!self.interrupt || size < 2) && (self.containerState.marker ? code2 === self.containerState.marker : code2 === 41 || code2 === 46)) {
         effects.exit("listItemValue");
         return atMarker(code2);
       }
@@ -3521,16 +3521,16 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       effects.enter("listItemMarker");
       effects.consume(code2);
       effects.exit("listItemMarker");
-      self2.containerState.marker = self2.containerState.marker || code2;
+      self.containerState.marker = self.containerState.marker || code2;
       return effects.check(
         blankLine,
         // Can’t be empty when interrupting.
-        self2.interrupt ? nok : onBlank,
+        self.interrupt ? nok : onBlank,
         effects.attempt(listItemPrefixWhitespaceConstruct, endOfPrefix, otherPrefix)
       );
     }
     function onBlank(code2) {
-      self2.containerState.initialBlankLine = true;
+      self.containerState.initialBlankLine = true;
       initialSize++;
       return endOfPrefix(code2);
     }
@@ -3544,50 +3544,50 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       return nok(code2);
     }
     function endOfPrefix(code2) {
-      self2.containerState.size = initialSize + self2.sliceSerialize(effects.exit("listItemPrefix"), true).length;
+      self.containerState.size = initialSize + self.sliceSerialize(effects.exit("listItemPrefix"), true).length;
       return ok2(code2);
     }
   }
   function tokenizeListContinuation(effects, ok2, nok) {
-    const self2 = this;
-    self2.containerState._closeFlow = void 0;
+    const self = this;
+    self.containerState._closeFlow = void 0;
     return effects.check(blankLine, onBlank, notBlank);
     function onBlank(code2) {
-      self2.containerState.furtherBlankLines = self2.containerState.furtherBlankLines || self2.containerState.initialBlankLine;
-      return factorySpace(effects, ok2, "listItemIndent", self2.containerState.size + 1)(code2);
+      self.containerState.furtherBlankLines = self.containerState.furtherBlankLines || self.containerState.initialBlankLine;
+      return factorySpace(effects, ok2, "listItemIndent", self.containerState.size + 1)(code2);
     }
     function notBlank(code2) {
-      if (self2.containerState.furtherBlankLines || !markdownSpace(code2)) {
-        self2.containerState.furtherBlankLines = void 0;
-        self2.containerState.initialBlankLine = void 0;
+      if (self.containerState.furtherBlankLines || !markdownSpace(code2)) {
+        self.containerState.furtherBlankLines = void 0;
+        self.containerState.initialBlankLine = void 0;
         return notInCurrentItem(code2);
       }
-      self2.containerState.furtherBlankLines = void 0;
-      self2.containerState.initialBlankLine = void 0;
+      self.containerState.furtherBlankLines = void 0;
+      self.containerState.initialBlankLine = void 0;
       return effects.attempt(indentConstruct, ok2, notInCurrentItem)(code2);
     }
     function notInCurrentItem(code2) {
-      self2.containerState._closeFlow = true;
-      self2.interrupt = void 0;
-      return factorySpace(effects, effects.attempt(list$2, ok2, nok), "linePrefix", self2.parser.constructs.disable.null.includes("codeIndented") ? void 0 : 4)(code2);
+      self.containerState._closeFlow = true;
+      self.interrupt = void 0;
+      return factorySpace(effects, effects.attempt(list$2, ok2, nok), "linePrefix", self.parser.constructs.disable.null.includes("codeIndented") ? void 0 : 4)(code2);
     }
   }
   function tokenizeIndent$1(effects, ok2, nok) {
-    const self2 = this;
-    return factorySpace(effects, afterPrefix, "listItemIndent", self2.containerState.size + 1);
+    const self = this;
+    return factorySpace(effects, afterPrefix, "listItemIndent", self.containerState.size + 1);
     function afterPrefix(code2) {
-      const tail = self2.events[self2.events.length - 1];
-      return tail && tail[1].type === "listItemIndent" && tail[2].sliceSerialize(tail[1], true).length === self2.containerState.size ? ok2(code2) : nok(code2);
+      const tail = self.events[self.events.length - 1];
+      return tail && tail[1].type === "listItemIndent" && tail[2].sliceSerialize(tail[1], true).length === self.containerState.size ? ok2(code2) : nok(code2);
     }
   }
   function tokenizeListEnd(effects) {
     effects.exit(this.containerState.type);
   }
   function tokenizeListItemPrefixWhitespace(effects, ok2, nok) {
-    const self2 = this;
-    return factorySpace(effects, afterPrefix, "listItemPrefixWhitespace", self2.parser.constructs.disable.null.includes("codeIndented") ? void 0 : 4 + 1);
+    const self = this;
+    return factorySpace(effects, afterPrefix, "listItemPrefixWhitespace", self.parser.constructs.disable.null.includes("codeIndented") ? void 0 : 4 + 1);
     function afterPrefix(code2) {
-      const tail = self2.events[self2.events.length - 1];
+      const tail = self.events[self.events.length - 1];
       return !markdownSpace(code2) && tail && tail[1].type === "listItemPrefixWhitespace" ? ok2(code2) : nok(code2);
     }
   }
@@ -3642,19 +3642,19 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     return events;
   }
   function tokenizeSetextUnderline(effects, ok2, nok) {
-    const self2 = this;
+    const self = this;
     let marker;
     return start;
     function start(code2) {
-      let index2 = self2.events.length;
+      let index2 = self.events.length;
       let paragraph2;
       while (index2--) {
-        if (self2.events[index2][1].type !== "lineEnding" && self2.events[index2][1].type !== "linePrefix" && self2.events[index2][1].type !== "content") {
-          paragraph2 = self2.events[index2][1].type === "paragraph";
+        if (self.events[index2][1].type !== "lineEnding" && self.events[index2][1].type !== "linePrefix" && self.events[index2][1].type !== "content") {
+          paragraph2 = self.events[index2][1].type === "paragraph";
           break;
         }
       }
-      if (!self2.parser.lazy[self2.now().line] && (self2.interrupt || paragraph2)) {
+      if (!self.parser.lazy[self.now().line] && (self.interrupt || paragraph2)) {
         effects.enter("setextHeadingLine");
         marker = code2;
         return before(code2);
@@ -3685,7 +3685,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     tokenize: initializeFlow
   };
   function initializeFlow(effects) {
-    const self2 = this;
+    const self = this;
     const initial = effects.attempt(
       // Try to parse a blank line.
       blankLine,
@@ -3702,7 +3702,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       effects.enter("lineEndingBlank");
       effects.consume(code2);
       effects.exit("lineEndingBlank");
-      self2.currentConstruct = void 0;
+      self.currentConstruct = void 0;
       return initial;
     }
     function afterConstruct(code2) {
@@ -3713,7 +3713,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       effects.enter("lineEnding");
       effects.consume(code2);
       effects.exit("lineEnding");
-      self2.currentConstruct = void 0;
+      self.currentConstruct = void 0;
       return initial;
     }
   }
@@ -3728,7 +3728,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       tokenize: initializeText
     };
     function initializeText(effects) {
-      const self2 = this;
+      const self = this;
       const constructs2 = this.parser.constructs[field];
       const text2 = effects.attempt(constructs2, start, notText);
       return start;
@@ -3761,7 +3761,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
         if (list2) {
           while (++index2 < list2.length) {
             const item = list2[index2];
-            if (!item.previous || item.previous.call(self2, self2.previous)) {
+            if (!item.previous || item.previous.call(self, self.previous)) {
               return true;
             }
           }
@@ -3954,7 +3954,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       containerState: {},
       defineSkip,
       events: [],
-      now: now2,
+      now,
       parser: parser2,
       previous: null,
       sliceSerialize,
@@ -3982,7 +3982,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     function sliceStream(token) {
       return sliceChunks(chunks, token);
     }
-    function now2() {
+    function now() {
       const {
         _bufferIndex,
         _index,
@@ -4049,14 +4049,14 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     function enter(type, fields) {
       const token = fields || {};
       token.type = type;
-      token.start = now2();
+      token.start = now();
       context.events.push(["enter", token, context]);
       stack.push(token);
       return token;
     }
     function exit2(type) {
       const token = stack.pop();
-      token.end = now2();
+      token.end = now();
       context.events.push(["exit", token, context]);
       return token;
     }
@@ -4152,7 +4152,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       }
     }
     function store() {
-      const startPoint = now2();
+      const startPoint = now();
       const startPrevious = context.previous;
       const startCurrentConstruct = context.currentConstruct;
       const startEventsIndex = context.events.length;
@@ -5095,17 +5095,17 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     }
   }
   function remarkParse(options) {
-    const self2 = this;
-    self2.parser = parser2;
+    const self = this;
+    self.parser = parser2;
     function parser2(doc2) {
       return fromMarkdown(doc2, {
-        ...self2.data("settings"),
+        ...self.data("settings"),
         ...options,
         // Note: these options are not in the readme.
         // The goal is for them to be set by plugins on `data` instead of being
         // passed by users.
-        extensions: self2.data("micromarkExtensions") || [],
-        mdastExtensions: self2.data("fromMarkdownExtensions") || []
+        extensions: self.data("micromarkExtensions") || [],
+        mdastExtensions: self.data("fromMarkdownExtensions") || []
       });
     }
   }
@@ -6113,7 +6113,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       "textDirective"
     ])
   );
-  function root$1(node2, _, state, info) {
+  function root(node2, _, state, info) {
     const hasPhrasing = node2.children.some(function(d) {
       return phrasing(d);
     });
@@ -6200,7 +6200,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     list,
     listItem,
     paragraph,
-    root: root$1,
+    root,
     strong,
     text: text$3,
     thematicBreak
@@ -6571,10 +6571,10 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
   }
   function track(config2) {
     const options = config2 || {};
-    const now2 = options.now || {};
+    const now = options.now || {};
     let lineShift = options.lineShift || 0;
-    let line = now2.line || 1;
-    let column = now2.column || 1;
+    let line = now.line || 1;
+    let column = now.column || 1;
     return { move, current, shift: shift2 };
     function current() {
       return { now: { line, column }, lineShift };
@@ -6665,16 +6665,16 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     return safe(this, value, config2);
   }
   function remarkStringify(options) {
-    const self2 = this;
-    self2.compiler = compiler2;
+    const self = this;
+    self.compiler = compiler2;
     function compiler2(tree) {
       return toMarkdown(tree, {
-        ...self2.data("settings"),
+        ...self.data("settings"),
         ...options,
         // Note: this option is not in the readme.
         // The goal is for it to be set by plugins on `data` instead of being
         // passed by users.
-        extensions: self2.data("toMarkdownExtensions") || []
+        extensions: self.data("toMarkdownExtensions") || []
       });
     }
   }
@@ -7723,8 +7723,8 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
      * @returns {(...parameters: Array<unknown>) => unknown}
      */
     function(property) {
-      const self2 = this;
-      const constr = self2.constructor;
+      const self = this;
+      const constr = self.constructor;
       const proto = (
         /** @type {Record<string | symbol, Function>} */
         // Prototypes do exist.
@@ -7876,7 +7876,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       if (this.frozen) {
         return this;
       }
-      const self2 = (
+      const self = (
         /** @type {Processor} */
         /** @type {unknown} */
         this
@@ -7889,7 +7889,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
         if (options[0] === true) {
           options[0] = void 0;
         }
-        const transformer = attacher.call(self2, ...options);
+        const transformer = attacher.call(self, ...options);
         if (typeof transformer === "function") {
           this.transformers.use(transformer);
         }
@@ -7962,7 +7962,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
      *   [rehype-react]: https://github.com/rehypejs/rehype-react
      */
     process(file, done) {
-      const self2 = this;
+      const self = this;
       this.freeze();
       assertParser("process", this.parser || this.Parser);
       assertCompiler("process", this.compiler || this.Compiler);
@@ -7972,9 +7972,9 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
         const parseTree2 = (
           /** @type {HeadTree extends undefined ? Node : HeadTree} */
           /** @type {unknown} */
-          self2.parse(realFile)
+          self.parse(realFile)
         );
-        self2.run(parseTree2, realFile, function(error, tree, file2) {
+        self.run(parseTree2, realFile, function(error, tree, file2) {
           if (error || !tree || !file2) {
             return realDone(error);
           }
@@ -7983,7 +7983,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
             /** @type {unknown} */
             tree
           );
-          const compileResult = self2.stringify(compileTree, file2);
+          const compileResult = self.stringify(compileTree, file2);
           if (looksLikeAValue(compileResult)) {
             file2.value = compileResult;
           } else {
@@ -8387,8 +8387,8 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     // value, or adding a binding to the end of the map. If `newKey` is
     // given, the key of the binding will be replaced with that key.
     update: function(key2, value, newKey) {
-      var self2 = newKey && newKey != key2 ? this.remove(newKey) : this;
-      var found2 = self2.find(key2), content2 = self2.content.slice();
+      var self = newKey && newKey != key2 ? this.remove(newKey) : this;
+      var found2 = self.find(key2), content2 = self.content.slice();
       if (found2 == -1) {
         content2.push(newKey || key2, value);
       } else {
@@ -14151,14 +14151,14 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       return (this.updated & UPDATED_SCROLL) > 0;
     }
   }
-  function bind(f, self2) {
-    return !self2 || !f ? f : f.bind(self2);
+  function bind(f, self) {
+    return !self || !f ? f : f.bind(self);
   }
   class FieldDesc {
-    constructor(name, desc, self2) {
+    constructor(name, desc, self) {
       this.name = name;
-      this.init = bind(desc.init, self2);
-      this.apply = bind(desc.apply, self2);
+      this.init = bind(desc.init, self);
+      this.apply = bind(desc.apply, self);
     }
   }
   const baseFields = [
@@ -14390,13 +14390,13 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       return instance;
     }
   }
-  function bindProps(obj, self2, target) {
+  function bindProps(obj, self, target) {
     for (let prop in obj) {
       let val = obj[prop];
       if (val instanceof Function)
-        val = val.bind(self2);
+        val = val.bind(self);
       else if (prop == "handleDOMEvents")
-        val = bindProps(val, self2, {});
+        val = bindProps(val, self, {});
       target[prop] = val;
     }
     return target;
@@ -16882,13 +16882,13 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
   }
   class WidgetViewDesc extends ViewDesc {
     constructor(parent, widget, view, pos) {
-      let self2, dom = widget.type.toDOM;
+      let self, dom = widget.type.toDOM;
       if (typeof dom == "function")
         dom = dom(view, () => {
-          if (!self2)
+          if (!self)
             return pos;
-          if (self2.parent)
-            return self2.parent.posBeforeChild(self2);
+          if (self.parent)
+            return self.parent.posBeforeChild(self);
         });
       if (!widget.type.spec.raw) {
         if (dom.nodeType != 1) {
@@ -16902,7 +16902,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       super(parent, [], dom, null);
       this.widget = widget;
       this.widget = widget;
-      self2 = this;
+      self = this;
     }
     matchesWidget(widget) {
       return this.dirty == NOT_DIRTY && widget.type.eq(this.widget.type);
@@ -18709,10 +18709,10 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     if (event.keyCode != 229)
       view.domObserver.forceFlush();
     if (ios && event.keyCode == 13 && !event.ctrlKey && !event.altKey && !event.metaKey) {
-      let now2 = Date.now();
-      view.input.lastIOSEnter = now2;
+      let now = Date.now();
+      view.input.lastIOSEnter = now;
       view.input.lastIOSEnterFallbackTimeout = setTimeout(() => {
-        if (view.input.lastIOSEnter == now2) {
+        if (view.input.lastIOSEnter == now) {
           view.someProp("handleKeyDown", (f) => f(view, keyEvent(13, "Enter")));
           view.input.lastIOSEnter = 0;
         }
@@ -18847,14 +18847,14 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     let event = _event;
     view.input.shiftKey = event.shiftKey;
     let flushed = forceDOMFlush(view);
-    let now2 = Date.now(), type = "singleClick";
-    if (now2 - view.input.lastClick.time < 500 && isNear(event, view.input.lastClick) && !event[selectNodeModifier] && view.input.lastClick.button == event.button) {
+    let now = Date.now(), type = "singleClick";
+    if (now - view.input.lastClick.time < 500 && isNear(event, view.input.lastClick) && !event[selectNodeModifier] && view.input.lastClick.button == event.button) {
       if (view.input.lastClick.type == "singleClick")
         type = "doubleClick";
       else if (view.input.lastClick.type == "doubleClick")
         type = "tripleClick";
     }
-    view.input.lastClick = { time: now2, x: event.clientX, y: event.clientY, type, button: event.button };
+    view.input.lastClick = { time: now, x: event.clientX, y: event.clientY, type, button: event.button };
     if (view.input.mouseDown)
       view.input.mouseDown.done();
     let pos = view.posAtCoords(eventCoords(event));
@@ -21485,7 +21485,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     if (defaultValue.type === "json") return Node.fromJSON(schema2, defaultValue.value);
     throw docTypeError(defaultValue);
   }
-  var key$1$1 = new PluginKey("MILKDOWN_STATE_TRACKER");
+  var key$1 = new PluginKey("MILKDOWN_STATE_TRACKER");
   var editorState = (ctx) => {
     ctx.inject(defaultValueCtx, "").inject(editorStateCtx, {}).inject(editorStateOptionsCtx, (x) => x).inject(editorStateTimerCtx, [
       ParserReady,
@@ -21506,7 +21506,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       const plugins2 = [
         ...prosePlugins,
         new Plugin({
-          key: key$1$1,
+          key: key$1,
           state: {
             init: () => {
             },
@@ -26159,10 +26159,10 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
   var ie_11up = /Trident\/(?:[7-9]|\d{2,})\..*rv:(\d+)/.exec(agent);
   var ie = !!(ie_upto10 || ie_11up || ie_edge);
   var safari = !ie && !!nav && /Apple Computer/.test(nav.vendor);
-  var key$1 = new PluginKey("safari-ime-span");
+  var key = new PluginKey("safari-ime-span");
   var isComposing = false;
   var spec = {
-    key: key$1,
+    key,
     props: {
       decorations: createDecorations,
       handleDOMEvents: {
@@ -26190,7 +26190,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     span.className = "ProseMirror-safari-ime-span";
     return span;
   }
-  var imeSpan = new Plugin(safari ? spec : { key: key$1 });
+  var imeSpan = new Plugin(safari ? spec : { key });
   function ccount(value, character) {
     const source = String(value);
     if (typeof character !== "string") {
@@ -27059,12 +27059,12 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
   text$2[87] = [emailAutolink, wwwAutolink];
   text$2[119] = [emailAutolink, wwwAutolink];
   function tokenizeEmailAutolink(effects, ok2, nok) {
-    const self2 = this;
+    const self = this;
     let dot;
     let data;
     return start;
     function start(code2) {
-      if (!gfmAtext(code2) || !previousEmail.call(self2, self2.previous) || previousUnbalanced(self2.events)) {
+      if (!gfmAtext(code2) || !previousEmail.call(self, self.previous) || previousUnbalanced(self.events)) {
         return nok(code2);
       }
       effects.enter("literalAutolink");
@@ -27099,7 +27099,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       return emailDomain;
     }
     function emailDomainAfter(code2) {
-      if (data && dot && asciiAlpha(self2.previous)) {
+      if (data && dot && asciiAlpha(self.previous)) {
         effects.exit("literalAutolinkEmail");
         effects.exit("literalAutolink");
         return ok2(code2);
@@ -27108,10 +27108,10 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     }
   }
   function tokenizeWwwAutolink(effects, ok2, nok) {
-    const self2 = this;
+    const self = this;
     return wwwStart;
     function wwwStart(code2) {
-      if (code2 !== 87 && code2 !== 119 || !previousWww.call(self2, self2.previous) || previousUnbalanced(self2.events)) {
+      if (code2 !== 87 && code2 !== 119 || !previousWww.call(self, self.previous) || previousUnbalanced(self.events)) {
         return nok(code2);
       }
       effects.enter("literalAutolink");
@@ -27125,12 +27125,12 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     }
   }
   function tokenizeProtocolAutolink(effects, ok2, nok) {
-    const self2 = this;
+    const self = this;
     let buffer = "";
     let seen = false;
     return protocolStart;
     function protocolStart(code2) {
-      if ((code2 === 72 || code2 === 104) && previousProtocol.call(self2, self2.previous) && !previousUnbalanced(self2.events)) {
+      if ((code2 === 72 || code2 === 104) && previousProtocol.call(self, self.previous) && !previousUnbalanced(self.events)) {
         effects.enter("literalAutolink");
         effects.enter("literalAutolinkHttp");
         buffer += String.fromCodePoint(code2);
@@ -27373,12 +27373,12 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     };
   }
   function tokenizePotentialGfmFootnoteCall(effects, ok2, nok) {
-    const self2 = this;
-    let index2 = self2.events.length;
-    const defined = self2.parser.gfmFootnotes || (self2.parser.gfmFootnotes = []);
+    const self = this;
+    let index2 = self.events.length;
+    const defined = self.parser.gfmFootnotes || (self.parser.gfmFootnotes = []);
     let labelStart;
     while (index2--) {
-      const token = self2.events[index2][1];
+      const token = self.events[index2][1];
       if (token.type === "labelImage") {
         labelStart = token;
         break;
@@ -27392,9 +27392,9 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       if (!labelStart || !labelStart._balanced) {
         return nok(code2);
       }
-      const id2 = normalizeIdentifier(self2.sliceSerialize({
+      const id2 = normalizeIdentifier(self.sliceSerialize({
         start: labelStart.end,
-        end: self2.now()
+        end: self.now()
       }));
       if (id2.codePointAt(0) !== 94 || !defined.includes(id2.slice(1))) {
         return nok(code2);
@@ -27464,8 +27464,8 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     return events;
   }
   function tokenizeGfmFootnoteCall(effects, ok2, nok) {
-    const self2 = this;
-    const defined = self2.parser.gfmFootnotes || (self2.parser.gfmFootnotes = []);
+    const self = this;
+    const defined = self.parser.gfmFootnotes || (self.parser.gfmFootnotes = []);
     let size = 0;
     let data;
     return start;
@@ -27498,7 +27498,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       if (code2 === 93) {
         effects.exit("chunkString");
         const token = effects.exit("gfmFootnoteCallString");
-        if (!defined.includes(normalizeIdentifier(self2.sliceSerialize(token)))) {
+        if (!defined.includes(normalizeIdentifier(self.sliceSerialize(token)))) {
           return nok(code2);
         }
         effects.enter("gfmFootnoteCallLabelMarker");
@@ -27524,8 +27524,8 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     }
   }
   function tokenizeDefinitionStart(effects, ok2, nok) {
-    const self2 = this;
-    const defined = self2.parser.gfmFootnotes || (self2.parser.gfmFootnotes = []);
+    const self = this;
+    const defined = self.parser.gfmFootnotes || (self.parser.gfmFootnotes = []);
     let identifier;
     let size = 0;
     let data;
@@ -27562,7 +27562,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       if (code2 === 93) {
         effects.exit("chunkString");
         const token = effects.exit("gfmFootnoteDefinitionLabelString");
-        identifier = normalizeIdentifier(self2.sliceSerialize(token));
+        identifier = normalizeIdentifier(self.sliceSerialize(token));
         effects.enter("gfmFootnoteDefinitionLabelMarker");
         effects.consume(code2);
         effects.exit("gfmFootnoteDefinitionLabelMarker");
@@ -27607,10 +27607,10 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     effects.exit("gfmFootnoteDefinition");
   }
   function tokenizeIndent(effects, ok2, nok) {
-    const self2 = this;
+    const self = this;
     return factorySpace(effects, afterPrefix, "gfmFootnoteDefinitionIndent", 4 + 1);
     function afterPrefix(code2) {
-      const tail = self2.events[self2.events.length - 1];
+      const tail = self.events[self.events.length - 1];
       return tail && tail[1].type === "gfmFootnoteDefinitionIndent" && tail[2].sliceSerialize(tail[1], true).length === 4 ? ok2(code2) : nok(code2);
     }
   }
@@ -27820,22 +27820,22 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     };
   }
   function tokenizeTable(effects, ok2, nok) {
-    const self2 = this;
+    const self = this;
     let size = 0;
     let sizeB = 0;
     let seen;
     return start;
     function start(code2) {
-      let index2 = self2.events.length - 1;
+      let index2 = self.events.length - 1;
       while (index2 > -1) {
-        const type = self2.events[index2][1].type;
+        const type = self.events[index2][1].type;
         if (type === "lineEnding" || // Note: markdown-rs uses `whitespace` instead of `linePrefix`
         type === "linePrefix") index2--;
         else break;
       }
-      const tail = index2 > -1 ? self2.events[index2][1].type : null;
+      const tail = index2 > -1 ? self.events[index2][1].type : null;
       const next = tail === "tableHead" || tail === "tableRow" ? bodyRowStart : headRowBefore;
-      if (next === bodyRowStart && self2.parser.lazy[self2.now().line]) {
+      if (next === bodyRowStart && self.parser.lazy[self.now().line]) {
         return nok(code2);
       }
       return next(code2);
@@ -27860,7 +27860,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       if (markdownLineEnding(code2)) {
         if (sizeB > 1) {
           sizeB = 0;
-          self2.interrupt = true;
+          self.interrupt = true;
           effects.exit("tableRow");
           effects.enter("lineEnding");
           effects.consume(code2);
@@ -27903,14 +27903,14 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       return headRowData(code2);
     }
     function headDelimiterStart(code2) {
-      self2.interrupt = false;
-      if (self2.parser.lazy[self2.now().line]) {
+      self.interrupt = false;
+      if (self.parser.lazy[self.now().line]) {
         return nok(code2);
       }
       effects.enter("tableDelimiterRow");
       seen = false;
       if (markdownSpace(code2)) {
-        return factorySpace(effects, headDelimiterBefore, "linePrefix", self2.parser.constructs.disable.null.includes("codeIndented") ? void 0 : 4)(code2);
+        return factorySpace(effects, headDelimiterBefore, "linePrefix", self.parser.constructs.disable.null.includes("codeIndented") ? void 0 : 4)(code2);
       }
       return headDelimiterBefore(code2);
     }
@@ -28138,12 +28138,12 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       previousCell.end = Object.assign({}, getPoint(context.events, range[0]));
       map2.add(range[0], 0, [["exit", previousCell, context]]);
     }
-    const now2 = getPoint(context.events, range[1]);
+    const now = getPoint(context.events, range[1]);
     previousCell = {
       type: groupName,
-      start: Object.assign({}, now2),
+      start: Object.assign({}, now),
       // Note: correct end is set later.
-      end: Object.assign({}, now2)
+      end: Object.assign({}, now)
     };
     map2.add(range[1], 0, [["enter", previousCell, context]]);
     if (range[2] !== 0) {
@@ -28204,14 +28204,14 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     };
   }
   function tokenizeTasklistCheck(effects, ok2, nok) {
-    const self2 = this;
+    const self = this;
     return open2;
     function open2(code2) {
       if (
         // Exit if there’s stuff before.
-        self2.previous !== null || // Exit if not in the first content that is the first child of a list
+        self.previous !== null || // Exit if not in the first content that is the first child of a list
         // item.
-        !self2._gfmTasklistFirstContentOfListItem
+        !self._gfmTasklistFirstContentOfListItem
       ) {
         return nok(code2);
       }
@@ -28275,12 +28275,12 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
   }
   const emptyOptions$1 = {};
   function remarkGfm(options) {
-    const self2 = (
+    const self = (
       /** @type {Processor<Root>} */
       this
     );
     const settings = options || emptyOptions$1;
-    const data = self2.data();
+    const data = self.data();
     const micromarkExtensions = data.micromarkExtensions || (data.micromarkExtensions = []);
     const fromMarkdownExtensions = data.fromMarkdownExtensions || (data.fromMarkdownExtensions = []);
     const toMarkdownExtensions = data.toMarkdownExtensions || (data.toMarkdownExtensions = []);
@@ -29827,306 +29827,6 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     displayName: "Shortcut<indent>"
   };
   var indent = [indentConfig, indentPlugin];
-  var freeGlobal = typeof global == "object" && global && global.Object === Object && global;
-  var freeSelf = typeof self == "object" && self && self.Object === Object && self;
-  var root = freeGlobal || freeSelf || Function("return this")();
-  var Symbol$1 = root.Symbol;
-  var objectProto$1 = Object.prototype;
-  var hasOwnProperty = objectProto$1.hasOwnProperty;
-  var nativeObjectToString$1 = objectProto$1.toString;
-  var symToStringTag$1 = Symbol$1 ? Symbol$1.toStringTag : void 0;
-  function getRawTag(value) {
-    var isOwn = hasOwnProperty.call(value, symToStringTag$1), tag = value[symToStringTag$1];
-    try {
-      value[symToStringTag$1] = void 0;
-      var unmasked = true;
-    } catch (e) {
-    }
-    var result = nativeObjectToString$1.call(value);
-    if (unmasked) {
-      if (isOwn) {
-        value[symToStringTag$1] = tag;
-      } else {
-        delete value[symToStringTag$1];
-      }
-    }
-    return result;
-  }
-  var objectProto = Object.prototype;
-  var nativeObjectToString = objectProto.toString;
-  function objectToString(value) {
-    return nativeObjectToString.call(value);
-  }
-  var nullTag = "[object Null]", undefinedTag = "[object Undefined]";
-  var symToStringTag = Symbol$1 ? Symbol$1.toStringTag : void 0;
-  function baseGetTag(value) {
-    if (value == null) {
-      return value === void 0 ? undefinedTag : nullTag;
-    }
-    return symToStringTag && symToStringTag in Object(value) ? getRawTag(value) : objectToString(value);
-  }
-  function isObjectLike(value) {
-    return value != null && typeof value == "object";
-  }
-  var symbolTag = "[object Symbol]";
-  function isSymbol(value) {
-    return typeof value == "symbol" || isObjectLike(value) && baseGetTag(value) == symbolTag;
-  }
-  var reWhitespace = /\s/;
-  function trimmedEndIndex(string2) {
-    var index2 = string2.length;
-    while (index2-- && reWhitespace.test(string2.charAt(index2))) {
-    }
-    return index2;
-  }
-  var reTrimStart = /^\s+/;
-  function baseTrim(string2) {
-    return string2 ? string2.slice(0, trimmedEndIndex(string2) + 1).replace(reTrimStart, "") : string2;
-  }
-  function isObject(value) {
-    var type = typeof value;
-    return value != null && (type == "object" || type == "function");
-  }
-  var NAN = 0 / 0;
-  var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
-  var reIsBinary = /^0b[01]+$/i;
-  var reIsOctal = /^0o[0-7]+$/i;
-  var freeParseInt = parseInt;
-  function toNumber(value) {
-    if (typeof value == "number") {
-      return value;
-    }
-    if (isSymbol(value)) {
-      return NAN;
-    }
-    if (isObject(value)) {
-      var other = typeof value.valueOf == "function" ? value.valueOf() : value;
-      value = isObject(other) ? other + "" : other;
-    }
-    if (typeof value != "string") {
-      return value === 0 ? value : +value;
-    }
-    value = baseTrim(value);
-    var isBinary = reIsBinary.test(value);
-    return isBinary || reIsOctal.test(value) ? freeParseInt(value.slice(2), isBinary ? 2 : 8) : reIsBadHex.test(value) ? NAN : +value;
-  }
-  var now = function() {
-    return root.Date.now();
-  };
-  var FUNC_ERROR_TEXT = "Expected a function";
-  var nativeMax = Math.max, nativeMin = Math.min;
-  function debounce(func, wait, options) {
-    var lastArgs, lastThis, maxWait, result, timerId, lastCallTime, lastInvokeTime = 0, leading = false, maxing = false, trailing = true;
-    if (typeof func != "function") {
-      throw new TypeError(FUNC_ERROR_TEXT);
-    }
-    wait = toNumber(wait) || 0;
-    if (isObject(options)) {
-      leading = !!options.leading;
-      maxing = "maxWait" in options;
-      maxWait = maxing ? nativeMax(toNumber(options.maxWait) || 0, wait) : maxWait;
-      trailing = "trailing" in options ? !!options.trailing : trailing;
-    }
-    function invokeFunc(time) {
-      var args = lastArgs, thisArg = lastThis;
-      lastArgs = lastThis = void 0;
-      lastInvokeTime = time;
-      result = func.apply(thisArg, args);
-      return result;
-    }
-    function leadingEdge(time) {
-      lastInvokeTime = time;
-      timerId = setTimeout(timerExpired, wait);
-      return leading ? invokeFunc(time) : result;
-    }
-    function remainingWait(time) {
-      var timeSinceLastCall = time - lastCallTime, timeSinceLastInvoke = time - lastInvokeTime, timeWaiting = wait - timeSinceLastCall;
-      return maxing ? nativeMin(timeWaiting, maxWait - timeSinceLastInvoke) : timeWaiting;
-    }
-    function shouldInvoke(time) {
-      var timeSinceLastCall = time - lastCallTime, timeSinceLastInvoke = time - lastInvokeTime;
-      return lastCallTime === void 0 || timeSinceLastCall >= wait || timeSinceLastCall < 0 || maxing && timeSinceLastInvoke >= maxWait;
-    }
-    function timerExpired() {
-      var time = now();
-      if (shouldInvoke(time)) {
-        return trailingEdge(time);
-      }
-      timerId = setTimeout(timerExpired, remainingWait(time));
-    }
-    function trailingEdge(time) {
-      timerId = void 0;
-      if (trailing && lastArgs) {
-        return invokeFunc(time);
-      }
-      lastArgs = lastThis = void 0;
-      return result;
-    }
-    function cancel() {
-      if (timerId !== void 0) {
-        clearTimeout(timerId);
-      }
-      lastInvokeTime = 0;
-      lastArgs = lastCallTime = lastThis = timerId = void 0;
-    }
-    function flush() {
-      return timerId === void 0 ? result : trailingEdge(now());
-    }
-    function debounced() {
-      var time = now(), isInvoking = shouldInvoke(time);
-      lastArgs = arguments;
-      lastThis = this;
-      lastCallTime = time;
-      if (isInvoking) {
-        if (timerId === void 0) {
-          return leadingEdge(lastCallTime);
-        }
-        if (maxing) {
-          clearTimeout(timerId);
-          timerId = setTimeout(timerExpired, wait);
-          return invokeFunc(lastCallTime);
-        }
-      }
-      if (timerId === void 0) {
-        timerId = setTimeout(timerExpired, wait);
-      }
-      return result;
-    }
-    debounced.cancel = cancel;
-    debounced.flush = flush;
-    return debounced;
-  }
-  var ListenerManager = class {
-    constructor() {
-      this.beforeMountedListeners = [];
-      this.mountedListeners = [];
-      this.updatedListeners = [];
-      this.selectionUpdatedListeners = [];
-      this.markdownUpdatedListeners = [];
-      this.blurListeners = [];
-      this.focusListeners = [];
-      this.destroyListeners = [];
-      this.beforeMount = (fn) => {
-        this.beforeMountedListeners.push(fn);
-        return this;
-      };
-      this.mounted = (fn) => {
-        this.mountedListeners.push(fn);
-        return this;
-      };
-      this.updated = (fn) => {
-        this.updatedListeners.push(fn);
-        return this;
-      };
-    }
-    get listeners() {
-      return {
-        beforeMount: this.beforeMountedListeners,
-        mounted: this.mountedListeners,
-        updated: this.updatedListeners,
-        markdownUpdated: this.markdownUpdatedListeners,
-        blur: this.blurListeners,
-        focus: this.focusListeners,
-        destroy: this.destroyListeners,
-        selectionUpdated: this.selectionUpdatedListeners
-      };
-    }
-    markdownUpdated(fn) {
-      this.markdownUpdatedListeners.push(fn);
-      return this;
-    }
-    blur(fn) {
-      this.blurListeners.push(fn);
-      return this;
-    }
-    focus(fn) {
-      this.focusListeners.push(fn);
-      return this;
-    }
-    destroy(fn) {
-      this.destroyListeners.push(fn);
-      return this;
-    }
-    selectionUpdated(fn) {
-      this.selectionUpdatedListeners.push(fn);
-      return this;
-    }
-  };
-  var listenerCtx = createSlice(new ListenerManager(), "listener");
-  var key = new PluginKey("MILKDOWN_LISTENER");
-  var listener = (ctx) => {
-    ctx.inject(listenerCtx, new ListenerManager());
-    return async () => {
-      await ctx.wait(InitReady);
-      const { listeners } = ctx.get(listenerCtx);
-      listeners.beforeMount.forEach((fn) => fn(ctx));
-      await ctx.wait(SerializerReady);
-      const serializer2 = ctx.get(serializerCtx);
-      let prevDoc = null;
-      let prevMarkdown = null;
-      let prevSelection = null;
-      let latestTr = null;
-      const debouncedHandler = debounce(() => {
-        if (!latestTr) return;
-        const { doc: doc2 } = latestTr;
-        if (listeners.updated.length > 0 && prevDoc && !prevDoc.eq(doc2)) listeners.updated.forEach((fn) => {
-          fn(ctx, doc2, prevDoc);
-        });
-        if (listeners.markdownUpdated.length > 0 && prevDoc && !prevDoc.eq(doc2)) {
-          const markdown = serializer2(doc2);
-          listeners.markdownUpdated.forEach((fn) => {
-            fn(ctx, markdown, prevMarkdown);
-          });
-          prevMarkdown = markdown;
-        }
-        prevDoc = doc2;
-        latestTr = null;
-      }, 200);
-      const plugin = new Plugin({
-        key,
-        view: () => {
-          return { destroy: () => {
-            listeners.destroy.forEach((fn) => fn(ctx));
-          } };
-        },
-        props: { handleDOMEvents: {
-          focus: () => {
-            listeners.focus.forEach((fn) => fn(ctx));
-            return false;
-          },
-          blur: () => {
-            listeners.blur.forEach((fn) => fn(ctx));
-            return false;
-          }
-        } },
-        state: {
-          init: (_, instance) => {
-            prevDoc = instance.doc;
-            prevMarkdown = serializer2(instance.doc);
-          },
-          apply: (tr) => {
-            const currentSelection = tr.selection;
-            if (!prevSelection && currentSelection || prevSelection && !currentSelection.eq(prevSelection)) {
-              listeners.selectionUpdated.forEach((fn) => {
-                fn(ctx, currentSelection, prevSelection);
-              });
-              prevSelection = currentSelection;
-            }
-            if (!(tr.docChanged || tr.storedMarksSet) || tr.getMeta("addToHistory") === false) return;
-            latestTr = tr;
-            debouncedHandler();
-          }
-        }
-      });
-      ctx.update(prosePluginsCtx, (x) => x.concat(plugin));
-      await ctx.wait(EditorViewReady);
-      listeners.mounted.forEach((fn) => fn(ctx));
-    };
-  };
-  listener.meta = {
-    package: "@milkdown/plugin-listener",
-    displayName: "Listener"
-  };
   function isPureText(content2) {
     if (!content2) return false;
     if (Array.isArray(content2)) {
@@ -37145,7 +36845,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     }
     return tok;
   };
-  var letCommand = (parser2, name, tok, global2) => {
+  var letCommand = (parser2, name, tok, global) => {
     var macro = parser2.gullet.macros.get(tok.text);
     if (macro == null) {
       tok.noexpand = true;
@@ -37156,7 +36856,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
         unexpandable: !parser2.gullet.isExpandable(tok.text)
       };
     }
-    parser2.gullet.macros.set(name, macro, global2);
+    parser2.gullet.macros.set(name, macro, global);
   };
   defineFunction({
     type: "internal",
@@ -42158,11 +41858,11 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
      * operation at every level, so takes time linear in their number.
      * A value of undefined means to delete existing definitions.
      */
-    set(name, value, global2) {
-      if (global2 === void 0) {
-        global2 = false;
+    set(name, value, global) {
+      if (global === void 0) {
+        global = false;
       }
-      if (global2) {
+      if (global) {
         for (var i2 = 0; i2 < this.undefStack.length; i2++) {
           delete this.undefStack[i2][name];
         }
@@ -44891,8 +44591,8 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     partial: true
   };
   function tokenizeMathFenced(effects, ok2, nok) {
-    const self2 = this;
-    const tail = self2.events[self2.events.length - 1];
+    const self = this;
+    const tail = self.events[self.events.length - 1];
     const initialSize = tail && tail[1].type === "linePrefix" ? tail[2].sliceSerialize(tail[1], true).length : 0;
     let sizeOpen = 0;
     return start;
@@ -44938,7 +44638,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     }
     function metaAfter(code2) {
       effects.exit("mathFlowFence");
-      if (self2.interrupt) {
+      if (self.interrupt) {
         return ok2(code2);
       }
       return effects.attempt(nonLazyContinuation, beforeNonLazyContinuation, after)(code2);
@@ -44976,7 +44676,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     }
     function tokenizeClosingFence(effects2, ok3, nok2) {
       let size = 0;
-      return factorySpace(effects2, beforeSequenceClose, "linePrefix", self2.parser.constructs.disable.null.includes("codeIndented") ? void 0 : 4);
+      return factorySpace(effects2, beforeSequenceClose, "linePrefix", self.parser.constructs.disable.null.includes("codeIndented") ? void 0 : 4);
       function beforeSequenceClose(code2) {
         effects2.enter("mathFlowFence");
         effects2.enter("mathFlowFenceSequence");
@@ -45004,7 +44704,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     }
   }
   function tokenizeNonLazyContinuation(effects, ok2, nok) {
-    const self2 = this;
+    const self = this;
     return start;
     function start(code2) {
       if (code2 === null) {
@@ -45016,7 +44716,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       return lineStart;
     }
     function lineStart(code2) {
-      return self2.parser.lazy[self2.now().line] ? nok(code2) : ok2(code2);
+      return self.parser.lazy[self.now().line] ? nok(code2) : ok2(code2);
     }
   }
   function mathText(options) {
@@ -45153,12 +44853,12 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
   }
   const emptyOptions = {};
   function remarkMath(options) {
-    const self2 = (
+    const self = (
       /** @type {Processor} */
       this
     );
     const settings = options || emptyOptions;
-    const data = self2.data();
+    const data = self.data();
     const micromarkExtensions = data.micromarkExtensions || (data.micromarkExtensions = []);
     const fromMarkdownExtensions = data.fromMarkdownExtensions || (data.fromMarkdownExtensions = []);
     const toMarkdownExtensions = data.toMarkdownExtensions || (data.toMarkdownExtensions = []);
@@ -45167,6 +44867,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     toMarkdownExtensions.push(mathToMarkdown(settings));
   }
   function normalizeMathDelimiters(markdown) {
+    if (markdown.indexOf("\\[") === -1 && markdown.indexOf("\\(") === -1) return markdown;
     let result = markdown.replace(/\\\[([\s\S]*?)\\\]/g, (_m, content2) => `$$${content2}$$`);
     result = result.replace(/\\\((.+?)\\\)/g, (_m, content2) => `$${content2}$`);
     return result;
@@ -45347,10 +45048,15 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       copy2.setAttribute("aria-label", uiText("copyTooltip"));
     });
   }
+  function selectInclusive(root2, selector) {
+    const found2 = [];
+    if (typeof root2.matches === "function" && root2.matches(selector)) found2.push(root2);
+    root2.querySelectorAll(selector).forEach((el) => found2.push(el));
+    return found2;
+  }
   function wrapTables(root2) {
     if (!root2) return;
-    const tables = root2.querySelectorAll("table");
-    tables.forEach((table) => {
+    selectInclusive(root2, "table").forEach((table) => {
       if (table.closest("." + TABLE_WRAPPER_CLASS)) return;
       const block = document.createElement("div");
       block.className = "table-block";
@@ -45403,7 +45109,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
   }
   function enhanceCodeBlocks(root2) {
     if (!root2) return;
-    root2.querySelectorAll("pre").forEach((pre) => {
+    selectInclusive(root2, "pre").forEach((pre) => {
       if (pre.closest("." + CODE_BLOCK_CLASS)) return;
       const lang = detectLanguage(pre);
       const codeEl = pre.querySelector("code");
@@ -45462,30 +45168,125 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     wrapTables(root2);
     enhanceCodeBlocks(root2);
   }
+  function enhanceNodes(nodes) {
+    if (!nodes || nodes.length === 0) return;
+    nodes.forEach((node2) => {
+      wrapTables(node2);
+      enhanceCodeBlocks(node2);
+    });
+  }
   const ROOT_ID = "app";
   let editor = null;
   let lastValue = "";
   let lastRequestedRatio = 0;
+  const PROGRESSIVE_THRESHOLD = 64 * 1024;
+  let renderGeneration = 0;
+  let buildProgress = null;
+  let userScrolledDuringBuild = false;
   function renderMarkdown(md) {
     if (!editor) return;
     const normalized = normalizeMathDelimiters(md == null ? "" : String(md));
     if (normalized === lastValue) return;
     lastValue = normalized;
-    editor.action(replaceAll(normalized));
-    const rootEl = document.getElementById(ROOT_ID);
-    setTimeout(() => {
-      enhance(rootEl);
-      reapplyScroll();
-    }, 0);
+    renderGeneration++;
+    buildProgress = null;
+    userScrolledDuringBuild = false;
+    if (normalized.length <= PROGRESSIVE_THRESHOLD) {
+      editor.action(replaceAll(normalized));
+      const rootEl = document.getElementById(ROOT_ID);
+      setTimeout(() => {
+        enhance(rootEl);
+        reapplyScroll();
+      }, 0);
+      return;
+    }
+    renderProgressively(normalized, renderGeneration);
+  }
+  function splitTopLevelBlocks(md, targetSize) {
+    const chunks = [];
+    const total = md.length;
+    let chunkStart = 0;
+    let cut = -1;
+    let pos = 0;
+    let fence = null;
+    while (pos < total) {
+      let lineEnd = md.indexOf("\n", pos);
+      if (lineEnd === -1) lineEnd = total;
+      const trimmed = md.slice(pos, lineEnd).trim();
+      if (fence) {
+        if (fence.marker === "$$") {
+          if (trimmed === "$$") fence = null;
+        } else if (trimmed.length >= fence.len && trimmed.startsWith(fence.marker)) {
+          fence = null;
+        }
+      } else if (trimmed.startsWith("```") || trimmed.startsWith("~~~")) {
+        const ch2 = trimmed.charAt(0);
+        let len = 0;
+        while (len < trimmed.length && trimmed.charAt(len) === ch2) len++;
+        fence = { marker: ch2.repeat(len), len };
+      } else if (trimmed.startsWith("$$")) {
+        fence = trimmed.length > 4 && trimmed.endsWith("$$") ? null : { marker: "$$" };
+      } else if (trimmed === "" && lineEnd < total) {
+        cut = lineEnd + 1;
+      }
+      pos = lineEnd + 1;
+      if (!fence && cut > chunkStart && pos - chunkStart >= targetSize) {
+        chunks.push(md.slice(chunkStart, cut));
+        chunkStart = cut;
+      }
+    }
+    if (chunkStart < total) chunks.push(md.slice(chunkStart));
+    return chunks;
+  }
+  function renderProgressively(md, gen) {
+    const chunks = splitTopLevelBlocks(md, PROGRESSIVE_THRESHOLD);
+    const totalChars = md.length;
+    let renderedChars = 0;
+    let index2 = 0;
+    buildProgress = { fraction: 0 };
+    const step = () => {
+      if (gen !== renderGeneration || !editor) return;
+      const chunk = chunks[index2++];
+      renderedChars += chunk.length;
+      if (index2 === 1) {
+        editor.action(replaceAll(chunk));
+        setTimeout(() => {
+          if (gen !== renderGeneration) return;
+          enhance(document.getElementById(ROOT_ID));
+          reapplyScroll();
+        }, 0);
+      } else {
+        appendChunk(chunk);
+      }
+      buildProgress.fraction = renderedChars / totalChars;
+      if (index2 < chunks.length) {
+        setTimeout(step, 0);
+      } else {
+        buildProgress = null;
+        if (!userScrolledDuringBuild) reapplyScroll();
+      }
+    };
+    step();
+  }
+  function appendChunk(chunk) {
+    editor.action((ctx) => {
+      const view = ctx.get(editorViewCtx);
+      const parsed = ctx.get(parserCtx)(chunk);
+      if (!parsed) return;
+      const dom = view.dom;
+      const before = dom.childNodes.length;
+      view.dispatch(view.state.tr.insert(view.state.doc.content.size, parsed.content));
+      enhanceNodes(Array.from(dom.childNodes).slice(before));
+    });
+  }
+  function toRenderedRatio(ratio) {
+    if (!buildProgress || buildProgress.fraction <= 0) return ratio;
+    return Math.max(0, Math.min(1, ratio / buildProgress.fraction));
   }
   function reapplyScroll() {
     const max = document.documentElement.scrollHeight - window.innerHeight;
     if (max > 0) {
-      __programmaticScroll = true;
-      window.scrollTo(0, lastRequestedRatio * max);
-      setTimeout(() => {
-        __programmaticScroll = false;
-      }, 0);
+      applyProgrammaticScroll(toRenderedRatio(lastRequestedRatio) * max);
     }
   }
   function applyTheme(jsonColors, isDark) {
@@ -45505,28 +45306,47 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     root2.style.setProperty("--content-max-width", maxContentWidth > 0 ? maxContentWidth + "px" : "none");
     root2.style.setProperty("--content-center", center ? "1" : "0");
   }
+  let __programmaticScroll = false;
+  let __lastProgrammaticY = null;
+  let __programmaticUntil = 0;
+  function applyProgrammaticScroll(y) {
+    __lastProgrammaticY = y;
+    __programmaticUntil = performance.now() + 200;
+    __programmaticScroll = true;
+    window.scrollTo(0, y);
+    setTimeout(() => {
+      __programmaticScroll = false;
+    }, 0);
+  }
+  function isProgrammaticPosition() {
+    return __lastProgrammaticY !== null && Math.abs(window.scrollY - __lastProgrammaticY) < 2;
+  }
   function scrollToRatio(ratio) {
     ratio = Math.max(0, Math.min(1, ratio));
     lastRequestedRatio = ratio;
+    const target = toRenderedRatio(ratio);
     const max = document.documentElement.scrollHeight - window.innerHeight;
-    console.log("[md] scrollToRatio", ratio, "max", max);
     if (max > 0) {
-      __programmaticScroll = true;
-      window.scrollTo(0, ratio * max);
-      setTimeout(() => {
-        __programmaticScroll = false;
-      }, 0);
+      applyProgrammaticScroll(target * max);
     }
   }
-  let __programmaticScroll = false;
   let __lastNotifiedRatio = -1;
+  let __lastNotifiedY = 0;
   window.addEventListener("scroll", () => {
-    if (__programmaticScroll) return;
+    if (__programmaticScroll || isProgrammaticPosition() || performance.now() < __programmaticUntil)
+      return;
+    __lastProgrammaticY = null;
     const max = document.documentElement.scrollHeight - window.innerHeight;
     if (max <= 0) return;
-    const ratio = Math.max(0, Math.min(1, window.scrollY / max));
-    if (Math.abs(ratio - __lastNotifiedRatio) < 1e-3) return;
+    let ratio = Math.max(0, Math.min(1, window.scrollY / max));
+    if (buildProgress) {
+      ratio = Math.min(1, ratio * buildProgress.fraction);
+      userScrolledDuringBuild = true;
+    }
+    if (Math.abs(window.scrollY - __lastNotifiedY) < 40 && Math.abs(ratio - __lastNotifiedRatio) < 1e-3)
+      return;
     __lastNotifiedRatio = ratio;
+    __lastNotifiedY = window.scrollY;
     if (window.bridge && typeof window.bridge.onScrollRatio === "function") {
       window.bridge.onScrollRatio(ratio);
     }
@@ -45555,12 +45375,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
         editable: () => false,
         attributes: { class: "milkdown-read-only" }
       }));
-      ctx.get(listenerCtx).markdownUpdated((_ctx4, markdown) => {
-        if (window.bridge && typeof window.bridge.onContentChanged === "function") {
-          window.bridge.onContentChanged(markdown);
-        }
-      });
-    }).use(commonmark).use(gfm).use(history).use(indent).use(listener).use(clipboard).use(mathPlugins).create();
+    }).use(commonmark).use(gfm).use(history).use(indent).use(clipboard).use(mathPlugins).create();
     setupBridge({
       onSetMarkdown: renderMarkdown,
       onSetMode: () => {

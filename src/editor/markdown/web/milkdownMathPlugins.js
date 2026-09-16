@@ -16,6 +16,8 @@ import { InputRule } from "@milkdown/kit/prose/inputrules";
 
 /* ==================== LaTeX 定界符规范化 ==================== */
 export function normalizeMathDelimiters(markdown) {
+    // 快速路径：无 \( / \[ 定界符必无公式，跳过两次全文正则（MB 级文档收益显著）
+    if (markdown.indexOf("\\[") === -1 && markdown.indexOf("\\(") === -1) return markdown;
     let result = markdown.replace(/\\\[([\s\S]*?)\\\]/g, (_m, content) => `$$${content}$$`);
     result = result.replace(/\\\((.+?)\\\)/g, (_m, content) => `$${content}$`);
     return result;
