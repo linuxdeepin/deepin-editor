@@ -4790,6 +4790,10 @@ void TextEdit::setMarkColorList(const QList<MarkReplaceInfo> &markInfo)
         // 限制位置在当前文档范围内，文件被外部修改后不致越界
         int start = qBound(0, static_cast<int>(info.start), docLen);
         int end = qBound(0, static_cast<int>(info.end), docLen);
+        // 防御性交换：确保 start <= end，避免异常数据导致光标反向选区
+        if (start > end) {
+            qSwap(start, end);
+        }
         markOpt.cursor.setPosition(start);
         markOpt.cursor.setPosition(end, QTextCursor::KeepAnchor);
 

@@ -874,6 +874,9 @@ QList<TextEdit::MarkReplaceInfo> StartManager::findMarkColor(const QString &loca
  */
 void StartManager::initMarkColor()
 {
+    // 定义单文件允许的最大标记数量，防止恶意配置导致内存耗尽
+    const int maxMarksPerFile = 10000;
+
     // 遍历标记颜色信息列表
     QStringList markColorInfoList = Settings::instance()->settings->value(s_markColorKey).toStringList();
     for (const QString &markColorInfo : markColorInfoList) {
@@ -887,8 +890,14 @@ void StartManager::initMarkColor()
             // 判断文件是否仍存在，若不存在，则不保留标记颜色信息
             if (!filePath.isEmpty()
                     && QFileInfo::exists(filePath)) {
-                QList<TextEdit::MarkReplaceInfo> markList;
                 QJsonArray marksArray = obj.value("marks").toArray();
+
+                // 安全校验：限制单文件标记数量，防止内存耗尽
+                if (marksArray.size() > maxMarksPerFile) {
+                    continue;
+                }
+
+                QList<TextEdit::MarkReplaceInfo> markList;
                 for (const QJsonValue &markValue : marksArray) {
                     QJsonObject markObj = markValue.toObject();
                     TextEdit::MarkReplaceInfo info;
