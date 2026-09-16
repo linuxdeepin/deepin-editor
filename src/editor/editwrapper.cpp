@@ -5,6 +5,7 @@
 #include "editwrapper.h"
 #include "leftareaoftextedit.h"
 #include "drecentmanager.h"
+#include "../startmanager.h"
 
 #include <unistd.h>
 
@@ -938,6 +939,11 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
     }
 
     m_pTextEdit->setTextFinished();
+
+    // 文件内容加载完成后，恢复该文件的标记颜色（位置型数据需待内容就绪）
+    QString markLocalPath = m_pTextEdit->getTruePath();
+    QList<TextEdit::MarkReplaceInfo> markColorInfo = StartManager::instance()->findMarkColor(markLocalPath);
+    m_pTextEdit->setMarkColorList(markColorInfo);
 
     QStringList temFileList = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();
 

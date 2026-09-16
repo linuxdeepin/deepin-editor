@@ -2133,6 +2133,12 @@
                             "hide": true,
                             "reset": false,
                             "default": ""
+                        },
+                        {
+                            "key": "markcolor",
+                            "hide": true,
+                            "reset": false,
+                            "default": ""
                         }
                     ]
                 },
