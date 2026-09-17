@@ -1,3 +1,13 @@
+deepin-editor (6.7.0) unstable; urgency=medium
+
+  * fix: add accessible name to MatchCountLabel in LineBar
+  * fix(window): guard find bar close without current wrapper
+  * test: add function importance inventory for deepin-editor
+  * chore: update version to 6.6.2
+  * fix(tests): make ApplyQss assertion tolerant to SPDX header
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Thu, 17 Sep 2026 19:17:57 +0800
+
 deepin-editor (6.6.2) unstable; urgency=medium
 
   * fix(tests): make ApplyQss assertion tolerant to SPDX header
