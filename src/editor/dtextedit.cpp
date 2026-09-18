@@ -5046,7 +5046,8 @@ void TextEdit::updateViewModeActions(ViewMode mode, bool isMarkdown)
     if (action && !action->isChecked())
         action->setChecked(true);
     // 置灰规则（§4.4）：非 md 文件仅「实时预览」置灰，编辑/查看始终可用
-    m_actLivePreview->setEnabled(isMarkdown);
+    if (m_actLivePreview)
+        m_actLivePreview->setEnabled(isMarkdown);
 }
 
 void TextEdit::SendtoggleReadmessage()
