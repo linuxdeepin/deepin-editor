@@ -1,0 +1,10 @@
+// SPDX-FileCopyrightText: 2026 UnionTech Software Technology Co., Ltd.
+// SPDX-License-Identifier: GPL-3.0-or-later
+//
+// UT 编译垫片（仅测试构建使用，不修改 daemon 源码）：
+// daemon 源码 #include <polkit-qt5-1/PolkitQt1/Authority>（Qt5 版 polkit-qt 头文件路径），
+// 本测试环境仅安装 polkit-qt6-1 dev（同 PolkitQt1 命名空间、同 Authority API）。
+// 本目录经 -I 注入后，将 polkit-qt5-1 头文件路径转发到系统 polkit-qt6-1 头。
+#pragma once
+
+#include <polkitqt1-authority.h>

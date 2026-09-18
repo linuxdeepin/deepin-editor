@@ -1,0 +1,19 @@
+{
+  "name": "deepin-editor-markdown-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Markdown rendering kernel (Milkdown) for deepin-editor, embedded via QWebEngine",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch"
+  },
+  "dependencies": {
+    "@milkdown/kit": "~7.20.0",
+    "katex": "~0.16.0",
+    "remark-math": "~6.0.0",
+    "highlight.js": "~11.11.1"
+  },
+  "devDependencies": {
+    "vite": "~5.4.0"
+  }
+}

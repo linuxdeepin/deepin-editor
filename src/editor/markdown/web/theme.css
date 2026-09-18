@@ -1,0 +1,278 @@
+/* SPDX-FileCopyrightText: 2026 UnionTech Software Technology Co., Ltd. */
+/* SPDX-License-Identifier: GPL-3.0-or-later */
+
+/* theme.css —— Milkdown 渲染区主题（§4.8 视觉规范） */
+
+:root {
+    --bg: #ffffff;
+    --fg: #1f1f1f;
+    --fg-secondary: #595959;
+    --code-bg: #f5f5f5;
+    --code-fg: #1f1f1f;
+    --border: #e0e0e0;
+    /* 表格专用边框：半透明适配任意主题底色（浅色叠加白底 ≈ #e6e6e6，与 §4.8.5 设计稿 #e5e5e5 一致）；
+       不复用 --border（C++ 注入 bg.darker(130)，白底时为 #c4c4c4，比设计稿明显偏深） */
+    --table-border: rgba(0, 0, 0, 0.1);
+    --link: #0058de;
+    --content-max-width: 800px;
+    --content-center: 1;
+}
+
+[data-theme="dark"] {
+    --link: #024cca;
+    --table-border: rgba(255, 255, 255, 0.1);
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* §4.8.1 内容区布局：800px 居中 + 20px 边距 */
+/* 居中由 max-width + margin:auto 完成；padding 用固定 20px。
+   不可写 max(20px, calc((100% - 800px)/2))：百分比 padding 相对包含块（视口）解析，
+   与元素自身 max-width 叠加会把内容宽压成负值（最大化时内容被挤压成极窄列） */
+#app {
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-sizing: border-box;
+}
+
+/* §4.8.2 字号字重 */
+.milkdown h1 { font-size: 26px; font-weight: 700; margin: 1em 0 0.5em; }
+.milkdown h2 { font-size: 22px; font-weight: 700; margin: 1em 0 0.5em; }
+.milkdown h3 { font-size: 18px; font-weight: 700; margin: 1em 0 0.5em; }
+.milkdown h4 { font-size: 16px; font-weight: 700; margin: 1em 0 0.5em; }
+.milkdown h5 { font-size: 14px; font-weight: 700; margin: 1em 0 0.5em; }
+.milkdown h6 { font-size: 13px; font-weight: 700; margin: 1em 0 0.5em; }
+
+/* 正文 14px normal，继承 body */
+.milkdown p, .milkdown li, .milkdown td, .milkdown th { font-size: 14px; font-weight: 400; }
+
+/* §4.8.3 说明文字 12px / normal / opacity 0.7
+   opacity 相对继承的 --fg：浅色=70% 黑，深色=70% 白，无需深浅色特判 */
+.milkdown blockquote,
+.milkdown figcaption,
+.milkdown .footnote,
+.milkdown .image-caption {
+    font-size: 12px;
+    font-weight: 400;
+    opacity: 0.7;
+}
+
+/* blockquote 引用样式 */
+.milkdown blockquote {
+    border-left: 3px solid var(--border);
+    padding: 0.5em 1em;
+    margin: 1em 0;
+    background: transparent;
+}
+
+/* §4.8.5 表格：.table-block（空表头条 + 表格容器）
+   表头：36px 高 / 圆角 12px 12px 0 0 / rgba(0,0,0,0.05) 底，无内容
+   高度用 min-height：内容随行数增高（固定高度会截断表格） */
+.table-block {
+    width: 502px;
+    max-width: 100%;
+    min-height: 222px;
+    box-sizing: border-box;
+    /* 外框用 --table-border 与内部网格线同色，避免表头区域边框与表格边框颜色不一致 */
+    border: 1px solid var(--table-border);
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.3);
+    margin: 1em 0;
+}
+.table-block-header {
+    height: 36px;
+    border-radius: 12px 12px 0 0;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+.table-block .table-wrapper {
+    container-type: inline-size;
+    overflow-x: auto;
+    border-radius: 0 0 12px 12px;
+}
+.table-wrapper table { width: 100%; border-collapse: collapse; margin: 1em 0; }
+/* 隐藏表格左/右/底外边框（collapse 冲突规则中 hidden 优先级最高）：
+   外框由 .table-block 的圆角边框承担，单元格不再贴边画直线——
+   否则侧面出现双线，且底部直边被 wrapper 圆角裁剪，转角处露出无边的透明缺口 */
+.table-block .table-wrapper table {
+    margin: 0;
+    border-left-style: hidden;
+    border-right-style: hidden;
+    border-bottom-style: hidden;
+}
+.table-wrapper td, .table-wrapper th {
+    min-width: 100px;
+    max-width: 240px;
+    height: 46px;
+    padding: 0 20px;
+    text-align: left;
+    vertical-align: middle;
+    word-break: break-word;
+    white-space: normal;
+    border: 1px solid var(--table-border);
+    box-sizing: border-box;
+}
+.table-wrapper th { font-weight: 700; }
+@container (max-width: 600px) {
+    .table-wrapper td, .table-wrapper th { max-width: 180px; }
+}
+
+/* §4.8.6 代码块：782px 宽 / 208px 高 / 圆角 10px / 半透明底
+   高度用 min-height：内容须能随行数增高超出视口，表头吸顶才有意义（固定高度会截断内容） */
+.code-block {
+    width: 782px;
+    max-width: 100%;
+    min-height: 208px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    margin: 1em 0;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* 操作表头：折叠箭头 + 语言标签 + 复制按钮；块内容超出视口滚动时吸顶保持可见 */
+.code-block-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    flex: 0 0 auto;
+    height: 32px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    padding: 0 10px 0 6px;
+    border-radius: 10px 10px 0 0;
+    /* 半透明蒙层叠在不透明底色上：静止时等效 rgba(0,0,0,0.05)，吸顶时能遮住下方滚过的代码 */
+    background-color: var(--bg);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05));
+}
+
+/* 折叠按钮：无背景，两段折线箭头（SVG currentColor 随此颜色） */
+.code-block-toggle {
+    border: none;
+    background: none;
+    padding: 4px 6px;
+    line-height: 0;
+    color: #000;
+    cursor: pointer;
+}
+.code-block-toggle svg { display: block; }
+
+/* 语言标签：黑色 14px */
+.code-block-lang {
+    color: #000;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.code-block-copy {
+    margin-left: auto;
+    border: none;
+    background: none;
+    padding: 4px 8px;
+    line-height: 0;
+    color: rgba(0, 0, 0, 0.7);
+    cursor: pointer;
+}
+.code-block-copy svg { display: block; }
+.code-block-copy:hover { color: rgba(0, 0, 0, 1); }
+
+.milkdown pre {
+    background: var(--code-bg);
+    color: var(--code-fg);
+    border-radius: 10px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    font-family: "Noto Sans Mono", "DejaVu Sans Mono", "Courier New", monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 1em 0;
+}
+/* 包裹进 .code-block 后：背景/圆角/外边距由 wrapper 承担 */
+.code-block pre {
+    flex: 1 1 auto;
+    margin: 0;
+    background: transparent;
+    border-radius: 0 0 10px 10px;
+}
+.milkdown pre code { background: transparent; padding: 0; }
+.milkdown :not(pre) > code {
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: "Noto Sans Mono", "DejaVu Sans Mono", "Courier New", monospace;
+    font-size: 0.9em;
+}
+
+/* 折叠态：隐藏代码区，块区显示“已折叠xx行代码  展开”提示行（不在表头内） */
+.code-block.collapsed { min-height: 0; }
+.code-block.collapsed pre { display: none; }
+/* 空代码块：撤销 208px 设计最小高度，表头下仅保留一行空白 */
+.code-block.empty { min-height: 0; }
+.code-block-collapsed {
+    display: none;
+    align-items: center;
+    gap: 4px;
+    padding: 10px 16px;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.5);
+    border-radius: 0 0 10px 10px;
+}
+.code-block.collapsed .code-block-collapsed { display: flex; }
+.code-block-expand { color: rgba(0, 0, 0, 0.7); cursor: pointer; }
+.code-block-expand:hover { color: rgba(0, 0, 0, 1); }
+
+/* 深色主题：黑系颜色按同透明度镜像为白系 */
+[data-theme="dark"] .code-block {
+    border-color: rgba(255, 255, 255, 0.08);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+[data-theme="dark"] .code-block-header {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05));
+}
+[data-theme="dark"] .code-block-toggle,
+[data-theme="dark"] .code-block-lang { color: #fff; }
+[data-theme="dark"] .code-block-copy { color: rgba(255, 255, 255, 0.7); }
+[data-theme="dark"] .code-block-copy:hover { color: rgba(255, 255, 255, 1); }
+[data-theme="dark"] .code-block-collapsed { color: rgba(255, 255, 255, 0.5); }
+[data-theme="dark"] .code-block-expand { color: rgba(255, 255, 255, 0.7); }
+[data-theme="dark"] .code-block-expand:hover { color: rgba(255, 255, 255, 1); }
+[data-theme="dark"] .table-block-header { background-color: rgba(255, 255, 255, 0.05); }
+[data-theme="dark"] .table-block { background-color: rgba(255, 255, 255, 0.1); }
+
+/* §4.8.7 图片 */
+.milkdown img {
+    display: block;
+    max-width: 258px;
+    max-height: 400px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    object-fit: contain;
+    margin: 1em 0;
+}
+
+/* 链接：浅色 rgba(0,88,222,1)，深色 rgba(2,76,202,1) */
+.milkdown a { color: var(--link); text-decoration: none; }
+.milkdown a:hover { text-decoration: underline; }
+
+/* 分割线 */
+.milkdown hr { border: none; border-top: 1px solid var(--border); margin: 2em 0; }
+
+/* 任务列表 */
+.milkdown ul:has(input[type="checkbox"]), .milkdown ol:has(input[type="checkbox"]) { list-style: none; padding-left: 1.5em; }
+.milkdown li:has(input[type="checkbox"]) { display: flex; align-items: center; gap: 8px; }
+
+/* 只读模式去除编辑光标 */
+.milkdown .ProseMirror { outline: none; caret-color: transparent; }
+.milkdown-read-only .ProseMirror { cursor: default; }

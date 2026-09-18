@@ -1,0 +1,45 @@
+Source: deepin-editor
+Section: editors
+Priority: optional
+Maintainer: Debian Deepin Packaging Team <pkg-deepin-devel@lists.alioth.debian.org>
+Uploaders: Ma Aiguo <imaiguo@gmail.com>,
+Build-Depends:
+ cmake,
+ debhelper-compat (= 12),
+ pkg-config,
+ qt6-5compat-dev,
+ qt6-base-dev,
+ qt6-tools-dev-tools,
+ qt6-tools-dev,
+ qt6-base-private-dev,
+ qt6-svg-dev,
+ qt6-webengine-dev,
+ libdtk6widget-dev,
+ libdtk6gui-dev,
+ libdtk6core-dev,
+ libdtk6declarative-dev,
+ libpolkit-qt6-1-dev,
+ libkf6syntaxhighlighting-dev,
+ libkf6codecs-dev,
+ libgtest-dev,
+ libgmock-dev,
+ libchardet-dev,
+ libuchardet-dev (>= 0.0.6),
+ libicu-dev
+Rules-Requires-Root: no
+Standards-Version: 4.5.1
+
+Package: deepin-editor
+Architecture: any
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+ dde-qt6integration,
+ libdtk6widget,
+ libuchardet0 (>= 0.0.6),
+ libchardet1
+Description: Text editor for DDE (Deepin Desktop Environment)
+ Advanced text editor based on dtk.
+ .
+ This package is part of DDE (Deepin Desktop Environment).
+Recommends: uos-reporter, deepin-event-log

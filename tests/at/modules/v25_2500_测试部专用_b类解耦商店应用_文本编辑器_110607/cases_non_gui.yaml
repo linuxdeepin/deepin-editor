@@ -1,0 +1,66 @@
+version: '1.0'
+cases:
+- id: case_1704779
+  name: 【玲珑】【文本编辑器】卸载玲珑应用
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 【玲珑】【文本编辑器】卸载玲珑应用
+  status: non_gui
+  reason: 终端 ll-cli 命令验证，不属于 AT-SPI GUI 自动化用例
+  steps:
+  - step_type: action
+    description: 1. 在终端执行命令：ll-cli uninstall org.deepin.editor
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 在终端执行命令：ll-cli info org.deepin.editor
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 【文本编辑器】玲珑应用卸载成功
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 没有玲珑应用【文本编辑器】的应用信息
+    needs_accessible_name: false
+- id: case_1704767
+  name: 【玲珑】【文本编辑器】更新玲珑应用
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 【玲珑】【文本编辑器】更新玲珑应用
+  status: non_gui
+  reason: 终端 ll-cli 命令验证，不属于 AT-SPI GUI 自动化用例
+  steps:
+  - step_type: action
+    description: 1. 在终端执行命令：ll-cli upgrade org.deepin.editor
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 在终端执行命令：ll-cli run org.deepin.editor
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 【文本编辑器】升级成功，默认升级到最新版本，可以使用命令查看信息：ll-cli info org.deepin.editor
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 【文本编辑器】打开运行成功，版本为升级后的版本
+    needs_accessible_name: false
+- id: case_1704763
+  name: 【玲珑】【文本编辑器】运行指定版本玲珑应用
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 【玲珑】【文本编辑器】运行指定版本玲珑应用
+  status: non_gui
+  reason: 终端 ll-cli 命令验证，不属于 AT-SPI GUI 自动化用例
+  steps:
+  - step_type: action
+    description: 1. 在终端执行命令：ll-cli run org.deepin.editor/6.0.17
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 打开运行指定版本6.0.17的【文本编辑器】应用
+    needs_accessible_name: false
+- id: case_1704757
+  name: 【玲珑】【文本编辑器】安装玲珑应用
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 【玲珑】【文本编辑器】安装玲珑应用
+  status: non_gui
+  reason: 终端 ll-cli 命令验证，不属于 AT-SPI GUI 自动化用例
+  steps:
+  - step_type: action
+    description: 1. 在终端执行命令：ll-cli install org.deepin.editor
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 等待一段时间后，【文本编辑器】安装完成(如果有多个版本，默认安装最高版本)，可以使用命令查看信息：ll-cli info org.deepin.editor
+    needs_accessible_name: false

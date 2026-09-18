@@ -1,0 +1,149 @@
+name: _V25_2500（测试部专用）_B类解耦商店应用_文本编辑器_主菜单(#114347)_suite
+app: deepin-editor
+description: ''
+module: _V25_2500（测试部专用）_B类解耦商店应用_文本编辑器_主菜单(#114347)
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-editor
+  wait: 3.0
+suites:
+- id: case_1592881_s1
+  name: 新建标签
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+t
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: MainWindow
+      role: frame
+- id: case_1592855_s1
+  name: 查找_不按压enter键
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_type
+    text: find target
+  - action: keyboard_hot_key
+    key: ctrl+f
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 查找
+      role: menu item
+- id: case_1592861_s1
+  name: 替换
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_type
+    text: replace target
+  - action: keyboard_hot_key
+    key: ctrl+h
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 替换
+      role: menu item
+- id: case_1592867_s1
+  name: 关于弹窗
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: keyboard_press
+    key: escape
+  - action: keyboard_hot_key
+    key: ctrl+shift+slash
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 帮助
+      role: menu item
+- id: case_1592885_s1
+  name: 查找_按压enter键
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_type
+    text: 'find target
+
+      find target
+
+      other'
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: keyboard_type
+    text: find
+  - action: keyboard_press
+    key: enter
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 查找
+- id: case_1592853_s1
+  name: 查找_更换查找词
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_type
+    text: 'alpha beta
+
+      alpha gamma
+
+      beta gamma'
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: keyboard_type
+    text: alpha
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_hot_key
+    key: ctrl+a
+  - action: keyboard_type
+    text: beta
+  - action: keyboard_press
+    key: enter
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 查找
+- id: case_1592883_s1
+  name: 新建窗口
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+n
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: MainWindow
+      role: frame
+- id: case_1592879_s1
+  name: 打开文件
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: keyboard_hot_key
+    key: ctrl+l
+  - action: keyboard_type
+    text: /etc/hosts
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_hot_key
+    key: ctrl+f
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 查找
+teardown:
+- action: session_stop

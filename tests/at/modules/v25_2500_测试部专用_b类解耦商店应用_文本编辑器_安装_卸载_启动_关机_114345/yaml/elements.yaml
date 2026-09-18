@@ -1,0 +1,4 @@
+elements:
+  MainWindow:
+    name: MainWindow
+    role: frame

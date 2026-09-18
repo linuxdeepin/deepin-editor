@@ -1,0 +1,151 @@
+name: _V25_2500（测试部专用）_B类解耦商店应用_文本编辑器_工作区(#114343)_suite
+app: deepin-editor
+description: ''
+module: _V25_2500（测试部专用）_B类解耦商店应用_文本编辑器_工作区(#114343)
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-editor
+  wait: 3.0
+suites:
+- id: case_1593169_s1
+  name: +标签
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+t
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: MainWindow
+      role: frame
+- id: case_1593219_s1
+  name: 【快捷键优化】“重做”快捷键恢复为“Ctrl+Y”
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_type
+    text: redo shortcut text
+  - action: keyboard_hot_key
+    key: ctrl+z
+  - action: keyboard_hot_key
+    key: ctrl+y
+  - action: keyboard_hot_key
+    key: ctrl+f
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 查找
+      role: menu item
+- id: case_1593015_s1
+  name: 文件查找【快捷键】
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_type
+    text: 'alpha beta
+
+      alpha gamma
+
+      '
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: keyboard_type
+    text: alpha
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 查找
+      role: menu item
+- id: case_1592893_s1
+  name: 全选复制粘贴回车交互【快捷键】
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_type
+    text: copy paste line
+  - action: keyboard_hot_key
+    key: ctrl+a
+  - action: keyboard_hot_key
+    key: ctrl+c
+  - action: keyboard_hot_key
+    key: ctrl+v
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_hot_key
+    key: ctrl+v
+  - action: keyboard_hot_key
+    key: ctrl+f
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 查找
+      role: menu item
+- id: case_1592835_s1
+  name: 输入内容
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_type
+    text: English input 中文输入
+  - action: keyboard_hot_key
+    key: ctrl+f
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 查找
+      role: menu item
+- id: case_1592749_s1
+  name: 全选
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_type
+    text: select all text
+  - action: keyboard_hot_key
+    key: ctrl+a
+  - action: keyboard_hot_key
+    key: ctrl+c
+  - action: keyboard_hot_key
+    key: ctrl+f
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 查找
+      role: menu item
+- id: case_1592637_s1
+  name: 替换_查询结果包含大小写
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_type
+    text: Apple apple APPLE
+  - action: keyboard_hot_key
+    key: ctrl+h
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 替换
+      role: menu item
+- id: case_1592739_s1
+  name: 重做
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_type
+    text: redo workspace text
+  - action: keyboard_hot_key
+    key: ctrl+z
+  - action: keyboard_hot_key
+    key: ctrl+y
+  - action: keyboard_hot_key
+    key: ctrl+f
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 查找
+teardown:
+- action: session_stop

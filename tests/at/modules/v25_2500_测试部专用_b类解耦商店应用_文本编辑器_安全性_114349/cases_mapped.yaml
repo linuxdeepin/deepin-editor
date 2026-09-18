@@ -1,0 +1,45 @@
+# === 格式范例 ===
+# metadata:
+#   generated_at: "2026-07-30T00:00:00"
+#   source: "input.xlsx"
+# cases:
+#   - id: "suite-id"
+#     name: "Suite name"
+#     status: "unsupported"
+#     reason: "performance/resource monitoring case"
+#     annotation:
+#       测试界面: "系统监视器/文本编辑器"
+#       测试功能: "内存释放/内存泄漏检查"
+#       前置条件: "需要大文件和系统资源监控"
+#       AT元素引用: "无稳定 deepin-editor 内部元素"
+#     steps: []
+# === 格式范例结束 ===
+
+metadata:
+  generated_at: "2026-07-30T03:55:00"
+  source: "统信桌面操作系统 V25-文本编辑器-用例.xlsx"
+  module: "v25_2500_测试部专用_b类解耦商店应用_文本编辑器_安全性_114349"
+cases:
+  - id: case_1593669
+    name: "内存释放检查"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/安全性(#114349)"
+    status: unsupported
+    reason: "需要反复打开几十兆 txt 文件并通过系统监视器人工/资源指标判断内存是否恢复，属于性能资源监控，不是 AT-SPI GUI 可稳定断言场景"
+    annotation:
+      测试界面: "系统监视器/文本编辑器"
+      测试功能: "关闭大文件后的内存释放检查"
+      前置条件: "存在几十兆 txt 文件；可观察系统内存占用"
+      AT元素引用: "无稳定 deepin-editor 内部元素"
+    steps: []
+
+  - id: case_1593461
+    name: "验证使用文本编辑器，无内存泄漏"
+    module: "/V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/安全性(#114349)"
+    status: unsupported
+    reason: "需要 100M 大文件、多次打开关闭应用并监控内存上升回落，属于性能/内存泄漏专项测试，无法通过 AT-SPI 元素断言"
+    annotation:
+      测试界面: "系统监视器/文本编辑器"
+      测试功能: "大文件反复打开关闭后的内存泄漏检查"
+      前置条件: "存在 100M 大文件；可监控进程内存变化"
+      AT元素引用: "无稳定 deepin-editor 内部元素"
+    steps: []

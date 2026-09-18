@@ -1,0 +1,374 @@
+version: '1.0'
+cases:
+- id: case_1978835
+  name: 【bug转用例】使用Shift+Tab缩进文本场景验证
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 【bug转用例】使用Shift+Tab缩进文本场景验证
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 选中多行文本进行Shift+Tab缩进操作
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 多行文本可以同时进行缩进
+    needs_accessible_name: false
+  annotation:
+    测试界面: 主窗口-编辑区
+    测试功能: 多行文本选择后使用 Shift+Tab 反向缩进
+    前置条件: 应用已启动，编辑区已有多行文本并选中
+    AT元素引用: 文本编辑器主窗口
+- id: case_1934897
+  name: 【bug转用例】修改编辑保存bashrc文件
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 【bug转用例】修改编辑保存bashrc文件
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 打开bashrc文件，修改任意信息，保存文本
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 保存成功
+    needs_accessible_name: false
+  annotation:
+    测试界面: 主窗口-编辑区/主菜单保存
+    测试功能: 打开并修改 bashrc 文本后保存
+    前置条件: 应用已启动，存在可打开的 bashrc 测试文件或用户主目录 .bashrc
+    AT元素引用: 文本编辑器主窗口, 保存, 打开文件
+- id: case_1919211
+  name: 查找替换-多匹配项中特定选中状态保留
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 查找替换-多匹配项中特定选中状态保留
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 打开文本编辑器，快捷键Ctrl+F触发查找功能
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 在查找输入框输入文本“武汉”，点击下一个，再次点击下一个
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 在查找弹窗中，点击右上角的“替换”按钮
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 观察文本编辑区域的高亮选中状态
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 下方显示查找窗口
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 第二个“武汉”文本被高亮选中
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 替换弹窗的'替换为'输入框自动填充内容与原文本区域高亮选中文本一致
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 原文本区域中第二个'武汉'文本保持高亮选中状态
+    needs_accessible_name: false
+  annotation:
+    测试界面: 主窗口-查找/替换浮窗
+    测试功能: 多匹配项查找后切换替换并保持高亮选中状态
+    前置条件: 应用已启动，编辑区包含多个“武汉”文本
+    AT元素引用: 文本编辑器主窗口, 查找, 替换
+- id: case_1919209
+  name: 查找替换-替换弹窗填充选中内容及状态保留
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 查找替换-替换弹窗填充选中内容及状态保留
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 打开文本编辑器，正文鼠标右键，点击查找
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 在查找输入框输入文本“武汉”，点击下一个
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 在查找弹窗中，点击右上角的“替换”按钮
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 观察文本编辑区域的高亮选中状态
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 下方显示查找窗口
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 第一个“武汉”文本被高亮选中
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 替换弹窗的'替换为'输入框自动填充内容与原文本区域高亮选中文本一致
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 原文本区域中第二个'武汉'文本保持高亮选中状态
+    needs_accessible_name: false
+  annotation:
+    测试界面: 主窗口-右键菜单/查找替换浮窗
+    测试功能: 通过右键查找后切换替换并保持选中状态
+    前置条件: 应用已启动，编辑区包含多个“武汉”文本
+    AT元素引用: 文本编辑器主窗口, 查找, 替换
+- id: case_1919207
+  name: 查找替换-替换按钮切换后与Ctrl+H触发功能一致性验证
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 查找替换-替换按钮切换后与Ctrl+H触发功能一致性验证
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 使用快捷键Ctrl+F触发查找功能，点击'替换'按钮切换至替换弹窗
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 关闭当前替换弹窗，使用快捷键Ctrl+H直接触发替换功能
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 对比步骤1与步骤2的弹窗标题、输入框位置、按钮排列顺序及功能按钮文本
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 成功切换至替换弹窗
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 弹出替换弹窗
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 步骤1与步骤2的弹窗标题、输入框位置、按钮排列顺序及功能按钮文本完全一致
+    needs_accessible_name: false
+  annotation:
+    测试界面: 主窗口-查找/替换浮窗
+    测试功能: 查找浮窗替换按钮与 Ctrl+H 替换入口一致性
+    前置条件: 应用已启动
+    AT元素引用: 文本编辑器主窗口, 查找, 替换
+- id: case_1919205
+  name: 查找替换-已选中文本时点击替换按钮切换至替换弹窗（代入选中文本）
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 查找替换-已选中文本时点击替换按钮切换至替换弹窗（代入选中文本）
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 使用快捷键Ctrl+F触发查找功能
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 点击查找弹窗中的'替换'按钮
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 观察替换弹窗的'查找内容'输入框内容及文本区域选中状态
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 查找弹窗正常显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 替换弹窗正常显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 替换弹窗的'查找内容'输入框自动填充选中文本'测试'；文本区域中'测试'二字保持选中状态
+    needs_accessible_name: false
+  annotation:
+    测试界面: 主窗口-查找/替换浮窗
+    测试功能: 已选中文本时从查找切换替换自动代入选中文本
+    前置条件: 应用已启动，编辑区存在并已选中“测试”文本
+    AT元素引用: 文本编辑器主窗口, 查找, 替换
+- id: case_1875739
+  name: 替换（右键菜单）
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 替换（右键菜单）
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 在新打开一个窗口中，空文档中点击右键，查看右键菜单显示
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 在文档页面选中一段文本，右键菜单中选中替换
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 点击 替换
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 点击剩余替换
+    needs_accessible_name: false
+  - step_type: action
+    description: 5. 点击全部替换
+    needs_accessible_name: false
+  - step_type: action
+    description: 6. 点击跳过
+    needs_accessible_name: false
+  - step_type: action
+    description: 7. 按下ESC，或 关闭按钮
+    needs_accessible_name: false
+  - step_type: action
+    description: 8. 拖拉替换框（新需求）
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 右键菜单中没有替换菜单
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 替换框出现，默认查找当前选择文本；
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 逐个替换
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 一次性替换剩余匹配文本
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 一次性替换所有匹配文本
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 不替换当前匹配文本
+    needs_accessible_name: false
+  - step_type: assert
+    description: 7. 关闭替换框
+    needs_accessible_name: false
+  - step_type: assert
+    description: 8. 不可移动
+    needs_accessible_name: false
+  annotation:
+    测试界面: 主窗口-编辑区右键菜单/替换浮窗
+    测试功能: 右键菜单替换入口及替换按钮操作
+    前置条件: 应用已启动，编辑区存在可替换文本
+    AT元素引用: 文本编辑器主窗口, 替换
+- id: case_1873485
+  name: 语音朗读-全选文字
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 语音朗读-全选文字
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 编辑区鼠标右键全选/快捷键ctrl+a，再次鼠标右键，点击语音朗读
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 开始朗读所有内容
+    needs_accessible_name: false
+  annotation:
+    测试界面: 主窗口-编辑区右键菜单
+    测试功能: 全选文本后语音朗读
+    前置条件: 应用已启动，编辑区存在文本内容
+    AT元素引用: 文本编辑器主窗口
+- id: case_1873483
+  name: 语音朗读/语音听写-未安装uos-ai
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 语音朗读/语音听写-未安装uos-ai
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 选择一段文字，鼠标右键，点击语音朗读
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 空白处，鼠标右键，点击语音听写
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 提示“请前往应用商店安装“UOS AI”后再使用”
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 提示“请前往应用商店安装“UOS AI”后再使用”
+    needs_accessible_name: false
+  annotation:
+    测试界面: 主窗口-编辑区右键菜单
+    测试功能: 未安装 UOS AI 时语音朗读/听写提示
+    前置条件: 应用已启动，环境未安装 uos-ai
+    AT元素引用: 文本编辑器主窗口
+- id: case_1873481
+  name: 语音朗读-音频设备缺失
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 语音朗读-音频设备缺失
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 选择一段文字，鼠标右键，点击语音朗读
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 提示未检测到音频输出设备，请检查后重试
+    needs_accessible_name: false
+  annotation:
+    测试界面: 主窗口-编辑区右键菜单
+    测试功能: 无音频输出设备时语音朗读提示
+    前置条件: 应用已启动，环境无音频输出设备
+    AT元素引用: 文本编辑器主窗口
+- id: case_1873479
+  name: 语音听写-音频设备缺失
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 语音听写-音频设备缺失
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 编辑器鼠标右键，点击语音听写
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 提示未检测到音频输入设备，请检查后重试
+    needs_accessible_name: false
+  annotation:
+    测试界面: 主窗口-编辑区右键菜单
+    测试功能: 无音频输入设备时语音听写提示
+    前置条件: 应用已启动，环境无音频输入设备
+    AT元素引用: 文本编辑器主窗口
+- id: case_1873477
+  name: 重复选择语音朗读
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 重复选择语音朗读
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 选择一段文字，鼠标右键，点击语音朗读
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 朗读过程中，重新选择一段文字，鼠标右键，点击语音朗读
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 重复步骤2多次
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 开始朗读选择的文字
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 开始朗读重新选择的这段文字
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 每次都朗读重新选择的文字
+    needs_accessible_name: false
+  annotation:
+    测试界面: 主窗口-编辑区右键菜单
+    测试功能: 重复选择语音朗读时重新朗读当前选择文本
+    前置条件: 应用已启动，编辑区存在多段文本
+    AT元素引用: 文本编辑器主窗口
+- id: case_1704765
+  name: 【玲珑】【文本编辑器】玲珑应用，基本功能测试
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 【玲珑】【文本编辑器】玲珑应用，基本功能测试
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 【文本编辑器】应用，进行文字输入，删减
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 进行查找、替换
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 复制、剪切、粘贴
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 编辑完成后，保存/另存为文件
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 功能正常
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 功能正常
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 功能正常
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 功能正常
+    needs_accessible_name: false
+  annotation:
+    测试界面: 主窗口-编辑区/查找替换/保存
+    测试功能: 玲珑应用运行后的文本编辑器基本功能
+    前置条件: 应用已通过玲珑方式启动
+    AT元素引用: 文本编辑器主窗口, 查找, 替换, 保存, 另存为

@@ -1,0 +1,4018 @@
+metadata:
+  generated_at: '2026-07-29T14:39:52.465614'
+  source: 统信桌面操作系统 V25-文本编辑器-用例.xlsx
+cases:
+- id: case_1978835
+  name: 【bug转用例】使用Shift+Tab缩进文本场景验证
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 【bug转用例】使用Shift+Tab缩进文本场景验证
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 选中多行文本进行Shift+Tab缩进操作
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 多行文本可以同时进行缩进
+    needs_accessible_name: false
+- id: case_1934897
+  name: 【bug转用例】修改编辑保存bashrc文件
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 【bug转用例】修改编辑保存bashrc文件
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 打开bashrc文件，修改任意信息，保存文本
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 保存成功
+    needs_accessible_name: false
+- id: case_1919211
+  name: 查找替换-多匹配项中特定选中状态保留
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 查找替换-多匹配项中特定选中状态保留
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 打开文本编辑器，快捷键Ctrl+F触发查找功能
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 在查找输入框输入文本“武汉”，点击下一个，再次点击下一个
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 在查找弹窗中，点击右上角的“替换”按钮
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 观察文本编辑区域的高亮选中状态
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 下方显示查找窗口
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 第二个“武汉”文本被高亮选中
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 替换弹窗的'替换为'输入框自动填充内容与原文本区域高亮选中文本一致
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 原文本区域中第二个'武汉'文本保持高亮选中状态
+    needs_accessible_name: false
+- id: case_1919209
+  name: 查找替换-替换弹窗填充选中内容及状态保留
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 查找替换-替换弹窗填充选中内容及状态保留
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 打开文本编辑器，正文鼠标右键，点击查找
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 在查找输入框输入文本“武汉”，点击下一个
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 在查找弹窗中，点击右上角的“替换”按钮
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 观察文本编辑区域的高亮选中状态
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 下方显示查找窗口
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 第一个“武汉”文本被高亮选中
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 替换弹窗的'替换为'输入框自动填充内容与原文本区域高亮选中文本一致
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 原文本区域中第二个'武汉'文本保持高亮选中状态
+    needs_accessible_name: false
+- id: case_1919207
+  name: 查找替换-替换按钮切换后与Ctrl+H触发功能一致性验证
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 查找替换-替换按钮切换后与Ctrl+H触发功能一致性验证
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 使用快捷键Ctrl+F触发查找功能，点击'替换'按钮切换至替换弹窗
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 关闭当前替换弹窗，使用快捷键Ctrl+H直接触发替换功能
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 对比步骤1与步骤2的弹窗标题、输入框位置、按钮排列顺序及功能按钮文本
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 成功切换至替换弹窗
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 弹出替换弹窗
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 步骤1与步骤2的弹窗标题、输入框位置、按钮排列顺序及功能按钮文本完全一致
+    needs_accessible_name: false
+- id: case_1919205
+  name: 查找替换-已选中文本时点击替换按钮切换至替换弹窗（代入选中文本）
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 查找替换-已选中文本时点击替换按钮切换至替换弹窗（代入选中文本）
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 使用快捷键Ctrl+F触发查找功能
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 点击查找弹窗中的'替换'按钮
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 观察替换弹窗的'查找内容'输入框内容及文本区域选中状态
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 查找弹窗正常显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 替换弹窗正常显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 替换弹窗的'查找内容'输入框自动填充选中文本'测试'；文本区域中'测试'二字保持选中状态
+    needs_accessible_name: false
+- id: case_1919203
+  name: 查找替换-点击替换按钮切换至替换弹窗（未选中文本）
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 查找替换-点击替换按钮切换至替换弹窗（未选中文本）
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 使用快捷键Ctrl+F触发查找功能
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 点击查找弹窗中的'替换'按钮
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 观察当前弹窗标题及布局
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 查找弹窗正常显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 替换弹窗正常显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 弹窗标题显示为'替换'，输入框位置、替换、跳过、剩余替换、全部替换按钮与使用快捷键Ctrl+H触发的替换弹窗完全一致
+    needs_accessible_name: false
+- id: case_1919201
+  name: 查找替换-查找弹窗中替换按钮可见性验证（未选中文本）
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 查找替换-查找弹窗中替换按钮可见性验证（未选中文本）
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 使用快捷键Ctrl+F触发查找功能
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 观察查找弹窗底部按钮区域
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 弹出查找弹窗
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 查找弹窗中显示'替换'按钮，按钮无遮挡且未禁用（光标悬停时显示可点击状态）
+    needs_accessible_name: false
+- id: case_1875739
+  name: 替换（右键菜单）
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 替换（右键菜单）
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 在新打开一个窗口中，空文档中点击右键，查看右键菜单显示
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 在文档页面选中一段文本，右键菜单中选中替换
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 点击 替换
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 点击剩余替换
+    needs_accessible_name: false
+  - step_type: action
+    description: 5. 点击全部替换
+    needs_accessible_name: false
+  - step_type: action
+    description: 6. 点击跳过
+    needs_accessible_name: false
+  - step_type: action
+    description: 7. 按下ESC，或 关闭按钮
+    needs_accessible_name: false
+  - step_type: action
+    description: 8. 拖拉替换框（新需求）
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 右键菜单中没有替换菜单
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 替换框出现，默认查找当前选择文本；
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 逐个替换
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 一次性替换剩余匹配文本
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 一次性替换所有匹配文本
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 不替换当前匹配文本
+    needs_accessible_name: false
+  - step_type: assert
+    description: 7. 关闭替换框
+    needs_accessible_name: false
+  - step_type: assert
+    description: 8. 不可移动
+    needs_accessible_name: false
+- id: case_1873485
+  name: 语音朗读-全选文字
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 语音朗读-全选文字
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 编辑区鼠标右键全选/快捷键ctrl+a，再次鼠标右键，点击语音朗读
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 开始朗读所有内容
+    needs_accessible_name: false
+- id: case_1873483
+  name: 语音朗读/语音听写-未安装uos-ai
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 语音朗读/语音听写-未安装uos-ai
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 选择一段文字，鼠标右键，点击语音朗读
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 空白处，鼠标右键，点击语音听写
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 提示“请前往应用商店安装“UOS AI”后再使用”
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 提示“请前往应用商店安装“UOS AI”后再使用”
+    needs_accessible_name: false
+- id: case_1873481
+  name: 语音朗读-音频设备缺失
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 语音朗读-音频设备缺失
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 选择一段文字，鼠标右键，点击语音朗读
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 提示未检测到音频输出设备，请检查后重试
+    needs_accessible_name: false
+- id: case_1873479
+  name: 语音听写-音频设备缺失
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 语音听写-音频设备缺失
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 编辑器鼠标右键，点击语音听写
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 提示未检测到音频输入设备，请检查后重试
+    needs_accessible_name: false
+- id: case_1873477
+  name: 重复选择语音朗读
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 重复选择语音朗读
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 选择一段文字，鼠标右键，点击语音朗读
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 朗读过程中，重新选择一段文字，鼠标右键，点击语音朗读
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 重复步骤2多次
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 开始朗读选择的文字
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 开始朗读重新选择的这段文字
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 每次都朗读重新选择的文字
+    needs_accessible_name: false
+- id: case_1704781
+  name: 【玲珑】【文本编辑器】卸载指定版本的玲珑应用
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 【玲珑】【文本编辑器】卸载指定版本的玲珑应用
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 在终端执行命令：ll-cli uninstall org.deepin.editor/6.0.17
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 在终端执行命令：ll-cli info org.deepin.editor
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 【文本编辑器】玲珑指定版本的应用卸载成功
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 没有指定版本玲珑应用【文本编辑器】的应用信息
+    needs_accessible_name: false
+- id: case_1704779
+  name: 【玲珑】【文本编辑器】卸载玲珑应用
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 【玲珑】【文本编辑器】卸载玲珑应用
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 在终端执行命令：ll-cli uninstall org.deepin.editor
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 在终端执行命令：ll-cli info org.deepin.editor
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 【文本编辑器】玲珑应用卸载成功
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 没有玲珑应用【文本编辑器】的应用信息
+    needs_accessible_name: false
+- id: case_1704777
+  name: 【玲珑】【文本编辑器】查看玲珑应用包含的文件
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 【玲珑】【文本编辑器】查看玲珑应用包含的文件
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 在终端执行命令：ll-cli content org.deepin.editor
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 展示已安装的【文本编辑器】应用包含的文件
+    needs_accessible_name: false
+- id: case_1704775
+  name: 【玲珑】【文本编辑器】杀掉玲珑应用运行进程
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 【玲珑】【文本编辑器】杀掉玲珑应用运行进程
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 在终端执行命令：ll-cli kill org.deepin.editor
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 终止后再次终端执行命令：ll-cli ps
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 【文本编辑器】应用进程运行被终止
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 没有显示【文本编辑器】运行
+    needs_accessible_name: false
+- id: case_1704773
+  name: 【玲珑】【文本编辑器】检查玲珑应用运行情况
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 【玲珑】【文本编辑器】检查玲珑应用运行情况
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 在终端执行命令：ll-cli ps
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 可以查看到【文本编辑器】的运行情况，包含：应用名称、容器ID、进程ID
+    needs_accessible_name: false
+- id: case_1704767
+  name: 【玲珑】【文本编辑器】更新玲珑应用
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 【玲珑】【文本编辑器】更新玲珑应用
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 在终端执行命令：ll-cli upgrade org.deepin.editor
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 在终端执行命令：ll-cli run org.deepin.editor
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 【文本编辑器】升级成功，默认升级到最新版本，可以使用命令查看信息：ll-cli info org.deepin.editor
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 【文本编辑器】打开运行成功，版本为升级后的版本
+    needs_accessible_name: false
+- id: case_1704765
+  name: 【玲珑】【文本编辑器】玲珑应用，基本功能测试
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 【玲珑】【文本编辑器】玲珑应用，基本功能测试
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 【文本编辑器】应用，进行文字输入，删减
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 进行查找、替换
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 复制、剪切、粘贴
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 编辑完成后，保存/另存为文件
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 功能正常
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 功能正常
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 功能正常
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 功能正常
+    needs_accessible_name: false
+- id: case_1704763
+  name: 【玲珑】【文本编辑器】运行指定版本玲珑应用
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 【玲珑】【文本编辑器】运行指定版本玲珑应用
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 在终端执行命令：ll-cli run org.deepin.editor/6.0.17
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 打开运行指定版本6.0.17的【文本编辑器】应用
+    needs_accessible_name: false
+- id: case_1704761
+  name: 【玲珑】【文本编辑器】运行玲珑应用
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 【玲珑】【文本编辑器】运行玲珑应用
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 在终端执行命令：ll-cli run org.deepin.editor
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 打开运行【文本编辑器】应用
+    needs_accessible_name: false
+- id: case_1704759
+  name: 【玲珑】【文本编辑器】安装玲珑应用指定版本
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 【玲珑】【文本编辑器】安装玲珑应用指定版本
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 在终端执行命令：ll-cli install org.deepin.editor/XXX指定版本
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 可正常安装成功
+    needs_accessible_name: false
+- id: case_1704757
+  name: 【玲珑】【文本编辑器】安装玲珑应用
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器(#110607)
+  description: 【玲珑】【文本编辑器】安装玲珑应用
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 在终端执行命令：ll-cli install org.deepin.editor
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 等待一段时间后，【文本编辑器】安装完成(如果有多个版本，默认安装最高版本)，可以使用命令查看信息：ll-cli info org.deepin.editor
+    needs_accessible_name: false
+- id: case_1704755
+  name: 【玲珑】【文本编辑器】仓库玲珑应用信息
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 【玲珑】【文本编辑器】仓库玲珑应用信息
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 在终端执行命令：ll-cli search org.deepin.editor
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 展示【文本编辑器】应用的相关信息，包含appid、name、version、arch、channel、module、description；如果版本有多个，则全部展示
+    needs_accessible_name: false
+- id: case_1704753
+  name: 【玲珑】【文本编辑器】查看玲珑应用信息
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 【玲珑】【文本编辑器】查看玲珑应用信息
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 在终端执行命令：ll-cli info org.deepin.editor
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 展示玲珑应用(文本编辑器)的应用信息；
+    needs_accessible_name: false
+  - step_type: assert
+    description: 'PS: 没有安装则不展示应用信息'
+    needs_accessible_name: false
+- id: case_1593669
+  name: 内存释放检查
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/安全性(#114349)
+  description: 内存释放检查
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 反复打开几十兆的txt文件，在系统监视器中检查系统内存占用情况
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 内存在关闭后均可恢复正常
+    needs_accessible_name: false
+- id: case_1593667
+  name: 保存编码文件场景补充
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 保存编码文件场景补充
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 编写任意代码，然后保存
+    needs_accessible_name: false
+  - step_type: action
+    description: '#include <stdio.h>'
+    needs_accessible_name: false
+  - step_type: action
+    description: int main() {
+    needs_accessible_name: false
+  - step_type: action
+    description: printf("hello world");
+    needs_accessible_name: false
+  - step_type: action
+    description: return 0;
+    needs_accessible_name: false
+  - step_type: action
+    description: '}'
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 关闭文本编辑器窗口
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 再次打开文本编辑器
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 保存为对应编码格式文档，如：test.h
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 窗口可正常关闭
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 文本编辑器中的代码关键字高亮显示，如：include、int、hello world
+    needs_accessible_name: false
+- id: case_1593649
+  name: 不保留现场_关闭应用（子标签页已保存+未保存）
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 不保留现场_关闭应用（子标签页已保存+未保存）
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 文本编辑器单窗口中标签页均含有已保存又含有未保存
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 关闭应用（点击X/主菜单“退出”/Alt+F4）
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 点击【不保存】
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 点击【保存】
+    needs_accessible_name: false
+  - step_type: action
+    description: 5. 再次打开文本编辑器
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 所有标签页标题栏中均包含* （例如，文本a ;*文本b;*文本c）
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 从左往右开始检测各标签页是否需要保存：最左边的标签页文本a为已存在文件，且无改动，直接关闭。 焦点顺移至*文本b标签页，并弹出提示框“您是否要保存此文件？”
+      取消/不保存/保存
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 不保存当前的*文本b标签页中的修改内容，关闭该标签页。焦点顺移至*文本c标签页，并弹出提示框“您是否要保存此文件？” 取消/不保存/保存
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 需弹出保存窗口，引导用户输入文件名、编码方式进行保存。保存完毕后，关闭窗口。
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 新开一个空白文档tab标签页
+    needs_accessible_name: false
+- id: case_1593647
+  name: 不保留现场_多窗口关闭应用
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 不保留现场_多窗口关闭应用
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 窗口1中存在空白的新建标签页； 新建标签页中有内容但未进行保存的标签页； 已打开文档的标签页；  已打开文档中进行修改内容未保存（*标题）的标签页，
+      对窗口1进行关闭（点击X/主菜单“退出”/Alt+F4）
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 窗口2中存在空白的新建标签页； 新建标签页中有内容但未进行保存的标签页； 已打开文档的标签页；  已打开文档中进行修改内容未保存（*标题）的标签页，（点击X/主菜单“退出”/Alt+F4）
+      关闭窗口
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 再次打开文本编辑器
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 从左往右开始对每个标签页操作， 对于无*标签的直接关闭，对于未保存含有*标签页触发提示是否保存文档，可成功完成关闭窗口1中所有标签页。
+      窗口2未受影响。
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 同上，窗口2可成功被完成关闭。
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 新开一个空白文档tab标签页
+    needs_accessible_name: false
+- id: case_1593645
+  name: 文本编辑器应用强制退出后再次打开
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 文本编辑器应用强制退出后再次打开
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 系统监视器中对文本编辑器应用“结束进程”后再次打开应用
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 任务栏中对文本编辑器应用“强制退出”后再次打开应用
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 应用崩溃后关闭窗口后再次打开应用
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 新开一个空白文档tab标签页
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 新开一个空白文档tab标签页
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 新开一个空白文档tab标签页
+    needs_accessible_name: false
+- id: case_1593639
+  name: 文件加载进度条_新开大文件
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 文件加载进度条_新开大文件
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 使用文本编辑器打开一个新文档，查看窗口底栏
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 加载完成
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 当文件未加载完时底栏最左侧展示加载进度条： 文案【文本加载中】+ 进度展示，其他控件同步展示在加载进度条控件的右侧
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 进度条同步消失，原右侧的控件向左补位显示
+    needs_accessible_name: false
+- id: case_1593611
+  name: 点击行号_最后一行
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 点击行号_最后一行
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 通过文本编辑器新开一多行文档
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 在左侧栏中单击最后一行
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 首行行号默认高亮（光标闪烁在首行）
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 默认选中整行内容，并且光标定位在当前行尾
+    needs_accessible_name: false
+- id: case_1593597
+  name: 复制含有跨行符文本_查找框
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 复制含有跨行符文本_查找框
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 复制含有文字内容+跨行符的文本内容粘贴到查找框中
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 点击Enter键开始查找
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 跨行符不显查找框中
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 可正常查找到含跨行符的所有内容
+    needs_accessible_name: false
+- id: case_1593577
+  name: 设置中缩放字号_缩放比例显示
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 设置中缩放字号_缩放比例显示
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 通过文本编辑器主菜单进入设置页面，调整字号大小(8~50)
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 底栏中缩放比例跟随字号增加展示正常，缩放范围为10%~500%
+    needs_accessible_name: false
+- id: case_1593561
+  name: 取消勾选“允许鼠标中键执行粘贴操作”
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 取消勾选“允许鼠标中键执行粘贴操作”
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 进入设置 - 高级设置，取消勾选“允许鼠标中键执行粘贴操作”
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 复制若干文字如abcd，通过按压鼠标中键进行粘贴
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 进入设置 - 高级设置，勾选“允许鼠标中键执行粘贴操作”，通过按压鼠标中键进行粘贴
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 可以取消勾选
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 无法粘贴成功
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 可以粘贴成功 (同step2中的复制内容abcd)
+    needs_accessible_name: false
+- id: case_1593551
+  name: 记住最后的操作路径_打开新文件
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 记住最后的操作路径_打开新文件
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 在文本编辑器应用中，主菜单打开/Ctrl+O
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 打开文件的路径为上次的操作路径（“下载 ”路径）
+    needs_accessible_name: false
+- id: case_1593549
+  name: 记住最后的操作路径_保存一个未保存过的新文档
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 记住最后的操作路径_保存一个未保存过的新文档
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 在文本编辑器的空白标签页中进行编辑并保存
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 存储路径为上次的操作路径（“下载 ”路径）
+    needs_accessible_name: false
+- id: case_1593535
+  name: 与当前文件保存一致_首次打开新文件
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 与当前文件保存一致_首次打开新文件
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 进入文本编辑器设置中切换 “打开/保存位置”项的属性为“与当前文件保存一致”
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 主菜单打开/Ctrl+O
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. “与当前文件保存一致”前高亮选中
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 打开的默认路径为 系统-文档 路径
+    needs_accessible_name: false
+- id: case_1593533
+  name: 与当前文件保存一致_首次保存新文件
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 与当前文件保存一致_首次保存新文件
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 进入文本编辑器设置中切换 “打开/保存位置”项的属性为“与当前文件保存一致”
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 编辑空白文档进行保存
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. “与当前文件保存一致”前高亮选中
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 存储的默认路径为 系统-文档 路径
+    needs_accessible_name: false
+- id: case_1593509
+  name: 自定义操作路径_打开新文件
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 自定义操作路径_打开新文件
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 进入文本编辑器设置中切换 “打开/保存位置”项的属性为“自定义操作路径”，并完成自定义路径设置
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 主菜单打开/Ctrl+O
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 成功设置自定义路径
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 默认路径为用户设置的自定义操作路径
+    needs_accessible_name: false
+- id: case_1593507
+  name: 自定义操作路径_保存一个未保存过的新文档
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 自定义操作路径_保存一个未保存过的新文档
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 进入文本编辑器设置中切换 “打开/保存位置”项的属性为“自定义操作路径”，并完成自定义路径设置
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 在文本编辑器的空白标签页中进行编辑并保存
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 成功设置自定义路径
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 默认路径为用户设置的自定义操作路径
+    needs_accessible_name: false
+- id: case_1593491
+  name: 字数展示_UI
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 字数展示_UI
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 打开文本编辑器，默认新开空白文档
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 输入中文、英文、中英文标点符号及空格
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 底栏上“字数”显示0
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. “字数”跟随计数 ，每个字符都计入一个字
+    needs_accessible_name: false
+- id: case_1593461
+  name: 验证使用文本编辑器，无内存泄漏
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/安全性(#114349)
+  description: 验证使用文本编辑器，无内存泄漏
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 通过文本编辑器打开一个大文件（如100M.txt）后关闭大文件的标签页
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 多次打开和关闭文本编辑器
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 无内存泄漏 （系统监视器中内容跟随打开关闭而相应地上升回落）
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 无内存泄漏
+    needs_accessible_name: false
+- id: case_1593373
+  name: 性能测试_冷热启动
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 性能测试_冷热启动
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 应用冷、热启动
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 不超过1S
+    needs_accessible_name: false
+- id: case_1593349
+  name: 打开大文件加载过程中的交互测试_查找
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 打开大文件加载过程中的交互测试_查找
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 使用文本编辑器打开大文件
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 打开大文件加载过程中，按Ctrl+F/点击查找菜单
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 在查找输入框输入字符进行查找操作
+    needs_accessible_name: false
+  - step_type: assert
+    description: '1.'
+    needs_accessible_name: false
+  - step_type: assert
+    description: '2.'
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 文件加载过程中，可以正常进行查找操作
+    needs_accessible_name: false
+- id: case_1593295
+  name: 关闭应用自动保存现场_label页高亮检查
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 关闭应用自动保存现场_label页高亮检查
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 新标签页不进行任何编辑
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 新建标签页，新建标签页输入任意字符，不保存
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 点击应用工具栏菜单“打开文件”，选择任意文件打开/拖拽任意文件至应用窗口打开，不进行任何编辑
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 点击应用工具栏菜单“打开文件”，选择任意文件打开/拖拽任意文件至应用窗口打开，进行编辑（添加、复制、剪切、删除等等操作），不保存
+    needs_accessible_name: false
+  - step_type: action
+    description: 5. 新建标签页，编辑并保存
+    needs_accessible_name: false
+  - step_type: action
+    description: 6. 切换当前显示tab页为非最后一个label点击应用窗口右上角关闭X按钮
+    needs_accessible_name: false
+  - step_type: action
+    description: 7. 打开文本编辑器
+    needs_accessible_name: false
+  - step_type: assert
+    description: '1.'
+    needs_accessible_name: false
+  - step_type: assert
+    description: '2.'
+    needs_accessible_name: false
+  - step_type: assert
+    description: '3.'
+    needs_accessible_name: false
+  - step_type: assert
+    description: '4.'
+    needs_accessible_name: false
+  - step_type: assert
+    description: '5.'
+    needs_accessible_name: false
+  - step_type: assert
+    description: '6.'
+    needs_accessible_name: false
+  - step_type: assert
+    description: 7. 步骤1~5标签页恢复为关闭前的状态
+    needs_accessible_name: false
+- id: case_1593273
+  name: Tip框显示文件路径
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: Tip框显示文件路径
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 打开编辑器，点击+新建标签页，鼠标光标移动到标签页上
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 点击Ctrl+s，弹出保存确认后，鼠标光标移动到标签页上
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 弹出tip框显示，文件名称
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 弹出tip框显示，文件路径+文件名称
+    needs_accessible_name: false
+- id: case_1593271
+  name: Tip框显示文件路径_长文件名
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: Tip框显示文件路径_长文件名
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 使用文本编辑器打开文件
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 鼠标光标移动到标签页
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 切换系统字体为最大，鼠标移动到标签页
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 切换屏幕缩放比率，鼠标移动到标签页
+    needs_accessible_name: false
+  - step_type: assert
+    description: '1.'
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 弹出tip框显示文件路径+文件名称，显示无异常
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 弹出tip框显示文件路径+文件名称，显示无异常
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 弹出tip框显示文件路径+文件名称，显示无异常
+    needs_accessible_name: false
+- id: case_1593251
+  name: 关闭应用自动保存现场_恢复现场后保存临时文件
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 关闭应用自动保存现场_恢复现场后保存临时文件
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 使用文本编辑器打开一个文档并编辑或新建tab页进行编辑
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 点击应用窗口右上角关闭X按钮
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 再次打开文本编辑器
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 保存这个临时文件
+    needs_accessible_name: false
+  - step_type: action
+    description: 5. 点击应用窗口右上角关闭X按钮
+    needs_accessible_name: false
+  - step_type: action
+    description: 6. 再次打开文本编辑器
+    needs_accessible_name: false
+  - step_type: assert
+    description: '1.'
+    needs_accessible_name: false
+  - step_type: assert
+    description: '2.'
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 支持对该修改自动保存到应用的临时文件中
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 文件保存成功
+    needs_accessible_name: false
+  - step_type: assert
+    description: '5.'
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 标签页恢复为关闭前的状态
+    needs_accessible_name: false
+- id: case_1593243
+  name: 关闭应用自动保存现场_根源文件删除
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 关闭应用自动保存现场_根源文件删除
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 使用文本编辑器打开文档A 和 文档B
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 文档A 不做编辑 ， 文档B做修改编辑
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 将文档A 和 文档B 删除
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 关闭文本编辑器的应用后再次打开应用
+    needs_accessible_name: false
+  - step_type: assert
+    description: '1.'
+    needs_accessible_name: false
+  - step_type: assert
+    description: '2.'
+    needs_accessible_name: false
+  - step_type: assert
+    description: '3.'
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 1040阶段（根源文件被删除后，均不保留现场）
+    needs_accessible_name: false
+- id: case_1593237
+  name: 打印预览2.0接口_存为PDF
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 打印预览2.0接口_存为PDF
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 打开文本编辑器应用
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 主菜单/快捷键Ctrl+P 调用打印
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 切换“打印机”子菜单为“存为PDF”，进行保存
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 若修改当前文件（文档名前*显示），打印时选择“存为PDF”，进行保存
+    needs_accessible_name: false
+  - step_type: assert
+    description: '1.'
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 显示打印预览2.0的接口
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 默认当前文件名+后缀名.pdf
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 默认当前文件名+后缀名.pdf
+    needs_accessible_name: false
+- id: case_1593219
+  name: 【快捷键优化】“重做”快捷键恢复为“Ctrl+Y”
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 【快捷键优化】“重做”快捷键恢复为“Ctrl+Y”
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 打开文本编辑器，任意操作，如删除一行文字
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 撤销（Ctrl +Z)
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 重做Ctrl+Y
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. Shift+Ctrl+? 调出快捷键页面
+    needs_accessible_name: false
+  - step_type: action
+    description: 5. 进入文本编辑器的设置页
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 操作成功
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 恢复Step1之前的状态
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 恢复Step2的操作结果
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 重做的快捷键为Ctrl+Y
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 重做的快捷键默认为Ctrl+Y
+    needs_accessible_name: false
+- id: case_1593181
+  name: 软件安装
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/安装/卸载/启动/关机(#114345)
+  description: 软件安装
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 手动下载软件包成功后，通过终端dpkg -i deepin-editor 进行软件安装
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 安装成功后查看软件是否显示正常，软件图标是否显示正常
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 软件安装成功后，再次用终端进行安装，查看软件是否依然能够安装成功
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 可以安装成功
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 软件显示正常，图标显示正常
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 软件再次进行安装，依然可以安装成功
+    needs_accessible_name: false
+- id: case_1593179
+  name: 软件启动
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/安装/卸载/启动/关机(#114345)
+  description: 软件启动
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 软件安装成功后，在启动器中查看是否有软件图标
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 在启动器中双击编辑器图标，查看软件显示
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 启动器中右键打开编辑器
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 在启动器中输入“编辑器”进行搜索该软件，查看是否可以搜索成功
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 启动器右键发送到dock，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 软件图标发送到dock成功后，用鼠标点击dock上的图标，查看软件显示
+    needs_accessible_name: false
+  - step_type: action
+    description: 7. 启动器右键发送到桌面，点击桌面图标打开编辑器
+    needs_accessible_name: false
+  - step_type: action
+    description: 8. 通过终端命令打开编辑器　deepin-editor
+    needs_accessible_name: false
+  - step_type: assert
+    description: 9. 在启动器中设置设置该软件为开启启动，重启PC机，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 在启动器中有安装图标
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 软件会自动启动，弹出对话框显示该软件的主界面
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 正常打开
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 可以正常搜索到该软件
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 软件图标可以正常发送到dock
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 软件会自动启动，弹出对话框显示该软件的主界面
+    needs_accessible_name: false
+  - step_type: assert
+    description: 7. 正常打开，没有报错
+    needs_accessible_name: false
+  - step_type: assert
+    description: 8. 正常打开，没有报错
+    needs_accessible_name: false
+  - step_type: assert
+    description: 9. 软件会随着系统启动而启动
+    needs_accessible_name: false
+- id: case_1593177
+  name: 软件卸载
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 软件卸载
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 软件安装成功后，在启动器中选中图标，点击右键--卸载，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 软件安装成功后，在终端中用命令将其卸载，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 软件卸载成功
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 软件卸载成功
+    needs_accessible_name: false
+- id: case_1593175
+  name: dock右键菜单
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/安装/卸载/启动/关机(#114345)
+  description: dock右键菜单
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 在启动器中将软件图标发送到dock上，在dock上右键软件图标查看系统显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 软件弹出右键菜单后，选中打开按钮，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 软件弹出右键菜单后，选中移除驻留按，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 在dock上显示软件窗口后，点击鼠标右键，查看系统显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 在系统弹出窗口后，点击关闭所有窗口，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 在系统弹出窗口后，点击所有窗口，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 7. 在系统弹出窗口后，点击驻留按钮，查看系统显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 系统会自动弹出右键菜单显示：打开、移除驻留
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 软件会自动运行
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 软件会自动在dock上移除图标
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 系统会自动弹出右键菜单，显示：编辑器、强制退出、所有窗口、移除驻留、关闭所有
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 系统会自动关闭当前所有打开的深度编辑器窗口
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 软件会列出当前所有已经打开的窗口
+    needs_accessible_name: false
+  - step_type: assert
+    description: 7. 系统会自动将当前软件图标驻留在dock上
+    needs_accessible_name: false
+- id: case_1593173
+  name: 最小化后从桌面再次打开应用
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/安装/卸载/启动/关机(#114345)
+  description: 最小化后从桌面再次打开应用
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 打开软件后，点击右上角的最小化，查看软件显示
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 软件最小化后，从桌面上双击新文件 或新文件右键菜单通过文本编辑器打开
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 软件最小化后，从桌面上双击已打开文件 或 文件右键菜单通过文本编辑器打开
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 当前窗口会自动最小化
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 软件会自动还原窗口并展示新文件窗口
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 软件会自动还原窗口
+    needs_accessible_name: false
+- id: case_1593171
+  name: 最小化后从启动器打开应用
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 最小化后从启动器打开应用
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 打开软件后，点击右上角的最小化，查看软件显示
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 软件最小化后，从启动器中点击文本编辑器打开
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 当前窗口会自动最小化
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 文本编辑器新开一窗口
+    needs_accessible_name: false
+- id: case_1593169
+  name: +标签
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: +标签
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 打开编辑器后点击顶部工具栏的+号，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 连续点击顶部工具栏的+号，查看软件显示
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 新建多个标签后，使用鼠标滚轮在标签上滚动
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 将编辑器最大化显示，然后添加满标签，再将编辑器还原，查看标签显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 在新建标签成功后，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 软件会自动新建一个标签
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 可以连续新建多个标签
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 滚动鼠标滚轮会自动切换标签显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 标签正常显示，前面会自动出现<，>
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 新建标签成功后，软件会将焦点自动切换到新标签上，且能正常看见
+    needs_accessible_name: false
+- id: case_1593099
+  name: 批量拖拽
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 批量拖拽
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 在桌面/文管窗口任意选中多个文件拖动到编辑器中，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 在桌面/文管窗口拖拽一个没有文档的文件夹到编辑器中，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 在桌面/文管窗口拖拽含有文档的文件夹到编辑器中，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 软件会自动过滤非文本文件，只加载文本文件
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 软件没有任何文档加载
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 软件提示无效文件
+    needs_accessible_name: false
+- id: case_1593097
+  name: 打开无效文件
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 打开无效文件
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 将一个mp3文件拖拽到编辑器中，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 将一个mp4文件拖拽到编辑器中，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 将一个jpg文件拖拽到编辑器中，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 将一个doc文件拖拽到编辑器中，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 软件给出提示信息，无效文档
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 软件给出提示信息，无效文档
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 软件给出提示信息，无效文档
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 软件给出提示信息，无效文档
+    needs_accessible_name: false
+- id: case_1593095
+  name: 打开U盘硬盘smb文件
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 打开U盘硬盘smb文件
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 在U盘中使用编辑器打开文本文档，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 在硬盘中使用编辑器打开文本文档，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 在smb中使用编辑器打开文本文档，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 软件可以正常打开文档
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 软件可以正常打开文档
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 软件可以正常打开文档
+    needs_accessible_name: false
+- id: case_1593093
+  name: 打开GB18030编码方式文件
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 打开GB18030编码方式文件
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 打开GB18030标准样例文件，查看编码格式显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. double1,double2,double3,double4,double5,four, use1,use2,use3第一时间应被识别为GB18030
+      ；若未被识别，可手动切换为GB18030
+    needs_accessible_name: false
+- id: case_1593091
+  name: 打开.crt格式文件
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 打开.crt格式文件
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 使用文本编辑器打开minetype:application/pkix-cert+pem类型文件(.crt)
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 可以正常打开，显示正常
+    needs_accessible_name: false
+- id: case_1593089
+  name: 打开.md文本类型格式文件
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 打开.md文本类型格式文件
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 使用文本编辑器打开markdown文本类型文件(.md)
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 使用附件中的文件，搜索查看“搜索日程”
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 可以正常打开
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 显示正常无乱码
+    needs_accessible_name: false
+- id: case_1593087
+  name: 打开编码方式为BIG5格式文件
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 打开编码方式为BIG5格式文件
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 使用文本编辑器打开BIG5编码类型文件
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 可以正常打开
+    needs_accessible_name: false
+- id: case_1593085
+  name: 打开大文件_1G +
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 打开大文件_1G +
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 使用文本编辑器打开大文件(1G , 1.2G ,1.5G ... )
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 支持正常打开 ，应用不会闪退 （参考竞品机的打开情况）
+    needs_accessible_name: false
+- id: case_1593077
+  name: 设置按钮
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 设置按钮
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 在主菜单下拉列表中点击设置按钮，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 弹出设置对话框后，按ESC键，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 弹出设置对话框后，点击右上角的×按钮，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 上下滑动查看设置页面
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 软件会自动弹出设置对话框
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 设置对话框会自动消失
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 设置对话框会自动消失
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 滑块功能正常
+    needs_accessible_name: false
+- id: case_1593075
+  name: 字号大小设置
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 字号大小设置
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 打开设置窗口后，选中字体样式，任意切换字体大小，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 查看字体最大最小设置显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 字体大小切换成功，在软件中显示正确
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 字体最小设置显示为8，最大设置显示为50。默认字号12px；
+    needs_accessible_name: false
+- id: case_1593073
+  name: 键盘映射
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 键盘映射
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 在键盘映射中共有三种方式可供选择，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 选中标准模式后，查看快捷键显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 假如手动修改快捷键后，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 选中Emacs模式，查看快捷键显示
+    needs_accessible_name: false
+  - step_type: action
+    description: 5. 分别使用标准，emacs，自定义三种模式快捷键操作编辑器
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 分别是标准，emacs，自定义
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 软件会自动显示默认标准快捷键显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 软件会自动跳转到自定义模式
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 快捷键和标准模式不同，但仍然可以正常使用
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 三种模式都可以正常操作
+    needs_accessible_name: false
+- id: case_1593071
+  name: 窗口设置
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 窗口设置
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 在设置中查看软件窗口显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 将窗口设置为最大化，重启软件，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 将窗口设置为全屏，重启软件，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 将窗口设置为正常窗口，重启软件，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 默认显示为正常窗口
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 软件启动后自动最大化显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 软件启动后自动全屏显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 软件启动后自动以正常窗口显示
+    needs_accessible_name: false
+- id: case_1593069
+  name: 自动换行
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 自动换行
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 打开编辑器设置栏
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 取消勾选
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 支持勾选自动换行；（默认为勾选状态）
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 文字不会自动换行
+    needs_accessible_name: false
+- id: case_1593067
+  name: 恢复默认
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 恢复默认
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 在设置中进行任意设置，然后点击恢复默认设置，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 所有设置都被恢复成默认设置
+    needs_accessible_name: false
+- id: case_1593065
+  name: 代码折叠标志
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 代码折叠标志
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 文本编辑器的设置菜单中查看“代码折叠标志”
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 支持自动检测文件类型，根据关键字显示节点;相应的折叠显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 默认勾选
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 代码折叠标识一一对应显示正常
+    needs_accessible_name: false
+- id: case_1593063
+  name: 显示行号
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 显示行号
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 打开编辑器，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 在主菜单打开设置界面，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 在设置界面取消“显示行号”的勾选状态，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 左侧默认显示行号
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. “显示行号”默认勾选状态
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 左侧不显示行号
+    needs_accessible_name: false
+- id: case_1593061
+  name: Tab 字符宽度
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: Tab 字符宽度
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 打开编辑器设置栏查看高级设置中的”编辑“设置参数
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 调节tab字符宽度
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. Tab 字符宽度默认为4
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 1~24的范围设置成功，且正文中tab字符的宽度相适应
+    needs_accessible_name: false
+- id: case_1593059
+  name: 空白字符/制表符
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 空白字符/制表符
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 进入基础设置，查看“空白字符/制表符”的默认设置
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 勾选“空白字符/制表符”
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 勾选“空白字符/制表符”，删除空格或制表字符时
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 默认不勾选， 且文本中不会显示空白字符和制表符
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 显示文本中的空白字符和制表符
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 空白字符和制表符正确显示
+    needs_accessible_name: false
+- id: case_1593057
+  name: 窗口设置_新窗口路径
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 窗口设置_新窗口路径
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 使用文本编辑器打开一个文件，进入设置中改变窗口为最大化/全屏
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 从启动器中点击“文本编辑器”
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 从任务栏中右击文本编辑器的图标-》文本编辑器
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 从桌面上点击“文本编辑器”的快捷图标
+    needs_accessible_name: false
+  - step_type: action
+    description: 5. 从主菜单的“新窗口”
+    needs_accessible_name: false
+  - step_type: action
+    description: 6. 使用新窗口的快捷键Ctrl+N
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 正常窗口
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 新窗口的属性跟随设置显示大小
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 新窗口的属性跟随设置显示大小
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 新窗口的属性跟随设置显示大小
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 新窗口的属性跟随设置显示大小
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 新窗口的属性跟随设置显示大小
+    needs_accessible_name: false
+- id: case_1593055
+  name: Tab字符宽度_首行的显示
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: Tab字符宽度_首行的显示
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 打开文本编辑器设置不同的Tab字符宽度（重点在最小，最大值）
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 在文本编辑区键入tab 键，回车换行后继续键入tab键
+    needs_accessible_name: false
+  - step_type: assert
+    description: '1.'
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 首行和其他行都显示正常
+    needs_accessible_name: false
+- id: case_1593053
+  name: 窗口设置_关闭应用保留现场
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 窗口设置_关闭应用保留现场
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 打开文本编辑器应用
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 最大化/全屏 窗口
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 关闭应用
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 再次打开文本编辑器
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 正常窗口
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 当前窗口最大化/全屏
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 应用被关闭
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 窗口的状态跟随设置里窗口状态的参数设置
+    needs_accessible_name: false
+- id: case_1593051
+  name: 字体类型设置
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 字体类型设置
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 通过文本编辑器打开一个代码文档，进入设置窗口后，选中“字体样式”
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 切换不同的字体后检查文档窗口UI显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 字体列表正常滑动查看
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 左侧栏中（行号，书签，代码折叠标志）和正文内容均显示正常
+    needs_accessible_name: false
+- id: case_1593049
+  name: 快捷键编辑
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 快捷键编辑
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 打开文本编辑器，点击设置->快捷键->选择任意快捷键映射模式->窗口/编辑
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 点击任意快捷键输入框
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 键入符合规则的按键
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 输入的单个按键（1~10）， 如数字1
+    needs_accessible_name: false
+  - step_type: action
+    description: 5. 输入的单个按键（a~z），如字母a
+    needs_accessible_name: false
+  - step_type: action
+    description: 6. 输入的单个符号按键，如逗号
+    needs_accessible_name: false
+  - step_type: action
+    description: 7. 键入的按键和已存在的相同
+    needs_accessible_name: false
+  - step_type: action
+    description: 8. 键入4个按键（如Ctrl+Alt+Shift+K）
+    needs_accessible_name: false
+  - step_type: assert
+    description: '1.'
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 快捷键为空状态，显示文案“请输入新的快捷键”
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 直接显示为新的快捷键
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 弹出设置无效的对话框，文案提示“[Num+1]为无效快捷键，请重新设置”。“确认”后弹框消失。
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 弹出设置无效的对话框，文案提示“[A]为无效快捷键，请重新设置”。“确认”后弹框消失。
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 弹出设置无效的对话框，文案提示“[,]为无效快捷键，请重新设置”。“确认”后弹框消失。
+    needs_accessible_name: false
+  - step_type: assert
+    description: 7. 弹出快捷键设置冲突的对话框，取消/替换 按钮功能正常
+    needs_accessible_name: false
+  - step_type: assert
+    description: 8. 支持最多设置4个按键做为快捷键
+    needs_accessible_name: false
+- id: case_1593047
+  name: 快捷键编辑_小键盘
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 快捷键编辑_小键盘
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 打开文本编辑器，点击设置->快捷键->选择任意快捷键映射模式->窗口/编辑，编辑任意快捷键输入框
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. （NUMLOCK键 亮）打开小键盘时，Ctrl/Alt +小键盘上的按键组合
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. （NUMLOCK键 灯灭）关闭小键盘时，Ctrl/Alt +小键盘上的按键组合
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 快捷键输入框提示“请输入新的快捷键”
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 文本编辑器中可设置，可使用（同系统中快捷键的设置）
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 文本编辑器中可设置，可使用（同系统中快捷键的设置）
+    needs_accessible_name: false
+- id: case_1593045
+  name: 设置【快捷键】
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 设置【快捷键】
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. F1打开帮助手册
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. Ctrl+Shift+/显示快捷键预览
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 可以打开帮助手册
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 可以显示快捷键预览
+    needs_accessible_name: false
+- id: case_1593015
+  name: 文件查找【快捷键】
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 文件查找【快捷键】
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 任意打开一个TXT文件，然后按Ctrl+F键，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 弹出查询菜单后，按Ctrl+T新建标签，查看查询菜单显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 弹出查询菜单后，按Ctrl+N新建窗口，查看查询菜单显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 弹出查询窗口后，按ESC键，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 弹出查询窗口后，点击×按钮，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 弹出查询窗口后，不输入任何字符，直接点击下一个/上一个，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 7. 弹出查询窗口后，输入任意字符，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 8. 弹出查询窗口后，输入文件中含有的字符，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 9. 假如只查找到一个字符，点击下一个/上一个按钮，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 10. 假如只查找到多个字符，点击下一个按钮，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 11. 假如只查找到多个字符，点击上一个按钮，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 12. 在查询输入框中输入大写字符，小写字符，查看能否正常查询
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 软件会自动弹出查询菜单
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 软件会切换到新标签，查询菜单会自动退出
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 软件会切换到新窗口，原窗口的查询菜单依然显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 查询窗口自动退出
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 查询窗口自动退出
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 软件无任何显示，点击按钮无任何反应
+    needs_accessible_name: false
+  - step_type: assert
+    description: 7. 搜索结果为空，不显示任何数据
+    needs_accessible_name: false
+  - step_type: assert
+    description: 8. 软件会自动显示已经查找到的字符,用其他颜色进行匹配
+    needs_accessible_name: false
+  - step_type: assert
+    description: 9. 按钮没有任何效果，只会显示那一个字符
+    needs_accessible_name: false
+  - step_type: assert
+    description: 10. 软件会依次向下查询字符，查询到低后，再次点击下一个按钮，会自动跳转到第一个字符，再次循环查询
+    needs_accessible_name: false
+  - step_type: assert
+    description: 11. 软件会依次向上查询字符，查询到最开始，再次点击上一个按钮，会自动跳转到最后一个字符，再次循环查询
+    needs_accessible_name: false
+  - step_type: assert
+    description: 12. 软件会自动匹配字符大小写，都可以正常查询（实际结果请follow 需求 ）
+    needs_accessible_name: false
+- id: case_1593009
+  name: 跳转到行【快捷键】
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 跳转到行【快捷键】
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 任意打开一个TXT文件，然后按Ctrl+G键，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 弹出跳转菜单后，按ESC键，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 弹出跳转行菜单后，输入任意字符，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 打开TXT文件后，在跳转行中输入大于当前文本的行数，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 打开TXT文件后，假如当前文本只有100行，在跳转行中输入50回车，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 在跳转行中输入连续跳转多次其他的行，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 软件会自动打开跳转行菜单
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 跳转行菜单会自动退出
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 输入框只能输入数字，无法输入其他字符
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 无法输入超过当前文本的行数
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 软件会自动跳转到当前文件的第50行
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 可以正常跳转
+    needs_accessible_name: false
+- id: case_1592893
+  name: 全选复制粘贴回车交互【快捷键】
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 全选复制粘贴回车交互【快捷键】
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 打开TXT文档，按Ctrl+A，按Ctrl+C键，然后按Ctrl+V多次（3~5次）
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 按回车
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 继续按Ctrl+V
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 可以一直粘贴复制的文本
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 新建换行
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 可以粘贴成功
+    needs_accessible_name: false
+- id: case_1592885
+  name: 查找_按压enter键
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 查找_按压enter键
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 编辑器打开TXT文档，主菜单中打开查找
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 输入字符后完成后，用户按“enter” 键后
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 查找结果高亮显示，点击“上一个”、“下一个”按钮
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 点击查找输入框中的“X”
+    needs_accessible_name: false
+  - step_type: action
+    description: 5. 点击查找框的“X”按钮
+    needs_accessible_name: false
+  - step_type: action
+    description: 6. 查找框、替换框不可移动 （新增需求）
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 打开查找框，页面显示应保持不变
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 全文高亮显示匹配字符，跳转到当前光标后第一个匹配处。
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 定位至上一个或下一个结果处
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 清除当前输入文本时，不清除查找结果，当前页面保持不变
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 关闭查找框，当前页面保持不变
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. （查找框、替换框弹出时，滚动条位置上移2行；例如：原来1屏幕可以显示30行，第30行的位置会有滚动条；查找框出来后，会覆盖2行；那么在28行的位置需要有滚动条；）即页面存在滚动条，不会妨碍用户查看文档内容
+    needs_accessible_name: false
+- id: case_1592883
+  name: 新建窗口
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 新建窗口
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 点击主菜单按钮，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 在下拉菜单中点击新建窗口，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 连续点击新建窗口按钮，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 连续打开多个窗口后，关闭新建窗口，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 在新建窗口中输入任意字符，查看窗口显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 非1040--在新窗口中输入字符后，再关闭窗口，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 7. 1040阶段--在新窗口中输入字符后，再关闭窗口，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 软件会自动弹出下拉菜单
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 软件会自动弹出一个新的窗口
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 软件会自动打开多个软件窗口
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 自动关闭新开的窗口
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 可以输入任意字符
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 弹出提示保存对话框
+    needs_accessible_name: false
+  - step_type: assert
+    description: 7. 软件直接关闭，输入的内容会被保存，下次打开编辑器时内容会还原
+    needs_accessible_name: false
+- id: case_1592881
+  name: 新建标签
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 新建标签
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 在主菜单中点击新建标签，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 连续点击新建标签按钮，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 打开多个标签后，点击标签的关闭按钮，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 打开新建标签后，在标签中输入任意字符，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 输入字符成功后，点击关闭标签按钮，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 点击放弃更改并退出按钮，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 7. 点击取消按钮，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 8. 点击另存为按钮，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 软件会自动在当前窗口打开新标签
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 软件会连续打开多个标签
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 软件无任何提示，直接关闭标签
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 可以输入任意字符
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 软件会弹出提示信息，放弃更改并退出，取消，另存为
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 软件不进行任何保存，直接关闭当前标签
+    needs_accessible_name: false
+  - step_type: assert
+    description: 7. 当前提示对话框自动取消
+    needs_accessible_name: false
+  - step_type: assert
+    description: 8. 软件会自动弹出文件保存对话框，可以另存文件
+    needs_accessible_name: false
+- id: case_1592879
+  name: 打开文件
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 打开文件
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 在主菜单中点击打开文件按钮，查看软件显示
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 在文件选择对话框中任意选中一个TXT文件
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 在文件选择对话框中任意选中一个TXT文件，txt文件较大有50M
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 在文件选择对话框中任意选中一个json文件
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 软件会自动弹出文件选择对话框
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 可以正常打开TXT文件
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 软件可以正常打开该文件，打开速度显示正常
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 软件可以正常打开json文件
+    needs_accessible_name: false
+- id: case_1592877
+  name: 保存
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 保存
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 任意打开一个TXT文件，然后修改数据后，点击主菜单的保存按钮，查看软件显示
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 任意新打开一个窗口或一个标签，输入字符后，点击保存按钮
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 文件会自动保存，文件保存时软件会有提示信息，文件已保存
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 软件会弹出文件保存对话框，可以将文件进行保存
+    needs_accessible_name: false
+- id: case_1592875
+  name: 另存为
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 另存为
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 打开TXT文档，然后点击主菜单--另存为按钮，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 假如另行保存的文件和其他文件重名，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 新打开一个文件或一个标签，点击主菜单--另存为按钮，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 软件会自动文件保存对话框，文件可以进行另行保存
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 软件会弹出重名提示对话框
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 软件会弹出自动保存对话框
+    needs_accessible_name: false
+- id: case_1592873
+  name: 打印
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 打印
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 打开一个TXT文档，然后点击主菜单--打印按钮，查看软件显示
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 弹出打印窗口后，按ESC键
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 弹出打印窗口后，点击×按钮，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 新建空白标签页进行编辑（此时文件名前有*），点击主菜单--打印按钮进行打印，查看返回的打印toast消息 或 进入打印管理器中查看“打印队列”里此条记录的文档列
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 本地文件进行编辑（此时文件名前有*），点击主菜单--打印按钮进行打印，查看返回的打印toast消息 或 进入打印管理器中查看“打印队列”里此条记录文档列
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 软件会自动弹出打印窗口（预览内容显示正常，默认当前打印机）
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 打印窗口消失
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 打印窗口自动消失
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 显示当前打印的文档名（无*）
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 显示当前打印的文档名（无*）
+    needs_accessible_name: false
+- id: case_1592871
+  name: 切换主题
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 切换主题
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 打开编辑器后，点击主菜单--主题按钮，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 在主题列表中任意点击其他主题，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 在主题列表中来回切换，查看主题显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 软件会自动弹出侧边栏，显示主题列表
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 当前软件会随着主题的切换变化而变化
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 可以来回切换主题，主题切换正常
+    needs_accessible_name: false
+- id: case_1592869
+  name: 帮助
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 帮助
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 在设置下拉列表中点击帮助按钮，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 打开深度编辑器，按F1,查看软件显示
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 核对中、英文下，文本编辑器帮助手册的文案
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 软件会自动弹出该软件的帮助文档
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 软件会自动弹出该软件的帮助文档
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 正常显示文本编辑器相关功能介绍和对应截图无异常
+    needs_accessible_name: false
+- id: case_1592867
+  name: “关于”弹窗
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: “关于”弹窗
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 打开文本编辑器，主菜单中选择“关于”
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 用鼠标移动“关于”弹窗
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. “关于”弹窗出现时，按ESC键
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 点击“关于”窗口外区域使焦点移出“关于”弹窗后， 点击任务栏上的文本编辑器图标观察
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 弹出“关于”弹窗
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. “关于”弹窗跟随鼠标移动
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. “关于”弹窗会自动关闭
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 文本编辑器窗口和“关于”弹窗同时隐藏和显示
+    needs_accessible_name: false
+- id: case_1592865
+  name: 退出
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/冒烟测试(#132443)
+  description: 退出
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 点击右上角的设置－退出按钮，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 打开软件后，按Alt+F4键，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 软件会自动退出
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 软件会自动退出当前窗口
+    needs_accessible_name: false
+- id: case_1592863
+  name: 最大最小关闭
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 最大最小关闭
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 打开软件后，点击右上角的最小化，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 软件最小化后，在dock上点击深度编辑器，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 打开软件，点击最大化按钮，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 软件最大化后，再点击顶部按钮向下拖拽，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 手动修改对话框的大小，然后重启软件，查看软件窗口大小
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 打开软件，点击右上角的关闭按钮，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 当前窗口会自动最小化
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 软件会自动还原窗口
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 当前窗口会自动最大化显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 软件会自动还原到原来窗口大小
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 新打开的窗口是上次修改的窗口大小
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 软件会自动关闭当前窗口
+    needs_accessible_name: false
+- id: case_1592861
+  name: 替换
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 替换
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 编辑器打开一个txt文档，主菜单中选择“替换”
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 输入字符后完成后，点击替换
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 点击跳过
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 剩余替换
+    needs_accessible_name: false
+  - step_type: action
+    description: 5. 全部替换
+    needs_accessible_name: false
+  - step_type: action
+    description: 6. 点击输入框中的“X”
+    needs_accessible_name: false
+  - step_type: action
+    description: 7. 点击替换框的“X”按钮，
+    needs_accessible_name: false
+  - step_type: action
+    description: 8. 替换框（新增需求）
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 弹出替换框
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 仅替换当前第一条，且替换结果不再高亮显示；
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 显示下一条替换结果；
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 替换当前光标所处文本后剩余查找结果；
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 替换全部查找结果；
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 清除当前输入文本；
+    needs_accessible_name: false
+  - step_type: assert
+    description: 7. 关闭替换框；
+    needs_accessible_name: false
+  - step_type: assert
+    description: 8. 不可以在整个屏幕内移动。
+    needs_accessible_name: false
+- id: case_1592855
+  name: 查找_不按压enter键
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 查找_不按压enter键
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 编辑器打开TXT文档，主菜单中打开查找
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 输入字符后，直接点击“上一个”、"下一个"按钮
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 打开查找框，页面显示应保持不变
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 不会全文高亮匹配字符，仅仅跳转到当前光标后第一个匹配处
+    needs_accessible_name: false
+- id: case_1592853
+  name: 查找_更换查找词
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/主菜单(#114347)
+  description: 查找_更换查找词
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 编辑器打开TXT文档，主菜单中打开查找
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 输入字符后完成后，用户按“enter” 键后
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 查找结果高亮显示，点击“上一个”、“下一个”按钮
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 点击查找输入框中的“X”
+    needs_accessible_name: false
+  - step_type: action
+    description: 5. 输入新的查找词，点击“上一个”、“下一个”按钮
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 再次点检查找输入框中的“X”
+    needs_accessible_name: false
+  - step_type: action
+    description: 7. 输入新的查找词，按压enter键
+    needs_accessible_name: false
+  - step_type: action
+    description: 8. 点击“上一个”、“下一个”按钮
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 打开查找框，页面显示应保持不变
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 全文高亮显示匹配字符，跳转到当前光标后第一个匹配处。
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 定位至上一个或下一个结果处
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 清除当前输入文本时，不清除查找结果，当前页面保持不变
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 跳转到当前光标后第一个新的查找词的匹配处（未有高亮匹配显示）
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 清除当前输入文本时，不清除查找结果，当前页面保持不变
+    needs_accessible_name: false
+  - step_type: assert
+    description: 7. 全文高亮显示匹配字符，跳转到当前光标后第一个匹配处。
+    needs_accessible_name: false
+  - step_type: assert
+    description: 8. 定位至上一个或下一个结果处
+    needs_accessible_name: false
+- id: case_1592845
+  name: 语法高亮
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 语法高亮
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 支持下列编程语言预设易分辨的色彩文本：Bat，C#，C++，CSS，HTML，Ini，Java，JavaScript，JSP，Markdown，Pascal
+      (Delphi)，Perl，PerlScript，PHP，Python，Ruby，SQL，TeX (LaTeX)，VBScript，WindowsScript，x86
+      Assembler，XML等
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 根据代码语法自动根据主题配色展示：ASP 标记 (<% ... %>) 以及标准脚本标记的文本会根据其脚本语言所指定的语言属性(JavaScript，VBScript
+      或 PerlScript)来格式；
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 滚动查看文本中的代码
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 放大缩小全屏切换的过程中查看代码高亮的显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 将代码文件的tab页拖拽窗口生成的新窗口中查看代码高亮度显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 将代码文件的tab页拖拽窗口合并窗口中查看代码高亮度显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 7. 从大窗口下拖拽出来生成的新窗口中查看代码高亮度显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 各编码预言的代码文本内容中显示正确的高亮颜色
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 不同主题下，高亮的代码显示正常
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 语法高亮的显示正常
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 代码高亮显示正常
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 代码高亮显示正常
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 代码高亮显示正常
+    needs_accessible_name: false
+  - step_type: assert
+    description: 7. 代码高亮显示正常
+    needs_accessible_name: false
+- id: case_1592835
+  name: 输入内容
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 输入内容
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 打开用文本编辑器
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 英文下通过键盘键入
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 中文下通过键盘键入
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 默认新开一空白文档
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 键入英文字符正常
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 若支持输入预览则输入预览中的文字显示正常，中文输入正常
+    needs_accessible_name: false
+- id: case_1592833
+  name: 大文件加载过程中“编码方式”和“文本类型”按钮
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 大文件加载过程中“编码方式”和“文本类型”按钮
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 打开一个大文件
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 加载的过程中查看底栏
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 加载完成后查看底栏
+    needs_accessible_name: false
+  - step_type: assert
+    description: '1.'
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. “编码方式”和“文本类型”按钮置灰，无法点击
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. “编码方式”和“文本类型”按钮恢复正常，可以被点击
+    needs_accessible_name: false
+- id: case_1592831
+  name: 文件内容_输入特殊字符
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 文件内容_输入特殊字符
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 打开文本编辑器
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 按压键盘输入特殊字符:shift,Ctrl,Caps lock
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 默认新开一个空白窗口，标签页文件名无*显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 不会键入字符，且标签页文件名无*显示
+    needs_accessible_name: false
+- id: case_1592827
+  name: 支持换行符：linux、Windows、Mac OS
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 支持换行符：linux、Windows、Mac OS
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 在文本编辑器窗口中输入内容后保存,在触发保存对话框点击"换行符"
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 选择"Linux"进行保存,再次打开做行号的检查
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 选择"Windows"进行保存
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 选择"Mac Os"进行保存
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 子菜单列表"Linux ,Windows,Mac Os"
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 行数自动加1
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 保存成功
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 保存成功
+    needs_accessible_name: false
+- id: case_1592813
+  name: 标签管理_异常保存_切换编码
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 标签管理_异常保存_切换编码
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 文本文件被修改后，点击右下角的切换编码
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 文本文件被修改后，关闭应用后重新打开，点击右下角的切换编码
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. “取消” 后弹框消失；
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. “保存”则会把修改的内容先保存，再展示保存后的内容以及新编码下的内容，同时标签页的*消失， 点击标签页进行关闭时，可直接关闭
+      。
+    needs_accessible_name: false
+- id: case_1592811
+  name: 切换编码_数据错误
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 切换编码_数据错误
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 拖拽一个文件到编辑器，点击右下角的切换编码，会导致数据错误时
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 点击取消
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 点击继续，强制使用此编码
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 会出现如下提示：
+    needs_accessible_name: false
+  - step_type: assert
+    description: 使用此编码加载文件出错，如果强制使用，可能会导致文件内容发生改变。
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 提示弹框消失，不进行编码的切换
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 编码显示为切换的编码方式，可能会导致文件内容发生改变。
+    needs_accessible_name: false
+- id: case_1592809
+  name: 大文件复制粘帖
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 大文件复制粘帖
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 通过文本编辑器打开一个大文件（如，100M.txt）
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 对内容进行全选->复制->粘帖（多次）
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 对内容进行全选后，复制->粘贴（多次）
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 完全加载
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 2-1： 粘帖正常 ；
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2-2： （受限于不同的硬件配置）当系统可用内存无法完成复制时，toast提示语： “！内存不足，复制失败”，不会造成文本编辑器或者系统的运行异常
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 无卡死，闪退等异常现象
+    needs_accessible_name: false
+- id: case_1592807
+  name: 文件内容_Insert覆盖输入
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 文件内容_Insert覆盖输入
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 通过文本编辑器打开一个文档
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 按压键盘上的Insert按键
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 按压键盘输入内容（覆盖小键盘区）
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 再次按压键盘的Insert按键
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 底栏上默认“插入”模式
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 底栏上切换为“覆盖”模式， 光标也切换为覆盖模式
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 光标上的内容被覆盖
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 切回“插入”模式
+    needs_accessible_name: false
+- id: case_1592799
+  name: 休眠、待机、锁屏不需要阻止框
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/安装/卸载/启动/关机(#114345)
+  description: 休眠、待机、锁屏不需要阻止框
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 打开编辑器，新建TXT文档，输入任意字符，不保存的情况下进入休眠、待机、锁屏
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 打开电脑，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 不弹出阻止框，直接进入休眠、待机、锁屏模式
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 软件保留原有状态
+    needs_accessible_name: false
+- id: case_1592797
+  name: 关机、重启、注销弹出阻止框
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/安装/卸载/启动/关机(#114345)
+  description: 关机、重启、注销弹出阻止框
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 打开编辑器，新建TXT文档，输入任意字符，不保存的情况下直接关机、重启、注销
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 弹出阻止框，阻止关机、重启、注销
+    needs_accessible_name: false
+- id: case_1592791
+  name: 未保存时关闭标签
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 未保存时关闭标签
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 编辑器任意打开一个文档，然后添加一些文字，关闭标签（或窗口）
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 选中对话框中的”取消“
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 选中对话框中的”不保存“
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 选中对话框中的”保存“
+    needs_accessible_name: false
+  - step_type: action
+    description: 5. 按ESC键
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 软件会弹出保存提示对话框“您是否要保存此文件？）
+    needs_accessible_name: false
+  - step_type: assert
+    description: （1040后新增加自动保存现场的需求，故1040后关闭窗口不会提示对话框）
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 保存提示对话框消失
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 此文档不保存关闭
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 保存后关闭
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 保存提示对话框消失
+    needs_accessible_name: false
+- id: case_1592787
+  name: 文本编辑器重新载入被其他应用修改的根源文件
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 文本编辑器重新载入被其他应用修改的根源文件
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 通过文本编辑器打开一个文档A
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 再通过另一个应用（例如kwrite）打开同样的这个文档A ，并对内容进行修改编辑后完成保存
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 点击文本编辑器窗口，触发对话框“磁盘中的原文件已被修改，是否重新载入？”
+    needs_accessible_name: false
+  - step_type: action
+    description: 3-1：选择“重新载入”
+    needs_accessible_name: false
+  - step_type: action
+    description: '3-2:  选择关闭按钮'
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 文本编辑器窗口显示文档A
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 另一个应用对更新后的文档A成功保存
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 3-1.”重新载入“后文本编辑器窗口显示的是步骤2中另一应用修改后的内容，继续点击文档A的标签页中的关闭按钮可以直接关闭
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3-2.“关闭”后弹框消失，当前标签页文件名前无*出现，此时继续点击当前标签页关闭时可以直接关闭
+    needs_accessible_name: false
+- id: case_1592779
+  name: “保存”一个有存储权限的网络文件
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: “保存”一个有存储权限的网络文件
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 使用文本编辑器打开smb文件夹中A的文件进行编辑
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 主菜单中保存/快捷键（Ctrl+S)
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 文本编辑器窗口中实时显示修改的内容
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. toast保存成功
+    needs_accessible_name: false
+- id: case_1592759
+  name: 语音朗读
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 语音朗读
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 选择一段文字，点击右键，查看右键菜单
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 点击“右键菜单”
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 未选中任何文字，点击右键，查看右键菜单
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 在设置中关闭语音朗读功能，编辑器选中一段文字右键，查看右键菜单
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 右键菜单中有语音朗读功能
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 语音播报选中部分文字
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. “语音朗读”功能置灰处理，无法使用
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 语音朗读功能置灰处理，无法使用
+    needs_accessible_name: false
+- id: case_1592757
+  name: 语音听写
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 语音听写
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 点击右键菜单，查看软件显示
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 点击“语音听写”菜单，用户通过麦克风语音输入
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 在设置中关闭语音听写功能，在编辑器中右击，查看右键菜单
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 右键菜单中有语音听写功能
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 语音转译文字被编辑在文档中
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 语音听写功能无法使用，并置灰
+    needs_accessible_name: false
+- id: case_1592749
+  name: 全选
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 全选
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 在新打开一个窗口中，点击右键，查看右键菜单显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 在新窗口中输入任意字符，点击右键，查看右键菜单显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 打开一个有字符的文档，点击右键，查看右键菜单
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 在有字符的文档中点击右键--全选按钮，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 右键菜单中没有全选按钮
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 右键菜单会显示出全选按钮
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 右键菜单会显示全选按钮
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 当前文档中所有的内容都会被选中，选中的文字可以进行复制或剪切
+    needs_accessible_name: false
+- id: case_1592743
+  name: 跳到行
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 跳到行
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 在新打开一个窗口中，点击右键，查看右键菜单显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 在新窗口中输入任意字符，点击右键，查看右键菜单显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 打开一个有字符的文档，点击右键，查看右键菜单
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 在有字符的文档中点击右键--跳到行按钮，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 右键菜单中没有跳到行按钮
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 右键菜单会显示出跳到行按钮
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 右键菜单会显示跳到行按钮
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 软件会自动弹出跳到行菜单，可以正确的进行行跳转
+    needs_accessible_name: false
+- id: case_1592739
+  name: 重做
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 重做
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 在新打开一个窗口中，点击右键，查看右键菜单显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 在新窗口中输入任意字符，点击右键，查看右键菜单显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 打开一个有字符的文档，点击右键，查看右键菜单
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 打开一个有字符的文档，在文档中新增字符然后撤销，点击右键，查看右键菜单
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 打开一个有字符的文档新增字符后撤销，点击右键菜单--重做按钮，查看右键菜单
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 右键菜单中没有重做按钮
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 右键菜单没有重做按钮
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 文档不进行任何操作是没有撤销按钮显示的，只有先进行撤销操作后，才会出现重做
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 右键菜单会显示出重做按钮
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 软件会自动还原撤销操作，返回到最新操作
+    needs_accessible_name: false
+- id: case_1592731
+  name: 转换大写
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 转换大写
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 在新打开一个窗口中，点击右键，查看右键菜单显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 打开TXT文档，点击右键，查看右键菜单显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 打开TXT文档，用鼠标左键框选字符，点击右键查看右键菜单显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 打开TXT文档，在字符上点击鼠标右键，查看右键菜单显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 假如选中的都是汉字，点击右键菜单--切换大写，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 假如选中的含有英文字符，点击右键菜单--切换大写，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 右键菜单中没有切换大写按钮
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 右键菜单没有切换大写按钮
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 选中字符后，右键菜单会有切换大写按钮显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 右键菜单会有切换大写按钮显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 汉字内容没有任何变化显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 软件会自动将选中的英文字符切换成大写
+    needs_accessible_name: false
+- id: case_1592729
+  name: 转换小写
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 转换小写
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 在新打开一个窗口中，点击右键，查看右键菜单显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 打开TXT文档，点击右键，查看右键菜单显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 打开TXT文档，用鼠标左键框选字符，点击右键查看右键菜单显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 打开TXT文档，在字符上点击鼠标右键，查看右键菜单显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 假如选中的都是汉字，点击右键菜单--切换小写，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 假如选中的含有英文字符，点击右键菜单--切换小写，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 右键菜单中没有切换小写按钮
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 右键菜单没有切换小写按钮
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 选中字符后，右键菜单会有切换小写按钮显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 右键菜单会有切换小写按钮显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 汉字内容没有任何变化显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 软件会自动将选中的英文字符切换成小写
+    needs_accessible_name: false
+- id: case_1592727
+  name: 首字母大写
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 首字母大写
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 在新打开一个窗口中，点击右键，查看右键菜单显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 打开TXT文档，点击右键，查看右键菜单显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 打开TXT文档，用鼠标左键框选字符，点击右键查看右键菜单显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 打开TXT文档，在字符上点击鼠标右键，查看右键菜单显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 假如选中的都是汉字，点击右键菜单--首字母大写，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 假如选中的含有英文字符，点击右键菜单--首字母大写，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 右键菜单中没有首字母大写按钮
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 右键菜单没有首字母大写按钮
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 选中字符后，右键菜单会有首字母大写按钮显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 右键菜单会有首字母大写按钮显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 汉字内容没有任何变化显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 软件会自动将选中的英文字符首字母切换成大写
+    needs_accessible_name: false
+- id: case_1592725
+  name: 标签栏的右键菜单
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 标签栏的右键菜单
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 软件打开多个标签后，任意选中一个标签，点击右键
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 在右键菜单中点击关闭标签，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 在右键菜单中点击关闭其他标签，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 假如当前只有一个标签，查看右键菜单显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 软件自动弹出右键菜单显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 软件会自动关闭当前标签页
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 软件会只留当前标签，关闭其他标签
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. “关闭其他标签” & ”更多关闭方式“置灰
+    needs_accessible_name: false
+- id: case_1592721
+  name: 有左右标签时查看“更多关闭方式”
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 有左右标签时查看“更多关闭方式”
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 打开编辑器，新建/打开至少3个标签页
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 点击有左右标签的标签页，查看右键菜单中的“更多关闭方式”
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 点击“关闭左侧所有标签页”
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 点击“关闭右侧所有标签页”
+    needs_accessible_name: false
+  - step_type: action
+    description: 5. 点击“关闭所有未修改标签页”
+    needs_accessible_name: false
+  - step_type: assert
+    description: '1.'
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 文案“关闭左侧所有标签页”
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2-2.文案“关闭右侧所有标签页”
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2-3.文案“关闭所有未修改标签页”
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 关闭当前标签页左侧的所有文件
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 关闭当前标签页右侧的所有文件
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 关闭所有未修改的文件
+    needs_accessible_name: false
+- id: case_1592711
+  name: 颜色标记_清除所有标记
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 颜色标记_清除所有标记
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 打开编辑器，新建或打开txt文档
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 选中未有颜色标记的文字区域，右键查看菜单栏
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 选中右键菜单项中的“添加标记”
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 继续选中右键菜单项中的“清除所有标记”
+    needs_accessible_name: false
+  - step_type: assert
+    description: '1.'
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 添加标记、清除标记、标记所有
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 颜色标记成功
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 当前所有颜色标记均被清除
+    needs_accessible_name: false
+- id: case_1592701
+  name: 展开所有层次
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 展开所有层次
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 文本编辑器新建/打开含有可折叠的函数的源代码文档
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 移动光标位于多层函数的节点“+”所在行区域，右键菜单中选择“展开所有层次”
+    needs_accessible_name: false
+  - step_type: assert
+    description: '1.'
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 将所有层次进行展开
+    needs_accessible_name: false
+- id: case_1592699
+  name: 添加书签
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 添加书签
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 打开一个TXT文档，鼠标右键，查看右键菜单
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 点击右键菜单“添加书签”
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 关闭当前文档的标签页后重新打开
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 右键菜单显示“添加书签”
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 光标所在行添加书签
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 添加的书签仍然有效
+    needs_accessible_name: false
+- id: case_1592693
+  name: 上一个书签/下一个书签
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 上一个书签/下一个书签
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 文档上未设置任何书签，鼠标右键，查看右键菜单
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 光标定位在已设置书签的行，右键菜单“上一个书签”
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 光标定位在已设置书签的行，右键菜单“下一个书签”
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 右键菜单“上一个书签/下一个书签”置灰
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 光标切换到上一个书签的位置
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 光标切换到下一个书签的位置
+    needs_accessible_name: false
+- id: case_1592685
+  name: 不同源代码文件注释
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 不同源代码文件注释
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 打开C、C++、java源文件，光标定位在任意一行，右键“添加注释”
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 打开C、C++、java源文件，选中一段字符，右键“添加注释”
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 打开Python源文件，光标定位在任意一行，右键“添加注释”
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 对光标所在行使用“//”注释
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 对选中文字使用“/* */”注释
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 对光标所在行使用“#”注释（Python不支持对一段字符进行注释）
+    needs_accessible_name: false
+- id: case_1592681
+  name: 列编辑操作 (SP3)
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 列编辑操作 (SP3)
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 选中多列后，输入任意字符，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 选中多列后，删除任意字符，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 选中多列后，复制任意字符，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 选中多列后，粘贴任意字符，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 选中多列后，剪切任意字符，查看软件显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 选中的多列都可以进行输入字符
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 选中的多列都可以进行删除字符
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 选中的多列都可以进行复制字符,在文中进行粘贴的内容应保留源格式，保持换行显示
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 选中的多列都需要进行粘贴字符
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 选中的多列都可以剪切输入字符,在文中进行粘贴的内容应保留源格式，保持换行显示
+    needs_accessible_name: false
+- id: case_1592679
+  name: 只读模式_切换文件属性
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 只读模式_切换文件属性
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 使用文本编辑器打开一文件
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 右击文件属性切换为只读模式
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 继续右击文件属性切换为读写模式
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 应用窗口底栏显示“插入”
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 应用窗口底栏显示“只读”，当前的右键菜单list显示正常，各种输入法下均无法输入文字
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 应用窗口底栏显示“插入”，当前的右键菜单list恢复正常，各种输入法下均可以输入文字
+    needs_accessible_name: false
+- id: case_1592677
+  name: 切换注释&撤销的交互
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 切换注释&撤销的交互
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 使用文本编辑器打开一个代码文档
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 在一行代码前“添加注释”
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 执行“取消注释”
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 执行“撤销”
+    needs_accessible_name: false
+  - step_type: action
+    description: 5. 再次“撤销”
+    needs_accessible_name: false
+  - step_type: action
+    description: 6. 选择一段内容进行“添加注释”
+    needs_accessible_name: false
+  - step_type: action
+    description: 7. 执行“撤销”
+    needs_accessible_name: false
+  - step_type: assert
+    description: '1.'
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 添加注释成功
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 已添加的注释取消成功
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 撤销step3,即恢复到添加注释的情景
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 撤销step2,即恢复到无注释添加的情景
+    needs_accessible_name: false
+  - step_type: assert
+    description: 6. 块注释成功
+    needs_accessible_name: false
+  - step_type: assert
+    description: 7. 撤销step6,即恢复到无注释的情景
+    needs_accessible_name: false
+- id: case_1592675
+  name: 只读模式_关闭应用后切换文件属性
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 只读模式_关闭应用后切换文件属性
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 通过文本编辑器打开一个文档A
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 点击文本编辑器窗口右上角的X按钮关闭应用
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 右击文件属性，权限管理切换“所有者”为只读
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 再次打开此文档A，观察底栏
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 文档A在文本编辑器窗口显示正常，底栏中显示为“插入”
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 正常关闭应用
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 文件图标上有上锁的图标
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 底栏中显示为“只读”
+    needs_accessible_name: false
+- id: case_1592669
+  name: 列编辑操作_Delete键删除
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 列编辑操作_Delete键删除
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 使用Alt+鼠标选中多列，仅选中多列的光标后，按压Delete
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 使用Alt+鼠标选中多列， 包括整列的字符和光标均被选中，按压Delete
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 光标后的字符被整列删除
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 整列的字符被删除，再次按压Detele才是光标后的字符被整列删除
+    needs_accessible_name: false
+- id: case_1592665
+  name: 切换大小写&撤销的交互
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 切换大小写&撤销的交互
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 在文本内容中选中某段文字进行大小写切换
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 撤销
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 大小写切换成功，文本内容被修改（文件名前显示*）
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 可用通过“撤销”恢复上级操作
+    needs_accessible_name: false
+- id: case_1592645
+  name: 只读模式_全选复制
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 只读模式_全选复制
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 非空文档中，开启只读模式后，右键菜单点击“全选”
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 继续右键菜单中点击“复制”
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 文中所有字符都被选中
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 可以把选中的内容粘帖到其他可编辑区
+    needs_accessible_name: false
+- id: case_1592641
+  name: 颜色标记的&quot;标记所有”后继续“添加标记”
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 颜色标记的&quot;标记所有”后继续“添加标记”
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 通过文本编辑器打开一个文档
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 当光标在任意行，右键菜单栏选择“颜色标记”的“标记所有”->  后继续对某些文字进行“添加标记”
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 当选择一段文字，右键菜单栏选择“颜色标记”的“标记所有”->  继续从上个查找标记的结果中选择部分文字->进行“添加标记”
+    needs_accessible_name: false
+  - step_type: assert
+    description: '1.'
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 后操作的颜色会覆盖在之前的操作之上
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 后操作的颜色会覆盖在之前的操作之上
+    needs_accessible_name: false
+- id: case_1592637
+  name: 替换_查询结果包含大小写
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 替换_查询结果包含大小写
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 通过文本编辑器打开一个文档，右键菜单中选择替换框
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 查找输入框中输入一个文中存在的查找词 A， “替换为”对话框中任意输入
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 点击替换（根据查询结果做多次替换）
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 点击剩余替换
+    needs_accessible_name: false
+  - step_type: action
+    description: 5. 点击全部替换
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 替换框出现
+    needs_accessible_name: false
+  - step_type: assert
+    description: '2.'
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 替换操作会根据查找词进去替换（区分大小写）
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 替换当前光标所处文本后剩余查找结果（区分大小写）
+    needs_accessible_name: false
+  - step_type: assert
+    description: 5. 替换全部查找结果（区分大小写）
+    needs_accessible_name: false
+- id: case_1592627
+  name: 列编辑交互颜色标记
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/工作区(#114343)
+  description: 列编辑交互颜色标记
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 在任意行用ALT+鼠标点选多行切换列编辑模式，右键'“颜色标记”进行“添加标记”
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 清除颜色标记后，再次进去列编辑模式，通过快捷键Ctrl+F6进行颜色标记
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 列编辑中的内容均可被标记
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 列编辑中的内容均可被标记
+    needs_accessible_name: false
+- id: case_1592617
+  name: 一指双击
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/硬件交互(#114353)
+  description: 一指双击
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 在文本管理器页面中通过触控板上使用一指手势移动光标至任意文字行，双击
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 在文件列表中通过触控板上使用一指手势双击文件
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 选中当前行的全部内容
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 可调用文本编辑器打开该文件
+    needs_accessible_name: false
+- id: case_1592615
+  name: 二指滚动
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/硬件交互(#114353)
+  description: 二指滚动
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 在文档视图界面，“自然滚动”选项关闭，二指向上移动
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. “自然滚动”选项打开，二指向上移动
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. “自然滚动”选项关闭，二指向下移动
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. “自然滚动”选项打开，二指向下移动
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. “自然滚动”选项关闭，二指向上移动对应的操作是“屏幕向上滚动”
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. “自然滚动”选项打开，二指向上移动对应的事件就是“屏幕向下滚动”
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. “自然滚动”选项关闭，二指向下移动对应的操作是“屏幕向下滚动”
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. “自然滚动”选项打开，二指向下移动对应的事件就是“屏幕向上滚动”
+    needs_accessible_name: false
+- id: case_1592589
+  name: 上下滑动
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/硬件交互(#114353)
+  description: 上下滑动
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 文档主视图界面（出现滚动条），上下滑动屏幕
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 内容可以滚动查看文档内容
+    needs_accessible_name: false
+- id: case_1592587
+  name: 左右滑动
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/硬件交互(#114353)
+  description: 左右滑动
+  status: active
+  reason: ''
+  steps:
+  - step_type: assert
+    description: 1. 文档主视图界面，左右滑动屏幕（出现滚动条）
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 内容可以滚动查看文档内容
+    needs_accessible_name: false
+- id: case_1592573
+  name: 主菜单，子菜单中的键盘交互
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/硬件交互(#114353)
+  description: 主菜单，子菜单中的键盘交互
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 光标在标题栏时，使用键盘上的Tab键切换至主菜单图标，按下“回车键”
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 在主菜单列表，使用“↑”、“↓”、“←”、“→”方向键
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 在高亮的列表中使用“回车键”
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 按“ESC键”
+    needs_accessible_name: false
+  - step_type: assert
+    description: 1. 展示主菜单列表
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 使用“↑”、“↓”方向键在条目中选择，“←”、“→”方向键进行“收起”、“展开”子菜单动作
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 执行选中的按钮
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 退出菜单
+    needs_accessible_name: false
+- id: case_1592559
+  name: 编码方式菜单调整_高分屏
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/硬件交互(#114353)
+  description: 编码方式菜单调整_高分屏
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 高分屏下，切换屏幕缩放比率
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 查看各个缩放比率下，编码及其二级菜单
+    needs_accessible_name: false
+  - step_type: assert
+    description: '1.'
+    needs_accessible_name: false
+  - step_type: assert
+    description: 2. 各个缩放比率下，编码及其二级菜单显示正常
+    needs_accessible_name: false
+  - step_type: assert
+    description: （注：中文、英文、繁体中文下均关注测试）
+    needs_accessible_name: false
+- id: case_1592557
+  name: 高分屏_拖拽标签页
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文本编辑器/硬件交互(#114353)
+  description: 高分屏_拖拽标签页
+  status: active
+  reason: ''
+  steps:
+  - step_type: action
+    description: 1. 打开文本编辑器，默认新开一个空白标签页（窗口1）
+    needs_accessible_name: false
+  - step_type: action
+    description: 2. 再开新窗口（窗口2），打开文档A进行编辑 ，打开文档B
+    needs_accessible_name: false
+  - step_type: action
+    description: 3. 将窗口1中的唯一的一个标签页拖拽合并到窗口2中
+    needs_accessible_name: false
+  - step_type: action
+    description: 4. 再将窗口2中的任意标签页拖拽出来，生成新窗口
+    needs_accessible_name: false
+  - step_type: assert
+    description: '1.'
+    needs_accessible_name: false
+  - step_type: assert
+    description: '2.'
+    needs_accessible_name: false
+  - step_type: assert
+    description: 3. 每个缩放比下，拖拽过程中表现正常，合并成功
+    needs_accessible_name: false
+  - step_type: assert
+    description: 4. 每个缩放比下，拖拽过程中表现正常，拆分成功
+    needs_accessible_name: false

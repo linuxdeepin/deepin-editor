@@ -1,0 +1,14 @@
+[main]
+host = https://www.transifex.com
+
+[o:linuxdeepin:p:deepin-editor:r:001e990346e6744130b689aaa0183033]
+file_filter = translations/deepin-editor_<lang>.ts
+source_file = translations/deepin-editor.ts
+source_lang = en
+type = QT
+
+[o:linuxdeepin:p:deepin-editor:r:74b610614fbfb3df259b3dc97b989c00]
+file_filter = translations/desktop/desktop_<lang>.ts
+source_file = translations/desktop/desktop.ts
+source_lang = en
+type = QT
