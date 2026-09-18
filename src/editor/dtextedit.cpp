@@ -3832,6 +3832,12 @@ void TextEdit::moveText(int from, int to, const QString &text, bool copy)
         }
         list->appendCom(insertCommand);
         m_pUndoStack->push(list);
+    } else {
+        delete list;
+        delete insertCommand;
+        if (delCommand) {
+            delete delCommand;
+        }
     }
     qDebug() << "Moving text completed";
 }
