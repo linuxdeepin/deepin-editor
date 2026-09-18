@@ -218,6 +218,7 @@ Window::Window(DMainWindow *parent)
       m_titlebarStyleSheet(titlebar()->styleSheet()),
       m_themePath(Settings::instance()->settings->option("advance.editor.theme")->value().toString())
 {
+    setAttribute(Qt::WA_TranslucentBackground);
     qDebug() << "Window constructor called";
     m_tabbar->setObjectName("Tabbar");
     m_tabbar->setAccessibleName("Tabbar");
