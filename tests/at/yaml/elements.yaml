@@ -1,0 +1,7 @@
+elements:
+  PToolButton:
+    accessible_id: PToolButton
+  PActUtf8:
+    accessible_id: PActUtf8
+  PTextEdit:
+    accessible_id: PTextEdit
