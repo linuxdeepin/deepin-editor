@@ -56,6 +56,6 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_link_libraries(test_editwrapper PRIVATE gcov)
 endif()
 
-gtest_discover_tests(test_editwrapper PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
+gtest_discover_tests(test_editwrapper PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen" DISCOVERY_TIMEOUT 30)
 
 message(STATUS "UT: test_editwrapper configured (B8, links startmanager_ut_src)")

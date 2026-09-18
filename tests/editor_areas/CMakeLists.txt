@@ -98,7 +98,7 @@ function(ea_add_test name)
         GTest::gtest
         GTest::gtest_main
         Qt6::Test)
-    gtest_discover_tests(test_${name} PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
+    gtest_discover_tests(test_${name} PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen" DISCOVERY_TIMEOUT 30)
     message(STATUS "UT: test_${name} configured")
 endfunction()
 

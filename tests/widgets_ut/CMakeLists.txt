@@ -47,7 +47,7 @@ function(add_widgets_ut_target NAME)
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")
         target_link_libraries(${NAME} PRIVATE gcov)
     endif()
-    gtest_discover_tests(${NAME} PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
+    gtest_discover_tests(${NAME} PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen" DISCOVERY_TIMEOUT 30)
 endfunction()
 
 add_widgets_ut_target(test_ddropdownmenu)

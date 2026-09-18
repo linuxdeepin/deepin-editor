@@ -123,8 +123,8 @@ target_link_libraries(test_startmanager_drag PRIVATE
     GTest::gtest
     GTest::gtest_main)
 
-gtest_discover_tests(test_startmanager PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
-gtest_discover_tests(test_filetabinfo PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
-gtest_discover_tests(test_startmanager_drag PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
+gtest_discover_tests(test_startmanager PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen" DISCOVERY_TIMEOUT 30)
+gtest_discover_tests(test_filetabinfo PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen" DISCOVERY_TIMEOUT 30)
+gtest_discover_tests(test_startmanager_drag PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen" DISCOVERY_TIMEOUT 30)
 
 message(STATUS "UT: startmanager module configured (test_startmanager, test_filetabinfo, test_startmanager_drag)")

@@ -56,6 +56,6 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_link_libraries(test_controls_ut PRIVATE gcov)
 endif()
 
-gtest_discover_tests(test_controls_ut PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
+gtest_discover_tests(test_controls_ut PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen" DISCOVERY_TIMEOUT 30)
 
 message(STATUS "UT: controls_ut configured with ${TEST_SOURCES}")

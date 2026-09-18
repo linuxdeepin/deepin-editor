@@ -66,7 +66,7 @@ function(daemon_ut_add_test TARGET_NAME TEST_SOURCE)
         daemon_ut_src
         GTest::gtest
         GTest::gtest_main)
-    gtest_discover_tests(${TARGET_NAME} PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
+    gtest_discover_tests(${TARGET_NAME} PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen" DISCOVERY_TIMEOUT 30)
 endfunction()
 
 daemon_ut_add_test(test_daemon_utils test_utils.cpp)

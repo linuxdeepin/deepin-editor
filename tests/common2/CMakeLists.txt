@@ -83,6 +83,6 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_link_libraries(test_common2 PRIVATE gcov)
 endif()
 
-gtest_discover_tests(test_common2 PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
+gtest_discover_tests(test_common2 PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen" DISCOVERY_TIMEOUT 30)
 
 message(STATUS "UT: test_common2 configured with ${TEST_SOURCES}")

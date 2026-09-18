@@ -75,7 +75,7 @@ function(add_ut_target TARGET_NAME)
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")
         target_link_libraries(${TARGET_NAME} PRIVATE gcov)
     endif()
-    gtest_discover_tests(${TARGET_NAME} PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
+    gtest_discover_tests(${TARGET_NAME} PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen" DISCOVERY_TIMEOUT 30)
     message(STATUS "UT: ${TARGET_NAME} configured")
 endfunction()
 

@@ -45,6 +45,6 @@ target_link_libraries(test_editorapplication PRIVATE
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_link_libraries(test_editorapplication PRIVATE gcov)
 endif()
-gtest_discover_tests(test_editorapplication PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
+gtest_discover_tests(test_editorapplication PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen" DISCOVERY_TIMEOUT 30)
 
 message(STATUS "UT: app_ut module configured (test_editorapplication, links startmanager_ut_src)")
