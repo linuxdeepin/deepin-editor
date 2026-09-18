@@ -58,7 +58,7 @@ public:
     virtual ~ParseFileEvent();
 
     // 返回此事件的克隆对象，用于下次任务。
-    ParseFileEvent *clone();
+    ParseFileEvent *clone() const;
 
     // 内部公开数据
     int             m_alreadyReadOffset = 0;    // 当前已读取文本大小
@@ -78,7 +78,7 @@ ParseFileEvent::~ParseFileEvent()
     qDebug() << "ParseFileEvent destructor";
 }
 
-ParseFileEvent *ParseFileEvent::clone()
+ParseFileEvent *ParseFileEvent::clone() const
 {
     qDebug() << "ParseFileEvent clone";
     // 创建克隆对象，复制数据(浅拷贝)
