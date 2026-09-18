@@ -85,6 +85,6 @@ void setLibNames(LoadLibNames tmp)
             free(g_ldnames.chZPDDLL);
         }
         g_ldnames.chZPDDLL = ( char*)malloc(strlen(tmp.chZPDDLL)+1);
-        strcpy(g_ldnames.chZPDDLL,tmp.chZPDDLL);
+        strncpy(g_ldnames.chZPDDLL, tmp.chZPDDLL, strlen(tmp.chZPDDLL)+1);
     }
 }
