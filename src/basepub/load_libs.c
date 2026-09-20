@@ -77,14 +77,13 @@ LoadLibs *getLoadZPDLibsInstance()
 
 void setLibNames(LoadLibNames tmp)
 {
-    if(tmp.chZPDDLL == NULL) {
+    // 重复调用或切换为 NULL 时先释放旧的分配，避免内存泄漏
+    if (g_ldnames.chZPDDLL != NULL) {
+        free(g_ldnames.chZPDDLL);
         g_ldnames.chZPDDLL = NULL;
-    } else {
-        // 重复调用时先释放旧的分配，避免内存泄漏
-        if (g_ldnames.chZPDDLL != NULL) {
-            free(g_ldnames.chZPDDLL);
-        }
-        g_ldnames.chZPDDLL = ( char*)malloc(strlen(tmp.chZPDDLL)+1);
-        strcpy(g_ldnames.chZPDDLL,tmp.chZPDDLL);
+    }
+    if (tmp.chZPDDLL != NULL) {
+        // strdup 一步完成按源串长度的分配与拷贝（含结尾 '\0'）
+        g_ldnames.chZPDDLL = strdup(tmp.chZPDDLL);
     }
 }
