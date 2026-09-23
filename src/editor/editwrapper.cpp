@@ -1008,19 +1008,26 @@ void EditWrapper::showNotify(const QString &message, bool warning)
         return;
     }
 
+    // Markdown 文件在 ReadView/LivePreview 模式下 TextEdit 被隐藏或 reparent，
+    // 浮层消息挂载到 m_pTextEdit 不可见；改用始终可见的 m_viewStack 作为目标控件
+    QWidget *target = m_pTextEdit;
+    if (m_isMarkdown && (m_viewMode == ViewMode::ReadView || m_viewMode == ViewMode::LivePreview)) {
+        target = m_viewStack;
+    }
+
     if (warning || m_pTextEdit->getReadOnlyPermission() || m_pTextEdit->getReadOnlyMode()) {
         qDebug() << "EditWrapper showNotify, warning || m_pTextEdit->getReadOnlyPermission() || m_pTextEdit->getReadOnlyMode()";
 #ifdef DTKWIDGET_CLASS_DSizeMode
-        Utils::sendFloatMessageFixedFont(m_pTextEdit, QIcon(":/images/warning.svg"), message);
+        Utils::sendFloatMessageFixedFont(target, QIcon(":/images/warning.svg"), message);
 #else
-        DMessageManager::instance()->sendMessage(m_pTextEdit, QIcon(":/images/warning.svg"), message);
+        DMessageManager::instance()->sendMessage(target, QIcon(":/images/warning.svg"), message);
 #endif
     } else {
         qDebug() << "EditWrapper showNotify, warning is false";
 #ifdef DTKWIDGET_CLASS_DSizeMode
-        Utils::sendFloatMessageFixedFont(m_pTextEdit, QIcon(":/images/ok.svg"), message);
+        Utils::sendFloatMessageFixedFont(target, QIcon(":/images/ok.svg"), message);
 #else
-        DMessageManager::instance()->sendMessage(m_pTextEdit, QIcon(":/images/ok.svg"), message);
+        DMessageManager::instance()->sendMessage(target, QIcon(":/images/ok.svg"), message);
 #endif
     }
     qDebug() << "EditWrapper showNotify, exit";
