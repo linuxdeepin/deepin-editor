@@ -18,6 +18,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QEvent>
+#include <QKeyEvent>
 
 #include <DSettings>
 #include <DSettingsOption>
@@ -1008,19 +1009,22 @@ void EditWrapper::showNotify(const QString &message, bool warning)
         return;
     }
 
+    // md ReadView 模式下 TextEdit 被隐藏，浮层消息须挂载到可见的 m_pReadPage
+    QWidget *target = (m_viewMode == ViewMode::ReadView && m_isMarkdown) ? m_pReadPage : m_pTextEdit;
+
     if (warning || m_pTextEdit->getReadOnlyPermission() || m_pTextEdit->getReadOnlyMode()) {
         qDebug() << "EditWrapper showNotify, warning || m_pTextEdit->getReadOnlyPermission() || m_pTextEdit->getReadOnlyMode()";
 #ifdef DTKWIDGET_CLASS_DSizeMode
-        Utils::sendFloatMessageFixedFont(m_pTextEdit, QIcon(":/images/warning.svg"), message);
+        Utils::sendFloatMessageFixedFont(target, QIcon(":/images/warning.svg"), message);
 #else
-        DMessageManager::instance()->sendMessage(m_pTextEdit, QIcon(":/images/warning.svg"), message);
+        DMessageManager::instance()->sendMessage(target, QIcon(":/images/warning.svg"), message);
 #endif
     } else {
         qDebug() << "EditWrapper showNotify, warning is false";
 #ifdef DTKWIDGET_CLASS_DSizeMode
-        Utils::sendFloatMessageFixedFont(m_pTextEdit, QIcon(":/images/ok.svg"), message);
+        Utils::sendFloatMessageFixedFont(target, QIcon(":/images/ok.svg"), message);
 #else
-        DMessageManager::instance()->sendMessage(m_pTextEdit, QIcon(":/images/ok.svg"), message);
+        DMessageManager::instance()->sendMessage(target, QIcon(":/images/ok.svg"), message);
 #endif
     }
     qDebug() << "EditWrapper showNotify, exit";
@@ -1974,6 +1978,9 @@ void EditWrapper::ensureMarkdownViewCreated()
 
     m_pMarkdownView = new MarkdownView(this);
     m_pMarkdownView->setMinimumWidth(200);   // 防止分栏右栏被压缩到不可见
+    // 安装事件过滤器：md ReadView 模式下拦截编辑类键盘事件（Ctrl+V/Delete 等），
+    // 阻止 Chromium 静默吞掉并显示只读提示
+    m_pMarkdownView->installEventFilter(this);
 #if !defined(QT_TESTCASE_SOURCEDIR)
     // 生产：构造后立即 init()（load qrc 页面 + 注册 WebChannel，§4.1 构造分离约定）。
     // 单测编译单元（-DQT_TESTCASE_SOURCEDIR）跳过，避免在测试进程拉起 WebEngine 渲染进程。
@@ -2024,4 +2031,77 @@ void EditWrapper::ensureLiveSplitterCreated()
     m_pLiveSplitter = new QSplitter(Qt::Horizontal, m_viewStack);
     m_pLiveSplitter->setChildrenCollapsible(false);
     m_viewStack->addWidget(m_pLiveSplitter);
+}
+
+bool EditWrapper::eventFilter(QObject *obj, QEvent *event)
+{
+    if (obj != m_pMarkdownView)
+        return QWidget::eventFilter(obj, event);
+
+    // 仅在 md ReadView 模式下拦截编辑类键盘事件
+    if (m_viewMode == ViewMode::ReadView && m_isMarkdown) {
+        if (event->type() == QEvent::ShortcutOverride) {
+            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+            if (isEditKeyEvent(keyEvent)) {
+                // accept() 阻止 Chromium 消费该快捷键，return true 阻止事件到达 QWebEngineView
+                event->accept();
+                return true;
+            }
+        } else if (event->type() == QEvent::KeyPress) {
+            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+            if (isEditKeyEvent(keyEvent)) {
+                showReadViewNotify();
+                event->accept();
+                return true;
+            }
+        }
+    }
+
+    return QWidget::eventFilter(obj, event);
+}
+
+bool EditWrapper::isEditKeyEvent(const QKeyEvent *e) const
+{
+    Qt::KeyboardModifiers mods = e->modifiers();
+    int key = e->key();
+
+    // Ctrl 系编辑快捷键（含 Ctrl+Shift 变体）
+    if (mods & Qt::ControlModifier) {
+        switch (key) {
+        case Qt::Key_V:       // 粘贴
+        case Qt::Key_X:       // 剪切
+        case Qt::Key_Z:       // 撤销 / 重做（Ctrl+Shift+Z）
+        case Qt::Key_Y:       // 重做
+        case Qt::Key_J:
+        case Qt::Key_K:
+        case Qt::Key_Return:
+        case Qt::Key_Enter:
+            return true;
+        case Qt::Key_D:       // Ctrl+Shift+D（复制行）
+        case Qt::Key_Up:      // Ctrl+Shift+Up（上移行）
+        case Qt::Key_Down:    // Ctrl+Shift+Down（下移行）
+            return (mods & Qt::ShiftModifier) != 0;
+        default:
+            return false;
+        }
+    }
+
+    // 无修饰键或仅 Keypad：删除键与普通字符输入
+    if (mods == Qt::NoModifier || mods == Qt::KeypadModifier) {
+        if (key == Qt::Key_Delete || key == Qt::Key_Backspace)
+            return true;
+        // Space/Tab 用于页面滚动和焦点导航，不是编辑操作
+        if (key == Qt::Key_Space || key == Qt::Key_Tab)
+            return false;
+        // 普通可打印字符输入
+        if (!e->text().isEmpty())
+            return true;
+    }
+
+    return false;
+}
+
+void EditWrapper::showReadViewNotify()
+{
+    showNotify(tr("Read-Only mode is on"), true);
 }

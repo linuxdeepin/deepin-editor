@@ -32,6 +32,7 @@
 class Window;
 class MarkdownView;
 class IMarkdownRenderer;
+class QKeyEvent;
 class EditWrapper : public QWidget
 {
     Q_OBJECT
@@ -154,8 +155,14 @@ signals:
 protected:
     // 处理文件加载事件
     virtual void customEvent(QEvent *e) override;
+    // md ReadView 模式下拦截编辑类键盘事件，显示只读提示
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
 private:
+    // 判断按键是否为编辑类操作（粘贴/剪切/删除/撤销/重做/普通字符输入等）
+    bool isEditKeyEvent(const QKeyEvent *e) const;
+    // 在 m_pReadPage（可见容器）上显示只读模式提示
+    void showReadViewNotify();
     // 类似setPlainText(QString) 接口支持大文本加载 不卡顿 秒退出 梁卫东 2020年11月11日16:56:27
     void loadContent(const QByteArray &);
     // 文件加载时重新初始化部分设置
