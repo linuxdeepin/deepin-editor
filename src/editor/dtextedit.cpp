@@ -8494,7 +8494,9 @@ void TextEdit::resizeEvent(QResizeEvent *e)
             auto docLayout = guard->document()->documentLayout();
             Q_EMIT docLayout->documentSizeChanged(docLayout->documentSize());
 
-            guard->verticalScrollBar()->setValue(guard->verticalScrollBar()->maximum());
+            if (guard->verticalScrollBar()->maximum() == guard->verticalScrollBar()->value()) {
+                guard->verticalScrollBar()->setValue(guard->verticalScrollBar()->maximum());
+            }
         });
     }
 

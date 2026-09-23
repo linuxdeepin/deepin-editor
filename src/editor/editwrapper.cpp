@@ -1057,6 +1057,8 @@ void EditWrapper::handleFilePreProcess(const QByteArray &encode, const QByteArra
     // 直接加载数据到文档页面
     QString data = codec->toUnicode(content.constData(), content.size());
     cursor.insertText(data);
+    cursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+    m_pTextEdit->setTextCursor(cursor);
     // 界面语法高亮
     OnUpdateHighlighter();
 
