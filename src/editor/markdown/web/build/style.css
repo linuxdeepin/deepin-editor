@@ -277,3 +277,30 @@ html, body {
 /* 只读模式去除编辑光标 */
 .milkdown .ProseMirror { outline: none; caret-color: transparent; }
 .milkdown-read-only .ProseMirror { cursor: default; }
+
+/* 滚动条适配主题色 (Bug 378215)
+   根因：深色主题下页面背景变深，但 Chromium 原生滚动条仍保持系统/浅色默认，
+   与深色背景形成强烈反差，显示突兀。
+   修复：1) color-scheme 让 Chromium 原生滚动条跟随深浅色；
+         2) ::-webkit-scrollbar 自定义样式与主题色一致。 */
+:root {
+    color-scheme: light;
+}
+[data-theme="dark"] {
+    color-scheme: dark;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--fg-secondary);
+}
