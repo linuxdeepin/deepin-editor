@@ -18,6 +18,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QEvent>
+#include <QKeyEvent>
 
 #include <DSettings>
 #include <DSettingsOption>
@@ -1008,19 +1009,27 @@ void EditWrapper::showNotify(const QString &message, bool warning)
         return;
     }
 
+    // md ReadView 模式下 TextEdit 被隐藏，浮层消息须挂载到可见的 m_pReadPage
+    QWidget *target = (m_viewMode == ViewMode::ReadView && m_isMarkdown) ? m_pReadPage : m_pTextEdit;
+
+    if (!target) {
+        qDebug() << "EditWrapper showNotify, target is null, return";
+        return;
+    }
+
     if (warning || m_pTextEdit->getReadOnlyPermission() || m_pTextEdit->getReadOnlyMode()) {
         qDebug() << "EditWrapper showNotify, warning || m_pTextEdit->getReadOnlyPermission() || m_pTextEdit->getReadOnlyMode()";
 #ifdef DTKWIDGET_CLASS_DSizeMode
-        Utils::sendFloatMessageFixedFont(m_pTextEdit, QIcon(":/images/warning.svg"), message);
+        Utils::sendFloatMessageFixedFont(target, QIcon(":/images/warning.svg"), message);
 #else
-        DMessageManager::instance()->sendMessage(m_pTextEdit, QIcon(":/images/warning.svg"), message);
+        DMessageManager::instance()->sendMessage(target, QIcon(":/images/warning.svg"), message);
 #endif
     } else {
         qDebug() << "EditWrapper showNotify, warning is false";
 #ifdef DTKWIDGET_CLASS_DSizeMode
-        Utils::sendFloatMessageFixedFont(m_pTextEdit, QIcon(":/images/ok.svg"), message);
+        Utils::sendFloatMessageFixedFont(target, QIcon(":/images/ok.svg"), message);
 #else
-        DMessageManager::instance()->sendMessage(m_pTextEdit, QIcon(":/images/ok.svg"), message);
+        DMessageManager::instance()->sendMessage(target, QIcon(":/images/ok.svg"), message);
 #endif
     }
     qDebug() << "EditWrapper showNotify, exit";
@@ -1981,9 +1990,12 @@ void EditWrapper::ensureMarkdownViewCreated()
     // 单测编译单元（-DQT_TESTCASE_SOURCEDIR）跳过，避免在测试进程拉起 WebEngine 渲染进程。
     m_pMarkdownView->init();
 #endif
-    // ready 后解除 RenderThrottle 缓存并 flush 首次内容
+    // ready 后解除 RenderThrottle 缓存并 flush 首次内容；
+    // 同时在 focusProxy 上安装事件过滤器（focusProxy 在页面 load 完成后才存在，
+    // 渲染进程崩溃恢复后 ready 会再次触发，重装过滤器）
     connect(m_pMarkdownView, &MarkdownView::ready, this, [this]() {
         m_renderThrottle.setReady(true);
+        installReadViewEventFilter();
     });
     // 反向滚动同步（§4.6 双向）：右栏用户滚动 → 按比例驱动左栏 TextEdit；
     // 护栏防回环（左栏 valueChanged 触发时跳过转发）
@@ -2026,4 +2038,85 @@ void EditWrapper::ensureLiveSplitterCreated()
     m_pLiveSplitter = new QSplitter(Qt::Horizontal, m_viewStack);
     m_pLiveSplitter->setChildrenCollapsible(false);
     m_viewStack->addWidget(m_pLiveSplitter);
+}
+
+void EditWrapper::installReadViewEventFilter()
+{
+    if (!m_pMarkdownView)
+        return;
+    // focusProxy() 是 QWebEngineView 内部的 QQuickWidget 渲染子控件，
+    // KeyPress 事件发给它而非 view 本身，必须在它上面安装过滤器
+    QWidget *proxy = m_pMarkdownView->focusProxy();
+    if (!proxy)
+        return;
+    // 渲染进程崩溃恢复后 focusProxy 可能变化，先从旧目标移除过滤器
+    if (m_pMdFocusWidget && m_pMdFocusWidget != proxy)
+        m_pMdFocusWidget->removeEventFilter(this);
+    m_pMdFocusWidget = proxy;
+    proxy->installEventFilter(this);
+}
+
+bool EditWrapper::eventFilter(QObject *obj, QEvent *event)
+{
+    // 仅拦截 MarkdownView focusProxy 上的编辑类 KeyPress
+    if (!m_pMdFocusWidget || obj != m_pMdFocusWidget)
+        return QWidget::eventFilter(obj, event);
+
+    // 仅在 md ReadView 模式下拦截编辑类键盘事件
+    if (m_viewMode == ViewMode::ReadView && m_isMarkdown
+        && event->type() == QEvent::KeyPress) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+        if (isEditKeyEvent(keyEvent)) {
+            showReadViewNotify();
+        }
+    }
+
+    return QWidget::eventFilter(obj, event);
+}
+
+bool EditWrapper::isEditKeyEvent(const QKeyEvent *e) const
+{
+    Qt::KeyboardModifiers mods = e->modifiers();
+    int key = e->key();
+
+    // Ctrl 系编辑快捷键（含 Ctrl+Shift 变体）
+    if (mods & Qt::ControlModifier) {
+        switch (key) {
+        case Qt::Key_V:       // 粘贴
+        case Qt::Key_X:       // 剪切
+        case Qt::Key_Z:       // 撤销 / 重做（Ctrl+Shift+Z）
+        case Qt::Key_Y:       // 重做
+        case Qt::Key_J:       // Ctrl+J（换行插入）
+        case Qt::Key_K:       // Ctrl+K（删除至行尾）
+        case Qt::Key_Return:
+        case Qt::Key_Enter:
+            return true;
+        case Qt::Key_D:       // Ctrl+Shift+D（复制行）
+        case Qt::Key_Up:      // Ctrl+Shift+Up（上移行）
+        case Qt::Key_Down:    // Ctrl+Shift+Down（下移行）
+            return (mods & Qt::ShiftModifier) != 0;
+        default:
+            return false;
+        }
+    }
+
+    // 无 Ctrl/Alt/Meta 修饰（允许 Shift 和 Keypad）：
+    // 删除键与普通字符输入（含 Shift+字符即大写字母）
+    if ((mods & ~(Qt::ShiftModifier | Qt::KeypadModifier)) == Qt::NoModifier) {
+        if (key == Qt::Key_Delete || key == Qt::Key_Backspace)
+            return true;
+        // Space/Tab 用于页面滚动和焦点导航，不是编辑操作
+        if (key == Qt::Key_Space || key == Qt::Key_Tab)
+            return false;
+        // 普通可打印字符输入
+        if (!e->text().isEmpty())
+            return true;
+    }
+
+    return false;
+}
+
+void EditWrapper::showReadViewNotify()
+{
+    showNotify(tr("Read-Only mode is on"), true);
 }

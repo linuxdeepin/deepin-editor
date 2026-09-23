@@ -26,19 +26,19 @@
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="73"/>
         <location filename="../src/widgets/bottombar.cpp" line="91"/>
-        <location filename="../src/widgets/bottombar.cpp" line="499"/>
+        <location filename="../src/widgets/bottombar.cpp" line="501"/>
         <source>Edit Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="74"/>
-        <location filename="../src/widgets/bottombar.cpp" line="489"/>
+        <location filename="../src/widgets/bottombar.cpp" line="491"/>
         <source>Read View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="75"/>
-        <location filename="../src/widgets/bottombar.cpp" line="493"/>
+        <location filename="../src/widgets/bottombar.cpp" line="495"/>
         <source>Live Preview</source>
         <translation type="unfinished"></translation>
     </message>
@@ -46,9 +46,9 @@
 <context>
     <name>DDropdownMenu</name>
     <message>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="363"/>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="421"/>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="426"/>
+        <location filename="../src/widgets/ddropdownmenu.cpp" line="370"/>
+        <location filename="../src/widgets/ddropdownmenu.cpp" line="428"/>
+        <location filename="../src/widgets/ddropdownmenu.cpp" line="433"/>
         <source>None</source>
         <translation>Tidak ada</translation>
     </message>
@@ -56,57 +56,62 @@
 <context>
     <name>EditWrapper</name>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="355"/>
-        <location filename="../src/editor/editwrapper.cpp" line="429"/>
-        <location filename="../src/editor/editwrapper.cpp" line="595"/>
-        <location filename="../src/editor/editwrapper.cpp" line="887"/>
+        <location filename="../src/editor/editwrapper.cpp" line="357"/>
+        <location filename="../src/editor/editwrapper.cpp" line="431"/>
+        <location filename="../src/editor/editwrapper.cpp" line="597"/>
+        <location filename="../src/editor/editwrapper.cpp" line="889"/>
         <source>Save</source>
         <translation>Simpan</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="590"/>
+        <location filename="../src/editor/editwrapper.cpp" line="592"/>
         <source>Do you want to save this file?</source>
         <translation>Apakah anda ingin menyimpan berkas ini?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="427"/>
-        <location filename="../src/editor/editwrapper.cpp" line="593"/>
+        <location filename="../src/editor/editwrapper.cpp" line="429"/>
+        <location filename="../src/editor/editwrapper.cpp" line="595"/>
         <source>Cancel</source>
         <translation>Batal</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="424"/>
+        <location filename="../src/editor/editwrapper.cpp" line="426"/>
         <source>Encoding changed. Do you want to save the file now?</source>
         <translation>Mengubah encoding. Apakah anda ingin menyimpan berkas sekarang?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="594"/>
+        <location filename="../src/editor/editwrapper.cpp" line="596"/>
         <source>Discard</source>
         <translation>Membuang</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="1121"/>
+        <location filename="../src/editor/editwrapper.cpp" line="1126"/>
         <source>The file contains invalid characters (NUL). Preview mode is read-only.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="337"/>
-        <location filename="../src/editor/editwrapper.cpp" line="705"/>
+        <location filename="../src/editor/editwrapper.cpp" line="2109"/>
+        <source>Read-Only mode is on</source>
+        <translation type="unfinished">Mode Hanya-Baca sudah dinyalakan</translation>
+    </message>
+    <message>
+        <location filename="../src/editor/editwrapper.cpp" line="339"/>
+        <location filename="../src/editor/editwrapper.cpp" line="707"/>
         <source>You do not have permission to save %1</source>
         <translation>Anda tidak mempunyai ijin untuk simpan %1</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="987"/>
+        <location filename="../src/editor/editwrapper.cpp" line="989"/>
         <source>File removed on the disk. Save it now?</source>
         <translation>Berkas didisk sudah dihapus. Simpan sekarang?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="993"/>
+        <location filename="../src/editor/editwrapper.cpp" line="995"/>
         <source>File has changed on disk. Reload?</source>
         <translation>Berkas didisk sudah berubah, muat ulang?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="1806"/>
+        <location filename="../src/editor/editwrapper.cpp" line="1817"/>
         <source>The file cannot be read, which may be too large or has been damaged!</source>
         <translation>Berkas tidak dapat dibaca, yang mungkin terlalu besar atau telah rusak!</translation>
     </message>
@@ -119,17 +124,17 @@
         <translation>Cari</translation>
     </message>
     <message>
-        <location filename="../src/controls/findbar.cpp" line="38"/>
+        <location filename="../src/controls/findbar.cpp" line="39"/>
         <source>Previous</source>
         <translation>Sebelum</translation>
     </message>
     <message>
-        <location filename="../src/controls/findbar.cpp" line="40"/>
+        <location filename="../src/controls/findbar.cpp" line="42"/>
         <source>Next</source>
         <translation>Lanjut</translation>
     </message>
     <message>
-        <location filename="../src/controls/findbar.cpp" line="42"/>
+        <location filename="../src/controls/findbar.cpp" line="45"/>
         <source>Replace</source>
         <translation>Ganti</translation>
     </message>
@@ -137,7 +142,7 @@
 <context>
     <name>JumpLineBar</name>
     <message>
-        <location filename="../src/controls/jumplinebar.cpp" line="46"/>
+        <location filename="../src/controls/jumplinebar.cpp" line="47"/>
         <source>Go to Line: </source>
         <translation>Pergi ke Baris:</translation>
     </message>
@@ -145,7 +150,7 @@
 <context>
     <name>LineBar</name>
     <message>
-        <location filename="../src/controls/linebar.cpp" line="144"/>
+        <location filename="../src/controls/linebar.cpp" line="148"/>
         <source>第%1/%2项</source>
         <translation type="unfinished"></translation>
     </message>
@@ -164,49 +169,18 @@
     </message>
 </context>
 <context>
-    <name>MarkdownBridge</name>
-    <message>
-        <location filename="../src/editor/markdown/markdownbridge.h" line="37"/>
-        <source>Collapse code block</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/editor/markdown/markdownbridge.h" line="38"/>
-        <source>Expand code block</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/editor/markdown/markdownbridge.h" line="39"/>
-        <source>Copy code</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/editor/markdown/markdownbridge.h" line="40"/>
-        <source>Expand</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/editor/markdown/markdownbridge.h" line="42"/>
-        <source>%1 line(s) of code collapsed</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>PathSettingWgt</name>
     <message>
-        <location filename="../src/widgets/pathsettintwgt.cpp" line="90"/>
         <source>Remember the last used path</source>
-        <translation>Ingat jalur yang terakhir digunakan</translation>
+        <translation type="vanished">Ingat jalur yang terakhir digunakan</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pathsettintwgt.cpp" line="91"/>
         <source>Same path as the current file</source>
-        <translation>Jalur yang sama dengan berkas saat ini</translation>
+        <translation type="vanished">Jalur yang sama dengan berkas saat ini</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pathsettintwgt.cpp" line="92"/>
         <source>Customize the default path</source>
-        <translation>Menyesuaikan jalur bawaan</translation>
+        <translation type="vanished">Menyesuaikan jalur bawaan</translation>
     </message>
 </context>
 <context>
@@ -217,18 +191,18 @@
         <translation>Text Editor</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="357"/>
-        <location filename="../src/editor/editwrapper.cpp" line="897"/>
-        <location filename="../src/editor/editwrapper.cpp" line="912"/>
-        <location filename="../src/widgets/window.cpp" line="1528"/>
-        <location filename="../src/widgets/window.cpp" line="1556"/>
-        <location filename="../src/widgets/window.cpp" line="1715"/>
-        <location filename="../src/widgets/window.cpp" line="1732"/>
+        <location filename="../src/editor/editwrapper.cpp" line="359"/>
+        <location filename="../src/editor/editwrapper.cpp" line="899"/>
+        <location filename="../src/editor/editwrapper.cpp" line="914"/>
+        <location filename="../src/widgets/window.cpp" line="1540"/>
+        <location filename="../src/widgets/window.cpp" line="1568"/>
+        <location filename="../src/widgets/window.cpp" line="1727"/>
+        <location filename="../src/widgets/window.cpp" line="1744"/>
         <source>Encoding</source>
         <translation>Mengencode</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="2001"/>
+        <location filename="../src/editor/editwrapper.cpp" line="2015"/>
         <source>视图模式</source>
         <translation type="unfinished"></translation>
     </message>
@@ -266,7 +240,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="18"/>
         <location filename="../src/controls/settingsdialog.cpp" line="96"/>
-        <location filename="../src/widgets/window.cpp" line="2581"/>
+        <location filename="../src/widgets/window.cpp" line="2611"/>
         <source>Window</source>
         <translation>Jendela</translation>
     </message>
@@ -806,70 +780,59 @@
         <translation>Vietnam</translation>
     </message>
     <message>
-        <location filename="../src/startmanager.cpp" line="1035"/>
+        <location filename="../src/startmanager.cpp" line="1040"/>
         <source>File not saved</source>
         <translation>Berkas tidak disimpan</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1716"/>
-        <location filename="../src/widgets/window.cpp" line="1733"/>
+        <location filename="../src/widgets/window.cpp" line="1728"/>
+        <location filename="../src/widgets/window.cpp" line="1745"/>
         <source>Line Endings</source>
         <translation>Akhir Baris</translation>
     </message>
     <message>
-        <location filename="../src/common/iflytek_ai_assistant.cpp" line="379"/>
         <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
-        <translation>Silakan instal &apos;UOS AI&apos; dari App Store sebelum menggunakan</translation>
+        <translation type="vanished">Silakan instal &apos;UOS AI&apos; dari App Store sebelum menggunakan</translation>
     </message>
     <message>
-        <location filename="../src/common/iflytek_ai_assistant.cpp" line="381"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation>Tidak ada perangkat masukan audio terdeteksi. Silakan periksa dan coba lagi</translation>
+        <translation type="vanished">Tidak ada perangkat masukan audio terdeteksi. Silakan periksa dan coba lagi</translation>
     </message>
     <message>
-        <location filename="../src/common/iflytek_ai_assistant.cpp" line="383"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation>Tidak ada perangkat keluaran audio terdeteksi. Silakan periksa dan coba lagi</translation>
+        <translation type="vanished">Tidak ada perangkat keluaran audio terdeteksi. Silakan periksa dan coba lagi</translation>
     </message>
     <message>
-        <location filename="../src/common/text_file_saver.cpp" line="74"/>
         <source>File path is empty</source>
-        <translation>Jalur berkas kosong</translation>
+        <translation type="vanished">Jalur berkas kosong</translation>
     </message>
     <message>
-        <location filename="../src/common/text_file_saver.cpp" line="153"/>
         <source>Insufficient memory to load document content</source>
-        <translation>Memori tidak cukup untuk memuat konten dokumen</translation>
+        <translation type="vanished">Memori tidak cukup untuk memuat konten dokumen</translation>
     </message>
     <message>
-        <location filename="../src/common/text_file_saver.cpp" line="178"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation>Memori tidak cukup untuk konversi encoding</translation>
+        <translation type="vanished">Memori tidak cukup untuk konversi encoding</translation>
     </message>
     <message>
-        <location filename="../src/common/text_file_saver.cpp" line="184"/>
         <source>Encoding conversion failed</source>
-        <translation>Konversi encoding gagal</translation>
+        <translation type="vanished">Konversi encoding gagal</translation>
     </message>
     <message>
-        <location filename="../src/common/text_file_saver.cpp" line="190"/>
         <source>Converted content is empty</source>
-        <translation>Konten yang telah dikonversi kosong</translation>
+        <translation type="vanished">Konten yang telah dikonversi kosong</translation>
     </message>
     <message>
-        <location filename="../src/common/text_file_saver.cpp" line="208"/>
         <source>Memory allocation failed</source>
-        <translation>Pengalokasian memori gagal</translation>
+        <translation type="vanished">Pengalokasian memori gagal</translation>
     </message>
     <message>
-        <location filename="../src/common/text_file_saver.cpp" line="212"/>
         <source>Error occurred: %1</source>
-        <translation>Terjadi kesalahan: %1</translation>
+        <translation type="vanished">Terjadi kesalahan: %1</translation>
     </message>
     <message>
-        <location filename="../src/common/text_file_saver.cpp" line="216"/>
         <source>Unknown error occurred</source>
-        <translation>Terjadi kesalahan yang tidak diketahui</translation>
+        <translation type="vanished">Terjadi kesalahan yang tidak diketahui</translation>
     </message>
 </context>
 <context>
@@ -880,27 +843,27 @@
         <translation>Cari</translation>
     </message>
     <message>
-        <location filename="../src/controls/replacebar.cpp" line="36"/>
+        <location filename="../src/controls/replacebar.cpp" line="37"/>
         <source>Replace With</source>
         <translation>Ganti dengan</translation>
     </message>
     <message>
-        <location filename="../src/controls/replacebar.cpp" line="40"/>
+        <location filename="../src/controls/replacebar.cpp" line="42"/>
         <source>Replace</source>
         <translation>Ganti</translation>
     </message>
     <message>
-        <location filename="../src/controls/replacebar.cpp" line="42"/>
+        <location filename="../src/controls/replacebar.cpp" line="45"/>
         <source>Skip</source>
         <translation>Lewati</translation>
     </message>
     <message>
-        <location filename="../src/controls/replacebar.cpp" line="44"/>
+        <location filename="../src/controls/replacebar.cpp" line="48"/>
         <source>Replace Rest</source>
         <translation>Ganti sisanya</translation>
     </message>
     <message>
-        <location filename="../src/controls/replacebar.cpp" line="46"/>
+        <location filename="../src/controls/replacebar.cpp" line="51"/>
         <source>Replace All</source>
         <translation>Ganti semua</translation>
     </message>
@@ -977,7 +940,7 @@
 <context>
     <name>StartManager</name>
     <message>
-        <location filename="../src/startmanager.cpp" line="425"/>
+        <location filename="../src/startmanager.cpp" line="430"/>
         <source>Untitled %1</source>
         <translation>Tanpa Judul %1</translation>
     </message>
@@ -985,32 +948,32 @@
 <context>
     <name>Tabbar</name>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="678"/>
+        <location filename="../src/controls/tabbar.cpp" line="683"/>
         <source>Close tab</source>
         <translation>Tutup tab</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="680"/>
+        <location filename="../src/controls/tabbar.cpp" line="685"/>
         <source>Close other tabs</source>
         <translation>Tutup tab lainnya</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="682"/>
+        <location filename="../src/controls/tabbar.cpp" line="687"/>
         <source>More options</source>
         <translation>Pilihan lainnya</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="684"/>
+        <location filename="../src/controls/tabbar.cpp" line="690"/>
         <source>Close tabs to the left</source>
         <translation>Tutup tab ke kiri</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="686"/>
+        <location filename="../src/controls/tabbar.cpp" line="692"/>
         <source>Close tabs to the right</source>
         <translation>Tutup tab ke kanan</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="688"/>
+        <location filename="../src/controls/tabbar.cpp" line="694"/>
         <source>Close unmodified tabs</source>
         <translation>Tutup tab yang tidak diubah</translation>
     </message>
@@ -1054,13 +1017,13 @@
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="402"/>
-        <location filename="../src/widgets/window.cpp" line="556"/>
+        <location filename="../src/widgets/window.cpp" line="558"/>
         <source>Find</source>
         <translation>Cari</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="404"/>
-        <location filename="../src/widgets/window.cpp" line="558"/>
+        <location filename="../src/widgets/window.cpp" line="560"/>
         <source>Replace</source>
         <translation>Ganti</translation>
     </message>
@@ -1191,26 +1154,26 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3531"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3534"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3482"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3485"/>
         <source>Copy failed: not enough memory</source>
         <translation>Salin gagal: tidak cukup memori</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3656"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3658"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3607"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3609"/>
         <source>Press ALT and click lines to edit in column mode</source>
         <translation>Tekan ALT dan klik baris untuk mengedit dalam mode kolom</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="9574"/>
-        <location filename="../src/editor/dtextedit.cpp" line="9576"/>
+        <location filename="../src/editor/dtextedit.cpp" line="9214"/>
+        <location filename="../src/editor/dtextedit.cpp" line="9216"/>
         <source>No audio output device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="9583"/>
-        <location filename="../src/editor/dtextedit.cpp" line="9585"/>
+        <location filename="../src/editor/dtextedit.cpp" line="9223"/>
+        <location filename="../src/editor/dtextedit.cpp" line="9225"/>
         <source>No audio input device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1275,23 +1238,23 @@
         <translation>Baris saat ini dipotong</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3550"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3553"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3501"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3504"/>
         <source>Paste failed: not enough memory</source>
         <translation>Tempel gagal: tidak cukup memori</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="4873"/>
+        <location filename="../src/editor/dtextedit.cpp" line="4833"/>
         <source>Read-Only mode is off</source>
         <translation>Mode Hanya-Baca sudah dimatikan</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="4885"/>
-        <location filename="../src/editor/dtextedit.cpp" line="4909"/>
-        <location filename="../src/editor/dtextedit.cpp" line="8236"/>
-        <location filename="../src/editor/dtextedit.cpp" line="8347"/>
-        <location filename="../src/editor/dtextedit.cpp" line="8355"/>
-        <location filename="../src/editor/dtextedit.cpp" line="8366"/>
+        <location filename="../src/editor/dtextedit.cpp" line="4845"/>
+        <location filename="../src/editor/dtextedit.cpp" line="4869"/>
+        <location filename="../src/editor/dtextedit.cpp" line="7875"/>
+        <location filename="../src/editor/dtextedit.cpp" line="7986"/>
+        <location filename="../src/editor/dtextedit.cpp" line="7994"/>
+        <location filename="../src/editor/dtextedit.cpp" line="8005"/>
         <source>Read-Only mode is on</source>
         <translation>Mode Hanya-Baca sudah dinyalakan</translation>
     </message>
@@ -1304,7 +1267,7 @@
         <translation>Muat Ulang</translation>
     </message>
     <message>
-        <location filename="../src/controls/warningnotices.cpp" line="29"/>
+        <location filename="../src/controls/warningnotices.cpp" line="31"/>
         <source>Edit Anyway</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1312,162 +1275,162 @@
 <context>
     <name>Window</name>
     <message>
-        <location filename="../src/controls/warningnotices.cpp" line="27"/>
-        <location filename="../src/widgets/window.cpp" line="548"/>
+        <location filename="../src/controls/warningnotices.cpp" line="28"/>
+        <location filename="../src/widgets/window.cpp" line="550"/>
         <source>Save as</source>
         <translation>Simpan bagai</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="540"/>
+        <location filename="../src/widgets/window.cpp" line="542"/>
         <source>New window</source>
         <translation>Jendela baru</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="542"/>
+        <location filename="../src/widgets/window.cpp" line="544"/>
         <source>New tab</source>
         <translation>Tab baru</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="544"/>
+        <location filename="../src/widgets/window.cpp" line="546"/>
         <source>Open file</source>
         <translation>Buka berkas</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="546"/>
-        <location filename="../src/widgets/window.cpp" line="3950"/>
+        <location filename="../src/widgets/window.cpp" line="548"/>
+        <location filename="../src/widgets/window.cpp" line="4008"/>
         <source>Save</source>
         <translation>Simpan</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="550"/>
+        <location filename="../src/widgets/window.cpp" line="552"/>
         <source>Print</source>
         <translation>Cetak</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="552"/>
+        <location filename="../src/widgets/window.cpp" line="554"/>
         <source>Switch theme</source>
         <translation>Beralih tema</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="554"/>
-        <location filename="../src/widgets/window.cpp" line="2641"/>
+        <location filename="../src/widgets/window.cpp" line="556"/>
+        <location filename="../src/widgets/window.cpp" line="2671"/>
         <source>Settings</source>
         <translation>Pengaturan</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="696"/>
-        <location filename="../src/widgets/window.cpp" line="4250"/>
+        <location filename="../src/widgets/window.cpp" line="700"/>
+        <location filename="../src/widgets/window.cpp" line="4308"/>
         <source>Read-Only</source>
         <translation>Hanya-Baca</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="719"/>
+        <location filename="../src/widgets/window.cpp" line="723"/>
         <source>You do not have permission to open %1</source>
         <translation>Anda tidak mempunyai ijin untuk buka %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="773"/>
-        <location filename="../src/widgets/window.cpp" line="3266"/>
+        <location filename="../src/widgets/window.cpp" line="777"/>
+        <location filename="../src/widgets/window.cpp" line="3296"/>
         <source>Invalid file: %1</source>
         <translation>Berkas tidak valid: %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="957"/>
-        <location filename="../src/widgets/window.cpp" line="1050"/>
-        <location filename="../src/widgets/window.cpp" line="3217"/>
+        <location filename="../src/widgets/window.cpp" line="961"/>
+        <location filename="../src/widgets/window.cpp" line="1054"/>
+        <location filename="../src/widgets/window.cpp" line="3247"/>
         <source>Do you want to save this file?</source>
         <translation>Apakah anda ingin menyimpan berkas ini?</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1381"/>
+        <location filename="../src/widgets/window.cpp" line="1393"/>
         <source>Invalid characters detected while saving &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1382"/>
+        <location filename="../src/widgets/window.cpp" line="1394"/>
         <source>If you force save this file, it may cause file corruption. Still want to save?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1386"/>
+        <location filename="../src/widgets/window.cpp" line="1398"/>
         <source>Don&apos;t Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1387"/>
+        <location filename="../src/widgets/window.cpp" line="1399"/>
         <source>Save As</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1388"/>
+        <location filename="../src/widgets/window.cpp" line="1400"/>
         <source>Save Anyway</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1456"/>
+        <location filename="../src/widgets/window.cpp" line="1468"/>
         <source>You do not have permission to save %1</source>
         <translation>Anda tidak mempunyai ijin untuk simpan %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1428"/>
-        <location filename="../src/widgets/window.cpp" line="1478"/>
+        <location filename="../src/widgets/window.cpp" line="1440"/>
+        <location filename="../src/widgets/window.cpp" line="1490"/>
         <source>Saved successfully</source>
         <translation>Berhasil disimpan</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1520"/>
-        <location filename="../src/widgets/window.cpp" line="1665"/>
-        <location filename="../src/widgets/window.cpp" line="1713"/>
+        <location filename="../src/widgets/window.cpp" line="1532"/>
+        <location filename="../src/widgets/window.cpp" line="1677"/>
+        <location filename="../src/widgets/window.cpp" line="1725"/>
         <source>Save File</source>
         <translation>Simpan Berkas</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1569"/>
+        <location filename="../src/widgets/window.cpp" line="1581"/>
         <source>Cannot save as the original file in preview mode. Please choose a different path.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1667"/>
+        <location filename="../src/widgets/window.cpp" line="1679"/>
         <source>Encoding</source>
         <translation>Mengencode</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1957"/>
+        <location filename="../src/widgets/window.cpp" line="1969"/>
         <source>Read-Only mode is on</source>
         <translation>Mode Hanya-Baca sudah dinyalakan</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="2511"/>
+        <location filename="../src/widgets/window.cpp" line="2541"/>
         <source>Current location remembered</source>
         <translation>Lokasi saat ini diingat</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="2591"/>
+        <location filename="../src/widgets/window.cpp" line="2621"/>
         <source>Ctrl+&apos;=&apos;</source>
         <translation>Ctrl+&apos;=&apos;</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="2594"/>
+        <location filename="../src/widgets/window.cpp" line="2624"/>
         <source>Ctrl+&apos;-&apos;</source>
         <translation>Ctrl+&apos;-&apos;</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="2623"/>
+        <location filename="../src/widgets/window.cpp" line="2653"/>
         <source>Editor</source>
         <translation>Penyunting</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="3436"/>
+        <location filename="../src/widgets/window.cpp" line="3466"/>
         <source>Untitled %1</source>
         <translation>Tanpa Judul %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="3948"/>
+        <location filename="../src/widgets/window.cpp" line="4006"/>
         <source>Cancel</source>
         <translation>Batal</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="3949"/>
+        <location filename="../src/widgets/window.cpp" line="4007"/>
         <source>Discard</source>
         <translation>Membuang</translation>
     </message>
