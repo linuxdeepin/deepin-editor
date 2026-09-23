@@ -26,19 +26,19 @@
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="73"/>
         <location filename="../src/widgets/bottombar.cpp" line="91"/>
-        <location filename="../src/widgets/bottombar.cpp" line="499"/>
+        <location filename="../src/widgets/bottombar.cpp" line="501"/>
         <source>Edit Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="74"/>
-        <location filename="../src/widgets/bottombar.cpp" line="489"/>
+        <location filename="../src/widgets/bottombar.cpp" line="491"/>
         <source>Read View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="75"/>
-        <location filename="../src/widgets/bottombar.cpp" line="493"/>
+        <location filename="../src/widgets/bottombar.cpp" line="495"/>
         <source>Live Preview</source>
         <translation type="unfinished"></translation>
     </message>
@@ -46,9 +46,9 @@
 <context>
     <name>DDropdownMenu</name>
     <message>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="363"/>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="421"/>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="426"/>
+        <location filename="../src/widgets/ddropdownmenu.cpp" line="370"/>
+        <location filename="../src/widgets/ddropdownmenu.cpp" line="428"/>
+        <location filename="../src/widgets/ddropdownmenu.cpp" line="433"/>
         <source>None</source>
         <translation>ບໍ່ມີ</translation>
     </message>
@@ -56,57 +56,62 @@
 <context>
     <name>EditWrapper</name>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="355"/>
-        <location filename="../src/editor/editwrapper.cpp" line="429"/>
-        <location filename="../src/editor/editwrapper.cpp" line="595"/>
-        <location filename="../src/editor/editwrapper.cpp" line="887"/>
+        <location filename="../src/editor/editwrapper.cpp" line="357"/>
+        <location filename="../src/editor/editwrapper.cpp" line="431"/>
+        <location filename="../src/editor/editwrapper.cpp" line="597"/>
+        <location filename="../src/editor/editwrapper.cpp" line="889"/>
         <source>Save</source>
         <translation>ບັນທຶກ</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="590"/>
+        <location filename="../src/editor/editwrapper.cpp" line="592"/>
         <source>Do you want to save this file?</source>
         <translation>ທ່ານຕ້ອງການບັນທຶກຂໍ້ມູນນີ້ຫຍັງ?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="427"/>
-        <location filename="../src/editor/editwrapper.cpp" line="593"/>
+        <location filename="../src/editor/editwrapper.cpp" line="429"/>
+        <location filename="../src/editor/editwrapper.cpp" line="595"/>
         <source>Cancel</source>
         <translation>ຢກເລີກ</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="424"/>
+        <location filename="../src/editor/editwrapper.cpp" line="426"/>
         <source>Encoding changed. Do you want to save the file now?</source>
         <translation>ດັດຊະນີຂໍ້ມູນນີ້ຫຍັງ? ທ່ານຕ້ອງການບັນທຶກຂໍ້ມູນນີ້ຫຍັງ?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="594"/>
+        <location filename="../src/editor/editwrapper.cpp" line="596"/>
         <source>Discard</source>
         <translation>ລົບ</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="1121"/>
+        <location filename="../src/editor/editwrapper.cpp" line="1126"/>
         <source>The file contains invalid characters (NUL). Preview mode is read-only.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="337"/>
-        <location filename="../src/editor/editwrapper.cpp" line="705"/>
+        <location filename="../src/editor/editwrapper.cpp" line="2109"/>
+        <source>Read-Only mode is on</source>
+        <translation type="unfinished">ໂໝດອ່ານຢ່າງດຽວຖືກເປີດ</translation>
+    </message>
+    <message>
+        <location filename="../src/editor/editwrapper.cpp" line="339"/>
+        <location filename="../src/editor/editwrapper.cpp" line="707"/>
         <source>You do not have permission to save %1</source>
         <translation>ທ່ານບໍ່ມີສິທາງການບັນທຶກ %1</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="987"/>
+        <location filename="../src/editor/editwrapper.cpp" line="989"/>
         <source>File removed on the disk. Save it now?</source>
         <translation>ໄຟລ໌ຖືກລຶບອອກຈາກດິສ. ທ່ານຕ້ອງການບັນທຶກມັນດຽວນີ້ບໍ?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="993"/>
+        <location filename="../src/editor/editwrapper.cpp" line="995"/>
         <source>File has changed on disk. Reload?</source>
         <translation>ໄຟລ໌ຖືກດັດຊະນີອອກຈາກດິສ. ທ່ານຕ້ອງການບັນທຶກມັນດຽວນີ້ບໍ?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="1806"/>
+        <location filename="../src/editor/editwrapper.cpp" line="1817"/>
         <source>The file cannot be read, which may be too large or has been damaged!</source>
         <translation>ບໍ່ສາມາດອ່ານໄຟລ໌ໄດ້, ອາດຈະໃຫຍ່ເກີນໄປ ຫຼື ໄດ້ຮັບຄວາມເສຍຫາຍ!</translation>
     </message>
@@ -119,17 +124,17 @@
         <translation>ຄີດຊອກ</translation>
     </message>
     <message>
-        <location filename="../src/controls/findbar.cpp" line="38"/>
+        <location filename="../src/controls/findbar.cpp" line="39"/>
         <source>Previous</source>
         <translation>ຫົວ້ອງກ່ອນຫົວ້ອງ</translation>
     </message>
     <message>
-        <location filename="../src/controls/findbar.cpp" line="40"/>
+        <location filename="../src/controls/findbar.cpp" line="42"/>
         <source>Next</source>
         <translation>ຫົວ້ອງຕໍ່ໄປ</translation>
     </message>
     <message>
-        <location filename="../src/controls/findbar.cpp" line="42"/>
+        <location filename="../src/controls/findbar.cpp" line="45"/>
         <source>Replace</source>
         <translation>ປ່ຽນແທນ</translation>
     </message>
@@ -137,7 +142,7 @@
 <context>
     <name>JumpLineBar</name>
     <message>
-        <location filename="../src/controls/jumplinebar.cpp" line="46"/>
+        <location filename="../src/controls/jumplinebar.cpp" line="47"/>
         <source>Go to Line: </source>
         <translation>ໄປຫາບຣາວຊາດ: </translation>
     </message>
@@ -145,7 +150,7 @@
 <context>
     <name>LineBar</name>
     <message>
-        <location filename="../src/controls/linebar.cpp" line="144"/>
+        <location filename="../src/controls/linebar.cpp" line="148"/>
         <source>第%1/%2项</source>
         <translation type="unfinished"></translation>
     </message>
@@ -164,49 +169,18 @@
     </message>
 </context>
 <context>
-    <name>MarkdownBridge</name>
-    <message>
-        <location filename="../src/editor/markdown/markdownbridge.h" line="37"/>
-        <source>Collapse code block</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/editor/markdown/markdownbridge.h" line="38"/>
-        <source>Expand code block</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/editor/markdown/markdownbridge.h" line="39"/>
-        <source>Copy code</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/editor/markdown/markdownbridge.h" line="40"/>
-        <source>Expand</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/editor/markdown/markdownbridge.h" line="42"/>
-        <source>%1 line(s) of code collapsed</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>PathSettingWgt</name>
     <message>
-        <location filename="../src/widgets/pathsettintwgt.cpp" line="90"/>
         <source>Remember the last used path</source>
-        <translation>ການນຳໃຊ້ເສີມ</translation>
+        <translation type="vanished">ການນຳໃຊ້ເສີມ</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pathsettintwgt.cpp" line="91"/>
         <source>Same path as the current file</source>
-        <translation>ຈຸດທີ່ໄດ້ໃຊ້ກ່ອນ</translation>
+        <translation type="vanished">ຈຸດທີ່ໄດ້ໃຊ້ກ່ອນ</translation>
     </message>
     <message>
-        <location filename="../src/widgets/pathsettintwgt.cpp" line="92"/>
         <source>Customize the default path</source>
-        <translation>ຄຸ້ມຄອບມາດຕະຖານ</translation>
+        <translation type="vanished">ຄຸ້ມຄອບມາດຕະຖານ</translation>
     </message>
 </context>
 <context>
@@ -217,18 +191,18 @@
         <translation>ຕົວເລີ່ມຕົ້ນສຳລັບດູແລະປ່ອຍປ່ອຍຂໍ້ມູນນີ້ຫຍັງ.</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="357"/>
-        <location filename="../src/editor/editwrapper.cpp" line="897"/>
-        <location filename="../src/editor/editwrapper.cpp" line="912"/>
-        <location filename="../src/widgets/window.cpp" line="1528"/>
-        <location filename="../src/widgets/window.cpp" line="1556"/>
-        <location filename="../src/widgets/window.cpp" line="1715"/>
-        <location filename="../src/widgets/window.cpp" line="1732"/>
+        <location filename="../src/editor/editwrapper.cpp" line="359"/>
+        <location filename="../src/editor/editwrapper.cpp" line="899"/>
+        <location filename="../src/editor/editwrapper.cpp" line="914"/>
+        <location filename="../src/widgets/window.cpp" line="1540"/>
+        <location filename="../src/widgets/window.cpp" line="1568"/>
+        <location filename="../src/widgets/window.cpp" line="1727"/>
+        <location filename="../src/widgets/window.cpp" line="1744"/>
         <source>Encoding</source>
         <translation>ລະຫັດສະແດງ</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="2001"/>
+        <location filename="../src/editor/editwrapper.cpp" line="2015"/>
         <source>视图模式</source>
         <translation type="unfinished"></translation>
     </message>
@@ -266,7 +240,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="18"/>
         <location filename="../src/controls/settingsdialog.cpp" line="96"/>
-        <location filename="../src/widgets/window.cpp" line="2581"/>
+        <location filename="../src/widgets/window.cpp" line="2611"/>
         <source>Window</source>
         <translation>ຫນ້າທີ່</translation>
     </message>
@@ -806,70 +780,59 @@
         <translation>ອາຣາບິກ</translation>
     </message>
     <message>
-        <location filename="../src/startmanager.cpp" line="1035"/>
+        <location filename="../src/startmanager.cpp" line="1040"/>
         <source>File not saved</source>
         <translation>ບໍ່ໄດ້ບີ້້</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1716"/>
-        <location filename="../src/widgets/window.cpp" line="1733"/>
+        <location filename="../src/widgets/window.cpp" line="1728"/>
+        <location filename="../src/widgets/window.cpp" line="1745"/>
         <source>Line Endings</source>
         <translation>ເສົ້າທື່</translation>
     </message>
     <message>
-        <location filename="../src/common/iflytek_ai_assistant.cpp" line="379"/>
         <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
-        <translation>ກະລູນາຕິດຕັ້ງ &apos;UOS AI&apos; ຈາກ App Store ກ່ອນໃຊ້ງານ</translation>
+        <translation type="vanished">ກະລູນາຕິດຕັ້ງ &apos;UOS AI&apos; ຈາກ App Store ກ່ອນໃຊ້ງານ</translation>
     </message>
     <message>
-        <location filename="../src/common/iflytek_ai_assistant.cpp" line="381"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation>ບໍ່ພົບອຸປະກອນຮັບສຽງ. ກະລຸນາກວດສອບ ແລະ ລອງໃໝ່ອີກຄັ້ງ</translation>
+        <translation type="vanished">ບໍ່ພົບອຸປະກອນຮັບສຽງ. ກະລຸນາກວດສອບ ແລະ ລອງໃໝ່ອີກຄັ້ງ</translation>
     </message>
     <message>
-        <location filename="../src/common/iflytek_ai_assistant.cpp" line="383"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation>ບໍ່ພົບອຸປະກອນອອກສຽງ. ກະລຸນາກວດສອບ ແລະ ລອງໃໝ່ອີກຄັ້ງ</translation>
+        <translation type="vanished">ບໍ່ພົບອຸປະກອນອອກສຽງ. ກະລຸນາກວດສອບ ແລະ ລອງໃໝ່ອີກຄັ້ງ</translation>
     </message>
     <message>
-        <location filename="../src/common/text_file_saver.cpp" line="74"/>
         <source>File path is empty</source>
-        <translation>ເຄື່ອງມຸງລະຫ຤ຸ້ນເປັນຫວ່າງເຫດ</translation>
+        <translation type="vanished">ເຄື່ອງມຸງລະຫ຤ຸ້ນເປັນຫວ່າງເຫດ</translation>
     </message>
     <message>
-        <location filename="../src/common/text_file_saver.cpp" line="153"/>
         <source>Insufficient memory to load document content</source>
-        <translation>ບໍ່ພີ້ນພ້ອມພໍເພື່ອອົບຮົມເນື່ອງໃນເນື່ອງຂອງບໍ່ພີ້ນພ້ອມພໍ</translation>
+        <translation type="vanished">ບໍ່ພີ້ນພ້ອມພໍເພື່ອອົບຮົມເນື່ອງໃນເນື່ອງຂອງບໍ່ພີ້ນພ້ອມພໍ</translation>
     </message>
     <message>
-        <location filename="../src/common/text_file_saver.cpp" line="178"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation>ບໍ່ພີ້ນພ້ອມພໍສື່ຂໍ້າງກຳນຳເພື່ອການປ່ອງແລະການແປກ</translation>
+        <translation type="vanished">ບໍ່ພີ້ນພ້ອມພໍສື່ຂໍ້າງກຳນຳເພື່ອການປ່ອງແລະການແປກ</translation>
     </message>
     <message>
-        <location filename="../src/common/text_file_saver.cpp" line="184"/>
         <source>Encoding conversion failed</source>
-        <translation>ລోຫຼາຍກວດການປ້ອມແປບ້ານບ່າຍກຳນຳໃຊ້ບໍ່ໄດ້</translation>
+        <translation type="vanished">ລోຫຼາຍກວດການປ້ອມແປບ້ານບ່າຍກຳນຳໃຊ້ບໍ່ໄດ້</translation>
     </message>
     <message>
-        <location filename="../src/common/text_file_saver.cpp" line="190"/>
         <source>Converted content is empty</source>
-        <translation>ແປບ້ານທຳເລັດມີເນື້ອໃນເປັນຫວ່າງ</translation>
+        <translation type="vanished">ແປບ້ານທຳເລັດມີເນື້ອໃນເປັນຫວ່າງ</translation>
     </message>
     <message>
-        <location filename="../src/common/text_file_saver.cpp" line="208"/>
         <source>Memory allocation failed</source>
-        <translation>ຈົ່ງການຈັດເຈົ້າມີບັນຫາ</translation>
+        <translation type="vanished">ຈົ່ງການຈັດເຈົ້າມີບັນຫາ</translation>
     </message>
     <message>
-        <location filename="../src/common/text_file_saver.cpp" line="212"/>
         <source>Error occurred: %1</source>
-        <translation>ເກີດຂ້ອງຫນ້າ: %1</translation>
+        <translation type="vanished">ເກີດຂ້ອງຫນ້າ: %1</translation>
     </message>
     <message>
-        <location filename="../src/common/text_file_saver.cpp" line="216"/>
         <source>Unknown error occurred</source>
-        <translation>ບ່າຍຂ້ອງຫນ້າທີ່ບໍ່ຮັບຮູ້ເກີດຂຶ້ນ</translation>
+        <translation type="vanished">ບ່າຍຂ້ອງຫນ້າທີ່ບໍ່ຮັບຮູ້ເກີດຂຶ້ນ</translation>
     </message>
 </context>
 <context>
@@ -880,27 +843,27 @@
         <translation>ຊອກຫາ</translation>
     </message>
     <message>
-        <location filename="../src/controls/replacebar.cpp" line="36"/>
+        <location filename="../src/controls/replacebar.cpp" line="37"/>
         <source>Replace With</source>
         <translation>ແບ່ງແຍ່ງໃຫ້ພັນທຳ</translation>
     </message>
     <message>
-        <location filename="../src/controls/replacebar.cpp" line="40"/>
+        <location filename="../src/controls/replacebar.cpp" line="42"/>
         <source>Replace</source>
         <translation>ແບ່ງແຍ່ງ</translation>
     </message>
     <message>
-        <location filename="../src/controls/replacebar.cpp" line="42"/>
+        <location filename="../src/controls/replacebar.cpp" line="45"/>
         <source>Skip</source>
         <translation>ຜ່ອຍວາງ</translation>
     </message>
     <message>
-        <location filename="../src/controls/replacebar.cpp" line="44"/>
+        <location filename="../src/controls/replacebar.cpp" line="48"/>
         <source>Replace Rest</source>
         <translation>ແບ່ງແຍ່ງເຫຼົ່າອື່ນ້ອຍ</translation>
     </message>
     <message>
-        <location filename="../src/controls/replacebar.cpp" line="46"/>
+        <location filename="../src/controls/replacebar.cpp" line="51"/>
         <source>Replace All</source>
         <translation>ແບ່ງແຍ່ງທີ່ງານ</translation>
     </message>
@@ -977,7 +940,7 @@
 <context>
     <name>StartManager</name>
     <message>
-        <location filename="../src/startmanager.cpp" line="425"/>
+        <location filename="../src/startmanager.cpp" line="430"/>
         <source>Untitled %1</source>
         <translation>ບໍ່ມີຊື່ %1</translation>
     </message>
@@ -985,32 +948,32 @@
 <context>
     <name>Tabbar</name>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="678"/>
+        <location filename="../src/controls/tabbar.cpp" line="683"/>
         <source>Close tab</source>
         <translation>ປຸງປະດີງ མົງ</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="680"/>
+        <location filename="../src/controls/tabbar.cpp" line="685"/>
         <source>Close other tabs</source>
         <translation>ປຸງປະດີງ མົງອື່ນ</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="682"/>
+        <location filename="../src/controls/tabbar.cpp" line="687"/>
         <source>More options</source>
         <translation>ອີ້ນີ້ມີຫຼາຍວົງຢານ</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="684"/>
+        <location filename="../src/controls/tabbar.cpp" line="690"/>
         <source>Close tabs to the left</source>
         <translation>ປຸງປະດີງ མົງທີ່ຢັນຂວາ</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="686"/>
+        <location filename="../src/controls/tabbar.cpp" line="692"/>
         <source>Close tabs to the right</source>
         <translation>ປຸງປະດີງ མົງທີ່ຢັນຊ່ວງການ</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="688"/>
+        <location filename="../src/controls/tabbar.cpp" line="694"/>
         <source>Close unmodified tabs</source>
         <translation>ປຸງປະດີງ མົງທີ່ບໍ່ຖືກແກນແລ້ງ</translation>
     </message>
@@ -1054,13 +1017,13 @@
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="402"/>
-        <location filename="../src/widgets/window.cpp" line="556"/>
+        <location filename="../src/widgets/window.cpp" line="558"/>
         <source>Find</source>
         <translation>ຊອກຫາ</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="404"/>
-        <location filename="../src/widgets/window.cpp" line="558"/>
+        <location filename="../src/widgets/window.cpp" line="560"/>
         <source>Replace</source>
         <translation>ແທນທີ່</translation>
     </message>
@@ -1191,26 +1154,26 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3531"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3534"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3482"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3485"/>
         <source>Copy failed: not enough memory</source>
         <translation>ການຄັດລອກບໍ່ສຳເລັດ: ຫມື່ມີຄວາມຈຸ່ມວາງ</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3656"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3658"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3607"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3609"/>
         <source>Press ALT and click lines to edit in column mode</source>
         <translation>ກົດ ALT ແລະຄລິກບຣາບາບສຳລັບການແກ້ໄຂໃນສະແດງໃນໂຕຈັດການໄຟລ໌</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="9574"/>
-        <location filename="../src/editor/dtextedit.cpp" line="9576"/>
+        <location filename="../src/editor/dtextedit.cpp" line="9214"/>
+        <location filename="../src/editor/dtextedit.cpp" line="9216"/>
         <source>No audio output device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="9583"/>
-        <location filename="../src/editor/dtextedit.cpp" line="9585"/>
+        <location filename="../src/editor/dtextedit.cpp" line="9223"/>
+        <location filename="../src/editor/dtextedit.cpp" line="9225"/>
         <source>No audio input device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1275,23 +1238,23 @@
         <translation>ລອຫາດທີ່ເລືອກໄວ້ຖືກລອຫາດແລ້ວ</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3550"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3553"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3501"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3504"/>
         <source>Paste failed: not enough memory</source>
         <translation>ການລອຫາດບໍ່ສຳເລັດ: ຫມື່ມີຄວາມຈຸ່ມວາງ</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="4873"/>
+        <location filename="../src/editor/dtextedit.cpp" line="4833"/>
         <source>Read-Only mode is off</source>
         <translation>ໂໝດອ່ານຢ່າງດຽວຖືກປິດ</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="4885"/>
-        <location filename="../src/editor/dtextedit.cpp" line="4909"/>
-        <location filename="../src/editor/dtextedit.cpp" line="8236"/>
-        <location filename="../src/editor/dtextedit.cpp" line="8347"/>
-        <location filename="../src/editor/dtextedit.cpp" line="8355"/>
-        <location filename="../src/editor/dtextedit.cpp" line="8366"/>
+        <location filename="../src/editor/dtextedit.cpp" line="4845"/>
+        <location filename="../src/editor/dtextedit.cpp" line="4869"/>
+        <location filename="../src/editor/dtextedit.cpp" line="7875"/>
+        <location filename="../src/editor/dtextedit.cpp" line="7986"/>
+        <location filename="../src/editor/dtextedit.cpp" line="7994"/>
+        <location filename="../src/editor/dtextedit.cpp" line="8005"/>
         <source>Read-Only mode is on</source>
         <translation>ໂໝດອ່ານຢ່າງດຽວຖືກເປີດ</translation>
     </message>
@@ -1304,7 +1267,7 @@
         <translation>ຕັດສຽງມາກກວ່ານີ້</translation>
     </message>
     <message>
-        <location filename="../src/controls/warningnotices.cpp" line="29"/>
+        <location filename="../src/controls/warningnotices.cpp" line="31"/>
         <source>Edit Anyway</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1312,162 +1275,162 @@
 <context>
     <name>Window</name>
     <message>
-        <location filename="../src/controls/warningnotices.cpp" line="27"/>
-        <location filename="../src/widgets/window.cpp" line="548"/>
+        <location filename="../src/controls/warningnotices.cpp" line="28"/>
+        <location filename="../src/widgets/window.cpp" line="550"/>
         <source>Save as</source>
         <translation>ບັນທຶກຕົວຢ່າງ</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="540"/>
+        <location filename="../src/widgets/window.cpp" line="542"/>
         <source>New window</source>
         <translation>ຫນ້າທີ່ໃຫມ່</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="542"/>
+        <location filename="../src/widgets/window.cpp" line="544"/>
         <source>New tab</source>
         <translation>ຫນ້າທີ່ໃຫມ່</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="544"/>
+        <location filename="../src/widgets/window.cpp" line="546"/>
         <source>Open file</source>
         <translation>ເປີດໄຟລ໌</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="546"/>
-        <location filename="../src/widgets/window.cpp" line="3950"/>
+        <location filename="../src/widgets/window.cpp" line="548"/>
+        <location filename="../src/widgets/window.cpp" line="4008"/>
         <source>Save</source>
         <translation>ບັນທຶກ</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="550"/>
+        <location filename="../src/widgets/window.cpp" line="552"/>
         <source>Print</source>
         <translation>ພິມ</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="552"/>
+        <location filename="../src/widgets/window.cpp" line="554"/>
         <source>Switch theme</source>
         <translation>ປ່ຽນສີສັນ</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="554"/>
-        <location filename="../src/widgets/window.cpp" line="2641"/>
+        <location filename="../src/widgets/window.cpp" line="556"/>
+        <location filename="../src/widgets/window.cpp" line="2671"/>
         <source>Settings</source>
         <translation>ຕັດສຽງມາກກວ່ານີ້</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="696"/>
-        <location filename="../src/widgets/window.cpp" line="4250"/>
+        <location filename="../src/widgets/window.cpp" line="700"/>
+        <location filename="../src/widgets/window.cpp" line="4308"/>
         <source>Read-Only</source>
         <translation>ອ່ານຢ່າງດຽວ</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="719"/>
+        <location filename="../src/widgets/window.cpp" line="723"/>
         <source>You do not have permission to open %1</source>
         <translation>ທ່ານບໍ່ມີສິດທິໃນການເປີດ %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="773"/>
-        <location filename="../src/widgets/window.cpp" line="3266"/>
+        <location filename="../src/widgets/window.cpp" line="777"/>
+        <location filename="../src/widgets/window.cpp" line="3296"/>
         <source>Invalid file: %1</source>
         <translation>ໄຟລ໌ບໍ່ຖືກຕ້ອງ: %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="957"/>
-        <location filename="../src/widgets/window.cpp" line="1050"/>
-        <location filename="../src/widgets/window.cpp" line="3217"/>
+        <location filename="../src/widgets/window.cpp" line="961"/>
+        <location filename="../src/widgets/window.cpp" line="1054"/>
+        <location filename="../src/widgets/window.cpp" line="3247"/>
         <source>Do you want to save this file?</source>
         <translation>ທ່ານຕ້ອງການບັນທຶກໄຟລ໌ນີ້ຫມືບໍ່?</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1381"/>
+        <location filename="../src/widgets/window.cpp" line="1393"/>
         <source>Invalid characters detected while saving &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1382"/>
+        <location filename="../src/widgets/window.cpp" line="1394"/>
         <source>If you force save this file, it may cause file corruption. Still want to save?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1386"/>
+        <location filename="../src/widgets/window.cpp" line="1398"/>
         <source>Don&apos;t Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1387"/>
+        <location filename="../src/widgets/window.cpp" line="1399"/>
         <source>Save As</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1388"/>
+        <location filename="../src/widgets/window.cpp" line="1400"/>
         <source>Save Anyway</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1456"/>
+        <location filename="../src/widgets/window.cpp" line="1468"/>
         <source>You do not have permission to save %1</source>
         <translation>ທ່ານບໍ່ມີສິດທິໃນການບັນທຶກ %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1428"/>
-        <location filename="../src/widgets/window.cpp" line="1478"/>
+        <location filename="../src/widgets/window.cpp" line="1440"/>
+        <location filename="../src/widgets/window.cpp" line="1490"/>
         <source>Saved successfully</source>
         <translation>ບັນທຶກສຳເລັດແລ້ວ</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1520"/>
-        <location filename="../src/widgets/window.cpp" line="1665"/>
-        <location filename="../src/widgets/window.cpp" line="1713"/>
+        <location filename="../src/widgets/window.cpp" line="1532"/>
+        <location filename="../src/widgets/window.cpp" line="1677"/>
+        <location filename="../src/widgets/window.cpp" line="1725"/>
         <source>Save File</source>
         <translation>ບັນທຶກໄຟລ໌</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1569"/>
+        <location filename="../src/widgets/window.cpp" line="1581"/>
         <source>Cannot save as the original file in preview mode. Please choose a different path.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1667"/>
+        <location filename="../src/widgets/window.cpp" line="1679"/>
         <source>Encoding</source>
         <translation>ການດັດສຽງ</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1957"/>
+        <location filename="../src/widgets/window.cpp" line="1969"/>
         <source>Read-Only mode is on</source>
         <translation>ໂໝດອ່ານຢ່າງດຽວຖືກເປີດ</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="2511"/>
+        <location filename="../src/widgets/window.cpp" line="2541"/>
         <source>Current location remembered</source>
         <translation>ຕຳລາທີ່ເລືອກໄວ້ຖືກຈັດສຳເລັດແລ້ວ</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="2591"/>
+        <location filename="../src/widgets/window.cpp" line="2621"/>
         <source>Ctrl+&apos;=&apos;</source>
         <translation>Ctrl+&apos;=&apos;</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="2594"/>
+        <location filename="../src/widgets/window.cpp" line="2624"/>
         <source>Ctrl+&apos;-&apos;</source>
         <translation>Ctrl+&apos;-&apos;</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="2623"/>
+        <location filename="../src/widgets/window.cpp" line="2653"/>
         <source>Editor</source>
         <translation>ຕັດສຽງມາກກວ່ານີ້</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="3436"/>
+        <location filename="../src/widgets/window.cpp" line="3466"/>
         <source>Untitled %1</source>
         <translation>ບໍ່ມີຊື່ %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="3948"/>
+        <location filename="../src/widgets/window.cpp" line="4006"/>
         <source>Cancel</source>
         <translation>ຢກເລີກ</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="3949"/>
+        <location filename="../src/widgets/window.cpp" line="4007"/>
         <source>Discard</source>
         <translation>ລົບລາຍການ</translation>
     </message>
