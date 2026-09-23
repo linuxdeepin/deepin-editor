@@ -6,6 +6,7 @@
 :root {
     --bg: #ffffff;
     --fg: #1f1f1f;
+    color-scheme: light;
     --fg-secondary: #595959;
     --code-bg: #f5f5f5;
     --code-fg: #1f1f1f;
@@ -19,6 +20,7 @@
 }
 
 [data-theme="dark"] {
+    color-scheme: dark;
     --link: #024cca;
     --table-border: rgba(255, 255, 255, 0.1);
 }
@@ -276,3 +278,17 @@ html, body {
 /* 只读模式去除编辑光标 */
 .milkdown .ProseMirror { outline: none; caret-color: transparent; }
 .milkdown-read-only .ProseMirror { cursor: default; }
+
+/* 滚动条主题适配 */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--fg-secondary); }
+
+/* 深色滑块提亮：--border（bg.lighter(150)≈#383838）在深底上过深，改半透明白叠加
+   （#252525 底上≈#666666），与本文件深色区的 rgba 白系蒙层做法及 DDE 滚动条观感一致。
+   两个选择器缺一不可：无空格匹配 html 自身的主框架滚动条，带空格匹配后代滚动区（代码块/表格） */
+[data-theme="dark"]::-webkit-scrollbar-thumb,
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+}
