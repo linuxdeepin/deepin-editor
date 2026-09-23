@@ -8494,7 +8494,10 @@ void TextEdit::resizeEvent(QResizeEvent *e)
             auto docLayout = guard->document()->documentLayout();
             Q_EMIT docLayout->documentSizeChanged(docLayout->documentSize());
 
-            guard->verticalScrollBar()->setValue(guard->verticalScrollBar()->maximum());
+            // 定时器触发时重新检查是否仍处于文档尾部，避免文件加载后光标已重置却错误滚动到底部
+            if (guard->verticalScrollBar()->maximum() == guard->verticalScrollBar()->value()) {
+                guard->verticalScrollBar()->setValue(guard->verticalScrollBar()->maximum());
+            }
         });
     }
 

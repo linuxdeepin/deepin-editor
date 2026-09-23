@@ -1057,6 +1057,9 @@ void EditWrapper::handleFilePreProcess(const QByteArray &encode, const QByteArra
     // 直接加载数据到文档页面
     QString data = codec->toUnicode(content.constData(), content.size());
     cursor.insertText(data);
+    // 重置光标到文档开头，与 loadContent 行为保持一致
+    cursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+    m_pTextEdit->setTextCursor(cursor);
     // 界面语法高亮
     OnUpdateHighlighter();
 
