@@ -664,7 +664,7 @@ void TextEdit::popRightMenu(QPoint pos)
     }
 
     // intelligent judge whether to support comments.
-    const auto def = m_repository.definitionForFileName(QFileInfo(m_sFilePath).fileName());
+    const auto def = m_repository.definitionForFileName(QFileInfo(m_sFilePath).fileName().toLower());
     if (characterCount() &&
             (textCursor().hasSelection() || !isBlankLine) &&
             !def.filePath().isEmpty()) {
@@ -4852,7 +4852,7 @@ void TextEdit::toggleReadOnlyMode(bool notNotify)
 void TextEdit::toggleComment(bool bValue)
 {
     qDebug() << "Toggle comment, bValue:" << bValue;
-    const auto def = m_repository.definitionForFileName(QFileInfo(m_sFilePath).fileName());
+    const auto def = m_repository.definitionForFileName(QFileInfo(m_sFilePath).fileName().toLower());
     QTextCursor selectionCursor = textCursor();
     selectionCursor.movePosition(QTextCursor::StartOfBlock);
     selectionCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
