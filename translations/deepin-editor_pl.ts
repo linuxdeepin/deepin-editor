@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="pl">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="pl">
 <context>
     <name>BottomBar</name>
     <message>
@@ -108,7 +106,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="2109"/>
         <source>Read-Only mode is on</source>
-        <translation type="unfinished">Tryb tylko-do-odczytu jest aktywny</translation>
+        <translation>Tryb tylko-do-odczytu jest aktywny</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="1126"/>
@@ -166,29 +164,6 @@
         <location filename="../src/editorapplication.cpp" line="34"/>
         <source>Text Editor</source>
         <translation>Edytor tekstu</translation>
-    </message>
-</context>
-<context>
-    <name>MarkdownBridge</name>
-    <message>
-        <source>Collapse code block</source>
-        <translation type="vanished">Zwiń blok kodu</translation>
-    </message>
-    <message>
-        <source>Expand code block</source>
-        <translation type="vanished">Rozwiń blok kodu</translation>
-    </message>
-    <message>
-        <source>Copy code</source>
-        <translation type="vanished">Kopiuj kod</translation>
-    </message>
-    <message>
-        <source>Expand</source>
-        <translation type="vanished">Rozwiń</translation>
-    </message>
-    <message>
-        <source>%1 line(s) of code collapsed</source>
-        <translation type="vanished">Zwinięto %1 linii(e) kodu</translation>
     </message>
 </context>
 <context>
@@ -889,6 +864,15 @@
         <location filename="../src/controls/replacebar.cpp" line="51"/>
         <source>Replace All</source>
         <translation>Zastąp wszystkie</translation>
+    </message>
+</context>
+<context>
+    <name>S:</name>
+    <message>
+        <location filename="../third/libiconv-1.16/src/iconv.c" line="103"/>
+        <source/>
+        <comment>The first line of the short usage message.</comment>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

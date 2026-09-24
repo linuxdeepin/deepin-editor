@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sv">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="sv">
 <context>
     <name>BottomBar</name>
     <message>
@@ -108,7 +106,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="2109"/>
         <source>Read-Only mode is on</source>
-        <translation type="unfinished">Skrivskyddat läge är på</translation>
+        <translation>Skrivskyddat läge är på</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="1126"/>
@@ -166,29 +164,6 @@
         <location filename="../src/editorapplication.cpp" line="34"/>
         <source>Text Editor</source>
         <translation>Textredigerare</translation>
-    </message>
-</context>
-<context>
-    <name>MarkdownBridge</name>
-    <message>
-        <source>Collapse code block</source>
-        <translation type="vanished">Fäll ihop kodblock</translation>
-    </message>
-    <message>
-        <source>Expand code block</source>
-        <translation type="vanished">Fäll ut kodblock</translation>
-    </message>
-    <message>
-        <source>Copy code</source>
-        <translation type="vanished">Kopiera kod</translation>
-    </message>
-    <message>
-        <source>Expand</source>
-        <translation type="vanished">Fäll ut</translation>
-    </message>
-    <message>
-        <source>%1 line(s) of code collapsed</source>
-        <translation type="vanished">%1 kodrad(er) är hopfällda</translation>
     </message>
 </context>
 <context>
@@ -895,9 +870,9 @@
     <name>S:</name>
     <message>
         <location filename="../third/libiconv-1.16/src/iconv.c" line="103"/>
-        <source></source>
+        <source/>
         <comment>The first line of the short usage message.</comment>
-        <translation></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
