@@ -6,6 +6,7 @@
 //
 // 插件链顺序与 uos-ai 一致：
 //   commonmark → gfm → history → indent → clipboard → mathPlugins
+//   另注册 tableView/codeBlockView（nodeViews.js）：表格/代码块视觉包裹走 NodeView
 // 本期固定 editable:false（只读预览）。阶段二切 editable:true 即得 WYSIWYG
 //（届时需恢复 listener 插件与 markdownUpdated 回写，见 boot() 内注释）。
 
@@ -18,7 +19,7 @@ import { clipboard } from "@milkdown/kit/plugin/clipboard";
 import { replaceAll } from "@milkdown/kit/utils";
 import { mathPlugins, normalizeMathDelimiters } from "./milkdownMathPlugins.js";
 import { setupBridge } from "./bridge.js";
-import { enhance, enhanceNodes, retranslateCodeBlocks } from "./renderEnhancer.js";
+import { tableView, codeBlockView, retranslateCodeBlocks } from "./nodeViews.js";
 
 import "katex/dist/katex.min.css";
 import "./theme.css";
@@ -57,13 +58,10 @@ function renderMarkdown(md) {
     userScrolledDuringBuild = false;
     if (normalized.length <= PROGRESSIVE_THRESHOLD) {
         editor.action(replaceAll(normalized));
-        // 重渲染后做静态后处理（表格包裹等）并重放滚动比例：
-        // 首次渲染完成前 scrollToRatio 因 max=0 被跳过，此处对齐左右初始位置
-        const rootEl = document.getElementById(ROOT_ID);
-        setTimeout(() => {
-            enhance(rootEl);
-            reapplyScroll();
-        }, 0);
+        // 表格/代码块的视觉包裹由 NodeView 随文档同步生成（不再事后 enhance），
+        // 渲染完成后重放滚动比例：首次渲染完成前 scrollToRatio 因 max=0 被跳过，
+        // 此处对齐左右初始位置
+        setTimeout(reapplyScroll, 0);
         return;
     }
     renderProgressively(normalized, renderGeneration);
@@ -121,11 +119,10 @@ function renderProgressively(md, gen) {
         const chunk = chunks[index++];
         renderedChars += chunk.length;
         if (index === 1) {
-            // 首块：清空重建 + 后处理 + 初始滚动对齐（对齐时机在后续块增高文档之前）
+            // 首块：清空重建 + 初始滚动对齐（对齐时机在后续块增高文档之前）
             editor.action(replaceAll(chunk));
             setTimeout(() => {
                 if (gen !== renderGeneration) return;
-                enhance(document.getElementById(ROOT_ID));
                 reapplyScroll();
             }, 0);
         } else {
@@ -144,17 +141,13 @@ function renderProgressively(md, gen) {
     step();   // 首块同步渲染，抢最快首屏
 }
 
-// 解析单块并追加到文档末尾；仅对新增 DOM 做后处理
-// （全树扫描在"块数×总节点数"下会重新引入超线性，renderEnhancer.enhanceNodes）
+// 解析单块并追加到文档末尾；表格/代码块外观由 NodeView 随节点创建自动生成
 function appendChunk(chunk) {
     editor.action((ctx) => {
         const view = ctx.get(editorViewCtx);
         const parsed = ctx.get(parserCtx)(chunk);
         if (!parsed) return;
-        const dom = view.dom;
-        const before = dom.childNodes.length;
         view.dispatch(view.state.tr.insert(view.state.doc.content.size, parsed.content));
-        enhanceNodes(Array.from(dom.childNodes).slice(before));
     });
 }
 
@@ -291,6 +284,9 @@ async function boot() {
         .use(indent)
         .use(clipboard)
         .use(mathPlugins)
+        // 表格/代码块包裹结构的 NodeView（闪烁根治，见 nodeViews.js 头注）
+        .use(tableView)
+        .use(codeBlockView)
         .create();
 
     setupBridge({
@@ -299,7 +295,7 @@ async function boot() {
         onApplyTheme: applyTheme,
         onSetLayout: applyLayout,
         onScrollToRatio: scrollToRatio,
-        onRetranslate: () => retranslateCodeBlocks(document.getElementById(ROOT_ID)),
+        onRetranslate: () => retranslateCodeBlocks(),
     });
 
     console.log("[md] boot done, bridge=", typeof window.bridge, "onReady=", window.bridge ? typeof window.bridge.onReady : "n/a");
@@ -317,6 +313,15 @@ async function boot() {
         };
         setTimeout(retry, 50);
     }
+}
+
+// Standalone 调试/自动化验证钩子：仅无 QWebChannel（本地浏览器，bridge.js
+// standalone 降级路径）时暴露；QWebEngine 宿主先加载 qwebchannel.js，不会进此分支
+if (typeof QWebChannel === "undefined") {
+    window.__mdTest = {
+        render: renderMarkdown,
+        rootId: ROOT_ID,
+    };
 }
 
 boot().catch((e) => console.error("Milkdown boot failed:", e));
