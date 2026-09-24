@@ -75,7 +75,7 @@ void ShowFlodCodeWidget::initHighLight(QString filepath, bool bIsLight)
         }
     }
    // m_highlighter->rehighlight();
-    const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
+    const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName().toLower());
     m_highlighter->setDefinition(def);
     qDebug() << "Syntax definition set to:" << def.name();
 }

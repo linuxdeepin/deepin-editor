@@ -1772,7 +1772,7 @@ void EditWrapper::loadContent(const QByteArray &strContent)
 void EditWrapper::reinitOnFileLoad(const QByteArray &encode)
 {
     qDebug() << "EditWrapper reinitOnFileLoad";
-    m_Definition = m_Repository.definitionForFileName(m_pTextEdit->getFilePath());
+    m_Definition = m_Repository.definitionForFileName(QFileInfo(m_pTextEdit->getFilePath()).fileName().toLower());
     if (m_Definition.isValid() && !m_Definition.filePath().isEmpty()) {
         qDebug() << "EditWrapper reinitOnFileLoad, m_Definition.isValid() && !m_Definition.filePath().isEmpty()";
         if (!m_pSyntaxHighlighter) m_pSyntaxHighlighter = new CSyntaxHighlighter(m_pTextEdit->document());
