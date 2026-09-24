@@ -255,6 +255,7 @@ public:
     QString getWordAtMouse();
     QString getWordAtCursor();
     void toggleReadOnlyMode(bool notNotify = false);
+    void setReadOnlyState(bool readonly);
     void toggleComment(bool bValue);
     int getNextWordPosition(QTextCursor &cursor, QTextCursor::MoveMode moveMode);
     int getPrevWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode);

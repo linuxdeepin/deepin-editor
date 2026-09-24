@@ -3738,6 +3738,13 @@ void Window::slotSwitchToReplaceBar()
 {
     qDebug() << "slotSwitchToReplaceBar - switching from find bar to replace bar";
     
+    // 只读模式下不允许切换到替换栏
+    EditWrapper *curWrapper = currentWrapper();
+    if (curWrapper && curWrapper->textEditor() && curWrapper->textEditor()->getReadOnlyMode()) {
+        showNotify(tr("Read-Only mode is on"));
+        return;
+    }
+
     // 获取当前查找栏中的搜索文本和位置信息
     QString searchText;
     QString currentFile;
