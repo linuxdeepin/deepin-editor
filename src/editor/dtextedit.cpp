@@ -5151,6 +5151,13 @@ bool TextEdit::getReadOnlyMode()
     return m_readOnlyMode;
 }
 
+void TextEdit::setReadOnlyState(bool readOnly)
+{
+    qDebug() << "Set read only state:" << readOnly;
+    m_readOnlyMode = readOnly;
+    setReadOnly(readOnly);
+}
+
 void TextEdit::hideRightMenu()
 {
     qDebug() << "Hide right menu";

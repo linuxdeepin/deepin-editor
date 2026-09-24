@@ -264,6 +264,7 @@ public:
     void setReadOnlyPermission(bool permission);
     bool getReadOnlyPermission();
     bool getReadOnlyMode();
+    void setReadOnlyState(bool readOnly);
     // 右键菜单「视图模式」入口（§8.1）：刷新子项选中态与非 md 置灰规则
     void updateViewModeActions(ViewMode mode, bool isMarkdown);
     // 视图模式动作组（编辑/查看/实时预览），供渲染视图右键菜单等复用同一份状态（§8.1）
