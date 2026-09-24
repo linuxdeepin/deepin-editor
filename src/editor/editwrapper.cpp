@@ -1871,6 +1871,14 @@ bool EditWrapper::setViewMode(ViewMode mode)
         m_bReadOnlyByViewMode = false;
     }
 
+    // md 的「查看视图」也需设置 TextEdit 只读，阻止替换等编辑操作
+    if (m_viewMode == ViewMode::ReadView && m_isMarkdown) {
+        if (!m_pTextEdit->getReadOnlyMode()) {
+            m_pTextEdit->setReadOnlyState(true);
+            m_bReadOnlyByViewMode = true;
+        }
+    }
+
     // 懒创建渲染页与分栏，并按模式切换 StackedWidget 页（§4.4）
     ensureMarkdownViewCreated();
     if (m_viewMode == ViewMode::ReadView) {

@@ -4849,6 +4849,13 @@ void TextEdit::toggleReadOnlyMode(bool notNotify)
     qDebug() << "Toggle read only mode completed";
 }
 
+void TextEdit::setReadOnlyState(bool readonly)
+{
+    qDebug() << "Set read only state:" << readonly;
+    m_readOnlyMode = readonly;
+    setReadOnly(readonly);
+}
+
 void TextEdit::toggleComment(bool bValue)
 {
     qDebug() << "Toggle comment, bValue:" << bValue;
