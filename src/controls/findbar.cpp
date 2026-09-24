@@ -112,7 +112,9 @@ void FindBar::focus()
 void FindBar::activeInput(QString text, QString file, int row, int column, int scrollOffset)
 {
     qDebug() << "Activating find bar with text:" << text << "for file:" << file;
-    
+
+    m_editLine->setMatchCount(0, 0);
+
     // Try fill keyword with select text.
     m_editLine->lineEdit()->clear();
     m_editLine->lineEdit()->insert(text);
