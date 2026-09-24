@@ -28,7 +28,7 @@
         <location filename="../src/widgets/bottombar.cpp" line="91"/>
         <location filename="../src/widgets/bottombar.cpp" line="501"/>
         <source>Edit Mode</source>
-        <translation>编辑模式</translation>
+        <translation>编辑视图</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="74"/>
@@ -40,7 +40,7 @@
         <location filename="../src/widgets/bottombar.cpp" line="75"/>
         <location filename="../src/widgets/bottombar.cpp" line="495"/>
         <source>Live Preview</source>
-        <translation>实时预览</translation>
+        <translation>实时阅览</translation>
     </message>
 </context>
 <context>
@@ -1208,7 +1208,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="409"/>
         <source>Edit Mode</source>
-        <translation>编辑模式</translation>
+        <translation>编辑视图</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="411"/>
@@ -1218,7 +1218,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="413"/>
         <source>Live Preview</source>
-        <translation>实时预览</translation>
+        <translation>实时阅览</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="535"/>

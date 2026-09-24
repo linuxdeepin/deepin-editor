@@ -394,7 +394,7 @@ elements:
   - id: "EditView"
     name: "EditView"
     role: "menu item"
-    description: "编辑模式"
+    description: "编辑视图"
 
   - id: "ReadView"
     name: "ReadView"
@@ -404,7 +404,7 @@ elements:
   - id: "LivePreview"
     name: "LivePreview"
     role: "menu item"
-    description: "实时预览"
+    description: "实时阅览"
 
   - id: "Fullscreen"
     name: "Fullscreen"
