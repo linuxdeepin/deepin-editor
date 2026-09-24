@@ -2019,15 +2019,12 @@ void EditWrapper::ensureMarkdownViewCreated()
         sb->setValue(target);
         m_bScrollSyncing = false;
     });
-    // 渲染视图右键菜单（§8.1）：ReadView/LivePreview 右栏上右键不再落入 Chromium 默认菜单，
-    // 弹「视图模式」子菜单（复用 TextEdit 动作，同一份选中态/置灰同步）
+    // 渲染视图右键菜单（§8.1）：ReadView/LivePreview 右栏上右键复用 TextEdit 完整上下文菜单。
+    // 预览栏是只读渲染区，按只读态弹出（asReadOnly）：菜单项完整展示，
+    // 剪切/粘贴/撤销/替换/列编辑等作用于左侧编辑器的编辑项统一置灰
     m_pMarkdownView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(m_pMarkdownView, &QWidget::customContextMenuRequested, this, [this](const QPoint &) {
-        DMenu menu(m_pMarkdownView);
-        DMenu *pViewMenu = new DMenu(QObject::tr("视图模式"), &menu);
-        pViewMenu->addActions(m_pTextEdit->viewModeActions());
-        menu.addMenu(pViewMenu);
-        menu.exec(QCursor::pos());
+        m_pTextEdit->popRightMenu(QCursor::pos(), true);
     });
     // 主题注入（§4.7）：创建即应用当前主题，深浅色与编辑器一致
     QString themePath = Settings::instance()->settings->option("advance.editor.theme")->value().toString();

@@ -945,6 +945,64 @@ TEST_F(TextEditTest, PopRightMenu_ReadonlyMode_DictationDisabled)
     EXPECT_TRUE(edit->getReadOnlyMode());
 }
 
+TEST_F(TextEditTest, PopRightMenu_AsReadOnly_ShowsEditActionsDisabled)
+{
+    // Arrange：编辑器保持可编辑（LivePreview 预览栏右键场景），
+    // 有选区 + 剪贴板有内容，保证各编辑项满足出现条件
+    setDocText(QString("hello world"));
+    QTextCursor cur = makeCursor(0);
+    cur.setPosition(5, QTextCursor::KeepAnchor);
+    edit->setTextCursor(cur);
+    QApplication::clipboard()->setText(QString("clip"));
+
+    // Act：asReadOnly = true（渲染预览栏右键按只读态弹出）
+    edit->popRightMenu(QPoint(5, 5), true);
+
+    // Assert：编辑类动作完整展示但置灰（剪切/粘贴/删除/替换/列编辑/转换大小写）
+    const QList<QAction *> actions = edit->m_rightMenu->actions();
+    EXPECT_TRUE(actions.contains(edit->m_cutAction));
+    EXPECT_FALSE(edit->m_cutAction->isEnabled());
+    EXPECT_TRUE(actions.contains(edit->m_pasteAction));
+    EXPECT_FALSE(edit->m_pasteAction->isEnabled());
+    EXPECT_TRUE(actions.contains(edit->m_deleteAction));
+    EXPECT_FALSE(edit->m_deleteAction->isEnabled());
+    EXPECT_TRUE(actions.contains(edit->m_replaceAction));
+    EXPECT_FALSE(edit->m_replaceAction->isEnabled());
+    EXPECT_TRUE(actions.contains(edit->m_columnEditAction));
+    EXPECT_FALSE(edit->m_columnEditAction->isEnabled());
+    bool hasConvertCase = false;
+    for (const QAction *act : actions) {
+        if (act->menu() == edit->m_convertCaseMenu)
+            hasConvertCase = true;
+    }
+    EXPECT_TRUE(hasConvertCase);
+    EXPECT_FALSE(edit->m_convertCaseMenu->menuAction()->isEnabled());
+
+    // Assert：只读可用项保留且可用（复制/全选/查找），听写（写操作）置灰
+    EXPECT_TRUE(actions.contains(edit->m_copyAction));
+    EXPECT_TRUE(edit->m_copyAction->isEnabled());
+    EXPECT_TRUE(actions.contains(edit->m_selectAllAction));
+    EXPECT_TRUE(edit->m_selectAllAction->isEnabled());
+    EXPECT_TRUE(actions.contains(edit->m_findAction));
+    EXPECT_TRUE(edit->m_findAction->isEnabled());
+    EXPECT_FALSE(edit->m_dictationAction->isEnabled());
+
+    // Assert：仅影响菜单可用性，编辑器可编辑态不被改写
+    EXPECT_FALSE(edit->getReadOnlyMode());
+
+    // Act：编辑侧正常弹出（asReadOnly 缺省 false）
+    edit->popRightMenu(QPoint(5, 5));
+
+    // Assert：编辑项恢复可用（置灰状态不泄漏到正常菜单）
+    EXPECT_TRUE(edit->m_cutAction->isEnabled());
+    EXPECT_TRUE(edit->m_pasteAction->isEnabled());
+    EXPECT_TRUE(edit->m_deleteAction->isEnabled());
+    EXPECT_TRUE(edit->m_replaceAction->isEnabled());
+    EXPECT_TRUE(edit->m_columnEditAction->isEnabled());
+    EXPECT_TRUE(edit->m_convertCaseMenu->menuAction()->isEnabled());
+    EXPECT_TRUE(edit->m_dictationAction->isEnabled());
+}
+
 TEST_F(TextEditTest, HideRightMenu_MenuHiddenNoCrash)
 {
     // Arrange
