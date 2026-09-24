@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<!--
+  SPDX-FileCopyrightText: 2026 UnionTech Software Technology Co., Ltd.
+  SPDX-License-Identifier: GPL-3.0-or-later
+
+  harness.html —— NodeView 包裹层的防闪烁回归验证页（本地浏览器用，不进 qrc）
+
+  验证目标（2026-09-24 表格闪烁修复）：表格/代码块的 .table-block/.code-block 包裹
+  结构由 NodeView 承载后，replaceAll 重渲染不得拆除包裹层（旧 renderEnhancer 方案
+  会被 ProseMirror renderDescs 拆掉再由 setTimeout 重包，产生无样式中间帧）。
+
+  用法：node_modules/.bin/vite build harness/harness.js --outDir build/harness
+        然后用浏览器打开本页（经本地 http 服务），读取 #harness-result 的 JSON。
+  注意：本页不加载 qwebchannel.js —— main.js 据此进入 standalone 模式并暴露
+  window.__mdTest 钩子；QWebEngine 宿主不受影响。
+-->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>MD NodeView Harness</title>
+    <link rel="stylesheet" href="../build/harness/style.css">
+    <style>
+        body { margin: 0; }
+        #harness-result {
+            position: fixed; top: 0; right: 0; z-index: 999;
+            max-width: 50%; max-height: 40vh; overflow: auto;
+            font: 12px/1.5 monospace; white-space: pre-wrap;
+            background: rgba(0, 0, 0, 0.8); color: #0f0; padding: 8px;
+        }
+        #harness-result.failed { color: #f66; }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+    <pre id="harness-result">running…</pre>
+    <script src="../build/harness/harness.bundle.js"></script>
+</body>
+</html>

@@ -21788,6 +21788,68 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       return __privateGet(this, _status2);
     }
   }, _enableInspector = new WeakMap(), _status2 = new WeakMap(), _configureList = new WeakMap(), _onStatusChange = new WeakMap(), _container4 = new WeakMap(), _clock3 = new WeakMap(), _usrPluginStore = new WeakMap(), _sysPluginStore = new WeakMap(), _ctx3 = new WeakMap(), _loadInternal = new WeakMap(), _prepare = new WeakMap(), _cleanup = new WeakMap(), _cleanupInternal = new WeakMap(), _setStatus = new WeakMap(), _loadPluginInStore = new WeakMap(), _j);
+  let random = (bytes) => crypto.getRandomValues(new Uint8Array(bytes));
+  let customRandom = (alphabet, defaultSize, getRandom) => {
+    let safeByteCutoff = 256 - 256 % alphabet.length;
+    if (safeByteCutoff === 256) {
+      let mask = alphabet.length - 1;
+      return (size = defaultSize) => {
+        if (!size) return "";
+        let id2 = "";
+        while (true) {
+          let bytes = getRandom(size);
+          let j = size;
+          while (j--) {
+            id2 += alphabet[bytes[j] & mask];
+            if (id2.length >= size) return id2;
+          }
+        }
+      };
+    }
+    let step = Math.ceil(1.6 * 256 * defaultSize / safeByteCutoff);
+    return (size = defaultSize) => {
+      if (!size) return "";
+      let id2 = "";
+      while (true) {
+        let bytes = getRandom(step);
+        let j = step;
+        while (j--) {
+          if (bytes[j] < safeByteCutoff) {
+            id2 += alphabet[bytes[j] % alphabet.length];
+            if (id2.length >= size) return id2;
+          }
+        }
+      }
+    };
+  };
+  let customAlphabet = (alphabet, size = 21) => customRandom(alphabet, size | 0, random);
+  var nanoid = customAlphabet("abcedfghicklmn", 10);
+  function addTimer(runner, injectTo, timerName) {
+    const timer = createTimer(nanoid());
+    let doneCalled = false;
+    const plugin = (ctx) => {
+      ctx.record(timer);
+      ctx.update(injectTo, (x) => x.concat(timer));
+      return async () => {
+        const done = () => {
+          ctx.done(timer);
+          doneCalled = true;
+        };
+        const cleanup = await runner(ctx, plugin, done);
+        if (!doneCalled) ctx.done(timer);
+        return () => {
+          ctx.update(injectTo, (x) => x.filter((y) => y !== timer));
+          ctx.clearTimer(timer);
+          if (cleanup) {
+            const result = cleanup();
+            if (result && "then" in result) result.catch(console.error);
+          }
+        };
+      };
+    };
+    plugin.timer = timer;
+    return plugin;
+  }
   function $command(key2, cmd) {
     const cmdKey = createCmdKey(key2);
     const plugin = (ctx) => async () => {
@@ -21886,6 +21948,20 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       };
     };
     return plugin;
+  }
+  function $viewAsync(type, view, timerName) {
+    return addTimer(async (ctx, plugin) => {
+      await ctx.wait(SchemaReady);
+      const v = await view(ctx);
+      if (type.type(ctx) instanceof NodeType$1) ctx.update(nodeViewCtx, (ps) => [...ps, [type.id, v]]);
+      else ctx.update(markViewCtx, (ps) => [...ps, [type.id, v]]);
+      plugin.view = v;
+      plugin.type = type;
+      return () => {
+        if (type.type(ctx) instanceof NodeType$1) ctx.update(nodeViewCtx, (ps) => ps.filter((x) => x[0] !== type.id));
+        else ctx.update(markViewCtx, (ps) => ps.filter((x) => x[0] !== type.id));
+      };
+    }, editorViewTimerCtx);
   }
   function $ctx(value, name) {
     const slice = createSlice(value, name);
@@ -45015,8 +45091,6 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     if (bridgeReady) wireSignals(handlers2);
   }
   initChannel();
-  const TABLE_WRAPPER_CLASS = "table-wrapper";
-  const CODE_BLOCK_CLASS = "code-block";
   const ARROW_UP_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7 L5 3 L9 7"/></svg>';
   const ARROW_DOWN_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3 L5 7 L9 3"/></svg>';
   const COPY_ICON_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="4.5" width="8" height="8" rx="1.5"/><path d="M9.5 4.5 V3 a1.5 1.5 0 0 0 -1.5 -1.5 H3 a1.5 1.5 0 0 0 -1.5 1.5 V8 a1.5 1.5 0 0 0 1.5 1.5 H4.5"/></svg>';
@@ -45033,57 +45107,10 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     const b = window.bridge;
     return b && typeof b[key2] === "string" && b[key2].length > 0 ? b[key2] : FALLBACK_TEXTS[key2];
   }
-  function retranslateCodeBlocks(root2) {
-    if (!root2) return;
-    root2.querySelectorAll("." + CODE_BLOCK_CLASS).forEach((wrapper) => {
-      const pre = wrapper.querySelector("pre");
-      const lineCount = pre ? countCodeLines(pre.textContent) : 0;
-      wrapper.querySelector(".code-block-collapsed > span:first-child").textContent = uiText("collapsedLinesText").replace("%1", lineCount);
-      wrapper.querySelector(".code-block-expand").textContent = uiText("expandText");
-      const collapsed = wrapper.classList.contains("collapsed");
-      const toggle = wrapper.querySelector(".code-block-toggle");
-      toggle.setAttribute("aria-label", collapsed ? uiText("expandTooltip") : uiText("collapseTooltip"));
-      const copy2 = wrapper.querySelector(".code-block-copy");
-      copy2.title = uiText("copyTooltip");
-      copy2.setAttribute("aria-label", uiText("copyTooltip"));
-    });
-  }
-  function selectInclusive(root2, selector) {
-    const found2 = [];
-    if (typeof root2.matches === "function" && root2.matches(selector)) found2.push(root2);
-    root2.querySelectorAll(selector).forEach((el) => found2.push(el));
-    return found2;
-  }
-  function wrapTables(root2) {
-    if (!root2) return;
-    selectInclusive(root2, "table").forEach((table) => {
-      if (table.closest("." + TABLE_WRAPPER_CLASS)) return;
-      const block = document.createElement("div");
-      block.className = "table-block";
-      const header = document.createElement("div");
-      header.className = "table-block-header";
-      const wrapper = document.createElement("div");
-      wrapper.className = TABLE_WRAPPER_CLASS;
-      table.parentNode.insertBefore(block, table);
-      block.appendChild(header);
-      block.appendChild(wrapper);
-      wrapper.appendChild(table);
-    });
-  }
   function countCodeLines(text2) {
     const lines = String(text2 || "").split("\n");
     while (lines.length && lines[lines.length - 1].trim() === "") lines.pop();
     return lines.length;
-  }
-  function detectLanguage(pre) {
-    const lang = pre.getAttribute("data-language");
-    if (lang && lang.length > 0) return lang;
-    const code2 = pre.querySelector("code");
-    if (code2) {
-      const m = code2.className.match(/(?:^|\s)language-([\w#+-]+)/);
-      if (m) return m[1];
-    }
-    return "";
   }
   function copyTextToClipboard(text2) {
     const ta = document.createElement("textarea");
@@ -45107,74 +45134,115 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     toggleBtn.innerHTML = collapsed ? ARROW_DOWN_SVG : ARROW_UP_SVG;
     toggleBtn.setAttribute("aria-label", collapsed ? uiText("expandTooltip") : uiText("collapseTooltip"));
   }
-  function enhanceCodeBlocks(root2) {
-    if (!root2) return;
-    selectInclusive(root2, "pre").forEach((pre) => {
-      if (pre.closest("." + CODE_BLOCK_CLASS)) return;
-      const lang = detectLanguage(pre);
-      const codeEl = pre.querySelector("code");
-      const lineCount = countCodeLines(codeEl ? codeEl.textContent : pre.textContent);
-      const wrapper = document.createElement("div");
-      wrapper.className = CODE_BLOCK_CLASS;
-      if (lineCount === 0) wrapper.classList.add("empty");
-      const header = document.createElement("div");
-      header.className = "code-block-header";
-      const toggleBtn = document.createElement("button");
-      toggleBtn.type = "button";
-      toggleBtn.className = "code-block-toggle";
-      toggleBtn.innerHTML = ARROW_UP_SVG;
-      toggleBtn.setAttribute("aria-label", uiText("collapseTooltip"));
-      const langLabel = document.createElement("span");
-      langLabel.className = "code-block-lang";
+  const activeCodeBlockViews = /* @__PURE__ */ new Set();
+  function retranslateCodeBlocks() {
+    activeCodeBlockViews.forEach((view) => view.retranslate());
+  }
+  const tableView = $viewAsync(tableSchema.node, () => (node2) => {
+    const block = document.createElement("div");
+    block.className = "table-block";
+    const header = document.createElement("div");
+    header.className = "table-block-header";
+    const wrapper = document.createElement("div");
+    wrapper.className = "table-wrapper";
+    const table = document.createElement("table");
+    const tbody = document.createElement("tbody");
+    table.appendChild(tbody);
+    wrapper.appendChild(table);
+    block.appendChild(header);
+    block.appendChild(wrapper);
+    return {
+      dom: block,
+      contentDOM: tbody,
+      // 同类型即原地更新（PM 已按 node.sameMarkup/content.eq 前置筛选）：
+      // 行内容由 PM 重新渲染进 tbody，包裹层与滚动条状态保留
+      update: (n) => n.type === node2.type
+    };
+  });
+  const codeBlockView = $viewAsync(codeBlockSchema.node, () => (node2) => {
+    let current = node2;
+    const wrapper = document.createElement("div");
+    wrapper.className = "code-block";
+    const header = document.createElement("div");
+    header.className = "code-block-header";
+    const toggleBtn = document.createElement("button");
+    toggleBtn.type = "button";
+    toggleBtn.className = "code-block-toggle";
+    toggleBtn.innerHTML = ARROW_UP_SVG;
+    toggleBtn.setAttribute("aria-label", uiText("collapseTooltip"));
+    const langLabel = document.createElement("span");
+    langLabel.className = "code-block-lang";
+    const copyBtn = document.createElement("button");
+    copyBtn.type = "button";
+    copyBtn.className = "code-block-copy";
+    copyBtn.innerHTML = COPY_ICON_SVG;
+    copyBtn.title = uiText("copyTooltip");
+    copyBtn.setAttribute("aria-label", uiText("copyTooltip"));
+    header.appendChild(toggleBtn);
+    header.appendChild(langLabel);
+    header.appendChild(copyBtn);
+    const hint = document.createElement("div");
+    hint.className = "code-block-collapsed";
+    const hintText = document.createElement("span");
+    const expandBtn = document.createElement("span");
+    expandBtn.className = "code-block-expand";
+    expandBtn.textContent = uiText("expandText");
+    hint.appendChild(hintText);
+    hint.appendChild(expandBtn);
+    const pre = document.createElement("pre");
+    const code2 = document.createElement("code");
+    pre.appendChild(code2);
+    wrapper.appendChild(header);
+    wrapper.appendChild(hint);
+    wrapper.appendChild(pre);
+    const refreshMeta = () => {
+      const lang = current.attrs.language || "";
+      if (lang) pre.setAttribute("data-language", lang);
+      else pre.removeAttribute("data-language");
       langLabel.textContent = lang;
-      const copyBtn = document.createElement("button");
-      copyBtn.type = "button";
-      copyBtn.className = "code-block-copy";
-      copyBtn.innerHTML = COPY_ICON_SVG;
-      copyBtn.title = uiText("copyTooltip");
-      copyBtn.setAttribute("aria-label", uiText("copyTooltip"));
-      header.appendChild(toggleBtn);
-      header.appendChild(langLabel);
-      header.appendChild(copyBtn);
-      const hint = document.createElement("div");
-      hint.className = "code-block-collapsed";
-      const hintText = document.createElement("span");
+      const lineCount = countCodeLines(current.textContent);
+      wrapper.classList.toggle("empty", lineCount === 0);
       hintText.textContent = uiText("collapsedLinesText").replace("%1", lineCount);
-      const expandBtn = document.createElement("span");
-      expandBtn.className = "code-block-expand";
-      expandBtn.textContent = uiText("expandText");
-      hint.appendChild(hintText);
-      hint.appendChild(expandBtn);
-      pre.parentNode.insertBefore(wrapper, pre);
-      wrapper.appendChild(header);
-      wrapper.appendChild(hint);
-      wrapper.appendChild(pre);
-      toggleBtn.addEventListener("click", () => {
-        setCollapsed(wrapper, toggleBtn, !wrapper.classList.contains("collapsed"));
-      });
-      expandBtn.addEventListener("click", () => {
-        setCollapsed(wrapper, toggleBtn, false);
-      });
-      copyBtn.addEventListener("click", () => {
-        const ok2 = copyTextToClipboard(codeEl ? codeEl.textContent : pre.textContent);
-        copyBtn.innerHTML = ok2 ? CHECK_ICON_SVG : COPY_ICON_SVG;
-        setTimeout(() => {
-          copyBtn.innerHTML = COPY_ICON_SVG;
-        }, COPY_FEEDBACK_MS);
-      });
+    };
+    refreshMeta();
+    toggleBtn.addEventListener("click", () => {
+      setCollapsed(wrapper, toggleBtn, !wrapper.classList.contains("collapsed"));
     });
-  }
-  function enhance(root2) {
-    wrapTables(root2);
-    enhanceCodeBlocks(root2);
-  }
-  function enhanceNodes(nodes) {
-    if (!nodes || nodes.length === 0) return;
-    nodes.forEach((node2) => {
-      wrapTables(node2);
-      enhanceCodeBlocks(node2);
+    expandBtn.addEventListener("click", () => {
+      setCollapsed(wrapper, toggleBtn, false);
     });
-  }
+    copyBtn.addEventListener("click", () => {
+      const ok2 = copyTextToClipboard(current.textContent);
+      copyBtn.innerHTML = ok2 ? CHECK_ICON_SVG : COPY_ICON_SVG;
+      setTimeout(() => {
+        copyBtn.innerHTML = COPY_ICON_SVG;
+      }, COPY_FEEDBACK_MS);
+    });
+    const view = {
+      dom: wrapper,
+      contentDOM: code2,
+      // 同类型原地更新：刷新语言/行数等元信息；折叠状态与交互 DOM 保留
+      update: (n) => {
+        if (n.type !== current.type) return false;
+        current = n;
+        refreshMeta();
+        return true;
+      },
+      retranslate: () => {
+        refreshMeta();
+        const collapsed = wrapper.classList.contains("collapsed");
+        toggleBtn.setAttribute("aria-label", collapsed ? uiText("expandTooltip") : uiText("collapseTooltip"));
+        expandBtn.textContent = uiText("expandText");
+        copyBtn.title = uiText("copyTooltip");
+        copyBtn.setAttribute("aria-label", uiText("copyTooltip"));
+      },
+      destroy: () => {
+        activeCodeBlockViews.delete(view);
+      }
+    };
+    activeCodeBlockViews.add(view);
+    return view;
+  });
   const ROOT_ID = "app";
   let editor = null;
   let lastValue = "";
@@ -45193,11 +45261,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     userScrolledDuringBuild = false;
     if (normalized.length <= PROGRESSIVE_THRESHOLD) {
       editor.action(replaceAll(normalized));
-      const rootEl = document.getElementById(ROOT_ID);
-      setTimeout(() => {
-        enhance(rootEl);
-        reapplyScroll();
-      }, 0);
+      setTimeout(reapplyScroll, 0);
       return;
     }
     renderProgressively(normalized, renderGeneration);
@@ -45252,7 +45316,6 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
         editor.action(replaceAll(chunk));
         setTimeout(() => {
           if (gen !== renderGeneration) return;
-          enhance(document.getElementById(ROOT_ID));
           reapplyScroll();
         }, 0);
       } else {
@@ -45273,10 +45336,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       const view = ctx.get(editorViewCtx);
       const parsed = ctx.get(parserCtx)(chunk);
       if (!parsed) return;
-      const dom = view.dom;
-      const before = dom.childNodes.length;
       view.dispatch(view.state.tr.insert(view.state.doc.content.size, parsed.content));
-      enhanceNodes(Array.from(dom.childNodes).slice(before));
     });
   }
   function toRenderedRatio(ratio) {
@@ -45375,7 +45435,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
         editable: () => false,
         attributes: { class: "milkdown-read-only" }
       }));
-    }).use(commonmark).use(gfm).use(history).use(indent).use(clipboard).use(mathPlugins).create();
+    }).use(commonmark).use(gfm).use(history).use(indent).use(clipboard).use(mathPlugins).use(tableView).use(codeBlockView).create();
     setupBridge({
       onSetMarkdown: renderMarkdown,
       onSetMode: () => {
@@ -45383,7 +45443,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       onApplyTheme: applyTheme,
       onSetLayout: applyLayout,
       onScrollToRatio: scrollToRatio,
-      onRetranslate: () => retranslateCodeBlocks(document.getElementById(ROOT_ID))
+      onRetranslate: () => retranslateCodeBlocks()
     });
     console.log("[md] boot done, bridge=", typeof window.bridge, "onReady=", window.bridge ? typeof window.bridge.onReady : "n/a");
     if (window.bridge && typeof window.bridge.onReady === "function") {
@@ -45399,6 +45459,12 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       };
       setTimeout(retry, 50);
     }
+  }
+  if (typeof QWebChannel === "undefined") {
+    window.__mdTest = {
+      render: renderMarkdown,
+      rootId: ROOT_ID
+    };
   }
   boot().catch((e) => console.error("Milkdown boot failed:", e));
 })();

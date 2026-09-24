@@ -5,6 +5,7 @@
   "description": "Markdown rendering kernel (Milkdown) for deepin-editor, embedded via QWebEngine",
   "scripts": {
     "build": "vite build",
+    "build:harness": "vite build -c vite.harness.config.js",
     "dev": "vite build --watch"
   },
   "dependencies": {
