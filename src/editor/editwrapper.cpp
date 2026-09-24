@@ -1882,6 +1882,11 @@ bool EditWrapper::setViewMode(ViewMode mode)
             m_pMarkdownView->show();
         }
         m_viewStack->setCurrentWidget(m_pReadPage);
+        // md 查看视图同样需要只读保护，防止通过替换功能编辑文件（BUG 378209）
+        if (!m_pTextEdit->getReadOnlyMode()) {
+            m_pTextEdit->setReadOnlyState(true);
+            m_bReadOnlyByViewMode = true;
+        }
     } else if (m_viewMode == ViewMode::LivePreview) {
         ensureLiveSplitterCreated();
         // 左栏＝编辑页（同一实例，不重建）、右栏＝渲染视图。
@@ -2107,6 +2112,10 @@ bool EditWrapper::isEditKeyEvent(const QKeyEvent *e) const
             return true;
         // Space/Tab 用于页面滚动和焦点导航，不是编辑操作
         if (key == Qt::Key_Space || key == Qt::Key_Tab)
+            return false;
+        // Esc 在 X11 下 text() 为 "\x1b"（非空控制字符），但它只用于退出全屏/
+        // 关闭浮层，没有编辑语义，需显式排除避免误弹只读提示
+        if (key == Qt::Key_Escape)
             return false;
         // 普通可打印字符输入
         if (!e->text().isEmpty())
