@@ -111,8 +111,9 @@ public:
     //初始化右键菜单
     void initRightClickedMenu();
 
-    //弹窗右键菜单
-    void popRightMenu(QPoint pos = QPoint());
+    //弹窗右键菜单；asReadOnly 为 true 时按只读态构建（编辑类菜单项完整展示但置灰），
+    //用于渲染预览栏等只读区域复用编辑器菜单的场景
+    void popRightMenu(QPoint pos = QPoint(), bool asReadOnly = false);
     //
     void setWrapper(EditWrapper *);
     EditWrapper *getWrapper();

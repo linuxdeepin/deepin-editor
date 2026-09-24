@@ -570,7 +570,7 @@ void TextEdit::initRightClickedMenu()
     qDebug() << "Right clicked menu initialized";
 }
 
-void TextEdit::popRightMenu(QPoint pos)
+void TextEdit::popRightMenu(QPoint pos, bool asReadOnly)
 {
     qDebug() << "Popping right clicked menu";
     //清除菜单分割线残影
@@ -581,6 +581,12 @@ void TextEdit::popRightMenu(QPoint pos)
     m_rightMenu = new DMenu;
 
     m_rightMenu->clear();
+    // 只读判定拆两级：
+    // hideEdit＝编辑项是否隐藏：真实只读（权限只读/只读模式）沿用既有隐藏行为；
+    //   asReadOnly（渲染预览栏右键）要求菜单完整展示，不隐藏
+    // blockEdit＝编辑项是否可用：任一只读因素（含 asReadOnly）都置灰
+    const bool hideEdit = (m_bReadOnlyPermission || m_readOnlyMode) && !asReadOnly;
+    const bool blockEdit = m_bReadOnlyPermission || m_readOnlyMode || asReadOnly;
     QTextCursor selectionCursor = textCursor();
     selectionCursor.movePosition(QTextCursor::StartOfBlock);
     selectionCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
@@ -590,14 +596,16 @@ void TextEdit::popRightMenu(QPoint pos)
     bool isBlankLine = text.trimmed().isEmpty();
 
     bool isAddUndoRedo = false;
-    if (m_pUndoStack->canUndo() && m_bReadOnlyPermission == false && m_readOnlyMode == false) {
+    if (m_pUndoStack->canUndo() && !hideEdit) {
         qDebug() << "Adding undo action";
+        m_undoAction->setEnabled(!blockEdit);
         m_rightMenu->addAction(m_undoAction);
         isAddUndoRedo = true;
     }
 
-    if (m_pUndoStack->canRedo() && m_bReadOnlyPermission == false && m_readOnlyMode == false) {
+    if (m_pUndoStack->canRedo() && !hideEdit) {
         qDebug() << "Adding redo action";
+        m_redoAction->setEnabled(!blockEdit);
         m_rightMenu->addAction(m_redoAction);
         isAddUndoRedo = true;
     }
@@ -609,8 +617,8 @@ void TextEdit::popRightMenu(QPoint pos)
 
     if (textCursor().hasSelection() || m_hasColumnSelection) {
         qDebug() << "Adding cut action";
-        if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
-            qDebug() << "Adding cut action";
+        if (!hideEdit) {
+            m_cutAction->setEnabled(!blockEdit);
             m_rightMenu->addAction(m_cutAction);
         }
         m_rightMenu->addAction(m_copyAction);
@@ -618,16 +626,16 @@ void TextEdit::popRightMenu(QPoint pos)
 
     if (canPaste()) {
         qDebug() << "Adding paste action";
-        if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
-            qDebug() << "Adding paste action";
+        if (!hideEdit) {
+            m_pasteAction->setEnabled(!blockEdit);
             m_rightMenu->addAction(m_pasteAction);
         }
     }
 
     if (textCursor().hasSelection() || m_hasColumnSelection) {
         qDebug() << "Adding delete action";
-        if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
-            qDebug() << "Adding delete action";
+        if (!hideEdit) {
+            m_deleteAction->setEnabled(!blockEdit);
             m_rightMenu->addAction(m_deleteAction);
         }
 
@@ -643,8 +651,9 @@ void TextEdit::popRightMenu(QPoint pos)
     if (!document()->isEmpty()) {
         qDebug() << "Adding find action";
         m_rightMenu->addAction(m_findAction);
-        if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
+        if (!hideEdit) {
             qDebug() << "Adding replace action";
+            m_replaceAction->setEnabled(!blockEdit);
             m_rightMenu->addAction(m_replaceAction);
         }
         qDebug() << "Adding jump line action";
@@ -654,9 +663,9 @@ void TextEdit::popRightMenu(QPoint pos)
 
     if (textCursor().hasSelection()) {
         qDebug() << "Adding convert case menu";
-        if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
-            qDebug() << "Adding convert case menu";
-            m_rightMenu->addMenu(m_convertCaseMenu);
+        if (!hideEdit) {
+            QAction *pCaseMenuAct = m_rightMenu->addMenu(m_convertCaseMenu);
+            pCaseMenuAct->setEnabled(!blockEdit);
         }
     } else {
         qDebug() << "Hiding convert case menu";
@@ -682,7 +691,7 @@ void TextEdit::popRightMenu(QPoint pos)
         }
     }
 
-    if (m_bReadOnlyPermission || m_readOnlyMode) {
+    if (blockEdit) {
         qDebug() << "Adding add comment action";
         m_addComment->setEnabled(false);
         m_cancelComment->setEnabled(false);
@@ -718,7 +727,7 @@ void TextEdit::popRightMenu(QPoint pos)
     m_voiceReadingAction->setEnabled((textCursor().hasSelection() || m_hasColumnSelection));
 
     m_rightMenu->addAction(m_dictationAction);
-    m_dictationAction->setEnabled(!(m_bReadOnlyPermission || m_readOnlyMode));
+    m_dictationAction->setEnabled(!blockEdit);
 
     // temporarily disable text to translate
 #ifdef ENABLE_IFLYTEK_TRANSLATE
@@ -766,8 +775,9 @@ void TextEdit::popRightMenu(QPoint pos)
         }
 
         m_rightMenu->addSeparator();
-        if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
+        if (!hideEdit) {
             qDebug() << "Adding column edit action";
+            m_columnEditAction->setEnabled(!blockEdit);
             m_rightMenu->addAction(m_columnEditAction);
         }
         m_rightMenu->addMenu(m_colorMarkMenu);
