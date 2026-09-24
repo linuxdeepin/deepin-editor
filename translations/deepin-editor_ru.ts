@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ru">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ru">
 <context>
     <name>BottomBar</name>
     <message>
@@ -28,19 +26,19 @@
         <location filename="../src/widgets/bottombar.cpp" line="91"/>
         <location filename="../src/widgets/bottombar.cpp" line="501"/>
         <source>Edit Mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="74"/>
         <location filename="../src/widgets/bottombar.cpp" line="491"/>
         <source>Read View</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="75"/>
         <location filename="../src/widgets/bottombar.cpp" line="495"/>
         <source>Live Preview</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -85,16 +83,6 @@
         <translation>Забыть</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="1126"/>
-        <source>The file contains invalid characters (NUL). Preview mode is read-only.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/editor/editwrapper.cpp" line="2109"/>
-        <source>Read-Only mode is on</source>
-        <translation type="unfinished">Режим Только Чтение включён</translation>
-    </message>
-    <message>
         <location filename="../src/editor/editwrapper.cpp" line="339"/>
         <location filename="../src/editor/editwrapper.cpp" line="707"/>
         <source>You do not have permission to save %1</source>
@@ -114,6 +102,16 @@
         <location filename="../src/editor/editwrapper.cpp" line="1817"/>
         <source>The file cannot be read, which may be too large or has been damaged!</source>
         <translation>Файл не может быть прочитан, возможно, он слишком велик или поврежден!</translation>
+    </message>
+    <message>
+        <location filename="../src/editor/editwrapper.cpp" line="2109"/>
+        <source>Read-Only mode is on</source>
+        <translation>Режим Только Чтение включён</translation>
+    </message>
+    <message>
+        <location filename="../src/editor/editwrapper.cpp" line="1126"/>
+        <source>The file contains invalid characters (NUL). Preview mode is read-only.</source>
+        <translation>Файл содержит недопустимые символы (NUL). Режим предварительного просмотра доступен только для чтения.</translation>
     </message>
 </context>
 <context>
@@ -152,7 +150,7 @@
     <message>
         <location filename="../src/controls/linebar.cpp" line="148"/>
         <source>第%1/%2项</source>
-        <translation type="unfinished"></translation>
+        <translation>Совпадение: %1 из %2</translation>
     </message>
 </context>
 <context>
@@ -204,7 +202,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="2015"/>
         <source>视图模式</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="11"/>
@@ -872,9 +870,9 @@
     <name>S:</name>
     <message>
         <location filename="../third/libiconv-1.16/src/iconv.c" line="103"/>
-        <source></source>
+        <source/>
         <comment>The first line of the short usage message.</comment>
-        <translation></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1151,7 +1149,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="543"/>
         <source>View Mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3482"/>
@@ -1169,13 +1167,13 @@
         <location filename="../src/editor/dtextedit.cpp" line="9214"/>
         <location filename="../src/editor/dtextedit.cpp" line="9216"/>
         <source>No audio output device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="9223"/>
         <location filename="../src/editor/dtextedit.cpp" line="9225"/>
         <source>No audio input device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="534"/>
@@ -1185,17 +1183,17 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="409"/>
         <source>Edit Mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="411"/>
         <source>Read View</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="413"/>
         <source>Live Preview</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="535"/>
@@ -1269,7 +1267,7 @@
     <message>
         <location filename="../src/controls/warningnotices.cpp" line="31"/>
         <source>Edit Anyway</source>
-        <translation type="unfinished"></translation>
+        <translation>Редактировать в любом случае</translation>
     </message>
 </context>
 <context>
@@ -1342,31 +1340,6 @@
         <translation>Вы хотите сохранить этот документ?</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1393"/>
-        <source>Invalid characters detected while saving &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/window.cpp" line="1394"/>
-        <source>If you force save this file, it may cause file corruption. Still want to save?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/window.cpp" line="1398"/>
-        <source>Don&apos;t Save</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/window.cpp" line="1399"/>
-        <source>Save As</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/window.cpp" line="1400"/>
-        <source>Save Anyway</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/widgets/window.cpp" line="1468"/>
         <source>You do not have permission to save %1</source>
         <translation>Вы не имеете разрешения на сохранение %1</translation>
@@ -1383,11 +1356,6 @@
         <location filename="../src/widgets/window.cpp" line="1725"/>
         <source>Save File</source>
         <translation>Сохранить Файл</translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/window.cpp" line="1581"/>
-        <source>Cannot save as the original file in preview mode. Please choose a different path.</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1679"/>
@@ -1433,6 +1401,36 @@
         <location filename="../src/widgets/window.cpp" line="4007"/>
         <source>Discard</source>
         <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1393"/>
+        <source>Invalid characters detected while saving &quot;%1&quot;</source>
+        <translation>При сохранении файла «%1» обнаружены недопустимые символы</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1394"/>
+        <source>If you force save this file, it may cause file corruption. Still want to save?</source>
+        <translation>Если вы принудительно сохраните этот файл, это может привести к его повреждению. Все равно хотите сохранить?</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1398"/>
+        <source>Don&apos;t Save</source>
+        <translation>Не сохранять</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1399"/>
+        <source>Save As</source>
+        <translation>Сохранить как</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1400"/>
+        <source>Save Anyway</source>
+        <translation>«Сохранить всё равно»</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1581"/>
+        <source>Cannot save as the original file in preview mode. Please choose a different path.</source>
+        <translation>В режиме предварительного просмотра невозможно сохранить файл под исходным именем. Пожалуйста, выберите другой путь.</translation>
     </message>
 </context>
 </TS>
