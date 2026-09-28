@@ -37,11 +37,13 @@ let lastRequestedRatio = 0;   // 最近一次 C++ 请求的滚动比例；重渲
 
 // —— 渐进渲染（大文件分段上屏，性能优化 2026-09-16）——
 // 整篇 replaceAll 需先完成全文 ProseMirror 建模才一次性上屏，大文档耗时超线性
-// （实测 5MB≈50s、10MB≈242s，期间预览空白）。超过阈值改为按顶层块边界切块：
-// 首块 replaceAll 立即上屏，其余块解析后 tr.insert 追加到文档末尾，块间让出
-// 事件循环——首屏秒级可见、内容渐进填充、渲染进程保持响应。
-// 语义边界情况：跨块的引用式链接定义、松散列表会被就近截断（预览可接受的误差）。
-const PROGRESSIVE_THRESHOLD = 64 * 1024;   // 触发渐进的最小字符数（约 1~2 屏正文）
+// （实测 5MB≈50s、10MB≈242s，期间预览空白）。超过阈值改为整篇解析后分批插入：
+// 先 parserCtx(md) 整篇解析确保跨块语义完整，再将顶层节点按 nodeSize 分批
+// （首批 ~256KB、后续每批 ~1MB）tr.insert 追加到文档末尾，批间让出事件循环
+// ——首屏秒级可见、内容渐进填充、渲染进程保持响应。
+const PROGRESSIVE_THRESHOLD = 1024 * 1024; // 触发渐进的最小字符数（约 1MB）
+const PROGRESSIVE_FIRST_BATCH = 256 * 1024; // 首批 nodeSize 上限（约 256KB，尽快出首屏）
+const PROGRESSIVE_BATCH_SIZE = 1024 * 1024; // 后续批 nodeSize 上限（约 1MB，压低批数/分发开销）
 let renderGeneration = 0;                  // 代际号：新内容到达时作废进行中的渐进渲染
 let anchorMap = null;                      // [{sourceLine, previewY}, ...]：锚点映射表；null=未构建/降级
 
@@ -79,70 +81,61 @@ function renderMarkdown(md) {
     renderProgressively(normalized, renderGeneration);
 }
 
-// 顶层块切块：在代码围栏（```/~~~）与数学块（$$）之外累积空行分割点，
-// 达到目标块长即切断。无法安全切断时（超长围栏等）保守并入下一块。
-function splitTopLevelBlocks(md, targetSize) {
-    const chunks = [];
-    const total = md.length;
-    let chunkStart = 0;
-    let cut = -1;          // 最近一个安全切断点（空行后的位置）
-    let pos = 0;
-    let fence = null;      // { marker, len } 围栏 / { marker: "$$" } 数学块
-    while (pos < total) {
-        let lineEnd = md.indexOf("\n", pos);
-        if (lineEnd === -1) lineEnd = total;
-        const trimmed = md.slice(pos, lineEnd).trim();
-        if (fence) {
-            if (fence.marker === "$$") {
-                if (trimmed === "$$") fence = null;
-            } else if (trimmed.length >= fence.len && trimmed.startsWith(fence.marker)) {
-                fence = null;
-            }
-        } else if (trimmed.startsWith("```") || trimmed.startsWith("~~~")) {
-            const ch = trimmed.charAt(0);
-            let len = 0;
-            while (len < trimmed.length && trimmed.charAt(len) === ch) len++;
-            fence = { marker: ch.repeat(len), len };
-        } else if (trimmed.startsWith("$$")) {
-            // 单行 $$...$$ 自闭合；跨行块由后续整行 $$ 关闭
-            fence = (trimmed.length > 4 && trimmed.endsWith("$$")) ? null : { marker: "$$" };
-        } else if (trimmed === "" && lineEnd < total) {
-            cut = lineEnd + 1;
-        }
-        pos = lineEnd + 1;
-        if (!fence && cut > chunkStart && pos - chunkStart >= targetSize) {
-            chunks.push(md.slice(chunkStart, cut));
-            chunkStart = cut;
-        }
-    }
-    if (chunkStart < total) chunks.push(md.slice(chunkStart));
-    return chunks;
-}
-
 function renderProgressively(md, gen) {
-    const chunks = splitTopLevelBlocks(md, PROGRESSIVE_THRESHOLD);
-    const totalChars = md.length;
-    let renderedChars = 0;
+    // 整篇解析后再分批插入：确保跨块 markdown 语义（引用式链接定义、
+    // 表格、松散列表等）完整解析，避免分块独立解析导致的格式丢失。
+    let parsed = null;
+    editor.action((ctx) => {
+        parsed = ctx.get(parserCtx)(md);
+    });
+    if (!parsed) return;
+
+    // 按 nodeSize 分批：首批小批抢首屏，后续大批减少批数。不可逐节点一批——
+    // 万级节点的文档每批一次 dispatch + setTimeout 间隙，1.4MB 填充实测超 2 分钟；
+    // 按大小分批后同为秒级。单个超限节点（超长表格/围栏）独立成批，不做拆分。
+    const batches = [];
+    let cur = [];
+    let curSize = 0;
+    let limit = PROGRESSIVE_FIRST_BATCH;
+    parsed.content.forEach((node) => {
+        cur.push(node);
+        curSize += node.nodeSize;
+        if (curSize >= limit) {
+            batches.push(cur);
+            cur = [];
+            curSize = 0;
+            limit = PROGRESSIVE_BATCH_SIZE;
+        }
+    });
+    if (cur.length > 0) batches.push(cur);
+
+    const totalSize = parsed.content.size;
+    let renderedSize = 0;
     let index = 0;
     buildProgress = { fraction: 0 };
     const step = () => {
         // 代际失效：期间有新内容/新请求到达，本轮渐进渲染作废
         if (gen !== renderGeneration || !editor) return;
-        const chunk = chunks[index++];
-        renderedChars += chunk.length;
+        const batch = batches[index++];
+        if (!batch) {
+            buildProgress = null;
+            if (!userScrolledDuringBuild) reapplyScroll();
+            return;
+        }
+        for (const node of batch) renderedSize += node.nodeSize;
         if (index === 1) {
-            // 首块：清空重建 + 初始滚动对齐（对齐时机在后续块增高文档之前）
-            editor.action(replaceAll(chunk));
+            // 首批：清空重建 + 初始滚动对齐（对齐时机在后续批增高文档之前）
+            replaceWithNodes(batch);
             setTimeout(() => {
                 if (gen !== renderGeneration) return;
                 reapplyScroll();
             }, 0);
         } else {
-            appendChunk(chunk);
+            appendChunk(batch);
             buildAnchorMap();
         }
-        buildProgress.fraction = renderedChars / totalChars;
-        if (index < chunks.length) {
+        buildProgress.fraction = totalSize > 0 ? renderedSize / totalSize : 1;
+        if (index < batches.length) {
             setTimeout(step, 0);
         } else {
             // 构建完成：f=1，后续同步恢复精确比例。若用户未动过右栏，
@@ -154,16 +147,23 @@ function renderProgressively(md, gen) {
             }
         }
     };
-    step();   // 首块同步渲染，抢最快首屏
+    step();   // 首批同步渲染，抢最快首屏
 }
 
-// 解析单块并追加到文档末尾；表格/代码块外观由 NodeView 随节点创建自动生成
-function appendChunk(chunk) {
+// 用已解析节点清空并重建文档内容
+function replaceWithNodes(nodes) {
     editor.action((ctx) => {
         const view = ctx.get(editorViewCtx);
-        const parsed = ctx.get(parserCtx)(chunk);
-        if (!parsed) return;
-        view.dispatch(view.state.tr.insert(view.state.doc.content.size, parsed.content));
+        const tr = view.state.tr;
+        view.dispatch(tr.replaceWith(0, tr.doc.content.size, nodes));
+    });
+}
+
+// 将已解析节点追加到文档末尾；表格/代码块外观由 NodeView 随节点创建自动生成
+function appendChunk(nodes) {
+    editor.action((ctx) => {
+        const view = ctx.get(editorViewCtx);
+        view.dispatch(view.state.tr.insert(view.state.doc.content.size, nodes));
     });
 }
 
@@ -204,10 +204,10 @@ function topRenderedBlocks(md) {
 }
 
 // 构建锚点映射表：将源码行号与预览像素 Y 对应。
-// 首选全量配对：AST 顶层块 i ↔ .ProseMirror 子节点 i（数量相等时逐块精确）。
-// 数量不等时（渐进渲染按空行切块可拆散松散列表等）退化为标题锚点：标题块
-// 不含空行、不会被切块拆散，DOM 与 AST 中的标题序列仍按序一一对应；标题
-// 锚点不足 2 个则置 null，调用方降级为纯比例映射。
+// 首选全量配对：AST 顶层块 i ↔ .ProseMirror 子节点 i（数量相等时逐块精确；
+// 整篇解析渲染完成后两者结构天然一致）。数量不等时（渐进构建期间 DOM 仅含
+// 已插入的批次）退化为标题锚点：DOM 与 AST 中的标题序列仍按序一一对应；
+// 标题锚点不足 2 个则置 null，调用方降级为纯比例映射。
 let lastAnchorMode = null;   // "zip" | "headings" | null，诊断用
 function buildAnchorMap() {
     const pm = document.querySelector(".ProseMirror");

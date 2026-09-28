@@ -45247,7 +45247,9 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
   let editor = null;
   let lastValue = "";
   let lastRequestedRatio = 0;
-  const PROGRESSIVE_THRESHOLD = 64 * 1024;
+  const PROGRESSIVE_THRESHOLD = 1024 * 1024;
+  const PROGRESSIVE_FIRST_BATCH = 256 * 1024;
+  const PROGRESSIVE_BATCH_SIZE = 1024 * 1024;
   let renderGeneration = 0;
   let anchorMap = null;
   let buildProgress = null;
@@ -45268,64 +45270,52 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     }
     renderProgressively(normalized, renderGeneration);
   }
-  function splitTopLevelBlocks(md, targetSize) {
-    const chunks = [];
-    const total = md.length;
-    let chunkStart = 0;
-    let cut = -1;
-    let pos = 0;
-    let fence = null;
-    while (pos < total) {
-      let lineEnd = md.indexOf("\n", pos);
-      if (lineEnd === -1) lineEnd = total;
-      const trimmed = md.slice(pos, lineEnd).trim();
-      if (fence) {
-        if (fence.marker === "$$") {
-          if (trimmed === "$$") fence = null;
-        } else if (trimmed.length >= fence.len && trimmed.startsWith(fence.marker)) {
-          fence = null;
-        }
-      } else if (trimmed.startsWith("```") || trimmed.startsWith("~~~")) {
-        const ch2 = trimmed.charAt(0);
-        let len = 0;
-        while (len < trimmed.length && trimmed.charAt(len) === ch2) len++;
-        fence = { marker: ch2.repeat(len), len };
-      } else if (trimmed.startsWith("$$")) {
-        fence = trimmed.length > 4 && trimmed.endsWith("$$") ? null : { marker: "$$" };
-      } else if (trimmed === "" && lineEnd < total) {
-        cut = lineEnd + 1;
-      }
-      pos = lineEnd + 1;
-      if (!fence && cut > chunkStart && pos - chunkStart >= targetSize) {
-        chunks.push(md.slice(chunkStart, cut));
-        chunkStart = cut;
-      }
-    }
-    if (chunkStart < total) chunks.push(md.slice(chunkStart));
-    return chunks;
-  }
   function renderProgressively(md, gen) {
-    const chunks = splitTopLevelBlocks(md, PROGRESSIVE_THRESHOLD);
-    const totalChars = md.length;
-    let renderedChars = 0;
+    let parsed = null;
+    editor.action((ctx) => {
+      parsed = ctx.get(parserCtx)(md);
+    });
+    if (!parsed) return;
+    const batches = [];
+    let cur = [];
+    let curSize = 0;
+    let limit = PROGRESSIVE_FIRST_BATCH;
+    parsed.content.forEach((node2) => {
+      cur.push(node2);
+      curSize += node2.nodeSize;
+      if (curSize >= limit) {
+        batches.push(cur);
+        cur = [];
+        curSize = 0;
+        limit = PROGRESSIVE_BATCH_SIZE;
+      }
+    });
+    if (cur.length > 0) batches.push(cur);
+    const totalSize = parsed.content.size;
+    let renderedSize = 0;
     let index2 = 0;
     buildProgress = { fraction: 0 };
     const step = () => {
       if (gen !== renderGeneration || !editor) return;
-      const chunk = chunks[index2++];
-      renderedChars += chunk.length;
+      const batch = batches[index2++];
+      if (!batch) {
+        buildProgress = null;
+        if (!userScrolledDuringBuild) reapplyScroll();
+        return;
+      }
+      for (const node2 of batch) renderedSize += node2.nodeSize;
       if (index2 === 1) {
-        editor.action(replaceAll(chunk));
+        replaceWithNodes(batch);
         setTimeout(() => {
           if (gen !== renderGeneration) return;
           reapplyScroll();
         }, 0);
       } else {
-        appendChunk(chunk);
+        appendChunk(batch);
         buildAnchorMap();
       }
-      buildProgress.fraction = renderedChars / totalChars;
-      if (index2 < chunks.length) {
+      buildProgress.fraction = totalSize > 0 ? renderedSize / totalSize : 1;
+      if (index2 < batches.length) {
         setTimeout(step, 0);
       } else {
         buildProgress = null;
@@ -45337,12 +45327,17 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     };
     step();
   }
-  function appendChunk(chunk) {
+  function replaceWithNodes(nodes) {
     editor.action((ctx) => {
       const view = ctx.get(editorViewCtx);
-      const parsed = ctx.get(parserCtx)(chunk);
-      if (!parsed) return;
-      view.dispatch(view.state.tr.insert(view.state.doc.content.size, parsed.content));
+      const tr = view.state.tr;
+      view.dispatch(tr.replaceWith(0, tr.doc.content.size, nodes));
+    });
+  }
+  function appendChunk(nodes) {
+    editor.action((ctx) => {
+      const view = ctx.get(editorViewCtx);
+      view.dispatch(view.state.tr.insert(view.state.doc.content.size, nodes));
     });
   }
   function toRenderedRatio(ratio) {
