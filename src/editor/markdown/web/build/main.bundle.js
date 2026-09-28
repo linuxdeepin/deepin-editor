@@ -45249,6 +45249,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
   let lastRequestedRatio = 0;
   const PROGRESSIVE_THRESHOLD = 64 * 1024;
   let renderGeneration = 0;
+  let anchorMap = null;
   let buildProgress = null;
   let userScrolledDuringBuild = false;
   function renderMarkdown(md) {
@@ -45258,6 +45259,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     lastValue = normalized;
     renderGeneration++;
     buildProgress = null;
+    anchorMap = null;
     userScrolledDuringBuild = false;
     if (normalized.length <= PROGRESSIVE_THRESHOLD) {
       editor.action(replaceAll(normalized));
@@ -45320,13 +45322,17 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
         }, 0);
       } else {
         appendChunk(chunk);
+        buildAnchorMap();
       }
       buildProgress.fraction = renderedChars / totalChars;
       if (index2 < chunks.length) {
         setTimeout(step, 0);
       } else {
         buildProgress = null;
-        if (!userScrolledDuringBuild) reapplyScroll();
+        if (!userScrolledDuringBuild) {
+          buildAnchorMap();
+          reapplyScroll();
+        }
       }
     };
     step();
@@ -45343,10 +45349,121 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     if (!buildProgress || buildProgress.fraction <= 0) return ratio;
     return Math.max(0, Math.min(1, ratio / buildProgress.fraction));
   }
+  const mdBlockParser = unified().use(remarkParse).use(remarkGfm).use(remarkMath);
+  let mdBlockCache = { value: null, blocks: null };
+  function topRenderedBlocks(md) {
+    if (mdBlockCache.value !== md) {
+      let blocks = null;
+      try {
+        const ast = mdBlockParser.parse(md);
+        blocks = ast.children.filter((node2) => node2.type !== "definition" && node2.position).map((node2) => ({ type: node2.type, startLine: node2.position.start.line - 1 }));
+      } catch (e) {
+        console.error("[md] remark parse for anchors failed:", e);
+      }
+      mdBlockCache = { value: md, blocks };
+    }
+    return mdBlockCache.blocks;
+  }
+  let lastAnchorMode = null;
+  function buildAnchorMap() {
+    const pm = document.querySelector(".ProseMirror");
+    if (!pm || !lastValue) {
+      anchorMap = null;
+      lastAnchorMode = null;
+      return;
+    }
+    const children = Array.from(pm.children);
+    const blocks = topRenderedBlocks(lastValue);
+    if (!blocks || children.length === 0) {
+      anchorMap = null;
+      lastAnchorMode = null;
+      return;
+    }
+    const anchors = [];
+    if (blocks.length === children.length) {
+      lastAnchorMode = "zip";
+      for (let i2 = 0; i2 < children.length; i2++) {
+        anchors.push({ sourceLine: blocks[i2].startLine, previewY: children[i2].offsetTop });
+      }
+    } else {
+      const astHeadings = blocks.filter((b) => b.type === "heading");
+      const domHeadings = children.filter((el) => /^H[1-6]$/.test(el.tagName));
+      const pairCount = Math.min(astHeadings.length, domHeadings.length);
+      for (let i2 = 0; i2 < pairCount; i2++) {
+        anchors.push({ sourceLine: astHeadings[i2].startLine, previewY: domHeadings[i2].offsetTop });
+      }
+      lastAnchorMode = anchors.length >= 2 ? "headings" : null;
+      if (!buildProgress) {
+        console.warn(
+          "[md] anchor block/dom mismatch:",
+          blocks.length,
+          "vs",
+          children.length,
+          "→ heading anchors:",
+          anchors.length
+        );
+      }
+    }
+    const lastChild = children[children.length - 1];
+    anchors.push({ sourceLine: lastValue.split("\n").length, previewY: lastChild.offsetTop + lastChild.offsetHeight });
+    anchorMap = anchors.length >= 2 ? anchors : null;
+    if (anchorMap === null) lastAnchorMode = null;
+  }
+  function ratioToPreviewY(ratio) {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    if (!anchorMap || anchorMap.length < 2) {
+      return ratio * max;
+    }
+    const totalLines = lastValue ? lastValue.split("\n").length : 1;
+    const sourceLine = ratio * totalLines;
+    let lo = 0, hi = anchorMap.length - 1;
+    while (lo < hi - 1) {
+      const mid = lo + hi >> 1;
+      if (anchorMap[mid].sourceLine <= sourceLine) lo = mid;
+      else hi = mid;
+    }
+    const a0 = anchorMap[lo];
+    const a1 = anchorMap[Math.min(lo + 1, anchorMap.length - 1)];
+    const lineSpan = a1.sourceLine - a0.sourceLine;
+    if (lineSpan <= 0) return a0.previewY;
+    let t = (sourceLine - a0.sourceLine) / lineSpan;
+    t = Math.max(0, Math.min(1, t));
+    return a0.previewY + t * (a1.previewY - a0.previewY);
+  }
+  function previewYToRatio(scrollY) {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    if (!anchorMap || anchorMap.length < 2) {
+      return max > 0 ? scrollY / max : 0;
+    }
+    let lo = 0, hi = anchorMap.length - 1;
+    while (lo < hi - 1) {
+      const mid = lo + hi >> 1;
+      if (anchorMap[mid].previewY <= scrollY) lo = mid;
+      else hi = mid;
+    }
+    const a0 = anchorMap[lo];
+    const a1 = anchorMap[Math.min(lo + 1, anchorMap.length - 1)];
+    const ySpan = a1.previewY - a0.previewY;
+    let sourceLine;
+    if (ySpan <= 0) {
+      sourceLine = a0.sourceLine;
+    } else {
+      let t = (scrollY - a0.previewY) / ySpan;
+      t = Math.max(0, Math.min(1, t));
+      sourceLine = a0.sourceLine + t * (a1.sourceLine - a0.sourceLine);
+    }
+    const totalLines = lastValue ? lastValue.split("\n").length : 1;
+    return totalLines > 0 ? sourceLine / totalLines : 0;
+  }
   function reapplyScroll() {
+    buildAnchorMap();
     const max = document.documentElement.scrollHeight - window.innerHeight;
     if (max > 0) {
-      applyProgrammaticScroll(toRenderedRatio(lastRequestedRatio) * max);
+      if (anchorMap && anchorMap.length >= 2) {
+        applyProgrammaticScroll(ratioToPreviewY(lastRequestedRatio));
+      } else {
+        applyProgrammaticScroll(toRenderedRatio(lastRequestedRatio) * max);
+      }
     }
   }
   function applyTheme(jsonColors, isDark) {
@@ -45384,9 +45501,12 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
   function scrollToRatio(ratio) {
     ratio = Math.max(0, Math.min(1, ratio));
     lastRequestedRatio = ratio;
-    const target = toRenderedRatio(ratio);
     const max = document.documentElement.scrollHeight - window.innerHeight;
-    if (max > 0) {
+    if (max <= 0) return;
+    if (anchorMap && anchorMap.length >= 2) {
+      applyProgrammaticScroll(ratioToPreviewY(ratio));
+    } else {
+      const target = toRenderedRatio(ratio);
       applyProgrammaticScroll(target * max);
     }
   }
@@ -45398,11 +45518,16 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     __lastProgrammaticY = null;
     const max = document.documentElement.scrollHeight - window.innerHeight;
     if (max <= 0) return;
-    let ratio = Math.max(0, Math.min(1, window.scrollY / max));
-    if (buildProgress) {
-      ratio = Math.min(1, ratio * buildProgress.fraction);
-      userScrolledDuringBuild = true;
+    let ratio;
+    if (anchorMap && anchorMap.length >= 2) {
+      ratio = previewYToRatio(window.scrollY);
+    } else {
+      ratio = Math.max(0, Math.min(1, window.scrollY / max));
+      if (buildProgress) {
+        ratio = Math.min(1, ratio * buildProgress.fraction);
+      }
     }
+    if (buildProgress) userScrolledDuringBuild = true;
     if (Math.abs(window.scrollY - __lastNotifiedY) < 40 && Math.abs(ratio - __lastNotifiedRatio) < 1e-3)
       return;
     __lastNotifiedRatio = ratio;
@@ -45463,6 +45588,10 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
   if (typeof QWebChannel === "undefined") {
     window.__mdTest = {
       render: renderMarkdown,
+      buildAnchorMap,
+      getAnchorMap: () => anchorMap,
+      getAnchorMode: () => lastAnchorMode,
+      topRenderedBlocks,
       rootId: ROOT_ID
     };
   }

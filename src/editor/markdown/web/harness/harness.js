@@ -12,6 +12,8 @@
 //   T3 重渲染（表格内容已变）：包裹结构完整且行数正确（update 原地更新路径）
 //   T4 代码块：.code-block 表头/复制按钮/pre 结构 + 重渲染后 DOM 身份保留
 //   T5 新增表格：增量文档中第二个表格同样被包裹
+//   A 系列滚动锚点对齐（V-5278 复测回归）：A1 精确配对与行号、A2 AST 块结构、
+//   A3 渐进渲染（>64KB）完成后锚点可用性
 // 结果写入 #harness-result（JSON），失败置 failed 类，document.title 同步 PASS/FAIL。
 
 import "../main.js";
@@ -70,10 +72,22 @@ function check(name, ok, detail) {
 }
 
 function waitFrames(n) {
-    // 跨宏任务 + rAF 双重等待：覆盖 renderDescs 同步更新与 setTimeout(0) 间隙
+    // 跨宏任务 + rAF 双重等待：覆盖 renderDescs 同步更新与 setTimeout(0) 间隙。
+    // rAF 附加 120ms 超时回退：headless/无合成帧环境 rAF 不触发，避免用例挂起
+    //（GUI 浏览器中 rAF ~16ms 先到，行为不变）。
     return new Promise((resolve) => {
         let left = n;
-        const tick = () => (left-- > 0 ? requestAnimationFrame(() => setTimeout(tick, 0)) : resolve());
+        const tick = () => {
+            if (left-- <= 0) return resolve();
+            let done = false;
+            const next = () => {
+                if (done) return;
+                done = true;
+                setTimeout(tick, 0);
+            };
+            requestAnimationFrame(next);
+            setTimeout(next, 120);
+        };
         setTimeout(tick, 0);
     });
 }
@@ -170,6 +184,85 @@ async function run() {
         const bareTables = Array.from(root.querySelectorAll("table")).filter((t) => !t.closest(".table-wrapper"));
         check("T6_no_bare_table_outside_wrapper", bareTables.length === 0,
             bareTables.length + " bare table(s)");
+
+        // —— A 系列：滚动锚点对齐（V-5278 复测：连续空行/松散列表/definition 致配对漂移）——
+        // 构造含全部错位诱因的文档：连续空行（幻影块）、松散列表（渲染合并）、
+        // 引用式链接定义（渲染无节点）、围栏内空行、表格。
+        const mdAnchor = [
+            "# 标题一",              // line 1  (0基 0)  heading
+            "", "", "",              // 连续空行 ×3
+            "第一段。",              // line 5  (0基 4)  paragraph
+            "",
+            "[ref]: http://x.com",   // line 7  definition（不渲染）
+            "",
+            "- 甲项",               // line 9  (0基 8)  松散列表（一项）
+            "",
+            "- 乙项",               // line 11 —— 与上一行同属一个 ul
+            "",
+            "```json",              // line 13 (0基 12) code
+            "{", "",
+            "  \"a\": 1", "}", "```",
+            "",                     // line 19
+            "| 列A | 列B |",        // line 20 (0基 19) table
+            "| --- | --- |",
+            "| a1 | b1 |",
+            "",                     // line 24
+            "结尾段使用[引用][ref]。", // line 25 (0基 24) paragraph
+        ].join("\n");
+        test.render(mdAnchor);
+        await waitFor(() => root.textContent.includes("结尾段"));
+        await waitFrames(3);
+        test.buildAnchorMap();
+        const amap = test.getAnchorMap();
+        const expectedLines = [0, 4, 8, 12, 19, 23];
+        check("A1_anchor_mode_zip", test.getAnchorMode() === "zip",
+            "mode=" + test.getAnchorMode() + "（DOM 与 AST 块数不一致）");
+        check("A1_anchor_exact_source_lines",
+            !!amap && amap.slice(0, expectedLines.length).every((a, i) => a.sourceLine === expectedLines[i]),
+            !!amap ? "got [" + amap.map((a) => a.sourceLine).join(",") + "]" : "anchorMap null");
+        const totalLines = mdAnchor.split("\n").length;
+        check("A1_anchor_sentinel_total_lines",
+            !!amap && amap[amap.length - 1].sourceLine === totalLines,
+            "sentinel=" + (amap ? amap[amap.length - 1].sourceLine : "n/a") + " expect=" + totalLines);
+        const domChildren = root.querySelectorAll(".ProseMirror > *").length;
+        check("A1_dom_children_match_blocks",
+            domChildren === expectedLines.length,
+            "dom=" + domChildren + " ast=" + expectedLines.length);
+
+        // 旧方案回归：此文档按空行切分会产生 8 个块（含幻影空块/definition/列表拆分），
+        // 与 6 个 DOM 子节点错位配对，后续所有锚点行号偏小 → 右栏超前（截图现象）。
+        const blocksAst = test.topRenderedBlocks(mdAnchor);
+        check("A2_ast_blocks_exact", blocksAst.length === 6
+            && blocksAst.map((b) => b.type).join(",") === "heading,paragraph,list,code,table,paragraph",
+            "types=" + blocksAst.map((b) => b.type).join(","));
+
+        // —— A3：渐进渲染（>64KB）完成后锚点仍可用（数量错位时退化标题锚点）——
+        // 700 节 ×5 块（heading/paragraph/松散列表/code/table）≈ 80KB，触发渐进渲染；
+        // 松散列表跨 64KB 块边界会被切块拆散（DOM 块数 > AST 块数）→ 验证标题锚点退化路径。
+        // 断言：全部小节渲染完成后 anchorMap 非空、行号单调不减、首锚点=0、哨兵=总行数。
+        const section = [
+            "## 小节", "", "引导段落。", "",
+            "- 条目一", "", "- 条目二", "", "- 条目三", "",
+            "```", "code line 1", "", "code line 2", "```", "",
+            "| a | b |", "| - | - |", "| 1 | 2 |", "",
+        ].join("\n");
+        const sectionCount = 700;
+        const mdBig = Array.from({ length: sectionCount }, () => section).join("\n");
+        check("A3_doc_over_progressive_threshold", mdBig.length > 65536, "len=" + mdBig.length);
+        test.render(mdBig);
+        await waitFor(() => (root.textContent.match(/code line 2/g) || []).length >= sectionCount, 180000);
+        await waitFrames(3);
+        const bigMap = test.getAnchorMap();
+        const bigMode = test.getAnchorMode();
+        check("A3_progressive_anchor_available",
+            !!bigMap && bigMap.length >= 2 && (bigMode === "zip" || bigMode === "headings"),
+            "mode=" + bigMode + " len=" + (bigMap ? bigMap.length : 0));
+        check("A3_progressive_anchor_monotonic",
+            !!bigMap && bigMap.every((a, i) => i === 0 || a.sourceLine >= bigMap[i - 1].sourceLine),
+            "sourceLines not monotonic");
+        check("A3_progressive_first_anchor_zero",
+            !!bigMap && bigMap[0].sourceLine === 0,
+            "first=" + (bigMap ? bigMap[0].sourceLine : "n/a"));
     } catch (e) {
         check("harness_exception", false, String(e && e.message ? e.message : e));
     }
