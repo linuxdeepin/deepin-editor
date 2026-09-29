@@ -502,4 +502,27 @@ TEST_P(FindBarKeywordTest, GetCurrentSearchText_AfterTyped_ReflectsEditLineConte
     EXPECT_EQ(bar->getCurrentSearchText(), editLine->lineEdit()->text());  // 双向一致
 }
 
+// ---- PMS bug 回归用例（批次 2）----
+
+// PMS: https://pms.uniontech.com/bug-view-56153.html  commit: 4fb7deff
+// 场景：编辑不保存关闭重开显示异常（4fb7deff）：构造函数移除 contentChanged →
+//       slot_ifClearSearchWord 陈旧连接（slot 已删除）；触发 LineBar::contentChanged
+//       不得清空关键词/破坏栏状态。activeInput 语义已由 ActiveInput_WithKeyword/
+//       ActiveInput_EmptyKeyword 两用例覆盖。
+TEST_F(FindBarTest, BUG56153_Constructor_ContentChangedNotWired_KeepsKeyword)
+{
+    // Arrange：填充关键词并显示
+    bar->activeInput(QString::fromUtf8("kw56153"), QString::fromUtf8("/ut/56153.txt"), 3, 4, 5);
+    ASSERT_EQ(bar->getCurrentSearchText(), QString::fromUtf8("kw56153"));
+    ASSERT_TRUE(bar->isVisible());
+
+    // Act：直发 LineBar::contentChanged（4fb7deff 前该信号连接 slot_ifClearSearchWord）
+    emit editLine->contentChanged();
+    QApplication::processEvents();
+
+    // Assert：关键词保留、栏仍显示、状态未破坏
+    EXPECT_EQ(bar->getCurrentSearchText(), QString::fromUtf8("kw56153"));
+    EXPECT_TRUE(bar->isVisible());
+}
+
 }  // namespace

@@ -1033,3 +1033,454 @@ TEST_F(TextEditTest, BookMarkAreaPaintEvent_WithBookmarks_RendersWithoutCrash)
     EXPECT_NEAR(edit->m_lineNumbersColor.alphaF(), 0.3, 0.01);
     EXPECT_TRUE(edit->getBookmarkInfo().contains(1));
 }
+
+// ============================================================================
+// PMS 回归用例（Mode 7 PMS 缺陷热点补强，批次 1）
+// 数据源：tests/.ut-pms/（bugs.json / work-order.md）
+// ============================================================================
+
+// PMS: https://pms.uniontech.com/bug-view-95115.html  commit: 17033b21
+// 场景：Ctrl+A 后 Ctrl+C 后多次 Ctrl+V 后回车，粘贴错乱。修复（17033b21）：
+// paste() 末尾重置 m_isSelectAll = false，后续滚动不误触发 selectTextInView
+TEST_F(TextEditTest, BUG95115_PasteAfterSelectAll_ResetsSelectAllFlag)
+{
+    // Arrange: 全选
+    setDocText(QString("original content"));
+    edit->slotSelectAllAction();
+    ASSERT_TRUE(edit->m_isSelectAll);
+    QApplication::clipboard()->setText(QString("pasted"));
+
+    // Act: 粘贴（paste 末尾 m_isSelectAll = false）
+    edit->paste();
+    QApplication::processEvents();
+
+    // Assert: 粘贴成功 + 全选标志重置
+    EXPECT_EQ(edit->toPlainText(), QStringLiteral("pasted"));
+    EXPECT_FALSE(edit->m_isSelectAll);
+}
+
+// ============================================================================
+// PMS 回归用例（Mode 2 PMS bug 回归，批次 2）
+// 数据源：tests/.ut-pms/bugs.json + 修复 commit diff
+// 本批次覆盖功能点：updateHighlightBrackets / getNeedControlLine /
+//   calcMarkReplaceList / setBookmarkFlagVisable / setCodeFlodFlagVisable /
+//   slotFlodAllLevel / slotFlodCurrentLevel / slotUnflodCurrentLevel / setMark /
+//   isNeedShowFoldIcon / setCodeFoldWidgetHide / MarkOperation / MarkReplaceInfo
+// （isMarkCurrentLine、updateMarkAllSelectColor、slotPreBookMarkAction、
+//   getBookmarkInfo/setBookMarkList、clearMarksForTextCursor、
+//   toggleMarkSelections、manualUpdateAllMark 已有既有用例覆盖，见文件头映射）
+// ============================================================================
+
+#include "showflodcodewidget.h" // 批次 2 追加：m_foldCodeShow 完整类型（仅新增内容）
+
+// PMS: https://pms.uniontech.com/bug-view-66378.html  commit: e3cbab1d
+// PMS: https://pms.uniontech.com/bug-view-65228.html  commit: d242fe4f
+// 场景：大文本"标记所有"卡死修复（e3cbab1d/d242fe4f）后括号高亮算法需正确
+// 处理字符串内括号/转义引号（updateHighlightBrackets：字符串内 '}' 与转义
+// 引号不计入配对深度，配对成功时同时设置首尾括号高亮选区）
+TEST_F(TextEditTest, BUG66378_UpdateHighlightBrackets_PairMatchSkipsStringContent)
+{
+    // Arrange：第 1 行 '{' + 字符串内含转义引号与 '}'（不计入配对），第 3 行为真正配对 '}'
+    const QString doc = QString("void f() {\n    char *s = \"a\\\"}b\";\n}\n");
+    setDocText(doc);
+    QTextBlock b0 = edit->document()->findBlockByNumber(0);
+    const int bracePos = b0.position() + b0.text().indexOf(QLatin1Char('{'));
+    moveCursorTo(bracePos); // 光标落在 '{' 上（forward 分支）
+
+    // Act
+    edit->updateHighlightBrackets(QLatin1Char('{'), QLatin1Char('}'));
+
+    // Assert：首选区覆盖 '{'，尾选区选中字符串外真正的 '}'（第 3 行）
+    EXPECT_EQ(edit->m_beginBracketSelection.cursor.selectedText(), QString("{"));
+    EXPECT_EQ(edit->m_endBracketSelection.cursor.selectedText(), QString("}"));
+    EXPECT_EQ(edit->m_endBracketSelection.cursor.blockNumber(), 2);
+}
+
+// PMS: https://pms.uniontech.com/bug-view-66378.html  commit: e3cbab1d
+// PMS: https://pms.uniontech.com/bug-view-65228.html  commit: d242fe4f
+// 场景：光标旁无任何括号字符（characterAt(position)/position-1 均非括号）时，
+// 不设置括号高亮选区（position-1 回退读取不越界，保持选区为空）
+TEST_F(TextEditTest, BUG66378_UpdateHighlightBrackets_NoAdjacentBracket_NoHighlight)
+{
+    // Arrange：文档无任何括号，光标置于行中
+    setDocText(QString("plain text line"));
+    moveCursorTo(7);
+
+    // Act
+    edit->updateHighlightBrackets(QLatin1Char('{'), QLatin1Char('}'));
+
+    // Assert：未命中括号 → 首尾高亮选区保持空
+    EXPECT_TRUE(edit->m_beginBracketSelection.cursor.isNull());
+    EXPECT_TRUE(edit->m_endBracketSelection.cursor.isNull());
+}
+
+// PMS: https://pms.uniontech.com/bug-view-66378.html  commit: e3cbab1d
+// 场景：代码折叠控制 getNeedControlLine：命中匹配括号时按区域隐藏/显示
+// （isVisable=false 折叠 beginBlock~endBlock 含 '}' 行并返回 true；true 时还原）
+TEST_F(TextEditTest, BUG66378_GetNeedControlLine_FoldAndUnfoldBlocks)
+{
+    // Arrange：两层嵌套花括号文档
+    setDocText(QString("int main()\n{\n    if (x)\n    {\n        return 0;\n    }\n    return 1;\n}\n"));
+
+    // Act：折叠第 2 行 '{' 的区域
+    const bool folded = edit->getNeedControlLine(1, false);
+
+    // Assert：返回 true；区域块（2~7）隐藏，括号行与首行保持可见
+    EXPECT_TRUE(folded);
+    EXPECT_TRUE(edit->document()->findBlockByNumber(0).isVisible());
+    EXPECT_TRUE(edit->document()->findBlockByNumber(1).isVisible());
+    EXPECT_FALSE(edit->document()->findBlockByNumber(2).isVisible());
+    EXPECT_FALSE(edit->document()->findBlockByNumber(4).isVisible());
+    EXPECT_FALSE(edit->document()->findBlockByNumber(7).isVisible());
+
+    // Act：展开还原
+    const bool unfolded = edit->getNeedControlLine(1, true);
+
+    // Assert：区域块恢复可见
+    EXPECT_TRUE(unfolded);
+    EXPECT_TRUE(edit->document()->findBlockByNumber(2).isVisible());
+    EXPECT_TRUE(edit->document()->findBlockByNumber(7).isVisible());
+}
+
+// PMS: https://pms.uniontech.com/bug-view-66378.html  commit: e3cbab1d
+// 场景：左右括号在同一行（endBlock == curBlock）时不执行折叠，返回 false
+TEST_F(TextEditTest, BUG66378_GetNeedControlLine_SameLineBraces_NoFold)
+{
+    // Arrange：单行内配对括号
+    setDocText(QString("int x { 0 };"));
+
+    // Act
+    const bool ret = edit->getNeedControlLine(0, false);
+
+    // Assert：同行括号不折叠，块可见性不变
+    EXPECT_FALSE(ret);
+    EXPECT_TRUE(edit->document()->findBlockByNumber(0).isVisible());
+}
+
+// PMS: https://pms.uniontech.com/bug-view-79951.html  commit: d0fe36dc
+// 场景：连续全选复制粘贴卡死修复（d0fe36dc）引入的替换-标记位置联动
+// calcMarkReplaceList：标记位于替换文本右侧时按长度变更量整体偏移
+TEST_F(TextEditTest, BUG79951_CalcMarkReplaceList_MarkShiftsByReplaceOffset)
+{
+    // Arrange：标记 "bb"（[4,6)）位于替换文本 "XX"（位置 2）右侧，"XX"→"X" 缩短 1
+    QList<TextEdit::MarkReplaceInfo> replaceList;
+    TextEdit::MarkReplaceInfo info;
+    info.opt.type = TextEdit::MarkOnce;
+    info.start = 4;
+    info.end = 6;
+    info.time = 1;
+    replaceList << info;
+
+    // Act
+    edit->calcMarkReplaceList(replaceList, QString("aaXXbb"), QString("XX"), QString("X"), 0, Qt::CaseSensitive);
+
+    // Assert：右侧标记整体左移 adjustlen=1 → [3,5)
+    ASSERT_EQ(replaceList.size(), 1);
+    EXPECT_EQ(replaceList.at(0).start, 3);
+    EXPECT_EQ(replaceList.at(0).end, 5);
+}
+
+// PMS: https://pms.uniontech.com/bug-view-79951.html  commit: d0fe36dc
+// 场景：calcMarkReplaceList 分支回归：替换文本完全覆盖标记 → 标记取消（归 0）；
+// MarkAll 全文标记不参与替换位置调整；replaceText == withText 直接返回
+TEST_F(TextEditTest, BUG79951_CalcMarkReplaceList_ReplaceCoversMarkOrAllSkipped)
+{
+    // Arrange 1：替换文本 "aaXX" 完全覆盖标记 "XX"（[2,4)）
+    QList<TextEdit::MarkReplaceInfo> replaceList;
+    TextEdit::MarkReplaceInfo info;
+    info.opt.type = TextEdit::MarkOnce;
+    info.start = 2;
+    info.end = 4;
+    info.time = 1;
+    replaceList << info;
+
+    // Act
+    edit->calcMarkReplaceList(replaceList, QString("aaXXbb"), QString("aaXX"), QString("Q"), 0, Qt::CaseSensitive);
+
+    // Assert：EIntersectInner → 标记取消（start/end 归 0，manualUpdateAllMark 会移除）
+    EXPECT_EQ(replaceList.at(0).start, 0);
+    EXPECT_EQ(replaceList.at(0).end, 0);
+
+    // Arrange 2：仅含 MarkAll 类型标记
+    QList<TextEdit::MarkReplaceInfo> allList;
+    TextEdit::MarkReplaceInfo allInfo;
+    allInfo.opt.type = TextEdit::MarkAll;
+    allInfo.start = 1;
+    allInfo.end = 3;
+    allInfo.time = 2;
+    allList << allInfo;
+
+    // Act：全文替换 "XX"→"LONGER"
+    edit->calcMarkReplaceList(allList, QString("aaXXbb"), QString("XX"), QString("LONGER"), 0, Qt::CaseSensitive);
+
+    // Assert：MarkAll 类型跳过调整，保持不变
+    EXPECT_EQ(allList.at(0).start, 1);
+    EXPECT_EQ(allList.at(0).end, 3);
+
+    // Arrange 3：replaceText == withText
+    QList<TextEdit::MarkReplaceInfo> sameList;
+    TextEdit::MarkReplaceInfo sameInfo;
+    sameInfo.opt.type = TextEdit::MarkOnce;
+    sameInfo.start = 4;
+    sameInfo.end = 6;
+    sameList << sameInfo;
+
+    // Act
+    edit->calcMarkReplaceList(sameList, QString("aaXXbb"), QString("XX"), QString("XX"), 0, Qt::CaseSensitive);
+
+    // Assert：相同文本直接返回，无变化
+    EXPECT_EQ(sameList.at(0).start, 4);
+    EXPECT_EQ(sameList.at(0).end, 6);
+}
+
+// PMS: https://pms.uniontech.com/bug-view-215591.html  commit: d0935120
+// 场景：点击序号列阻塞修复（d0935120，实际修复 onPressedLineNumber 死循环，
+// 相关用例见 test_dtextedit_find.cpp F15）同提交涉及左边栏标志接口回归：
+// setBookmarkFlagVisable/setCodeFlodFlagVisable 同步标志位与列隐藏/显示状态
+TEST_F(TextEditTest, BUG215591_SetBookmarkAndFlodFlagVisable_TogglesLeftAreas)
+{
+    // Arrange
+    ASSERT_NE(edit->m_pLeftAreaWidget, nullptr);
+    ASSERT_NE(edit->m_pLeftAreaWidget->m_pBookMarkArea, nullptr);
+    ASSERT_NE(edit->m_pLeftAreaWidget->m_pFlodArea, nullptr);
+
+    // Act：隐藏书签列
+    edit->setBookmarkFlagVisable(false);
+    // Assert：标志位与控件隐藏态同步
+    EXPECT_FALSE(edit->m_pIsShowBookmarkArea);
+    EXPECT_TRUE(edit->m_pLeftAreaWidget->m_pBookMarkArea->isHidden());
+
+    // Act：显示书签列
+    edit->setBookmarkFlagVisable(true);
+    // Assert
+    EXPECT_TRUE(edit->m_pIsShowBookmarkArea);
+    EXPECT_FALSE(edit->m_pLeftAreaWidget->m_pBookMarkArea->isHidden());
+
+    // Act：隐藏代码折叠列
+    edit->setCodeFlodFlagVisable(false);
+    // Assert
+    EXPECT_FALSE(edit->m_pIsShowCodeFoldArea);
+    EXPECT_TRUE(edit->m_pLeftAreaWidget->m_pFlodArea->isHidden());
+
+    // Act：显示代码折叠列
+    edit->setCodeFlodFlagVisable(true);
+    // Assert
+    EXPECT_TRUE(edit->m_pIsShowCodeFoldArea);
+    EXPECT_FALSE(edit->m_pLeftAreaWidget->m_pFlodArea->isHidden());
+}
+
+// PMS: https://pms.uniontech.com/bug-view-184107.html  commit: 3b9b699f
+// 场景：超大文件读取异常处理修复（3b9b699f）PMS 热点关联折叠入口回归：
+// slotFlodAllLevel → flodOrUnflodAllLevel(true) 遍历可见含 '{' 块折叠，
+// 记录折叠行号，折叠后区域块不可见
+TEST_F(TextEditTest, BUG184107_SlotFlodAllLevel_FoldsAllBraceBlocks)
+{
+    // Arrange：两层嵌套花括号文档（无注释行）
+    setDocText(QString("int main()\n{\n    if (x)\n    {\n        return 0;\n    }\n    return 1;\n}\n"));
+
+    // Act
+    edit->slotFlodAllLevel();
+
+    // Assert：折叠点行号被记录（行 1）；区域块隐藏、括号行/首行可见
+    EXPECT_TRUE(edit->m_listMainFlodAllPos.contains(1));
+    EXPECT_FALSE(edit->document()->findBlockByNumber(2).isVisible());
+    EXPECT_FALSE(edit->document()->findBlockByNumber(4).isVisible());
+    EXPECT_TRUE(edit->document()->findBlockByNumber(0).isVisible());
+    EXPECT_TRUE(edit->document()->findBlockByNumber(1).isVisible());
+}
+
+// PMS: https://pms.uniontech.com/bug-view-184107.html  commit: 3b9b699f
+// 场景：slotFlodCurrentLevel/slotUnflodCurrentLevel 按点击行折叠/展开当前层级：
+// 点击行（getLineFromPoint）→ getNeedControlLine(line-1, ...) 隐藏/恢复区域块
+TEST_F(TextEditTest, BUG184107_SlotFlodCurrentLevel_FoldAndUnfoldAtClickLine)
+{
+    // Arrange：点击位置取第 3 行（if 行）光标矩形中心（与字体度量解耦）
+    setDocText(QString("int main()\n{\n    if (x)\n    {\n        return 0;\n    }\n    return 1;\n}\n"));
+    QTextCursor tmp(edit->document());
+    tmp.setPosition(edit->document()->findBlockByNumber(2).position());
+    edit->m_mouseClickPos = edit->cursorRect(tmp).center();
+
+    // Act：折叠当前层级（line-1 = 块 2 的 if 区域）
+    edit->slotFlodCurrentLevel();
+
+    // Assert：if 区域块（3~5）隐藏，点击行与外层括号行可见
+    EXPECT_FALSE(edit->document()->findBlockByNumber(3).isVisible());
+    EXPECT_FALSE(edit->document()->findBlockByNumber(5).isVisible());
+    EXPECT_TRUE(edit->document()->findBlockByNumber(2).isVisible());
+    EXPECT_TRUE(edit->document()->findBlockByNumber(1).isVisible());
+
+    // Act：展开当前层级
+    edit->slotUnflodCurrentLevel();
+
+    // Assert：区域块恢复可见
+    EXPECT_TRUE(edit->document()->findBlockByNumber(3).isVisible());
+    EXPECT_TRUE(edit->document()->findBlockByNumber(5).isVisible());
+}
+
+// PMS: https://pms.uniontech.com/bug-view-305473.html  commit: 65bc75a3
+// 场景：主题色修复（65bc75a3）中 setEditPalette 在 Qt6 下取消手动 setPalette
+// （纯调色板行为无法离屏断言，SKIP）；同函数族 setMark 标记模式状态机回归：
+// 无选区开启 → 有选区清除选区并通知 → 无选区关闭
+TEST_F(TextEditTest, BUG305473_SetMark_TogglesCursorMarkMode)
+{
+    // Arrange
+    setDocText(QString("mark mode"));
+    moveCursorTo(3);
+    ASSERT_FALSE(edit->m_cursorMark);
+    QSignalSpy spy(edit, &TextEdit::cursorMarkChanged);
+
+    // Act：无选区开启标记模式
+    edit->setMark();
+    // Assert：m_cursorMark 翻转并发送 cursorMarkChanged
+    EXPECT_TRUE(edit->m_cursorMark);
+    EXPECT_EQ(spy.count(), 1);
+
+    // Act：标记模式下有选区 → 清除选区（保持标记模式）
+    QTextCursor cur = edit->textCursor();
+    cur.setPosition(3);
+    cur.setPosition(7, QTextCursor::KeepAnchor);
+    edit->setTextCursor(cur);
+    edit->setMark();
+    // Assert：选区被清除，标记模式保持，再次通知
+    EXPECT_FALSE(edit->textCursor().hasSelection());
+    EXPECT_TRUE(edit->m_cursorMark);
+    EXPECT_EQ(spy.count(), 2);
+
+    // Act：无选区再触发 → 关闭标记模式
+    edit->setMark();
+    // Assert
+    EXPECT_FALSE(edit->m_cursorMark);
+    EXPECT_EQ(spy.count(), 3);
+}
+
+// PMS: https://pms.uniontech.com/bug-view-79951.html  commit: d0fe36dc
+// 场景：isNeedShowFoldIcon 纯文本括号分析回归：首个 '{' 后无配对 '}' → 需要
+// 折叠图标；单行配对/无括号/无前置 '{' 的 '}' → 不需要
+TEST_F(TextEditTest, BUG79951_IsNeedShowFoldIcon_BracketBalanceDecision)
+{
+    // Arrange
+    setDocText(QString("void f() {\n}\nint g() { return 0; }\nplain line"));
+
+    // Act/Assert：'{' 未在行内配对 → true
+    EXPECT_TRUE(edit->isNeedShowFoldIcon(edit->document()->findBlockByNumber(0)));
+    // Act/Assert：'}' 无前置 '{'（hasFindLeft=false 不计数）→ false
+    EXPECT_FALSE(edit->isNeedShowFoldIcon(edit->document()->findBlockByNumber(1)));
+    // Act/Assert：单行内左右配对 → false
+    EXPECT_FALSE(edit->isNeedShowFoldIcon(edit->document()->findBlockByNumber(2)));
+    // Act/Assert：无括号行 → false
+    EXPECT_FALSE(edit->isNeedShowFoldIcon(edit->document()->findBlockByNumber(3)));
+}
+
+// PMS: https://pms.uniontech.com/bug-view-79951.html  commit: d0fe36dc
+// 场景：setCodeFoldWidgetHide 委托折叠预览控件显隐：构造即创建 m_foldCodeShow
+// （判空），setHidden(true/false) 正确传递
+TEST_F(TextEditTest, BUG79951_SetCodeFoldWidgetHide_TogglesFoldWidget)
+{
+    // Arrange
+    ASSERT_NE(edit->m_foldCodeShow, nullptr);
+
+    // Act/Assert：隐藏
+    edit->setCodeFoldWidgetHide(true);
+    EXPECT_TRUE(edit->m_foldCodeShow->isHidden());
+
+    // Act/Assert：显示
+    edit->setCodeFoldWidgetHide(false);
+    EXPECT_FALSE(edit->m_foldCodeShow->isHidden());
+}
+
+// PMS: https://pms.uniontech.com/bug-view-66378.html  commit: e3cbab1d
+// 场景：MarkOperation/MarkReplaceInfo（dtextedit.h）默认构造语义回归：
+// MarkOperation 默认 MarkOnce、光标/颜色/匹配文本为空；MarkReplaceInfo
+// 位置与时间戳默认 0（撤销替换联动依赖的初始值约定）
+TEST_F(TextEditTest, BUG66378_MarkStructs_DefaultConstruct_InitialValues)
+{
+    // Act
+    TextEdit::MarkOperation op;
+    TextEdit::MarkReplaceInfo info;
+
+    // Assert
+    EXPECT_EQ(op.type, TextEdit::MarkOnce);
+    EXPECT_TRUE(op.cursor.isNull());
+    EXPECT_TRUE(op.color.isEmpty());
+    EXPECT_TRUE(op.matchText.isEmpty());
+    EXPECT_EQ(info.start, 0);
+    EXPECT_EQ(info.end, 0);
+    EXPECT_EQ(info.time, 0);
+}
+
+// PMS: https://pms.uniontech.com/bug-view-331945.html  commit: ebf6f7ee
+// 场景：文本删除时多个标记被移除会删错元素。修复（ebf6f7ee）：updateMark
+// 移除逻辑 removeAt 索引错位改为 removeIf + 索引计数（Qt6 分支），
+// 多标记同批次移除时索引不错位
+TEST_F(TextEditTest, BUG331945_UpdateMark_MultiRemoved_CorrectIndicesRemain)
+{
+    // Arrange: 三个标记（位置顺序 aaa/bbb/ccc），一次 contentsChange 同时删除
+    // 前两个标记的文本（同批次 removeSet={0,1} 多标记移除场景）
+    setDocText(QString("aaaXXbbbXXccc"));
+    QList<QPair<QTextEdit::ExtraSelection, qint64>> marks;
+    for (int i = 0; i < 3; ++i) {
+        const int base = edit->document()->firstBlock().position();
+        QTextCursor cur(edit->document());
+        cur.setPosition(base + i * 5);
+        cur.setPosition(base + i * 5 + 3, QTextCursor::KeepAnchor);
+        QTextEdit::ExtraSelection sel;
+        sel.cursor = cur;
+        sel.format.setBackground(QColor(QString("#ff0000")));
+        marks << QPair<QTextEdit::ExtraSelection, qint64>(sel, 1000 + i);
+    }
+    edit->m_wordMarkSelections = marks;
+    edit->m_nSelectEndLine = -1; // 无列选区，走"标记文本已空"移除分支
+    ASSERT_EQ(edit->m_wordMarkSelections.size(), 3);
+
+    // Act: 删除 [0,8)（"aaaXXbbb"）→ contentsChange 自动触发 updateMark
+    QTextCursor del(edit->document());
+    del.setPosition(0);
+    del.setPosition(8, QTextCursor::KeepAnchor);
+    del.removeSelectedText();
+
+    // Assert: 修复后 removeIf 按索引精确移除 {0,1}，仅 ccc 保留
+    // （修复前 removeAt(0)+removeAt(1) 索引错位会误删 ccc 留下空标记 bbb）
+    EXPECT_EQ(edit->m_wordMarkSelections.size(), 1);
+    if (edit->m_wordMarkSelections.size() == 1)
+        EXPECT_EQ(edit->m_wordMarkSelections.first().first.cursor.selectedText(),
+                  QString("ccc"));
+}
+
+// PMS: https://pms.uniontech.com/bug-view-331945.html  commit: ebf6f7ee
+// 场景：列选区激活（m_nSelectEndLine != -1）时，删除区间完全包含的标记
+// 被移除、区间外的保留，同批次多标记移除索引不错位
+TEST_F(TextEditTest, BUG331945_UpdateMark_ColumnSelection_ContainedMarksRemoved)
+{
+    // Arrange: 两个标记分别位于第 0、2 行；列选区位置范围覆盖两个标记
+    setDocText(QString("aa\nbb\ncc"));
+    QList<QPair<QTextEdit::ExtraSelection, qint64>> marks;
+    const int line0 = edit->document()->firstBlock().position();
+    const int line2 = edit->document()->findBlockByNumber(2).position();
+    QTextCursor c0(edit->document());
+    c0.setPosition(line0);
+    c0.setPosition(line0 + 2, QTextCursor::KeepAnchor);
+    QTextCursor c2(edit->document());
+    c2.setPosition(line2);
+    c2.setPosition(line2 + 2, QTextCursor::KeepAnchor);
+    QTextEdit::ExtraSelection s0, s2;
+    s0.cursor = c0;
+    s0.format.setBackground(QColor(QString("#00ff00")));
+    s2.cursor = c2;
+    s2.format.setBackground(QColor(QString("#00ff00")));
+    marks << QPair<QTextEdit::ExtraSelection, qint64>(s0, 100);
+    marks << QPair<QTextEdit::ExtraSelection, qint64>(s2, 200);
+    edit->m_wordMarkSelections = marks;
+    edit->m_nSelectStart = 0;
+    edit->m_nSelectEnd = 20;
+    edit->m_nSelectEndLine = 2; // 列选区激活
+    ASSERT_EQ(edit->m_wordMarkSelections.size(), 2);
+
+    // Act: 删除第 1 行部分文本（charsRemoved>0）→ 触发 updateMark 列选区分支
+    QTextCursor del(edit->document());
+    del.setPosition(3);
+    del.setPosition(5, QTextCursor::KeepAnchor);
+    del.removeSelectedText();
+
+    // Assert: 两个标记均被 [0,20] 完全包含 → 同批次移除，索引不错位
+    EXPECT_TRUE(edit->m_wordMarkSelections.isEmpty());
+}

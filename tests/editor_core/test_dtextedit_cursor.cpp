@@ -838,3 +838,76 @@ TEST_F(TextEditTest, LeftAreaUpdateState_SetFileOpenEnd_TriggersUpdateAll)
     // Assert
     EXPECT_EQ(edit->getLeftAreaUpdateState(), TextEdit::FileOpenEnd);
 }
+
+// ============================================================================
+// PMS 回归用例（Mode 2 PMS bug 回归，批次 2）
+// 数据源：tests/.ut-pms/bugs.json + git show <sha>
+// ============================================================================
+
+#include "leftareaoftextedit.h" // BUG215591：LeftAreaTextEdit::updateAll 计数桩
+
+// PMS: https://pms.uniontech.com/bug-view-215591.html  commit: d0935120
+// 场景：大文件加载过程中点击序号阻塞修复（d0935120）：加载中（FileOpenBegin）
+// 仅记录左侧区状态、不触发手动更新；updateLeftAreaWidget 滚动联动不阻塞，
+// FileOpenEnd 才手动触发一次 updateAll
+TEST_F(TextEditTest, BUG215591_UpdateLeftAreaWidget_FileOpenBegin_NoHang)
+{
+    // Arrange: 统计左侧区手动更新次数（stub updateAll 计数）
+    int updateAllCalls = 0;
+    stub.set_lamda(&LeftAreaTextEdit::updateAll,
+                   [&updateAllCalls](LeftAreaTextEdit *) { ++updateAllCalls; });
+
+    // Act: 进入文件加载状态（FileOpenBegin）
+    edit->setLeftAreaUpdateState(TextEdit::FileOpenBegin);
+
+    // Assert: 状态已记录，加载中不触发手动更新
+    EXPECT_EQ(edit->getLeftAreaUpdateState(), TextEdit::FileOpenBegin);
+    EXPECT_EQ(updateAllCalls, 0);
+
+    // Act: 加载过程中滚动联动 updateLeftAreaWidget —— 不阻塞、状态保持
+    edit->updateLeftAreaWidget();
+
+    // Assert: 滚动联动正常执行手动更新（+1），状态不被清除
+    EXPECT_EQ(edit->getLeftAreaUpdateState(), TextEdit::FileOpenBegin);
+    EXPECT_EQ(updateAllCalls, 1);
+
+    // Act: 加载结束 → 手动触发一次界面更新
+    edit->setLeftAreaUpdateState(TextEdit::FileOpenEnd);
+
+    // Assert: FileOpenEnd 才触发手动更新（累计 2 次）
+    EXPECT_EQ(edit->getLeftAreaUpdateState(), TextEdit::FileOpenEnd);
+    EXPECT_EQ(updateAllCalls, 2);
+}
+
+// PMS: https://pms.uniontech.com/bug-view-66378.html  commit: e3cbab1d / d242fe4f
+// 场景：大文本卡死修复（d242fe4f/e3cbab1d）回归：大文本滚动/跳转场景下
+// firstVisibleBlock/getFirstVisibleBlockId/jumpToLine 导航辅助不卡死且同步有效
+TEST_F(TextEditTest, BUG66378_FirstVisibleBlockId_ScrolledDoc_NoHang)
+{
+    // Arrange: 400 行大文本 + 缩小视口制造滚动条，滚动到中部（maximum()/2）
+    QString text;
+    for (int i = 0; i < 400; ++i) {
+        text += QString("line %1 content\n").arg(i);
+    }
+    setDocText(text);
+    edit->resize(200, 100);
+    auto *bar = edit->verticalScrollBar();
+    ASSERT_GT(bar->maximum(), 0);
+    bar->setValue(bar->maximum() / 2);
+
+    // Act: 大文本滚动状态下获取首可见块
+    const int blockId = edit->getFirstVisibleBlockId();
+    const QTextBlock block = edit->firstVisibleBlock();
+
+    // Assert: 返回合法且非首块的可见块（视图已滚动），firstVisibleBlock 同步
+    ASSERT_TRUE(block.isValid());
+    EXPECT_GT(blockId, 0);
+    EXPECT_GT(block.blockNumber(), 0);
+
+    // Act: jumpToLine 跳转中部行（keepLineAtCenter=false）
+    edit->jumpToLine(200, false);
+
+    // Assert: 光标落在目标行，firstVisibleBlock 仍同步有效
+    EXPECT_EQ(edit->textCursor().blockNumber(), 199);
+    EXPECT_TRUE(edit->firstVisibleBlock().isValid());
+}

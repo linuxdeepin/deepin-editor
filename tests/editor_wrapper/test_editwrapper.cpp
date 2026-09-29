@@ -2217,3 +2217,149 @@ TEST_F(EditWrapperTest, MarkdownViewSignalHandlers_ViewEvents_ReactCorrectly)
     EXPECT_EQ(m_wrapper->viewMode(), ViewMode::LivePreview);
     EXPECT_EQ(m_wrapper->textEditor()->toPlainText().size(), text.size());
 }
+
+// ============================================================================
+// PMS 回归用例（Mode 7 PMS 缺陷热点补强，批次 1）
+// 数据源：tests/.ut-pms/（bugs.json / work-order.md）
+// ============================================================================
+
+// PMS: https://pms.uniontech.com/bug-view-78042.html  commit: dfa7ff93
+// 场景：重新载入被其他应用修改的同一文档后，点击关闭当前标签页应用闪退。
+// 修复（dfa7ff93）：checkForReload 的 QTimer 延迟回调使用 QPointer 判空，
+// 对象销毁后回调安全返回，不再悬挂指针崩溃
+TEST_F(EditWrapperTest, BUG78042_CheckForReload_DestroyedDuringTimer_NoCrash)
+{
+    // Arrange: 打开真实文件（非草稿）
+    const QString path = createFile("reload-ext.txt", QByteArray("v1\n"));
+    m_wrapper->updatePath(path, path);
+    ASSERT_TRUE(m_wrapper->readFile());
+
+    // Act: 启动 checkForReload 的 QTimer(50ms) 延迟检查；随后销毁对象（模拟关闭标签页）
+    m_wrapper->checkForReload();
+    delete m_wrapper;
+    m_wrapper = nullptr; // TearDown delete nullptr 安全
+
+    // Assert: QTimer 回调触发时 QPointer 判空安全（修复前悬挂指针崩溃）
+    QElapsedTimer t;
+    t.start();
+    while (t.elapsed() < 120) {
+        QApplication::processEvents();
+        QThread::msleep(10);
+    }
+    SUCCEED() << "QTimer 回调在对象销毁后安全返回";
+}
+
+// PMS: https://pms.uniontech.com/bug-view-56048.html  commit: c6879c19
+// 场景：切换编码方式后关闭有是否保存提示。reloadFileEncode 边界：编码相同
+// 不重写加载（return false），避免无谓重载与状态错乱
+TEST_F(EditWrapperTest, BUG56048_ReloadFileEncode_SameEncodeSkips)
+{
+    // Arrange: 指定编码加载（m_sCurEncode = "UTF-8"）
+    const QString path = createFile("enc-same.txt", QByteArray("enc test\n"));
+    m_wrapper->updatePath(path, path);
+    ASSERT_TRUE(m_wrapper->readFile("UTF-8"));
+
+    // Act: 相同编码重载
+    const bool reloaded = m_wrapper->reloadFileEncode(QByteArrayLiteral("UTF-8"));
+
+    // Assert: return false（跳过重载，内容不变）
+    EXPECT_FALSE(reloaded);
+    EXPECT_EQ(m_wrapper->textEditor()->toPlainText(), QStringLiteral("enc test\n"));
+}
+
+// PMS: https://pms.uniontech.com/bug-view-66378.html  commit: e3cbab1d
+// 场景：大文本（ParseFileEvent 分片队列）处理中析构对象引起崩溃。修复后：
+// 分片队列处理期间析构不闪退（事件队列与对象生命周期隔离）
+TEST_F(EditWrapperTest, BUG66378_ParseFileEventDtor_NoCrash)
+{
+    // Arrange: >40MB 内容触发 ParseFileEvent 分片（同 CustomEvent_LargeContent 模式）
+    const QString path = createFile("big-dtor.txt", QByteArray("x"));
+    m_wrapper->updatePath(path, path);
+    const int size = 40 * 1024 * 1024 + 1;
+    QByteArray line = QByteArray(63, 'a') + '\n';
+    QByteArray big;
+    big.reserve(size);
+    while (big.size() + line.size() <= size)
+        big.append(line);
+    big.append(QByteArray(size - big.size(), 'a'));
+
+    // Act: 分片事件入队后立即析构（模拟大文本加载中关闭标签页）
+    m_wrapper->handleFileLoadFinished("UTF-8", big, false, false);
+    delete m_wrapper;
+    m_wrapper = nullptr;
+
+    // Assert: 分片队列处理期间析构不闪退
+    QApplication::processEvents();
+    SUCCEED() << "ParseFileEvent 分片处理中析构安全";
+}
+
+// PMS: https://pms.uniontech.com/bug-view-107958.html  commit: f020329e
+// 场景：读取超大文件时软件闪退（saveDraftFile 写盘链）。修复后：大文档
+// saveDraftFile 成功写盘不闪退
+TEST_F(EditWrapperTest, BUG107958_SaveDraftFile_LargeDocumentSurvives)
+{
+    // Arrange: 1MB 大文档（< 40MB 走同步路径）
+    const QString big(1024 * 1024, QChar('x'));
+    m_wrapper->textEditor()->document()->setPlainText(big);
+    m_qdialogResult = 1; // 保存
+    const QString saveTo = m_tempDir->filePath(QStringLiteral("draft-big.txt"));
+    m_selectedFiles = QStringList{ saveTo };
+    m_comboValue = QStringLiteral("UTF-8");
+
+    // Act
+    QString newFilePath;
+    const bool ok = m_wrapper->saveDraftFile(newFilePath);
+
+    // Assert: 成功写盘不闪退
+    EXPECT_TRUE(ok);
+    EXPECT_EQ(newFilePath, saveTo);
+    EXPECT_TRUE(QFileInfo::exists(saveTo));
+    EXPECT_GT(QFileInfo(saveTo).size(), 0);
+}
+
+// PMS: https://pms.uniontech.com/bug-view-169265.html  commit: e2fbbd48
+// 场景：新建标签页修改编码格式并输入内容，保存时仍为 utf-8。修复（e2fbbd48）：
+// readFile 空编码时补充文件头内容（最多 1MB）做编码检测，m_sFirstEncode 及时落位
+TEST_F(EditWrapperTest, BUG169265_ReadFileHeaderEncode_DetectedFromHead)
+{
+    // Arrange: UTF-8 文件（带 BOM 语义的内容在文件头）
+    const QString path = createFile("head-enc.txt", QByteArray("编码检测 header content\n"));
+    m_wrapper->updatePath(path, path);
+
+    // Act: 空编码 → 文件头 1MB 内容参与编码检测
+    const bool ok = m_wrapper->readFile();
+
+    // Assert: 编码检测落位（m_sCurEncode/m_sFirstEncode 一致，保存按检测编码）
+    EXPECT_TRUE(ok);
+    EXPECT_EQ(m_wrapper->textEditor()->toPlainText(), QStringLiteral("编码检测 header content\n"));
+    EXPECT_FALSE(m_wrapper->textEditor()->document()->isModified());
+}
+
+// PMS: https://pms.uniontech.com/bug-view-311693.html  commit: 5cb743f3
+// 场景：大文件分片插入时内存分配失败（std::exception）导致应用闪退。
+// 修复（5cb743f3, 311693 / bd742e7d, 297727）：customEvent 分片插入包
+// try/catch，捕获 std::exception 后置 m_bAsyncReadFileFinished 并安全返回
+TEST_F(EditWrapperTest, BUG311693_InsertTextBadAlloc_AbortLoadSafely)
+{
+    // Arrange: >40MB 内容走 ParseFileEvent 分片路径；stub insertText 抛异常
+    const QString path = createFile("big-badalloc.txt", QByteArray("x"));
+    m_wrapper->updatePath(path, path);
+    stub_ext::StubExt stub;
+    stub.set_lamda((void (QTextCursor::*)(const QString &))&QTextCursor::insertText,
+                   [](QTextCursor *, const QString &) -> void { throw std::runtime_error("mock alloc failure"); });
+    const int size = 40 * 1024 * 1024 + 1;
+    QByteArray line = QByteArray(63, 'a') + '\n';
+    QByteArray big;
+    big.reserve(size);
+    while (big.size() + line.size() <= size)
+        big.append(line);
+    big.append(QByteArray(size - big.size(), 'a')); // 补足至精确大小（> 40MB 阈值）
+
+    // Act: 分片插入遇异常 → catch 捕获并中止加载
+    m_wrapper->handleFileLoadFinished("UTF-8", big, false, false);
+    QApplication::processEvents();
+
+    // Assert: 未闪退，异步读取中止标记置位，文档保持为空（无部分插入）
+    EXPECT_TRUE(m_wrapper->m_bAsyncReadFileFinished);
+    EXPECT_TRUE(m_wrapper->textEditor()->toPlainText().isEmpty());
+}

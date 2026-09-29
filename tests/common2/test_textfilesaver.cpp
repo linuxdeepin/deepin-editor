@@ -350,3 +350,64 @@ TEST_F(TextFileSaverTest, ErrorString_InitiallyEmpty_ReturnsEmptyByDefault)
     EXPECT_FALSE(obj->save());
     EXPECT_FALSE(obj->errorString().isEmpty());
 }
+
+// ============================================================================
+// PMS 批次 2 回归用例（仅追加）
+// ============================================================================
+
+// PMS: https://pms.uniontech.com/bug-view-327987.html  commit: 5cacfb18
+// 场景：禁用 QSaveFile 防超长文件名/权限问题（5cacfb18）：save() 直接用 QFile
+//       保存，超过 MAX_FILENAME_LENGTH(245) 的长文件名（QSaveFile 临时文件名
+//       会超文件系统 255 字节上限，327987 根因）须可完整保存且内容可读回
+TEST_F(TextFileSaverTest, BUG327987_LongFileName_DirectQFileSave_Succeeds)
+{
+    // Arrange: 248 个 'a' + ".txt" = 252 字节（> 245，且 ≤ 文件系统 255 字节上限）
+    const QString longName = QString(248, QLatin1Char('a')) + QStringLiteral(".txt");
+    ASSERT_EQ(longName.length(), 252);
+    const QString expectedText = QStringLiteral("long filename content 中文");
+    doc->setPlainText(expectedText);
+    obj->setFilePath(filePath(longName));
+    // Act
+    const bool ret = obj->save();
+    // Assert: 保存成功、errorString 清空、内容完整可读回
+    EXPECT_TRUE(ret);
+    EXPECT_TRUE(obj->errorString().isEmpty());
+    QFile f(filePath(longName));
+    ASSERT_TRUE(f.open(QIODevice::ReadOnly));
+    EXPECT_EQ(f.readAll(), expectedText.toUtf8());
+    f.close();
+}
+
+// PMS: https://pms.uniontech.com/bug-view-327987.html  commit: 5cacfb18
+// 场景：QSaveFile 经临时文件 rename 提交会用临时文件权限（umask 派生，通常 0644）
+//       覆盖原文件权限——327987 根因之一；修复后 save() 直接 QFile 覆写既有文件，
+//       inode 不重建，原有权限必须保持不变
+TEST_F(TextFileSaverTest, BUG327987_SaveOverExistingFile_PreservesPermissions)
+{
+    // Arrange: 预创建文件并 chmod 为 0664（含组写，区别于 QSaveFile rename 后的 0644）
+    const QString path = filePath(QStringLiteral("perm_check.txt"));
+    {
+        QFile pre(path);
+        ASSERT_TRUE(pre.open(QIODevice::WriteOnly));
+        pre.write(QByteArrayLiteral("old"));
+    }
+    const QFile::Permissions expected = QFile::ReadOwner | QFile::WriteOwner
+                                        | QFile::ReadGroup | QFile::WriteGroup
+                                        | QFile::ReadOther;  // 0664
+    ASSERT_TRUE(QFile::setPermissions(path, expected));
+    // Qt6 中 QFile::permissions() 对 Unix 文件同时置 Owner 与 User 位别名（0664 → 0x6664），
+    // 故以前后快照对比断言“权限保持”，不硬编码 flag 联合值
+    const QFile::Permissions permsBefore = QFile::permissions(path);
+    ASSERT_TRUE(permsBefore & QFile::WriteGroup);  // 确认组写已置（QSaveFile rename 后会丢失）
+    doc->setPlainText(QStringLiteral("updated"));
+    obj->setFilePath(path);
+    // Act: 直接 QFile 覆写（Truncate，不重建 inode）
+    const bool ret = obj->save();
+    // Assert: 保存成功、内容更新、权限保持 0664 不变
+    EXPECT_TRUE(ret);
+    EXPECT_EQ(QFile::permissions(path), permsBefore);
+    QFile f(path);
+    ASSERT_TRUE(f.open(QIODevice::ReadOnly));
+    EXPECT_EQ(f.readAll(), QStringLiteral("updated").toUtf8());
+    f.close();
+}

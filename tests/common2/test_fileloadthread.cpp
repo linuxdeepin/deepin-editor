@@ -421,3 +421,41 @@ TEST_F(FileLoadThreadTest, SetEncodeHint_AppliesToBothDetectAndConvertPath)
     }
     EXPECT_TRUE(guard.isNull());
 }
+
+// ============================================================================
+// PMS 回归用例（Mode 7 PMS 缺陷热点补强，批次 1）
+// 数据源：tests/.ut-pms/（bugs.json / work-order.md）
+// ============================================================================
+
+// PMS: https://pms.uniontech.com/bug-view-184107.html  commit: 3b9b699f
+// 场景：读取超大文件时软件闪退。修复（3b9b699f）：run() 中 file.read 内存
+// 申请以 try-catch 捕获 std::bad_alloc，异常时 emit sigLoadFinished(hasError)
+// 安全返回，不再闪退
+TEST_F(FileLoadThreadTest, BUG184107_BadAllocDuringRead_EmitsErrorNoCrash)
+{
+    // Arrange: 非 0 size 文件（走 file.read(size) 分支）
+    const QString path = writeTempFile(QStringLiteral("big-alloc.txt"), QByteArray("x"));
+    ASSERT_FALSE(path.isEmpty());
+    FileLoadThread *t = new FileLoadThread(path);
+    QPointer<FileLoadThread> guard(t);
+    QSignalSpy spy(t, &FileLoadThread::sigLoadFinished);
+
+    // 模拟内存申请失败：file.read(qint64) 抛 std::bad_alloc
+    stub.set_lamda((QByteArray (QFile::*)(qint64))&QFile::read,
+                   [](QFile *, qint64) -> QByteArray { throw std::bad_alloc(); });
+
+    // Act
+    runSync(t);
+
+    // Assert: 异常被捕获 → hasError=true 信号发出，不闪退
+    EXPECT_EQ(spy.count(), 1);
+    if (spy.count() == 1) {
+        EXPECT_TRUE(spy.at(0).at(2).toBool());
+        EXPECT_FALSE(spy.at(0).at(3).toBool());
+    }
+    // 当前代码：catch 分支提前 return（:88），deleteLater 仅在正常路径末尾（:132）注册，
+    // 故此处 guard 未清空属预期；手动补 deleteLater 防泄漏后断言回收
+    t->deleteLater();
+    QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
+    EXPECT_TRUE(guard.isNull());
+}

@@ -3131,3 +3131,373 @@ TEST_F(WindowTest, CloseEvent_UnsavedCancel_IgnoresClose)
     EXPECT_EQ(spy.count(), 0);
     EXPECT_TRUE(m_win->isVisible());
 }
+
+// ============================================================================
+// PMS 回归用例（Mode 7 PMS 缺陷热点补强，批次 1）
+// 数据源：tests/.ut-pms/（bugs.json / work-order.md）
+// 断言针对当前代码语义下 bug 揭示的边界；bug 详情见 PMS 链接
+// ============================================================================
+
+// PMS: https://pms.uniontech.com/bug-view-91037.html  commit: 1c45afc8
+// 场景：被命名替换的文档在关闭标签页时闪退。修复后：updateSaveAsFileName 的
+// 替换分支先关闭原同名 tab，再迁移映射，最终 m_wrappers 无悬挂键、无同名残留
+TEST_F(WindowTest, BUG91037_NamedReplaceClose_DupTabRemoved)
+{
+    // Arrange: 打开文件 tab（路径 A），再加空白 tab 准备命名为同名
+    const QString pathA = addFileTab(QStringLiteral("A.txt"));
+    EditWrapper *wA = m_win->wrapper(pathA);
+    ASSERT_NE(wA, nullptr);
+    const QString blank = addBlankAndGetPath();
+    EditWrapper *wBlank = m_win->wrapper(blank);
+    ASSERT_NE(wBlank, nullptr);
+    ASSERT_EQ(m_tabbar->count(), 2);
+
+    // Act: 将空白 tab 保存命名为 A.txt（触发替换同名 tab 分支）
+    m_win->updateSaveAsFileName(blank, pathA);
+    QApplication::processEvents();
+
+    // Assert: 映射迁移到新路径（原键移除、悬挂键清理），窗口存活不闪退
+    EXPECT_FALSE(m_win->m_wrappers.contains(blank));
+    EXPECT_EQ(m_win->m_wrappers.size(), 1);
+    EXPECT_EQ(m_win->m_wrappers.value(pathA), wBlank);
+    EXPECT_EQ(wBlank->filePath(), pathA);
+    EXPECT_GE(m_tabbar->count(), 1);
+    EXPECT_TRUE(m_win->isVisible());
+}
+
+// PMS: https://pms.uniontech.com/bug-view-64947.html  commit: fe2e6283
+// 场景：同名文件替换后 tab 显示错乱。修复后：替换后 tab 标题与 wrapper 路径一致
+TEST_F(WindowTest, BUG64947_SameNameReplace_TabTitleUpdated)
+{
+    // Arrange: 打开同名文件，另开空白 tab 保存命名为同名
+    const QString pathA = addFileTab(QStringLiteral("A.txt"), "content-A\n");
+    const QString blank = addBlankAndGetPath();
+
+    // Act
+    m_win->updateSaveAsFileName(blank, pathA);
+    QApplication::processEvents();
+
+    // Assert: tab 显示名称与 wrapper 路径一致
+    EXPECT_EQ(m_tabbar->currentName(), QStringLiteral("A.txt"));
+    EditWrapper *cur = m_win->currentWrapper();
+    ASSERT_NE(cur, nullptr);
+    EXPECT_EQ(cur->filePath(), pathA);
+}
+
+// PMS: https://pms.uniontech.com/bug-view-87216.html  commit: 0f405329
+// 场景：打开多个标签页，依次点击标签页 x 按钮，程序退出。修复后：依次关闭
+// 全部 tab 无残留、无退出
+TEST_F(WindowTest, BUG87216_MultiTabCloseSequential_NoExit)
+{
+    // Arrange: 3 个 tab（2 文件 + 1 空白，保留空白 tab 验证关闭中间 tab 不退出）
+    const QString p1 = addFileTab(QStringLiteral("m1.txt"));
+    const QString p2 = addFileTab(QStringLiteral("m2.txt"));
+    addBlankAndGetPath();
+    ASSERT_EQ(m_tabbar->count(), 3);
+
+    // Act: 依次触发标签页关闭（模拟依次点击 x，保留最后一个验证中途不退出）
+    m_win->closeTab(p1);
+    QApplication::processEvents();
+    m_win->closeTab(p2);
+    QApplication::processEvents();
+
+    // Assert: 依次关闭中间标签页程序不退出（bug 修复语义），无残留
+    EXPECT_FALSE(m_win->m_wrappers.contains(p1));
+    EXPECT_FALSE(m_win->m_wrappers.contains(p2));
+    EXPECT_TRUE(m_win->isVisible());
+}
+
+// PMS: https://pms.uniontech.com/bug-view-56107.html
+// 场景：同时拖拽多个文件至应用窗口打开，依次点击标签页 X 关闭，应用闪退。
+// 修复后：多文件 tab 依次关闭全程无崩溃、无悬挂 wrapper
+TEST_F(WindowTest, BUG56107_MultiFileTabsCloseSequential_NoCrash)
+{
+    // Arrange: 模拟拖拽打开 5 个文件 tab
+    QStringList paths;
+    for (int i = 0; i < 5; ++i)
+        paths << addFileTab(QStringLiteral("multi%1.txt").arg(i));
+    ASSERT_EQ(m_tabbar->count(), 5);
+
+    // Act: 依次关闭（保留最后一个验证中途不退出）
+    for (int i = 0; i < 4; ++i) {
+        m_win->closeTab(paths[i]);
+        QApplication::processEvents();
+    }
+
+    // Assert: 依次关闭中间标签页无崩溃、无悬挂 wrapper，程序不退出
+    for (int i = 0; i < 4; ++i)
+        EXPECT_FALSE(m_win->m_wrappers.contains(paths[i]));
+    EXPECT_TRUE(m_win->isVisible());
+}
+
+// PMS: https://pms.uniontech.com/bug-view-56153.html  commit: 4fb7deff
+// 场景：编辑文本不保存，关闭选"保存"，重新打开内容显示异常。修复后：
+// 关闭保存流程内容持久化，重开内容正确
+TEST_F(WindowTest, BUG56153_CloseWithSave_ContentPersisted)
+{
+    // Arrange: 打开文件并标记已修改（桩 isModified，与现有 CloseTab 用例同模式）
+    const QString path = createFile(QStringLiteral("save-close.txt"), "original\n");
+    m_win->addTab(path, true);
+    EditWrapper *w = m_win->wrapper(path);
+    ASSERT_NE(w, nullptr);
+    stub.set_lamda(&EditWrapper::isModified, [](EditWrapper *) -> bool { return true; });
+    int saveCalls = 0;
+    stub.set_lamda(&EditWrapper::saveFile,
+                   [&saveCalls](EditWrapper *, QByteArray) -> bool {
+                       ++saveCalls;
+                       return true;
+                   });
+    m_ddialogResult = 2; // 保存
+
+    // Act: 关闭标签页（选保存）
+    m_win->closeTab(path);
+    QApplication::processEvents();
+
+    // Assert: 关闭选"保存"→ 保存分支执行（修复前丢改动）
+    EXPECT_EQ(saveCalls, 1);
+}
+
+// PMS: https://pms.uniontech.com/bug-view-56048.html
+// 场景：切换编码方式后关闭 tab 应有"是否保存"提示（修复前静默关闭丢失改动）。
+// 断言：已修改文件切换编码触发保存确认对话框，不被静默跳过
+TEST_F(WindowTest, BUG56048_EncodeSwitchOnModified_PromptsSave)
+{
+    // Arrange: 打开文件并标记已修改（reloadFileEncode 内部读 TextEdit::getModified）
+    const QString path = addFileTab(QStringLiteral("enc-switch.txt"), "hello\n");
+    EditWrapper *w = m_win->wrapper(path);
+    ASSERT_NE(w, nullptr);
+    stub.set_lamda(&TextEdit::getModified, [](TextEdit *) -> bool { return true; });
+
+    // Act: 切换编码（与当前编码不同）→ 已修改 → 弹保存确认
+    m_ddialogExecCalls = 0;
+    m_ddialogResult = 1; // 保存
+    w->reloadFileEncode(QByteArrayLiteral("UTF-16"));
+    QApplication::processEvents();
+
+    // Assert: 保存确认对话框已弹出
+    EXPECT_GE(m_ddialogExecCalls, 1);
+}
+
+// PMS: https://pms.uniontech.com/bug-view-56765.html  commit: ab891ddc
+// 场景：打开 sh、cpp、json 等脚本文件应用闪退。修复后：脚本文件正常加载
+TEST_F(WindowTest, BUG56765_OpenScriptFile_NoCrash)
+{
+    // Arrange & Act: 打开 shell 脚本文件
+    const QString path = createFile(QStringLiteral("script.sh"),
+                                    "#!/bin/bash\necho hi\n");
+    m_win->addTab(path, true);
+    QApplication::processEvents();
+    EditWrapper *w = m_win->wrapper(path);
+
+    // Assert: wrapper 就绪、加载完成、tab 名称正确
+    ASSERT_NE(w, nullptr);
+    EXPECT_TRUE(waitUntil([w]() { return !w->getFileLoading(); }));
+    EXPECT_EQ(m_tabbar->currentName(), QStringLiteral("script.sh"));
+    EXPECT_TRUE(m_win->isVisible());
+}
+
+// PMS: https://pms.uniontech.com/bug-view-58894.html  commit: 44442923
+// 场景：空白 tab（临时文件）状态被误清，isModified 语义不完整。修复后：
+// isModified = getModified() | m_bIsTemFile，临时文件状态计入
+TEST_F(WindowTest, BUG58894_TemFileTab_ModifiedReflectsTemState)
+{
+    // Arrange: 恢复备份文件标签页（bIsTemFile=true）
+    const QString temPath = createFile(QStringLiteral("tem-modified.txt"), QByteArray("tem\n"));
+    m_win->addTemFileTab(temPath, QStringLiteral("tem.txt"), QString(),
+                         QStringLiteral("2026-01-01T00:00:00"), true);
+    QApplication::processEvents();
+    EditWrapper *w = m_win->wrapper(temPath);
+    ASSERT_NE(w, nullptr);
+
+    // Assert: 修复后语义——临时文件状态计入 isModified
+    EXPECT_TRUE(w->isTemFile());
+    EXPECT_TRUE(w->isModified());
+}
+
+// PMS: https://pms.uniontech.com/bug-view-58883.html  commit: 44442923
+// 场景：打开新文本/重新打开关闭前的文本，现场恢复不一致。修复后：
+// 打开文件 tab 的 pending 消费一致、wrapper 路径一致、无悬挂
+TEST_F(WindowTest, BUG58883_OpenFileNoEdit_PendingConsistent)
+{
+    // Arrange: 模拟一次打开两个文件（第一个立即加载，其余 pending）
+    const QString p1 = createFile(QStringLiteral("open-a.txt"), "A\n");
+    const QString p2 = createFile(QStringLiteral("open-b.txt"), "B\n");
+    m_qdialogResult = QDialog::Accepted;
+    m_selectedFiles = QStringList{ p1, p2 };
+
+    // Act
+    m_win->openFile();
+    QApplication::processEvents();
+    waitUntil([this, &p1]() { return m_win->wrapper(p1) != nullptr; });
+
+    // Assert: 已打开文件的 wrapper 路径一致，无悬挂 wrapper
+    EditWrapper *w1 = m_win->wrapper(p1);
+    ASSERT_NE(w1, nullptr);
+    EXPECT_EQ(w1->filePath(), p1);
+    EditWrapper *w2 = m_win->wrapper(p2);
+    if (w2 != nullptr)
+        EXPECT_EQ(w2->filePath(), p2);
+    EXPECT_FALSE(m_win->m_wrappers.contains(QString()));
+    EXPECT_TRUE(m_win->isVisible());
+}
+
+// ============================================================================
+// PMS 回归用例（Mode 2 PMS bug 回归，批次 2）
+// 数据源：tests/.ut-pms/bugs.json + git show <sha> -- src/widgets/window.cpp
+// 断言针对当前代码语义下 bug 揭示的边界；bug 详情见 PMS 链接
+// ============================================================================
+
+// PMS: https://pms.uniontech.com/bug-view-62649.html  commit: 3a96d0f4
+// 场景：新建文档改名后（磁盘路径不存在）Ctrl+S 无法保存。修复（3a96d0f4）：
+// Window::saveFile 权限检查外包 info.exists() 守卫——文件不存在时跳过权限
+// 检查直接保存，不再误报无权限拒绝保存
+TEST_F(WindowTest, BUG62649_SaveFileNotExist_SkipsPermissionCheck)
+{
+    // Arrange: 打开真实文件 tab 后删除磁盘文件（模拟改名后打开的旧路径）
+    const QString path = addFileTab(QStringLiteral("renamed.txt"), "content\n");
+    EditWrapper *w = m_win->wrapper(path);
+    ASSERT_NE(w, nullptr);
+    ASSERT_TRUE(QFile::exists(path));
+    QFile::remove(path);
+    ASSERT_FALSE(QFile::exists(path));
+
+    // Act: 保存当前文件（Ctrl+S 语义，走 Window::saveFile）
+    const bool ret = m_win->saveFile();
+    QApplication::processEvents();
+
+    // Assert: 磁盘文件不存在时不做权限检查，保存继续执行（修复前因无权限
+    // 误判 return false 且回调无权限提示），文件重新落盘
+    EXPECT_TRUE(ret);
+    EXPECT_EQ(m_iconMsgCalls, 0);
+    EXPECT_FALSE(m_lastIconMsg.contains(QStringLiteral("permission")));
+    EXPECT_TRUE(QFile::exists(path));
+}
+
+// PMS: https://pms.uniontech.com/bug-view-365421.html  commit: 717fe1b1
+// 场景：打开多个文本时关闭其中一个，窗口闪退/未正确关闭。修复（717fe1b1）：
+// removeWrapper 退出条件由仅 m_wrappers.isEmpty() 改为同时检查
+// m_tabbar->count() == 0——标签页仍在时不得 close() 窗口；全部关闭后才退出
+TEST_F(WindowTest, BUG365421_RemoveWrapper_TabsRemain_WindowStays)
+{
+    // Arrange: 展示窗口，打开 2 个文件 tab
+    m_win->show();
+    const QString p1 = addFileTab(QStringLiteral("w1.txt"));
+    const QString p2 = addFileTab(QStringLiteral("w2.txt"));
+    QSignalSpy spy(m_win, &Window::closeWindow);
+    ASSERT_EQ(m_tabbar->count(), 2);
+
+    // Act: 移除全部 wrapper（模拟关闭过程中 wrapper 先于 tab 清理的时序）
+    m_win->removeWrapper(p1, false);
+    m_win->removeWrapper(p2, false);
+    QApplication::processEvents();
+
+    // Assert: wrapper 已清空但标签页仍在 → 修复后不 close()，窗口存活不闪退
+    EXPECT_TRUE(m_win->m_wrappers.isEmpty());
+    EXPECT_EQ(m_tabbar->count(), 2);
+    EXPECT_EQ(spy.count(), 0);
+    EXPECT_TRUE(m_win->isVisible());
+
+    // Act: 补齐关闭流程——标签页全部移除后再触发 removeWrapper
+    m_tabbar->removeTab(0);
+    m_tabbar->removeTab(0);
+    QApplication::processEvents();
+    m_win->removeWrapper(QString(), false);
+    QApplication::processEvents();
+
+    // Assert: wrapper 空 + 标签页空 → 窗口正常关闭退出（修复后正确关闭时机）
+    EXPECT_EQ(m_tabbar->count(), 0);
+    EXPECT_EQ(spy.count(), 1);
+    EXPECT_FALSE(m_win->isVisible());
+}
+
+// PMS: https://pms.uniontech.com/bug-view-67180.html  commit: d3d6c4f9
+// 场景：打印预览后关闭 tab，再在另一 tab 打开打印预览闪退（m_printDoc 悬挂）。
+// 修复（d3d6c4f9）：新增 clearPrintTextDocument 并在预览 finished/rejected 与
+// 析构中清理 m_printDoc，doPrint 对空 m_printDoc 早退。覆盖 d3d6c4f9 涉及的
+// popupPrintDialog/saveAsFileToDisk/saveBlankFileToDisk/openFile/confirmInvalidCharSave
+// 关联语义（打印文档生命周期）
+TEST_F(WindowTest, BUG67180_PrintPreviewAfterTabClose_NoDanglingDoc)
+{
+    // Arrange: 打开文件 A 并弹出打印预览（克隆 A 的文档）
+    m_win->show();
+    const QString pathA = addFileTab(QStringLiteral("A.txt"), "content A\n");
+    m_win->popupPrintDialog();
+    QApplication::processEvents();
+    ASSERT_NE(m_win->m_pPreview, nullptr);
+    ASSERT_NE(m_win->m_printDoc, nullptr);
+
+    // Act: 关闭预览（finished → clearPrintTextDocument 修复语义）
+    emit m_win->m_pPreview->finished(0);
+    QApplication::processEvents();
+    delete m_win->m_pPreview;
+    m_win->m_pPreview = nullptr;
+
+    // Assert: 打印文档已释放置空，无悬挂克隆副本
+    EXPECT_EQ(m_win->m_printDoc, nullptr);
+
+    // Act: 关闭 tab A（销毁其编辑器/文档），换文档 B 再次弹出打印预览
+    m_win->closeTab(pathA);
+    QApplication::processEvents();
+    const QString pathB = addFileTab(QStringLiteral("B.txt"), "content B\n");
+    ASSERT_NE(m_win->wrapper(pathB), nullptr);
+    m_win->popupPrintDialog();
+    QApplication::processEvents();
+
+    // Assert: 二次打印预览无闪退，m_printDoc 为 B 的全新克隆副本
+    ASSERT_NE(m_win->m_pPreview, nullptr);
+    ASSERT_NE(m_win->m_printDoc, nullptr);
+    EXPECT_FALSE(m_win->m_printDoc->isEmpty());
+    EXPECT_EQ(m_win->m_printDoc->toPlainText(), QString("content B\n"));
+
+    // Act: doPrint 空文档早退链（修复新增的 nullptr == m_printDoc 守卫）
+    m_win->m_printDoc = nullptr;
+    DPrinter paintPrinter(QPrinter::HighResolution);
+    m_win->doPrint(&paintPrinter, QVector<int> { 1 });
+
+    emit m_win->m_pPreview->finished(0);
+    delete m_win->m_pPreview;
+    m_win->m_pPreview = nullptr;
+}
+
+// PMS: https://pms.uniontech.com/bug-view-65228.html  commit: d242fe4f
+// PMS: https://pms.uniontech.com/bug-view-66378.html  commit: e3cbab1d
+// 场景：大文本中"标记所有"后查找下一处/上一处卡死（标记颜色未随查找动态
+// 更新）。修复（d242fe4f/e3cbab1d）：handleFindKeyword 在查找跳转时调用
+// TextEdit::markAllKeywordInView 动态更新可视范围内标记的颜色
+TEST_F(WindowTest, BUG65228_FindNextMarkAll_UpdatesInView)
+{
+    // Arrange: 打开有内容的文件，桩记录 markAllKeywordInView 调用
+    addFileTab(QStringLiteral("mark.txt"), QByteArray("alpha beta alpha\n"));
+    int markInViewCalls = 0;
+    stub.set_lamda(&TextEdit::markAllKeywordInView,
+                   [&markInViewCalls](TextEdit *) -> void { ++markInViewCalls; });
+
+    // Act: 查找下一处 / 上一处（handleFindKeyword 全链路）
+    m_win->handleFindNextSearchKeyword(QStringLiteral("alpha"));
+    m_win->handleFindPrevSearchKeyword(QStringLiteral("alpha"));
+    QApplication::processEvents();
+
+    // Assert: 查找跳转时标记所有颜色更新被调用（修复前缺失导致卡死路径）
+    EXPECT_GE(markInViewCalls, 2);
+    EXPECT_EQ(m_win->getKeywordForSearch(), QString("alpha"));
+}
+
+// PMS: https://pms.uniontech.com/bug-view-282985.html  commit: 67eb6905
+// 场景：打开大文件后关闭，内存不释放。修复（67eb6905）：removeWrapper 与
+// checkTabbarForReload 末尾调用 StartManager::instance()->delayMallocTrim()
+// 触发延迟内存回收
+TEST_F(WindowTest, BUG282985_CloseTab_TriggersMemoryTrim)
+{
+    // Arrange: 打开文件 tab，桩记录 delayMallocTrim 调用
+    const QString path = addFileTab(QStringLiteral("trim.txt"), "trim\n");
+    int trimCalls = 0;
+    stub.set_lamda(&StartManager::delayMallocTrim,
+                   [&trimCalls](StartManager *) -> void { ++trimCalls; });
+
+    // Act: 关闭标签页（removeWrapper → delayMallocTrim 修复语义）
+    m_win->closeTab(path);
+    QApplication::processEvents();
+
+    // Assert: 关闭 tab 触发延迟内存回收
+    EXPECT_GE(trimCalls, 1);
+}

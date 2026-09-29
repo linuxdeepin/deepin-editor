@@ -1216,3 +1216,172 @@ TEST_F(TextEditTest, GetWordAtMouse_EmptyDoc_ReturnsEmpty)
     EXPECT_TRUE(edit->getWordAtMouse().isEmpty());
     EXPECT_EQ(edit->characterCount(), 1); // 空文档仅块分隔符
 }
+// ============================================================================
+// PMS 回归用例（Mode 7 PMS 缺陷热点补强，批次 1）
+// 数据源：tests/.ut-pms/（bugs.json / work-order.md）
+// ============================================================================
+
+// PMS: https://pms.uniontech.com/bug-view-79951.html  commit: d0fe36dc
+// 场景：全选状态下滚动视口，全选选区丢失。修复（d0fe36dc）：verticalScrollBar
+// valueChanged 分支 if(m_isSelectAll) selectTextInView()，滚动后全选恢复
+TEST_F(TextEditTest, BUG79951_SelectAllScroll_RestoresSelection)
+{
+    // Arrange: 大文档（确保滚动发生）+ 全选
+    QString big;
+    for (int i = 0; i < 200; ++i)
+        big += QStringLiteral("line content\n");
+    setDocText(big);
+    edit->slotSelectAllAction();
+    ASSERT_TRUE(edit->m_isSelectAll);
+    ASSERT_TRUE(edit->textCursor().hasSelection());
+
+    // Act: 滚动到中部触发 valueChanged → m_isSelectAll 时 selectTextInView 恢复全选
+    // （滚动到底时可视区全在文档末尾，startPos==endPos，选区退化为空）
+    edit->verticalScrollBar()->setValue(edit->verticalScrollBar()->maximum() / 2);
+    QApplication::processEvents();
+
+    // Assert: 滚动后全选保持（选区仍在、标志不丢）
+    EXPECT_TRUE(edit->textCursor().hasSelection());
+    EXPECT_TRUE(edit->m_isSelectAll);
+    edit->m_isSelectAll = false;
+}
+
+// PMS: https://pms.uniontech.com/bug-view-350765.html  commit: 0d973f19
+// 场景：TextEdit 析构后 DBus 信号回调已销毁对象引起崩溃。修复（0d973f19）：
+// 析构时断开 Gesture/Audio D-Bus 信号（getSystemVersion 分支），重建不闪退
+TEST_F(TextEditTest, BUG350765_ReconstructAfterDestroy_NoCrash)
+{
+    // Arrange & Act: 第一个 TextEdit 构造（DBus connect）后析构（DBus disconnect）
+    {
+        TextEdit te;
+        te.document()->setPlainText(QStringLiteral("some content"));
+        EXPECT_EQ(te.toPlainText(), QStringLiteral("some content"));
+    }
+
+    // Assert: 析构（DBus 断连路径）后重建安全
+    TextEdit *te2 = new TextEdit();
+    te2->document()->setPlainText(QStringLiteral("after destroy"));
+    EXPECT_EQ(te2->toPlainText(), QStringLiteral("after destroy"));
+    delete te2;
+    SUCCEED() << "TextEdit 析构（DBus 断连）后重建安全";
+}
+
+// ===========================================================================
+// 批次 2 补漏（BUG 回归，PMS 行功能点 34 项缺口部分）
+// ===========================================================================
+
+// PMS: https://pms.uniontech.com/bug-view-79951.html  commit: d0fe36dc
+// 场景：killLine m_isSelectAll 分支修复（d0fe36dc）：大文档连续全选复制粘贴后卡死；
+// 全选状态下 killLine 先视图全选（QPlainTextEdit::selectAll）再删除，文档清空不卡死
+TEST_F(TextEditTest, BUG79951_KillLineSelectAll_DeletesWholeDoc)
+{
+    // Arrange: 多行文档 + 强制全选标志
+    setDocText(QStringLiteral("first\nsecond\nthird"));
+    edit->m_isSelectAll = true;
+
+    // Act: 全选状态下 killLine → 视图全选 + deleteSelectTextEx 删除
+    edit->killLine();
+
+    // Assert: 文档清空、不卡死
+    EXPECT_TRUE(edit->toPlainText().isEmpty());
+    edit->m_isSelectAll = false;
+}
+
+// PMS: https://pms.uniontech.com/bug-view-79951.html  commit: d0fe36dc
+// 场景：convertWordCase m_isSelectAll 分支修复（d0fe36dc）：全选状态下大小写转换
+// 先视图全选再基于选区变换并压撤销栈，实际变更才替换
+TEST_F(TextEditTest, BUG79951_ConvertWordCaseSelectAll_SelectionTransformed)
+{
+    // Arrange: 全选标志 + 小写内容
+    setDocText(QStringLiteral("abc"));
+    edit->m_isSelectAll = true;
+
+    // Act: 全选状态下转大写
+    edit->convertWordCase(UPPER);
+
+    // Assert: 选区文本整体变换且操作可撤销
+    EXPECT_EQ(edit->toPlainText(), QStringLiteral("ABC"));
+    EXPECT_TRUE(edit->isUndoRedoOpt());
+    edit->m_isSelectAll = false;
+}
+
+// PMS: https://pms.uniontech.com/bug-view-79951.html  commit: d0fe36dc
+// 场景：killBackwardWord 选中态行为锁定（d0fe36dc）：有选区时删除动作被禁用
+// （removeSelectedText 注释掉，交由按键路径处理），调用安全不崩溃、内容不变
+TEST_F(TextEditTest, BUG79951_KillBackwardWordWithSelection_NoOpNoCrash)
+{
+    // Arrange: 带选区文档
+    setDocText(QStringLiteral("hello world"));
+    QTextCursor cur = makeCursor(0);
+    cur.setPosition(5, QTextCursor::KeepAnchor);
+    edit->setTextCursor(cur);
+
+    // Act: 选中态 killBackwardWord（删除分支被禁用）
+    edit->killBackwardWord();
+
+    // Assert: 内容与选区保持、无崩溃（当前实现的行为锁定）
+    EXPECT_EQ(edit->toPlainText(), QStringLiteral("hello world"));
+    EXPECT_TRUE(edit->textCursor().hasSelection());
+}
+
+// PMS: https://pms.uniontech.com/bug-view-65228.html  commit: d242fe4f
+// 场景：大文本标记卡死修复（d242fe4f）：newline 先 tryUnsetMark 清除标记模式
+// 再经撤销栈插入换行，标记态下换行不卡死、标记复位
+TEST_F(TextEditTest, BUG65228_NewlineWithMark_UnsetsMarkThenInserts)
+{
+    // Arrange: 标记模式开启（无选区）
+    setDocText(QStringLiteral("ab"));
+    moveCursorTo(1);
+    edit->setMark();
+    ASSERT_TRUE(edit->m_cursorMark);
+
+    // Act: 标记态换行
+    edit->newline();
+
+    // Assert: 标记先复位、换行经撤销栈生效
+    EXPECT_FALSE(edit->m_cursorMark);
+    EXPECT_EQ(edit->toPlainText(), QStringLiteral("a\nb"));
+    EXPECT_EQ(edit->document()->blockCount(), 2);
+    EXPECT_TRUE(edit->isUndoRedoOpt());
+}
+
+// PMS: https://pms.uniontech.com/bug-view-66378.html  commit: e3cbab1d
+// 场景：大文本标记所有卡死修复（e3cbab1d）关联行：openNewlineAbove 不打断标记模式，
+// 在块首插入空行后光标上移，标记态保持
+TEST_F(TextEditTest, BUG66378_OpenNewlineAboveKeepsMark_InsertsBlankLine)
+{
+    // Arrange: 标记模式开启
+    setDocText(QStringLiteral("ab"));
+    moveCursorTo(1);
+    edit->setMark();
+    ASSERT_TRUE(edit->m_cursorMark);
+
+    // Act: 上方插入空行
+    edit->openNewlineAbove();
+
+    // Assert: 块首插入空行、光标上移、标记模式未被清除
+    EXPECT_EQ(edit->toPlainText(), QStringLiteral("\nab"));
+    EXPECT_EQ(edit->document()->blockCount(), 2);
+    EXPECT_EQ(edit->textCursor().blockNumber(), 0);
+    EXPECT_TRUE(edit->m_cursorMark);
+}
+
+// PMS: https://pms.uniontech.com/bug-view-305473.html  commit: 65bc75a3
+// 场景：切换深浅主题文字颜色（65bc75a3）关联行：pasteText 原生粘贴后 unsetMark，
+// 标记态下粘贴内容插入且标记复位（真实主题切换依赖 DTK 环境不可单测复现，仅锁定粘贴语义）
+TEST_F(TextEditTest, BUG305473_PasteTextUnsetsMark_InsertsClipboardText)
+{
+    // Arrange: 标记模式 + 剪贴板内容
+    setDocText(QStringLiteral("ab"));
+    moveCursorTo(1);
+    edit->setMark();
+    ASSERT_TRUE(edit->m_cursorMark);
+    QApplication::clipboard()->setText(QStringLiteral("X"));
+
+    // Act: 标记态粘贴
+    edit->pasteText();
+
+    // Assert: 剪贴板内容插入、标记复位（pasteText 末尾 unsetMark）
+    EXPECT_EQ(edit->toPlainText(), QStringLiteral("aXb"));
+    EXPECT_FALSE(edit->m_cursorMark);
+}

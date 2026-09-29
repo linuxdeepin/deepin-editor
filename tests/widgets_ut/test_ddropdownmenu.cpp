@@ -748,3 +748,214 @@ TEST_F(DDropdownMenuTest, SetSVGBackColor_ColorGroup_AttributeReplaced)
     }
     EXPECT_TRUE(found);
 }
+
+// ============================================================================
+// PMS 回归用例（Mode 7 PMS 缺陷热点补强，批次 1）
+// 数据源：tests/.ut-pms/（bugs.json / work-order.md）
+// ============================================================================
+
+// PMS: https://pms.uniontech.com/bug-view-55529.html  commit: 221f0cd1
+// 场景：保存文件、切换编码方式设计混乱（sev1）。修复后：切换编码时旧编码
+// 取消勾选、新编码勾选（互斥），getCurrentText 与勾选状态一致
+TEST_F(DDropdownMenuTest, BUG55529_EncodeSwitchExclusive_OldUncheckedNewChecked)
+{
+    // Arrange: 真实编码菜单（UTF-8 预选中）
+    DDropdownMenu *menu = DDropdownMenu::createEncodeMenu();
+    ASSERT_NE(menu, nullptr);
+    ASSERT_NE(menu->m_pActUtf8, nullptr);
+    ASSERT_TRUE(menu->m_pActUtf8->isChecked());
+
+    // 找一个非 UTF-8 的编码 action
+    QAction *target = nullptr;
+    const QList<QAction *> tops = menu->m_menu->actions();
+    for (QAction *top : tops) {
+        if (!top->menu())
+            continue;
+        for (QAction *a : top->menu()->actions()) {
+            if (a->text() != QString("UTF-8")) {
+                target = a;
+                break;
+            }
+        }
+        if (target)
+            break;
+    }
+    ASSERT_NE(target, nullptr);
+
+    // Act: 切换编码
+    menu->setCurrentTextOnly(target->text());
+
+    // Assert: 互斥——旧编码取消勾选、新编码勾选、文本同步
+    EXPECT_FALSE(menu->m_pActUtf8->isChecked());
+    EXPECT_TRUE(target->isChecked());
+    EXPECT_EQ(menu->getCurrentText(), target->text());
+    delete menu;
+}
+
+// PMS: https://pms.uniontech.com/bug-view-56765.html  commit: ab891ddc
+// 场景：打开 sh、cpp、json 等文件应用闪退（sev1）。修复（ab891ddc）：菜单项
+// menu() 判空由 setCurrentTextOnly 迁移至 setCheckedExclusive 递归函数，
+// 顶层无子菜单的 action 遍历不再空指针崩溃
+TEST_F(DDropdownMenuTest, BUG56765_NullSubmenu_SetCurrentTextOnlyNoCrash)
+{
+    // Arrange: 顶层 action 均无子菜单（menu() 为 null，与真实编码菜单结构不同）
+    QMenu *menu = new QMenu();
+    QAction *plain1 = menu->addAction(QStringLiteral("Plain1"));
+    QAction *plain2 = menu->addAction(QStringLiteral("Plain2"));
+    ASSERT_NE(plain1, nullptr);
+    ASSERT_NE(plain2, nullptr);
+    obj->setMenu(menu);
+
+    // Act & Assert: 无子菜单 action 遍历不闪退（修复前 menu()->actions() 空指针）
+    obj->setCurrentTextOnly(QStringLiteral("Plain1"));
+    EXPECT_EQ(obj->getCurrentText(), QStringLiteral("Plain1"));
+    EXPECT_TRUE(plain1->isChecked());
+    EXPECT_FALSE(plain2->isChecked());
+}
+
+// PMS: https://pms.uniontech.com/bug-view-55503.html  commit: 0990036c
+// 场景：默认编码 Unicode/UTF-8 未显示勾选状态，注销/重启后仍如此。修复后：
+// 编码菜单重建后通过 setCurrentTextOnly 恢复持久化编码的勾选状态
+TEST_F(DDropdownMenuTest, BUG55503_EncodeMenuRebuild_CheckedStateRestored)
+{
+    // Arrange: 编码菜单（模拟注销/重启后重建）
+    DDropdownMenu *menu = DDropdownMenu::createEncodeMenu();
+    ASSERT_NE(menu, nullptr);
+    ASSERT_NE(menu->m_pActUtf8, nullptr);
+    EXPECT_TRUE(menu->m_pActUtf8->isChecked());
+
+    // Act: 切换到其他编码后恢复默认编码（持久化编码回显）
+    menu->setCurrentTextOnly(QStringLiteral("GBK"));
+    menu->setCurrentTextOnly(QStringLiteral("UTF-8"));
+
+    // Assert: 默认编码勾选状态恢复
+    EXPECT_TRUE(menu->m_pActUtf8->isChecked());
+    EXPECT_EQ(menu->getCurrentText(), QStringLiteral("UTF-8"));
+    delete menu;
+}
+
+// PMS: https://pms.uniontech.com/bug-view-169265.html  commit: e2fbbd48
+// 场景：新建标签页修改编码格式并输入内容，保存时仍为 utf-8。修复（e2fbbd48）：
+// 新增 getCurrentText() const 访问器，底栏编码切换失败恢复 previousText 流程依赖
+TEST_F(DDropdownMenuTest, BUG169265_GetCurrentText_EncodeMenuReadback)
+{
+    // Arrange: 编码菜单（UTF-8 预选）
+    DDropdownMenu *menu = DDropdownMenu::createEncodeMenu();
+    ASSERT_NE(menu, nullptr);
+    EXPECT_EQ(menu->getCurrentText(), QStringLiteral("UTF-8"));
+
+    // Act: 切换编码（setCurrentTextOnly 更新 m_text）
+    QAction *other = nullptr;
+    const QList<QAction *> tops = menu->m_menu->actions();
+    for (QAction *top : tops) {
+        if (!top->menu())
+            continue;
+        for (QAction *a : top->menu()->actions()) {
+            if (a->text() != QString("UTF-8")) {
+                other = a;
+                break;
+            }
+        }
+        if (other)
+            break;
+    }
+    ASSERT_NE(other, nullptr);
+    menu->setCurrentTextOnly(other->text());
+
+    // Assert: getCurrentText 读回当前编码（底栏恢复流程依赖）
+    EXPECT_EQ(menu->getCurrentText(), other->text());
+    delete menu;
+}
+
+// ============================================================================
+// PMS 回归用例（Mode 2 PMS bug 回归，批次 2）
+// 数据源：tests/.ut-pms/bugs.json；修复 diff：git show <sha> -- src/widgets/ddropdownmenu.cpp
+// ============================================================================
+
+// PMS: https://pms.uniontech.com/bug-view-67950.html  commit: 9eb4f93c
+// 场景：安全测试 17 处内存泄露（s2）。修复（9eb4f93c）：~DDropdownMenu 补齐
+// deleteMenuActionGroup()+deleteMenu()，setMenu/setMenuActionGroup 注入的
+// 无父对象资源随析构释放；createHighLightMenu 组归属经 setMenuActionGroup 托管。
+// （同 bug 57271 对构造函数的箭头图标 DPR 渲染调整单测不可复现，见 SKIP 记录）
+TEST_F(DDropdownMenuTest, BUG67950_Destructor_ReleasesMenuAndActionGroup)
+{
+    // Arrange: 无父对象菜单/组（修复前 ~DDropdownMenu 为空实现 → 泄漏）
+    DDropdownMenu *m = new DDropdownMenu();
+    QMenu *menu = buildNestedMenu(nullptr);
+    m->setMenu(menu);
+    QActionGroup *group = new QActionGroup(nullptr);
+    m->setMenuActionGroup(group);
+    QPointer<QMenu> menuWatch(menu);
+    QPointer<QActionGroup> groupWatch(group);
+
+    // Act: 析构（修复后析构链 deleteMenuActionGroup + deleteMenu）
+    delete m;
+
+    // Assert: 托管资源随析构释放（QPointer 归空），不再泄露
+    EXPECT_TRUE(menuWatch.isNull());
+    EXPECT_TRUE(groupWatch.isNull());
+
+    // 补充：createHighLightMenu 归属链（9eb4f93c 在该函数增加
+    // setMenuActionGroup —— 组随菜单析构一并释放）
+    DDropdownMenu *hl = DDropdownMenu::createHighLightMenu();
+    ASSERT_NE(hl, nullptr);
+    QPointer<QMenu> hlMenuWatch(hl->m_menu);
+    QPointer<QActionGroup> hlGroupWatch(hl->m_actionGroup);
+
+    // Act: 析构高亮菜单
+    delete hl;
+
+    // Assert: 内部菜单与互斥组随析构释放
+    EXPECT_TRUE(hlMenuWatch.isNull());
+    EXPECT_TRUE(hlGroupWatch.isNull());
+}
+
+// PMS: https://pms.uniontech.com/bug-view-67950.html  commit: 9eb4f93c
+// 场景：createEncodeMenu 内部 DMenu 无父对象（底栏经此工厂创建编码菜单）。
+// 修复（9eb4f93c）：~DDropdownMenu 执行 deleteMenu，内部菜单随对象析构释放，
+// 编码菜单销毁不再泄露内部 DMenu
+TEST_F(DDropdownMenuTest, BUG67950_CreateEncodeMenu_DtorReleasesInternalMenu)
+{
+    // Arrange: 编码菜单（内部 DMenu 无父对象，修复前随对象销毁而泄露）
+    DDropdownMenu *encodeMenu = DDropdownMenu::createEncodeMenu();
+    ASSERT_NE(encodeMenu, nullptr);
+    ASSERT_NE(encodeMenu->m_menu, nullptr);
+    QPointer<QMenu> menuWatch(encodeMenu->m_menu);
+
+    // Act: 析构编码菜单
+    delete encodeMenu;
+
+    // Assert: 内部菜单随析构释放
+    EXPECT_TRUE(menuWatch.isNull());
+}
+
+// PMS: https://pms.uniontech.com/bug-view-57271.html  commit: 1abe3fb2
+// 场景：切换编码方式为阿拉伯语/CP1256 应用闪退（s2）。根因：编码表 ini 中
+// "CP1256 " 带尾随空格（split(",") 不 trim → 非法编码名）。修复（1abe3fb2）：
+// encodes1.ini 去除尾随空格（另含箭头图标 DPR 渲染调整，单测不可复现）。
+// 经 createEncodeMenu 校验全部编码名无首尾空白且 CP1256（阿拉伯语组）存在
+TEST_F(DDropdownMenuTest, BUG57271_EncodeActions_NoTrailingWhitespace)
+{
+    // Arrange: 真实编码菜单（资源 :/encodes/encodes.ini 经 Utils::getSupportEncoding 装载）
+    DDropdownMenu *menu = DDropdownMenu::createEncodeMenu();
+    ASSERT_NE(menu, nullptr);
+    const QList<QAction *> tops = menu->m_menu->actions();
+    ASSERT_FALSE(tops.isEmpty());
+
+    // Act: 遍历全部编码 action（顶层 → 子菜单）
+    bool cp1256Found = false;
+    for (QAction *top : tops) {
+        ASSERT_NE(top->menu(), nullptr);
+        for (QAction *a : top->menu()->actions()) {
+            // Assert: 编码名无首尾空白（修复前 "CP1256 " 尾随空格 → 非法编码名闪退）
+            EXPECT_EQ(a->text(), a->text().trimmed())
+                << "encode name has surrounding whitespace: " << a->text().toStdString();
+            if (a->text() == QStringLiteral("CP1256"))
+                cp1256Found = true;
+        }
+    }
+
+    // Assert: 缺陷场景编码 CP1256（阿拉伯语组）在菜单中且名称合法
+    EXPECT_TRUE(cp1256Found);
+    delete menu;
+}

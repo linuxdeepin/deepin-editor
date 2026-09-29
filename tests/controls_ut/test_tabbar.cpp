@@ -1530,4 +1530,104 @@ TEST_F(TabbarTest, SettingsResource_QrcLinked_InstanceAvailable)
     EXPECT_EQ(Settings::instance(), Settings::instance());
 }
 
+// ---- PMS bug 回归用例（批次 2）----
+
+// PMS: https://pms.uniontech.com/bug-view-305473.html  commit: 65bc75a3
+// 场景：主题色切换文字显示不对（65bc75a3）：修复本体为 setTabPalette 在 Qt6 下跳过
+//       手动 setPalette（由 SetTabPalette_AnyColors_NoStateCorruption 覆盖；主题渲染
+//       效果 offscreen 不可断言，SKIP）；此处补批次指定 updateTab 的 localDataPath
+//       （空白/草稿文件）分支缺口：tooltip 直接用 tabName，不走路径换行重排。
+TEST_F(TabbarTest, BUG305473_UpdateTab_LocalDraftTooltipUsesTabName)
+{
+    installWindowRecorderStubs(nullptr);
+    addTabsQuietly({ localRoot + "/before.txt" });
+
+    // Act：更新为 localDataPath 下的草稿路径（命中 localDataPath 含分支）
+    const QString draft = localRoot + "/draft-after.txt";
+    bar->updateTab(0, draft, QString::fromUtf8("草稿&后.txt"));
+
+    // Assert：路径表同步更新；tooltip = tabName 原文（不经换行重排、无 '\n'）
+    EXPECT_EQ(bar->fileAt(0), draft);
+    EXPECT_EQ(bar->m_tabTruePaths.at(0), draft);
+    EXPECT_EQ(bar->tabToolTip(0), QString::fromUtf8("草稿&后.txt"));
+    EXPECT_FALSE(bar->tabToolTip(0).contains('\n'));
+}
+
+// PMS: https://pms.uniontech.com/bug-view-67950.html  commit: 9eb4f93c
+// 场景：安全测试 17 处内存泄露（9eb4f93c）：~Tabbar 增加 m_rightMenu/
+//       m_moreWaysCloseMenu 判空释放；右键菜单分配后销毁 Tabbar 不崩溃、
+//       菜单逐一经判空释放（泄漏由 ASAN/valgrind 构建守护）。构造函数
+//       setAcceptDrops(true)（e8be974a）已由 Constructor_DefaultParent 断言覆盖。
+TEST_F(TabbarTest, BUG67950_Destructor_AfterMenusAllocated_DestroysWithoutCrash)
+{
+    installWindowRecorderStubs(nullptr);
+    addTabsQuietly({ localRoot + "/dtor0.txt", localRoot + "/dtor1.txt" });
+
+    // Arrange：右键命中标签 → 分配 m_rightMenu / m_moreWaysCloseMenu
+    const QRect rect = bar->tabRect(0);
+    ASSERT_FALSE(rect.isNull());
+    QMouseEvent rightPress(QEvent::MouseButtonPress, rect.center(), bar->mapToGlobal(rect.center()),
+                           Qt::RightButton, Qt::RightButton, Qt::NoModifier);
+    ASSERT_TRUE(bar->eventFilter(bar, &rightPress));
+    ASSERT_NE(bar->m_rightMenu, nullptr);
+    ASSERT_NE(bar->m_moreWaysCloseMenu, nullptr);
+
+    // Act + Assert：析构走判空释放分支（9eb4f93c 修复点），不崩溃
+    delete bar;
+    bar = nullptr;
+    SUCCEED();
+}
+
+// PMS: https://pms.uniontech.com/bug-view-97737.html  commit: 2ac30a62
+// 场景：触摸屏/wayland 下拖拽窗口中唯一标签页应用闪退（2ac30a62）：旧代码
+//       count()==1 时 window()->hide()，wayland 下引发闪退；修复后 wayland
+//       不再隐藏窗口。previousTab/nextTab 边界回绕由 StepTab_BoundaryIndex_
+//       WrapsOrSteps 覆盖。
+struct DragPixmapSingleTabCase {
+    bool wayland;         // Utils::isWayland 桩值
+    bool expectMinimized; // 期望拖拽后窗口被最小化（非 wayland 现行为）
+};
+
+class TabbarDragSingleTabTest : public TabbarTest,
+                                public ::testing::WithParamInterface<DragPixmapSingleTabCase> {
+};
+
+TEST_P(TabbarDragSingleTabTest, BUG97737_CreateDragPixmap_SingleTab_WindowStateFollowsPlatform)
+{
+    EditWrapper *wrapper = nullptr;
+    installEditWrapperCtorStubs(stub, host, &wrapper);
+    wrapper->textEditor()->setSettings(Settings::instance());
+    installWindowRecorderStubs(wrapper);
+    const bool wayland = GetParam().wayland;
+    stub.set_lamda(&Utils::isWayland, [wayland]() -> bool { return wayland; });
+    stub.set_lamda(&DWindowManagerHelper::hasComposite,
+                   [](DWindowManagerHelper *) -> bool { return false; });
+    addTabsQuietly({ localRoot + "/single.txt" });
+    ASSERT_EQ(bar->count(), 1);   // 唯一标签页场景
+    ASSERT_TRUE(host->isVisible());
+
+    // Act：拖拽唯一标签页（真实 EditWrapper 渲染链路）
+    QStyleOptionTab option;
+    QPoint hotspot;
+    const QPixmap pixmap = bar->createDragPixmapFromTab(0, option, &hotspot);
+
+    QApplication::processEvents();
+
+    // Assert：位图非空；wayland 单标签不隐藏/最小化窗口（97737 回归点），
+    // 非 wayland 走 showMinimized（现合并提示行为）
+    EXPECT_FALSE(pixmap.isNull());
+    if (GetParam().expectMinimized) {
+        EXPECT_TRUE(host->windowState() & Qt::WindowMinimized);
+    } else {
+        EXPECT_FALSE(host->windowState() & Qt::WindowMinimized);
+        EXPECT_TRUE(host->isVisible());
+    }
+}
+
+INSTANTIATE_TEST_SUITE_P(
+    SingleTabDrag, TabbarDragSingleTabTest,
+    ::testing::Values(
+        DragPixmapSingleTabCase{ true, false },    // wayland：不最小化（97737 回归点）
+        DragPixmapSingleTabCase{ false, true }));  // 非 wayland：showMinimized
+
 }  // namespace

@@ -144,3 +144,33 @@ TEST_F(DeleteBackCommandTest, Destructor_DeleteViaBasePointer_ReleasesCleanly)
     // Assert：析构仅释放命令对象，不触碰文档
     EXPECT_EQ(docText(), QString("llo"));
 }
+
+// ============================================================================
+// 批次 2 PMS bug 回归追加用例
+// ============================================================================
+
+// ---- BUG273663：删除后光标变更，撤销仍恢复文本并重选 ----
+// PMS: https://pms.uniontech.com/bug-view-273663.html  commit: 432c884c, 889fa196
+// 场景：列模式编辑撤销崩溃（273663）。修复（432c884c）：删除类命令改为持久缓存
+// delText/delPos（不依赖易变引用），redo 末尾 setTextCursor 恢复光标。本用例回归
+// 273663 的"光标变更后撤销"关键序列：redo 删除 → 用户移动/全选光标 → undo，
+// 验证文本恢复且编辑器光标重新选中恢复的文本（不崩溃、不错位）。
+TEST_F(DeleteBackCommandTest, BUG273663_CursorChangedBetweenRedoAndUndo_RestoresTextAndSelection)
+{
+    // Arrange：删除选中的 "world"
+    edit->setPlainText("hello world");
+    QTextCursor cursor = ut::cursorAt(edit->document(), 6, 11);
+    DeleteBackCommand cmd(cursor, edit);
+    cmd.redo();
+    ASSERT_EQ(docText(), QString("hello "));
+
+    // Act：模拟光标变更（删除后用户移动/全选光标），再执行撤销
+    edit->setTextCursor(ut::cursorAt(edit->document(), 0, 6));  // 光标移至 "hello"
+    cmd.undo();
+
+    // Assert：undo 按缓存 insertPos 重插，不受光标变更影响；编辑器重新选中恢复文本
+    EXPECT_EQ(docText(), QString("hello world"));
+    EXPECT_EQ(ut::toLf(edit->textCursor().selectedText()), QString("world"));
+    EXPECT_EQ(edit->textCursor().position(), 11);
+    EXPECT_EQ(edit->textCursor().anchor(), 6);
+}

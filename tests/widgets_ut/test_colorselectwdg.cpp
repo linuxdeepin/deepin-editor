@@ -43,6 +43,7 @@
 #include <QSignalSpy>
 #include <QMouseEvent>
 #include <QEnterEvent>
+#include <QPointer>
 #include <QDir>
 #include <QPushButton>
 
@@ -414,4 +415,139 @@ TEST_F(ColorSelectWdgTest, ColorSelectWdg_EventFilter_DelegatesToBase)
 
     // Assert: 不经按钮点击不发射默认色信号
     EXPECT_EQ(spy.count(), 0);
+}
+
+// ============================================================
+// PMS 批次 2 回归用例（bug 196825 / 67950）
+// PMS: https://pms.uniontech.com/bug-view-196825.html  commit: 306a42de
+// PMS: https://pms.uniontech.com/bug-view-67950.html  commit: 9eb4f93c
+// 场景：颜色标记图标悬停与按压状态修复（306a42de）：ColorLabel 新增
+//       m_bHover/m_bPressed 状态机（enter/leave/press/release），释放时仅在
+//       按压有效时选中并发 sigColorClicked；内存释放修复（9eb4f93c）：
+//       ~ColorSelectWdg() 显式回收布局，QPointer 托管断言析构释放
+// ============================================================
+
+// PMS: https://pms.uniontech.com/bug-view-196825.html  commit: 306a42de
+// 场景：完整悬停-按压-释放状态机（306a42de）：enter 置 hover，press 仅置
+//       pressed 不立即选中，release 选中并发信号，leave 复位悬停、选中保持
+TEST_F(ColorSelectWdgTest, BUG196825_FullHoverPressRelease_StateMachineSequence)
+{
+    // Arrange
+    QSignalSpy spy(label, &ColorLabel::sigColorClicked);
+    ASSERT_FALSE(label->m_bHover);
+    ASSERT_FALSE(label->m_bPressed);
+
+    // Act 1: enter（QEnterEvent 合成）→ 悬停态置位
+    const QPointF local(4, 4);
+    QEnterEvent enter(local, local, local);
+    QApplication::sendEvent(label, &enter);
+    EXPECT_TRUE(label->m_bHover);
+
+    // Act 2: 左键 press → 仅按压态置位，不立即选中（196825 修复语义）
+    sendMouseEvent(QEvent::MouseButtonPress, Qt::LeftButton, Qt::LeftButton);
+    EXPECT_TRUE(label->m_bPressed);
+    EXPECT_FALSE(label->isSelected());
+    EXPECT_EQ(spy.count(), 0);
+
+    // Act 3: 左键 release → 选中 + 信号，pressed 复位，hover 保持
+    sendMouseEvent(QEvent::MouseButtonRelease, Qt::LeftButton, Qt::NoButton);
+    EXPECT_TRUE(label->isSelected());
+    EXPECT_FALSE(label->m_bPressed);
+    EXPECT_TRUE(label->m_bHover);
+    ASSERT_EQ(spy.count(), 1);
+    EXPECT_TRUE(spy.at(0).at(0).toBool());
+    EXPECT_EQ(spy.at(0).at(1).value<QColor>(), firstColor);
+
+    // Act 4: leave → hover/pressed 复位，选中态保持
+    QEvent leave(QEvent::Leave);
+    QApplication::sendEvent(label, &leave);
+    EXPECT_FALSE(label->m_bHover);
+    EXPECT_FALSE(label->m_bPressed);
+    EXPECT_TRUE(label->isSelected());
+}
+
+// PMS: https://pms.uniontech.com/bug-view-196825.html  commit: 306a42de
+// 场景：按压期间移出（leave 复位 pressed）→ 回到图标上释放不再触发选择
+TEST_F(ColorSelectWdgTest, BUG196825_LeaveDuringPress_ReleaseEmitsNothing)
+{
+    // Arrange: 进入并按下
+    QSignalSpy spy(label, &ColorLabel::sigColorClicked);
+    QEnterEvent enter(QPointF(4, 4), QPointF(4, 4), QPointF(4, 4));
+    QApplication::sendEvent(label, &enter);
+    sendMouseEvent(QEvent::MouseButtonPress, Qt::LeftButton, Qt::LeftButton);
+    ASSERT_TRUE(label->m_bPressed);
+
+    // Act: 按住期间移出图标（leave 复位 hover 与 pressed）
+    QEvent leave(QEvent::Leave);
+    QApplication::sendEvent(label, &leave);
+    ASSERT_FALSE(label->m_bPressed);
+
+    // Act: 释放（pressed 已复位 → mouseReleaseEvent 守卫拦截）
+    sendMouseEvent(QEvent::MouseButtonRelease, Qt::LeftButton, Qt::NoButton);
+
+    // Assert: 无信号、未选中（强异常安全：状态未被污染）
+    EXPECT_EQ(spy.count(), 0);
+    EXPECT_FALSE(label->isSelected());
+    EXPECT_FALSE(label->m_bHover);
+}
+
+// PMS: https://pms.uniontech.com/bug-view-196825.html  commit: 306a42de
+// PMS: https://pms.uniontech.com/bug-view-67950.html  commit: 9eb4f93c
+// 场景：程序化选中（setColorSelected，默认色标记路径）后真实绘制：
+//       paintEvent 选中圆环分支可渲染，选中态画面与未选中基线不同（
+//       非逐点像素断言，仅断言渲染成功且画面随状态变化）
+TEST_F(ColorSelectWdgTest, BUG196825_SetColorSelected_PaintRendersSelectedState)
+{
+    // Arrange
+    label->resize(24, 24);
+
+    // Act: 未选中基线绘制 → 置选中 → 再绘制（grab 同步触发 paintEvent）
+    const QPixmap base = label->grab();
+    label->setColorSelected(true);
+    const QPixmap selected = label->grab();
+
+    // Assert: 两态均成功渲染（paintEvent 正常/选中分支无错误），
+    //         选中态画面与基线不同（选中圆环已画出）
+    ASSERT_FALSE(base.isNull());
+    ASSERT_FALSE(selected.isNull());
+    EXPECT_TRUE(label->isSelected());
+    EXPECT_NE(base.toImage(), selected.toImage());
+}
+
+// PMS: https://pms.uniontech.com/bug-view-67950.html  commit: 9eb4f93c
+// 场景：内存释放修复（9eb4f93c）：~ColorSelectWdg() 显式 delete
+//       m_pMainLayout/m_pHLayout1/m_pHLayout2 并置空；QPointer 托管控件与
+//       子色块/按钮，断言两种布局变体析构后全部释放无悬空（Asan 泄漏回归）
+TEST_F(ColorSelectWdgTest, BUG67950_ConstructDestroy_QPointerReleased)
+{
+    // Arrange: QPointer 托管控件与子对象（带标题/紧凑两种变体各一）
+    QPointer<ColorSelectWdg> withTextGuard;
+    QPointer<ColorSelectWdg> compactGuard;
+    QPointer<ColorLabel> childLabel;
+    QPointer<QPushButton> childButton;
+
+    {
+        ColorSelectWdg *withText = new ColorSelectWdg(QStringLiteral("Mark"));
+        withTextGuard = withText;
+        ASSERT_FALSE(withTextGuard.isNull());
+        QPushButton *btn = withText->findChild<QPushButton *>("PButton");
+        ASSERT_NE(btn, nullptr);
+        childButton = btn;
+        ASSERT_FALSE(withText->m_colorLabels.isEmpty());
+        childLabel = withText->m_colorLabels.first();
+
+        ColorSelectWdg *compact = new ColorSelectWdg(QString());
+        compactGuard = compact;
+        ASSERT_FALSE(compactGuard.isNull());
+
+        // Act: 析构（修复：~ColorSelectWdg 回收三个布局指针并置空）
+        delete withText;
+        delete compact;
+    }
+
+    // Assert: QPointer 全部失效 → 控件、子色块、按钮均已释放，无悬空
+    EXPECT_TRUE(withTextGuard.isNull());
+    EXPECT_TRUE(compactGuard.isNull());
+    EXPECT_TRUE(childLabel.isNull());
+    EXPECT_TRUE(childButton.isNull());
 }
