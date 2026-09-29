@@ -239,6 +239,16 @@ Settings::~Settings()
     if (s_pSetting == this) {
         s_pSetting = nullptr;
     }
+    // 先销毁 DSettings 再销毁后端：setBackend() 会将 backend moveToThread
+    // 到专门的写线程，doSetOption/doSync 经队列在该线程异步落盘，仅
+    // DSettings::destroyed 会 quit+wait 该线程。若先 delete m_backend，
+    // 主线程销毁 backend（及其 QSettings）会与写线程在途的 doSetOption
+    // 竞态（QSettings UAF → SIGSEGV，CI test_settings 套件复现），且
+    // settings 裸指针从不释放；此处先停写线程，后端销毁即无并发风险
+    if (settings != nullptr) {
+        delete settings;
+        settings = nullptr;
+    }
     if (m_backend != nullptr) {
         qDebug() << "Cleaning up settings backend";
         delete m_backend;
