@@ -1,3 +1,37 @@
+deepin-editor (6.6.5) unstable; urgency=medium
+
+  * chore: migrate linglong deps to declarative buildext.apt
+  * fix: markdown format loss in progressive render
+  * fix: anchor-based scroll sync via remark AST for md preview
+  * fix: case-insensitive syntax definition match
+  * fix: show full context menu in md read view
+  * fix: stop table flicker in md live preview via NodeView
+  * fix: clear stale match count when reopening find bar
+  * fix: correct view mode labels in zh_CN translation and AT test expectations
+  * fix: block replace in md read-only view
+  * fix: install event filter on focusProxy for md read view notify
+  * fix: adapt scrollbar to dark theme in md preview
+  * fix: cursor jumps to last line when opening markdown files
+  * [skip CI] i18n: Translate deepin-editor.ts in fi
+  * [skip CI] i18n: Translate deepin-editor.ts in fi
+  * [skip CI] i18n: Translate deepin-editor.ts in fi
+  * [skip CI] i18n: Translate deepin-editor.ts in fi
+  * [skip CI] i18n: Translate deepin-editor.ts in fi
+  * [skip CI] i18n: Translate deepin-editor.ts in fi
+  * [skip CI] i18n: Translate deepin-editor.ts in fi
+  * [skip CI] i18n: Translate deepin-editor.ts in pl
+  * [skip CI] i18n: Translate deepin-editor.ts in pl
+  * [skip CI] i18n: Translate deepin-editor.ts in pl
+  * [skip CI] i18n: Translate deepin-editor.ts in pl
+  * fix: fix memory leak in moveText when from equals to
+  * fix: guard null pointer in updateViewModeActions
+  * fix: add const qualifier to ParseFileEvent::clone
+  * fix: use strdup for library name copy in load_libs
+  * chore: update version to 6.6.4
+  * fix(build): skip unit tests in Release mode
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Tue, 29 Sep 2026 11:09:18 +0800
+
 deepin-editor (6.6.4) unstable; urgency=medium
 
   * chore: update version to 6.6.3
