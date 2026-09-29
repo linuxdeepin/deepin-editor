@@ -1312,3 +1312,35 @@ TEST_F(TextEditTest, OnTextContentChanged_NormalEdit_NoExtraCommand)
     EXPECT_EQ(edit->toPlainText(), QString("x"));
     EXPECT_EQ(edit->blockCount(), 1); // 回滚后仍单块
 }
+
+// ============================================================================
+// PMS 回归用例（Mode 2 PMS bug 回归，批次 2）
+// 数据源：tests/.ut-pms/bugs.json + git show <sha>
+// ============================================================================
+
+// PMS: https://pms.uniontech.com/bug-view-60989.html  commit: b902de7b
+// 场景：大文件查找/替换卡死修复（b902de7b：高亮改为视图内收集）回归：大文本
+// 全选状态下 updateFont 走 selectTextInView 视图内选区，不整篇重建、不卡死
+TEST_F(TextEditTest, BUG60989_UpdateFont_SelectAllInView_NoHang)
+{
+    // Arrange: 大文本 + 全选标志（m_isSelectAll 下 updateFont 调 selectTextInView）
+    QString text;
+    for (int i = 0; i < 300; ++i) {
+        text += QString("font line %1\n").arg(i);
+    }
+    setDocText(text);
+    edit->m_isSelectAll = true;
+
+    // Act: 更新字体（setFontSize → updateFont → selectTextInView 视图内选区）
+    edit->setFontSize(20);
+
+    // Assert: 默认字体字号已更新，制表位同步，全选标志保持
+    EXPECT_NEAR(edit->document()->defaultFont().pointSizeF(), 20.0, 0.001);
+    EXPECT_GT(edit->tabStopDistance(), 0);
+    EXPECT_TRUE(edit->m_isSelectAll);
+
+    // Assert: 选区仅覆盖视图范围（不整篇文档重建 —— 60989 卡死修复语义）
+    const QTextCursor cur = edit->textCursor();
+    EXPECT_TRUE(cur.hasSelection());
+    EXPECT_LT(cur.selectionEnd() - cur.selectionStart(), edit->document()->characterCount());
+}

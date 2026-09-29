@@ -1491,3 +1491,29 @@ TEST_F(UtilsTest, IsMemorySufficientForOperation_UnknownOperationType_DefaultAll
     EXPECT_TRUE(ok);
     EXPECT_TRUE(Utils::isMemorySufficientForOperation(static_cast<Utils::OperationType>(100), 100, 100));
 }
+
+// ===========================================================================
+// PMS bug 回归用例（批次 2）
+// ===========================================================================
+// PMS: https://pms.uniontech.com/bug-view-345247.html  commit: aff4126b
+// 场景：设置-快捷键映射-上一个标签页/减少缩进快捷键展示名错误（"Ctrl+Shift+Backtab" → "Ctrl+Shift+Tab"）修复（aff4126b）：
+//       Qt 在 Shift 组合下按 Tab 产生 Key_Backtab 事件，QKeySequence(Qt::Key_Backtab).toString() 输出 "Backtab"；
+//       getKeyshortcut 需将 "Backtab" 键名归一化为 "Tab"（含 Shift 组合，即 BUG 中快捷键展示的真实场景）。
+//       注：commit aff4126b 实际修复位置为 Utils::getKeyshortcut（任务清单所列 fileIsWritable 未被该 commit 触及，
+//       其通用行为已由 FileIsWritable_WritableAndReadOnlyFiles_ReturnExpected 覆盖），故回归用例落在 getKeyshortcut。
+TEST_F(UtilsTest, BUG345247_BacktabWithShift_DisplaysTabInsteadOfBacktab)
+{
+    // Arrange：Shift+Tab 在 Qt 中即 Key_Backtab + ShiftModifier；settings.json selectprevtab 默认 "Ctrl+Shift+Tab"
+    QKeyEvent shiftBacktab(QEvent::KeyPress, Qt::Key_Backtab, Qt::ShiftModifier);
+    QKeyEvent ctrlShiftBacktab(QEvent::KeyPress, Qt::Key_Backtab, Qt::ControlModifier | Qt::ShiftModifier);
+
+    // Act
+    const QString shiftOnly = Utils::getKeyshortcut(&shiftBacktab);
+    const QString ctrlShift = Utils::getKeyshortcut(&ctrlShiftBacktab);
+
+    // Assert：Backtab 键名归一化为 Tab，展示名绝不能再含 "Backtab"（BUG #345247 展示名错误）
+    EXPECT_EQ(shiftOnly, QString::fromLatin1("Shift+Tab"));
+    EXPECT_EQ(ctrlShift, QString::fromLatin1("Ctrl+Shift+Tab"));
+    EXPECT_FALSE(shiftOnly.contains(QString::fromLatin1("Backtab")));
+    EXPECT_FALSE(ctrlShift.contains(QString::fromLatin1("Backtab")));
+}

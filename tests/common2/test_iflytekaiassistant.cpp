@@ -573,3 +573,44 @@ INSTANTIATE_TEST_SUITE_P(
         ErrorCase{IflytekAiAssistant::NoUserAgreement, nullptr},
         ErrorCase{IflytekAiAssistant::Success, nullptr},
         ErrorCase{IflytekAiAssistant::Failed, nullptr}));
+
+// ============================================================================
+// PMS 批次 2 回归用例（仅追加，勿改动上方状态机用例声明顺序）
+// ============================================================================
+
+// PMS: https://pms.uniontech.com/bug-view-300549.html  commit: 2b054245
+// PMS: https://pms.uniontech.com/bug-view-301561.html  commit: 6e402655
+// 场景：uos-ai 安装检测/音频设备检测修复（2b054245、6e402655）：
+//       AudioDeviceDetector::hasEnabledPorts/countEnabledPorts 对 DDE Audio
+//       CardsWithoutUnavailable JSON 的健壮性——非法 JSON（解析失败分支）、
+//       合法但根非数组、空数组、端口 Enabled 但 Direction 非法值，均须返回
+//       false 且不崩溃。本用例不触碰 m_status（hasAudioOutputDevice/
+//       hasAudioInputDevice 不做状态检查），追加在状态机套件末尾安全
+TEST_F(IflytekAiAssistantTest, BUG300549_AudioDetector_InvalidJsonAndEdgeCases_ReturnFalse)
+{
+    // Arrange
+    IflytekAiAssistant *ins = IflytekAiAssistant::instance();
+    installAudioStubs();
+    fakeIsValid = true;
+    // Act/Assert: JSON 解析失败（缺右括号）→ parseError 分支 → false，不崩溃
+    cardsJson = QByteArrayLiteral("{\"Id\":0,\"Name\":\"c0\"");
+    EXPECT_FALSE(ins->hasAudioOutputDevice());
+    EXPECT_FALSE(ins->hasAudioInputDevice());
+    // 合法 JSON 但根为对象（非数组）→ array() 为空 → 0 端口 → false
+    cardsJson = QByteArrayLiteral("{\"Id\":0,\"Ports\":[]}");
+    EXPECT_FALSE(ins->hasAudioOutputDevice());
+    // 空数组 → 0 端口 → false
+    cardsJson = QByteArrayLiteral("[]");
+    EXPECT_FALSE(ins->hasAudioInputDevice());
+    // 端口 Enabled 但 Direction 为非法值(9)：输出/输入方向计数均为 0 → false
+    cardsJson = QByteArrayLiteral(
+        "[{\"Id\":7,\"Name\":\"usb-audio\",\"Ports\":[{\"Name\":\"spk\",\"Enabled\":true,\"Direction\":9}]}]");
+    EXPECT_FALSE(ins->hasAudioOutputDevice());
+    EXPECT_FALSE(ins->hasAudioInputDevice());
+    // Direction 匹配但 Enabled=false，countEnabledPorts 计数条件不满足 → false
+    cardsJson = QByteArrayLiteral(
+        "[{\"Id\":7,\"Name\":\"usb-audio\",\"Ports\":[{\"Name\":\"spk\",\"Enabled\":false,\"Direction\":1}]}]");
+    EXPECT_FALSE(ins->hasAudioOutputDevice());
+    // 以上全程仅读取属性，无 DBus 方法调用
+    EXPECT_EQ(dbusCallCount, 0);
+}

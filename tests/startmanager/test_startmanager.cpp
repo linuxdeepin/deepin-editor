@@ -2686,3 +2686,74 @@ TEST_F(StartManagerInitBookmarkTest, InitBookmark_Variants_LoadsOnlyExistingVali
     EXPECT_EQ(found, QList<int>({ 4, 6 }));
     EXPECT_EQ(obj->m_bookmarkTable.count(), 1);
 }
+
+// ============================================================
+// PMS bug 回归（批次 2）
+// ============================================================
+
+// PMS: https://pms.uniontech.com/bug-view-324727.html  commit: 409a4500（另涉 145279 / 806e110c）
+// 场景：打开多个文件后关闭编辑器，重开只恢复 1 个 —— 修复（409a4500）：移除 recoverFile 记录循环内的
+// return recFilesSum，多条记录恢复不再在首个后提前返回；修复（806e110c）：恢复逻辑提取为独立 recoverFile。
+// 回归断言：3 条有效记录（1 焦点 + 2 非焦点）全部恢复（ret==3、焦点 addTemFileTab×1、非焦点 addPendingTab×2），
+// 且 lastModifiedTime 字段透传 addTemFileTab 第 4 参（806e110c 区域语义）。
+TEST_F(StartManagerTest, BUG324727_MultiRecords_AllTabsRecovered)
+{
+    // Arrange：3 条有效记录（焦点在前，模拟关闭前打开的多个文件），文件均存在
+    QString focusLocal = tmp->filePath("first.txt");
+    QString focusTem = tmp->filePath("first.tem");
+    QString lazyB = tmp->filePath("second.txt");
+    QString lazyC = tmp->filePath("third.txt");
+    QJsonObject jsonFocus;
+    jsonFocus.insert("localPath", focusLocal);
+    jsonFocus.insert("temFilePath", focusTem);
+    jsonFocus.insert("focus", true);
+    jsonFocus.insert("lastModifiedTime", QStringLiteral("2026-06-11 19:48:19"));
+    QJsonObject jsonB;
+    jsonB.insert("localPath", lazyB);
+    jsonB.insert("cursorPosition", "3");
+    QJsonObject jsonC;
+    jsonC.insert("localPath", lazyC);
+    jsonC.insert("cursorPosition", "9");
+    obj->m_qlistTemFile = QStringList {
+        QString::fromUtf8(QJsonDocument(jsonFocus).toJson(QJsonDocument::Compact)),
+        QString::fromUtf8(QJsonDocument(jsonB).toJson(QJsonDocument::Compact)),
+        QString::fromUtf8(QJsonDocument(jsonC).toJson(QJsonDocument::Compact))
+    };
+
+    Window *win = qobjFake<Window>();
+    obj->m_windows << win;
+    int temCalls = 0;
+    int pendingCalls = 0;
+    QString gotTemPath;
+    QString gotLastMod;
+    QStringList pendingPaths;
+    stub.set_lamda(static_cast<void (Window::*)(bool)>(&Window::setBatchAddingPendingTabs),
+                   [](Window *, bool) {});
+    stub.set_lamda(
+        static_cast<void (Window::*)(const QString &, const QString &, const QString &, const QString &, bool, int, int)>(
+            &Window::addTemFileTab),
+        [&temCalls, &gotTemPath, &gotLastMod](Window *, const QString &p, const QString &,
+                                              const QString &, const QString &lastMod, bool, int, int) {
+            ++temCalls;
+            gotTemPath = p;
+            gotLastMod = lastMod;
+        });
+    stub.set_lamda(
+        static_cast<void (Window::*)(const Window::PendingTabInfo &, int)>(&Window::addPendingTab),
+        [&pendingCalls, &pendingPaths](Window *, const Window::PendingTabInfo &info, int) {
+            ++pendingCalls;
+            pendingPaths << info.filepath;
+        });
+    stubWindowInteraction(win);   // 恢复后激活焦点标签（popupExistTabs 路径）
+
+    // Act
+    int ret = obj->recoverFile(win);
+
+    // Assert：循环未提前返回 → 3 条记录全部恢复（1 焦点加载 + 2 待加载），返回恢复总数 3
+    EXPECT_EQ(ret, 3);
+    EXPECT_EQ(temCalls, 1);
+    EXPECT_EQ(gotTemPath, focusTem);
+    EXPECT_EQ(gotLastMod, QString("2026-06-11 19:48:19"));
+    EXPECT_EQ(pendingCalls, 2);
+    EXPECT_EQ(pendingPaths, QStringList({ lazyB, lazyC }));
+}

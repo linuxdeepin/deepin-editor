@@ -224,3 +224,39 @@ TEST_F(DeleteTextUndoCommandTest, Id_ColumnMode_ReturnsIdColumnEditDelete)
     EXPECT_EQ(cmd.id(), Utils::IdColumnEditDelete);
     EXPECT_EQ(cmd.id(), Utils::IdColumnEdit | Utils::IdDelete);
 }
+
+// ============================================================================
+// 批次 2 PMS bug 回归追加用例
+// ============================================================================
+
+// ---- BUG273663：删除后光标变更，undo/redo 仍恢复列选区并定位最后选区 ----
+// PMS: https://pms.uniontech.com/bug-view-273663.html  commit: 889fa196
+// 场景：列模式编辑撤销崩溃（273663）。修复（889fa196）：列编辑 undo/redo 末尾调用
+// restoreColumnEditSelection 恢复列选区状态，并将编辑器光标定位到最后一个选区。
+// 本用例回归 273663 的"删除后光标变更再撤销"序列：redo 列删除 → 光标移走 → undo，
+// 验证列选区状态恢复、编辑器光标回到最后选区（不崩溃、不错位）。
+TEST_F(DeleteTextUndoCommandTest, BUG273663_CursorChangedBeforeUndo_RestoresColumnSelections)
+{
+    // Arrange：列编辑两行各选中一个字符
+    edit->setPlainText("aa\nbb");
+    QList<QTextEdit::ExtraSelection> selections;
+    selections << ut::makeSelection(edit->document(), 0, 1)
+               << ut::makeSelection(edit->document(), 3, 4);
+    DeleteTextUndoCommand cmd(selections, edit);
+    cmd.redo();
+    ASSERT_EQ(docText(), QString("a\nb"));                     // 前提：列删除已生效
+    ASSERT_EQ(seam.restoreColumnEditSelectionCalls, 1);        // redo 恢复列选区
+
+    // Act：模拟光标变更（删除后用户移动光标），再执行撤销
+    edit->setTextCursor(ut::cursorAt(edit->document(), 0, 0));
+    cmd.undo();
+
+    // Assert：列选区状态恢复，编辑器光标定位到最后一个选区
+    EXPECT_EQ(docText(), QString("aa\nbb"));                   // 文本恢复
+    EXPECT_EQ(seam.restoreColumnEditSelectionCalls, 2);        // undo 恢复列选区
+    ASSERT_EQ(seam.lastRestoredSelections.size(), 2);
+    EXPECT_EQ(ut::toLf(seam.lastRestoredSelections[0].cursor.selectedText()), QString("a"));
+    EXPECT_EQ(ut::toLf(seam.lastRestoredSelections[1].cursor.selectedText()), QString("b"));
+    EXPECT_EQ(edit->textCursor().position(),
+              seam.lastRestoredSelections.last().cursor.position());  // 定位最后选区
+}

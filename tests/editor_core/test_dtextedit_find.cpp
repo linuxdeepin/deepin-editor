@@ -828,3 +828,172 @@ TEST_F(TextEditTest, RenderAllSelections_MixedSelections_AppliedToViewport)
     EXPECT_GE(total, 3);
     EXPECT_TRUE(edit->m_HightlightYes); // 当前行高亮已入渲染链
 }
+
+// ============================================================================
+// PMS 回归用例（Mode 7 PMS 缺陷热点补强，批次 1）
+// 数据源：tests/.ut-pms/（bugs.json / work-order.md）
+// ============================================================================
+
+// PMS: https://pms.uniontech.com/bug-view-60989.html  commit: b902de7b
+// 场景：查找关键词高亮在替换后选区错乱（b902de7b 将 updateKeywordSelections
+// 迁移至 updateKeywordSelectionsInView）。修复后：replaceNext 后剩余高亮
+// 选区正确更新
+TEST_F(TextEditTest, BUG60989_ReplaceNextInView_KeepsHighlightSelections)
+{
+    // Arrange: 多个匹配的高亮
+    setDocText(QString("aa bb cc bb dd bb"));
+    ASSERT_TRUE(edit->highlightKeyword(QString("bb"), 0));
+    const int selBefore = edit->m_findMatchSelections.size();
+    ASSERT_GT(selBefore, 1);
+
+    // Act: 视图模式替换（updateKeywordSelectionsInView 选区更新）
+    edit->replaceNext(QString("bb"), QString("XX"));
+
+    // Assert: 替换后剩余高亮选区 -1、内容正确
+    EXPECT_EQ(edit->toPlainText(), QString("aa XX cc bb dd bb"));
+    EXPECT_EQ(edit->m_findMatchSelections.size(), selBefore - 1);
+}
+
+// ============================================================================
+// PMS 回归用例（Mode 2 PMS bug 回归，批次 2）
+// 数据源：tests/.ut-pms/bugs.json + git show <sha>
+// ============================================================================
+
+// PMS: https://pms.uniontech.com/bug-view-66378.html  commit: e3cbab1d / d242fe4f
+// 场景：大文本"标记所有"卡死修复（d242fe4f/e3cbab1d 引入按视图收集 + 时间戳）：
+// markKeywordInView 只收集可视范围内匹配，不再整篇文档构建 QList 引起卡死
+TEST_F(TextEditTest, BUG66378_MarkKeywordInView_OnlyVisibleRange)
+{
+    // Arrange: 400 行全部匹配同一关键字，匹配总数远超可视范围
+    QString text;
+    for (int i = 0; i < 400; ++i) {
+        text += QString("ut_sync line %1\n").arg(i);
+    }
+    setDocText(text);
+
+    // Act: 视图内标记关键字（显式时间戳）
+    const qint64 stamp = 1710490000000;
+    const bool ret = edit->markKeywordInView(QString("ut_sync"), QString("#FF0000"), stamp);
+
+    // Assert: 标记成功，仅收集视图内匹配（远少于全文 400 处），时间戳已记录
+    EXPECT_TRUE(ret);
+    ASSERT_TRUE(edit->m_mapKeywordMarkSelections.contains(QString("ut_sync")));
+    const auto &marked = edit->m_mapKeywordMarkSelections[QString("ut_sync")];
+    EXPECT_GE(marked.size(), 1);
+    EXPECT_LT(marked.size(), 400);
+    EXPECT_EQ(marked.first().second, stamp);
+
+    // Assert: 所有收集的选区都位于视图起始范围（前半篇文档内）
+    for (const auto &pair : marked) {
+        const int blockNo = pair.first.cursor.blockNumber();
+        EXPECT_GE(blockNo, 0);
+        EXPECT_LT(blockNo, 200);
+    }
+}
+
+// PMS: https://pms.uniontech.com/bug-view-67950.html  commit: 9eb4f93c
+// 场景：17 处内存泄露修复（9eb4f93c）：滚动动画/右键菜单析构中判空停止释放。
+// replaceRest 带标记替换后 + 动画运行中析构 TextEdit —— 无崩溃/悬空指针
+TEST_F(TextEditTest, BUG67950_ReplaceRest_WithMarks_DtorStopsAnimationNoCrash)
+{
+    // Arrange: 启动滚动动画（析构须停止释放），并造一个颜色标记选区
+    setDocText(QString("aa bb aa bb aa"));
+    edit->scrollToLine(3, 1, 0);
+    ASSERT_NE(edit->m_scrollAnimation, nullptr);
+    ASSERT_NE(edit->m_scrollAnimation->state(), QAbstractAnimation::Stopped);
+
+    QTextCursor markCursor = edit->textCursor();
+    markCursor.setPosition(3, QTextCursor::MoveAnchor);
+    markCursor.setPosition(5, QTextCursor::KeepAnchor);   // 选中 "bb"
+    TextEdit::MarkOperation op;
+    op.type = TextEdit::MarkOnce;
+    op.cursor = markCursor;
+    op.color = QString("#FFFF00");
+    edit->m_markOperations.append(qMakePair(op, qint64(1710490000000)));
+
+    // Act: 从光标处（起始位置）替换剩余 "aa"→"XX"（标记坐标经 calcMarkReplaceList 偏移）
+    edit->replaceRest(QString("aa"), QString("XX"));
+
+    // Assert: 光标之后的替换全部生效
+    EXPECT_EQ(edit->toPlainText(), QString("XX bb XX bb XX"));
+
+    // Act: 动画运行中构造并析构 TextEdit（9eb4f93c 析构修复：stop + delete）
+    {
+        TextEdit *scoped = new TextEdit();
+        scoped->setSettings(Settings::instance());
+        scoped->setWrapper(fakeWrapper());
+        scoped->scrollToLine(2, 1, 0);
+        ASSERT_NE(scoped->m_scrollAnimation, nullptr);
+        delete scoped;   // 析构中停止并释放动画/菜单，无 UAF/崩溃
+    }
+}
+
+// PMS: https://pms.uniontech.com/bug-view-106594.html  commit: c310b0e2
+// 场景：复制超大内容闪退修复（c310b0e2 引入 isAbleOperation 内存预检）：
+// 小数据量（普通选区/列选区/全选/剪贴板粘贴）下内存预检放行，copy 正常执行
+TEST_F(TextEditTest, BUG106594_IsAbleCopyOperation_SmallData_Allowed)
+{
+    // Arrange: 普通选区（小数据）
+    setDocText(QString("hello world, hello editor"));
+    QTextCursor cur = edit->textCursor();
+    cur.setPosition(0, QTextCursor::MoveAnchor);
+    cur.setPosition(5, QTextCursor::KeepAnchor);
+    edit->setTextCursor(cur);
+
+    // Act/Assert: 小选区复制放行（内存充足时不拦截）
+    EXPECT_TRUE(edit->isAbleOperation(Utils::CopyOperation));
+
+    // Act/Assert: 列选区小数据复制放行
+    edit->m_bIsAltMod = true;
+    QTextCursor altCur(edit->document());
+    altCur.setPosition(0);
+    altCur.setPosition(2, QTextCursor::KeepAnchor);
+    QTextEdit::ExtraSelection altSel;
+    altSel.cursor = altCur;
+    edit->m_altModSelections << altSel;
+    EXPECT_TRUE(edit->isAbleOperation(Utils::CopyOperation));
+    edit->m_bIsAltMod = false;
+    edit->m_altModSelections.clear();
+
+    // Act/Assert: 全选小文档复制放行，copy() 正常写入剪贴板
+    edit->m_isSelectAll = true;
+    EXPECT_TRUE(edit->isAbleOperation(Utils::CopyOperation));
+    edit->copy(true);
+    EXPECT_EQ(QApplication::clipboard()->text(), edit->toPlainText());
+    edit->m_isSelectAll = false;
+
+    // Act/Assert: 剪贴板小文本粘贴预检放行
+    QApplication::clipboard()->setText(QString("paste me"));
+    EXPECT_TRUE(edit->isAbleOperation(Utils::PasteOperation));
+}
+
+// PMS: https://pms.uniontech.com/bug-view-79951.html  commit: d0fe36dc
+// 场景：大文件连续全选复制粘贴卡死修复（d0fe36dc 引入 m_isSelectAll 视图内
+// 全选 + 重入守卫）：selectTextInView 视图内全选生效，重入被阻断不自激振荡
+TEST_F(TextEditTest, BUG79951_SelectTextInView_ReentryGuarded)
+{
+    // Arrange: 大文本 + 全选标志
+    QString text;
+    for (int i = 0; i < 200; ++i) {
+        text += QString("select all line %1\n").arg(i);
+    }
+    setDocText(text);
+    edit->m_isSelectAll = true;
+
+    // Act: 视图内全选
+    edit->selectTextInView();
+
+    // Assert: 生成跨视图选区，重入守卫已复位
+    EXPECT_TRUE(edit->textCursor().hasSelection());
+    EXPECT_FALSE(edit->m_isSelectingInView);
+
+    // Act: 重入守卫置位后再次调用 —— 立即返回，不再自激振荡（防卡死）
+    edit->m_isSelectingInView = true;
+    const QTextCursor before = edit->textCursor();
+    edit->selectTextInView();
+
+    // Assert: 第二次调用被阻断（光标未变化、守卫保持置位）
+    EXPECT_TRUE(edit->textCursor() == before);
+    EXPECT_TRUE(edit->m_isSelectingInView);
+    edit->m_isSelectingInView = false;
+}

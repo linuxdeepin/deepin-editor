@@ -14,6 +14,7 @@
 #include <DKeySequenceEdit>
 #include <DDialog>
 #include <QSettings>
+#include <QThread>
 #include <QPointer>
 #include <QKeyEvent>
 #include <QDebug>
@@ -1165,4 +1166,58 @@ TEST_F(SettingsTest, KeySequenceEdit_EventFilter_ModifierOrForeignObject_Delegat
     // Assert：基类不拦截（返回 false），与"自家无修饰键才拦截"互补
     EXPECT_FALSE(withModifier);
     EXPECT_FALSE(foreignObject);
+}
+
+// PMS: https://pms.uniontech.com/bug-view-102351.html  commit: 824ad66b
+// 场景：关闭应用不能保留现场。修复（824ad66b）：Settings 构造后端不再父挂
+// 到 Settings 控件（new QSettingBackend(strConfigPath)），后端不随 widget
+// 树提前析构，doSetOption 的写盘（lock + setValue + sync）可完整落盘
+TEST_F(SettingsTest, BUG102351_SettingsDestroyed_ConfigValuePreserved)
+{
+    // Arrange: 独立 Settings 实例（不注册单例，同 Destruct_TemporaryInstance 模式）
+    Settings *tmp = new Settings();
+    ASSERT_NE(tmp->settings, nullptr);
+    ASSERT_NE(tmp->m_backend, nullptr);
+    const QString fontKey = QStringLiteral("base.font.family");
+    const QString marked = QStringLiteral("bug102351-font");
+    const QString configPath = QString("%1/%2/%3/config.conf")
+            .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
+            .arg(QString::fromLatin1(kOrgName))
+            .arg(QString::fromLatin1(kAppName));
+
+    // 修复核心断言：后端无父对象（824ad66b 将 new QSettingBackend(path, this)
+    // 改为 new QSettingBackend(path)），不随 Settings widget 树提前析构
+    EXPECT_EQ(tmp->m_backend->parent(), nullptr);
+
+    // Act: 经 DSettings 公开 API 写入配置；写链（valueChanged → doSetOption）
+    // 可能经排队信号异步落盘，轮询等待到达后端
+    tmp->settings->setOption(fontKey, QVariant(marked));
+    bool reached = false;
+    for (int i = 0; i < 40 && !reached; ++i) {
+        reached = tmp->m_backend->keys().contains(fontKey);
+        if (!reached) {
+            QThread::msleep(25);
+            QApplication::processEvents();
+        }
+    }
+    ASSERT_TRUE(reached);
+    delete tmp; // 销毁 Settings（dtor 显式 delete m_backend）
+
+    // Assert: 配置经全新 CustemBackend 从磁盘读回——后端生命周期独立于
+    // Settings 控件，销毁 Settings 不丢失已写配置（关闭应用现场保留语义）
+    // 注：Dtk QSettingBackend 落盘格式为 [key] 组 + value= 子键，
+    // 这里按值扫描校验（对 key 序列化格式不敏感）
+    bool onDisk = false;
+    for (int i = 0; i < 40 && !onDisk; ++i) {
+        CustemBackend verifier(configPath);
+        for (const QString &k : verifier.keys()) {
+            if (verifier.getOption(k).toString() == marked) {
+                onDisk = true;
+                break;
+            }
+        }
+        if (!onDisk)
+            QThread::msleep(25);
+    }
+    EXPECT_TRUE(onDisk);
 }

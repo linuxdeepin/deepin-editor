@@ -1708,3 +1708,140 @@ TEST_F(TextEditTest, ViewModeActionTriggered_EmitsViewModeRequested)
     EXPECT_EQ(spy.last().at(0).value<ViewMode>(), ViewMode::ReadView);
     EXPECT_EQ(spy.count(), 1);
 }
+
+// ============================================================================
+// PMS 回归用例（Mode 2 PMS bug 回归，批次 2）
+// 数据源：tests/.ut-pms/bugs.json + git show <sha>
+// ============================================================================
+
+// PMS: https://pms.uniontech.com/bug-view-273663.html  commit: 889fa196
+// 场景：列模式编辑撤销崩溃修复（889fa196 引入 DeleteBackAltCommand + 列选区
+// 恢复）：列剪切 → 撤销 → 文本恢复，列选区经 restoreColumnEditSelection 还原
+TEST_F(TextEditTest, BUG273663_ColumnCutUndo_RestoresTextAndSelections)
+{
+    // Arrange: 三行各造一个列选区（每行前 2 字符）
+    setDocText(QString("aa\nbb\ncc\n"));
+    QList<QTextEdit::ExtraSelection> sels;
+    for (int line = 0; line < 3; ++line) {
+        QTextCursor cur(edit->document());
+        const int blockPos = edit->document()->findBlockByNumber(line).position();
+        cur.setPosition(blockPos);
+        cur.setPosition(blockPos + 2, QTextCursor::KeepAnchor);
+        QTextEdit::ExtraSelection sel;
+        sel.cursor = cur;
+        sels << sel;
+    }
+    edit->restoreColumnEditSelection(sels);
+    edit->m_bIsAltMod = true;
+
+    // Act: 列剪切（经 DeleteBackAltCommand 压栈）
+    edit->cut(true);
+
+    // Assert: 每行选中字符被删除，剪贴板为列内容，列选区仍可恢复
+    EXPECT_EQ(edit->toPlainText(), QString("\n\n\n"));
+    EXPECT_EQ(QApplication::clipboard()->text(), QString("aa\nbb\ncc"));
+    EXPECT_FALSE(edit->m_altModSelections.isEmpty());
+
+    // Act: 撤销（undo_ → DeleteBackAltCommand::undo → 文本回插 + 列选区还原）
+    edit->undo_();
+
+    // Assert: 文本恢复、列选区经 restoreColumnEditSelection 还原为 3 条
+    EXPECT_EQ(edit->toPlainText(), QString("aa\nbb\ncc\n"));
+    ASSERT_EQ(edit->m_altModSelections.size(), 3);
+    EXPECT_EQ(edit->m_altModSelections.first().cursor.selectedText(), QString("aa"));
+    EXPECT_TRUE(edit->m_bIsAltMod);   // refreshUndoRedoColumnStatus 保持列编辑状态
+}
+
+// PMS: https://pms.uniontech.com/bug-view-95115.html  commit: 17033b21
+// 场景：全选复制粘贴标志位修复（17033b21：selectTextInView 光标锚点顺序修正 +
+// 首次粘贴后 m_isSelectAll 复位）；lineNumberAreaPaintEvent 渲染烟测不崩溃
+TEST_F(TextEditTest, BUG95115_LineNumberAreaPaintEvent_SmokeNoCrash)
+{
+    // Arrange: 大文本 + 全选标志（95115/79951 全选粘贴场景）
+    QString text;
+    for (int i = 0; i < 300; ++i) {
+        text += QString("paint line %1\n").arg(i);
+    }
+    setDocText(text);
+    edit->m_isSelectAll = true;
+    edit->selectTextInView();
+
+    // Assert: 17033b21 修复后视图内全选覆盖可视范围（首可见位置至视口底部）
+    const QTextCursor selCur = edit->textCursor();
+    EXPECT_TRUE(selCur.hasSelection());
+    EXPECT_EQ(std::min(selCur.anchor(), selCur.position()), 0);
+    EXPECT_GT(std::max(selCur.anchor(), selCur.position()), 0);
+
+    // Act: 序号区绘制烟测（直接驱动 paintEvent，深浅主题两分支均不崩溃）
+    QPaintEvent paintEv(QRect(0, 0, 40, 300));
+    edit->lineNumberAreaPaintEvent(&paintEv);
+
+    // Assert: 绘制完成后行号颜色 alpha 已按主题分支设置（dark 0.2 / light 0.3）
+    const qreal alpha = edit->m_lineNumbersColor.alphaF();
+    EXPECT_TRUE(qAbs(alpha - 0.2) < 0.01 || qAbs(alpha - 0.3) < 0.01);
+
+    // Act: 首次粘贴后 m_isSelectAll 复位（95115 标志位修复语义）
+    QApplication::clipboard()->setText(QString("x"));
+    edit->paste();
+
+    // Assert
+    EXPECT_FALSE(edit->m_isSelectAll);
+}
+
+// ---------------- PMS 回归：109625 剪贴板拖拽字符到文本失败（df0f7bcb dropEvent 文本数据处理） ----------------
+
+// PMS: https://pms.uniontech.com/bug-view-109625.html  commit: df0f7bcb
+// 场景：外部剪贴板文本拖入编辑器（无 source）→ 文本插入文档并入撤销栈，不崩溃
+TEST_F(TextEditTest, BUG109625_DropEvent_TextDropped_Inserted)
+{
+    // Arrange：文档有内容、光标在行尾；构造外部文本拖入（无 source，与拖拽字符到文本场景一致）
+    setDocText(QString("body "));
+    moveCursorTo(5);
+    QMimeData data;
+    data.setText(QString("拖入文本"));
+    QDropEvent ev(QPointF(10, 8), Qt::CopyAction, &data, Qt::NoButton, Qt::NoModifier);
+
+    // Act
+    edit->dropEvent(&ev);
+
+    // Assert：拖入文本已插入（修复前剪贴板拖拽字符到文本失败）且入撤销栈
+    EXPECT_TRUE(edit->toPlainText().contains(QString("拖入文本")));
+    EXPECT_TRUE(edit->isUndoRedoOpt());
+}
+
+// PMS: https://pms.uniontech.com/bug-view-109625.html  commit: df0f7bcb
+// 场景：>1MB 大文本拖入 → 入撤销栈且文本完整进入文档（df0f7bcb 中 size>1MB 走 InsertBlockByTextCommand 入栈；6.x 重构后 dropEvent 外部文本统一经 DragInsertTextUndoCommand 入栈）
+TEST_F(TextEditTest, BUG109625_DropEvent_LargeText_BlockCommand)
+{
+    // Arrange：1MB+16 字符大文本（对应修复 commit 的 1MB 阈值），无 source 外部拖入
+    const int kLargeChars = 1024 * 1024 + 16;
+    QMimeData data;
+    data.setText(QString(kLargeChars, QChar('a')));
+    QDropEvent ev(QPointF(10, 8), Qt::CopyAction, &data, Qt::NoButton, Qt::NoModifier);
+
+    // Act
+    edit->dropEvent(&ev);
+
+    // Assert：大文本完整进入文档、撤销栈有记录、无崩溃
+    EXPECT_EQ(edit->toPlainText().size(), kLargeChars);
+    EXPECT_TRUE(edit->isUndoRedoOpt());
+}
+
+// PMS: https://pms.uniontech.com/bug-view-109625.html  commit: df0f7bcb
+// 场景：带 Alt 修饰键的文本拖入 → 不崩溃且文本入文档（df0f7bcb 中 Alt 走 insertColumnEditTextEx 列编辑；6.x 重构后该修饰键分流移至 pasteText/inputMethodEvent，dropEvent 对 Alt 拖入统一走外部文本插入路径）
+TEST_F(TextEditTest, BUG109625_DropEvent_AltModifier_ColumnEdit)
+{
+    // Arrange：构造带 AltModifier 的外部文本拖入（无 source）
+    setDocText(QString("body "));
+    moveCursorTo(5);
+    QMimeData data;
+    data.setText(QString("alt拖入"));
+    QDropEvent ev(QPointF(10, 8), Qt::CopyAction, &data, Qt::NoButton, Qt::AltModifier);
+
+    // Act
+    edit->dropEvent(&ev);
+
+    // Assert：Alt 修饰键拖入不崩溃，文本被插入并入撤销栈
+    EXPECT_TRUE(edit->toPlainText().contains(QString("alt拖入")));
+    EXPECT_TRUE(edit->isUndoRedoOpt());
+}

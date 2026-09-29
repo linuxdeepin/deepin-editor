@@ -51,12 +51,15 @@
 // - EasingEndpoints_StandardFormulas_HitBoundaries /*TEST_P*/  → 端点 b / b+c
 // - BounceEaseOut_FourSegments_MatchFormula /*TEST_P*/         → B9~B12
 // - Destructor_ScopeExit_DeletesOwnedTimers                   → dtor
+// - BUG67950_DestroyWhileRunning_TimersReleasedNoDangling     → PMS 67950 析构释放
+// - BUG67950_StopThenDestroy_TimersReleasedNoDangling         → PMS 67950 停止后析构
 
 #include <gtest/gtest.h>
 #include "FlashTween.h"
 
 #include <QCoreApplication>
 #include <QTimer>
+#include <QPointer>
 #include <cmath>
 
 namespace {
@@ -475,4 +478,65 @@ TEST_F(FlashTweenTest, Destructor_ScopeExit_DeletesOwnedTimers)
     EXPECT_FALSE(fresh->activeX());
     EXPECT_FALSE(fresh->activeY());
     delete fresh;
+}
+
+// ============================================================
+// PMS 批次 2 回归用例（bug 67950）
+// PMS: https://pms.uniontech.com/bug-view-67950.html  commit: 9eb4f93c
+// 场景：内存释放修复（9eb4f93c）：~FlashTween() 由空实现改为显式 delete
+//       m_timerX/m_timerY 并置空，startY/startX/__runY 定时器操作加判空保护；
+//       以 QPointer 托管定时器，断言动画运行中析构无悬空定时器（Asan 泄漏回归）
+// ============================================================
+TEST_F(FlashTweenTest, BUG67950_DestroyWhileRunning_TimersReleasedNoDangling)
+{
+    // Arrange: QPointer 托管两个动画定时器（修复后成员公开，可观测托管）
+    QPointer<QTimer> timerX(obj->m_timerX);
+    QPointer<QTimer> timerY(obj->m_timerY);
+    ASSERT_NE(timerX.data(), nullptr);
+    ASSERT_NE(timerY.data(), nullptr);
+
+    // Act: 双轴启动惯性滑动并各驱动一拍（动画运行中析构，走 B5/B6 判空与 B7 步进分支）
+    obj->startY(0, 0, 100.0, 30.0, fnY);
+    obj->startX(0, 0, 100.0, 30.0, fnX);
+    obj->__runY();
+    ASSERT_TRUE(obj->activeY());
+    ASSERT_TRUE(obj->activeX());
+
+    delete obj;
+    obj = nullptr;
+
+    // Assert: QPointer 失效 → 定时器已随析构释放（修复前空析构定时器悬空泄漏）
+    EXPECT_TRUE(timerX.isNull());
+    EXPECT_TRUE(timerY.isNull());
+}
+
+// PMS: https://pms.uniontech.com/bug-view-67950.html  commit: 9eb4f93c
+// 场景：动画完整停止后析构（9eb4f93c）：startY/startX 驱动至完成（__runY/__runX
+//       走 B8 完成分支自动 stop）+ 幂等 stop 后析构，定时器仍随析构释放
+TEST_F(FlashTweenTest, BUG67950_StopThenDestroy_TimersReleasedNoDangling)
+{
+    // Arrange: QPointer 托管 + 双轴动画启动
+    QPointer<QTimer> timerX(obj->m_timerX);
+    QPointer<QTimer> timerY(obj->m_timerY);
+    obj->startY(0, 0, 100.0, 30.0, fnY);
+    obj->startX(0, 0, 100.0, 30.0, fnX);
+
+    // Act: 各轴三拍走完（t=0,15,30 → B8 完成自动 stop），再幂等 stop
+    obj->__runY();
+    obj->__runY();
+    obj->__runY();
+    obj->__runX();
+    obj->__runX();
+    obj->__runX();
+    ASSERT_FALSE(obj->activeY());
+    ASSERT_FALSE(obj->activeX());
+    obj->stopY();
+    obj->stopX();
+
+    delete obj;
+    obj = nullptr;
+
+    // Assert: 定时器随析构释放，无悬空、无崩溃
+    EXPECT_TRUE(timerX.isNull());
+    EXPECT_TRUE(timerY.isNull());
 }

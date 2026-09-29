@@ -236,3 +236,37 @@ TEST_F(InsertBlockByTextCommandTest, Destructor_DeleteViaBasePointer_ReleasesCle
     // Assert：析构不改变文档状态
     EXPECT_EQ(docText(), QString("12345"));
 }
+
+// ============================================================================
+// 批次 2 PMS bug 回归追加用例
+// ============================================================================
+
+// ---- BUG79951：连续全选-复制-粘贴场景，多轮 redo/undo 循环保持可逆 ----
+// PMS: https://pms.uniontech.com/bug-view-79951.html  commit: d0fe36dc
+// 场景：大文件连续全选复制粘贴后系统卡死。修复（d0fe36dc）：引入分块插入命令
+// InsertBlockByTextCommand 分块插入避免卡死。本用例回归 bug 的"连续重复"序列：
+// 粘贴（大文本替换选区）→ 撤销 → 再粘贴循环，验证多轮后状态仍精确可逆。
+TEST_F(InsertBlockByTextCommandTest, BUG79951_RepeatPasteCycles_SelectionReplaceReversible)
+{
+    // Arrange：初始文档与选区（"hello"），粘贴大文本将替换选区
+    QWidget wrapperHost;
+    auto *wrapper = reinterpret_cast<EditWrapper *>(&wrapperHost);
+    const QString pasteText = QString(kBlockSize + 10, 'z');
+    edit->setPlainText("hello world");
+    edit->setTextCursor(ut::cursorAt(edit->document(), 0, 5));
+    InsertBlockByTextCommand cmd(pasteText, edit, wrapper);
+
+    // Act & Assert：两轮"全选→粘贴→撤销"循环（对应 bug 的连续重复操作），
+    // 每轮重新全选后粘贴，验证循环后状态仍精确可逆
+    for (int round = 0; round < 2; ++round) {
+        edit->setTextCursor(ut::cursorAt(edit->document(), 0, 5));  // 每轮重新全选（用户操作序列）
+
+        cmd.redo();                                                // 粘贴：选区被大文本替换
+        EXPECT_EQ(edit->document()->characterCount() - 1, pasteText.size() + 6) << "round " << round;
+        EXPECT_EQ(docText().right(6), QString(" world")) << "round " << round;
+
+        cmd.undo();                                                // 撤销：恢复原文档
+        EXPECT_EQ(docText(), QString("hello world")) << "round " << round;
+        EXPECT_EQ(edit->document()->characterCount() - 1, 11) << "round " << round;
+    }
+}

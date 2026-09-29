@@ -734,3 +734,94 @@ TEST_F(BottomBarTest, SlotSetTextEditFocus_EmitsWindowPressEsc)
     QApplication::processEvents();
     EXPECT_EQ(spy.count(), 2);
 }
+
+// ============================================================================
+// PMS 回归用例（Mode 7 PMS 缺陷热点补强，批次 1）
+// 数据源：tests/.ut-pms/（bugs.json / work-order.md）
+// ============================================================================
+
+namespace {
+// 在编码菜单中找一个非 UTF-8 的编码 action（分组菜单结构）
+QAction *findOtherEncodeAction(DDropdownMenu *enc)
+{
+    const QList<QAction *> tops = enc->m_menu->actions();
+    for (QAction *top : tops) {
+        if (!top->menu())
+            continue;
+        for (QAction *a : top->menu()->actions()) {
+            if (a->text() != QString("UTF-8"))
+                return a;
+        }
+    }
+    return nullptr;
+}
+} // namespace
+
+// PMS: https://pms.uniontech.com/bug-view-169265.html  commit: e2fbbd48
+// 场景：新建标签页修改编码格式并输入内容，保存时仍为 utf-8。修复（e2fbbd48）：
+// 编码切换先记录 previousText，文件加载中（getFileLoading）直接恢复，不调用重载
+TEST_F(BottomBarTest, BUG169265_EncodeSwitchLoading_RevertsPreviousText)
+{
+    // Arrange: 文件加载中
+    m_fileLoading = true;
+    DDropdownMenu *enc = m_bar->getEncodeMenu();
+    ASSERT_NE(enc, nullptr);
+    const QString prev = enc->getCurrentText();
+    QAction *other = findOtherEncodeAction(enc);
+    ASSERT_NE(other, nullptr);
+
+    // Act: 触发编码切换信号（加载中 → 恢复 previousText）
+    emit enc->currentActionChanged(other);
+    QApplication::processEvents();
+
+    // Assert: 底栏编码恢复原文本（短路，不触发重载）
+    EXPECT_EQ(enc->getCurrentText(), prev);
+    EXPECT_EQ(m_reloadEncodeCalls, 0);
+}
+
+// PMS: https://pms.uniontech.com/bug-view-169265.html  commit: e2fbbd48
+// 场景（成功分支）：编码重载成功后底栏展示新编码，保存按新编码写入
+TEST_F(BottomBarTest, BUG169265_EncodeSwitchSuccess_UpdatesText)
+{
+    // Arrange: 加载完成 + 重载成功
+    m_fileLoading = false;
+    m_reloadEncodeResult = true;
+    DDropdownMenu *enc = m_bar->getEncodeMenu();
+    ASSERT_NE(enc, nullptr);
+    QAction *other = findOtherEncodeAction(enc);
+    ASSERT_NE(other, nullptr);
+
+    // Act
+    emit enc->currentActionChanged(other);
+    QApplication::processEvents();
+
+    // Assert: 底栏展示新编码、重载已调用
+    EXPECT_EQ(enc->getCurrentText(), other->text());
+    EXPECT_EQ(m_reloadEncodeCalls, 1);
+    EXPECT_EQ(m_lastReloadEncode, other->text().toLocal8Bit());
+}
+
+// PMS: https://pms.uniontech.com/bug-view-55529.html  commit: 221f0cd1
+// 场景：保存文件、切换编码方式设计混乱（sev1）。BottomBar 联动断言：编码切换
+// 成功后菜单互斥勾选（UTF-8 取消、新编码勾选），界面一致
+TEST_F(BottomBarTest, BUG55529_EncodeSwitchExclusive_BottomBarConsistent)
+{
+    // Arrange: 加载完成 + 重载成功
+    m_fileLoading = false;
+    m_reloadEncodeResult = true;
+    DDropdownMenu *enc = m_bar->getEncodeMenu();
+    ASSERT_NE(enc, nullptr);
+    ASSERT_NE(enc->m_pActUtf8, nullptr);
+    ASSERT_TRUE(enc->m_pActUtf8->isChecked());
+    QAction *other = findOtherEncodeAction(enc);
+    ASSERT_NE(other, nullptr);
+
+    // Act
+    emit enc->currentActionChanged(other);
+    QApplication::processEvents();
+
+    // Assert: 互斥勾选一致（UTF-8 取消、新编码勾选）
+    EXPECT_FALSE(enc->m_pActUtf8->isChecked());
+    EXPECT_TRUE(other->isChecked());
+    EXPECT_EQ(enc->getCurrentText(), other->text());
+}

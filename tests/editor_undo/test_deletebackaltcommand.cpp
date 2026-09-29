@@ -262,3 +262,38 @@ TEST_F(DeleteBackAltCommandTest, Destructor_DeleteViaBasePointer_ReleasesCleanly
     EXPECT_EQ(docText(), QString("b"));
     EXPECT_EQ(seam.restoreColumnEditSelectionCalls, 1);        // 析构不再触发列选区恢复
 }
+
+// ============================================================================
+// 批次 2 PMS bug 回归追加用例
+// ============================================================================
+
+// ---- BUG273663：redo 后外部列选区列表被清空，undo 值拷贝不崩溃且照常恢复 ----
+// PMS: https://pms.uniontech.com/bug-view-273663.html  commit: 889fa196, 432c884c
+// 场景：列模式编辑撤销崩溃（273663）。根因：旧版 m_ColumnEditSelections 缓存引用值，
+// 光标变更时列选区列表被更新/清空，undo 访问已清空容器越界。修复（889fa196/432c884c）：
+// 改为值拷贝持久缓存 + idInColumn 越界判断。本用例直接回归根因：redo 后清空外部
+// 列表并移动光标，undo 不崩溃且列选区/编辑器光标照常恢复。
+TEST_F(DeleteBackAltCommandTest, BUG273663_SelectionListClearedBeforeUndo_ValueCopyNoCrash)
+{
+    // Arrange：两行各选中一个字符（"a" 与 "b"）
+    edit->setPlainText("aa\nbb");
+    QList<QTextEdit::ExtraSelection> selections;
+    selections << ut::makeSelection(edit->document(), 0, 1)
+               << ut::makeSelection(edit->document(), 3, 4);
+    DeleteBackAltCommand cmd(selections, edit);
+    cmd.redo();
+    ASSERT_EQ(docText(), QString("a\nb"));                     // 前提：列删除已生效
+
+    // Act：模拟光标变更导致外部列选区列表被清空，再撤销
+    selections.clear();
+    edit->setTextCursor(ut::cursorAt(edit->document(), 0, 0));
+    cmd.undo();
+
+    // Assert：内部值拷贝仍有效——不越界、文本恢复、列选区与编辑器光标照常恢复
+    EXPECT_EQ(docText(), QString("aa\nbb"));
+    ASSERT_EQ(seam.lastRestoredSelections.size(), 2);
+    EXPECT_EQ(ut::toLf(seam.lastRestoredSelections[0].cursor.selectedText()), QString("a"));
+    EXPECT_EQ(ut::toLf(seam.lastRestoredSelections[1].cursor.selectedText()), QString("b"));
+    EXPECT_EQ(edit->textCursor().position(),
+              seam.lastRestoredSelections.last().cursor.position());  // 恢复至最后选区
+}
