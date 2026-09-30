@@ -271,7 +271,7 @@ IflytekAiAssistant::CallStatus IflytekAiAssistant::stopTtsDirectly() const
     // BUG-301561 : disable stop tts when close tab or window
 #ifdef ENABLE_STOP_TTS
     qDebug() << "ENABLE_STOP_TTS is defined!";
-    return stopTtsDirectlyInternal()
+    return stopTtsDirectlyInternal();
 #else
     qDebug() << "ENABLE_STOP_TTS is not defined!, return Enable";
     return Enable;
