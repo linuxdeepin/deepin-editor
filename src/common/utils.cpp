@@ -1208,12 +1208,29 @@ QVector<QPair<QString, QStringList>> Utils::getSupportEncoding()
             qDebug() << "readStream.readLine()";
             QString group = readStream.readLine();
             qDebug() << "group:" << group;
-            QString key = group.mid(1, group.length() - 2);
+            if (!group.startsWith('[') || !group.endsWith(']')) {
+                qWarning() << "unexpected group line, skipped:" << group;
+                continue;
+            }
+            QString key = group.mid(1, group.length() - 2).trimmed();
             QString encodes = readStream.readLine();
             qDebug() << "encodes:" << encodes;
-            QString value = encodes.mid(8, encodes.length() - 2);
+            int eqIdx = encodes.indexOf('=');
+            if (eqIdx == -1) {
+                qWarning() << "unexpected encodes line, skipped:" << encodes;
+                continue;
+            }
+            QString value = encodes.mid(eqIdx + 1).trimmed();
+            QStringList encodeNames;
+            const QStringList parts = value.split(',', Qt::SkipEmptyParts);
+            for (const QString &part : parts) {
+                const QString name = part.trimmed();
+                if (!name.isEmpty()) {
+                    encodeNames.append(name);
+                }
+            }
             qDebug() << "value:" << value;
-            tmpEncodeVec.append(QPair<QString, QStringList>(key, value.split(",")));
+            tmpEncodeVec.append(QPair<QString, QStringList>(key, encodeNames));
         }
         qDebug() << "tmpEncodeVec:" << tmpEncodeVec;
         s_groupEncodeVec = tmpEncodeVec;
