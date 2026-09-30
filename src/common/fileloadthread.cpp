@@ -85,6 +85,10 @@ void FileLoadThread::run()
 
             file.close();
             emit sigLoadFinished(encode, indata, true, false);
+            // Skip the common cleanup at the end of run(): stop the event loop
+            // and release the thread object, or both leak on the error path.
+            this->quit();
+            this->deleteLater();
             return;
         }
 
