@@ -3894,8 +3894,8 @@ void Window::handleUpdateSearchKeyword(QWidget *widget, const QString &file, con
                     replaceBarWidget->setMismatchAlert(false);
                     qDebug() << "empty keyword, set mismatch alert false";
                 } else {
-                    replaceBarWidget->setMismatchAlert(false);
-                    qDebug() << "not empty keyword, set mismatch alert false";
+                    replaceBarWidget->setMismatchAlert(!findKeyword);
+                    qDebug() << "not empty keyword, set mismatch alert " << !findKeyword;
                 }
             }
         }
