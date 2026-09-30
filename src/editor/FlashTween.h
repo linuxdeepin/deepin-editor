@@ -27,10 +27,10 @@ public:
 
     void startX(qreal t,qreal b,qreal c,qreal d, FunSlideInertial fSlideGesture);
     void startY(qreal t,qreal b,qreal c,qreal d, FunSlideInertial fSlideGesture);
-    void stopX(){m_timerX->stop();}
-    void stopY(){m_timerY->stop();}
-    bool activeX(){return m_timerX->isActive();}
-    bool activeY(){return m_timerY->isActive();}
+    void stopX(){if (m_timerX != nullptr) m_timerX->stop();}
+    void stopY(){if (m_timerY != nullptr) m_timerY->stop();}
+    bool activeX(){return m_timerX != nullptr && m_timerX->isActive();}
+    bool activeY(){return m_timerY != nullptr && m_timerY->isActive();}
 
 private slots:
     void __runY();

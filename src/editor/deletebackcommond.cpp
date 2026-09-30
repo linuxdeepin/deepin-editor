@@ -29,6 +29,9 @@ void DeleteBackCommand::undo()
 {
     qDebug() << "DeleteBackCommand undo - inserting text at:" << m_insertPos
                 << ", length:" << m_delText.length();
+    if (nullptr == m_edit) {
+        return;
+    }
     m_cursor.setPosition(m_insertPos);
     m_cursor.insertText(m_delText);
 
@@ -42,6 +45,9 @@ void DeleteBackCommand::redo()
 {
     qDebug() << "DeleteBackCommand redo - deleting text at:" << m_delPos
                 << ", length:" << m_delText.length();
+    if (nullptr == m_edit) {
+        return;
+    }
     m_cursor.setPosition(m_delPos);
     m_cursor.setPosition(m_delPos + m_delText.size(), QTextCursor::KeepAnchor);
     m_cursor.deleteChar();
