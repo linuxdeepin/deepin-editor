@@ -111,10 +111,19 @@ void DDropdownMenu::setCurrentAction(QAction *pAct)
     qDebug() << "DDropdownMenu setCurrentAction";
     if(pAct){
         qDebug() << "pAct is not null";
+        if (m_menu == nullptr) {
+            qDebug() << "DDropdownMenu setCurrentAction: menu is null";
+            setText(pAct->text());
+            return;
+        }
         QList<QAction*> menuList = m_menu->actions();
         pAct->setChecked(true);
         for (int i = 0; i < menuList.size(); i++) {
-            QList<QAction*> acts = menuList[i]->menu()->actions();
+            QMenu *subMenu = menuList[i]->menu();
+            if (subMenu == nullptr) {
+                continue;
+            }
+            QList<QAction*> acts = subMenu->actions();
             for (int j = 0; j < acts.size(); j++) {
                 if(acts[j] != pAct) acts[j]->setChecked(false);
             }
@@ -145,8 +154,10 @@ void DDropdownMenu::setCurrentTextOnly(const QString &name)
 //        }
 //      }
 //   }
-   for(auto ac:m_menu->actions()){
-       setCheckedExclusive(ac,name);
+   if (m_menu != nullptr) {
+       for(auto ac:m_menu->actions()){
+           setCheckedExclusive(ac,name);
+       }
    }
 
    setText(name);
@@ -579,7 +590,10 @@ QPixmap DDropdownMenu::setSvgColor(QString color)
     //设置图标颜色
     QString path = QString(":/images/arrow_dark.svg");
     QFile file(path);
-    file.open(QIODevice::ReadOnly);
+    if (!file.open(QIODevice::ReadOnly)) {
+        qWarning() << "DDropdownMenu setSvgColor: failed to open" << path << file.errorString();
+        return QPixmap();
+    }
     QByteArray data = file.readAll();
     QDomDocument doc;
     doc.setContent(data);
@@ -609,7 +623,6 @@ void DDropdownMenu::SetSVGBackColor(QDomElement &elem, QString strattr, QString 
     if (elem.tagName().compare("g") == 0 && elem.attribute("id").compare("color") == 0)
     {
         qDebug() << "DDropdownMenu SetSVGBackColor, found color group";
-        QString before_color = elem.attribute(strattr);
         elem.setAttribute(strattr, strattrval);
     }
     for (int i = 0; i < elem.childNodes().count(); i++)
