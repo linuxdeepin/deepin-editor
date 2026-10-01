@@ -106,7 +106,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="2109"/>
         <source>Read-Only mode is on</source>
-        <translation>Режим Только Чтение включён</translation>
+        <translation>Режим «Только чтение» включён</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="1126"/>
@@ -585,7 +585,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="87"/>
         <source>Read-Only mode</source>
-        <translation>Режим Только Чтение</translation>
+        <translation>Режим «Только чтение»</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="88"/>
@@ -1365,7 +1365,7 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="1969"/>
         <source>Read-Only mode is on</source>
-        <translation>Режим Только Чтение включён</translation>
+        <translation>Режим Только чтение включён</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2541"/>
