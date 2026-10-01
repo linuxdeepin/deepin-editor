@@ -26,19 +26,19 @@
         <location filename="../src/widgets/bottombar.cpp" line="91"/>
         <location filename="../src/widgets/bottombar.cpp" line="501"/>
         <source>Edit Mode</source>
-        <translation type="unfinished"/>
+        <translation>Режим правки</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="74"/>
         <location filename="../src/widgets/bottombar.cpp" line="491"/>
         <source>Read View</source>
-        <translation type="unfinished"/>
+        <translation>Просмотр для чтения</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="75"/>
         <location filename="../src/widgets/bottombar.cpp" line="495"/>
         <source>Live Preview</source>
-        <translation type="unfinished"/>
+        <translation>Живой предпросмотр</translation>
     </message>
 </context>
 <context>
@@ -202,7 +202,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="2015"/>
         <source>视图模式</source>
-        <translation type="unfinished"/>
+        <translation>Режим просмотра</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="11"/>
@@ -1149,7 +1149,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="543"/>
         <source>View Mode</source>
-        <translation type="unfinished"/>
+        <translation>Режим просмотра</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3482"/>
@@ -1167,13 +1167,13 @@
         <location filename="../src/editor/dtextedit.cpp" line="9214"/>
         <location filename="../src/editor/dtextedit.cpp" line="9216"/>
         <source>No audio output device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
-        <translation type="unfinished"/>
+        <translation>Устройство вывода звука обнаружено не было. Пожалуйста, убедитесь, что ваши динамики или наушники правильно подключены, и повторите попытку.</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="9223"/>
         <location filename="../src/editor/dtextedit.cpp" line="9225"/>
         <source>No audio input device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
-        <translation type="unfinished"/>
+        <translation>Устройство ввода звука обнаружено не было. Пожалуйста, убедитесь, что ваши динамики или наушники правильно подключены, и повторите попытку.</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="534"/>
@@ -1183,17 +1183,17 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="409"/>
         <source>Edit Mode</source>
-        <translation type="unfinished"/>
+        <translation>Режим правки</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="411"/>
         <source>Read View</source>
-        <translation type="unfinished"/>
+        <translation>Просмотр для чтения</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="413"/>
         <source>Live Preview</source>
-        <translation type="unfinished"/>
+        <translation>Живой предпросмотр</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="535"/>
@@ -1244,7 +1244,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="4833"/>
         <source>Read-Only mode is off</source>
-        <translation>Режим Только Чтение отключён</translation>
+        <translation>Режим «Только чтение» отключён</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="4845"/>
@@ -1254,7 +1254,7 @@
         <location filename="../src/editor/dtextedit.cpp" line="7994"/>
         <location filename="../src/editor/dtextedit.cpp" line="8005"/>
         <source>Read-Only mode is on</source>
-        <translation>Режим Только Чтение включён</translation>
+        <translation>Режим «Только чтение» включён</translation>
     </message>
 </context>
 <context>
