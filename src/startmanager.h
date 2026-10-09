@@ -30,6 +30,7 @@ public:
     };
 
     static StartManager *instance();
+    static StartManager *instanceOrNull();
     explicit StartManager(QObject *parent = nullptr);
     ~StartManager();
     bool checkPath(const QString &file);

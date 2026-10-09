@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -46,9 +46,9 @@ EditorApplication::~EditorApplication()
 {
     qDebug() << "Enter EditorApplication destructor";
     // app结束时，释放
-    if (nullptr != StartManager::instance()) {
+    if (nullptr != StartManager::instanceOrNull()) {
         qDebug() << "Deleting StartManager instance";
-        delete StartManager::instance();
+        delete StartManager::instanceOrNull();
     } else {
         qDebug() << "StartManager instance is already null";
     }
