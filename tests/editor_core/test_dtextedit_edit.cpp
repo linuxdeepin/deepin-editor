@@ -1344,3 +1344,74 @@ TEST_F(TextEditTest, BUG60989_UpdateFont_SelectAllInView_NoHang)
     EXPECT_TRUE(cur.hasSelection());
     EXPECT_LT(cur.selectionEnd() - cur.selectionStart(), edit->document()->characterCount());
 }
+
+// PMS: https://pms.uniontech.com/bug-view-46081.html  commit: N/A（批次4：git 历史无修复提交，按 PMS 复现步骤 + master d634cbad 代码语义锚定）
+// 场景：alt+鼠标列选择模式下，复制/剪切/粘贴异常（列选区内容未按行拼接进入剪贴板）。
+// 锚定语义：TextEdit::copy(true) 的 m_bIsAltMod 分支将各列选区文本按 "\n" 拼接写入剪贴板；
+// 文本保持不变、列选区保留（copy 不破坏选择状态）。
+TEST_F(TextEditTest, BUG46081_ColumnSelectionCopy_JoinsLines)
+{
+    // Arrange: 三行各造一个列选区（每行前 2 字符），进入列编辑模式
+    setDocText(QString("aa\nbb\ncc\n"));
+    QList<QTextEdit::ExtraSelection> sels;
+    for (int line = 0; line < 3; ++line) {
+        QTextCursor cur(edit->document());
+        const int blockPos = edit->document()->findBlockByNumber(line).position();
+        cur.setPosition(blockPos);
+        cur.setPosition(blockPos + 2, QTextCursor::KeepAnchor);
+        QTextEdit::ExtraSelection sel;
+        sel.cursor = cur;
+        sels << sel;
+    }
+    edit->restoreColumnEditSelection(sels);
+    edit->m_bIsAltMod = true;
+
+    // Act: 列复制（ignoreCheck=true 绕开权限校验，聚焦列分支）
+    edit->copy(true);
+
+    // Assert: 剪贴板为各选区按行拼接；文本未被改动；列选区仍在
+    EXPECT_EQ(QApplication::clipboard()->text(), QString("aa\nbb\ncc"));
+    EXPECT_EQ(edit->toPlainText(), QString("aa\nbb\ncc\n"));
+    EXPECT_EQ(edit->m_altModSelections.size(), 3);
+    EXPECT_TRUE(edit->m_bIsAltMod);
+}
+
+// PMS: https://pms.uniontech.com/bug-view-46081.html  commit: N/A（批次4：无修复提交，按 PMS 步骤 + master 代码语义锚定）
+// 场景：alt 列选择后粘贴，粘贴内容应作用于各列选区且可整体撤销。
+// 锚定语义：TextEdit::paste() 的 m_bIsAltMod 分支走 insertColumnEditTextEx →
+// InsertTextUndoCommand（列路径）：每个列选区替换为剪贴板文本（多选区共享同一插入文本，
+// InsertTextUndoCommand::redo 列分支语义）；undo_ 后完整还原文本与列选区。
+TEST_F(TextEditTest, BUG46081_ColumnPaste_ReplacesEachSelectionAndUndoRestores)
+{
+    // Arrange: 三行各造列选区（每行首字符），剪贴板单行文本
+    setDocText(QString("xx\nyy\nzz\n"));
+    QList<QTextEdit::ExtraSelection> sels;
+    for (int line = 0; line < 3; ++line) {
+        QTextCursor cur(edit->document());
+        const int blockPos = edit->document()->findBlockByNumber(line).position();
+        cur.setPosition(blockPos);
+        cur.setPosition(blockPos + 1, QTextCursor::KeepAnchor);
+        QTextEdit::ExtraSelection sel;
+        sel.cursor = cur;
+        sels << sel;
+    }
+    edit->restoreColumnEditSelection(sels);
+    edit->m_bIsAltMod = true;
+    QApplication::clipboard()->setText(QStringLiteral("1"));
+
+    // Act: 列粘贴
+    edit->paste();
+
+    // Assert: 每个选区被剪贴板文本替换
+    EXPECT_EQ(edit->toPlainText(), QString("1x\n1y\n1z\n"));
+    EXPECT_EQ(edit->m_altModSelections.size(), 3);
+
+    // Act: 撤销整次列粘贴
+    edit->undo_();
+
+    // Assert: 文本与列选区完整还原（可逆）
+    EXPECT_EQ(edit->toPlainText(), QString("xx\nyy\nzz\n"));
+    ASSERT_EQ(edit->m_altModSelections.size(), 3);
+    EXPECT_EQ(edit->m_altModSelections.first().cursor.selectedText(), QString("x"));
+    EXPECT_EQ(edit->m_altModSelections.last().cursor.selectedText(), QString("z"));
+}

@@ -3501,3 +3501,179 @@ TEST_F(WindowTest, BUG282985_CloseTab_TriggersMemoryTrim)
     // Assert: 关闭 tab 触发延迟内存回收
     EXPECT_GE(trimCalls, 1);
 }
+
+// PMS: https://pms.uniontech.com/bug-view-37292.html  commit: N/A（批次4：git 历史无修复提交，按 PMS 复现步骤 + master d634cbad 代码语义锚定）
+// 场景：标签页拖出当前窗口再拖回后，右键查找/替换/跳行闪退。
+// 锚定语义：移出 = Tabbar::closeTab + Window::removeWrapper(false)（handleTabReleased 移除侧）；
+// 移回 = addTabWithWrapper 重建 textEditor 信号连接（insertFromMimeDataOnDragEnter /
+// createWindowFromWrapper 动画完成回填侧）。回填后 popupFindBar/popupReplaceBar/popupJumpLineBar
+// 均依赖 currentWrapper 空判 + 非空文档守卫，必须正常弹出且不闪退。
+TEST_F(WindowTest, BUG37292_TabMoveOutAndBack_BarsPopup_NoCrash)
+{
+    // Arrange: 打开带内容的文件 tab，模拟"拖出窗口"（closeTab + 摘除 wrapper，不删除）
+    const QString path = addFileTab(QStringLiteral("move.txt"), "find me\nsecond line\n");
+    EditWrapper *w = m_win->wrapper(path);
+    ASSERT_NE(w, nullptr);
+    const QString truePath = w->textEditor()->getTruePath();
+    int idx = -1;
+    for (int i = 0; i < m_tabbar->count(); ++i) {
+        if (m_tabbar->fileAt(i) == path) { idx = i; break; }
+    }
+    ASSERT_GE(idx, 0);
+    m_tabbar->closeTab(idx);
+    m_win->removeWrapper(path, false);
+    QApplication::processEvents();
+    ASSERT_EQ(m_win->wrapper(path), nullptr);   // 已移出
+    ASSERT_EQ(m_win->currentWrapper(), nullptr);
+
+    // Act: 拖回原窗口（addTabWithWrapper 重建连接），依次右键查找/替换/跳行
+    // 注：子栏 isVisible 需窗口可见；popup* 内有 10ms focus 定时器需事件循环
+    m_win->show();
+    m_win->addTabWithWrapper(w, path, truePath, QFileInfo(path).fileName(), -1);
+    QApplication::processEvents();
+    ASSERT_EQ(m_win->wrapper(path), w);
+    ASSERT_EQ(m_win->currentWrapper(), w);
+    EXPECT_NO_FATAL_FAILURE(m_win->popupFindBar());
+    processEventsFor(60);
+    EXPECT_TRUE(m_win->findBarIsVisiable());
+
+    EXPECT_NO_FATAL_FAILURE(m_win->popupReplaceBar());
+    processEventsFor(60);
+    EXPECT_TRUE(m_win->replaceBarIsVisiable());
+
+    EXPECT_NO_FATAL_FAILURE(m_win->popupJumpLineBar());
+    processEventsFor(60);
+    EXPECT_TRUE(m_win->m_jumpLineBar->isVisible());
+}
+
+// PMS: https://pms.uniontech.com/bug-view-46084.html  commit: N/A（批次4：无修复提交，按 PMS 步骤 + master 代码语义锚定）
+// 场景：标签页拖拽至其他窗口，高概率闪退。
+// 锚定语义：跨窗口迁移的往返闭环——移出（closeTab+removeWrapper(false)，wrapper 保留）→
+// 回填（addTabWithWrapper）。反复三轮后 wrapper 存活、标签数守恒、映射无悬挂键。
+TEST_F(WindowTest, BUG46084_TabMoveBackForth_RepeatedTransfer_WrapperIntact)
+{
+    // Arrange
+    const QString path = addFileTab(QStringLiteral("drag.txt"), "drag content\n");
+    EditWrapper *w = m_win->wrapper(path);
+    ASSERT_NE(w, nullptr);
+    const QString truePath = w->textEditor()->getTruePath();
+
+    // Act+Assert: 三轮"移出→移回"
+    for (int round = 0; round < 3; ++round) {
+        int idx = -1;
+        for (int i = 0; i < m_tabbar->count(); ++i) {
+            if (m_tabbar->fileAt(i) == path) { idx = i; break; }
+        }
+        ASSERT_GE(idx, 0);
+        m_tabbar->closeTab(idx);
+        m_win->removeWrapper(path, false);
+        QApplication::processEvents();
+        EXPECT_EQ(m_win->m_wrappers.contains(path), false);
+        EXPECT_FALSE(w == nullptr);   // wrapper 未被销毁（UAF 防护语义）
+
+        m_win->addTabWithWrapper(w, path, truePath, QFileInfo(path).fileName(), -1);
+        QApplication::processEvents();
+        EXPECT_EQ(m_win->wrapper(path), w);
+        EXPECT_EQ(m_tabbar->count(), 1);   // 无重复/幽灵 tab
+    }
+    EXPECT_EQ(m_win->currentWrapper(), w);
+}
+
+// PMS: https://pms.uniontech.com/bug-view-48750.html  commit: N/A（批次4：无修复提交，按 PMS 步骤 + master 代码语义锚定）
+// 场景：标签页被拖拽至新窗口后，原窗口仍显示该标签页；关闭后应用直接退出。
+// 锚定语义：移出后原窗口不得残留"幽灵标签"——tabbar 无该路径、wrapper 映射已摘除（removeWrapper
+// 第二参 false 仅摘除不删除）；且摘除只发生一次（不重复入映射）。
+TEST_F(WindowTest, BUG48750_TabMovedOut_SourceWindowNoGhostTab)
+{
+    // Arrange: 两个 tab，模拟第一个被拖出新窗口
+    const QString moved = addFileTab(QStringLiteral("ghost.txt"), "ghost\n");
+    const QString kept = addFileTab(QStringLiteral("kept.txt"), "kept\n");
+    EditWrapper *wMoved = m_win->wrapper(moved);
+    ASSERT_NE(wMoved, nullptr);
+    ASSERT_EQ(m_tabbar->count(), 2);
+
+    // Act: 移出（handleTabReleased 移除侧语义：closeTab + removeWrapper(false)）
+    int idx = -1;
+    for (int i = 0; i < m_tabbar->count(); ++i) {
+        if (m_tabbar->fileAt(i) == moved) { idx = i; break; }
+    }
+    ASSERT_GE(idx, 0);
+    m_tabbar->closeTab(idx);
+    m_win->removeWrapper(moved, false);
+    QApplication::processEvents();
+
+    // Assert: 原窗口无幽灵标签；wrapper 存活（供新窗口回填），仅剩 kept
+    EXPECT_EQ(m_win->m_wrappers.contains(moved), false);
+    EXPECT_NE(wMoved, nullptr);
+    EXPECT_EQ(m_tabbar->count(), 1);
+    EXPECT_EQ(m_tabbar->fileAt(0), kept);
+    EXPECT_EQ(m_win->wrapper(kept), m_win->m_wrappers.value(kept));
+}
+
+// PMS: https://pms.uniontech.com/bug-view-157589.html  commit: N/A（批次4：无修复提交，按 PMS 步骤 + master 代码语义锚定）
+// 场景：wayland 下拖入 txt 文本文件闪退（外部拖放源 source()==nullptr）。
+// 锚定语义：Window::dropEvent 仅依赖 mimeData->hasUrls() 分流 addTab，不依赖
+// event->source()；外部（无来源）拖入受支持文件必须正常开 tab 且不闪退。
+TEST_F(WindowTest, BUG157589_DropEvent_FileUrlWithoutSource_OpensFile)
+{
+    // Arrange: 单个 txt 文件 URL 的放下事件（QDropEvent 构造不携带 source → 外部拖放语义）
+    const QString file = createFile(QStringLiteral("wayland.txt"), "external drop\n");
+    ASSERT_FALSE(file.isEmpty());
+    QMimeData mime;
+    mime.setUrls({ QUrl::fromLocalFile(file) });
+    QDropEvent ev(QPointF(10, 10), Qt::DropActions(Qt::CopyAction), &mime,
+                  Qt::LeftButton, Qt::NoModifier);
+    ASSERT_EQ(ev.source(), nullptr);
+
+    // Act
+    EXPECT_NO_FATAL_FAILURE(m_win->dropEvent(&ev));
+    QApplication::processEvents();
+
+    // Assert: 文件正常打开为 tab，无闪退、无异常提示
+    EXPECT_NE(m_win->wrapper(file), nullptr);
+    EXPECT_EQ(m_iconMsgCalls, 0);
+}
+
+// PMS: https://pms.uniontech.com/bug-view-41754.html  commit: N/A（批次4：无修复提交，按 PMS 步骤 + master 代码语义锚定）
+// 场景：ESC 切至标题栏后用 Tab 切换标题栏/底栏控件，焦点消失。
+// 锚定语义：slot_setTitleFocus 将标题栏按钮全部转入 Tab 焦点链（initTitlebar 默认 NoFocus），
+// 建立 addButton→option→min→quitFull→max→close 的 tabOrder，并经
+// bottomBar()->setChildrenFocus(true, closeBtn) 把焦点链续接到底栏菜单按钮。
+TEST_F(WindowTest, BUG41754_SlotSetTitleFocus_ChainsFocusToBottomBar)
+{
+    // Arrange: 存在当前 wrapper（底栏可访问）
+    addBlankAndGetPath();
+    ASSERT_NE(m_win->currentWrapper(), nullptr);
+
+    // Act
+    m_win->slot_setTitleFocus();
+
+    // Assert: 标题栏与全部窗口按钮进入 Tab 焦点链
+    EXPECT_EQ(m_win->titlebar()->focusPolicy(), Qt::TabFocus);
+    const QStringList buttons = { "AddButton", "DTitlebarDWindowOptionButton",
+                                  "DTitlebarDWindowMinButton", "DTitlebarDWindowQuitFullscreenButton",
+                                  "DTitlebarDWindowMaxButton", "DTitlebarDWindowCloseButton" };
+    QWidget *prev = nullptr;
+    for (const QString &name : buttons) {
+        QWidget *btn = (name == "AddButton")
+                ? m_win->getTabbar()->findChild<DIconButton *>(name)
+                : m_win->titlebar()->findChild<DIconButton *>(name);
+        ASSERT_NE(btn, nullptr) << name.toStdString();
+        EXPECT_EQ(btn->focusPolicy(), Qt::TabFocus) << name.toStdString();
+        if (prev) {
+            // tabOrder 链：prev 的 focus 代理下一个即为 btn
+            EXPECT_EQ(prev->nextInFocusChain(), btn) << name.toStdString();
+        }
+        prev = btn;
+    }
+
+    // Assert: 焦点链续接到底栏三个菜单按钮（encode/format/highlight）
+    BottomBar *bar = m_win->currentWrapper()->bottomBar();
+    ASSERT_NE(bar, nullptr);
+    EXPECT_NE(bar->m_pEncodeMenu->getButton(), nullptr);
+    EXPECT_NE(bar->m_formatMenu->getButton(), nullptr);
+    EXPECT_NE(bar->m_pHighlightMenu->getButton(), nullptr);
+    EXPECT_EQ(prev->nextInFocusChain(), bar->m_pEncodeMenu->getButton());
+    EXPECT_EQ(bar->m_pEncodeMenu->getButton()->nextInFocusChain(), bar->m_formatMenu->getButton());
+    EXPECT_EQ(bar->m_formatMenu->getButton()->nextInFocusChain(), bar->m_pHighlightMenu->getButton());
+}

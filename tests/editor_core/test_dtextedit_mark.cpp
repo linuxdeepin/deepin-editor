@@ -1484,3 +1484,44 @@ TEST_F(TextEditTest, BUG331945_UpdateMark_ColumnSelection_ContainedMarksRemoved)
     // Assert: 两个标记均被 [0,20] 完全包含 → 同批次移除，索引不错位
     EXPECT_TRUE(edit->m_wordMarkSelections.isEmpty());
 }
+
+// PMS: https://pms.uniontech.com/bug-view-44591.html  commit: N/A（批次4：git 历史无修复提交，按 PMS 复现步骤 + master d634cbad 代码语义锚定）
+// 场景：右键菜单 → 颜色标记 → 高亮所有，标记无任何颜色效果。
+// 锚定语义：slotSigColorAllSelected(true, color) → isMarkAllLine 以 color.name() 建立
+// MarkAllMatch 记录 + m_mapKeywordMarkSelections[选中文本] 全文匹配选区（格式背景色为所选
+// 颜色）→ renderAllSelections 渲染进 extraSelections。
+TEST_F(TextEditTest, BUG44591_ColorMarkAll_AppliesChosenColor)
+{
+    // Arrange: 文本含 3 处目标词，选中第一处；直连颜色面板选择信号
+    setDocText(QString("cat dog cat bird cat"));
+    QTextCursor cur(edit->document());
+    cur.setPosition(0);
+    cur.setPosition(3, QTextCursor::KeepAnchor);   // 选中 "cat"
+    edit->setTextCursor(cur);
+    const QColor chosen(255, 127, 80);
+
+    // Act: 颜色面板确认（高亮所有选中内容）
+    edit->slotSigColorAllSelected(true, chosen);
+
+    // Assert: 操作记录携带所选颜色，类型为 MarkAllMatch
+    ASSERT_FALSE(edit->m_markOperations.isEmpty());
+    const auto &op = edit->m_markOperations.last().first;
+    EXPECT_EQ(op.type, TextEdit::MarkAllMatch);
+    EXPECT_EQ(op.color, chosen.name());
+    EXPECT_EQ(op.matchText, QString("cat"));
+
+    // Assert: 关键词标记映射建立，全部匹配选区背景色为所选颜色
+    ASSERT_TRUE(edit->m_mapKeywordMarkSelections.contains(QString("cat")));
+    const auto marked = edit->m_mapKeywordMarkSelections.value(QString("cat"));
+    EXPECT_EQ(marked.size(), 3);
+    for (const auto &pair : marked)
+        EXPECT_EQ(pair.first.format.background().color(), chosen);
+
+    // Assert: 渲染结果（extraSelections）实际携带该背景色（修复前无颜色效果）
+    bool rendered = false;
+    for (const auto &es : edit->extraSelections()) {
+        if (es.format.background().color() == chosen)
+            rendered = true;
+    }
+    EXPECT_TRUE(rendered);
+}

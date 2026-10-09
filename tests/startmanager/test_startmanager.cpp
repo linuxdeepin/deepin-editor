@@ -168,6 +168,7 @@
 #include <gtest/gtest.h>
 #include "stubext.h"
 
+#include <deque>
 #include <QCoreApplication>
 #include <QTemporaryDir>
 #include <QTimer>
@@ -2756,4 +2757,143 @@ TEST_F(StartManagerTest, BUG324727_MultiRecords_AllTabsRecovered)
     EXPECT_EQ(gotLastMod, QString("2026-06-11 19:48:19"));
     EXPECT_EQ(pendingCalls, 2);
     EXPECT_EQ(pendingPaths, QStringList({ lazyB, lazyC }));
+}
+
+// PMS: https://pms.uniontech.com/bug-view-55533.html  commit: N/A（批次4：git 历史无修复提交，按 PMS 复现步骤 + master d634cbad 代码语义锚定）
+// 场景：关闭其中一个窗口后，应用直接退出。
+// 锚定语义：slotCloseWindow 仅当窗口列表清空才走清退（unregister + 延迟 quit）；
+// 多窗口关闭其一 → 仅移除该窗口，剩余窗口完好，绝不调度退出/注销总线。
+TEST_F(StartManagerTest, BUG55533_CloseOneOfTwoWindows_RemainingIntact_NoQuit)
+{
+    // Arrange：两个窗口，关闭其一
+    Window *winA = qobjFake<Window>();
+    Window *winB = qobjFake<Window>();
+    obj->m_windows << winA << winB;
+    stub.set_lamda(static_cast<QObject *(QObject::*)() const>(&QObject::sender),
+                   [winB](const QObject *) -> QObject * { return winB; });
+    curPathOverride = tmp->path();
+
+    // Act
+    obj->slotCloseWindow();
+
+    // Assert：剩余窗口完好；未注销 DBus 总线、未调度退出（含延迟任务也未触发）
+    ASSERT_EQ(obj->m_windows.count(), 1);
+    EXPECT_EQ(obj->m_windows.at(0), winA);
+    EXPECT_EQ(unregisterCalls, 0);
+    EXPECT_EQ(lastUnregisterService, QString());
+    EXPECT_EQ(quitCalls, 0);
+    processEventsFor(1200);   // 即便误调度 1000ms 延迟退出也会在此暴露
+    EXPECT_EQ(quitCalls, 0);
+}
+
+// PMS: https://pms.uniontech.com/bug-view-177757.html  commit: N/A（批次4：无修复提交，按 PMS 步骤 + master 代码语义锚定）
+// 场景：多个窗口被快速连续关闭（用户连按 alt+F4），偶发应用异常。
+// 锚定语义：逐个移除仅移除对应窗口；只有最后一次（列表清空）进入清退分支——
+// 恰好一次 unregister、恰好一次延迟 quit 调度，不重复调度、不闪退。
+TEST_F(StartManagerTest, BUG177757_RapidSequentialClose_SingleQuitScheduling)
+{
+    // Arrange：三个窗口 + 发送者队列（模拟快速连关）
+    std::deque<Window *> senders;
+    Window *w1 = qobjFake<Window>();
+    Window *w2 = qobjFake<Window>();
+    Window *w3 = qobjFake<Window>();
+    senders.push_back(w1);
+    senders.push_back(w2);
+    senders.push_back(w3);
+    obj->m_windows << w1 << w2 << w3;
+    stub.set_lamda(static_cast<QObject *(QObject::*)() const>(&QObject::sender),
+                   [&senders](const QObject *) -> QObject * {
+                       Window *w = senders.front();
+                       senders.pop_front();
+                       return w;
+                   });
+    curPathOverride = tmp->path();
+
+    // Act：快速连续关闭三个窗口（中间不跑事件循环）
+    obj->slotCloseWindow();
+    obj->slotCloseWindow();
+    obj->slotCloseWindow();
+
+    // Assert：前两次仅移除；末次清退恰好一次注销 + 一次延迟退出
+    EXPECT_TRUE(obj->m_windows.isEmpty());
+    EXPECT_EQ(unregisterCalls, 1);
+    EXPECT_EQ(lastUnregisterService, QString("com.deepin.Editor"));
+    EXPECT_EQ(quitCalls, 0);   // 延迟 1000ms 尚未触发
+    processEventsFor(1200);
+    EXPECT_EQ(quitCalls, 1);   // 仅一次退出调度（重复调度会 >1）
+}
+
+// PMS: https://pms.uniontech.com/bug-view-49292.html  commit: N/A（批次4：无修复提交，按 PMS 步骤 + master 代码语义锚定）
+// 场景：重复开关后无法打开（总线名 com.deepin.Editor 被残留进程占用）。
+// 锚定语义：末窗关闭即先注销总线名再延迟退出（startmanager.cpp 末窗清退分支）——
+// unregisterService("com.deepin.Editor") 先于 quit 发生，让下一次启动能成功注册。
+TEST_F(StartManagerTest, BUG49292_LastClose_FreesBusBeforeQuit)
+{
+    // Arrange：单窗口关闭进入清退；桩内记录事件顺序
+    Window *win = qobjFake<Window>();
+    obj->m_windows << win;
+    stub.set_lamda(static_cast<QObject *(QObject::*)() const>(&QObject::sender),
+                   [win](const QObject *) -> QObject * { return win; });
+    curPathOverride = tmp->path();
+    QStringList order;
+    int unregCalls = 0;
+    stub.set_lamda(
+        static_cast<bool (QDBusConnection::*)(const QString &)>(&QDBusConnection::unregisterService),
+        [&order, &unregCalls](QDBusConnection *, const QString &svc) -> bool {
+            order << QStringLiteral("unregister:") + svc;
+            ++unregCalls;
+            return true;
+        });
+    stub.set_lamda(&QCoreApplication::quit, [&order]() -> void {
+        order << QStringLiteral("quit");
+    });
+
+    // Act
+    obj->slotCloseWindow();
+
+    // Assert：注销先于退出；总线名正确释放一次（新进程可注册）
+    EXPECT_TRUE(obj->m_windows.isEmpty());
+    EXPECT_EQ(unregCalls, 1);
+    processEventsFor(1200);
+    EXPECT_EQ(order, QStringList({ QStringLiteral("unregister:com.deepin.Editor"),
+                                   QStringLiteral("quit") }));
+}
+
+// PMS: https://pms.uniontech.com/bug-view-177725.html  commit: N/A（批次4：无修复提交，按 PMS 步骤 + master 代码语义锚定）
+// 场景：设置中取消勾选"保留页签"后打开文件，打开的是新建文本而非文件内容。
+// 锚定语义：openFilesInTab 带文件参数且无窗口 → createWindow(true) + showCenterWindow +
+// 延迟 50ms recoverFile(无临时记录时恢复 0 个) + window->addTab(resolvedFile)——
+// 文件参数路径必须落为文件 tab，不能退化为空白新建。
+TEST_F(StartManagerTest, BUG177725_KeepTabsDisabled_OpenFile_OpensFileTab)
+{
+    // Arrange：无窗口 + 无临时记录（保留页签已取消）+ 带文件参数
+    obj->m_qlistTemFile = QStringList();   // 无临时记录
+    const QString file = tmp->filePath("keep_off.txt");
+    Window *newWin = qobjFake<Window>();
+    int recoverCalls = 0;
+    int blankCalls = 0;
+    QString addedPath;
+    stub.set_lamda(static_cast<Window *(StartManager::*)(bool)>(&StartManager::createWindow),
+                   [newWin](StartManager *, bool) -> Window * { return newWin; });
+    stubWindowInteraction(newWin);
+    stub.set_lamda(static_cast<int (StartManager::*)(Window *)>(&StartManager::recoverFile),
+                   [&recoverCalls](StartManager *, Window *) -> int {
+                       ++recoverCalls;
+                       return 0;
+                   });
+    stub.set_lamda(static_cast<void (Window::*)()>(&Window::addBlankTab),
+                   [&blankCalls](Window *) { ++blankCalls; });
+    stub.set_lamda(static_cast<void (Window::*)(const QString &, bool)>(&Window::addTab),
+                   [&addedPath](Window *, const QString &p, bool) { addedPath = p; });
+
+    // Act
+    obj->openFilesInTab(QStringList { file });
+    processEventsFor(100);   // 触发 50ms 延迟打开
+
+    // Assert：文件 tab 被添加（非空白新建）；恢复空转一次
+    EXPECT_EQ(showCenterCalls, 1);
+    EXPECT_TRUE(lastCenterFlag);
+    EXPECT_EQ(recoverCalls, 1);
+    EXPECT_EQ(blankCalls, 0);
+    EXPECT_EQ(addedPath, file);
 }
