@@ -12,6 +12,7 @@
 #include <QDBusInterface>
 #include <QDebug>
 #include <QProcess>
+#include <QCoreApplication>
 #include <QStandardPaths>
 
 #include <QDBusInterface>
@@ -391,15 +392,28 @@ QString IflytekAiAssistant::errorString(CallStatus ret) const
     }
 }
 
+bool IflytekAiAssistant::appShuttingDown()
+{
+    // 主线程进入 ~QCoreApplication（closingDown）或应用已析构后，dtk6log/事件派发
+    // 处于 teardown 状态，后台线程再走日志或排队回调会崩溃（BUG-378881/378901）
+    QCoreApplication *app = QCoreApplication::instance();
+    return app == nullptr || app->closingDown();
+}
+
 IflytekAiAssistant::CallStatus IflytekAiAssistant::copilotInstalled(const QSharedPointer<QDBusInterface> &copilot)
 {
     QDBusReply<QString> version = copilot->call("version");
     if (version.isValid()) {
-        qInfo() << "current uos-ai version:" << version.value();
+        // 阻塞调用可能跨越整个应用退出过程（默认超时 25s），返回后须复查
+        if (!appShuttingDown()) {
+            qInfo() << "current uos-ai version:" << version.value();
+        }
         return Enable;
     }
 
-    qWarning() << "Query uos-ai installed faild! Maybe need install";
+    if (!appShuttingDown()) {
+        qWarning() << "Query uos-ai installed faild! Maybe need install";
+    }
     return NotInstalled;
 }
 
@@ -411,12 +425,16 @@ IflytekAiAssistant::CallStatus IflytekAiAssistant::isCopilotEnabled(const QShare
 {
     QDBusReply<bool> state = copilot->call("isCopilotEnabled");
     if (state.isValid()) {
-        qDebug() << "current uos-ai user exp state:" << state.value();
+        if (!appShuttingDown()) {
+            qDebug() << "current uos-ai user exp state:" << state.value();
+        }
         return state.value() ? Enable : NoUserAgreement;
     }
 
     // NOTE: Adapt old version, if dbus interface not valid, assume the user agreement agreed.
-    qWarning() << "Query uos-ai user exp state failed!" << state.error().message();
+    if (!appShuttingDown()) {
+        qWarning() << "Query uos-ai user exp state failed!" << state.error().message();
+    }
     return Enable;
 }
 
@@ -440,11 +458,21 @@ void IflytekAiAssistant::checkAiExists()
     static std::once_flag kAiFlag;
     std::call_once(kAiFlag, [this]() {
         QtConcurrent::run([this]() {
+            // 任务可能排队到应用退出期才被线程池执行
+            if (appShuttingDown()) {
+                return;
+            }
             // If call dbus interface success, the uos-ai backend process started.
             auto copilot = QSharedPointer<QDBusInterface>::create(kCopilotService, kCopilotPath, kCopilotInterface);
             CallStatus status = IflytekAiAssistant::copilotInstalled(copilot);
             if (Enable == status) {
                 status = IflytekAiAssistant::isCopilotEnabled(copilot);
+            }
+
+            // 阻塞 D-Bus 期间应用可能已进入析构（主线程卡在 ~QCoreApplication
+            // 的 QThreadPool::waitForDone 等本任务收尾），此时打日志/排队回调即崩溃
+            if (appShuttingDown()) {
+                return;
             }
 
             qInfo() << QString("backend uos-ai status: %1(%2)").arg(Enable == status).arg(status);
