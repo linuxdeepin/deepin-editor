@@ -453,9 +453,7 @@ TEST_F(FileLoadThreadTest, BUG184107_BadAllocDuringRead_EmitsErrorNoCrash)
         EXPECT_TRUE(spy.at(0).at(2).toBool());
         EXPECT_FALSE(spy.at(0).at(3).toBool());
     }
-    // 当前代码：catch 分支提前 return（:88），deleteLater 仅在正常路径末尾（:132）注册，
-    // 故此处 guard 未清空属预期；手动补 deleteLater 防泄漏后断言回收
-    t->deleteLater();
-    QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
+    // 当前代码（master a66591ed）：catch 分支已自带 quit()+deleteLater()，
+    // runSync 的 DeferredDelete 派发即完成回收，无需（也不得）再手动补删
     EXPECT_TRUE(guard.isNull());
 }
