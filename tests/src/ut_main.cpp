@@ -8,6 +8,8 @@
 #include <QApplication>
 #include <DApplication>
 
+#include "../../src/startmanager.h"
+
 #if defined(CMAKE_SAFETYTEST_ARG_ON)
 #include <sanitizer/asan_interface.h>
 #endif
@@ -22,6 +24,10 @@ int main(int argc, char *argv[])
     qputenv("QT_QPA_PLATFORM","offscreen");
     qputenv("QT_LOGGING_RULES", "*.debug=false;*.info=false");
     DApplication app(argc, argv);
+
+    // BUG-378901 修复后 instance() 为纯查询访问器，不再惰性创建；
+    // window/tabbar 等生产代码调用点依赖单例已存在，测试入口统一显式创建
+    StartManager::create();
 
     testing::InitGoogleTest(&argc, argv);
 

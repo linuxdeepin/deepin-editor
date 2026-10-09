@@ -45,7 +45,8 @@ using namespace sm_lambda_stub;
 static StartManager *freshStartManager()
 {
     StartManager::m_instance = nullptr;
-    return StartManager::instance();
+    // BUG-378901 修复后 instance() 为纯查询访问器，创建须走 create()
+    return StartManager::create();
 }
 
 // StartManager::tr 静态翻译函数

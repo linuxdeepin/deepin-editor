@@ -577,7 +577,7 @@ TEST(UT_Window_saveBlankFileToDisk, UT_Window_saveBlankFileToDisk)
 //saveAsOtherTabFile
 TEST(UT_Window_saveAsOtherTabFile, UT_Window_saveAsOtherTabFile_001)
 {
-    Window * window = StartManager::instance()->createWindow();
+    Window * window = StartManager::create()->createWindow();
     window->addBlankTab("");
     window->addBlankTab("");
     window->addBlankTab("");
@@ -601,7 +601,7 @@ TEST(UT_Window_saveAsOtherTabFile, UT_Window_saveAsOtherTabFile_001)
 
 TEST(UT_Window_saveAsOtherTabFile, UT_Window_saveAsOtherTabFile_002)
 {
-    Window * window = StartManager::instance()->createWindow();
+    Window * window = StartManager::create()->createWindow();
     window->addBlankTab("");
     window->addBlankTab("");
     window->addBlankTab("");

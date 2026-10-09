@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -64,7 +64,7 @@ TEST(UT_StartManager_StartManager, StartManager)
 
 TEST(UT_StartManager_instance, instance)
 {
-    StartManager *pStartManager = StartManager::instance();
+    StartManager *pStartManager = StartManager::create();
     ASSERT_TRUE(pStartManager != nullptr);
 
     pStartManager->deleteLater();
@@ -72,7 +72,7 @@ TEST(UT_StartManager_instance, instance)
 
 TEST(UT_StartManager_openFilesInWindow, openFilesInWindow)
 {
-    StartManager *startManager = StartManager::instance();
+    StartManager *startManager = StartManager::create();
     QStringList filePathList;
     filePathList<<".cache/deepin/deepin-editor";
     startManager->openFilesInWindow(filePathList);
@@ -87,7 +87,7 @@ TEST(UT_StartManager_openFilesInWindow, openFilesInWindow)
 //initWindowPosition
 TEST(UT_StartManager_initWindowPosition, initWindowPosition)
 {
-    StartManager *startManager = StartManager::instance();
+    StartManager *startManager = StartManager::create();
     startManager->openFilesInTab(QStringList());
     ASSERT_TRUE(startManager->m_windows.at(0) != nullptr);
 
@@ -97,7 +97,7 @@ TEST(UT_StartManager_initWindowPosition, initWindowPosition)
 //getFileTabInfo
 TEST(UT_StartManager_getFileTabInfo, getFileTabInfo)
 {
-    StartManager *startManager = StartManager::instance();
+    StartManager *startManager = StartManager::create();
     StartManager::FileTabInfo fileTabInfo = startManager->getFileTabInfo(".cache/deepin/deepin-editor");
 
     ASSERT_TRUE(fileTabInfo.windowIndex != 0);
@@ -107,7 +107,7 @@ TEST(UT_StartManager_getFileTabInfo, getFileTabInfo)
 //slotCheckUnsaveTab
 TEST(UT_StartManager_slotCheckUnsaveTab, slotCheckUnsaveTab)
 {
-    StartManager *startManager = StartManager::instance();
+    StartManager *startManager = StartManager::create();
     startManager->openFilesInWindow(QStringList());
     startManager->slotCheckUnsaveTab();
 
@@ -123,7 +123,7 @@ TEST(UT_StartManager_checkPath, checkPath_001)
     QStringList fileLists;
     QString strFilePath(QCoreApplication::applicationDirPath() + "/Makefile");
     fileLists << strFilePath;
-    StartManager *pStartManager = StartManager::instance();
+    StartManager *pStartManager = StartManager::create();
     pStartManager->openFilesInTab(fileLists);
     bool bRet = pStartManager->checkPath(strFilePath);
     ASSERT_TRUE(bRet == false);
@@ -134,7 +134,7 @@ TEST(UT_StartManager_checkPath, checkPath_001)
 //checkPath
 TEST(UT_StartManager_checkPath, checkPath_002)
 {
-    StartManager *pStartManager = StartManager::instance();
+    StartManager *pStartManager = StartManager::create();
     pStartManager->openFilesInTab(QStringList());
     bool bRet = pStartManager->checkPath(QString());
     ASSERT_TRUE(bRet == true);
@@ -144,7 +144,7 @@ TEST(UT_StartManager_checkPath, checkPath_002)
 
 TEST(UT_StartManager_ifKlu,ifKlu )
 {
-    StartManager *startManager = StartManager::instance();
+    StartManager *startManager = StartManager::create();
     bool bRet = startManager->ifKlu();
     ASSERT_TRUE(bRet == false);
 
@@ -154,7 +154,7 @@ TEST(UT_StartManager_ifKlu,ifKlu )
 //loadTheme
 TEST(UT_StartManager_loadThem,loadTheme)
 {
-    StartManager *startManager = StartManager::instance();
+    StartManager *startManager = StartManager::create();
     startManager->loadTheme("Dark");
     ASSERT_TRUE(startManager != nullptr);
 
@@ -168,7 +168,7 @@ TEST(UT_StartManager_isMultiWindow, isMultiWindow_001)
     QString strMakeFilePath(QCoreApplication::applicationDirPath() + "/Makefile");
     QString strCMakePath(QCoreApplication::applicationDirPath() + "/CMakeCache.txt");
     fileLists << strMakeFilePath << strCMakePath;
-    StartManager *pStartManager = StartManager::instance();
+    StartManager *pStartManager = StartManager::create();
     bool bRet = pStartManager->isMultiWindow();
     ASSERT_TRUE(bRet == true);
     
@@ -178,7 +178,7 @@ TEST(UT_StartManager_isMultiWindow, isMultiWindow_001)
 // bool isMultiWindow();
 TEST(UT_StartManager_isMultiWindow, isMultiWindow_002)
 {
-    StartManager *pStartManager = StartManager::instance();
+    StartManager *pStartManager = StartManager::create();
     pStartManager->m_windows.clear();
     bool bRet = pStartManager->isMultiWindow();
     ASSERT_TRUE(bRet == false);
@@ -191,7 +191,7 @@ TEST(UT_StartManager_isTemFilesEmpty, isTemFilesEmpty_001)
     QStringList fileLists;
     QString strFilePath(QCoreApplication::applicationDirPath() + "/Makefile");
     fileLists << strFilePath;
-    StartManager *pStartManager = StartManager::instance();
+    StartManager *pStartManager = StartManager::create();
     pStartManager->m_qlistTemFile.clear();
     pStartManager->openFilesInTab(fileLists);
     pStartManager->m_qlistTemFile << QString("");
@@ -203,7 +203,7 @@ TEST(UT_StartManager_isTemFilesEmpty, isTemFilesEmpty_001)
 
 TEST(UT_StartManager_isTemFilesEmpty, isTemFilesEmpty_002)
 {
-    StartManager *pStartManager = StartManager::instance();
+    StartManager *pStartManager = StartManager::create();
     pStartManager->m_qlistTemFile.clear();
     bool bRet = pStartManager->isTemFilesEmpty();
     ASSERT_TRUE(bRet == false);
@@ -213,7 +213,7 @@ TEST(UT_StartManager_isTemFilesEmpty, isTemFilesEmpty_002)
 
 TEST(UT_StartManager_autoBackupFile,autoBackupFile)
 {
-    StartManager *startManager = StartManager::instance();
+    StartManager *startManager = StartManager::create();
     Window* w1 = new Window;
 
     EditWrapper* wr1 = new EditWrapper;
@@ -247,7 +247,7 @@ TEST(UT_StartManager_autoBackupFile,autoBackupFile)
 
 TEST(UT_StartManager_recoverFile,recoverFile_001)
 {
-    StartManager *startManager = StartManager::instance();
+    StartManager *startManager = StartManager::create();
     QString c1 = "{\"bookMark\":\"7,7,8,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"cursorPosition\":\"7\",\"focus\":true,\"localPath\":\"/home/uos/.local/share/deepin/deepin-editor/blank-files/blank_file_2021-09-22_09-43-10-824\",\"modify\":true}";
     QString c2 = "{\"bookMark\":\"1,0,1,0,0\",\"cursorPosition\":\"23\",\"localPath\":\"/home/uos/Desktop/563/526.txt\",\"modify\":false}";
     startManager->m_qlistTemFile.push_back(c1);
@@ -268,7 +268,7 @@ TEST(UT_StartManager_recoverFile,recoverFile_001)
 
 TEST(UT_StartManager_recoverFile,recoverFile_002)
 {
-    StartManager *startManager = StartManager::instance();
+    StartManager *startManager = StartManager::create();
     QString c1 = "{\"bookMark\":\"7,7,8,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"cursorPosition\":\"7\",\"focus\":true,\"localPath\":\"/home/uos/.local/share/deepin/deepin-editor/blank-files/blank_file_2021-09-22_09-43-10-824\",\"modify\":true}";
     QString c2 = "{\"bookMark\":\"1,0,1,0,0\",\"cursorPosition\":\"23\",\"localPath\":\"/home/uos/Desktop/563/526.txt\",\"modify\":false}";
     startManager->m_qlistTemFile.push_back(c1);
@@ -297,7 +297,7 @@ TEST(UT_StartManager_recoverFile,recoverFile_002)
 
 TEST(UT_StartManager_openFilesInTab,openFilesInTab_001)
 {
-    StartManager *startManager = StartManager::instance();
+    StartManager *startManager = StartManager::create();
     startManager->m_windows.clear();
 
     Stub s1;
@@ -318,7 +318,7 @@ TEST(UT_StartManager_openFilesInTab,openFilesInTab_001)
 
 TEST(UT_StartManager_openFilesInTab,openFilesInTab_002)
 {
-    StartManager *startManager = StartManager::instance();
+    StartManager *startManager = StartManager::create();
     startManager->m_windows.clear();
 
     Stub s1;
@@ -340,7 +340,7 @@ TEST(UT_StartManager_openFilesInTab,openFilesInTab_002)
 
 TEST(UT_StartManager_openFilesInTab,openFilesInTab_003)
 {
-    StartManager *startManager = StartManager::instance();
+    StartManager *startManager = StartManager::create();
     startManager->m_windows.clear();
 
     Stub s1;
@@ -362,7 +362,7 @@ TEST(UT_StartManager_openFilesInTab,openFilesInTab_003)
 
 TEST(UT_StartManager_analyzeBookmakeInfo,analyzeBookmakeInfo)
 {
-    StartManager *startManager = StartManager::instance();
+    StartManager *startManager = StartManager::create();
     QList<int> list = startManager->analyzeBookmakeInfo(QString());
     ASSERT_TRUE(!list.isEmpty());
     
@@ -378,7 +378,7 @@ TEST(UT_StartManager_analyzeBookmakeInfo,analyzeBookmakeInfo)
 
 TEST(UT_StartManager_slotCloseWindow,slotCloseWindow)
 {
-    StartManager *startManager = StartManager::instance();
+    StartManager *startManager = StartManager::create();
     startManager->m_windows.clear();
 
     Stub s1;

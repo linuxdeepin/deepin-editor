@@ -98,7 +98,8 @@ int main(int argc, char *argv[])
         qDebug() << "DTKWIDGET_CLASS_DSizeMode not defined, skipping size mode handler";
 #endif
 
-        StartManager *startManager = StartManager::instance();
+        // 单例唯一创建点；D-Bus 转发进程走不到这里，不会实例化 StartManager
+        StartManager *startManager = StartManager::create();
 
         //埋点记录启动数据
         QJsonObject objStartEvent{
@@ -134,7 +135,11 @@ int main(int argc, char *argv[])
 
         PerformanceMonitor::initializAppFinish();
         qDebug() << "Entering main event loop";
-        return app.exec();
+        int ret = app.exec();
+        // 事件循环已停止，在此显式释放单例；~EditorApplication 不再管理其生命周期
+        qDebug() << "Deleting StartManager instance on exit";
+        delete StartManager::instance();
+        return ret;
     }
     // Just send dbus message to exist editor process.
     else {
