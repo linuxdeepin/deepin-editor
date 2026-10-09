@@ -138,6 +138,16 @@ EditWrapper::EditWrapper(Window *window, QWidget *parent)
 EditWrapper::~EditWrapper()
 {
     qDebug() << "EditWrapper destructor";
+    // 必须在 delete m_pTextEdit 之前清理 m_pWaringNotices，避免 DMessageManager
+    // 持有 m_pTextEdit 悬空指针导致 use-after-free（bug 378881）。
+    // 此前 bug 78042 的崩溃根因是 delete m_pWaringNotices 位于 m_pTextEdit 之后，
+    // DMessageManager 在处理消息移除时访问已释放的 m_pTextEdit；将删除顺序
+    // 调整为先 m_pWaringNotices 后 m_pTextEdit 即可同时避免两个问题。
+    if (m_pWaringNotices != nullptr) {
+        disconnect(m_pWaringNotices);
+        delete m_pWaringNotices;
+        m_pWaringNotices = nullptr;
+    }
     if (m_pTextEdit != nullptr) {
         qDebug() << "EditWrapper destructor, m_pTextEdit not nullptr";
         disconnect(m_pTextEdit);
@@ -150,12 +160,6 @@ EditWrapper::~EditWrapper()
         delete m_pBottomBar;
         m_pBottomBar = nullptr;
     }
-    //delete 之后，如果出现文件被修改，需要重新加载弹框，之后，点击标签关闭，闪退问题　78042 ut002764
-//    if (m_pWaringNotices != nullptr) {
-//    disconnect(m_pWaringNotices);
-//        delete m_pWaringNotices;
-//        m_pWaringNotices = nullptr;
-//    }
     qDebug() << "EditWrapper destructor exit";
 }
 
