@@ -548,22 +548,34 @@ QCoreApplication *StartManagerTest::s_app = nullptr;
 // 构造 / 单例 / 析构
 // ============================================================
 
-TEST_F(StartManagerTest, Instance_FirstCall_CreatesAndReusesSingleton)
+TEST_F(StartManagerTest, Create_FirstCall_CreatesAndReusesSingleton)
 {
     // Arrange
     StartManager::m_instance = nullptr;
 
-    // Act
-    StartManager *p1 = StartManager::instance();
-    StartManager *p2 = StartManager::instance();
+    // Act：create() 为唯一创建点，重复调用幂等；instance() 纯查询同实例
+    StartManager *p1 = StartManager::create();
+    StartManager *p2 = StartManager::create();
+    StartManager *q = StartManager::instance();
 
     // Assert：首建非空且复用同一实例
     ASSERT_NE(p1, nullptr);
     EXPECT_EQ(p1, p2);
+    EXPECT_EQ(q, p1);
 
     // Cleanup：析构置空静态指针（覆盖 ~StartManager B2 正侧）
     delete p1->m_pTimer;
     delete p1;
+    EXPECT_EQ(StartManager::m_instance, nullptr);
+}
+
+TEST_F(StartManagerTest, Instance_NonCreating_ReturnsNullWhenAbsent)
+{
+    // Arrange：BUG-378901 修复后 instance() 不再惰性创建
+    StartManager::m_instance = nullptr;
+
+    // Act / Assert：单例缺席时纯查询返回空，不得实例化
+    EXPECT_EQ(StartManager::instance(), nullptr);
     EXPECT_EQ(StartManager::m_instance, nullptr);
 }
 

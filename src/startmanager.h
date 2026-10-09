@@ -29,6 +29,8 @@ public:
         int tabIndex;
     };
 
+    // 唯一创建点：仅 main() 调用；其余场合一律用 instance() 纯查询
+    static StartManager *create();
     static StartManager *instance();
     explicit StartManager(QObject *parent = nullptr);
     ~StartManager();

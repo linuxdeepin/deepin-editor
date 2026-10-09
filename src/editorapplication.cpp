@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -45,13 +45,8 @@ EditorApplication::EditorApplication(int &argc, char *argv[]) : DApplication(arg
 EditorApplication::~EditorApplication()
 {
     qDebug() << "Enter EditorApplication destructor";
-    // app结束时，释放
-    if (nullptr != StartManager::instance()) {
-        qDebug() << "Deleting StartManager instance";
-        delete StartManager::instance();
-    } else {
-        qDebug() << "StartManager instance is already null";
-    }
+    // StartManager 生命周期由 main() 接管（创建于 create()，事件循环结束后显式释放），
+    // 析构不得触碰，否则 D-Bus 转发进程会在退出期意外实例化单例（BUG-378901）
     qDebug() << "Exit EditorApplication destructor";
     qInfo() << "Application resources released";
 }

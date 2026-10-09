@@ -13,8 +13,7 @@
 // 分支清单 → 用例映射（editorapplication.cpp）：
 //   ctor(9)    → SetUpTestSuite 真实构造 + Ctor_应用属性就位（Qt>=6 分支）
 //   dtor(45)   → TearDownTestSuite delete s_app：
-//                D2/D0 双记录 + "StartManager::instance() 非空 → delete"分支
-//                （else 空分支不可二次构造 QApplication，函数覆盖已达成）
+//                D2/D0 双记录（StartManager 生命周期已移交 main()，dtor 不再触碰）
 //   handleQuitAction(59)
 //     B1 activeWindow 非空 → close
 //        → HandleQuitAction_ActiveWindow_ClosesIt（closeEvent 计数 + 隐藏断言）
@@ -444,14 +443,19 @@ TEST_F(EditorApplicationTest, PressSpace_Button_ReleasesAfter80msAndClicks)
 
 // ---------------- dtor 前置 ----------------
 
-// dtor(45) 前置：保证 TearDownTestSuite delete s_app 时 StartManager::instance()
-// 非空，命中“Deleting StartManager instance”分支（D2/D0 双记录在 delete 时落点）
-TEST_F(EditorApplicationTest, Dtor_Precondition_StartManagerInstanceAlive)
+// dtor(45) 前置：~EditorApplication 已不管理 StartManager 生命周期（BUG-378901 修复：
+// 创建点唯一化为 main() 中的 create()，事件循环结束后于 main() 显式释放）。
+// 此处验证 instance() 为纯查询访问器，无创建副作用——TearDownTestSuite delete s_app
+// 时不会意外实例化/销毁单例（D2/D0 双记录在 delete 时落点）
+TEST_F(EditorApplicationTest, Dtor_Precondition_InstanceIsNonCreating)
 {
-    // Arrange / Act：惰性单例真实构造（DBus/Iflytek 已 stub，XDG 已重定向）
+    // Arrange
+    StartManager::m_instance = nullptr;
+
+    // Act：纯查询访问器（旧实现此处会惰性创建完整单例）
     StartManager *instance = StartManager::instance();
 
-    // Assert
-    EXPECT_NE(instance, nullptr);
-    EXPECT_EQ(StartManager::m_instance, instance);
+    // Assert：不创建，析构路径对 StartManager 零接触
+    EXPECT_EQ(instance, nullptr);
+    EXPECT_EQ(StartManager::m_instance, nullptr);
 }
