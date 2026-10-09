@@ -42,6 +42,11 @@ StartManager *StartManager::instance()
     return m_instance;
 }
 
+StartManager *StartManager::instanceOrNull()
+{
+    return m_instance;
+}
+
 StartManager::~StartManager()
 {
     qDebug() << "Enter StartManager destructor";
