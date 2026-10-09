@@ -32,7 +32,7 @@ static const QString s_bookMarkKey = "advance.editor.bookmark";
 
 StartManager *StartManager::m_instance = nullptr;
 
-StartManager *StartManager::instance()
+StartManager *StartManager::create()
 {
     if (m_instance == nullptr) {
         qDebug() << "StartManager instance is null, creating new instance";
@@ -42,6 +42,24 @@ StartManager *StartManager::instance()
     return m_instance;
 }
 
+StartManager *StartManager::instance()
+{
+    return m_instance;
+}
+
+StartManager::~StartManager()
+{
+    qDebug() << "Enter StartManager destructor";
+    // 单例被销毁（应用退出/测试 deleteLater）后置空，避免 instance() 返回悬空指针
+    if (m_instance == this) {
+        m_instance = nullptr;
+    }
+    // 释放登录管理 DBus 接口，避免泄漏
+    if (m_pLoginManager) {
+        delete m_pLoginManager;
+        m_pLoginManager = nullptr;
+    }
+}
 StartManager::StartManager(QObject *parent)
     : QObject(parent)
 {
