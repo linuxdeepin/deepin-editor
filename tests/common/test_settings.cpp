@@ -1221,3 +1221,30 @@ TEST_F(SettingsTest, BUG102351_SettingsDestroyed_ConfigValuePreserved)
     }
     EXPECT_TRUE(onDisk);
 }
+
+// PMS: https://pms.uniontech.com/bug-view-44975.html  commit: N/A（批次4：git 历史无修复提交，按 PMS 复现步骤 + master d634cbad 代码语义锚定）
+// 场景：设置中修改"启动时窗口状态"选项后，向已关闭窗口发送 sigChangeWindowSize 导致异常。
+// 锚定语义：Settings 构造中 windowstate→sigChangeWindowSize 的 connect 被 #if 0 禁用
+// （settings.cpp 146-149）——选项值变更正常生效，但不得再向任何窗口 poke 信号。
+TEST_F(SettingsTest, BUG44975_WindowStateOptionChange_DoesNotPokeWindows)
+{
+    // Arrange: 监听 sigChangeWindowSize（修复前该信号会向已关闭/销毁窗口发送）
+    QString lastMode;
+    int pokes = 0;
+    QObject::connect(Settings::instance(), &Settings::sigChangeWindowSize,
+                     [&lastMode, &pokes](QString mode) {
+                         lastMode = mode;
+                         ++pokes;
+                     });
+    auto option = s_instance->settings->option("advance.window.windowstate");
+    ASSERT_NE(option, nullptr);
+
+    // Act: 在设置中切换窗口启动状态（PMS 步骤：修改该选项）
+    option->setValue(QString("fullscreen"));
+    QApplication::processEvents();
+
+    // Assert: 选项值正常更新；无窗口 poke 信号发出
+    EXPECT_EQ(option->value().toString(), QString("fullscreen"));
+    EXPECT_EQ(pokes, 0);
+    EXPECT_TRUE(lastMode.isEmpty());
+}
