@@ -93,6 +93,11 @@ protected:
         QDir().mkpath(xdgData + "/deepin/deepin-editor/blank-files");
         QDir().mkpath(xdgData + "/deepin/deepin-editor/backup-files");
         QDir().mkpath(xdgData + "/deepin/deepin-editor/autoBackup-files");
+
+        // BUG-378901 修复后 instance() 为纯查询不创建，window.cpp 各调用点
+        // （checkTabbarForReload/removeWrapper 的 delayMallocTrim 等）依赖单例已存在；
+        // 套件级显式建真实例，与旧懒创建语义等价（生产路径由 main() 中 create() 保证）
+        StartManager::create();
     }
 
     static void TearDownTestSuite()

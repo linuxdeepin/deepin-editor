@@ -32,13 +32,18 @@ static const QString s_bookMarkKey = "advance.editor.bookmark";
 
 StartManager *StartManager::m_instance = nullptr;
 
-StartManager *StartManager::instance()
+StartManager *StartManager::create()
 {
     if (m_instance == nullptr) {
         qDebug() << "StartManager instance is null, creating new instance";
         m_instance = new StartManager;
     }
 
+    return m_instance;
+}
+
+StartManager *StartManager::instance()
+{
     return m_instance;
 }
 
