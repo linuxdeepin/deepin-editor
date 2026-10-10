@@ -67,6 +67,9 @@ private:
     static CallStatus isCopilotEnabled(const QSharedPointer<QDBusInterface> &copilot);
     static CallStatus launchCopilotChat(const QSharedPointer<QDBusInterface> &copilot);
 
+    /// BUG-378881/378901: 应用 teardown 期间为 true，后台探测线程此时不得打日志/排队回调
+    static bool appShuttingDown();
+
     static QString copilotService();
 
     bool m_inited{false};
