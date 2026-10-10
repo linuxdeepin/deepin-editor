@@ -89,6 +89,11 @@ protected:
         QDir().mkpath(xdgData + "/deepin/deepin-editor/blank-files");
         QDir().mkpath(xdgData + "/deepin/deepin-editor/backup-files");
         QDir().mkpath(xdgData + "/deepin/deepin-editor/autoBackup-files");
+
+        // BUG-378901 修复后 instance() 为纯查询不创建，而 Window::addTab 无条件调用
+        // StartManager::instance()->checkPath()；套件级显式建真实例（与 test_window.cpp
+        // 及生产路径 main() 中 create() 语义一致），否则 instance() 返回空指针致 SIGSEGV
+        StartManager::create();
     }
 
     static void TearDownTestSuite()
