@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -35,7 +35,10 @@ private:
         int startPos{false};
         int endPos{false};
         bool leftToRight{true};
-        QString originText;  // replaced text before insert.
+        QString originText;    // replaced text before insert.
+        QString insertedText;  // text inserted into this selection; one clipboard line
+                               // per selection when a multi-line clipboard matches
+                               // the selection count, whole text otherwise.
     };
 
     TextEdit *m_pEdit = nullptr;
