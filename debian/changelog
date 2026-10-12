@@ -1,3 +1,25 @@
+deepin-editor (6.5.60) unstable; urgency=medium
+
+  * fix: guard AI probe worker at shutdown, keep message teardown order
+  * fix: make StartManager lifetime explicit to prevent exit crash
+  * Revert "chore: migrate linglong deps to declarative buildext.apt"
+  * chore: migrate linglong deps to declarative buildext.apt
+  * chore: Sync by https://github.com/linuxdeepin/.github/commit/a300f8523d4876677112edab6a0772f7ad112976
+  * test(modules): add unit tests for dbus, theme, widgets and startmanager
+  * fix(common): update SPDX year to 2026 for new detectcode helpers file
+  * test(common): add unit tests for common and encodes modules
+  * fix(common): update SPDX year range end to 2026 for modified files
+  * test(common): extend existing tests for better coverage
+  * fix(editor): update SPDX year range end to 2026 for modified files
+  * test(editor): extend tests and remove empty stubs
+  * fix(editor): update SPDX year to 2026 for new test files
+  * test(editor): add unit tests for editor command classes
+  * test(editor): extend TextEdit and Window tests, fix crashes
+  * fix(ut): fix null pointer crash and static variable bug in source
+  * chore: Update version to 6.5.58
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Mon, 12 Oct 2026 16:33:10 +0800
+
 deepin-editor (6.5.58) unstable; urgency=medium
 
   * chore: Update version to 6.5.58
