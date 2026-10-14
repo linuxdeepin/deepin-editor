@@ -164,6 +164,10 @@ bool TextFileSaver::saveToFile(QFileDevice &file)
 
         // Dynamically calculate chunk size (10MB or 1/8 of total length, whichever is larger)
         const int chunkSize = qMax(10 * 1024 * 1024, length / 8);
+        // Latched when the owner (EditWrapper) is destroyed or requests quit
+        // while the save loop is still running.  Once latched we stop
+        // dispatching events but keep writing so the file stays complete.
+        bool closing = false;
         qDebug() << "chunkSize" << chunkSize;
         qDebug() << "Saving document in chunks, total size:" << length << "chars, chunk size:" << chunkSize;
         for (int i = 0; i < length; i += chunkSize) {
@@ -191,23 +195,30 @@ bool TextFileSaver::saveToFile(QFileDevice &file)
                 return false;
             }
             qDebug() << "outData is not empty";
-            QApplication::processEvents();
-            qDebug() << "processEvents";
             // processEvents() may deliver a queued QCloseEvent that deletes the
             // EditWrapper (and thus the QTextDocument) while the save loop is
-            // still running.  Abort immediately when the document is gone or the
-            // owner has requested quit, mirroring the guard pattern already used
-            // in EditWrapper::loadContent().
+            // still running.  When that happens do NOT abort the write: this
+            // loop only touches locals (content was copied before the loop and
+            // the saver itself lives on the caller's stack), so finishing the
+            // remaining chunks is memory-safe even after the owner is gone.
+            // Aborting here would leave a truncated file (the target is opened
+            // with Truncate), losing the not-yet-written tail.  We only stop
+            // dispatching events so no further re-entrant saves or other event
+            // handlers can truncate the file we are writing.
             // Note: the condition order below is significant — m_quitFlag is a
             // raw pointer to EditWrapper::m_bQuit and may dangle after the owner
             // is destroyed.  The null check (m_quitFlag &&) MUST precede the
             // dereference (*m_quitFlag) so that C++ short-circuit evaluation
-            // prevents dereferencing a dangling pointer.  Do not reorder.
-            if (!m_document || (m_quitFlag && *m_quitFlag)) {
-                m_errorString = QObject::tr("Save aborted: editor is closing");
-                qWarning() << "Save aborted: document destroyed or quit requested";
-                file.close();
-                return false;
+            // prevents dereferencing a dangling pointer; once closing is
+            // latched the condition is never evaluated again.  Do not reorder.
+            if (!closing) {
+                QApplication::processEvents();
+                qDebug() << "processEvents";
+                if (!m_document || (m_quitFlag && *m_quitFlag)) {
+                    closing = true;
+                    qWarning() << "Editor closing during save: finishing remaining"
+                               << (length - i) << "chars without event processing";
+                }
             }
             qint64 written = file.write(outData);
             if (written != outData.size()) {
@@ -218,6 +229,9 @@ bool TextFileSaver::saveToFile(QFileDevice &file)
             }
         }
 
+        if (closing) {
+            qInfo() << "Save completed after close request, file kept complete:" << m_filePath;
+        }
         qDebug() << "File saved successfully:" << m_filePath;
         return true;
     } catch (const std::bad_alloc &) {
