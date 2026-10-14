@@ -1167,6 +1167,18 @@
         <translation>請使用ALT+鼠標點選切換列編輯模式</translation>
     </message>
     <message>
+        <location filename="../src/editor/dtextedit.cpp" line="9404"/>
+        <location filename="../src/editor/dtextedit.cpp" line="9406"/>
+        <source>No audio output device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
+        <translation>未檢測到音頻輸出設備，請確保揚聲器或耳機已正確連接後重試</translation>
+    </message>
+    <message>
+        <location filename="../src/editor/dtextedit.cpp" line="9413"/>
+        <location filename="../src/editor/dtextedit.cpp" line="9415"/>
+        <source>No audio input device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
+        <translation>未檢測到音頻輸入設備，請確保揚聲器或耳機已正確連接後重試</translation>
+    </message>
+    <message>
         <location filename="../src/editor/dtextedit.cpp" line="418"/>
         <source>Change Case</source>
         <translation>切換大小寫</translation>
