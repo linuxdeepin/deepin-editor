@@ -196,6 +196,22 @@ bool TextFileSaver::saveToFile(QFileDevice &file)
             qDebug() << "outData is not empty";
             QApplication::processEvents();
             qDebug() << "processEvents";
+            // processEvents() may deliver a queued QCloseEvent that deletes the
+            // EditWrapper (and thus the QTextDocument) while the save loop is
+            // still running.  Abort immediately when the document is gone or the
+            // owner has requested quit, mirroring the guard pattern already used
+            // in EditWrapper::loadContent().
+            // Note: the condition order below is significant — m_quitFlag is a
+            // raw pointer to EditWrapper::m_bQuit and may dangle after the owner
+            // is destroyed.  The null check (m_quitFlag &&) MUST precede the
+            // dereference (*m_quitFlag) so that C++ short-circuit evaluation
+            // prevents dereferencing a dangling pointer.  Do not reorder.
+            if (!m_document || (m_quitFlag && *m_quitFlag)) {
+                m_errorString = QObject::tr("Save aborted: editor is closing");
+                qWarning() << "Save aborted: document destroyed or quit requested";
+                file.close();
+                return false;
+            }
             qint64 written = file.write(outData);
             if (written != outData.size()) {
                 m_errorString = file.errorString();

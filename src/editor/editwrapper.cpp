@@ -323,12 +323,17 @@ bool EditWrapper::saveAsFile(const QString &newFilePath, const QByteArray &encod
     qDebug() << "Attempting to save file to:" << newFilePath << "with encoding:" << encodeName;
 
     // Use TextFileSaver for safe file saving
+    QPointer<QObject> guard(this);
     TextFileSaver saver(m_pTextEdit->document());
     saver.setFilePath(newFilePath);
     saver.setEncoding(encodeName);
     saver.setEndlineFormat(m_pBottomBar->getEndlineFormat() == BottomBar::EndlineFormat::Windows);
+    saver.setQuitFlag(&m_bQuit);
 
     bool saveSuccess = saver.save();
+    if (guard.isNull() || m_bQuit) {
+        return false;
+    }
     if (!saveSuccess) {
         qWarning() << "Failed to save file:" << newFilePath << "Error:" << saver.errorString();
         QWidget *curWidget = this->window()->getStackedWgt()->currentWidget();
@@ -376,6 +381,7 @@ bool EditWrapper::saveAsFile()
         saver.setFilePath(newFilePath);
         saver.setEncoding(m_sFirstEncode.toUtf8());
         saver.setEndlineFormat(m_pBottomBar->getEndlineFormat() == BottomBar::EndlineFormat::Windows);
+        saver.setQuitFlag(&m_bQuit);
 
         if (!saver.save()) {
             qWarning() << "EditWrapper saveAsFile, Failed to save file:" << saver.errorString();
@@ -683,12 +689,19 @@ bool EditWrapper::saveFile(QByteArray encode)
     }
 
     // 使用TextFileSaver进行文件保存
+    QPointer<QObject> guard(this);
     TextFileSaver saver(m_pTextEdit->document());
     saver.setFilePath(qstrFilePath);
     saver.setEncoding(m_sCurEncode.toUtf8());
     saver.setEndlineFormat(m_pBottomBar->getEndlineFormat() == BottomBar::EndlineFormat::Windows);
+    saver.setQuitFlag(&m_bQuit);
 
     bool ok = saver.save();
+    // processEvents() inside save may have triggered closeEvent which deletes
+    // this wrapper via deleteLater().  Bail out before touching any member.
+    if (guard.isNull() || m_bQuit) {
+        return false;
+    }
     if (ok) {
         qDebug() << "EditWrapper saveFile, ok is true";
         m_sFirstEncode = m_sCurEncode;
@@ -738,12 +751,17 @@ bool EditWrapper::forceSaveInvalidCharFile()
 {
     qDebug() << "EditWrapper forceSaveInvalidCharFile, saving to original path:" << m_sInvalidCharOriginalPath;
     QString savePath = m_sInvalidCharOriginalPath;
+    QPointer<QObject> guard(this);
     TextFileSaver saver(m_pTextEdit->document());
     saver.setFilePath(savePath);
     saver.setEncoding(m_sCurEncode.toUtf8());
     saver.setEndlineFormat(m_pBottomBar->getEndlineFormat() == BottomBar::EndlineFormat::Windows);
+    saver.setQuitFlag(&m_bQuit);
 
     bool ok = saver.save();
+    if (guard.isNull() || m_bQuit) {
+        return false;
+    }
     if (ok) {
         qDebug() << "EditWrapper forceSaveInvalidCharFile, save succeeded";
         m_sFirstEncode = m_sCurEncode;
@@ -806,12 +824,17 @@ bool EditWrapper::saveTemFile(QString qstrDir)
 {
     qDebug() << "EditWrapper saveTemFile, qstrDir:" << qstrDir;
     // Use TextFileSaver for safe file saving
+    QPointer<QObject> guard(this);
     TextFileSaver saver(m_pTextEdit->document());
     saver.setFilePath(qstrDir);
     saver.setEncoding(m_sCurEncode.toUtf8());
     saver.setEndlineFormat(m_pBottomBar->getEndlineFormat() == BottomBar::EndlineFormat::Windows);
+    saver.setQuitFlag(&m_bQuit);
 
     bool ok = saver.save();
+    if (guard.isNull() || m_bQuit) {
+        return false;
+    }
     if (ok) {
         qDebug() << "EditWrapper saveTemFile, ok is true";
         m_sFirstEncode = m_sCurEncode;
