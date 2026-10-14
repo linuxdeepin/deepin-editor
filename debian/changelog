@@ -1,3 +1,10 @@
+deepin-editor (6.5.62) unstable; urgency=medium
+
+  * fix: finish writing file instead of aborting when editor closes mid-save
+  * fix: guard save path against use-after-free on close
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Wed, 14 Oct 2026 16:27:28 +0800
+
 deepin-editor (6.5.61) unstable; urgency=medium
 
   * chore: migrate linglong deps to declarative buildext.apt
