@@ -8,6 +8,7 @@
 #include <QString>
 #include <QByteArray>
 #include <QFile>
+#include <QPointer>
 
 class QTextDocument;
 
@@ -20,6 +21,7 @@ public:
     void setFilePath(const QString &filePath);
     void setEncoding(const QByteArray &toEncode);
     void setEndlineFormat(bool useCRLF);
+    void setQuitFlag(const bool *quitFlag) { m_quitFlag = quitFlag; }
     bool save();
     bool saveAs(const QString &newFilePath);
     QString errorString() const;
@@ -29,7 +31,8 @@ private:
     bool convertEncoding(QByteArray &input, QByteArray &output) const;
 
 private:
-    QTextDocument *m_document;
+    QPointer<QTextDocument> m_document;
+    const bool *m_quitFlag = nullptr;
     QString m_filePath;
     QByteArray m_fromEncode; // default is UTF-16 (QString)
     QByteArray m_toEncode;   // default is UTF-8
