@@ -57,9 +57,10 @@ public:
     /**
      * @brief recoverFile 备份恢复
      * @param window　从哪个窗口进行恢复
+     * @param explicitPaths 本次显式请求打开的文件路径，恢复时需跳过同一路径的备份记录
      * @return 恢复完成的文件数量
      */
-    int recoverFile(Window *window);
+    int recoverFile(Window *window, const QStringList &explicitPaths = QStringList());
 
     /**
      * @brief analyzeBookmakeInfo 解析书签信息
