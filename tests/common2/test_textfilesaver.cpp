@@ -17,6 +17,8 @@
  * B10: saveAs 成功                            → 新路径写入成功
  * B11: saveAs 失败                            → m_filePath 回退原路径
  * B12: 默认 UTF-8 保存（UTF-16→UTF-8 iconv）  → 文件字节 == toUtf8()
+ * B13: 退出标志已置位                         → false + "Save aborted: editor is closing"
+ * B14: processEvents 删除文档                 → false + "Save aborted: editor is closing"
  *
  * 用例映射：
  * - Save_EmptyFilePath_ReturnsFalseWithError            → B1
@@ -32,6 +34,8 @@
  * - SaveAs_NewPath_SucceedsAndWritesFile                → B10
  * - SaveAs_FailureRestoresOriginalPath                  → B11
  * - Save_LargeDocumentMultiChunk_WritesAllBytes         → B8
+ * - BUG379439_Save_QuitFlagSet_ReturnsFalse             → B13
+ * - BUG379439_Save_DocumentDeletedDuringEvents_ReturnsFalse → B14
  *
  * 隐式依赖处理：
  * - Utils::isMemorySufficientForOperation：utils.cpp 为重 GUI 模块（DSettings/
@@ -52,7 +56,9 @@
 #include <QTemporaryFile>
 #include <QFile>
 #include <QGuiApplication>
+#include <QApplication>
 #include <QPointer>
+#include <QEventLoop>
 
 #include <memory>
 
@@ -410,4 +416,36 @@ TEST_F(TextFileSaverTest, BUG327987_SaveOverExistingFile_PreservesPermissions)
     ASSERT_TRUE(f.open(QIODevice::ReadOnly));
     EXPECT_EQ(f.readAll(), QStringLiteral("updated").toUtf8());
     f.close();
+}
+
+// B13
+TEST_F(TextFileSaverTest, BUG379439_Save_QuitFlagSet_ReturnsFalse)
+{
+    // Arrange: 保存循环在 processEvents 后检查退出标志
+    const bool quitRequested = true;
+    obj->setQuitFlag(&quitRequested);
+    obj->setFilePath(filePath(QStringLiteral("quit_flag.txt")));
+    // Act
+    const bool ret = obj->save();
+    // Assert: 保存被中止并返回未翻译源文错误
+    EXPECT_FALSE(ret);
+    EXPECT_EQ(obj->errorString(), QStringLiteral("Save aborted: editor is closing"));
+}
+
+// B14
+TEST_F(TextFileSaverTest, BUG379439_Save_DocumentDeletedDuringEvents_ReturnsFalse)
+{
+    // Arrange: processEvents 模拟关闭窗口时销毁 QTextDocument
+    stub.set_lamda(
+        static_cast<void (*)(QEventLoop::ProcessEventsFlags)>(&QCoreApplication::processEvents),
+        [this](QEventLoop::ProcessEventsFlags) {
+            delete doc;
+            doc = nullptr;
+        });
+    obj->setFilePath(filePath(QStringLiteral("document_deleted.txt")));
+    // Act
+    const bool ret = obj->save();
+    // Assert: QPointer 感知文档销毁，保存中止且不崩溃
+    EXPECT_FALSE(ret);
+    EXPECT_EQ(obj->errorString(), QStringLiteral("Save aborted: editor is closing"));
 }
