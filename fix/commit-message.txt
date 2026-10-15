@@ -1,0 +1,45 @@
+fix: sync scroll to rendered view in ReadView mode during search
+
+1. Root cause: forward scroll sync lambda in EditWrapper only allows
+   LivePreview mode; when viewMode is ReadView the guard condition
+   m_viewMode != ViewMode::LivePreview is true, causing early return
+   so the rendered MarkdownView never receives scroll commands during
+   keyword search navigation
+2. Fix: extend the guard to also allow ReadView mode by changing the
+   condition to (m_viewMode != ViewMode::LivePreview && m_viewMode
+   != ViewMode::ReadView), and update the comment accordingly
+3. Impact: search navigation in ReadView mode now scrolls the rendered
+   page to the matching position; reverse sync and recursion guard
+   remain unchanged; non-md ReadView is still protected by the
+   !m_pRenderer null check
+
+Log: search scroll sync now works in ReadView mode
+
+Influence:
+1. Open a md file, switch to ReadView, use find bar to search keywords
+2. Click previous/next and verify rendered page scrolls to match
+3. Verify LivePreview mode scroll sync still works as before
+4. Verify non-md files in ReadView mode are unaffected
+
+fix: 修复查看视图模式下搜索导航不滚动渲染页
+
+1. 根因：EditWrapper 前向滚动同步 lambda 仅允许 LivePreview 模式，
+   ReadView 模式下守卫条件 m_viewMode != ViewMode::LivePreview 为
+   true 直接返回，导致渲染页 MarkdownView 收不到滚动指令
+2. 方案：将守卫条件扩展为同时允许 ReadView，改为 (m_viewMode
+   != ViewMode::LivePreview && m_viewMode != ViewMode::ReadView)，
+   并更新注释
+3. 影响：ReadView 模式下搜索导航可正常滚动渲染页至匹配位置；
+   反向同步和防递归保护不变；非 md 的 ReadView 仍受 !m_pRenderer
+   空指针保护
+
+Log: 查看视图模式下搜索导航可正常滚动渲染页
+
+Influence:
+1. 打开 md 文件切换查看视图，使用查找栏搜索关键词
+2. 点击上一个/下一个，验证渲染页滚动到匹配位置
+3. 验证 LivePreview 模式滚动同步功能不受影响
+4. 验证非 md 文件查看视图模式不受影响
+
+PMS: BUG-379599
+multica: V-5897
