@@ -149,9 +149,9 @@ EditWrapper::EditWrapper(Window *window, QWidget *parent)
         const QString baseDir = QFileInfo(m_pTextEdit->getFilePath()).absolutePath();
         m_pRenderer->setMarkdown(MarkdownLogic::resolveImagePaths(md, baseDir));
     });
-    // 滚动同步（§4.6）：左栏为主驱动，LivePreview 下按比例转发右栏
+    // 滚动同步（§4.6）：左栏为主驱动，LivePreview/ReadView 下按比例转发右栏
     connect(m_pTextEdit->verticalScrollBar(), &QScrollBar::valueChanged, this, [this](int value) {
-        if (m_bScrollSyncing || m_viewMode != ViewMode::LivePreview || !m_pRenderer)
+        if (m_bScrollSyncing || (m_viewMode != ViewMode::LivePreview && m_viewMode != ViewMode::ReadView) || !m_pRenderer)
             return;
         auto sb = m_pTextEdit->verticalScrollBar();
         m_pRenderer->scrollToRatio(ScrollSync::ratioFromScrollBar(value, sb->minimum(), sb->maximum()));
