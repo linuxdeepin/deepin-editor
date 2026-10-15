@@ -255,14 +255,36 @@ html, body {
 [data-theme="dark"] .table-block { background-color: rgba(255, 255, 255, 0.1); }
 
 /* §4.8.7 图片 */
+/* 行内显示：与源码排版一致——同行图片并排、独行图片独占一行（Milkdown 的 image
+   本就是段落内 inline 节点，此处不可 display:block 强制拆行）。独占一行的图片
+   所在段落本身就是块级容器，天然单独成行。
+   尺寸：按原始大小渲染；仅当原始宽度超出内容区宽度时等比缩小
+   （max-width:100% + height:auto，浏览器保持宽高比）。 */
 .milkdown img {
-    display: block;
-    max-width: 258px;
-    max-height: 400px;
+    display: inline-block;
+    vertical-align: middle;
+    max-width: 100%;
+    height: auto;
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.3);
-    object-fit: contain;
-    margin: 1em 0;
+    margin: 1em 0.25em;
+}
+
+/* ProseMirror 在相邻行内原子节点（如两张相邻图片）间插入 img.ProseMirror-separator
+   作为光标定位占位，不是内容图片；且本页未注入 prosemirror-view 基础样式，
+   上面的规则会误伤它（旧 display:block 会让占位变成带 1em 边距的空块，产生多余空隙）。
+   按 prosemirror-view 官方 initialCSS 还原为 1px 不可见占位。 */
+.milkdown img.ProseMirror-separator {
+    display: inline;
+    width: 1px;
+    height: 1px;
+    max-width: none;
+    max-height: none;
+    border: none;
+    border-radius: 0;
+    background: none;
+    margin: 0;
+    vertical-align: baseline;
 }
 
 /* 链接：浅色 rgba(0,88,222,1)，深色 rgba(2,76,202,1) */
