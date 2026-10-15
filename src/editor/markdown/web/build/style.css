@@ -82,9 +82,9 @@ html, body {
    表头：36px 高 / 圆角 12px 12px 0 0 / rgba(0,0,0,0.05) 底，无内容
    高度用 min-height：内容随行数增高（固定高度会截断表格） */
 .table-block {
-    width: 502px;
+    width: 100%;
     max-width: 100%;
-    min-height: 222px;
+    min-height: 0;
     box-sizing: border-box;
     /* 外框用 --table-border 与内部网格线同色，避免表头区域边框与表格边框颜色不一致 */
     border: 1px solid var(--table-border);
@@ -129,12 +129,12 @@ html, body {
     .table-wrapper td, .table-wrapper th { max-width: 180px; }
 }
 
-/* §4.8.6 代码块：782px 宽 / 208px 高 / 圆角 10px / 半透明底
+/* §4.8.6 代码块：100% 宽 / min-height: 0 / 圆角 10px / 半透明底
    高度用 min-height：内容须能随行数增高超出视口，表头吸顶才有意义（固定高度会截断内容） */
 .code-block {
-    width: 782px;
+    width: 100%;
     max-width: 100%;
-    min-height: 208px;
+    min-height: 0;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -221,7 +221,7 @@ html, body {
 /* 折叠态：隐藏代码区，块区显示“已折叠xx行代码  展开”提示行（不在表头内） */
 .code-block.collapsed { min-height: 0; }
 .code-block.collapsed pre { display: none; }
-/* 空代码块：撤销 208px 设计最小高度，表头下仅保留一行空白 */
+/* 空代码块：min-height: 0，表头下仅保留一行空白 */
 .code-block.empty { min-height: 0; }
 .code-block-collapsed {
     display: none;
