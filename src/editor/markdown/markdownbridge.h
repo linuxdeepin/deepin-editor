@@ -13,7 +13,8 @@
 // 协议（与 web/bridge.js 一一对应）：
 //   JS → C++（槽）:onReady / onContentChanged / onScrollLine / onOpenLink
 //   C++ → JS（信号）:setMarkdownRequested / setModeRequested /
-//                    applyThemeRequested / setLayoutRequested / scrollToLineRequested
+//                    applyThemeRequested / setLayoutRequested / scrollToLineRequested /
+//                    searchHighlightRequested
 //
 // 阶段一（只读预览）：仅 onReady / setMarkdownRequested / applyThemeRequested /
 //                    setLayoutRequested / scrollToLineRequested 实际使用；
@@ -65,6 +66,9 @@ signals:
     void applyThemeRequested(const QString &jsonColors, bool isDark);
     void setLayoutRequested(int maxW, bool center);
     void scrollToLineRequested(double line);
+    // 搜索高亮：keyword 为空表示清除；currentIndex 为当前命中在全文匹配中的序号
+    //（0 起，-1 表示无当前命中），JS 侧据此区分"全部命中/当前命中"两级配色
+    void searchHighlightRequested(const QString &keyword, int currentIndex, bool caseSensitive);
 };
 
 #endif // MARKDOWNBRIDGE_H

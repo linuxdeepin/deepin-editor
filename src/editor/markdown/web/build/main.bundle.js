@@ -45080,6 +45080,9 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     b.scrollToLineRequested.connect(function(line) {
       h.onScrollToLine(line);
     });
+    b.searchHighlightRequested.connect(function(keyword, currentIndex, caseSensitive) {
+      h.onSearchHighlight(keyword, currentIndex, caseSensitive);
+    });
     if (h.onRetranslate && b.retranslated) {
       b.retranslated.connect(function() {
         h.onRetranslate();
@@ -45267,7 +45270,10 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     userScrolledDuringBuild = false;
     if (normalized.length <= PROGRESSIVE_THRESHOLD) {
       editor.action(replaceAll(normalized));
-      setTimeout(reapplyScroll, 0);
+      setTimeout(() => {
+        reapplyScroll();
+        reapplySearchHighlight();
+      }, 0);
       return;
     }
     renderProgressively(normalized, renderGeneration);
@@ -45302,6 +45308,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       const batch = batches[index2++];
       if (!batch) {
         buildProgress = null;
+        reapplySearchHighlight();
         if (!userScrolledDuringBuild) reapplyScroll();
         return;
       }
@@ -45311,6 +45318,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
         setTimeout(() => {
           if (gen !== renderGeneration) return;
           reapplyScroll();
+          reapplySearchHighlight();
         }, 0);
       } else {
         appendChunk(batch);
@@ -45321,6 +45329,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
         setTimeout(step, 0);
       } else {
         buildProgress = null;
+        reapplySearchHighlight();
         if (!userScrolledDuringBuild) {
           buildAnchorMap();
           reapplyScroll();
@@ -45487,6 +45496,100 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     root2.style.setProperty("--content-max-width", maxContentWidth > 0 ? maxContentWidth + "px" : "none");
     root2.style.setProperty("--content-center", center ? "1" : "0");
   }
+  const FIND_MATCH_HL = "md-find-match";
+  const FIND_CURRENT_HL = "md-find-current";
+  let lastSearch = null;
+  let lastAppliedSearch = null;
+  const SEARCH_TEXT_REJECT = ".table-block-header, .code-block-header, .code-block-collapsed, .katex-mathml";
+  function collectTextNodes(root2) {
+    const nodes = [];
+    let text2 = "";
+    const walker = document.createTreeWalker(root2, NodeFilter.SHOW_TEXT, {
+      acceptNode(node2) {
+        const el = node2.parentElement;
+        if (el && el.closest(SEARCH_TEXT_REJECT)) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    while (walker.nextNode()) {
+      nodes.push({ node: walker.currentNode, start: text2.length });
+      text2 += walker.currentNode.nodeValue;
+    }
+    return { nodes, text: text2 };
+  }
+  function rangeForOffsets(nodes, start, end) {
+    let lo = 0, hi = nodes.length - 1;
+    while (lo < hi) {
+      const mid = lo + hi + 1 >> 1;
+      if (nodes[mid].start <= start) lo = mid;
+      else hi = mid - 1;
+    }
+    if (nodes.length === 0 || start < nodes[lo].start) return null;
+    let idx = lo;
+    while (idx + 1 < nodes.length && nodes[idx + 1].start < end) idx++;
+    const range = document.createRange();
+    range.setStart(nodes[lo].node, start - nodes[lo].start);
+    range.setEnd(nodes[idx].node, end - nodes[idx].start);
+    return range;
+  }
+  function clearSearchHighlight() {
+    if (typeof CSS === "undefined" || !CSS.highlights) return;
+    CSS.highlights.delete(FIND_MATCH_HL);
+    CSS.highlights.delete(FIND_CURRENT_HL);
+  }
+  function applySearchHighlight() {
+    if (typeof CSS === "undefined" || !CSS.highlights) return;
+    clearSearchHighlight();
+    lastAppliedSearch = null;
+    if (!lastSearch || !lastSearch.keyword) return;
+    const pm = document.querySelector(".ProseMirror");
+    if (!pm) return;
+    const { nodes, text: text2 } = collectTextNodes(pm);
+    const needle = lastSearch.caseSensitive ? lastSearch.keyword : lastSearch.keyword.toLowerCase();
+    const hay = lastSearch.caseSensitive ? text2 : text2.toLowerCase();
+    const matchRanges = [];
+    const currentRanges = [];
+    let from = 0;
+    let idx = 0;
+    let found2;
+    while ((found2 = hay.indexOf(needle, from)) !== -1) {
+      const range = rangeForOffsets(nodes, found2, found2 + needle.length);
+      if (range) (idx === lastSearch.index ? currentRanges : matchRanges).push(range);
+      from = found2 + needle.length;
+      idx++;
+    }
+    if (matchRanges.length > 0) {
+      const hl = new Highlight();
+      for (const r of matchRanges) hl.add(r);
+      CSS.highlights.set(FIND_MATCH_HL, hl);
+    }
+    if (currentRanges.length > 0) {
+      const hl = new Highlight();
+      for (const r of currentRanges) hl.add(r);
+      CSS.highlights.set(FIND_CURRENT_HL, hl);
+    }
+    lastAppliedSearch = {
+      key: (lastSearch.caseSensitive ? "1;" : "0;") + lastSearch.keyword,
+      index: lastSearch.index,
+      gen: renderGeneration
+    };
+  }
+  function reapplySearchHighlight() {
+    if (typeof CSS === "undefined" || !CSS.highlights) return;
+    if (!lastSearch || !lastSearch.keyword) {
+      applySearchHighlight();
+      return;
+    }
+    const key2 = (lastSearch.caseSensitive ? "1;" : "0;") + lastSearch.keyword;
+    if (lastAppliedSearch && lastAppliedSearch.key === key2 && lastAppliedSearch.index === lastSearch.index && lastAppliedSearch.gen === renderGeneration)
+      return;
+    applySearchHighlight();
+  }
+  function highlightSearch(keyword, currentIndex, caseSensitive) {
+    const kw = keyword == null ? "" : String(keyword);
+    lastSearch = kw ? { keyword: kw, index: currentIndex | 0, caseSensitive: !!caseSensitive } : null;
+    reapplySearchHighlight();
+  }
   let __programmaticScroll = false;
   let __lastProgrammaticY = null;
   let __programmaticUntil = 0;
@@ -45582,6 +45685,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       onApplyTheme: applyTheme,
       onSetLayout: applyLayout,
       onScrollToLine: scrollToLine,
+      onSearchHighlight: highlightSearch,
       onRetranslate: () => retranslateCodeBlocks()
     });
     console.log("[md] boot done, bridge=", typeof window.bridge, "onReady=", window.bridge ? typeof window.bridge.onReady : "n/a");
@@ -45610,7 +45714,13 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       lineToPreviewY,
       previewYToLine,
       getLastRequestedLine: () => lastRequestedLine,
-      rootId: ROOT_ID
+      rootId: ROOT_ID,
+      // 搜索高亮（本地浏览器验证）：highlight + 状态探针
+      highlightSearch,
+      searchHighlightCounts: () => ({
+        match: (CSS.highlights && CSS.highlights.get(FIND_MATCH_HL) || { size: 0 }).size,
+        current: (CSS.highlights && CSS.highlights.get(FIND_CURRENT_HL) || { size: 0 }).size
+      })
     };
   }
   boot().catch((e) => console.error("Milkdown boot failed:", e));

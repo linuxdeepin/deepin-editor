@@ -152,8 +152,10 @@ EditWrapper::EditWrapper(Window *window, QWidget *parent)
     // 滚动同步（§4.6，VS Code 式行号对齐）：左栏顶部可见行号直接下发右栏，
     // 由 JS 锚点表映射为预览内像素位置。行号取 QPlainTextEdit 块锚定滚动的
     // 精确顶部块（TextEdit::topVisibleBlockNumber），不用像素近似重载。
+    // LivePreview/ReadView 均放行：查看视图下搜索导航（隐藏 TextEdit 的光标跳转）
+    // 同样驱动渲染页滚动（BUG-379599）
     connect(m_pTextEdit->verticalScrollBar(), &QScrollBar::valueChanged, this, [this](int) {
-        if (m_bScrollSyncing || m_viewMode != ViewMode::LivePreview || !m_pRenderer)
+        if (m_bScrollSyncing || (m_viewMode != ViewMode::LivePreview && m_viewMode != ViewMode::ReadView) || !m_pRenderer)
             return;
         m_pRenderer->scrollToLine(m_pTextEdit->topVisibleBlockNumber());
     });

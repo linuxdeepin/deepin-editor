@@ -55,6 +55,18 @@ public:
             ? (dark ? bg.lighter(150).name() : bg.darker(130).name())
             : (dark ? QStringLiteral("#3a3a3a") : QStringLiteral("#e0e0e0"));
 
+        // 搜索高亮（渲染区对齐左侧编辑器查找配色）：取主题 editor-colors 的
+        // find-match / find-highlight 四色；缺失时回退 deepin / deepin_dark 主题值
+        auto ec = themeMap.value(QStringLiteral("editor-colors")).toMap();
+        auto findColor = [&ec, dark](const QString &key, const char *lightVal, const char *darkVal) {
+            const QColor c(ec.value(key).toString());
+            return c.isValid() ? c.name() : QString::fromLatin1(dark ? darkVal : lightVal);
+        };
+        obj["--find-match-bg"] = findColor(QStringLiteral("find-match-background"), "#ffff00", "#cccc00");
+        obj["--find-match-fg"] = findColor(QStringLiteral("find-match-foreground"), "#000000", "#000000");
+        obj["--find-highlight-bg"] = findColor(QStringLiteral("find-highlight-background"), "#2ca7f8", "#2d5c76");
+        obj["--find-highlight-fg"] = findColor(QStringLiteral("find-highlight-foreground"), "#ffffff", "#ffffff");
+
         return QString::fromUtf8(QJsonDocument(obj).toJson(QJsonDocument::Compact));
     }
 

@@ -235,6 +235,38 @@ TEST_F(MarkdownViewTest, SetMarkdown_BeforeReady_EmitsAndCachesForReplay)
     EXPECT_TRUE(obj->isReady());   // 期望 true 边：onBridgeReady 置位
 }
 
+TEST_F(MarkdownViewTest, HighlightSearch_BeforeReady_EmitsAndCachesForReplay)
+{
+    // Arrange：与 setMarkdown 同型的协议缓存契约（含清除态的有效性）
+    QSignalSpy searchSpy(obj->bridge(), &MarkdownBridge::searchHighlightRequested);
+
+    // Act：ready 前推送（当前命中序号 2、大小写敏感）
+    obj->highlightSearch(QStringLiteral("foo"), 2, true);
+
+    // Assert：即时 emit + 参数精确 + 未就绪（缓存待补发）
+    EXPECT_EQ(searchSpy.count(), 1);
+    EXPECT_EQ(searchSpy.at(0).at(0).toString(), QString("foo"));
+    EXPECT_EQ(searchSpy.at(0).at(1).toInt(), 2);
+    EXPECT_TRUE(searchSpy.at(0).at(2).toBool());
+    EXPECT_FALSE(obj->isReady());
+
+    // Act 2：内核就绪 → 补发；随后清除态同样即时 emit（空关键词为有效状态）
+    QSignalSpy readySpy(obj, &MarkdownView::ready);
+    obj->bridge()->onReady();
+    obj->highlightSearch(QString(), -1, false);
+
+    // Assert 2：补发一次 + 清除一次，参数逐项精确
+    EXPECT_EQ(searchSpy.count(), 3);
+    EXPECT_EQ(searchSpy.at(1).at(0).toString(), QString("foo"));
+    EXPECT_EQ(searchSpy.at(1).at(1).toInt(), 2);
+    EXPECT_TRUE(searchSpy.at(1).at(2).toBool());
+    EXPECT_TRUE(searchSpy.at(2).at(0).toString().isEmpty());
+    EXPECT_EQ(searchSpy.at(2).at(1).toInt(), -1);
+    EXPECT_FALSE(searchSpy.at(2).at(2).toBool());
+    EXPECT_EQ(readySpy.count(), 1);
+    EXPECT_TRUE(obj->isReady());
+}
+
 TEST_F(MarkdownViewTest, SetMode_ReadOnlyEditableAndInvalid_EmitsMappedFlag)
 {
     // Arrange
@@ -347,11 +379,12 @@ INSTANTIATE_TEST_SUITE_P(ViewLineBoundaries, ViewLineParamTest,
 
 TEST_F(MarkdownViewTest, OnBridgeReady_FullCache_ReplaysAllAndEmitsReady)
 {
-    // Arrange：ready 前塞满四类缓存（内容/布局/主题/滚动）
+    // Arrange：ready 前塞满五类缓存（内容/布局/主题/滚动/搜索高亮）
     QSignalSpy mdSpy(obj->bridge(), &MarkdownBridge::setMarkdownRequested);
     QSignalSpy layoutSpy(obj->bridge(), &MarkdownBridge::setLayoutRequested);
     QSignalSpy themeSpy(obj->bridge(), &MarkdownBridge::applyThemeRequested);
     QSignalSpy scrollSpy(obj->bridge(), &MarkdownBridge::scrollToLineRequested);
+    QSignalSpy searchSpy(obj->bridge(), &MarkdownBridge::searchHighlightRequested);
     QSignalSpy readySpy(obj, &MarkdownView::ready);
     QVariantMap theme;
     QVariantMap ec;
@@ -361,12 +394,13 @@ TEST_F(MarkdownViewTest, OnBridgeReady_FullCache_ReplaysAllAndEmitsReady)
     obj->setLayout(800, true);
     obj->applyTheme(theme);
     obj->scrollToLine(42.0);
+    obj->highlightSearch(QStringLiteral("body"), 0, false);
     EXPECT_EQ(mdSpy.count(), 1);   // 前置即时 emit
 
     // Act：内核就绪
     obj->bridge()->onReady();
 
-    // Assert：四类全部补发（即时 1 次 + 补发 1 次 = 2）+ ready 恰一次
+    // Assert：五类全部补发（即时 1 次 + 补发 1 次 = 2）+ ready 恰一次
     EXPECT_EQ(mdSpy.count(), 2);
     EXPECT_EQ(mdSpy.at(1).at(0).toString(), QString("body"));
     EXPECT_EQ(layoutSpy.count(), 2);
@@ -376,6 +410,10 @@ TEST_F(MarkdownViewTest, OnBridgeReady_FullCache_ReplaysAllAndEmitsReady)
     EXPECT_EQ(themeSpy.at(1).at(1).toBool(), true);
     EXPECT_EQ(scrollSpy.count(), 2);
     EXPECT_DOUBLE_EQ(scrollSpy.at(1).at(0).toDouble(), 42.0);
+    EXPECT_EQ(searchSpy.count(), 2);
+    EXPECT_EQ(searchSpy.at(1).at(0).toString(), QString("body"));
+    EXPECT_EQ(searchSpy.at(1).at(1).toInt(), 0);
+    EXPECT_FALSE(searchSpy.at(1).at(2).toBool());
     EXPECT_EQ(readySpy.count(), 1);
     EXPECT_TRUE(obj->isReady());
 }
@@ -403,6 +441,7 @@ TEST_F(MarkdownViewTest, OnBridgeReady_NoCache_EmitsOnlyReady)
     QSignalSpy layoutSpy(obj->bridge(), &MarkdownBridge::setLayoutRequested);
     QSignalSpy themeSpy(obj->bridge(), &MarkdownBridge::applyThemeRequested);
     QSignalSpy scrollSpy(obj->bridge(), &MarkdownBridge::scrollToLineRequested);
+    QSignalSpy searchSpy(obj->bridge(), &MarkdownBridge::searchHighlightRequested);
     QSignalSpy readySpy(obj, &MarkdownView::ready);
 
     // Act
@@ -414,6 +453,7 @@ TEST_F(MarkdownViewTest, OnBridgeReady_NoCache_EmitsOnlyReady)
     EXPECT_EQ(layoutSpy.count(), 0);
     EXPECT_EQ(themeSpy.count(), 0);
     EXPECT_EQ(scrollSpy.count(), 0);
+    EXPECT_EQ(searchSpy.count(), 0);
     EXPECT_TRUE(obj->isReady());
 }
 

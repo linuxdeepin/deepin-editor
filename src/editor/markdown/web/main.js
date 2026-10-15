@@ -77,8 +77,11 @@ function renderMarkdown(md) {
         editor.action(replaceAll(normalized));
         // 表格/代码块的视觉包裹由 NodeView 随文档同步生成（不再事后 enhance），
         // 渲染完成后重放滚动行号：首次渲染完成前 scrollToLine 因 max=0 被跳过，
-        // 此处对齐左右初始位置
-        setTimeout(reapplyScroll, 0);
+        // 此处对齐左右初始位置；搜索高亮同样重放（replaceAll 重建了全部 DOM 节点）
+        setTimeout(() => {
+            reapplyScroll();
+            reapplySearchHighlight();
+        }, 0);
         return;
     }
     renderProgressively(normalized, renderGeneration);
@@ -122,6 +125,7 @@ function renderProgressively(md, gen) {
         const batch = batches[index++];
         if (!batch) {
             buildProgress = null;
+            reapplySearchHighlight();
             if (!userScrolledDuringBuild) reapplyScroll();
             return;
         }
@@ -132,6 +136,7 @@ function renderProgressively(md, gen) {
             setTimeout(() => {
                 if (gen !== renderGeneration) return;
                 reapplyScroll();
+                reapplySearchHighlight();
             }, 0);
         } else {
             appendChunk(batch);
@@ -144,6 +149,7 @@ function renderProgressively(md, gen) {
             // 构建完成：f=1，后续同步恢复精确比例。若用户未动过右栏，
             // 按左栏最近请求做最终对齐（消除补偿近似误差）；动过则尊重其位置。
             buildProgress = null;
+            reapplySearchHighlight();   // 完整 DOM 就绪后重建全部命中高亮
             if (!userScrolledDuringBuild) {
                 buildAnchorMap();
                 reapplyScroll();
@@ -342,6 +348,120 @@ function applyLayout(maxContentWidth, center) {
     root.style.setProperty("--content-center", center ? "1" : "0");
 }
 
+// —— 搜索高亮（CSS Custom Highlight API，对齐左侧编辑器查找配色）——
+// C++ 侧 TextEdit::syncRendererFindHighlight 经 bridge 推送（关键词/当前命中序号/
+// 大小写），全部命中用 find-match 配色、当前命中用 find-highlight 配色（theme.css
+// ::highlight 规则）。选 CSS.highlights 而非 <mark> 包裹：不改动 DOM，不干扰
+// ProseMirror 文档模型与 NodeView，天然支持跨节点匹配；重渲染后凭 lastSearch 重放。
+// Chromium <105 无此 API 时静默降级（只滚动、不高亮）。
+const FIND_MATCH_HL = "md-find-match";
+const FIND_CURRENT_HL = "md-find-current";
+let lastSearch = null;         // { keyword, index, caseSensitive }：最近一次高亮请求；null=已清除
+let lastAppliedSearch = null;  // { key, index, gen }：已应用状态，配合 renderGeneration 幂等去重
+
+// NodeView UI 部件文本（表头工具条/代码块表头/折叠提示/KaTeX 隐藏 MathML 副本）
+// 不参与匹配，对齐左侧编辑器"只高亮正文"的语义
+const SEARCH_TEXT_REJECT = ".table-block-header, .code-block-header, .code-block-collapsed, .katex-mathml";
+
+function collectTextNodes(root) {
+    const nodes = [];
+    let text = "";
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+            const el = node.parentElement;
+            if (el && el.closest(SEARCH_TEXT_REJECT)) return NodeFilter.FILTER_REJECT;
+            return NodeFilter.FILTER_ACCEPT;
+        },
+    });
+    while (walker.nextNode()) {
+        nodes.push({ node: walker.currentNode, start: text.length });
+        text += walker.currentNode.nodeValue;
+    }
+    return { nodes, text };
+}
+
+// 全文偏移区间 [start, end) → DOM Range（二分定位起始节点，向后找结束节点）
+function rangeForOffsets(nodes, start, end) {
+    let lo = 0, hi = nodes.length - 1;
+    while (lo < hi) {
+        const mid = (lo + hi + 1) >> 1;
+        if (nodes[mid].start <= start) lo = mid;
+        else hi = mid - 1;
+    }
+    if (nodes.length === 0 || start < nodes[lo].start) return null;
+    let idx = lo;
+    while (idx + 1 < nodes.length && nodes[idx + 1].start < end) idx++;
+    const range = document.createRange();
+    range.setStart(nodes[lo].node, start - nodes[lo].start);
+    range.setEnd(nodes[idx].node, end - nodes[idx].start);
+    return range;
+}
+
+function clearSearchHighlight() {
+    if (typeof CSS === "undefined" || !CSS.highlights) return;
+    CSS.highlights.delete(FIND_MATCH_HL);
+    CSS.highlights.delete(FIND_CURRENT_HL);
+}
+
+function applySearchHighlight() {
+    if (typeof CSS === "undefined" || !CSS.highlights) return;
+    clearSearchHighlight();
+    lastAppliedSearch = null;
+    if (!lastSearch || !lastSearch.keyword) return;
+    const pm = document.querySelector(".ProseMirror");
+    if (!pm) return;
+    const { nodes, text } = collectTextNodes(pm);
+    const needle = lastSearch.caseSensitive ? lastSearch.keyword : lastSearch.keyword.toLowerCase();
+    const hay = lastSearch.caseSensitive ? text : text.toLowerCase();
+    const matchRanges = [];
+    const currentRanges = [];
+    let from = 0;
+    let idx = 0;
+    let found;
+    while ((found = hay.indexOf(needle, from)) !== -1) {
+        const range = rangeForOffsets(nodes, found, found + needle.length);
+        if (range) (idx === lastSearch.index ? currentRanges : matchRanges).push(range);
+        from = found + needle.length;
+        idx++;
+    }
+    if (matchRanges.length > 0) {
+        const hl = new Highlight();
+        for (const r of matchRanges) hl.add(r);
+        CSS.highlights.set(FIND_MATCH_HL, hl);
+    }
+    if (currentRanges.length > 0) {
+        const hl = new Highlight();
+        for (const r of currentRanges) hl.add(r);
+        CSS.highlights.set(FIND_CURRENT_HL, hl);
+    }
+    lastAppliedSearch = {
+        key: (lastSearch.caseSensitive ? "1;" : "0;") + lastSearch.keyword,
+        index: lastSearch.index,
+        gen: renderGeneration,
+    };
+}
+
+// 幂等入口：状态与代际均未变化时跳过重扫（滚动 valueChanged 路径高频重推）
+function reapplySearchHighlight() {
+    if (typeof CSS === "undefined" || !CSS.highlights) return;
+    if (!lastSearch || !lastSearch.keyword) {
+        applySearchHighlight();   // 清除路径（applySearchHighlight 内部处理空态）
+        return;
+    }
+    const key = (lastSearch.caseSensitive ? "1;" : "0;") + lastSearch.keyword;
+    if (lastAppliedSearch && lastAppliedSearch.key === key
+        && lastAppliedSearch.index === lastSearch.index
+        && lastAppliedSearch.gen === renderGeneration)
+        return;
+    applySearchHighlight();
+}
+
+function highlightSearch(keyword, currentIndex, caseSensitive) {
+    const kw = keyword == null ? "" : String(keyword);
+    lastSearch = kw ? { keyword: kw, index: currentIndex | 0, caseSensitive: !!caseSensitive } : null;
+    reapplySearchHighlight();
+}
+
 // 程序化滚动与用户滚动的可靠区分（2026-09-16 根因修复）：
 // Chromium 的 scroll 事件在渲染步骤【异步】派发：仅靠同步标记会被定时器提前复位误判；
 // 仅靠位置判定在渐进构建期也不可靠——补偿系数 f 随块追加变化，两次前向同步的目标
@@ -483,6 +603,7 @@ async function boot() {
         onApplyTheme: applyTheme,
         onSetLayout: applyLayout,
         onScrollToLine: scrollToLine,
+        onSearchHighlight: highlightSearch,
         onRetranslate: () => retranslateCodeBlocks(),
     });
 
@@ -517,6 +638,12 @@ if (typeof QWebChannel === "undefined") {
         previewYToLine,
         getLastRequestedLine: () => lastRequestedLine,
         rootId: ROOT_ID,
+        // 搜索高亮（本地浏览器验证）：highlight + 状态探针
+        highlightSearch,
+        searchHighlightCounts: () => ({
+            match: (CSS.highlights && CSS.highlights.get(FIND_MATCH_HL) || { size: 0 }).size,
+            current: (CSS.highlights && CSS.highlights.get(FIND_CURRENT_HL) || { size: 0 }).size,
+        }),
     };
 }
 
