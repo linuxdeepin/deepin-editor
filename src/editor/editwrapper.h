@@ -108,6 +108,8 @@ public:
     QString filePath();
     TextEdit *textEditor();
     Window *window();
+    // Markdown 渲染器（未创建/纯文本文件时为 null），供 TextEdit 推送搜索高亮等渲染区状态
+    IMarkdownRenderer *markdownRenderer() const { return m_pRenderer; }
     void updateHighlighterAll();
 
     //get and set m_tModifiedDateTime

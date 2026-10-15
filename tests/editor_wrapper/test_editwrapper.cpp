@@ -195,6 +195,13 @@ public:
         ++scrollCalls;
         lastLine = line;
     }
+    void highlightSearch(const QString &keyword, int currentIndex, bool caseSensitive) override
+    {
+        ++highlightSearchCalls;
+        lastSearchKeyword = keyword;
+        lastSearchIndex = currentIndex;
+        lastSearchCaseSensitive = caseSensitive;
+    }
 
     bool ready = false;
     int setMarkdownCalls = 0;
@@ -202,11 +209,15 @@ public:
     int applyThemeCalls = 0;
     int setLayoutCalls = 0;
     int scrollCalls = 0;
+    int highlightSearchCalls = 0;
     QString lastMarkdown;
     int lastMode = -1;
     int lastMaxWidth = -1;
     bool lastCenter = false;
     double lastLine = -1.0;
+    QString lastSearchKeyword;
+    int lastSearchIndex = -2;
+    bool lastSearchCaseSensitive = false;
     QVariantMap lastTheme;
 };
 
@@ -580,6 +591,39 @@ TEST_F(EditWrapperTest, SetTemFile_TrueAndFalse_RoundTrips)
     EXPECT_TRUE(m_wrapper->isTemFile());
     m_wrapper->setTemFile(false);
     EXPECT_FALSE(m_wrapper->isTemFile());
+}
+
+TEST_F(EditWrapperTest, FindHighlight_OnTextEditor_ForwardedToInjectedRenderer)
+{
+    // Arrange：注入记录型渲染器（渲染区搜索高亮推送链路：TextEdit → EditWrapper → renderer）
+    m_wrapper->setMarkdownRendererForTest(&m_renderer);
+    m_wrapper->textEditor()->setPlainText("foo bar\nbaz foo\nlast foo");
+
+    // Act：查找下一个（当前命中跳到首个 "foo"）后触发左栏高亮刷新
+    m_wrapper->textEditor()->updateCursorKeywordSelection("foo", true);
+    m_wrapper->textEditor()->highlightKeywordInView("foo");
+
+    // Assert：渲染区收到同关键词推送，当前命中为首个（1 基计数转 0 基序号）
+    EXPECT_GE(m_renderer.highlightSearchCalls, 1);
+    EXPECT_EQ(m_renderer.lastSearchKeyword, QString("foo"));
+    EXPECT_EQ(m_renderer.lastSearchIndex, 0);
+    EXPECT_FALSE(m_renderer.lastSearchCaseSensitive);
+
+    // Act 2：再次查找下一个 → 当前命中移到第二个
+    m_wrapper->textEditor()->updateCursorKeywordSelection("foo", true);
+    m_wrapper->textEditor()->highlightKeywordInView("foo");
+
+    // Assert 2：序号推进到 1（第二个命中）
+    EXPECT_EQ(m_renderer.lastSearchKeyword, QString("foo"));
+    EXPECT_EQ(m_renderer.lastSearchIndex, 1);
+
+    // Act 3：清除关键词（查找框清空路径）→ 渲染区收到空关键词清除态
+    m_wrapper->textEditor()->removeKeywords();
+
+    // Assert 3
+    EXPECT_TRUE(m_renderer.lastSearchKeyword.isEmpty());
+    EXPECT_EQ(m_renderer.lastSearchIndex, -1);
+    EXPECT_FALSE(m_renderer.lastSearchCaseSensitive);
 }
 
 TEST_F(EditWrapperTest, PlainTextEmpty_DefaultTrue_AfterInsertFalse)

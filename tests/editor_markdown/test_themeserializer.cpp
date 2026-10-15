@@ -246,10 +246,15 @@ TEST(MarkdownThemeSerializerTest, Serialize_OutputIsCompactJson_AllKeysPresent)
     // Act
     const QString json = ThemeSerializer::serialize(theme);
 
-    // Assert：Compact JSON（无空白换行）且恰含 6 个键
+    // Assert：Compact JSON（无空白换行）且恰含 10 个键
+    //（7 个外观键 + 搜索高亮 4 键：--find-match-bg/fg、--find-highlight-bg/fg）
     const QJsonObject obj = QJsonDocument::fromJson(json.toUtf8()).object();
-    EXPECT_EQ(obj.size(), 6);
-    EXPECT_EQ(obj.keys().count(), 6);
+    EXPECT_EQ(obj.size(), 10);
+    EXPECT_EQ(obj.keys().count(), 10);
+    EXPECT_TRUE(obj.contains("--find-match-bg"));
+    EXPECT_TRUE(obj.contains("--find-match-fg"));
+    EXPECT_TRUE(obj.contains("--find-highlight-bg"));
+    EXPECT_TRUE(obj.contains("--find-highlight-fg"));
     EXPECT_FALSE(json.contains('\n'));
     EXPECT_FALSE(json.contains(' '));   // Compact 模式无空格分隔符
 }

@@ -222,6 +222,9 @@ public:
     bool searchKeywordSeletion(QString keyword, QTextCursor cursor, bool findNext,
                                Qt::CaseSensitivity caseFlag = Qt::CaseInsensitive);
     void renderAllSelections();
+    // 将查找高亮状态（关键词/当前命中序号/大小写）同步到渲染区（ReadView/LivePreview），
+    // keyword 为空表示清除；复用 findMatchCount 的匹配位置缓存避免重复全文扫描
+    void syncRendererFindHighlight(const QString &keyword, Qt::CaseSensitivity caseFlag = Qt::CaseInsensitive);
 
     bool clearMarkOperationForCursor(QTextCursor cursor);
     bool clearMarksForTextCursor();

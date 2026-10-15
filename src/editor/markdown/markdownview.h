@@ -47,6 +47,7 @@ public:
     void applyTheme(const QVariantMap &themeMap) override;   // 阶段 3 接 ThemeSerializer
     void setLayout(int maxContentWidth, bool center) override;
     void scrollToLine(double line) override;
+    void highlightSearch(const QString &keyword, int currentIndex, bool caseSensitive) override;
 
 signals:
     void ready();
@@ -72,6 +73,11 @@ private:
     bool m_hasLayout = false;
     double m_lastScrollLine = 0.0;      // 最近一次同步行号（初始对齐：恢复光标后左栏非顶部）
     bool m_hasScroll = false;           // 与内容/布局/主题同型的有效标记（0.0＝回顶部亦有效）
+    // 最近一次搜索高亮请求（ready 前缓存；内容重渲染后由 JS 侧自行重放，C++ 不重复推送）
+    QString m_lastSearchKeyword;
+    int m_lastSearchIndex = -1;
+    bool m_lastSearchCaseSensitive = false;
+    bool m_hasSearch = false;
 };
 
 #endif // MARKDOWNVIEW_H

@@ -9,6 +9,7 @@
 #include "dtextedit.h"
 #include "leftareaoftextedit.h"
 #include "editwrapper.h"
+#include "markdown/imarkdownrenderer.h"
 #include "showflodcodewidget.h"
 #include "deletebackcommond.h"
 #include "replaceallcommond.h"
@@ -2364,6 +2365,8 @@ void TextEdit::removeKeywords()
 
     renderAllSelections();
 
+    syncRendererFindHighlight(QString());
+
     qDebug() << "Removing keywords successfully";
     //setFocus();
 }
@@ -2378,6 +2381,8 @@ bool TextEdit::highlightKeyword(const QString &keyword, int position, Qt::CaseSe
     bool bRet = updateKeywordSelectionsInView(keyword, m_findMatchFormat, &m_findMatchSelections, caseFlag);
     renderAllSelections();
 
+    syncRendererFindHighlight(keyword, caseFlag);
+
     qDebug() << "Highlighting keyword successfully: " << bRet;
     return bRet;
 }
@@ -2391,8 +2396,33 @@ bool TextEdit::highlightKeywordInView(const QString &keyword, Qt::CaseSensitivit
     // setExtraSelections(m_findMatchSelections);
     renderAllSelections();
 
+    syncRendererFindHighlight(keyword, caseFlag);
+
     qDebug() << "Highlighting keyword in view successfully: " << bRet;
     return bRet;
+}
+
+void TextEdit::syncRendererFindHighlight(const QString &keyword, Qt::CaseSensitivity caseFlag)
+{
+    if (!m_wrapper)
+        return;
+    IMarkdownRenderer *renderer = m_wrapper->markdownRenderer();
+    if (!renderer)
+        return;
+
+    if (keyword.isEmpty()) {
+        renderer->highlightSearch(QString(), -1, false);
+        return;
+    }
+
+    // 复用 updateMatchCount 的缓存（关键词/大小写未变时不重扫全文）；
+    // findCurrentMatchIndex 为 1 基序号（未命中返回 0），转 0 基传给渲染区
+    if (keyword != m_countedKeyword || caseFlag != m_countedCase) {
+        m_allMatchPositions = scanAllMatchPositions(keyword, caseFlag);
+        m_countedKeyword = keyword;
+        m_countedCase = caseFlag;
+    }
+    renderer->highlightSearch(keyword, findCurrentMatchIndex() - 1, caseFlag == Qt::CaseSensitive);
 }
 
 void TextEdit::clearFindMatchSelections()

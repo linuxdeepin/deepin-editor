@@ -157,6 +157,8 @@ void MarkdownView::onBridgeReady()
     // 不可用 > 0 判断（否则回顶部语义被静默吞掉，安全/代码审查 2026-08-19）
     if (m_hasScroll)
         emit m_bridge->scrollToLineRequested(m_lastScrollLine);
+    if (m_hasSearch)
+        emit m_bridge->searchHighlightRequested(m_lastSearchKeyword, m_lastSearchIndex, m_lastSearchCaseSensitive);
     emit ready();
 }
 
@@ -200,4 +202,14 @@ void MarkdownView::scrollToLine(double line)
     m_lastScrollLine = line;
     m_hasScroll = true;
     emit m_bridge->scrollToLineRequested(line);
+}
+
+void MarkdownView::highlightSearch(const QString &keyword, int currentIndex, bool caseSensitive)
+{
+    // 缓存同上：ready 前请求不丢失；空 keyword（清除）亦为有效状态，用标记而非值判断
+    m_lastSearchKeyword = keyword;
+    m_lastSearchIndex = currentIndex;
+    m_lastSearchCaseSensitive = caseSensitive;
+    m_hasSearch = true;
+    emit m_bridge->searchHighlightRequested(keyword, currentIndex, caseSensitive);
 }

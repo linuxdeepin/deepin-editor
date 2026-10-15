@@ -35,6 +35,9 @@ public:
     virtual void setLayout(int maxContentWidth, bool center) = 0;
     // 滚动同步（VS Code 式行号对齐）：line 为 0 基源码行号（左栏顶部可见行），由左侧 TextEdit 滚动驱动。
     virtual void scrollToLine(double line) = 0;
+    // 搜索高亮：keyword 为空表示清除；currentIndex 为当前命中序号（0 起，-1 无当前命中）。
+    // 渲染页对齐左侧编辑器的查找配色：全部命中 find-match，当前命中 find-highlight。
+    virtual void highlightSearch(const QString &keyword, int currentIndex, bool caseSensitive) = 0;
 };
 
 #endif // IMARKDOWNRENDERER_H

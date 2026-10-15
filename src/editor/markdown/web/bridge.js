@@ -36,6 +36,9 @@ function wireSignals(h) {
     b.applyThemeRequested.connect(function (json, isDark) { h.onApplyTheme(json, isDark); });
     b.setLayoutRequested.connect(function (maxW, center) { h.onSetLayout(maxW, center); });
     b.scrollToLineRequested.connect(function (line) { h.onScrollToLine(line); });
+    b.searchHighlightRequested.connect(function (keyword, currentIndex, caseSensitive) {
+        h.onSearchHighlight(keyword, currentIndex, caseSensitive);
+    });
     // 语言切换：C++ 侧 Q_PROPERTY 文案更新后触发，重刷已渲染 DOM
     if (h.onRetranslate && b.retranslated) {
         b.retranslated.connect(function () { h.onRetranslate(); });

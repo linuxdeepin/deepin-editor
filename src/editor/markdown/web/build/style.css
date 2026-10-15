@@ -18,12 +18,33 @@
     --link: #0058de;
     --content-max-width: 800px;
     --content-center: 1;
+    /* 搜索高亮（CSS Custom Highlight API）：运行时由 ThemeSerializer 按编辑器主题注入
+       覆盖（inline style 优先于本样式表），此处缺省值对齐 deepin 主题 find-* 配色 */
+    --find-match-bg: #ffff00;
+    --find-match-fg: #000000;
+    --find-highlight-bg: #2ca7f8;
+    --find-highlight-fg: #ffffff;
 }
 
 [data-theme="dark"] {
     color-scheme: dark;
     --link: #024cca;
     --table-border: rgba(255, 255, 255, 0.1);
+    /* standalone 调试（未注入主题）时的深色回退，对齐 deepin_dark 主题 */
+    --find-match-bg: #cccc00;
+    --find-highlight-bg: #2d5c76;
+}
+
+/* 搜索高亮：全部命中（find-match）与当前命中（find-highlight）两级配色，
+   与左侧编辑器查找高亮一致；main.js 经 CSS.highlights 注册 Range 集合 */
+::highlight(md-find-match) {
+    background-color: var(--find-match-bg);
+    color: var(--find-match-fg);
+}
+
+::highlight(md-find-current) {
+    background-color: var(--find-highlight-bg);
+    color: var(--find-highlight-fg);
 }
 
 html, body {

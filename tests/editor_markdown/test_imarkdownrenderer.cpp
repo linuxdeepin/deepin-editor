@@ -51,12 +51,16 @@ protected:
         int applyThemeCalls = 0;
         int setLayoutCalls = 0;
         int scrollToLineCalls = 0;
+        int highlightSearchCalls = 0;
         QString lastMd;
         int lastMode = -1;
         QVariantMap lastTheme;
         int lastMaxW = -1;
         bool lastCenter = false;
         double lastLine = -1.0;
+        QString lastSearchKeyword;
+        int lastSearchIndex = -2;
+        bool lastSearchCaseSensitive = false;
         bool *dtorFlag = nullptr;
 
         ~RecordingRenderer() override {
@@ -70,6 +74,13 @@ protected:
         void applyTheme(const QVariantMap &themeMap) override { ++applyThemeCalls; lastTheme = themeMap; }
         void setLayout(int maxContentWidth, bool center) override { ++setLayoutCalls; lastMaxW = maxContentWidth; lastCenter = center; }
         void scrollToLine(double line) override { ++scrollToLineCalls; lastLine = line; }
+        void highlightSearch(const QString &keyword, int currentIndex, bool caseSensitive) override
+        {
+            ++highlightSearchCalls;
+            lastSearchKeyword = keyword;
+            lastSearchIndex = currentIndex;
+            lastSearchCaseSensitive = caseSensitive;
+        }
     };
 
     RecordingRenderer *impl = nullptr;
@@ -82,12 +93,13 @@ TEST_F(IMarkdownRendererTest, PolymorphicDispatch_AllInterfaceMethods_ReachImpl)
     QVariantMap theme;
     theme["k"] = "v";
 
-    // Act —— 仅经接口指针驱动全部 6 个方法
+    // Act —— 仅经接口指针驱动全部 7 个方法
     base->setMarkdown("# title");
     base->setMode(1);
     base->applyTheme(theme);
     base->setLayout(800, true);
     base->scrollToLine(42.5);
+    base->highlightSearch("foo", 2, true);
     (void)base->isReady();
 
     // Assert：实现侧逐项收到精确调用与参数
@@ -102,6 +114,10 @@ TEST_F(IMarkdownRendererTest, PolymorphicDispatch_AllInterfaceMethods_ReachImpl)
     EXPECT_TRUE(impl->lastCenter);
     EXPECT_EQ(impl->scrollToLineCalls, 1);
     EXPECT_DOUBLE_EQ(impl->lastLine, 42.5);
+    EXPECT_EQ(impl->highlightSearchCalls, 1);
+    EXPECT_EQ(impl->lastSearchKeyword, QString("foo"));
+    EXPECT_EQ(impl->lastSearchIndex, 2);
+    EXPECT_TRUE(impl->lastSearchCaseSensitive);
     EXPECT_EQ(impl->isReadyCalls, 1);
 }
 
