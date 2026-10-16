@@ -149,12 +149,13 @@ EditWrapper::EditWrapper(Window *window, QWidget *parent)
         const QString baseDir = QFileInfo(m_pTextEdit->getFilePath()).absolutePath();
         m_pRenderer->setMarkdown(MarkdownLogic::resolveImagePaths(md, baseDir));
     });
-    // 滚动同步（§4.6）：左栏为主驱动，LivePreview 下按比例转发右栏
-    connect(m_pTextEdit->verticalScrollBar(), &QScrollBar::valueChanged, this, [this](int value) {
+    // 滚动同步（§4.6，VS Code 式行号对齐）：左栏顶部可见行号直接下发右栏，
+    // 由 JS 锚点表映射为预览内像素位置。行号取 QPlainTextEdit 块锚定滚动的
+    // 精确顶部块（TextEdit::topVisibleBlockNumber），不用像素近似重载。
+    connect(m_pTextEdit->verticalScrollBar(), &QScrollBar::valueChanged, this, [this](int) {
         if (m_bScrollSyncing || m_viewMode != ViewMode::LivePreview || !m_pRenderer)
             return;
-        auto sb = m_pTextEdit->verticalScrollBar();
-        m_pRenderer->scrollToRatio(ScrollSync::ratioFromScrollBar(value, sb->minimum(), sb->maximum()));
+        m_pRenderer->scrollToLine(m_pTextEdit->topVisibleBlockNumber());
     });
     // 视图模式入口（§8.2）：combobox 请求切换；状态变化回写入口选中态/置灰
     connect(m_pBottomBar, &BottomBar::viewModeRequested, this, [this](ViewMode mode) {
@@ -1948,10 +1949,9 @@ bool EditWrapper::setViewMode(ViewMode mode)
     m_renderThrottle.noteContent(m_pTextEdit->toPlainText());
     m_renderThrottle.flushNow();
 
-    // 进入 LivePreview：同步当前滚动比例到右栏（§5.2）
+    // 进入 LivePreview：左栏顶部可见行同步到右栏（§5.2，行号对齐）
     if (m_viewMode == ViewMode::LivePreview && m_pRenderer) {
-        auto sb = m_pTextEdit->verticalScrollBar();
-        m_pRenderer->scrollToRatio(ScrollSync::ratioFromScrollBar(sb->value(), sb->minimum(), sb->maximum()));
+        m_pRenderer->scrollToLine(m_pTextEdit->topVisibleBlockNumber());
     }
 
     emit viewModeChanged(m_viewMode);
@@ -2025,17 +2025,16 @@ void EditWrapper::ensureMarkdownViewCreated()
         m_renderThrottle.setReady(true);
         installReadViewEventFilter();
     });
-    // 反向滚动同步（§4.6 双向）：右栏用户滚动 → 按比例驱动左栏 TextEdit；
+    // 反向滚动同步（§4.6 双向，行号对齐）：右栏用户滚动 → JS 由锚点插值回传顶部
+    // 可见源码行号（可带小数）→ 左栏滚动条按块号定位；
     // 护栏防回环（左栏 valueChanged 触发时跳过转发）
-    connect(m_pMarkdownView, &MarkdownView::scrollRatioChanged, this, [this](double ratio) {
+    connect(m_pMarkdownView, &MarkdownView::scrollLineChanged, this, [this](double line) {
         if (m_viewMode != ViewMode::LivePreview)
             return;
         auto sb = m_pTextEdit->verticalScrollBar();
         if (sb->maximum() <= sb->minimum())
             return;
-        const double clamped = ScrollSync::clampRatio(ratio);
-        const int target = sb->minimum()
-                           + qRound(clamped * (sb->maximum() - sb->minimum()));
+        const int target = ScrollSync::scrollValueForLine(line, sb->minimum(), sb->maximum());
         if (target == sb->value())
             return;
         m_bScrollSyncing = true;

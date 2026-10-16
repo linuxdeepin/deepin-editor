@@ -146,6 +146,9 @@ public:
     int blockCount() const;
     int characterCount() const;
     QTextBlock firstVisibleBlock();
+    // 视口顶部首个可见块号（0 基源码行号，实时阅览滚动同步用）。
+    // 取 QPlainTextEdit 块锚定滚动的精确值，不经过本类同名像素近似重载
+    int topVisibleBlockNumber() const;
 
     void moveToStart();
     void moveToEnd();

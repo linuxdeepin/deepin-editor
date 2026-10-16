@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2026 UnionCTechnology Software Technology Co., Ltd.
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include <gtest/gtest.h>
@@ -7,160 +7,156 @@
 
 #include <climits>
 
-// 分支清单（来源：scrollsync.h）
-// clampRatio:
-//   C1: ratio < 0.0 → 0.0
-//   C2: ratio > 1.0 → 1.0
-//   C3: [0,1] 区间 → 原值
-// ratioFromScrollBar:
-//   S1: max <= min → 0.0（除零保护，含 max<min 与相等）
-//   S2: 正常 (value-min)/(max-min) → 钳制后值
-//   S3: value 越出 [min,max] → 钳制到 0/1
-//   S4: min 非 0（负 min 边界）
+// 分支清单（来源：scrollsync.h，VS Code 式行号同步纯函数）
+// clampLine:
+//   C1: line < lo → lo
+//   C2: line > hi → hi
+//   C3: [lo,hi] 区间 → 原值
+//   C4: 退化区间 lo > hi → lo
+// scrollValueForLine:
+//   S1: 带小数四舍五入（<0.5 舍 / >=0.5 入）
+//   S2: 越下界 → min
+//   S3: 越上界 → max
+//   S4: 退化区间 min > max → min（除零/负区间保护）
+//   S5: 区间内整数值 → 原值
 //
 // 用例映射：
-// - ClampRatio_BoundaryValues_ClampsToUnitInterval（TEST_P 7 组）      → C1/C2/C3
-// - RatioFromScrollBar_DegenerateRange_ReturnsZero（TEST_P 3 组）      → S1
-// - RatioFromScrollBar_NormalRanges_ReturnsNormalized（TEST_P 5 组）   → S2/S4
-// - RatioFromScrollBar_ValueOutOfRange_ClampedToUnitInterval（TEST_P 3 组）→ S3
+// - ClampLine_BoundaryValues_ClampsToRange（TEST_P 7 组）                 → C1/C2/C3
+// - ClampLine_DegenerateRange_ReturnsLo（TEST_F）                          → C4
+// - ScrollValueForLine_FractionalLines_RoundsHalfUp（TEST_P 4 组）         → S1/S5
+// - ScrollValueForLine_OutOfRange_ClampsToRange（TEST_P 4 组）             → S2/S3
+// - ScrollValueForLine_DegenerateRange_ReturnsMin（TEST_P 3 组）           → S4
 //
 // 最小清单自检：1 每公开方法≥1用例 ✔（2 方法全覆盖）2 等价类 ✔ 3 边界值显式成组 ✔
 // 4 TEST_P ×3（各≥3 组）✔ 5 分支映射 ✔ 6 全分支覆盖 ✔ 7 无异常 8 负面（退化区间/越界）✔
 // 9 纯函数无状态 ✔ 10 无外部依赖，无需 stub ✔
 
-// —— C1/C2/C3：[0,1] 钳制边界值成组 ——
+// —— C1/C2/C3：区间钳制边界值成组 ——
 namespace {
 struct ClampCase {
     double input;
     double expected;
 };
 const ClampCase kClampCases[] = {
-    { -0.5, 0.0 },     // 下越界
-    { -0.001, 0.0 },   // 贴近下界的负值
+    { -5.0, 0.0 },     // 下越界（负行号）
+    { -0.5, 0.0 },     // 贴近下界的负值
     { 0.0, 0.0 },      // 下边界
-    { 0.3, 0.3 },      // 区间内
-    { 1.0, 1.0 },      // 上边界
-    { 1.0001, 1.0 },   // 贴近上界的越界
-    { 2.5, 1.0 },      // 上越界
+    { 42.5, 42.5 },    // 区间内（小数原样保留）
+    { 100.0, 100.0 },  // 上边界
+    { 100.5, 100.0 },  // 贴近上界的越界
+    { 250.0, 100.0 },  // 上越界
 };
 } // namespace
 
-class ClampRatioParamTest : public ::testing::TestWithParam<ClampCase> {
+class ClampLineParamTest : public ::testing::TestWithParam<ClampCase> {
 };
 
-TEST_P(ClampRatioParamTest, ClampRatio_BoundaryValues_ClampsToUnitInterval)
+TEST_P(ClampLineParamTest, ClampLine_BoundaryValues_ClampsToRange)
 {
-    // Arrange
+    // Arrange：固定区间 [0, 100]
     const auto &c = GetParam();
 
     // Act
-    const double out = ScrollSync::clampRatio(c.input);
+    const double out = ScrollSync::clampLine(c.input, 0.0, 100.0);
 
     // Assert
     EXPECT_NEAR(out, c.expected, 1e-12);   // 期望值见参数表
-    EXPECT_GE(out, 0.0);                   // 恒 >= 0
-    EXPECT_LE(out, 1.0);                   // 恒 <= 1
+    EXPECT_GE(out, 0.0);                   // 恒 >= lo
+    EXPECT_LE(out, 100.0);                 // 恒 <= hi
 }
 
-INSTANTIATE_TEST_SUITE_P(ClampBoundaries, ClampRatioParamTest,
+INSTANTIATE_TEST_SUITE_P(ClampBoundaries, ClampLineParamTest,
                          ::testing::ValuesIn(kClampCases));
 
-// —— S1：退化区间（max<=min，除零保护）——
-namespace {
-struct BarCase {
-    int value;
-    int min;
-    int max;
-};
-const BarCase kDegenerateCases[] = {
-    { 0, 10, 10 },    // max == min
-    { 5, 10, 5 },     // max < min
-    { 7, 0, -3 },     // max 为负
-};
-} // namespace
-
-class DegenerateBarParamTest : public ::testing::TestWithParam<BarCase> {
-};
-
-TEST_P(DegenerateBarParamTest, RatioFromScrollBar_DegenerateRange_ReturnsZero)
+// —— C4：退化区间（lo > hi）返回 lo ——
+TEST(ScrollSyncStaticTest, ClampLine_DegenerateRange_ReturnsLo)
 {
-    // Arrange
-    const auto &c = GetParam();
-
-    // Act
-    const double out = ScrollSync::ratioFromScrollBar(c.value, c.min, c.max);
-
-    // Assert：除零保护路径恒 0（期望 0.0 边）
-    EXPECT_DOUBLE_EQ(out, 0.0);
-    EXPECT_GE(out, 0.0);
+    EXPECT_NEAR(ScrollSync::clampLine(50.0, 100.0, 0.0), 100.0, 1e-12);
+    EXPECT_NEAR(ScrollSync::clampLine(-1.0, 10.0, 5.0), 10.0, 1e-12);
 }
 
-INSTANTIATE_TEST_SUITE_P(DegenerateRanges, DegenerateBarParamTest,
-                         ::testing::ValuesIn(kDegenerateCases));
-
-// —— S2/S4：正常区间（含非零 min）——
+// —— S1/S5：小数四舍五入与整数原值 ——
 namespace {
-struct RatioCase {
-    int value;
-    int min;
-    int max;
-    double expected;
+struct RoundCase {
+    double line;
+    int expected;
 };
-const RatioCase kNormalCases[] = {
-    { 0, 0, 100, 0.0 },     // 顶边界
-    { 50, 0, 100, 0.5 },    // 中点
-    { 100, 0, 100, 1.0 },   // 底边界
-    { 10, 10, 110, 0.0 },   // 非零 min：value==min
-    { 60, 10, 110, 0.5 },   // 非零 min：中点
+const RoundCase kRoundCases[] = {
+    { 10.4, 10 },   // 小数部分 < 0.5 → 舍
+    { 10.5, 11 },   // 小数部分 = 0.5 → 入（半值远离零方向）
+    { 10.7, 11 },   // 小数部分 > 0.5 → 入
+    { 7.0, 7 },     // 整数 → 原值
 };
 } // namespace
 
-class NormalBarParamTest : public ::testing::TestWithParam<RatioCase> {
+class RoundLineParamTest : public ::testing::TestWithParam<RoundCase> {
 };
 
-TEST_P(NormalBarParamTest, RatioFromScrollBar_NormalRanges_ReturnsNormalized)
+TEST_P(RoundLineParamTest, ScrollValueForLine_FractionalLines_RoundsHalfUp)
 {
-    // Arrange
+    // Arrange：宽区间 [0, 1000]，排除钳制干扰只验证取整
     const auto &c = GetParam();
 
     // Act
-    const double out = ScrollSync::ratioFromScrollBar(c.value, c.min, c.max);
+    const int out = ScrollSync::scrollValueForLine(c.line, 0, 1000);
 
     // Assert
-    EXPECT_NEAR(out, c.expected, 1e-12);
-    // 与 clampRatio 组合语义一致（独立公式复核）
-    const double raw = double(c.value - c.min) / double(c.max - c.min);
-    EXPECT_NEAR(out, ScrollSync::clampRatio(raw), 1e-12);
+    EXPECT_EQ(out, c.expected);
 }
 
-INSTANTIATE_TEST_SUITE_P(NormalRanges, NormalBarParamTest,
-                         ::testing::ValuesIn(kNormalCases));
+INSTANTIATE_TEST_SUITE_P(RoundLines, RoundLineParamTest,
+                         ::testing::ValuesIn(kRoundCases));
 
-// —— S3：value 越出区间 → 钳制 ——
+// —— S2/S3：越界钳制 ——
 namespace {
-const RatioCase kOutOfRangeCases[] = {
-    { -50, 0, 100, 0.0 },    // 下越界
-    { 200, 0, 100, 1.0 },    // 上越界
-    { INT_MIN, 0, 100, 0.0 },// 极小值边界
+struct OutOfRangeCase {
+    double line;
+    int min;
+    int max;
+    int expected;
+};
+const OutOfRangeCase kOutOfRangeCases[] = {
+    { -3.7, 0, 200, 0 },      // 下越界（带小数）→ min
+    { 0.2, 0, 200, 0 },       // 越下界四舍五入前先钳制（非 0）
+    { 205.9, 0, 200, 200 },   // 上越界 → max
+    { 100.0, 10, 90, 90 },    // 非零 min 下越上界
 };
 } // namespace
 
-class OutOfRangeBarParamTest : public ::testing::TestWithParam<RatioCase> {
+class OutOfRangeParamTest : public ::testing::TestWithParam<OutOfRangeCase> {
 };
 
-TEST_P(OutOfRangeBarParamTest, RatioFromScrollBar_ValueOutOfRange_ClampedToUnitInterval)
+TEST_P(OutOfRangeParamTest, ScrollValueForLine_OutOfRange_ClampsToRange)
 {
-    // Arrange
     const auto &c = GetParam();
-
-    // Act
-    const double out = ScrollSync::ratioFromScrollBar(c.value, c.min, c.max);
-
-    // Assert
-    EXPECT_NEAR(out, c.expected, 1e-12);
-    EXPECT_LE(out, 1.0);
-    EXPECT_GE(out, 0.0);
+    EXPECT_EQ(ScrollSync::scrollValueForLine(c.line, c.min, c.max), c.expected);
 }
 
-INSTANTIATE_TEST_SUITE_P(OutOfRangeValues, OutOfRangeBarParamTest,
+INSTANTIATE_TEST_SUITE_P(OutOfRangeClamp, OutOfRangeParamTest,
                          ::testing::ValuesIn(kOutOfRangeCases));
+
+// —— S4：退化区间（min >= max）→ min ——
+namespace {
+struct DegenerateCase {
+    double line;
+    int min;
+    int max;
+};
+const DegenerateCase kDegenerateCases[] = {
+    { 5.0, 10, 10 },    // min == max
+    { 50.0, 10, 5 },    // min > max
+    { -7.5, 0, -3 },    // max 为负
+};
+} // namespace
+
+class DegenerateRangeParamTest : public ::testing::TestWithParam<DegenerateCase> {
+};
+
+TEST_P(DegenerateRangeParamTest, ScrollValueForLine_DegenerateRange_ReturnsMin)
+{
+    const auto &c = GetParam();
+    EXPECT_EQ(ScrollSync::scrollValueForLine(c.line, c.min, c.max), c.min);
+}
+
+INSTANTIATE_TEST_SUITE_P(DegenerateRanges, DegenerateRangeParamTest,
+                         ::testing::ValuesIn(kDegenerateCases));

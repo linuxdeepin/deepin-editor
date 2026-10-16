@@ -33,8 +33,8 @@ public:
     virtual void applyTheme(const QVariantMap &themeMap) = 0;
     // 内容区布局：maxContentWidth=0 表示不限最大宽（实时阅览半幅），>0 表示居中约束（查看视图 800）。
     virtual void setLayout(int maxContentWidth, bool center) = 0;
-    // 滚动同步：ratio ∈ [0,1]，由左侧 TextEdit 滚动驱动。
-    virtual void scrollToRatio(double ratio) = 0;
+    // 滚动同步（VS Code 式行号对齐）：line 为 0 基源码行号（左栏顶部可见行），由左侧 TextEdit 滚动驱动。
+    virtual void scrollToLine(double line) = 0;
 };
 
 #endif // IMARKDOWNRENDERER_H

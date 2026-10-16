@@ -45077,8 +45077,8 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     b.setLayoutRequested.connect(function(maxW, center) {
       h.onSetLayout(maxW, center);
     });
-    b.scrollToRatioRequested.connect(function(ratio) {
-      h.onScrollToRatio(ratio);
+    b.scrollToLineRequested.connect(function(line) {
+      h.onScrollToLine(line);
     });
     if (h.onRetranslate && b.retranslated) {
       b.retranslated.connect(function() {
@@ -45246,12 +45246,14 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
   const ROOT_ID = "app";
   let editor = null;
   let lastValue = "";
-  let lastRequestedRatio = 0;
+  let lastRequestedLine = 0;
   const PROGRESSIVE_THRESHOLD = 1024 * 1024;
   const PROGRESSIVE_FIRST_BATCH = 256 * 1024;
   const PROGRESSIVE_BATCH_SIZE = 1024 * 1024;
   let renderGeneration = 0;
   let anchorMap = null;
+  let anchorBuildHeight = -1;
+  let lastUserScrollAt = 0;
   let buildProgress = null;
   let userScrolledDuringBuild = false;
   function renderMarkdown(md) {
@@ -45360,7 +45362,9 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     return mdBlockCache.blocks;
   }
   let lastAnchorMode = null;
+  const docY = (el) => el.getBoundingClientRect().top + window.scrollY;
   function buildAnchorMap() {
+    anchorBuildHeight = document.documentElement.scrollHeight;
     const pm = document.querySelector(".ProseMirror");
     if (!pm || !lastValue) {
       anchorMap = null;
@@ -45378,14 +45382,14 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     if (blocks.length === children.length) {
       lastAnchorMode = "zip";
       for (let i2 = 0; i2 < children.length; i2++) {
-        anchors.push({ sourceLine: blocks[i2].startLine, previewY: children[i2].offsetTop });
+        anchors.push({ sourceLine: blocks[i2].startLine, previewY: docY(children[i2]) });
       }
     } else {
       const astHeadings = blocks.filter((b) => b.type === "heading");
       const domHeadings = children.filter((el) => /^H[1-6]$/.test(el.tagName));
       const pairCount = Math.min(astHeadings.length, domHeadings.length);
       for (let i2 = 0; i2 < pairCount; i2++) {
-        anchors.push({ sourceLine: astHeadings[i2].startLine, previewY: domHeadings[i2].offsetTop });
+        anchors.push({ sourceLine: astHeadings[i2].startLine, previewY: docY(domHeadings[i2]) });
       }
       lastAnchorMode = anchors.length >= 2 ? "headings" : null;
       if (!buildProgress) {
@@ -45400,35 +45404,40 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       }
     }
     const lastChild = children[children.length - 1];
-    anchors.push({ sourceLine: lastValue.split("\n").length, previewY: lastChild.offsetTop + lastChild.offsetHeight });
+    anchors.push({
+      sourceLine: lastValue.split("\n").length,
+      previewY: lastChild.getBoundingClientRect().bottom + window.scrollY
+    });
     anchorMap = anchors.length >= 2 ? anchors : null;
     if (anchorMap === null) lastAnchorMode = null;
   }
-  function ratioToPreviewY(ratio) {
-    const max = document.documentElement.scrollHeight - window.innerHeight;
+  function lineToPreviewY(line) {
     if (!anchorMap || anchorMap.length < 2) {
-      return ratio * max;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const totalLines = lastValue ? lastValue.split("\n").length : 1;
+      return (totalLines > 0 ? line / totalLines : 0) * max;
     }
-    const totalLines = lastValue ? lastValue.split("\n").length : 1;
-    const sourceLine = ratio * totalLines;
     let lo = 0, hi = anchorMap.length - 1;
     while (lo < hi - 1) {
       const mid = lo + hi >> 1;
-      if (anchorMap[mid].sourceLine <= sourceLine) lo = mid;
+      if (anchorMap[mid].sourceLine <= line) lo = mid;
       else hi = mid;
     }
     const a0 = anchorMap[lo];
     const a1 = anchorMap[Math.min(lo + 1, anchorMap.length - 1)];
     const lineSpan = a1.sourceLine - a0.sourceLine;
     if (lineSpan <= 0) return a0.previewY;
-    let t = (sourceLine - a0.sourceLine) / lineSpan;
+    let t = (line - a0.sourceLine) / lineSpan;
     t = Math.max(0, Math.min(1, t));
     return a0.previewY + t * (a1.previewY - a0.previewY);
   }
-  function previewYToRatio(scrollY) {
-    const max = document.documentElement.scrollHeight - window.innerHeight;
+  function previewYToLine(scrollY) {
     if (!anchorMap || anchorMap.length < 2) {
-      return max > 0 ? scrollY / max : 0;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      let ratio = max > 0 ? scrollY / max : 0;
+      if (buildProgress) ratio = Math.min(1, ratio * buildProgress.fraction);
+      const totalLines = lastValue ? lastValue.split("\n").length : 1;
+      return ratio * totalLines;
     }
     let lo = 0, hi = anchorMap.length - 1;
     while (lo < hi - 1) {
@@ -45439,26 +45448,26 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     const a0 = anchorMap[lo];
     const a1 = anchorMap[Math.min(lo + 1, anchorMap.length - 1)];
     const ySpan = a1.previewY - a0.previewY;
-    let sourceLine;
-    if (ySpan <= 0) {
-      sourceLine = a0.sourceLine;
-    } else {
-      let t = (scrollY - a0.previewY) / ySpan;
-      t = Math.max(0, Math.min(1, t));
-      sourceLine = a0.sourceLine + t * (a1.sourceLine - a0.sourceLine);
+    if (ySpan <= 0) return a0.sourceLine;
+    let t = (scrollY - a0.previewY) / ySpan;
+    t = Math.max(0, Math.min(1, t));
+    return a0.sourceLine + t * (a1.sourceLine - a0.sourceLine);
+  }
+  function ensureAnchorsFresh() {
+    if (document.documentElement.scrollHeight !== anchorBuildHeight) {
+      buildAnchorMap();
     }
-    const totalLines = lastValue ? lastValue.split("\n").length : 1;
-    return totalLines > 0 ? sourceLine / totalLines : 0;
   }
   function reapplyScroll() {
     buildAnchorMap();
     const max = document.documentElement.scrollHeight - window.innerHeight;
-    if (max > 0) {
-      if (anchorMap && anchorMap.length >= 2) {
-        applyProgrammaticScroll(ratioToPreviewY(lastRequestedRatio));
-      } else {
-        applyProgrammaticScroll(toRenderedRatio(lastRequestedRatio) * max);
-      }
+    if (max <= 0) return;
+    if (anchorMap && anchorMap.length >= 2) {
+      applyProgrammaticScroll(lineToPreviewY(lastRequestedLine));
+    } else {
+      const totalLines = lastValue ? lastValue.split("\n").length : 1;
+      const ratio = totalLines > 0 ? lastRequestedLine / totalLines : 0;
+      applyProgrammaticScroll(toRenderedRatio(ratio) * max);
     }
   }
   function applyTheme(jsonColors, isDark) {
@@ -45493,44 +45502,54 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
   function isProgrammaticPosition() {
     return __lastProgrammaticY !== null && Math.abs(window.scrollY - __lastProgrammaticY) < 2;
   }
-  function scrollToRatio(ratio) {
-    ratio = Math.max(0, Math.min(1, ratio));
-    lastRequestedRatio = ratio;
+  function scrollToLine(line) {
+    line = Math.max(0, line);
+    lastRequestedLine = line;
+    ensureAnchorsFresh();
     const max = document.documentElement.scrollHeight - window.innerHeight;
     if (max <= 0) return;
     if (anchorMap && anchorMap.length >= 2) {
-      applyProgrammaticScroll(ratioToPreviewY(ratio));
+      applyProgrammaticScroll(lineToPreviewY(line));
     } else {
-      const target = toRenderedRatio(ratio);
-      applyProgrammaticScroll(target * max);
+      const totalLines = lastValue ? lastValue.split("\n").length : 1;
+      const ratio = totalLines > 0 ? line / totalLines : 0;
+      applyProgrammaticScroll(toRenderedRatio(ratio) * max);
     }
   }
-  let __lastNotifiedRatio = -1;
+  let __lastNotifiedLine = -1;
   let __lastNotifiedY = 0;
   window.addEventListener("scroll", () => {
     if (__programmaticScroll || isProgrammaticPosition() || performance.now() < __programmaticUntil)
       return;
     __lastProgrammaticY = null;
+    ensureAnchorsFresh();
     const max = document.documentElement.scrollHeight - window.innerHeight;
     if (max <= 0) return;
-    let ratio;
-    if (anchorMap && anchorMap.length >= 2) {
-      ratio = previewYToRatio(window.scrollY);
-    } else {
-      ratio = Math.max(0, Math.min(1, window.scrollY / max));
-      if (buildProgress) {
-        ratio = Math.min(1, ratio * buildProgress.fraction);
-      }
-    }
+    const line = previewYToLine(window.scrollY);
+    lastUserScrollAt = performance.now();
     if (buildProgress) userScrolledDuringBuild = true;
-    if (Math.abs(window.scrollY - __lastNotifiedY) < 40 && Math.abs(ratio - __lastNotifiedRatio) < 1e-3)
+    if (Math.abs(window.scrollY - __lastNotifiedY) < 40 && Math.abs(line - __lastNotifiedLine) < 0.5)
       return;
-    __lastNotifiedRatio = ratio;
+    __lastNotifiedLine = line;
     __lastNotifiedY = window.scrollY;
-    if (window.bridge && typeof window.bridge.onScrollRatio === "function") {
-      window.bridge.onScrollRatio(ratio);
+    lastRequestedLine = line;
+    if (window.bridge && typeof window.bridge.onScrollLine === "function") {
+      window.bridge.onScrollLine(line);
     }
   }, { passive: true });
+  if (typeof ResizeObserver !== "undefined") {
+    let layoutSyncTimer = 0;
+    new ResizeObserver(() => {
+      clearTimeout(layoutSyncTimer);
+      layoutSyncTimer = setTimeout(() => {
+        if (!lastValue) return;
+        buildAnchorMap();
+        if (!buildProgress && performance.now() - lastUserScrollAt > 500 && lastRequestedLine > 0) {
+          reapplyScroll();
+        }
+      }, 100);
+    }).observe(document.body);
+  }
   document.addEventListener("click", (event) => {
     const target = event.target;
     const anchor = target && target.closest ? target.closest("a[href]") : null;
@@ -45562,7 +45581,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       },
       onApplyTheme: applyTheme,
       onSetLayout: applyLayout,
-      onScrollToRatio: scrollToRatio,
+      onScrollToLine: scrollToLine,
       onRetranslate: () => retranslateCodeBlocks()
     });
     console.log("[md] boot done, bridge=", typeof window.bridge, "onReady=", window.bridge ? typeof window.bridge.onReady : "n/a");
@@ -45587,6 +45606,10 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       getAnchorMap: () => anchorMap,
       getAnchorMode: () => lastAnchorMode,
       topRenderedBlocks,
+      scrollToLine,
+      lineToPreviewY,
+      previewYToLine,
+      getLastRequestedLine: () => lastRequestedLine,
       rootId: ROOT_ID
     };
   }

@@ -50,13 +50,13 @@ protected:
         int setModeCalls = 0;
         int applyThemeCalls = 0;
         int setLayoutCalls = 0;
-        int scrollToRatioCalls = 0;
+        int scrollToLineCalls = 0;
         QString lastMd;
         int lastMode = -1;
         QVariantMap lastTheme;
         int lastMaxW = -1;
         bool lastCenter = false;
-        double lastRatio = -1.0;
+        double lastLine = -1.0;
         bool *dtorFlag = nullptr;
 
         ~RecordingRenderer() override {
@@ -69,7 +69,7 @@ protected:
         void setMode(int mode) override { ++setModeCalls; lastMode = mode; }
         void applyTheme(const QVariantMap &themeMap) override { ++applyThemeCalls; lastTheme = themeMap; }
         void setLayout(int maxContentWidth, bool center) override { ++setLayoutCalls; lastMaxW = maxContentWidth; lastCenter = center; }
-        void scrollToRatio(double ratio) override { ++scrollToRatioCalls; lastRatio = ratio; }
+        void scrollToLine(double line) override { ++scrollToLineCalls; lastLine = line; }
     };
 
     RecordingRenderer *impl = nullptr;
@@ -87,7 +87,7 @@ TEST_F(IMarkdownRendererTest, PolymorphicDispatch_AllInterfaceMethods_ReachImpl)
     base->setMode(1);
     base->applyTheme(theme);
     base->setLayout(800, true);
-    base->scrollToRatio(0.5);
+    base->scrollToLine(42.5);
     (void)base->isReady();
 
     // Assert：实现侧逐项收到精确调用与参数
@@ -100,8 +100,8 @@ TEST_F(IMarkdownRendererTest, PolymorphicDispatch_AllInterfaceMethods_ReachImpl)
     EXPECT_EQ(impl->setLayoutCalls, 1);
     EXPECT_EQ(impl->lastMaxW, 800);
     EXPECT_TRUE(impl->lastCenter);
-    EXPECT_EQ(impl->scrollToRatioCalls, 1);
-    EXPECT_DOUBLE_EQ(impl->lastRatio, 0.5);
+    EXPECT_EQ(impl->scrollToLineCalls, 1);
+    EXPECT_DOUBLE_EQ(impl->lastLine, 42.5);
     EXPECT_EQ(impl->isReadyCalls, 1);
 }
 

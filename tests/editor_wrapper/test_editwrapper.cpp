@@ -190,10 +190,10 @@ public:
         lastMaxWidth = maxContentWidth;
         lastCenter = center;
     }
-    void scrollToRatio(double ratio) override
+    void scrollToLine(double line) override
     {
         ++scrollCalls;
-        lastRatio = ratio;
+        lastLine = line;
     }
 
     bool ready = false;
@@ -206,7 +206,7 @@ public:
     int lastMode = -1;
     int lastMaxWidth = -1;
     bool lastCenter = false;
-    double lastRatio = -1.0;
+    double lastLine = -1.0;
     QVariantMap lastTheme;
 };
 
@@ -2128,10 +2128,13 @@ TEST_F(EditWrapperTest, ScrollBarLambdas_OnScrollInLivePreview_SyncRenderer)
     sb->setValue(sb->maximum() / 2);
     QApplication::processEvents();
 
-    // Assert: 右栏按比例收到滚动同步；排队高亮链路已消化
+    // Assert: 右栏按行号语义收到滚动同步（顶部可见行＝滚动条值，块锚定）；
+    // 排队高亮链路已消化
     EXPECT_GE(m_renderer.scrollCalls, 1);
-    EXPECT_GT(m_renderer.lastRatio, 0.0);
-    EXPECT_LT(m_renderer.lastRatio, 1.0);
+    const int topLine = m_wrapper->textEditor()->topVisibleBlockNumber();
+    EXPECT_DOUBLE_EQ(m_renderer.lastLine, double(topLine));
+    EXPECT_GT(m_renderer.lastLine, 0.0);
+    EXPECT_LT(m_renderer.lastLine, double(sb->maximum()));
     EXPECT_EQ(sb->value(), sb->maximum() / 2);
 }
 
@@ -2194,17 +2197,17 @@ TEST_F(EditWrapperTest, MarkdownViewSignalHandlers_ViewEvents_ReactCorrectly)
     // Assert 1: throttle 进入 ready 态
     EXPECT_TRUE(m_wrapper->m_renderThrottle.isReady());
 
-    // Act 2: 右栏滚动比例 → 反向同步驱动左栏（§4.6 双向）
+    // Act 2: 右栏回传行号 → 反向同步驱动左栏（§4.6 双向，行号语义）
     QString text;
     for (int i = 0; i < 300; ++i)
         text += QStringLiteral("l%1\n").arg(i);
     m_wrapper->textEditor()->setPlainText(text);
     auto *sb = m_wrapper->textEditor()->verticalScrollBar();
     ASSERT_GT(sb->maximum(), sb->minimum());
-    QMetaObject::invokeMethod(view, "scrollRatioChanged", Q_ARG(double, 0.5));
+    QMetaObject::invokeMethod(view, "scrollLineChanged", Q_ARG(double, 150.0));
 
-    // Assert 2: 左栏光标条按比例定位（min + round(0.5*(max-min))）
-    const int expected = sb->minimum() + qRound(0.5 * (sb->maximum() - sb->minimum()));
+    // Assert 2: 左栏滚动条定位到第 150 行（块号，四舍五入+钳制到范围）
+    const int expected = qRound(qBound(double(sb->minimum()), 150.0, double(sb->maximum())));
     EXPECT_EQ(sb->value(), expected);
 
     // Act 3: 渲染页右键 → 视图模式菜单（QMenu::exec 置空桩防模态阻塞）
