@@ -10,6 +10,7 @@
 #include <DWidgetUtil>
 #include <QDebug>
 #include <QScreen>
+#include <QSet>
 #include <QPropertyAnimation>
 #include <DSettingsOption>
 #include <DAboutDialog>
@@ -329,7 +330,7 @@ void StartManager::autoBackupFile()
     qDebug() << "Exit autoBackupFile";
 }
 
-int StartManager::recoverFile(Window *window)
+int StartManager::recoverFile(Window *window, const QStringList &explicitPaths)
 {
     qDebug() << "Enter recoverFile";
 
@@ -351,11 +352,37 @@ int StartManager::recoverFile(Window *window)
     // 第一阶段：解析所有 JSON 记录
     qDebug() << "Processing" << m_qlistTemFile.count() << "temporary files for recovery";
     QVector<QJsonObject> tabRecords;
+    QSet<QString> logicalPaths;
+    QSet<QString> requestedPaths;
+    for (const QString &path : explicitPaths) {
+        QString resolvedPath = Utils::getFilePath(path);
+        if (!resolvedPath.isEmpty())
+            requestedPaths.insert(resolvedPath);
+    }
     for (int i = 0; i < m_qlistTemFile.count(); i++) {
         QJsonParseError jsonError;
         QJsonDocument doucment = QJsonDocument::fromJson(m_qlistTemFile.value(i).toUtf8(), &jsonError);
         if (!doucment.isNull() && (jsonError.error == QJsonParseError::NoError) && doucment.isObject()) {
-            tabRecords.append(doucment.object());
+            const QJsonObject &object = doucment.object();
+            QString logicalPath = object.value("localPath").toString();
+            if (logicalPath.isEmpty())
+                logicalPath = object.value("temFilePath").toString();
+
+            if (!logicalPath.isEmpty()) {
+                QString resolvedPath = Utils::getFilePath(logicalPath);
+                if (!resolvedPath.isEmpty()) {
+                    if (requestedPaths.contains(resolvedPath)) {
+                        qDebug() << "Skip recovery record for explicitly opened file:" << resolvedPath;
+                        continue;
+                    }
+                    if (logicalPaths.contains(resolvedPath)) {
+                        qDebug() << "Skip duplicate recovery record for file:" << resolvedPath;
+                        continue;
+                    }
+                    logicalPaths.insert(resolvedPath);
+                }
+            }
+            tabRecords.append(object);
         }
     }
     qDebug() << "Parsed" << tabRecords.size() << "valid tab records";
@@ -426,7 +453,15 @@ int StartManager::recoverFile(Window *window)
         QString openPath;
         QString displayName;
         if (!temFilePath.isEmpty() && Utils::fileExists(temFilePath)) {
-            openPath = temFilePath;
+            QDateTime backupModifiedTime = QFileInfo(temFilePath).lastModified();
+            QDateTime realModifiedTime = QFileInfo(localPath).lastModified();
+            if (localPath.isEmpty() || !realModifiedTime.isValid() || backupModifiedTime > realModifiedTime) {
+                openPath = temFilePath;
+            } else {
+                openPath = localPath;
+                lastmodifiedtime.clear();
+                qDebug() << "Backup is stale, open local file instead:" << openPath;
+            }
             displayName = QFileInfo(localPath).fileName();
         } else if (!localPath.isEmpty() && Utils::fileExists(localPath)) {
             openPath = localPath;
@@ -637,7 +672,10 @@ void StartManager::openFilesInTab(QStringList files)
                 // 以 window 为 context：窗口在延时期间被销毁则不触发，避免悬空调用
                 QTimer::singleShot(50, window, [ = ] {
                     qDebug() << "Delayed file opening for:" << resolvedFile;
-                    recoverFile(window);
+                    QStringList explicitPaths;
+                    for (const QString &file : files)
+                        explicitPaths.append(Utils::getFilePath(file));
+                    recoverFile(window, explicitPaths);
                     window->addTab(resolvedFile);
                 });
             }

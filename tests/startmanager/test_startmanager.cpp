@@ -182,6 +182,8 @@
 #include <QJsonParseError>
 #include <QFile>
 #include <QFileInfo>
+#include <QDateTime>
+#include <QHash>
 #include <QDir>
 #include <QDBusConnection>
 #include <QDBusMessage>
@@ -1588,6 +1590,170 @@ TEST_F(StartManagerTest, RecoverFile_FocusTab_LoadsImmediatelyWithBookmarks)
     EXPECT_EQ(appliedBookmarks, QList<int>({ 3, 5 }));
 }
 
+TEST_F(StartManagerTest, RecoverFile_ExplicitPathMatching_SkipsBackupRecord)
+{
+    // Arrange：显式请求路径与会话备份的 localPath 一致
+    QString explicitPath = tmp->filePath("explicit.txt");
+    QJsonObject json;
+    json.insert("localPath", explicitPath);
+    json.insert("temFilePath", tmp->filePath("explicit.tem"));
+    json.insert("focus", true);
+    obj->m_qlistTemFile = QStringList { QString::fromUtf8(
+        QJsonDocument(json).toJson(QJsonDocument::Compact)) };
+
+    Window *win = qobjFake<Window>();
+    int addTemCalls = 0;
+    stub.set_lamda(static_cast<void (Window::*)(bool)>(&Window::setBatchAddingPendingTabs),
+                   [](Window *, bool) {});
+    stub.set_lamda(
+        static_cast<void (Window::*)(const QString &, const QString &, const QString &, const QString &, bool, int, int)>(
+            &Window::addTemFileTab),
+        [&addTemCalls](Window *, const QString &, const QString &, const QString &, const QString &,
+                       bool, int, int) {
+            ++addTemCalls;
+        });
+
+    // Act
+    int ret = obj->recoverFile(win, QStringList { explicitPath });
+
+    // Assert：显式打开优先，备份记录不创建标签
+    EXPECT_EQ(ret, 0);
+    EXPECT_EQ(addTemCalls, 0);
+}
+
+TEST_F(StartManagerTest, RecoverFile_BackupOlderThanReal_SkipsBackup_OpensReal)
+{
+    // Arrange：备份 mtime 早于真实文件，即使备份存在也不恢复旧内容
+    QString localPath = tmp->filePath("stale.txt");
+    QString temPath = tmp->filePath("stale.tem");
+    QJsonObject json;
+    json.insert("localPath", localPath);
+    json.insert("temFilePath", temPath);
+    json.insert("lastModifiedTime", QStringLiteral("stale-time"));
+    json.insert("focus", true);
+    obj->m_qlistTemFile = QStringList { QString::fromUtf8(
+        QJsonDocument(json).toJson(QJsonDocument::Compact)) };
+
+    QHash<QString, QDateTime> modifiedTimes;
+    modifiedTimes.insert(localPath, QDateTime::fromSecsSinceEpoch(200));
+    modifiedTimes.insert(temPath, QDateTime::fromSecsSinceEpoch(100));
+    stub.set_lamda(static_cast<QDateTime (QFileInfo::*)() const>(&QFileInfo::lastModified),
+                   [modifiedTimes](QFileInfo *self) -> QDateTime {
+                       return modifiedTimes.value(self->absoluteFilePath());
+                   });
+
+    Window *win = qobjFake<Window>();
+    obj->m_windows << win;
+    QString gotPath, gotTruePath, gotModifiedTime;
+    stub.set_lamda(static_cast<void (Window::*)(bool)>(&Window::setBatchAddingPendingTabs),
+                   [](Window *, bool) {});
+    stub.set_lamda(
+        static_cast<void (Window::*)(const QString &, const QString &, const QString &, const QString &, bool, int, int)>(
+            &Window::addTemFileTab),
+        [&](Window *, const QString &p, const QString &, const QString &truePath,
+            const QString &modifiedTime, bool, int, int) {
+            gotPath = p;
+            gotTruePath = truePath;
+            gotModifiedTime = modifiedTime;
+        });
+    stubWindowInteraction(win);
+
+    // Act
+    int ret = obj->recoverFile(win);
+
+    // Assert：改开真实文件并清空旧备份时间，避免恢复过期内容
+    EXPECT_EQ(ret, 1);
+    EXPECT_EQ(gotPath, localPath);
+    EXPECT_EQ(gotTruePath, localPath);
+    EXPECT_EQ(gotModifiedTime, QString());
+}
+
+TEST_F(StartManagerTest, RecoverFile_BackupNewerThanReal_RecoversBackup)
+{
+    // Arrange：备份 mtime 晚于真实文件，仍保留崩溃恢复能力
+    QString localPath = tmp->filePath("valid.txt");
+    QString temPath = tmp->filePath("valid.tem");
+    QJsonObject json;
+    json.insert("localPath", localPath);
+    json.insert("temFilePath", temPath);
+    json.insert("lastModifiedTime", QStringLiteral("valid-time"));
+    json.insert("focus", true);
+    obj->m_qlistTemFile = QStringList { QString::fromUtf8(
+        QJsonDocument(json).toJson(QJsonDocument::Compact)) };
+
+    QHash<QString, QDateTime> modifiedTimes;
+    modifiedTimes.insert(localPath, QDateTime::fromSecsSinceEpoch(100));
+    modifiedTimes.insert(temPath, QDateTime::fromSecsSinceEpoch(200));
+    stub.set_lamda(static_cast<QDateTime (QFileInfo::*)() const>(&QFileInfo::lastModified),
+                   [modifiedTimes](QFileInfo *self) -> QDateTime {
+                       return modifiedTimes.value(self->absoluteFilePath());
+                   });
+
+    Window *win = qobjFake<Window>();
+    obj->m_windows << win;
+    QString gotPath, gotTruePath, gotModifiedTime;
+    stub.set_lamda(static_cast<void (Window::*)(bool)>(&Window::setBatchAddingPendingTabs),
+                   [](Window *, bool) {});
+    stub.set_lamda(
+        static_cast<void (Window::*)(const QString &, const QString &, const QString &, const QString &, bool, int, int)>(
+            &Window::addTemFileTab),
+        [&](Window *, const QString &p, const QString &, const QString &truePath,
+            const QString &modifiedTime, bool, int, int) {
+            gotPath = p;
+            gotTruePath = truePath;
+            gotModifiedTime = modifiedTime;
+        });
+    stubWindowInteraction(win);
+
+    // Act
+    int ret = obj->recoverFile(win);
+
+    // Assert：继续打开备份并保留恢复时间
+    EXPECT_EQ(ret, 1);
+    EXPECT_EQ(gotPath, temPath);
+    EXPECT_EQ(gotTruePath, localPath);
+    EXPECT_EQ(gotModifiedTime, QStringLiteral("valid-time"));
+}
+
+TEST_F(StartManagerTest, RecoverFile_DuplicateLocalPaths_KeepsFirst)
+{
+    // Arrange：两条会话记录指向同一 localPath
+    QString localPath = tmp->filePath("duplicate.txt");
+    QJsonObject firstJson;
+    firstJson.insert("localPath", localPath);
+    firstJson.insert("focus", true);
+    QJsonObject duplicateJson;
+    duplicateJson.insert("localPath", localPath);
+    obj->m_qlistTemFile = QStringList {
+        QString::fromUtf8(QJsonDocument(firstJson).toJson(QJsonDocument::Compact)),
+        QString::fromUtf8(QJsonDocument(duplicateJson).toJson(QJsonDocument::Compact))
+    };
+
+    Window *win = qobjFake<Window>();
+    obj->m_windows << win;
+    int addTemCalls = 0;
+    QString gotPath;
+    stub.set_lamda(static_cast<void (Window::*)(bool)>(&Window::setBatchAddingPendingTabs),
+                   [](Window *, bool) {});
+    stub.set_lamda(
+        static_cast<void (Window::*)(const QString &, const QString &, const QString &, const QString &, bool, int, int)>(
+            &Window::addTemFileTab),
+        [&addTemCalls, &gotPath](Window *, const QString &p, const QString &,
+                                 const QString &, const QString &, bool, int, int) {
+            ++addTemCalls;
+            gotPath = p;
+        });
+    stubWindowInteraction(win);
+
+    // Act
+    int ret = obj->recoverFile(win);
+
+    // Assert：相同逻辑路径只保留第一条记录
+    EXPECT_EQ(ret, 1);
+    EXPECT_EQ(addTemCalls, 1);
+    EXPECT_EQ(gotPath, localPath);
+}
+
 TEST_F(StartManagerTest, RecoverFile_BookMarkFromGlobal_AppliesConfigBookmark)
 {
     // Arrange：记录无书签字段，但全局书签表有 temPath 记录
@@ -1984,8 +2150,8 @@ TEST_F(StartManagerTest, OpenFilesInTab_EmptyNoWindowsTemFilesRecovers_Recovers)
     stub.set_lamda(static_cast<Window *(StartManager::*)(bool)>(&StartManager::createWindow),
                    [newWin](StartManager *, bool) -> Window * { return newWin; });
     stubWindowInteraction(newWin);
-    stub.set_lamda(static_cast<int (StartManager::*)(Window *)>(&StartManager::recoverFile),
-                   [&recoverCalls](StartManager *, Window *) -> int {
+    stub.set_lamda(static_cast<int (StartManager::*)(Window *, const QStringList &)>(&StartManager::recoverFile),
+                   [&recoverCalls](StartManager *, Window *, const QStringList &) -> int {
                        ++recoverCalls;
                        return 2;
                    });
@@ -2010,8 +2176,8 @@ TEST_F(StartManagerTest, OpenFilesInTab_RecoveryFoundNothing_AddsBlankTab)
     stub.set_lamda(static_cast<Window *(StartManager::*)(bool)>(&StartManager::createWindow),
                    [newWin](StartManager *, bool) -> Window * { return newWin; });
     stubWindowInteraction(newWin);
-    stub.set_lamda(static_cast<int (StartManager::*)(Window *)>(&StartManager::recoverFile),
-                   [&recoverCalls](StartManager *, Window *) -> int {
+    stub.set_lamda(static_cast<int (StartManager::*)(Window *, const QStringList &)>(&StartManager::recoverFile),
+                   [&recoverCalls](StartManager *, Window *, const QStringList &) -> int {
                        ++recoverCalls;
                        return 0;
                    });
@@ -2116,8 +2282,8 @@ TEST_F(StartManagerTest, OpenFilesInTab_FirstFileNoWindow_DelayedOpen)
     stub.set_lamda(static_cast<Window *(StartManager::*)(bool)>(&StartManager::createWindow),
                    [newWin](StartManager *, bool) -> Window * { return newWin; });
     stubWindowInteraction(newWin);
-    stub.set_lamda(static_cast<int (StartManager::*)(Window *)>(&StartManager::recoverFile),
-                   [&recoverCalls](StartManager *, Window *) -> int {
+    stub.set_lamda(static_cast<int (StartManager::*)(Window *, const QStringList &)>(&StartManager::recoverFile),
+                   [&recoverCalls](StartManager *, Window *, const QStringList &) -> int {
                        ++recoverCalls;
                        return 0;
                    });
@@ -2137,6 +2303,33 @@ TEST_F(StartManagerTest, OpenFilesInTab_FirstFileNoWindow_DelayedOpen)
     // Assert：延迟打开发生（recover + addTab）
     EXPECT_EQ(recoverCalls, 1);
     EXPECT_EQ(addedPath, QString("delayed.cpp"));
+}
+
+TEST_F(StartManagerTest, OpenFilesInTab_FirstFileNoWindow_PassesExplicitPathsToRecovery)
+{
+    // Arrange：无窗口打开文件时，延迟恢复需收到全部显式路径
+    const QString file = tmp->filePath("explicit-recovery.txt");
+    Window *newWin = qobjFake<Window>();
+    QStringList gotExplicitPaths;
+    QString addedPath;
+    stub.set_lamda(static_cast<Window *(StartManager::*)(bool)>(&StartManager::createWindow),
+                   [newWin](StartManager *, bool) -> Window * { return newWin; });
+    stubWindowInteraction(newWin);
+    stub.set_lamda(static_cast<int (StartManager::*)(Window *, const QStringList &)>(&StartManager::recoverFile),
+                   [&gotExplicitPaths](StartManager *, Window *, const QStringList &paths) -> int {
+                       gotExplicitPaths = paths;
+                       return 0;
+                   });
+    stub.set_lamda(static_cast<void (Window::*)(const QString &, bool)>(&Window::addTab),
+                   [&addedPath](Window *, const QString &p, bool) { addedPath = p; });
+
+    // Act
+    obj->openFilesInTab(QStringList { file });
+    processEventsFor(100);
+
+    // Assert：显式路径参与恢复判断，且当前文件仍按原路径打开
+    EXPECT_EQ(gotExplicitPaths, QStringList { file });
+    EXPECT_EQ(addedPath, file);
 }
 
 TEST_F(StartManagerTest, OpenFilesInTab_ExistingWindow_AddsTabAndActivates)
@@ -2888,8 +3081,8 @@ TEST_F(StartManagerTest, BUG177725_KeepTabsDisabled_OpenFile_OpensFileTab)
     stub.set_lamda(static_cast<Window *(StartManager::*)(bool)>(&StartManager::createWindow),
                    [newWin](StartManager *, bool) -> Window * { return newWin; });
     stubWindowInteraction(newWin);
-    stub.set_lamda(static_cast<int (StartManager::*)(Window *)>(&StartManager::recoverFile),
-                   [&recoverCalls](StartManager *, Window *) -> int {
+    stub.set_lamda(static_cast<int (StartManager::*)(Window *, const QStringList &)>(&StartManager::recoverFile),
+                   [&recoverCalls](StartManager *, Window *, const QStringList &) -> int {
                        ++recoverCalls;
                        return 0;
                    });
