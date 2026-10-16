@@ -13,7 +13,7 @@
 // 分支清单（来源：markdownbridge.h —— 槽→信号 1:1 转发 + 5 个 tr 文案 getter，无 if 分支）
 // B1: onReady()            → emit ready()
 // B2: onContentChanged(md) → emit contentChanged(md)
-// B3: onScrollRatio(r)     → emit scrollRatioChanged(r)
+// B3: onScrollLine(line)   → emit scrollLineChanged(line)
 // B4: onOpenLink(url)      → emit openLinkRequested(url)
 // B5: retranslate()        → emit retranslated()
 // B6: 5 个 Q_PROPERTY getter → tr(...) 源文案
@@ -22,7 +22,7 @@
 // 用例映射：
 // - OnReady_JsBridgeReady_EmitsReadySignal                      → B1
 // - OnContentChanged_MdPayload_EmitsSamePayload                 → B2
-// - OnScrollRatio_ValidRatios_EmitsExactRatio（TEST_P 3 组）     → B3
+// - OnScrollLine_SourceLines_EmitsExactLine（TEST_P 3 组）       → B3
 // - OnOpenLink_ExternalUrl_EmitsSameUrl                          → B4
 // - Retranslate_LanguageSwitched_EmitsRetranslatedAndTextsAlive  → B5 + B6
 // - UiTextProperties_AllGetters_ReturnSourceTexts                → B6
@@ -30,7 +30,7 @@
 // - Constructor_NoParent_StandaloneOwnership                     → B7(null)
 //
 // 最小清单自检：1 每公开方法≥1用例 ✔（5 getter/5 槽/ctor 全覆盖）
-// 2 等价类：ratio ∈{0,0.25,1} 边界成组 ✔ 3 边界显式 ✔ 4 TEST_P ≥3 组 ✔
+// 2 等价类：line ∈{0(顶部),中段小数,末行} 边界成组 ✔ 3 边界显式 ✔ 4 TEST_P ≥3 组 ✔
 // 5 分支清单映射 ✔ 6 无 if/switch/throw 7 无异常路径 8 空串/空 URL 负面 ✓（EmptyPayload 用例）
 // 9 状态未损坏验证 ✓ 10 QObject/Qt 内置类型无虚注入点，直接实例化 + QSignalSpy（无 stub 目标）
 
@@ -99,38 +99,38 @@ TEST_F(MarkdownBridgeTest, OnContentChanged_MdPayload_EmitsSamePayload)
     EXPECT_EQ(spy.at(0).at(0).toString(), md);
 }
 
-// —— 边界值成组：ratio 0 / 中点 / 1（同断言逻辑，强制 TEST_P）——
+// —— 边界值成组：行号 0（顶部）/ 中段小数（插值）/ 末行（同断言逻辑，强制 TEST_P）——
 namespace {
-struct RatioCase {
-    double ratio;
+struct LineCase {
+    double line;
 };
-const RatioCase kRatioCases[] = {
-    { 0.0 },   // 下边界（回顶部）
-    { 0.25 },  // 中间值
-    { 1.0 },   // 上边界（页尾）
+const LineCase kLineCases[] = {
+    { 0.0 },    // 下边界（回顶部）
+    { 120.5 },  // 中间值（JS 锚点插值可带小数）
+    { 299.0 },  // 上边界（末行）
 };
 } // namespace
 
-class BridgeRatioParamTest : public MarkdownBridgeTest,
-                             public ::testing::WithParamInterface<RatioCase> {
+class BridgeLineParamTest : public MarkdownBridgeTest,
+                            public ::testing::WithParamInterface<LineCase> {
 };
 
-TEST_P(BridgeRatioParamTest, OnScrollRatio_ValidRatios_EmitsExactRatio)
+TEST_P(BridgeLineParamTest, OnScrollLine_SourceLines_EmitsExactLine)
 {
     // Arrange
-    const double ratio = GetParam().ratio;
-    QSignalSpy spy(bridge, &MarkdownBridge::scrollRatioChanged);
+    const double line = GetParam().line;
+    QSignalSpy spy(bridge, &MarkdownBridge::scrollLineChanged);
 
     // Act
-    bridge->onScrollRatio(ratio);
+    bridge->onScrollLine(line);
 
     // Assert
     EXPECT_EQ(spy.count(), 1);
-    EXPECT_DOUBLE_EQ(spy.at(0).at(0).toDouble(), ratio);
+    EXPECT_DOUBLE_EQ(spy.at(0).at(0).toDouble(), line);
 }
 
-INSTANTIATE_TEST_SUITE_P(RatioBoundaries, BridgeRatioParamTest,
-                         ::testing::ValuesIn(kRatioCases));
+INSTANTIATE_TEST_SUITE_P(LineBoundaries, BridgeLineParamTest,
+                         ::testing::ValuesIn(kLineCases));
 
 TEST_F(MarkdownBridgeTest, OnOpenLink_ExternalUrl_EmitsSameUrl)
 {

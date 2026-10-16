@@ -4,7 +4,6 @@
 
 #include "markdownview.h"
 #include "themeserializer.h"
-#include "scrollsync.h"
 #include <QTimer>
 #include <QWebEnginePage>
 #include <QWebEngineProfile>
@@ -83,7 +82,7 @@ MarkdownView::MarkdownView(QWidget *parent)
 {
     connect(m_bridge, &MarkdownBridge::ready, this, &MarkdownView::onBridgeReady);
     connect(m_bridge, &MarkdownBridge::contentChanged, this, &MarkdownView::contentChanged);
-    connect(m_bridge, &MarkdownBridge::scrollRatioChanged, this, &MarkdownView::scrollRatioChanged);
+    connect(m_bridge, &MarkdownBridge::scrollLineChanged, this, &MarkdownView::scrollLineChanged);
     // 外部链接转交系统浏览器打开，不在预览内导航（JS 点击拦截的主路径）。
     // scheme 白名单（安全审查 2026-08-19）：仅放行 http/https——JS 传入的 url 来自
     // md 内容，若直接交 QDesktopServices 会触发系统注册的任意协议处理程序
@@ -145,7 +144,7 @@ void MarkdownView::onBridgeReady()
     m_ready = true;
     // 页面（重新）就绪时补发缓存状态：JS 未接线期间到达的请求全部丢失（§5.3 时序）。
     // 顺序：内容 → 布局 → 主题 → 滚动（内容先渲染出高度，滚动比例才有意义；
-    // JS 侧 renderMarkdown 完成后还会重放 lastRequestedRatio 二次对齐）
+    // JS 侧 renderMarkdown 完成后还会重放 lastRequestedLine 二次对齐）
     if (m_hasPendingMd) {
         m_hasPendingMd = false;
         emit m_bridge->setMarkdownRequested(m_pendingMd);
@@ -154,10 +153,10 @@ void MarkdownView::onBridgeReady()
         emit m_bridge->setLayoutRequested(m_lastLayoutMaxW, m_lastLayoutCenter);
     if (m_hasTheme)
         emit m_bridge->applyThemeRequested(m_lastThemeJson, m_lastThemeDark);
-    // 比例为 0.0（回顶部）同样是有效状态，须与其他三项一样以独立标记判定，
+    // 行号为 0.0（回顶部）同样是有效状态，须与其他三项一样以独立标记判定，
     // 不可用 > 0 判断（否则回顶部语义被静默吞掉，安全/代码审查 2026-08-19）
     if (m_hasScroll)
-        emit m_bridge->scrollToRatioRequested(m_lastScrollRatio);
+        emit m_bridge->scrollToLineRequested(m_lastScrollLine);
     emit ready();
 }
 
@@ -194,21 +193,11 @@ void MarkdownView::setLayout(int maxContentWidth, bool center)
     emit m_bridge->setLayoutRequested(maxContentWidth, center);
 }
 
-void MarkdownView::scrollToRatio(double ratio)
+void MarkdownView::scrollToLine(double line)
 {
-    // 缓存：ready 前到达的初始对齐比例不丢失（恢复光标后左栏非 0 时初始同步）；
+    // 缓存：ready 前到达的初始对齐行号不丢失（恢复光标后左栏非 0 时初始同步）；
     // 以标记而非值判断有效性，0.0（回顶部）同样是可重放状态
-    m_lastScrollRatio = ratio;
+    m_lastScrollLine = line;
     m_hasScroll = true;
-    emit m_bridge->scrollToRatioRequested(ratio);
-}
-
-// 反向：读取当前页面滚动比例（右栏滚动回传，供上层同步左栏）
-// 注：QWebEngine 异步，同步读取仅作粗略估计；精准同步走 JS scroll 事件 → onScrollRatio 槽。
-double MarkdownView::scrollRatio() const
-{
-    QSizeF contents = page()->contentsSize();
-    double h = contents.height();
-    if (h <= 0) return 0.0;
-    return ScrollSync::clampRatio(page()->scrollPosition().y() / h);
+    emit m_bridge->scrollToLineRequested(line);
 }

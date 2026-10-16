@@ -33,7 +33,7 @@ let editor = null;
 let lastValue = "";
 
 // —— C++ → JS 处理器 ——
-let lastRequestedRatio = 0;   // 最近一次 C++ 请求的滚动比例；重渲染后重放（§4.6 初始对齐）
+let lastRequestedLine = 0;   // 最近一次 C++ 请求的源码行号（0 基顶部可见行）；重渲染后重放（§4.6 初始对齐）
 
 // —— 渐进渲染（大文件分段上屏，性能优化 2026-09-16）——
 // 整篇 replaceAll 需先完成全文 ProseMirror 建模才一次性上屏，大文档耗时超线性
@@ -46,12 +46,15 @@ const PROGRESSIVE_FIRST_BATCH = 256 * 1024; // 首批 nodeSize 上限（约 256K
 const PROGRESSIVE_BATCH_SIZE = 1024 * 1024; // 后续批 nodeSize 上限（约 1MB，压低批数/分发开销）
 let renderGeneration = 0;                  // 代际号：新内容到达时作废进行中的渐进渲染
 let anchorMap = null;                      // [{sourceLine, previewY}, ...]：锚点映射表；null=未构建/降级
+let anchorBuildHeight = -1;                // 锚点表构建时的页面 scrollHeight（惰性失效判据）
+let lastUserScrollAt = 0;                  // 最近一次用户滚动右栏的时间戳（布局重排对齐护栏）
 
 // —— 锚点映射（anchor-based line mapping，PMS 378227 修复）——
-// 纯比例映射假设"源码第 N% 位置 = 预览第 N% 位置"，表格密集场景下该假设不成立：
-// 表格渲染高度（padding/border/折行/NodeView 包裹）≠ 源码行高，累积漂移可达数屏。
-// 改为锚点映射：渲染后按 remark AST 顶层块（与 DOM 子节点同源一一对应）建立
-// {源码行号→预览像素Y} 锚点表，滚动时通过锚点段内线性插值定位，C++ 侧协议不变。
+// VS Code markdown preview 同款行号同步：两栏按"顶部可见源码行号"对齐，而非滚动比例
+//（比例假设"源码第 N% 位置 = 预览第 N% 位置"，且左栏滚动条比例 value/max 与行号比例
+// line/总行数天然错位——max = 总行数 - 可见行数，中段滚动偏差可达半个视口）。
+// 渲染后按 remark AST 顶层块（与 DOM 子节点同源一一对应）建立 {源码行号→预览像素Y}
+// 锚点表，滚动时通过锚点段内线性插值定位，C++ 侧协议传行号（scrollToLine/onScrollLine）。
 
 // —— 渐进构建期的滚动比例补偿 ——
 // 比例式同步假设两栏代表同一篇完整文档；渐进填充期间右栏仅有部分内容，
@@ -73,7 +76,7 @@ function renderMarkdown(md) {
     if (normalized.length <= PROGRESSIVE_THRESHOLD) {
         editor.action(replaceAll(normalized));
         // 表格/代码块的视觉包裹由 NodeView 随文档同步生成（不再事后 enhance），
-        // 渲染完成后重放滚动比例：首次渲染完成前 scrollToRatio 因 max=0 被跳过，
+        // 渲染完成后重放滚动行号：首次渲染完成前 scrollToLine 因 max=0 被跳过，
         // 此处对齐左右初始位置
         setTimeout(reapplyScroll, 0);
         return;
@@ -208,8 +211,14 @@ function topRenderedBlocks(md) {
 // 整篇解析渲染完成后两者结构天然一致）。数量不等时（渐进构建期间 DOM 仅含
 // 已插入的批次）退化为标题锚点：DOM 与 AST 中的标题序列仍按序一一对应；
 // 标题锚点不足 2 个则置 null，调用方降级为纯比例映射。
+// previewY 取 getBoundingClientRect + scrollY 的文档绝对 Y（与 window.scrollTo
+// 同一坐标系；offsetTop 依赖 offsetParent 链，居中布局/外边距下不可靠）。
 let lastAnchorMode = null;   // "zip" | "headings" | null，诊断用
+const docY = (el) => el.getBoundingClientRect().top + window.scrollY;
 function buildAnchorMap() {
+    // 快照基准高度：此后 scrollHeight 变化即视为锚点过期（图片/字体/公式异步加载，
+    // 实测 d_editor.md 60 张图加载使高度翻倍、行 279 目标 Y 漂移 9000px+，右栏大幅落后）
+    anchorBuildHeight = document.documentElement.scrollHeight;
     const pm = document.querySelector(".ProseMirror");
     if (!pm || !lastValue) { anchorMap = null; lastAnchorMode = null; return; }
     const children = Array.from(pm.children);
@@ -220,14 +229,14 @@ function buildAnchorMap() {
     if (blocks.length === children.length) {
         lastAnchorMode = "zip";
         for (let i = 0; i < children.length; i++) {
-            anchors.push({ sourceLine: blocks[i].startLine, previewY: children[i].offsetTop });
+            anchors.push({ sourceLine: blocks[i].startLine, previewY: docY(children[i]) });
         }
     } else {
         const astHeadings = blocks.filter((b) => b.type === "heading");
         const domHeadings = children.filter((el) => /^H[1-6]$/.test(el.tagName));
         const pairCount = Math.min(astHeadings.length, domHeadings.length);
         for (let i = 0; i < pairCount; i++) {
-            anchors.push({ sourceLine: astHeadings[i].startLine, previewY: domHeadings[i].offsetTop });
+            anchors.push({ sourceLine: astHeadings[i].startLine, previewY: docY(domHeadings[i]) });
         }
         lastAnchorMode = anchors.length >= 2 ? "headings" : null;
         if (!buildProgress) {
@@ -237,41 +246,44 @@ function buildAnchorMap() {
     }
     // 哨兵：文档末尾（源码行号=总行数，预览Y=最后一个子节点底部）
     const lastChild = children[children.length - 1];
-    anchors.push({ sourceLine: lastValue.split("\n").length, previewY: lastChild.offsetTop + lastChild.offsetHeight });
+    anchors.push({ sourceLine: lastValue.split("\n").length,
+                   previewY: lastChild.getBoundingClientRect().bottom + window.scrollY });
     anchorMap = anchors.length >= 2 ? anchors : null;
     if (anchorMap === null) lastAnchorMode = null;
 }
 
 // 源码行号 → 预览像素 Y（二分查找锚点段，段内线性插值）
-// 锚点表不可用时降级为纯比例映射
-function ratioToPreviewY(ratio) {
-    const max = document.documentElement.scrollHeight - window.innerHeight;
+// 锚点表不可用时降级为"行号/总行数 ≈ 滚动比例"近似
+function lineToPreviewY(line) {
     if (!anchorMap || anchorMap.length < 2) {
-        return ratio * max;
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        const totalLines = lastValue ? lastValue.split("\n").length : 1;
+        return (totalLines > 0 ? line / totalLines : 0) * max;
     }
-    const totalLines = lastValue ? lastValue.split("\n").length : 1;
-    const sourceLine = ratio * totalLines;
     let lo = 0, hi = anchorMap.length - 1;
     while (lo < hi - 1) {
         const mid = (lo + hi) >> 1;
-        if (anchorMap[mid].sourceLine <= sourceLine) lo = mid;
+        if (anchorMap[mid].sourceLine <= line) lo = mid;
         else hi = mid;
     }
     const a0 = anchorMap[lo];
     const a1 = anchorMap[Math.min(lo + 1, anchorMap.length - 1)];
     const lineSpan = a1.sourceLine - a0.sourceLine;
     if (lineSpan <= 0) return a0.previewY;
-    let t = (sourceLine - a0.sourceLine) / lineSpan;
+    let t = (line - a0.sourceLine) / lineSpan;
     t = Math.max(0, Math.min(1, t));
     return a0.previewY + t * (a1.previewY - a0.previewY);
 }
 
-// 预览像素 Y → 滚动比例（二分查找锚点段，段内线性插值得源码行号，再除以总行数）
-// 锚点表不可用时降级为纯比例映射
-function previewYToRatio(scrollY) {
-    const max = document.documentElement.scrollHeight - window.innerHeight;
+// 预览像素 Y → 源码行号（二分查找锚点段，段内线性插值，可返回小数）
+// 锚点表不可用时降级为"滚动比例 × 总行数"近似（渐进期经 buildProgress 补偿）
+function previewYToLine(scrollY) {
     if (!anchorMap || anchorMap.length < 2) {
-        return max > 0 ? scrollY / max : 0;
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        let ratio = max > 0 ? scrollY / max : 0;
+        if (buildProgress) ratio = Math.min(1, ratio * buildProgress.fraction);
+        const totalLines = lastValue ? lastValue.split("\n").length : 1;
+        return ratio * totalLines;
     }
     let lo = 0, hi = anchorMap.length - 1;
     while (lo < hi - 1) {
@@ -282,27 +294,32 @@ function previewYToRatio(scrollY) {
     const a0 = anchorMap[lo];
     const a1 = anchorMap[Math.min(lo + 1, anchorMap.length - 1)];
     const ySpan = a1.previewY - a0.previewY;
-    let sourceLine;
-    if (ySpan <= 0) {
-        sourceLine = a0.sourceLine;
-    } else {
-        let t = (scrollY - a0.previewY) / ySpan;
-        t = Math.max(0, Math.min(1, t));
-        sourceLine = a0.sourceLine + t * (a1.sourceLine - a0.sourceLine);
+    if (ySpan <= 0) return a0.sourceLine;
+    let t = (scrollY - a0.previewY) / ySpan;
+    t = Math.max(0, Math.min(1, t));
+    return a0.sourceLine + t * (a1.sourceLine - a0.sourceLine);
+}
+
+// 惰性失效：协议入口换算前核对 scrollHeight，与快照不符即重建锚点表
+//（兜底路径——即使 ResizeObserver 回调遗漏/时序错后，下一次同步仍然正确；
+//  与 VS Code 每次滚动实时查询元素位置同效，成本为一次 scrollHeight 读取）
+function ensureAnchorsFresh() {
+    if (document.documentElement.scrollHeight !== anchorBuildHeight) {
+        buildAnchorMap();
     }
-    const totalLines = lastValue ? lastValue.split("\n").length : 1;
-    return totalLines > 0 ? sourceLine / totalLines : 0;
 }
 
 function reapplyScroll() {
     buildAnchorMap();
     const max = document.documentElement.scrollHeight - window.innerHeight;
-    if (max > 0) {
-        if (anchorMap && anchorMap.length >= 2) {
-            applyProgrammaticScroll(ratioToPreviewY(lastRequestedRatio));
-        } else {
-            applyProgrammaticScroll(toRenderedRatio(lastRequestedRatio) * max);
-        }
+    if (max <= 0) return;
+    if (anchorMap && anchorMap.length >= 2) {
+        applyProgrammaticScroll(lineToPreviewY(lastRequestedLine));
+    } else {
+        // 降级：行号按总行数折算比例（渐进构建期先补偿到已渲染范围）
+        const totalLines = lastValue ? lastValue.split("\n").length : 1;
+        const ratio = totalLines > 0 ? lastRequestedLine / totalLines : 0;
+        applyProgrammaticScroll(toRenderedRatio(ratio) * max);
     }
 }
 
@@ -347,55 +364,74 @@ function isProgrammaticPosition() {
            && Math.abs(window.scrollY - __lastProgrammaticY) < 2;
 }
 
-function scrollToRatio(ratio) {
-    // §4.6 滚动到比例（0~1）
+function scrollToLine(line) {
+    // §4.6 VS Code 式行号同步：line 为 0 基源码行号（左栏顶部可见行，revealLine 语义）
     // 根因修复：ProseMirror 元素本身不可滚动（无 overflow:auto），页面滚动在 window/documentElement。
-    ratio = Math.max(0, Math.min(1, ratio));
-    lastRequestedRatio = ratio;
+    line = Math.max(0, line);
+    lastRequestedLine = line;
+    ensureAnchorsFresh();   // 布局自上次建表后可能已变（图片等异步加载）
     const max = document.documentElement.scrollHeight - window.innerHeight;
     if (max <= 0) return;
     if (anchorMap && anchorMap.length >= 2) {
-        // 锚点映射：ratio 解释为源码行位置，通过锚点表转为预览像素位置
-        applyProgrammaticScroll(ratioToPreviewY(ratio));
+        // 锚点映射：行号所在块对齐视口顶部
+        applyProgrammaticScroll(lineToPreviewY(line));
     } else {
-        // 降级：纯比例映射（渐进构建期先补偿到已渲染范围）
-        const target = toRenderedRatio(ratio);
-        applyProgrammaticScroll(target * max);
+        // 降级：行号按总行数折算比例（渐进构建期先补偿到已渲染范围）
+        const totalLines = lastValue ? lastValue.split("\n").length : 1;
+        const ratio = totalLines > 0 ? line / totalLines : 0;
+        applyProgrammaticScroll(toRenderedRatio(ratio) * max);
     }
 }
 
-// 右栏用户滚动 → 通知 C++（反向同步）
-let __lastNotifiedRatio = -1;
+// 右栏用户滚动 → 通知 C++（反向同步，回传顶部可见源码行号）
+let __lastNotifiedLine = -1;
 let __lastNotifiedY = 0;
 window.addEventListener("scroll", () => {
     // 程序化产物（同步请求的滚动、其异步事件、回声窗口期）不回传，避免左→右→左回环
     if (__programmaticScroll || isProgrammaticPosition() || performance.now() < __programmaticUntil)
         return;
     __lastProgrammaticY = null;   // 用户已接管滚动位置
+    ensureAnchorsFresh();         // 布局可能已变（图片等），回传行号须按新锚点表换算
     const max = document.documentElement.scrollHeight - window.innerHeight;
     if (max <= 0) return;
-    let ratio;
-    if (anchorMap && anchorMap.length >= 2) {
-        // 锚点映射：预览像素 Y → 源码行号 → ratio（渐进期已内置，无需额外补偿）
-        ratio = previewYToRatio(window.scrollY);
-    } else {
-        // 降级：纯比例映射
-        ratio = Math.max(0, Math.min(1, window.scrollY / max));
-        if (buildProgress) {
-            ratio = Math.min(1, ratio * buildProgress.fraction);
-        }
-    }
+    const line = previewYToLine(window.scrollY);
+    lastUserScrollAt = performance.now();
     if (buildProgress) userScrolledDuringBuild = true;
-    // 去抖阈值须像素感知：固定 0.001 比例对超大文档（30 万行级）相当于数屏死区，
-    // 用户翻页会被吞掉；构建期补偿后的通知值更小，同样会被吞。任一维度显著变化即通知。
-    if (Math.abs(window.scrollY - __lastNotifiedY) < 40 && Math.abs(ratio - __lastNotifiedRatio) < 0.001)
+    // 去抖阈值须像素感知：固定比例阈值对超大文档（30 万行级）相当于数屏死区，
+    // 用户翻页会被吞掉；行号维度 0.5 行以内且像素 40px 以内视为未变。
+    if (Math.abs(window.scrollY - __lastNotifiedY) < 40 && Math.abs(line - __lastNotifiedLine) < 0.5)
         return;
-    __lastNotifiedRatio = ratio;
+    __lastNotifiedLine = line;
     __lastNotifiedY = window.scrollY;
-    if (window.bridge && typeof window.bridge.onScrollRatio === "function") {
-        window.bridge.onScrollRatio(ratio);
+    // 用户当前阅读行成为对齐目标：布局变化（图片加载等）后的重放以此为准，
+    // 不再把用户拉回旧位置
+    lastRequestedLine = line;
+    if (window.bridge && typeof window.bridge.onScrollLine === "function") {
+        window.bridge.onScrollLine(line);
     }
 }, { passive: true });
+
+// —— 布局变化 → 锚点失效重建（VS Code 每次滚动实时查询位置；本实现为快照+失效）——
+// 图片/字体/KaTeX/代码高亮异步加载会改变块高：渲染完成时建的锚点表系统性偏小，
+// 右栏滚动不到位（实测 d_editor.md：60 张图加载后目标 Y 漂移 9000px+）。
+// ResizeObserver 监听高度变化，100ms 防抖合并连续加载；重建后若用户近期未滚动
+//（>500ms），按 lastRequestedLine 重放对齐（该值已跟随用户右栏滚动，重放即锚定
+// 当前阅读行，不会拉回旧位置）。渐进构建期不重放（由构建流程自行对齐）。
+if (typeof ResizeObserver !== "undefined") {
+    let layoutSyncTimer = 0;
+    new ResizeObserver(() => {
+        clearTimeout(layoutSyncTimer);
+        layoutSyncTimer = setTimeout(() => {
+            if (!lastValue) return;
+            buildAnchorMap();
+            if (!buildProgress
+                    && performance.now() - lastUserScrollAt > 500
+                    && lastRequestedLine > 0) {
+                reapplyScroll();
+            }
+        }, 100);
+    }).observe(document.body);
+}
 
 // 外部链接拦截：http/https 链接不在预览内导航，经 bridge.onOpenLink → C++ QDesktopServices
 // 转系统浏览器打开（捕获阶段先行，preventDefault 阻止 Chromium 导航；页内锚点 # 不受影响）
@@ -446,7 +482,7 @@ async function boot() {
         onSetMode: () => { /* 阶段二 */ },
         onApplyTheme: applyTheme,
         onSetLayout: applyLayout,
-        onScrollToRatio: scrollToRatio,
+        onScrollToLine: scrollToLine,
         onRetranslate: () => retranslateCodeBlocks(),
     });
 
@@ -476,6 +512,10 @@ if (typeof QWebChannel === "undefined") {
         getAnchorMap: () => anchorMap,
         getAnchorMode: () => lastAnchorMode,
         topRenderedBlocks,
+        scrollToLine,
+        lineToPreviewY,
+        previewYToLine,
+        getLastRequestedLine: () => lastRequestedLine,
         rootId: ROOT_ID,
     };
 }

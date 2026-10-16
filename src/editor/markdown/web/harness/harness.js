@@ -13,7 +13,7 @@
 //   T4 代码块：.code-block 表头/复制按钮/pre 结构 + 重渲染后 DOM 身份保留
 //   T5 新增表格：增量文档中第二个表格同样被包裹
 //   A 系列滚动锚点对齐（V-5278 复测回归）：A1 精确配对与行号、A2 AST 块结构、
-//   A3 渐进渲染（>64KB）完成后锚点可用性
+//   A3 渐进渲染（>64KB）完成后锚点可用性、A4 行号往返（行→Y→行 不变性，比例协议回归）
 // 结果写入 #harness-result（JSON），失败置 failed 类，document.title 同步 PASS/FAIL。
 
 import "../main.js";
@@ -235,6 +235,65 @@ async function run() {
         check("A2_ast_blocks_exact", blocksAst.length === 6
             && blocksAst.map((b) => b.type).join(",") === "heading,paragraph,list,code,table,paragraph",
             "types=" + blocksAst.map((b) => b.type).join(","));
+
+        // —— A4：行号往返 + scrollToLine 视口顶对齐（VS Code 式行号协议核心不变量）——
+        // mdAnchor 内容不足一屏（max=0 无处可滚，对齐语义退化为"同在顶部"），
+        // 对齐断言须用超出一屏的文档；锚点行做端点应精确还原，段内行允许插值误差。
+        // 旧比例协议回归：滚动条比例≠行号比例，中段行恒偏移。
+        {
+            const parts = ["# 标题"];
+            for (let i = 1; i <= 100; i++) parts.push("", "", "", "垫高段落 " + i);
+            const mdTall = parts.join("\n");
+            test.render(mdTall);
+            await waitFor(() => root.textContent.includes("垫高段落 100"));
+            await waitFrames(3);
+            test.buildAnchorMap();
+            const tallMap = test.getAnchorMap();
+            if (tallMap && tallMap.length >= 4
+                    && document.documentElement.scrollHeight > 2 * window.innerHeight) {
+                // 目标行取文档中部（其 Y 须在可滚范围内，避免被 Chromium 钳制）
+                let mid = null;
+                for (let i = tallMap.length - 2; i >= 0; i--) {
+                    if (test.lineToPreviewY(tallMap[i].sourceLine)
+                            <= document.documentElement.scrollHeight - window.innerHeight - 50) {
+                        mid = tallMap[i];
+                        break;
+                    }
+                }
+                const yMid = test.lineToPreviewY(mid.sourceLine);
+                test.scrollToLine(mid.sourceLine);
+                await waitFrames(2);
+                check("A4_scroll_to_line_aligns_viewport_top",
+                    Math.abs(window.scrollY - yMid) < 2,
+                    "scrollY=" + window.scrollY.toFixed(1) + " expect=" + yMid.toFixed(1)
+                    + " line=" + mid.sourceLine);
+
+                // —— A5：布局变化锚点自纠错（图片异步加载回归，d_editor.md 实测 9000px+ 漂移）——
+                // 模拟大图加载：膨胀视口顶之前的首段，目标行位置应随之下移；scrollToLine
+                // 协议入口须自动检测 scrollHeight 变化并重建锚点表（惰性失效）。
+                const pmRoot = document.querySelector(".ProseMirror");
+                const inflated = pmRoot.children[1];
+                const addPx = 400;
+                inflated.style.height = (inflated.offsetHeight + addPx) + "px";
+                await waitFrames(2);
+                const yStale = test.lineToPreviewY(mid.sourceLine);   // 未重建的旧表值（应偏小）
+                test.scrollToLine(mid.sourceLine);                    // 协议入口：应惰性重建
+                await waitFrames(2);
+                const yFresh = test.lineToPreviewY(mid.sourceLine);   // 重建后的正确值
+                check("A5_layout_change_target_shifts",
+                    Math.abs(yFresh - yStale - addPx) < 8,
+                    "fresh=" + yFresh.toFixed(0) + " stale=" + yStale.toFixed(0) + " added=" + addPx);
+                check("A5_scroll_after_layout_change_self_corrects",
+                    Math.abs(window.scrollY - yFresh) < 2,
+                    "scrollY=" + window.scrollY.toFixed(0) + " fresh=" + yFresh.toFixed(0));
+                inflated.style.height = "";   // 还原
+                await waitFrames(2);
+            } else {
+                check("A4_tall_doc_scrollable", false,
+                    "map=" + (tallMap ? tallMap.length : 0)
+                    + " h=" + document.documentElement.scrollHeight);
+            }
+        }
 
         // —— A3：渐进渲染（>64KB）完成后锚点仍可用（数量错位时退化标题锚点）——
         // 700 节 ×5 块（heading/paragraph/松散列表/code/table）≈ 80KB，触发渐进渲染；

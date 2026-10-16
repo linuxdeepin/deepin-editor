@@ -11,15 +11,16 @@
 // MarkdownBridge —— 暴露给 JS 的 WebChannel 桥接对象
 //
 // 协议（与 web/bridge.js 一一对应）：
-//   JS → C++（槽）:onReady / onContentChanged / onScrollRatio / onOpenLink
+//   JS → C++（槽）:onReady / onContentChanged / onScrollLine / onOpenLink
 //   C++ → JS（信号）:setMarkdownRequested / setModeRequested /
-//                    applyThemeRequested / setLayoutRequested / scrollToRatioRequested
+//                    applyThemeRequested / setLayoutRequested / scrollToLineRequested
 //
 // 阶段一（只读预览）：仅 onReady / setMarkdownRequested / applyThemeRequested /
-//                    setLayoutRequested / scrollToRatioRequested 实际使用；
-//                    onContentChanged / onScrollRatio / setModeRequested 接口先到位，
+//                    setLayoutRequested / scrollToLineRequested 实际使用；
+//                    onContentChanged / setModeRequested 接口先到位，
 //                    阶段二（WYSIWYG 编辑）启用，本期实现为转发信号但上层不连接。
 //                    onOpenLink 由 JS 点击拦截调用（外部链接转系统浏览器）。
+// 滚动同步为 VS Code 式行号协议：line 为 0 基源码行号（顶部可见行，可带小数）。
 //
 class MarkdownBridge : public QObject
 {
@@ -45,7 +46,7 @@ public slots:
     // JS → C++
     void onReady() { emit ready(); }
     void onContentChanged(const QString &md) { emit contentChanged(md); }
-    void onScrollRatio(double ratio) { emit scrollRatioChanged(ratio); }
+    void onScrollLine(double line) { emit scrollLineChanged(line); }
     void onOpenLink(const QString &url) { emit openLinkRequested(url); }
 
     // 语言切换后由宿主调用：NOTIFY 信号触发 JS 侧全部属性重取
@@ -55,7 +56,7 @@ signals:
     // C++ → JS（JS 端 bridge.{signal}.connect(function(...){...}) 接收）
     void ready();
     void contentChanged(const QString &md);
-    void scrollRatioChanged(double ratio);
+    void scrollLineChanged(double line);
     void openLinkRequested(const QString &url);
     void retranslated();
 
@@ -63,7 +64,7 @@ signals:
     void setModeRequested(bool editable);
     void applyThemeRequested(const QString &jsonColors, bool isDark);
     void setLayoutRequested(int maxW, bool center);
-    void scrollToRatioRequested(double ratio);
+    void scrollToLineRequested(double line);
 };
 
 #endif // MARKDOWNBRIDGE_H

@@ -6,7 +6,7 @@
 //
 // 协议（与 C++ MarkdownBridge 一一对应）：
 //   C++ → JS：bridge.{signal}.connect(fn)
-//   JS → C++：bridge.onReady/onContentChanged/onScrollRatio/onOpenLink(...)
+//   JS → C++：bridge.onReady/onContentChanged/onScrollLine/onOpenLink(...)
 //
 // 提供 setupBridge(handlers) 供 main.js 调用，在 QWebChannel 就绪后连接信号。
 
@@ -35,7 +35,7 @@ function wireSignals(h) {
     b.setModeRequested.connect(function (editable) { h.onSetMode(editable); });
     b.applyThemeRequested.connect(function (json, isDark) { h.onApplyTheme(json, isDark); });
     b.setLayoutRequested.connect(function (maxW, center) { h.onSetLayout(maxW, center); });
-    b.scrollToRatioRequested.connect(function (ratio) { h.onScrollToRatio(ratio); });
+    b.scrollToLineRequested.connect(function (line) { h.onScrollToLine(line); });
     // 语言切换：C++ 侧 Q_PROPERTY 文案更新后触发，重刷已渲染 DOM
     if (h.onRetranslate && b.retranslated) {
         b.retranslated.connect(function () { h.onRetranslate(); });

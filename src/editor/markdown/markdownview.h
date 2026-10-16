@@ -46,14 +46,11 @@ public:
     void setMode(int mode) override;
     void applyTheme(const QVariantMap &themeMap) override;   // 阶段 3 接 ThemeSerializer
     void setLayout(int maxContentWidth, bool center) override;
-    void scrollToRatio(double ratio) override;
-
-    // 反向滚动比例（右栏自身滚动时回传，供上层同步左栏，§4.6 双向）
-    double scrollRatio() const;
+    void scrollToLine(double line) override;
 
 signals:
     void ready();
-    void scrollRatioChanged(double ratio);   // 预留：右栏主动滚动回传（本期不连上层）
+    void scrollLineChanged(double line);   // 右栏用户滚动回传顶部可见源码行号（§4.6 双向）
     void contentChanged(const QString &md);  // 预留：编辑模式回写源码（本期不触发）
 
 private slots:
@@ -73,8 +70,8 @@ private:
     int m_lastLayoutMaxW = 0;            // 最近一次布局约束
     bool m_lastLayoutCenter = false;
     bool m_hasLayout = false;
-    double m_lastScrollRatio = 0.0;      // 最近一次滚动比例（初始对齐：恢复光标后左栏非顶部）
-    bool m_hasScroll = false;            // 与内容/布局/主题同型的有效标记（0.0＝回顶部亦有效）
+    double m_lastScrollLine = 0.0;      // 最近一次同步行号（初始对齐：恢复光标后左栏非顶部）
+    bool m_hasScroll = false;           // 与内容/布局/主题同型的有效标记（0.0＝回顶部亦有效）
 };
 
 #endif // MARKDOWNVIEW_H

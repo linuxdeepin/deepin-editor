@@ -32,11 +32,10 @@
 //   R3: m_hasTheme → 补发主题
 //   R4: m_hasScroll（含 0.0 有效）→ 补发滚动
 //   R5: emit ready()
-// setMarkdown/setLayout/applyTheme/scrollToRatio: 缓存 + 即时 emit（无分支，参数与标记）
+// setMarkdown/setLayout/applyTheme/scrollToLine: 缓存 + 即时 emit（无分支，参数与标记）
 // setMode: mode==Editable → true，否则 false（含越界值）
 // openLinkRequested lambda: scheme http/https → QDesktopServices::openUrl；否则拦截
 // renderProcessTerminated lambda: m_ready=false + 300ms 后 Reload
-// scrollRatio(): h<=0 → 0.0；h>0 → clampRatio(scrollY/h)
 //
 // 用例映射：
 // - Constructor_BareCreation_BridgeChildNotReady                       → ctor
@@ -45,12 +44,10 @@
 // - SetMode_ReadOnlyEditableAndInvalid_EmitsMappedFlag                  → setMode 分支
 // - ApplyTheme_DarkAndLightMaps_EmitsSerializedJsonAndFlag（TEST_P 2）  → applyTheme
 // - SetLayout_MaxWidthAndCenter_EmitsExactParams                        → setLayout/R2
-// - ScrollToRatio_BoundaryValues_EmitsExactRatio（TEST_P 3）             → scrollToRatio/R4
+// - ScrollToLine_BoundaryValues_EmitsExactLine（TEST_P 3）              → scrollToLine/R4
 // - OnBridgeReady_FullCache_ReplaysAllAndEmitsReady                     → R1-R5
-// - OnBridgeReady_ZeroRatioValid_ReplaysZeroScroll                      → R4（0.0 边界）
+// - OnBridgeReady_ZeroLineValid_ReplaysZeroScroll                      → R4（0.0 边界）
 // - OnBridgeReady_NoCache_EmitsOnlyReady                                 → R1-R4 反例
-// - ScrollRatio_EmptyContents_ReturnsZero                                → h<=0
-// - ScrollRatio_NonEmptyContents_ReturnsClampedRatio                     → h>0 + clamp
 // - OpenLink_HttpAndHttpsSchemes_DelegatedToDesktopServices             → 白名单
 // - OpenLink_NonHttpScheme_BlockedWithoutDelegation                      → 拦截
 // - RenderProcessTerminated_AliveView_MarksUnreadyAndReloads            → 恢复 lambda
@@ -60,7 +57,7 @@
 // - UrlChanged_NonHttpScheme_StaysInRenderPage                            → I4 反例
 //
 // 最小清单自检：1 公开方法全覆盖（ctor/dtor/init/bridge/isReady/setMarkdown/setMode/
-// applyTheme/setLayout/scrollToRatio/scrollRatio；onBridgeReady private 经 bridge 公开槽触发）
+// applyTheme/setLayout/scrollToLine/scrollLine；onBridgeReady private 经 bridge 公开槽触发）
 // ✔ 2 等价类 ✔ 3 边界（ratio 0/1、mode 越界、空缓存）✔ 4 TEST_P ×2（≥3 组）✔
 // 5 分支映射 ✔ 6 I1-I4/R1-R5/模式分支全覆盖 ✔ 7 无异常路径 8 越界/拦截负面 ✔
 // 9 fail/拦截后状态一致 ✔ 10 QDesktopServices/openUrl、QWebChannel::registerObject、
@@ -199,19 +196,19 @@ TEST_F(MarkdownViewTest, ModeEnum_MetaObjectRegistration_KeysAndValuesMapped)
 
 TEST_F(MarkdownViewTest, BridgeSignals_ForwardedToViewSignals_PayloadIntact)
 {
-    // Arrange：ctor 中 bridge→view 的 contentChanged/scrollRatioChanged 转发
+    // Arrange：ctor 中 bridge→view 的 contentChanged/scrollLineChanged 转发
     QSignalSpy contentSpy(obj, &MarkdownView::contentChanged);
-    QSignalSpy scrollSpy(obj, &MarkdownView::scrollRatioChanged);
+    QSignalSpy scrollSpy(obj, &MarkdownView::scrollLineChanged);
 
     // Act：经 bridge 公开槽注入（JS 侧来源等价路径）
     obj->bridge()->onContentChanged(QStringLiteral("# live"));
-    obj->bridge()->onScrollRatio(0.4);
+    obj->bridge()->onScrollLine(120.0);
 
     // Assert
     ASSERT_EQ(contentSpy.count(), 1);
     EXPECT_EQ(contentSpy.at(0).at(0).toString(), QString("# live"));
     ASSERT_EQ(scrollSpy.count(), 1);
-    EXPECT_DOUBLE_EQ(scrollSpy.at(0).at(0).toDouble(), 0.4);
+    EXPECT_DOUBLE_EQ(scrollSpy.at(0).at(0).toDouble(), 120.0);
 }
 
 TEST_F(MarkdownViewTest, SetMarkdown_BeforeReady_EmitsAndCachesForReplay)
@@ -315,38 +312,38 @@ TEST_F(MarkdownViewTest, SetLayout_MaxWidthAndCenter_EmitsExactParams)
     EXPECT_FALSE(layoutSpy.at(1).at(1).toBool());
 }
 
-// —— scrollToRatio 边界值成组（0/中点/1）——
+// —— scrollToLine 边界值成组（0=顶部 / 中段 / 末行）——
 namespace {
-struct ViewRatioCase {
-    double ratio;
+struct ViewLineCase {
+    double line;
 };
-const ViewRatioCase kViewRatioCases[] = {
+const ViewLineCase kViewLineCases[] = {
     { 0.0 },
-    { 0.5 },
-    { 1.0 },
+    { 120.5 },
+    { 299.0 },
 };
 } // namespace
 
-class ViewRatioParamTest : public MarkdownViewTest,
-                           public ::testing::WithParamInterface<ViewRatioCase> {
+class ViewLineParamTest : public MarkdownViewTest,
+                          public ::testing::WithParamInterface<ViewLineCase> {
 };
 
-TEST_P(ViewRatioParamTest, ScrollToRatio_BoundaryValues_EmitsExactRatio)
+TEST_P(ViewLineParamTest, ScrollToLine_BoundaryValues_EmitsExactLine)
 {
     // Arrange
-    const double ratio = GetParam().ratio;
-    QSignalSpy scrollSpy(obj->bridge(), &MarkdownBridge::scrollToRatioRequested);
+    const double line = GetParam().line;
+    QSignalSpy scrollSpy(obj->bridge(), &MarkdownBridge::scrollToLineRequested);
 
     // Act
-    obj->scrollToRatio(ratio);
+    obj->scrollToLine(line);
 
     // Assert
     EXPECT_EQ(scrollSpy.count(), 1);
-    EXPECT_DOUBLE_EQ(scrollSpy.at(0).at(0).toDouble(), ratio);
+    EXPECT_DOUBLE_EQ(scrollSpy.at(0).at(0).toDouble(), line);
 }
 
-INSTANTIATE_TEST_SUITE_P(ViewRatioBoundaries, ViewRatioParamTest,
-                         ::testing::ValuesIn(kViewRatioCases));
+INSTANTIATE_TEST_SUITE_P(ViewLineBoundaries, ViewLineParamTest,
+                         ::testing::ValuesIn(kViewLineCases));
 
 TEST_F(MarkdownViewTest, OnBridgeReady_FullCache_ReplaysAllAndEmitsReady)
 {
@@ -354,7 +351,7 @@ TEST_F(MarkdownViewTest, OnBridgeReady_FullCache_ReplaysAllAndEmitsReady)
     QSignalSpy mdSpy(obj->bridge(), &MarkdownBridge::setMarkdownRequested);
     QSignalSpy layoutSpy(obj->bridge(), &MarkdownBridge::setLayoutRequested);
     QSignalSpy themeSpy(obj->bridge(), &MarkdownBridge::applyThemeRequested);
-    QSignalSpy scrollSpy(obj->bridge(), &MarkdownBridge::scrollToRatioRequested);
+    QSignalSpy scrollSpy(obj->bridge(), &MarkdownBridge::scrollToLineRequested);
     QSignalSpy readySpy(obj, &MarkdownView::ready);
     QVariantMap theme;
     QVariantMap ec;
@@ -363,7 +360,7 @@ TEST_F(MarkdownViewTest, OnBridgeReady_FullCache_ReplaysAllAndEmitsReady)
     obj->setMarkdown(QStringLiteral("body"));
     obj->setLayout(800, true);
     obj->applyTheme(theme);
-    obj->scrollToRatio(0.25);
+    obj->scrollToLine(42.0);
     EXPECT_EQ(mdSpy.count(), 1);   // 前置即时 emit
 
     // Act：内核就绪
@@ -378,17 +375,17 @@ TEST_F(MarkdownViewTest, OnBridgeReady_FullCache_ReplaysAllAndEmitsReady)
     EXPECT_EQ(themeSpy.count(), 2);
     EXPECT_EQ(themeSpy.at(1).at(1).toBool(), true);
     EXPECT_EQ(scrollSpy.count(), 2);
-    EXPECT_DOUBLE_EQ(scrollSpy.at(1).at(0).toDouble(), 0.25);
+    EXPECT_DOUBLE_EQ(scrollSpy.at(1).at(0).toDouble(), 42.0);
     EXPECT_EQ(readySpy.count(), 1);
     EXPECT_TRUE(obj->isReady());
 }
 
-TEST_F(MarkdownViewTest, OnBridgeReady_ZeroRatioValid_ReplaysZeroScroll)
+TEST_F(MarkdownViewTest, OnBridgeReady_ZeroLineValid_ReplaysZeroScroll)
 {
     // Arrange：0.0（回顶部）是有效状态，以独立标记而非值判断
-    QSignalSpy scrollSpy(obj->bridge(), &MarkdownBridge::scrollToRatioRequested);
+    QSignalSpy scrollSpy(obj->bridge(), &MarkdownBridge::scrollToLineRequested);
     QSignalSpy readySpy(obj, &MarkdownView::ready);
-    obj->scrollToRatio(0.0);
+    obj->scrollToLine(0.0);
 
     // Act
     obj->bridge()->onReady();
@@ -405,7 +402,7 @@ TEST_F(MarkdownViewTest, OnBridgeReady_NoCache_EmitsOnlyReady)
     QSignalSpy mdSpy(obj->bridge(), &MarkdownBridge::setMarkdownRequested);
     QSignalSpy layoutSpy(obj->bridge(), &MarkdownBridge::setLayoutRequested);
     QSignalSpy themeSpy(obj->bridge(), &MarkdownBridge::applyThemeRequested);
-    QSignalSpy scrollSpy(obj->bridge(), &MarkdownBridge::scrollToRatioRequested);
+    QSignalSpy scrollSpy(obj->bridge(), &MarkdownBridge::scrollToLineRequested);
     QSignalSpy readySpy(obj, &MarkdownView::ready);
 
     // Act
@@ -418,40 +415,6 @@ TEST_F(MarkdownViewTest, OnBridgeReady_NoCache_EmitsOnlyReady)
     EXPECT_EQ(themeSpy.count(), 0);
     EXPECT_EQ(scrollSpy.count(), 0);
     EXPECT_TRUE(obj->isReady());
-}
-
-TEST_F(MarkdownViewTest, ScrollRatio_EmptyContents_ReturnsZero)
-{
-    // Arrange：未 load 任何内容（contentsSize 无效/负，h<=0 分支）
-
-    // Act
-    const double ratio = obj->scrollRatio();
-
-    // Assert：除零保护 → 0.0（期望精确值）
-    EXPECT_DOUBLE_EQ(ratio, 0.0);
-    EXPECT_GE(ratio, 0.0);
-}
-
-TEST_F(MarkdownViewTest, ScrollRatio_NonEmptyContents_ReturnsClampedRatio)
-{
-    // Arrange：stub 页面几何（contentsSize/scrollPosition 均非虚属性 getter）
-    stub.set_lamda(&QWebEnginePage::contentsSize,
-                   [](QWebEnginePage *) -> QSizeF { return QSizeF(0, 1000); });
-    stub.set_lamda(&QWebEnginePage::scrollPosition,
-                   [](QWebEnginePage *) -> QPointF { return QPointF(0, 250); });
-
-    // Act
-    const double ratio = obj->scrollRatio();
-
-    // Assert：250/1000
-    EXPECT_NEAR(ratio, 0.25, 1e-12);
-
-    // Arrange 2：越界滚动位置 → 钳制
-    stub.set_lamda(&QWebEnginePage::scrollPosition,
-                   [](QWebEnginePage *) -> QPointF { return QPointF(0, 1500); });
-
-    // Act 2 & Assert 2：1500/1000=1.5 → clamp 1.0
-    EXPECT_NEAR(obj->scrollRatio(), 1.0, 1e-12);
 }
 
 TEST_F(MarkdownViewTest, OpenLink_HttpAndHttpsSchemes_DelegatedToDesktopServices)

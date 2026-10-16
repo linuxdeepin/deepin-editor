@@ -1020,6 +1020,12 @@ QTextBlock TextEdit::firstVisibleBlock()
     return document()->findBlockByLineNumber(getFirstVisibleBlockId());
 }
 
+int TextEdit::topVisibleBlockNumber() const
+{
+    const QTextBlock block = QPlainTextEdit::firstVisibleBlock();
+    return block.isValid() ? block.blockNumber() : 0;
+}
+
 void TextEdit::moveToStart()
 {
     qDebug() << "Moving to start";
