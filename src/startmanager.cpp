@@ -329,7 +329,7 @@ void StartManager::autoBackupFile()
     qDebug() << "Exit autoBackupFile";
 }
 
-int StartManager::recoverFile(Window *window)
+int StartManager::recoverFile(Window *window, const QStringList &explicitFiles)
 {
     qDebug() << "Enter recoverFile";
 
@@ -339,6 +339,12 @@ int StartManager::recoverFile(Window *window)
     qDebug() << "Found" << blankFiles.size() << "blank files in directory:" << m_blankFileDir;
     int recFilesSum = 0;
     QStringList files = blankFiles;
+    QStringList resolvedExplicitFiles;
+    for (const QString &explicitFile : explicitFiles) {
+        if (!explicitFile.isEmpty())
+            resolvedExplicitFiles.append(Utils::getFilePath(explicitFile));
+    }
+    QStringList recoveredLogicalPaths;
     //去除非新建文件
     for (auto file : blankFiles) {
         if (!file.contains("blank_file")) {
@@ -420,14 +426,36 @@ int StartManager::recoverFile(Window *window)
                 qWarning() << "Local file does not exist, skipping:" << localPath;
                 continue;
             }
+
+            const QString logicalPath = Utils::getFilePath(localPath);
+            if (resolvedExplicitFiles.contains(logicalPath)) {
+                qDebug() << "Skip recovery for explicitly opened file:" << localPath;
+                continue;
+            }
+
+            if (!logicalPath.isEmpty() && recoveredLogicalPaths.contains(logicalPath)) {
+                qDebug() << "Skip duplicated recovery for logical path:" << localPath;
+                continue;
+            }
         }
 
         // 确定实际打开路径和显示名称
         QString openPath;
         QString displayName;
         if (!temFilePath.isEmpty() && Utils::fileExists(temFilePath)) {
-            openPath = temFilePath;
-            displayName = QFileInfo(localPath).fileName();
+            const QFileInfo backupFileInfo(temFilePath);
+            const QFileInfo localFileInfo(localPath);
+            if (localFileInfo.lastModified() > backupFileInfo.lastModified()) {
+                qWarning() << "Backup is older than local file, recover local file instead:"
+                           << temFilePath << localPath;
+                openPath = localPath;
+                displayName = QFileInfo(localPath).fileName();
+                bIsTemFile = false;
+                lastmodifiedtime.clear();
+            } else {
+                openPath = temFilePath;
+                displayName = QFileInfo(localPath).fileName();
+            }
         } else if (!localPath.isEmpty() && Utils::fileExists(localPath)) {
             openPath = localPath;
             if (Utils::isDraftFile(localPath) || !Utils::isMimeTypeSupport(localPath)) {
@@ -439,6 +467,9 @@ int StartManager::recoverFile(Window *window)
         } else {
             continue;
         }
+
+        if (!localPath.isEmpty())
+            recoveredLogicalPaths.append(Utils::getFilePath(localPath));
 
         // 处理多窗口：当窗口索引变化时创建新窗口
         if (object.contains("window") && object.value("window").isDouble()) {
@@ -637,7 +668,7 @@ void StartManager::openFilesInTab(QStringList files)
                 // 以 window 为 context：窗口在延时期间被销毁则不触发，避免悬空调用
                 QTimer::singleShot(50, window, [ = ] {
                     qDebug() << "Delayed file opening for:" << resolvedFile;
-                    recoverFile(window);
+                    recoverFile(window, files);
                     window->addTab(resolvedFile);
                 });
             }
