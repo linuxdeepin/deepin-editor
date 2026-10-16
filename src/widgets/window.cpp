@@ -32,6 +32,8 @@
 #include <DWidgetUtil>
 #include <QTextDocumentFragment>
 #include <dprintpreviewwidget.h>
+#include <QTimer>
+#include <QWindowStateChangeEvent>
 
 #ifdef DTKWIDGET_CLASS_DFileDialog
 
@@ -200,6 +202,43 @@ void Window::printPageWithMultiDoc(
     painter->restore();
 
 }
+
+namespace {
+// Suppresses stale-content flash during print preview maximize/restore
+// by disabling widget updates across the WindowStateChange event.
+class PrintPreviewStateFilter : public QObject
+{
+public:
+    explicit PrintPreviewStateFilter(QWidget *dialog)
+        : QObject(dialog)
+        , m_dialog(dialog)
+    {
+        dialog->installEventFilter(this);
+    }
+
+protected:
+    bool eventFilter(QObject *, QEvent *event) override
+    {
+        if (event->type() == QEvent::WindowStateChange) {
+            auto *stateChangeEvent = static_cast<QWindowStateChangeEvent *>(event);
+            bool wasMaximized = stateChangeEvent->oldState() & Qt::WindowMaximized;
+            bool isMaximized = m_dialog->windowState() & Qt::WindowMaximized;
+
+            if (wasMaximized != isMaximized) {
+                m_dialog->setUpdatesEnabled(false);
+                QTimer::singleShot(0, m_dialog, [this]() {
+                    m_dialog->setUpdatesEnabled(true);
+                    m_dialog->update();
+                });
+            }
+        }
+        return false;
+    }
+
+private:
+    QWidget *m_dialog;
+};
+} // namespace
 
 Window::Window(DMainWindow *parent)
     : DMainWindow(parent),
@@ -2445,6 +2484,7 @@ void Window::popupPrintDialog()
     m_isNewPrint = true;
     m_pPreview = new DPrintPreviewDialog(this);
     m_pPreview->setAttribute(Qt::WA_DeleteOnClose);
+    new PrintPreviewStateFilter(m_pPreview);
 
     if (fileDir == m_blankFileDir) {
         QString name = m_tabbar->currentName();
@@ -2489,6 +2529,7 @@ void Window::popupPrintDialog()
 
 #else
     DPrintPreviewDialog preview(this);
+    new PrintPreviewStateFilter(&preview);
 
     connect(&preview, QOverload<DPrinter *>::of(&DPrintPreviewDialog::paintRequested),
     this, [ & ](DPrinter * printer) {
