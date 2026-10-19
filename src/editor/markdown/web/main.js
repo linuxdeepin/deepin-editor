@@ -16,7 +16,7 @@ import { gfm } from "@milkdown/kit/preset/gfm";
 import { history } from "@milkdown/kit/plugin/history";
 import { indent } from "@milkdown/kit/plugin/indent";
 import { clipboard } from "@milkdown/kit/plugin/clipboard";
-import { replaceAll } from "@milkdown/kit/utils";
+import { replaceAll, $remark } from "@milkdown/kit/utils";
 import { mathPlugins, normalizeMathDelimiters } from "./milkdownMathPlugins.js";
 import { setupBridge } from "./bridge.js";
 import { tableView, codeBlockView, retranslateCodeBlocks } from "./nodeViews.js";
@@ -570,6 +570,31 @@ document.addEventListener("click", (event) => {
     }
 }, true);
 
+// —— 代码块末尾空行修剪（parse 期）——
+// 闭合围栏前的空行/纯空白行按 CommonMark 属代码块内容（remark value 以 "\n" 或
+// "\n    " 结尾——工具/LLM 生成的 md 常见），preset-commonmark 的 coderParser 将
+// value 原样写入 PM 文本，white-space:pre 的 <pre> 里末尾空行渲染为代码后的多余
+// 空行。此处在渲染解析链上修剪 value 末尾的全部空白行（与 nodeViews countCodeLines
+// 的"忽略末尾空行"语义一致，末尾空行不视为内容）：代码中间的空行不受影响；空代码
+// 块 value 本就为 ""，表头下一行空白的现状不变。replaceAll 与渐进渲染的 parserCtx
+// 共用此解析链；锚点行号走独立的 mdBlockParser（只读块位置），不受 value 修剪影响。
+function trimCodeTrailingBlankLinesAttacher() {
+    return (tree) => {
+        const walk = (node) => {
+            if (!node || !Array.isArray(node.children)) return;
+            for (const child of node.children) {
+                if (child.type === "code" && typeof child.value === "string") {
+                    child.value = child.value.replace(/(?:[ \t]*\n)+[ \t]*$/, "");
+                }
+                walk(child);
+            }
+        };
+        walk(tree);
+    };
+}
+const remarkTrimCodeTrailingBlankLines =
+    $remark("remarkTrimCodeTrailingBlankLines", () => trimCodeTrailingBlankLinesAttacher);
+
 // 启动 Milkdown
 async function boot() {
     const rootEl = document.getElementById(ROOT_ID);
@@ -592,6 +617,8 @@ async function boot() {
         .use(indent)
         .use(clipboard)
         .use(mathPlugins)
+        // 代码块末尾空白行修剪：见 trimCodeTrailingBlankLinesAttacher 注释
+        .use(remarkTrimCodeTrailingBlankLines)
         // 表格/代码块包裹结构的 NodeView（闪烁根治，见 nodeViews.js 头注）
         .use(tableView)
         .use(codeBlockView)

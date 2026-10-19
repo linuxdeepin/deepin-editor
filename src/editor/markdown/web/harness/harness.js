@@ -12,6 +12,9 @@
 //   T3 重渲染（表格内容已变）：包裹结构完整且行数正确（update 原地更新路径）
 //   T4 代码块：.code-block 表头/复制按钮/pre 结构 + 重渲染后 DOM 身份保留
 //   T5 新增表格：增量文档中第二个表格同样被包裹
+//   C 系列代码块末尾空行（闭合围栏前空行属内容致多渲染一行）：C1 非空块无多余
+//   空行（文本无末尾换行 + pre 高度=行数×行高+padding）、C2 围栏前空行/纯空白行
+//   被修剪且代码中间空行保留、C3 空块仍为空（.empty 形态不变）
 //   A 系列滚动锚点对齐（V-5278 复测回归）：A1 精确配对与行号、A2 AST 块结构、
 //   A3 渐进渲染（>64KB）完成后锚点可用性、A4 行号往返（行→Y→行 不变性，比例协议回归）
 // 结果写入 #harness-result（JSON），失败置 failed 类，document.title 同步 PASS/FAIL。
@@ -184,6 +187,72 @@ async function run() {
         const bareTables = Array.from(root.querySelectorAll("table")).filter((t) => !t.closest(".table-wrapper"));
         check("T6_no_bare_table_outside_wrapper", bareTables.length === 0,
             bareTables.length + " bare table(s)");
+
+        // —— C 系列：代码块末尾空行 ——
+        // 闭合围栏前的空行/纯空白行按 CommonMark 属代码块内容（value 以 "\n" 或
+        // "\n    " 结尾），white-space:pre 下渲染为代码后的多余空行。修剪后断言：
+        // 非空块文本无末尾换行、pre 高度=行数×行高+上下 padding（无多余行）；
+        // 围栏前空行/纯空白行被修剪，代码中间空行保留；空块无内容、.empty 形态不变。
+        {
+            const lineHeightOf = (pre) => {
+                const cs = getComputedStyle(pre);
+                return parseFloat(cs.lineHeight) || 1.5 * parseFloat(cs.fontSize);
+            };
+            const preHeight = (pre) => pre.getBoundingClientRect().height;
+            const padY = (pre) => {
+                const cs = getComputedStyle(pre);
+                return parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+            };
+            const expectLines = (pre, n) => Math.abs(preHeight(pre) - (n * lineHeightOf(pre) + padY(pre))) < 1;
+
+            test.render("```cpp\nint main() {\n    return 0;\n}\n```");
+            await waitFor(() => root.querySelector(".code-block pre code"));
+            await waitFrames(2);
+            const codeEl = root.querySelector(".code-block pre code");
+            check("C1_nonempty_code_no_trailing_newline",
+                codeEl.textContent === "int main() {\n    return 0;\n}",
+                "text=" + JSON.stringify(codeEl.textContent));
+            check("C1_nonempty_code_pre_height_no_extra_line",
+                expectLines(codeEl.closest("pre"), 3),
+                "h=" + preHeight(codeEl.closest("pre")).toFixed(1));
+
+            // C2a：闭合围栏前空行（工具/LLM 生成 md 常见）→ 不渲染多余空行
+            test.render("```cpp\nint a;\nint b;\n\n```");
+            await waitFor(() => root.querySelector(".code-block pre code"));
+            await waitFrames(2);
+            const code2a = root.querySelector(".code-block pre code");
+            check("C2_blank_line_before_fence_trimmed",
+                code2a.textContent === "int a;\nint b;" && expectLines(code2a.closest("pre"), 2),
+                "text=" + JSON.stringify(code2a.textContent)
+                    + " h=" + preHeight(code2a.closest("pre")).toFixed(1));
+
+            // C2b：闭合围栏前纯空白行（自动缩进残留）→ 同样修剪
+            test.render("```cpp\nint a;\nint b;\n    \n```");
+            await waitFor(() => root.querySelector(".code-block pre code"));
+            await waitFrames(2);
+            const code2b = root.querySelector(".code-block pre code");
+            check("C2_whitespace_line_before_fence_trimmed",
+                code2b.textContent === "int a;\nint b;" && expectLines(code2b.closest("pre"), 2),
+                "text=" + JSON.stringify(code2b.textContent));
+
+            // C2c：代码中间的空行是内容，必须保留（3 行渲染高度）
+            test.render("```cpp\nint a;\n\nint b;\n```");
+            await waitFor(() => root.querySelector(".code-block pre code"));
+            await waitFrames(2);
+            const code2c = root.querySelector(".code-block pre code");
+            check("C2_interior_blank_line_kept",
+                code2c.textContent === "int a;\n\nint b;" && expectLines(code2c.closest("pre"), 3),
+                "text=" + JSON.stringify(code2c.textContent));
+
+            test.render("```\n```");
+            await waitFor(() => root.querySelector(".code-block"));
+            await waitFrames(2);
+            const emptyBlock = root.querySelector(".code-block");
+            check("C3_empty_code_block_stays_empty",
+                emptyBlock.classList.contains("empty")
+                    && emptyBlock.querySelector("pre code").textContent === "",
+                "text=" + JSON.stringify(emptyBlock.querySelector("pre code").textContent));
+        }
 
         // —— A 系列：滚动锚点对齐（V-5278 复测：连续空行/松散列表/definition 致配对漂移）——
         // 构造含全部错位诱因的文档：连续空行（幻影块）、松散列表（渲染合并）、
