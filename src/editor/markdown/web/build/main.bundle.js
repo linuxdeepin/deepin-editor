@@ -45667,6 +45667,21 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
       console.warn("[md] bridge unavailable, external link not opened:", href);
     }
   }, true);
+  function trimCodeTrailingBlankLinesAttacher() {
+    return (tree) => {
+      const walk = (node2) => {
+        if (!node2 || !Array.isArray(node2.children)) return;
+        for (const child of node2.children) {
+          if (child.type === "code" && typeof child.value === "string") {
+            child.value = child.value.replace(/(?:[ \t]*\n)+[ \t]*$/, "");
+          }
+          walk(child);
+        }
+      };
+      walk(tree);
+    };
+  }
+  const remarkTrimCodeTrailingBlankLines = $remark("remarkTrimCodeTrailingBlankLines", () => trimCodeTrailingBlankLinesAttacher);
   async function boot() {
     const rootEl = document.getElementById(ROOT_ID);
     editor = await Editor.make().config((ctx) => {
@@ -45677,7 +45692,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
         editable: () => false,
         attributes: { class: "milkdown-read-only" }
       }));
-    }).use(commonmark).use(gfm).use(history).use(indent).use(clipboard).use(mathPlugins).use(tableView).use(codeBlockView).create();
+    }).use(commonmark).use(gfm).use(history).use(indent).use(clipboard).use(mathPlugins).use(remarkTrimCodeTrailingBlankLines).use(tableView).use(codeBlockView).create();
     setupBridge({
       onSetMarkdown: renderMarkdown,
       onSetMode: () => {
