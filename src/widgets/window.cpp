@@ -2788,7 +2788,7 @@ void Window::doPrint(DPrinter *printer, const QVector<int> &pageRange)
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QRectF pageRect(printer->pageRect());
 #else
-    QRectF pageRect(printer->pageRect(QPrinter::Point));
+    QRectF pageRect(printer->pageRect(QPrinter::DevicePixel));
 #endif
 
     QRectF body = QRectF(0, 0, pageRect.width(), pageRect.height());
@@ -2894,7 +2894,7 @@ void Window::doPrintWithLargeDoc(DPrinter *printer, const QVector<int> &pageRang
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QRectF pageRect(printer->pageRect());
 #else
-    QRectF pageRect(printer->pageRect(QPrinter::Point));
+    QRectF pageRect(printer->pageRect(QPrinter::DevicePixel));
 #endif
     QRectF body = QRectF(0, 0, pageRect.width(), pageRect.height());
     // 使用首个文档信息即可
@@ -2990,7 +2990,7 @@ void Window::asynPrint(QPainter &p, DPrinter *printer, const QVector<int> &pageR
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QRectF pageRect(printer->pageRect());
 #else
-    QRectF pageRect(printer->pageRect(QPrinter::Point));
+    QRectF pageRect(printer->pageRect(QPrinter::DevicePixel));
 #endif
     int dpiy = p.device()->logicalDpiY();
     int margin = static_cast<int>((2 / 2.54) * dpiy); // 2 cm margins
