@@ -456,6 +456,18 @@ public:
     void setBookMarkList(QList<int> bookMarkList);
 
     /**
+     * @brief getMarkColorInfo 得到当前标记颜色信息（含绝对位置）
+     * @return 标记颜色信息列表
+     */
+    QList<MarkReplaceInfo> getMarkColorInfo();
+
+    /**
+     * @brief setMarkColorList 从持久化数据恢复标记颜色，重建内存标记并刷新显示
+     * @param markInfo 标记颜色信息列表（含绝对位置，光标无需有效）
+     */
+    void setMarkColorList(const QList<MarkReplaceInfo> &markInfo);
+
+    /**
      * 更新上次保存时的撤销回收栈的索引值
      */
     void updateSaveIndex();
