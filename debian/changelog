@@ -1,3 +1,28 @@
+deepin-editor (6.6.6) unstable; urgency=medium
+
+  * fix: render bottom bar dropdown text natively to fix blur
+  * fix: trim trailing blank lines in markdown code blocks
+  * fix: enable scroll sync and search highlight in ReadView
+  * fix: sync markdown live preview scroll by source line
+  * fix: markdown table and code block auto-fit width
+  * fix: render markdown images inline at natural size
+  * fix: guard save path against use-after-free on close
+  * test(ut): create StartManager singleton in window-integration suite
+  * fix: make StartManager lifetime explicit to prevent exit crash
+  * test(ut): drop stale manual deleteLater in BUG184107 case
+  * test(ut): add regression cases for 12 blocked PMS bugs without fix commits
+  * fix: parse encodes.ini by structure instead of fixed offsets
+  * fix: show mismatch alert for ReplaceBar when keyword is not found
+  * fix: stop event loop and release FileLoadThread on the exception path
+  * fix: add null guards and check svg file open in DDropdownMenu
+  * fix: add missing semicolon and null guards in editor code
+  * fix: stop backend write thread before teardown in ~Settings
+  * test(ut): add PMS regression unit tests for severity 1/2 bug hotspots
+  * chore: update version to 6.6.5
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Tue, 20 Oct 2026 16:51:26 +0800
+
+
 deepin-editor (6.6.5) unstable; urgency=medium
 
   * chore: migrate linglong deps to declarative buildext.apt
