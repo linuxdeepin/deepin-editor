@@ -1,3 +1,10 @@
+deepin-editor (6.5.63) unstable; urgency=medium
+
+  * fix: use DevicePixel for print page rect under Qt6
+  * fix(i18n): complete zh translations for audio device disabled toast
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Tue, 20 Oct 2026 20:21:55 +0800
+
 deepin-editor (6.5.62) unstable; urgency=medium
 
   * fix: finish writing file instead of aborting when editor closes mid-save
