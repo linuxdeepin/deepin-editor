@@ -507,6 +507,13 @@ int StartManager::recoverFile(Window *window)
     } else if (recFilesSum > 0 && window->getTabbar()->count() > 0) {
         // 焦点标签页文件不存在或无焦点记录，加载第一个可用标签页
         qDebug() << "No focus tab available, loading first tab";
+        // 当仅剩 pending 标签页时，currentIndex 已被 addPendingTab 隐式设为 0，
+        // activeTab(0) 中的 setCurrentIndex(0) 不会触发 currentChanged 信号，
+        // 需显式加载该 pending 标签页，否则编辑区域为空且无法编辑
+        QString firstFile = window->getTabbar()->fileAt(0);
+        if (window->isPendingTab(firstFile)) {
+            window->loadPendingTab(firstFile);
+        }
         window->activeTab(0);
     }
 
