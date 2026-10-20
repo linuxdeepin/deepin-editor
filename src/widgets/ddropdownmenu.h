@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -58,9 +58,11 @@ signals:
     void sigSetTextEditFocus();
 
 private:
-    //创建文字ICON
-    QIcon createIcon();
+    //原生绘制文本的工具按钮（嵌套类可直接访问宿主私有成员，定义在 cpp）
+    class LabelToolButton;
     void setText(const QString &text);
+    //按当前文本与字体计算并应用按钮尺寸
+    void updateButtonSize();
 private slots:
     //字体大小跟随系统变化
     void OnFontChangedSlot(const QFont &font);
@@ -71,10 +73,12 @@ private:
     QPixmap setSvgColor(QString color);
     void SetSVGBackColor(QDomElement &elem, QString strattr, QString strattrval);
 private:
-    DToolButton *m_pToolButton = nullptr;
+    DToolButton *m_pToolButton = nullptr;   //实际类型为 LabelToolButton（见 cpp）
     DMenu *m_menu = nullptr;
     QActionGroup *m_actionGroup = nullptr;
     QPixmap m_arrowPixmap;
+    QPixmap m_pressedArrowPixmap;  //按下态高亮色箭头，首次按下时生成
+    QString m_theme;               //当前箭头主题（dark/light）
     QString m_text = "UTF-8";
     QAction* m_pActUtf8 = nullptr;
     QFont m_font;

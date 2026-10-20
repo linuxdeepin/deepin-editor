@@ -52,8 +52,10 @@
 #include <QHoverEvent>
 #include <QActionGroup>
 #include <QFont>
+#include <QFontMetrics>
 #include <QDir>
 #include <DGuiApplicationHelper>
+#include <DFontSizeManager>
 
 using Dtk::Gui::DGuiApplicationHelper;
 
@@ -704,10 +706,36 @@ TEST_F(DDropdownMenuTest, EventFilter_ApplicationFontChange_RefreshesFont)
     QEvent fontEvent(QEvent::ApplicationFontChange);
     bool ret = obj->eventFilter(obj->getButton(), &fontEvent);
 
-    // Assert: 事件放行且内部字体已同步为 qApp 字体
+    // Assert: 事件放行且字体族同步为 qApp 字体，字号保持底栏 T9
+    //（修复：原 Qt6 分支漏设 pixelSize，文字会随应用字号漂移）
     EXPECT_FALSE(ret);
-    EXPECT_EQ(obj->m_font.pixelSize(), qApp->font().pixelSize());
+    EXPECT_EQ(obj->m_font.family(), qApp->font().family());
+    EXPECT_EQ(obj->m_font.pixelSize(),
+              DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T9));
     EXPECT_NE(obj->m_font.pixelSize(), 21);
+}
+
+// ------------------------------------------------------------
+// 原生文本渲染（修复底栏下拉文字模糊）
+// ------------------------------------------------------------
+
+TEST_F(DDropdownMenuTest, SetText_NativeRendering_NoPixmapIconAndWidthFollowsText)
+{
+    // Assert: 文本不再栅格化为位图图标
+    //（修复：分数缩放(125%/150%)下位图按非 1:1 尺寸重采样导致整行文字发虚，
+    //  长文本尤甚；现由按钮 paintEvent 原生绘制）
+    EXPECT_TRUE(obj->getButton()->icon().isNull());
+
+    // Act / Assert: 按钮宽度即时跟随文本测量宽度（内边距 10+10+8+10 与原实现一致）
+    obj->setCurrentTextOnly(QStringLiteral("UTF-8"));
+    const QFontMetrics metrics(obj->m_font);
+    EXPECT_EQ(obj->getButton()->width(),
+              metrics.horizontalAdvance(QStringLiteral("UTF-8")) + 20 + 8 + 10);
+
+    // Act / Assert: 长文本按同一规则增长（修复前宽度只在重建图标时更新）
+    obj->setCurrentTextOnly(QStringLiteral("A Much Longer Highlight Name"));
+    EXPECT_EQ(obj->getButton()->width(),
+              metrics.horizontalAdvance(QStringLiteral("A Much Longer Highlight Name")) + 38);
 }
 
 // ------------------------------------------------------------
