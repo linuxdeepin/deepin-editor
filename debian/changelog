@@ -1,3 +1,10 @@
+deepin-editor (6.6.7) unstable; urgency=medium
+
+  * fix: use DevicePixel for print page rect under Qt6
+  * fix: stub EditWrapper::markdownRenderer in editor_core UT fixture
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Tue, 20 Oct 2026 22:12:48 +0800
+
 deepin-editor (6.6.6) unstable; urgency=medium
 
   * fix: render bottom bar dropdown text natively to fix blur
