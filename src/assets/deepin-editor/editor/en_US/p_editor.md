@@ -2,305 +2,323 @@
 
 ## Overview
 
-Text Editor is a simple text editing tool. You can use it to write a simple text document, or make it a code editing tool with its advanced features which support code syntax highlighting.
+The text editor is a simple tool for editing text. You can use it to write simple text documents or leverage its advanced features to turn it into a code editor with syntax highlighting support.
 
 ![overview](fig/overview.png)
 
-## Guide
+## Getting Started
 
-### Run Text Editor
+### Launching the Text Editor
 
-1. Click the Launcher icon ![deepin_launcher](../common/deepin_launcher.svg) in the Dock to enter the Launcher interface. 
-2. Locate Text Editor ![deepin_editor](../common/deepin_editor.svg) by  scrolling the mouse wheel or searching "text editor" in the Launcher interface, and click it to run.
-3. In Launcher, right-click Text Editor to:
-  - Click **Send to desktop** to create a desktop shortcut.
-  - Click **Send to dock** to fix it in the Dock.
-  - Click **Add to startup** to add the application to startup, and it will automatically run when the system starts up.
+1. Click the Launcher icon ![deepin_launcher](../common/deepin_launcher.svg) on the taskbar to enter the Launcher interface.
+2. Scroll up and down with the mouse wheel or search to locate the Text Editor icon ![deepin_editor](../common/deepin_editor.svg), then click to launch.
+3. Right-click ![deepin_editor](../common/deepin_editor.svg) to:
+   - Click **Send to Desktop** to create a desktop shortcut.
+   - Click **Send to Taskbar** to pin the application to the taskbar.
+   - Click **Startup Automatically** to add the application to the startup items, enabling it to launch automatically when the computer boots.
 
-### Exit Text Editor
+### Exiting the Text Editor
 
-- On the Text Editor interface, click ![close](../common/close_icon.svg) to exit.
-- On the Text Editor interface, click ![icon_menu](../common/icon_menu.svg)> **Exit** to exit.
-- Right-click ![deepin_editor](../common/deepin_editor.svg) in the Dock, and select **Close All** to exit.
+- On the Text Editor interface, click ![close_icon](../common/close_icon.svg) to exit.
+- On the Text Editor interface, click the main menu ![icon_menu](../common/icon_menu.svg) > **Exit** to quit.
+- Right-click ![deepin_editor](../common/deepin_editor.svg) on the taskbar and select **Close All** to exit.
 
-### View Shortcuts
+### Viewing Shortcuts
 
-On the Text Editor Interface, press **Ctrl** + **Shift** + **?** to view all the shortcuts. You can also check shortcuts in the Settings. Proficiency in shortcuts will greatly improve your efficiency.
+On the Text Editor interface, use the shortcut **Ctrl + Shift + ?** to open the shortcuts preview panel. You can also view shortcuts in the settings interface. Mastering shortcuts will significantly improve your efficiency.
 
 ![1|hotkey](fig/hotkey.png)
 
 ## Basic Operations
 
-### Manage Tabs
+### Managing Tabs
 
-- Create New Tabs/Windows
-  - Click ![plus_icon](../common/+.svg)or ![icon_menu](../common/icon_menu.svg)> **New tab** on the title bar or press **Ctrl + T** to create a new tab.
-  - Click ![icon_menu](../common/icon_menu.svg)> **New window** or press **Ctrl + N** to create a new window.
+- **New Tab/Window**:
+  - Click the ![plus_icon](../common/+.svg) button on the tab bar or ![icon_menu](../common/icon_menu.svg) > **New Tab**, or use the shortcut **Ctrl + T** to create a new tab.
+  - Click ![icon_menu](../common/icon_menu.svg) > **New Window**, or use **Ctrl + N** to create a new window.
 
-- Adjust Tabs/Windows
-  - Drag the tab in the same window to reorder tabs.
-  - Scroll the mouse wheel on the title of a tab to reorder tabs in the same window.
-  - Move the tab out of the window to create a new window or move the tab from one window to another.
+- **Rearranging Tabs/Windows**:
+  - Drag and drop tabs within the same window to reorder them.
+  - Scroll the mouse to switch between tabs in the same window.
+  - Drag a tab out to create a new window or move it to another window.
 
-- Close Tabs /Windows
+- **Closing Tabs/Windows**:
+  - If a window has only one tab, closing the tab will also close the window.
+  - Use **Ctrl + W** to close the current tab.
+  - Click the ![close_icon](../common/close_icon.svg) button on the tab or press the mouse wheel to close the current tab.
+  - Right-click a tab and select **Close Tab**, **Close Other Tabs**, or **More Closing Options**.
 
-  The window will be closed as well when there is only one tab in the window.
+  > ![notes](../common/notes.svg) Note: If your file contains unsaved changes, the Text Editor will prompt you to save before closing.
 
-  - Press **Ctrl + W** to close the file on the file interface.
-  - Move the cursor to the file title, and click the ![close](../common/close_icon.svg) icon there or the mouse middle button to close the file.
-  - Right-click the file title and select **Close tab** or **Close other tabs** or **More options** to close the tabs.
+### Opening Files
 
-> ![notes](../common/notes.svg) Notes: If you make changes to the file but does not save it, you will be prompted by Text Editor to save before closing the file.
+You can open one or multiple text files in the following ways; selected files will open in new tabs:
 
-### Open Files
+- Drag and drop files directly onto the Text Editor interface or its icon.
+- Right-click a file, select **Open With** > **Text Editor**. After setting the Text Editor as the default program, you can open files by double-clicking.
+- On the Text Editor interface, click ![icon_menu](../common/icon_menu.svg) > **Open File**, or use **Ctrl + O**, then select files in the popup window.
 
-You can open one or multiple text files at one time in the following ways, and the selected file will open in the new tab:
+### Saving Files
 
-- Drag the file directly to the Text Editor interface or the Text Editor icon.
-- Right-click the file and select **Open with** > **Text Editor**. After selecting Text Editor as the default application for text files in Control Center, you can double-click the file to open it directly.
-- On the Text Editor interface, click ![icon_menu](../common/icon_menu.svg)> **Open file**,  or use the shortcuts **Ctrl + O** to open the file in File Manager.
+- Click ![icon_menu](../common/icon_menu.svg) > **Save**, or use **Ctrl + S** to save the current file.
+- Click ![icon_menu](../common/icon_menu.svg) > **Save As**, or use **Ctrl + Shift + S** to save the file under a new name.
 
-### Save Files
+### Printing Files
 
-- Press **Ctrl + S** or click ![icon_menu](../common/icon_menu.svg)> **Save** to save the current document.
-- Press **Ctrl + Shift + S** or  click ![icon_menu](../common/icon_menu.svg)> **Save as** to save the file as a new one.
+To print in the Text Editor, ensure your printer is connected and configured.
 
-### Print Files
-
-To print a file in the Text Editor interface, you should connect and set up the printer first.
-
-1. Click ![icon_menu](../common/icon_menu.svg)> **Print**, or press **Ctrl + P** to open the print preview interface.
-2. On the preview interface, preview the document, select a printer, and set the printing page. 
-3. Click the **Advanced** option on the preview interface to select parameters including paper size and layout. 
-4. Click **Print** to start printing at the printer selected.
+1. Click ![icon_menu](../common/icon_menu.svg) > **Print**, or use **Ctrl + P** to open the print preview.
+2. In the preview interface, you can review the file, select a printer, and adjust page settings.
+3. Click **Advanced Settings** to configure paper size, printing method, and other parameters.
+4. Click **Print** to send the file to the printer.
 
 ![pagesetup](fig/printer.png)
 
 ![printer](fig/printer_setting.png)
 
-## Edit Texts
+## Editing Text
 
-### Move Cursor
+### Moving the Cursor
 
-In addition to the arrow keys and mouse clicks, you can also use the following shortcuts to move the cursor quickly:
+Apart from using arrow keys and mouse clicks, you can use the following shortcuts for efficient navigation:
 
-| Function   |  Shortcuts |
-| --------------- | ------------ |
-| Save cursor position | Ctrl + Shift + > |
-| Reset cursor position (Jump to cursor last saving position) | Ctrl + Shift + < |
-| Forward one word (Jump forward over one word) | Ctrl + Right |
-| Backward one word (Jump backward over one word) | Ctrl + Left |
-| Move to end of line | End |
-| Move to start of line | Home |
-| Move to end of text | Ctrl + End |
-| Move to start of text | Ctrl + Home |
-| Move to line indentation | Ctrl + M |
-| Forward over a pair (Jump forward after the right parenthesis) | Alt + P |
-| Backward over a pair (Jump backward before the left parenthesis) | Alt + N |
+| Function                                   | Shortcut           |
+| ------------------------------------------ | ------------------ |
+| Save cursor position                       | Ctrl + Shift + >   |
+| Reset cursor position (jump to last saved) | Ctrl + Shift + <   |
+| Move right one word                        | Ctrl + Right Arrow |
+| Move left one word                         | Ctrl + Left Arrow  |
+| Move to line end                           | End                |
+| Move to line start                         | Home               |
+| Move to document end                       | Ctrl + End         |
+| Move to document start                     | Ctrl + Home        |
+| Move to indentation                        | Ctrl + M           |
+| Right bracket matching (jump after )       | Alt + P            |
+| Left bracket matching (jump before ()      | Alt + N            |
 
-### Change Cases
+### Toggling Case
 
-It helps you change the case of selected text. You can change it to lowercase, uppercase, or capitalize the initial.
+The case toggling feature allows you to convert selected text to uppercase, lowercase, or capitalize the first letter.
 
-1. Select the text.
-2. Right-click and select **Change Case**.
-3. Choose **Upper Case**, **Lower Case**, or **Capitalize**. The changes will take effect immediately.
+1. Select the text to modify.
+2. Right-click and choose **Toggle Case**.
+3. Select **Uppercase**/**Lowercase**/**Capitalize**; changes take effect immediately.
 
-You can also use **Alt** + **U/L/C** to quickly switch the cases.
+You can also use the shortcuts **Alt + U/L/C** for quick case toggling.
 
 ![togglecase](fig/togglecase.png)
 
-### Highlight Texts
-Text Editor supports highlighting different kinds of texts.
+### Highlighting Text
 
-Click the triangle symbol at the far right corner of the status bar at the bottom, and select the type of text you want to highlight. The corresponding contents in the text will be highlighted automatically.
+The Text Editor supports highlighting text of various types. Click the triangle icon at the bottom-right of the status bar and select a text type. Relevant content will be highlighted automatically.
 
 ![highlight](fig/highlight.png)
 
-### Delete Texts
+### Deleting Text
 
-In addition to deleting characters one by one, you can quickly delete characters by using the following shortcuts:
+In addition to deleting characters one by one, you can use these shortcuts for faster deletion:
 
-| Function   |  Shortcuts |
-| --------------- | ------------ |
-| Delete to end of line | Ctrl + K |
+| Function            | Shortcut         |
+| ------------------- | ---------------- |
+| Delete to line end  | Ctrl + K         |
 | Delete current line | Ctrl + Shift + K |
-| Delete one word backward | Alt + Shift + N |
-| Delete one word forward | Alt + Shift + M |
+| Delete left word    | Alt + Shift + N  |
+| Delete right word   | Alt + Shift + M  |
 
-### Undo
+### Undoing Actions
 
-If you make an incorrect operation, press **Ctrl + Z** to undo it, or right-click and select **Undo**.
+If you make a mistake while editing, use **Ctrl + Z** or right-click and select **Undo**.
 
-### Find Texts
+### Finding Text
 
-1. Click ![menu](../common/icon_menu.svg) > **Find**, or press **Ctrl + F** to open the **Find** box in the bottom of the Text Editor interface.
-2. Input the text you want to find. 
-3. Click **Previous**/**Next** to find each match, or press the **Enter** key to find the next match.
-4. Press the **Esc** key or click the close icon to close the dialog box.
+1. Click ![menu](../common/icon_menu.svg) > **Find**, or use **Ctrl + F** to open the Find window.
+2. Enter the text to search.
+3. Click **Next** or **Previous**, or press **Enter** to find the next match.
+4. Press **Esc** or click the close button to exit.
 
-> ![tips](../common/tips.svg)Tips: Select the text and conduct search. The text selected will be automatically displayed in the **Find** box.
+> ![tips](../common/tips.svg) Tip: If you select text before searching, it will automatically populate the Find window.
 
-### Replace Texts
-1. Click ![menu](../common/icon_menu.svg) > **Replace**, or press **Ctrl + H**, or click **Replace** in the **Find** box to open the **Replace** box  in the bottom of the Text Editor interface.
-2.  Input the text to be replaced and the new text.
-3.  Click **Replace** to replace the matches one by one, and click **Replace Rest** and **Replace All** to replace the rest or all the matches at once. Click **Skip** to skip the current matching text.
-4.  Press **Esc** or click the close icon to close the dialog box.
+### Replacing Text
 
-### Go to Line
-Use Go to Line to jump to the specific line directly.
+1. Click ![menu](../common/icon_menu.svg) > **Replace**, or use **Ctrl + H**, or click **Replace** in the Find window.
+2. Enter the text to replace and the new text.
+3. Click **Replace** for individual changes, **Replace All** for all matches, or **Skip** to ignore the current match.
+4. Press **Esc** or click the close button to exit.
 
-Right-click and select **Go to Line**; or press **Ctrl + G**, and then input the line number to go to that line.
+### Jumping to a Line
 
-### Edit Line
+Use this feature to quickly navigate to any line. Right-click and select **Go to Line**, or use **Ctrl + G**, then enter the line number.
 
-Use the shortcuts below to edit lines easily:
+### Editing Lines
 
-| Function  |  Shortcuts |
-| ------------ | ------------ |
-| New line above (Insert one line above) | Ctrl + Enter |
-| New line below (Insert one line below) | Ctrl + Shift + Enter |
-| Duplicate line | Ctrl + Shift + D |
-| Swap line up (Swap the current line with above line) | Ctrl + Shift + Up |
-| Swap line down (Swap the current line with below line)  | Ctrl + Shift + Down |
-| Scroll up one line | Super + Shift + Up |
-| Scroll down one line | Super + Shift + Down |
-| Mark | Alt + H |
-| Unmark | Alt + Shift + H |
-| Copy line | Super + C |
-| Cut line | Super + X |
-| Merge lines | Ctrl + J |
+Use these shortcuts for efficient line editing:
 
-### Enable/Disable Read-only Mode
+| Function                         | Shortcut             |
+| -------------------------------- | -------------------- |
+| Insert line above                | Ctrl + Enter         |
+| Insert line below                | Ctrl + Shift + Enter |
+| Duplicate current line           | Ctrl + Shift + D     |
+| Move line up (swap with above)   | Ctrl + Shift + Up    |
+| Move line down (swap with below) | Ctrl + Shift + Down  |
+| Scroll line up                   | Super + Shift + Up   |
+| Scroll line down                 | Super + Shift + Down |
+| Set marker                       | Alt + H              |
+| Clear marker                     | Alt + Shift + H      |
+| Copy line                        | Super + C            |
+| Cut line                         | Super + X            |
+| Merge lines                      | Ctrl + J             |
 
-1. Open the document with Text Editor, right-click on the Text Editor interface, and select **Turn on Read-Only mode**.
-1. Right-click on the Text Editor interface, and select **Turn off Read-Only mode** under the read-only mode.
+### Changing View Mode
 
-![readonly](fig/read_only.png)
+After opening a document, right-click and select **View Mode**, then choose from the submenu:
 
-![read-only](fig/read_only_02.png)
+1. **Edit View**: Free editing of text.
+2. **Read-Only View**: View text only; no editing.
+3. **Live Preview**: For Markdown files. Edit on the left while previewing on the right.
 
-### Text to Speech  
+![view_mode](fig/view_mode.png)
 
-1. Select a paragraph of texts. Right-click it and select **Text to Speech**. The texts selected will be broadcast.
-1. During playback, you can stop the **Text to Speech** by clicking the close button on the reading control.
+### Text-to-Speech
 
-> ![notes](../common/notes.svg) Notes: The **Text to Speech** option in the right-click menu is grayed out and cannot be activated when no text is selected.
+1. Select text, right-click, and choose **Text-to-Speech** to hear the selection read aloud.
+2. Click the close button on the speech control to stop.
+
+> ![notes](../common/notes.svg) Note: **Text-to-Speech** is disabled (grayed out) if no text is selected.
 
 ![read-only](fig/reading.png)
 
-### Speech to Text
+### Speech-to-Text
 
-1. In the text editor area, right-click and select **Speech to Text**. Input speech through the microphone to insert transcribed text at the cursor position.
-2. During dictation, you can stop **Speech to Text**  by clicking the close button on the dictation control.
+1. In the text area, right-click and select **Speech-to-Text**; spoken words will be transcribed and inserted at the cursor.
+2. Click the close button to stop transcription.
 
 ![read-only](fig/listen.png)
 
-### Use Column Mode
+### Column Editing
 
-Press and hold the **Alt** key on the keyboard, drag the mouse to select multiple lines, and edit the identical contents in multiple lines of codes efficiently by using the column mode function. 
+Hold **Alt**, then left-click multiple columns to enter column edit mode, allowing simultaneous edits for multiple lines of code.
 
 ![mode](fig/column_mode.png)
 
-### Color Mark
+### Color Marking
 
-Select the text to be marked in Text Editor, right-click to select **Color Mark**, and select the corresponding options in the drop-down list as needed.
+Right-click and select **Color Marking**, then:
+
+- **Add Mark**: Mark a line or selected text with one of 8 colors.
+- **Mark All**: Highlight all matching text in the document.
+- **Clear Last**: Remove the last mark.
+- **Clear All**: Remove all marks.
 
 ![color](fig/colortag.png)
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-- Select **Mark** to mark a certain line or a paragraph of texts. You can choose from 8 colors displayed through icons.
-   - Place the cursor at any line and you can mark the current line.
-   - Select a paragraph of texts and you can mark the selected texts.
-- Select **Mark All** to mark all the contents in Text Editor, or mark all the matching contents of selected texts in Text Editor. You can choose from 8 colors displayed through icons.
-   - Place the cursor at any line and you can mark all contents.
-   - Select any content and you can mark the same content in the whole document. 
-- Select **Clear Last Mark** to cancel the last mark operation.
-- Select **Clear All Marks** to cancel all the current marks.
+### Bookmark Management
 
-### Manage Bookmarks 
+Enable **Show Bookmark Icon** in settings to add bookmarks. Hover over line numbers in the left margin to see ![icon](../common/bookmark_normal_light.svg); ![bookmarkbig](../common/bookmarkbig_checked_light.svg) indicates a bookmark.
 
-Check **Show bookmarks icon** in **Settings** and you can add a bookmark for any current line on the Text Editor interface. The icon ![icon](../common/bookmark_normal_light.svg) shows up when you move the cursor to any line in the left column, and the icon ![bookmarkbig](../common/bookmarkbig_checked_light.svg) will appear after a bookmark is successfully added.
+- **Add Bookmark**:
+  - Click ![icon](../common/bookmark_normal_light.svg) or right-click and select **Add Bookmark**.
+  - Use **Ctrl + F2**.
+- **Remove Bookmark**:
+  - Click ![bookmarkbig](../common/bookmarkbig_checked_light.svg), right-click and select **Clear Bookmark**, or **Clear All**.
 
-- Add bookmarks
-   + Click ![icon](../common/bookmark_normal_light.svg) to add a bookmark for the line.
-   + Right-click ![icon](../common/bookmark_normal_light.svg) and select **Add bookmark** to add a bookmark for the line.
-   + Place the cursor on any line, and press **Ctrl + F2** to add a bookmark for the line.
+> ![notes](../common/notes.svg) Note: Bookmark icons appear only when hovering.
 
--   Delete bookmarks
-   + Click the colored bookmark icon ![bookmarkbig](../common/bookmarkbig_checked_light.svg) to delete the bookmark of the line directly.
-   + Right-click the colored bookmark icon ![bookmarkbig](../common/bookmarkbig_checked_light.svg) , and select **Remove Bookmark** to delete the bookmark in the line.
-   + Right-click a bookmark, and select **Remove All Bookmarks** to delete all the bookmarks in the text.
-  >![Notes](../common/notes.svg) Notes: The bookmark icon appears only when cursor is hovered over to the left of the line number in the left column; when it's moved beyond the left bookmark column, the bookmark icon will disappear. The bookmark icon will always be displayed after being added.
+### Comment Management
 
-### Manage Comments 
+For code files (e.g., `.cpp`, `.java`, `.py`):
 
-You can add comments to any text with a code type suffix, such as cpp and java, among others.
+- **Add Comment**:
+  - Select text, right-click, and choose **Add Comment** or use **Alt + A**.
+- **Remove Comment**:
+  - Select commented text, right-click, and choose **Remove Comment** or use **Alt + Z**.
 
-- Add comments
-  - Select the text needed, and right-click to select **Add Comment**.
-  - Select the text needed, and press **Alt + A** to add comments.
-
-- Cancel comments
-  - Select the text with comments, and right-click to select **Remove Comment**.
-  - Select the text with comments, and press **Alt + Z** to cancel comments.
-
-> ![notes](../common/notes.svg) Notes: This supports comments in different languages. Please refer to actual conditions for detailed information. For example, comment symbol for C, C# and Java is //, and comment symbol for Python is #.
+> ![notes](../common/notes.svg) Note: Supports language-specific comment symbols (e.g., `//` for C/Java, `#` for Python).
 
 ## Main Menu
 
-On the main menu, you can Create New Windows, Create New Files, [Find Texts](#Find Texts), [Replace Texts](#Replace Texts), [Save Files](#Save Files), switch window themes, view help manual, and get more information about Text Editor.
+The main menu allows you to create new windows/tabs, find/replace text, save files, switch themes, view help, and more.
 
 ### Settings
 
-You can set the basic information, shortcuts, and advanced information in settings.
+Configure basic, shortcut, and advanced settings.
 
 #### Basic Settings
 
-Click ![icon_menu](../common/icon_menu.svg)> **Settings** and you can perform the following in the **Basic** option:
+1. Click ![icon_menu](../common/icon_menu.svg) > **Settings**.
+2. Options:
+   - Font style and size.
+   - **Word Wrap**: Enable automatic line breaks.
+   - **Code Folding Icons**: Show ![next](../common/next.svg) or ![next](../common/next_down.svg) for folding/expanding code blocks.
+   - **Show Line Numbers**: Display line numbers.
+   - **Highlight Current Line**: Highlight the active line.
+   - **Show Bookmark Icons**: Display bookmarks.
+   - **Show Whitespace/Tabs**: Visualize whitespace characters.
 
-- Select the Font and Font Size.
-- Check or uncheck **Word wrap**.
-- Check **Code folding flag** and ![next](../common/next.svg) or ![next](../common/next_down.svg) are displayed in the edit area. Right-click and select **Fold/Unfold Current Level** or **Fold/Unfold All** to perform the corresponding operations.
-- Check **Show line numbers** to display the line number in the edit area.
-- Check **Highlight current line** to highlight the current line.
-- Check **Show bookmarks icon** to display the bookmarks in the text.
-- Check **Show whitespaces and tabs** to display all the white spaces and tabs. You can also input or delete white spaces and tabs manually.
+> ![tips](../common/tips.svg) Tip: Use **Ctrl + +/-** to adjust font size; **Ctrl + 0** resets it.
 
-> ![tips](../common/tips.svg) Tips: You can also use **Ctrl + “+”/ “-”** to adjust the font size, and press **Ctrl + 0** to restore to default font size.
+#### Shortcut Settings
 
-#### Shortcuts Settings
-1. Click ![icon_menu](../common/icon_menu.svg)> **Settings** to view the current shortcut in the **Shortcuts** option.
-2. Select a keymap in **Shortcuts** and view the shortcuts.
-3. You can click and customize new shortcuts.
-
-> ![notes](../common/notes.svg) Notes: You can choose a proper keymap to fit your habits, including standard keymap, Emacs keymap, or customize it as you like.
+1. Click ![icon_menu](../common/icon_menu.svg) > **Settings** > **Shortcuts**.
+2. Choose a preset or customize shortcuts.
 
 #### Advanced Settings
 
-1. Click ![icon_menu](../common/icon_menu.svg)> **Settings**.
-2. In the **Advanced** option, you can set:
-   - Window size: Normal, Maximum, or Fullscreen;
-   - Tab width: The width of a tab character.
+Configure window state (normal, maximized, fullscreen) and tab character width.
 
 ### Theme
 
-The window theme provides three theme types, namely Light Theme, Dark Theme, and System Theme.
-
-1. On the Text Editor interface, click ![icon_menu](../common/icon_menu.svg).
-2. Click **Theme** to select one theme.
+Switch between light, dark, and system themes via ![icon_menu](../common/icon_menu.svg) > **Theme**.
 
 ### Help
 
-1. On the Text Editor interface, click ![menu](../common/icon_menu.svg).
-2. Select **Help** to view the manual of Text Editor.
+View the manual via ![icon_menu](../common/icon_menu.svg) > **Help**.
 
 ### About
 
-1. On the Text Editor interface, click ![menu](../common/icon_menu.svg).
-2. Select **About** to view the version and introduction of Text Editor.
+Check the version and description via ![icon_menu](../common/icon_menu.svg) > **About**.
 
 ### Exit
 
-1. On the Text Editor interface, click ![menu](../common/icon_menu.svg).
-2. Click **Exit** to exit Text Editor. 
+Quit the application via ![icon_menu](../common/icon_menu.svg) > **Exit**.
+
+---
+
+### **Technical Analysis**
+
+**【Technical Terms and Concepts】**
+
+1. **Syntax Highlighting**:
+   - **Definition**: A feature that displays text (especially code) in distinct colors and fonts to distinguish different elements (e.g., keywords, strings, comments).
+   - **Application**: Enhances code readability and debugging efficiency.
+
+2. **Code Folding**:
+   - **Definition**: A feature that collapses blocks of code (e.g., functions, loops) to simplify navigation in large files.
+   - **Implementation**: Supported via icons in the left margin (e.g., ![next](../common/next.svg)).
+
+3. **Column Editing**:
+   - **Definition**: Simultaneous editing of aligned text across multiple lines, often used for bulk data/code manipulation.
+   - **Usage**: Activated by holding **Alt** while selecting columns.
+
+4. **Text-to-Speech/Speech-to-Text**:
+   - **Technologies**: Likely leverages system APIs for voice synthesis (TTS) and recognition (STT).
+   - **Dependencies**: Requires microphone access for STT.
+
+5. **Markdown Live Preview**:
+   - **Definition**: A split-view mode that renders Markdown in real-time as it is edited.
+   - **Tools**: Typically involves a lightweight Markdown parser integrated into the editor.
+
+6. **Bookmark Management**:
+   - **Purpose**: Allows users to mark specific lines for quick navigation, especially in long documents.
+   - **Visual Cues**: Icons (e.g., ![bookmarkbig](../common/bookmarkbig_checked_light.svg)) indicate bookmarked lines.
+
+**【Key Shortcuts】**
+- **Navigation**: `Ctrl + Arrow Keys` for word-wise movement; `End`/`Home` for line-wise.
+- **Editing**: `Ctrl + Shift + D` duplicates lines; `Ctrl + J` merges lines.
+- **Efficiency**: `Alt + U/L/C` for case toggling, `Ctrl + K` for deletion.
+
+**【Target Audience】**
+- Developers: Features like syntax highlighting, code folding, and comment management cater to coding.
+- General Users: Simple text editing, printing, and TTS/STT support broader use cases.
+
+**【Integration】**
+- **System-Level**: Printer configuration, theme synchronization (light/dark mode), and default app associations.
