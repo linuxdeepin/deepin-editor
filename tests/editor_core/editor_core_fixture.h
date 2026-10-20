@@ -23,6 +23,7 @@
 
 #include "dtextedit.h"
 #include "editwrapper.h"
+#include "markdown/imarkdownrenderer.h"
 #include "../widgets/window.h"
 #include "../widgets/bottombar.h"
 #include "settings.h"
@@ -221,6 +222,12 @@ protected:
                        [](EditWrapper *) -> bool { return true; });
         stub.set_lamda(&EditWrapper::UpdateBottomBarWordCnt,
                        [this](EditWrapper *, int) { ++wordCntCalls; });
+        // d08b8fec 后 highlightKeyword/highlightKeywordInView 末尾经
+        // syncRendererFindHighlight 取 renderer 并虚调用 highlightSearch；
+        // fake wrapper 是 QWidget 载体，不打桩会把载体内存读成野指针导致段错误。
+        // 真实 EditWrapper 默认 m_pRenderer 为 null（提前返回），桩对齐该默认值。
+        stub.set_lamda(&EditWrapper::markdownRenderer,
+                       [](EditWrapper *) -> IMarkdownRenderer * { return nullptr; });
 
         stub.set_lamda(&Window::findBarIsVisiable,
                        [this](Window *) -> bool { return seamFindBarVisible; });
