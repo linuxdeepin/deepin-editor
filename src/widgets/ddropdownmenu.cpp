@@ -7,6 +7,7 @@
 #include "ddropdownmenu.h"
 #include <QHBoxLayout>
 #include <QMouseEvent>
+#include <QPaintEvent>
 #include <DApplication>
 #include <QPainter>
 #include <DSettingsOption>
@@ -27,9 +28,51 @@ DWIDGET_USE_NAMESPACE
 const int s_DDropdownMenuHeight = 28;
 const int s_DDropdownMenuHeightCompact = 20;
 
+// 原生绘制文本的工具按钮：文本直接画在控件 backing store 上，
+// 不再经过中间 QPixmap/QIcon，任何缩放下都按实际物理像素栅格化，
+// 避免分数缩放时位图被非 1:1 重采样导致的文字发虚（长文本尤其明显）。
+class DDropdownMenu::LabelToolButton : public DToolButton
+{
+public:
+    explicit LabelToolButton(DDropdownMenu *host, QWidget *parent = nullptr)
+        : DToolButton(parent), m_host(host) {}
+
+protected:
+    void paintEvent(QPaintEvent *event) override
+    {
+        // 先走基类绘制，保留 DStyle 的悬停/焦点等状态层（无图标时仅绘制按钮底板）
+        DToolButton::paintEvent(event);
+
+        DPalette dpalette = DPaletteHelper::instance()->palette(this);
+        // 点击时前景色变为高亮色，与原位图方案一致
+        const QColor textColor = m_host->m_bPressed
+                ? dpalette.color(DPalette::Highlight)
+                : dpalette.color(DPalette::WindowText);
+
+        const QFontMetrics metrics(m_host->m_font);
+        const int fontHeight = metrics.size(Qt::TextSingleLine, m_host->m_text).height();
+        const int arrowX = 10 + metrics.horizontalAdvance(m_host->m_text) + 10;
+
+        QPainter painter(this);
+        painter.setFont(m_host->m_font);
+        painter.setPen(textColor);
+        // 整数逻辑坐标绘制，保证字形不落在半像素上
+        painter.drawText(QRectF(10, (height() - fontHeight) / 2, width() - 20, fontHeight),
+                         m_host->m_text);
+
+        const QPixmap &arrow = (m_host->m_bPressed && !m_host->m_pressedArrowPixmap.isNull())
+                ? m_host->m_pressedArrowPixmap
+                : m_host->m_arrowPixmap;
+        painter.drawPixmap(QRectF(arrowX, (height() - 5) / 2, 8, 5), arrow, arrow.rect());
+    }
+
+private:
+    DDropdownMenu *m_host;
+};
+
 DDropdownMenu::DDropdownMenu(QWidget *parent)
     : QFrame(parent)
-    , m_pToolButton(new DToolButton(this))
+    , m_pToolButton(new LabelToolButton(this, this))
     , m_menu(new DMenu)
 {
     qDebug() << "DDropdownMenu constructor";
@@ -40,22 +83,8 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     m_pToolButton->setFocusPolicy(Qt::StrongFocus);
     m_pToolButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
     m_pToolButton->setArrowType(Qt::NoArrow);
-    m_pToolButton->setFixedHeight(28);
     m_pToolButton->installEventFilter(this);
     //this->installEventFilter(this);
-    //设置图标
-    QString theme =  (DGuiApplicationHelper::instance()->applicationPalette().color(QPalette::Window).lightness() < 128) ? "dark" : "light";
-    QString arrowSvgPath = QString(":/images/dropdown_arrow_%1.svg").arg(theme);
-    // 根据当前显示缩放转换图片
-    qreal scaled = this->devicePixelRatioF();
-    QSvgRenderer svg_render(arrowSvgPath);
-    QPixmap pixmap(QSize(8,5)*scaled);
-    pixmap.fill(Qt::transparent);
-    pixmap.setDevicePixelRatio(scaled);
-    QPainter painter(&pixmap);
-    svg_render.render(&painter,QRect(0,0,8,5));
-    m_arrowPixmap = pixmap;
-    m_pToolButton->setIcon(createIcon());
     m_pToolButton->setAccessibleName("DropdownToolButton");
     m_pToolButton->setObjectName("PToolButton");
 
@@ -69,6 +98,10 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     layout->setContentsMargins(0,0,0,0);
     this->setLayout(layout);
 
+    //按当前主题生成箭头，文本由按钮原生绘制（不再生成位图图标）
+    setTheme((DGuiApplicationHelper::instance()->applicationPalette().color(QPalette::Window).lightness() < 128) ? "dark" : "light");
+    updateButtonSize();
+
     connect(this, &DDropdownMenu::requestContextMenu, this, &DDropdownMenu::slotRequestMenu);
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -80,12 +113,9 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
 #endif
 
 #ifdef DTKWIDGET_CLASS_DSizeMode
-    m_pToolButton->setFixedHeight(DGuiApplicationHelper::isCompactMode() ? s_DDropdownMenuHeightCompact : s_DDropdownMenuHeight);
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, [this](){
-        m_pToolButton->setFixedHeight(DGuiApplicationHelper::isCompactMode() ? s_DDropdownMenuHeightCompact : s_DDropdownMenuHeight);
+        updateButtonSize();
     });
-#else
-    m_pToolButton->setFixedHeight(s_DDropdownMenuHeight);
 #endif
     qDebug() << "DDropdownMenu constructor end";
 }
@@ -103,6 +133,8 @@ void DDropdownMenu::setFontEx(const QFont& font)
     qDebug() << "DDropdownMenu setFontEx";
     m_pToolButton->setFont(font);
     m_font = font;
+    //字体变化影响文本宽度，需重算按钮尺寸
+    updateButtonSize();
     qDebug() << "DDropdownMenu setFontEx end";
 }
 
@@ -226,8 +258,8 @@ void DDropdownMenu::setText(const QString &text)
 {
     qDebug() << "DDropdownMenu setText:" << text;
     m_text = text;
-    //重新绘制icon　设置宽度
-    m_pToolButton->setIcon(createIcon());
+    //文本宽度变化时重算按钮尺寸（文本原生绘制，无需重建位图图标）
+    updateButtonSize();
     qDebug() << "DDropdownMenu setText end";
 }
 
@@ -276,6 +308,7 @@ void DDropdownMenu::deleteMenuActionGroup()
 void DDropdownMenu::setTheme(const QString &theme)
 {
     qDebug() << "DDropdownMenu setTheme:" << theme;
+    m_theme = theme;
     QString arrowSvgPath = QString(":/images/dropdown_arrow_%1.svg").arg(theme);
     // 根据当前显示缩放转换图片
     qreal scaled = this->devicePixelRatioF();
@@ -289,7 +322,9 @@ void DDropdownMenu::setTheme(const QString &theme)
     svg_render.render(&painter,QRect(0,0,8,5));
 
     m_arrowPixmap = pixmap;
-    m_pToolButton->setIcon(createIcon());
+    //按下态箭头依赖旧调色板颜色，置空待下次按下时按当前调色板重建
+    m_pressedArrowPixmap = QPixmap();
+    m_pToolButton->update();
     qDebug() << "DDropdownMenu setTheme end";
 }
 
@@ -449,76 +484,33 @@ DDropdownMenu *DDropdownMenu::createHighLightMenu()
     return m_pHighLightMenu;
 }
 
-QIcon DDropdownMenu::createIcon()
+void DDropdownMenu::updateButtonSize()
 {
-    qDebug() << "DDropdownMenu createIcon";
-    DPalette dpalette  = DPaletteHelper::instance()->palette(m_pToolButton);
-    QColor textColor;
-
-    QPixmap arrowPixmap;
-
-    if(m_bPressed){
-        qDebug() << "Button is pressed, changing icon color";
-        textColor = dpalette.color(DPalette::Highlight);
-        QString color = textColor.name(QColor::HexRgb);
-        arrowPixmap = setSvgColor(color);
-    }else {
-        qDebug() << "Button is not pressed, using default icon color";
-        textColor = dpalette.color(DPalette::WindowText);
-        arrowPixmap = m_arrowPixmap;
+    if (m_pToolButton == nullptr) {
+        return;
     }
-
-    // 根据字体大小设置icon大小，按计算的字体高度，而非从字体文件中读取的高度(部分字体中英文高度不同)
+    // 根据字体大小计算尺寸，按计算的字体高度，而非从字体文件中读取的高度(部分字体中英文高度不同)
     QFontMetrics metrics(m_font);
-    int fontWidth = metrics.horizontalAdvance(m_text) + 20;
-    int fontHeight = metrics.size(Qt::TextSingleLine, m_text).height();
-    int iconW = 8;
-    int iconH = 5;
-
-    int totalWidth = fontWidth + iconW + 10;
+    // 内边距与原实现一致：左 10 + 文本 + 10 + 箭头 8 + 右 10
+    const int totalWidth = metrics.horizontalAdvance(m_text) + 20 + 8 + 10;
 #ifdef DTKWIDGET_CLASS_DSizeMode
-    int totalHeigth = DGuiApplicationHelper::isCompactMode() ? s_DDropdownMenuHeightCompact : s_DDropdownMenuHeight;
+    const int totalHeigth = DGuiApplicationHelper::isCompactMode() ? s_DDropdownMenuHeightCompact : s_DDropdownMenuHeight;
 #else
-    int totalHeigth = s_DDropdownMenuHeight;
+    const int totalHeigth = s_DropdownMenuHeight;
 #endif
-    m_pToolButton->setFixedSize(totalWidth,totalHeigth);
-    m_pToolButton->setIconSize(QSize(totalWidth,totalHeigth));
-
-    qreal rate = this->devicePixelRatioF();
-    QPixmap icon(QSize(totalWidth,totalHeigth)*rate);
-    icon.setDevicePixelRatio(rate);
-    icon.fill(Qt::transparent);
-
-    QPainter painter(&icon);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setRenderHints(QPainter::SmoothPixmapTransform);
-
-    painter.save();
-    painter.setFont(m_font);
-    painter.setPen(textColor);
-    painter.drawText(QRectF(10,(totalHeigth-fontHeight)/2,fontWidth,fontHeight),m_text);
-    painter.restore();
-
-    //arrowPixmap=arrowPixmap.scaled(iconW,iconH,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
-
-    //qDebug()<<"==================="<<arrowPixmap.rect().height();
-    painter.drawPixmap(QRectF(fontWidth,(totalHeigth-iconH)/2,iconW,iconH),arrowPixmap,arrowPixmap.rect());
-
-    painter.end();
-    qDebug() << "DDropdownMenu createIcon end";
-    return icon;
+    m_pToolButton->setFixedSize(totalWidth, totalHeigth);
+    m_pToolButton->update();
 }
 
 void DDropdownMenu::OnFontChangedSlot(const QFont &font)
 {
     qDebug() << "DDropdownMenu OnFontChangedSlot";
     m_font = font;
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    int fontsize = DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T8);
+    //字体族跟随系统字体，但字号保持底栏 T9（原 Qt6 分支漏设字号会导致文字随应用字号变化）
+    int fontsize = DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T9);
     m_font.setPixelSize(fontsize);
-#endif
     m_pToolButton->setFont(m_font);
-    m_pToolButton->setIcon(createIcon());
+    updateButtonSize();
     qDebug() << "DDropdownMenu OnFontChangedSlot end";
 }
 
@@ -530,6 +522,12 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
         // 处理字体变化
         QFont font = qApp->font(); // 获取当前应用程序字体
         OnFontChangedSlot(font);   // 调用槽函数更新字体
+        return false;
+    }
+
+    // 窗口移到不同缩放的屏幕时，按新 DPR 重建箭头位图（文本为原生绘制，无需处理）
+    if (object == this && event->type() == QEvent::DevicePixelRatioChange) {
+        setTheme(m_theme);
         return false;
     }
 #endif
@@ -553,8 +551,10 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
             if(mouseEvent->button() == Qt::LeftButton){
                 qDebug() << "Left mouse button pressed on dropdown menu";
                 m_bPressed = true;
-                //重新绘制icon 点击改变前景色
-                m_pToolButton->setIcon(createIcon());
+                //按下时按当前调色板高亮色重建箭头，文本颜色由 paintEvent 实时取色
+                DPalette dpalette = DPaletteHelper::instance()->palette(m_pToolButton);
+                m_pressedArrowPixmap = setSvgColor(dpalette.color(DPalette::Highlight).name(QColor::HexRgb));
+                m_pToolButton->update();
                 return true;
             }
 
@@ -569,7 +569,7 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
             QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
             if(mouseEvent->button() == Qt::LeftButton){
                 m_bPressed = false;
-                m_pToolButton->setIcon(createIcon());
+                m_pToolButton->update();
                 if (isEnabled()) {
                     qDebug() << "Left mouse button released, showing context menu";
                     Q_EMIT requestContextMenu(true);
