@@ -2852,6 +2852,133 @@ TEST_F(WindowTest, PrintPage_Static_RendersPageAndNumber)
     EXPECT_EQ(doc.blockCount(), blocksBefore); // 只读绘制不改文档结构
 }
 
+// ============================================================
+// 回归测试：BUG-380145 — DevicePixel pageRect 单位一致性
+// 修复前 pageRect(Point) 与 margin（设备像素）单位不一致，导致
+// titleBox.width() = body.width() - 2*margin 为负；修复后改用
+// DevicePixel 恢复 Qt5 语义，三处打印路径均验证单位一致性。
+// ============================================================
+
+TEST_F(WindowTest, DoPrint_DevicePixel_PageRectConsistentWithMargins)
+{
+    // Arrange: 通过 popupPrintDialog 建立 m_pPreview + m_printDoc + currentWrapper
+    m_win->show();
+    addFileTab(QStringLiteral("devicepixel_print.txt"),
+               QByteArray("DevicePixel regression line 1\nline 2\n"));
+    m_win->popupPrintDialog();
+    QApplication::processEvents();
+    ASSERT_NE(m_win->m_pPreview, nullptr);
+    ASSERT_NE(m_win->m_printDoc, nullptr);
+
+    // DPrinter 设为 PDF 输出，使 QPainter(printer) 活跃（绕过真实打印机依赖）
+    DPrinter printer(QPrinter::HighResolution);
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    printer.setOutputFileName(m_tempDir->filePath("doprint_devicepixel.pdf"));
+
+    // Act: 走 doPrint 完整路径（m_isNewPrint=true → 跳过缓存分支）
+    m_win->doPrint(&printer, QVector<int> { 1 });
+
+    // Assert: 完整路径已执行（m_lastLayout 被设置，非早退）
+    EXPECT_TRUE(m_win->m_lastLayout.isValid());
+
+    // 核心回归断言：DevicePixel 与 margin 单位一致 → titleBox 宽度为正
+    const int dpiy = printer.logicalDpiY();
+    const int margin = static_cast<int>((2 / 2.54) * dpiy);
+    const QRectF rectDevice = printer.pageRect(QPrinter::DevicePixel);
+    const QRectF rectPoint = printer.pageRect(QPrinter::Point);
+    // 修复后（DevicePixel）：body.width() - 2*margin > 0
+    EXPECT_GT(rectDevice.width() - 2 * margin, 0);
+    // 修复前（Point）：body.width() - 2*margin < 0 → 负的 titleBox 宽度
+    EXPECT_LT(rectPoint.width() - 2 * margin, 0);
+
+    // Cleanup
+    m_win->clearPrintTextDocument();
+    delete m_win->m_pPreview;
+    m_win->m_pPreview = nullptr;
+}
+
+TEST_F(WindowTest, DoPrintWithLargeDoc_DevicePixel_PageRectConsistentWithMargins)
+{
+    // Arrange: 通过 popupPrintDialog 建立 m_pPreview + currentWrapper
+    m_win->show();
+    addFileTab(QStringLiteral("devicepixel_large.txt"),
+               QByteArray("Large doc regression line\n"));
+    m_win->popupPrintDialog();
+    QApplication::processEvents();
+    ASSERT_NE(m_win->m_pPreview, nullptr);
+
+    // 构建大文档列表（doPrintWithLargeDoc 使用 m_printDocList）
+    Window::PrintInfo info;
+    info.doc = new QTextDocument();
+    info.doc->setPlainText(QStringLiteral("large doc page content\n"));
+    info.highlighter = nullptr;
+    m_win->m_printDocList.append(info);
+    m_win->m_bLargePrint = true;
+    m_win->m_bPrintProcessing = false;
+
+    // DPrinter 设为 PDF 输出
+    DPrinter printer(QPrinter::HighResolution);
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    printer.setOutputFileName(m_tempDir->filePath("doprintlargedoc_devicepixel.pdf"));
+
+    // Act: 走 doPrintWithLargeDoc 完整路径
+    m_win->doPrintWithLargeDoc(&printer, QVector<int> { 1 });
+
+    // Assert: 完整路径已执行（m_multiDocPageCount 被累加，非早退）
+    EXPECT_GT(m_win->m_multiDocPageCount, 0);
+    EXPECT_FALSE(m_win->m_bPrintProcessing);
+
+    // 核心回归断言
+    const int dpiy = printer.logicalDpiY();
+    const int margin = static_cast<int>((2 / 2.54) * dpiy);
+    const QRectF rectDevice = printer.pageRect(QPrinter::DevicePixel);
+    const QRectF rectPoint = printer.pageRect(QPrinter::Point);
+    EXPECT_GT(rectDevice.width() - 2 * margin, 0);
+    EXPECT_LT(rectPoint.width() - 2 * margin, 0);
+
+    // Cleanup
+    m_win->clearPrintTextDocument();
+    delete m_win->m_pPreview;
+    m_win->m_pPreview = nullptr;
+}
+
+TEST_F(WindowTest, AsynPrint_DevicePixel_PageRectConsistentWithMargins)
+{
+    // Arrange: 打印文档 + 位图绘制设备（painter 活跃）
+    m_win->m_printDoc = new QTextDocument();
+    m_win->m_printDoc->setPlainText(QStringLiteral("DevicePixel asynPrint line\n"));
+    QImage image(600, 800, QImage::Format_ARGB32);
+    image.fill(Qt::white);
+    const qint64 keyBefore = image.cacheKey();
+    DPrinter printer(QPrinter::HighResolution);
+    QPainter painter(&image);
+    ASSERT_TRUE(painter.isActive());
+
+    // Act: 走 asynPrint 小文档路径（printPage 渲染）
+    m_win->asynPrint(painter, &printer, QVector<int> { 1 });
+    painter.end();
+
+    // Assert: 位图被绘制修改
+    EXPECT_NE(image.cacheKey(), keyBefore);
+
+    // 核心回归断言：DevicePixel 给出打印机原生分辨率的设备像素维度
+    const QRectF rectDevice = printer.pageRect(QPrinter::DevicePixel);
+    const QRectF rectPoint = printer.pageRect(QPrinter::Point);
+    // DevicePixel 维度严格大于 Point（设备像素 >> 点）
+    EXPECT_GT(rectDevice.width(), rectPoint.width());
+    // DevicePixel / Point 比值 ≈ 打印机 DPI / 72（验证使用了原生分辨率）
+    EXPECT_NEAR(rectDevice.width() / rectPoint.width(),
+                static_cast<double>(printer.logicalDpiY()) / 72.0, 1.0);
+    // DevicePixel body 宽度足以容纳边距（titleBox 宽度为正）
+    const int dpiy = image.logicalDpiY();
+    const int margin = static_cast<int>((2 / 2.54) * dpiy);
+    EXPECT_GT(rectDevice.width() - 2 * margin, 0);
+
+    // Cleanup
+    delete m_win->m_printDoc;
+    m_win->m_printDoc = nullptr;
+}
+
 TEST_F(WindowTest, CloneLargeDocument_NullWrapper_ReturnsFalse)
 {
     // Act / Assert
