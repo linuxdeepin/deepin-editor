@@ -31,12 +31,21 @@ InsertTextUndoCommand::InsertTextUndoCommand(QList<QTextEdit::ExtraSelection> &s
     m_sInsertText.replace("\r\n", "\n");
     qDebug() << "InsertTextUndoCommand(multi-selection) created";
 
-    for (const auto &selection : m_columnEditSelections) {
+    // When the clipboard text has the same number of lines as the column
+    // selections, distribute one line per selection (the semantics of
+    // mainstream editors); otherwise insert the whole text into every
+    // selection as before.
+    const QStringList lines = m_sInsertText.split(QLatin1Char('\n'));
+    const bool distribute = lines.size() > 1 && lines.size() == m_columnEditSelections.size();
+
+    for (int i = 0; i < m_columnEditSelections.size(); ++i) {
+        const auto &selection = m_columnEditSelections.at(i);
         ColumnReplaceNode replaceNode;
         replaceNode.startPos = selection.cursor.selectionStart();
         replaceNode.endPos = selection.cursor.selectionEnd();
         replaceNode.leftToRight = selection.cursor.anchor() <= selection.cursor.position();
         replaceNode.originText = selection.cursor.selectedText();
+        replaceNode.insertedText = distribute ? lines.at(i) : m_sInsertText;
         m_replaces.append(replaceNode);
     }
 }
@@ -72,7 +81,7 @@ void InsertTextUndoCommand::undo()
             // restore origin text
             QTextCursor cursor = selection.cursor;
             cursor.setPosition(replaceNode.startPos);
-            cursor.setPosition(replaceNode.startPos + m_sInsertText.size(), QTextCursor::KeepAnchor);
+            cursor.setPosition(replaceNode.startPos + replaceNode.insertedText.size(), QTextCursor::KeepAnchor);
             cursor.insertText(replaceNode.originText);
 
             if (replaceNode.leftToRight) {
@@ -130,25 +139,26 @@ void InsertTextUndoCommand::redo()
         for (int i = 0; i < m_columnEditSelections.size(); i++) {
             QTextEdit::ExtraSelection &selection = m_columnEditSelections[i];
             const ColumnReplaceNode &replaceNode = m_replaces[i];
+            const QString &insertedText = replaceNode.insertedText;
 
             // remove origin text with replace text
             QTextCursor cursor = selection.cursor;
             cursor.setPosition(columnOffset + replaceNode.startPos);
             cursor.setPosition(columnOffset + replaceNode.endPos, QTextCursor::KeepAnchor);
-            cursor.insertText(m_sInsertText);
+            cursor.insertText(insertedText);
 
             if (replaceNode.leftToRight) {
                 qDebug() << "InsertTextUndoCommand redo, leftToRight";
                 cursor.setPosition(columnOffset + replaceNode.startPos);
-                cursor.setPosition(columnOffset + replaceNode.startPos + m_sInsertText.size(), QTextCursor::KeepAnchor);
+                cursor.setPosition(columnOffset + replaceNode.startPos + insertedText.size(), QTextCursor::KeepAnchor);
             } else {
                 qDebug() << "InsertTextUndoCommand redo, rightToLeft";
-                cursor.setPosition(columnOffset + replaceNode.startPos + m_sInsertText.size());
+                cursor.setPosition(columnOffset + replaceNode.startPos + insertedText.size());
                 cursor.setPosition(columnOffset + replaceNode.startPos, QTextCursor::KeepAnchor);
             }
 
             selection.cursor = cursor;
-            columnOffset += m_sInsertText.size() - replaceNode.originText.size();
+            columnOffset += insertedText.size() - replaceNode.originText.size();
         }
 
         if (m_pEdit && !m_columnEditSelections.isEmpty()) {
