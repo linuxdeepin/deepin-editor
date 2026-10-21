@@ -1,3 +1,9 @@
+deepin-editor (6.6.8) unstable; urgency=medium
+
+  * fix: wrap overlong link text in markdown preview
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Wed, 21 Oct 2026 14:11:09 +0800
+
 deepin-editor (6.6.7) unstable; urgency=medium
 
   * fix: use DevicePixel for print page rect under Qt6

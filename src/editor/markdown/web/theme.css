@@ -311,6 +311,14 @@ html, body {
 .milkdown a { color: var(--link); text-decoration: none; }
 .milkdown a:hover { text-decoration: underline; }
 
+/* 超长链接文本换行：URL 等连续拉丁串默认无断点，不换行会横向溢出内容区，
+   而中文纯文本因字符间天然可断行正常折行（"纯文本换行、链接不换行"缺陷）。
+   overflow-wrap 可继承，在 ProseMirror 根声明一次即覆盖段落/标题/列表/引用中
+   全部行内内容；取 anywhere 而非 break-word：仅当行内没有其他断点时才强制折行，
+   正常中英文断词不变。代码块/公式自带 white-space:pre 或 nowrap，不受影响
+   （代码块本就横向滚动） */
+.milkdown .ProseMirror { overflow-wrap: anywhere; }
+
 /* 分割线 */
 .milkdown hr { border: none; border-top: 1px solid var(--border); margin: 2em 0; }
 
