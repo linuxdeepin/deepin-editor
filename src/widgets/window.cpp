@@ -1103,7 +1103,13 @@ bool Window::closeTab(const QString &filePath)
                     }
                 } else {
                     qDebug() << "File is not a backup file, saving normally";
-                    if (wrapper->saveFile()) {
+                    if (!fileInfo.exists()) {
+                        qDebug() << "File no longer exists on disk, redirecting to Save As";
+                        if (!saveAsFile()) {
+                            qWarning() << "Save as file cancelled or failed, keep tab open";
+                            return false;
+                        }
+                    } else if (wrapper->saveFile()) {
                         qDebug() << "File saved, removing wrapper and closing tab";
                         removeWrapper(filePath, true);
                         m_tabbar->closeCurrentTab(filePath);
@@ -1557,7 +1563,9 @@ QString Window::saveAsFileToDisk()
         dialog.selectFile(match.captured(0) + ".txt");
         qDebug() << "Setting dialog file name to draft file name:" << match.captured(0) + ".txt";
     } else {
-        dialog.setDirectory(fileInfo.dir());
+        if (fileInfo.exists()) {
+            dialog.setDirectory(fileInfo.dir());
+        }
         dialog.selectFile(fileInfo.fileName());
         qDebug() << "Setting dialog file name to current file name:" << fileInfo.fileName();
     }
@@ -1685,7 +1693,9 @@ QString Window::saveBlankFileToDisk()
         dialog.selectFile(match.captured(0) + ".txt");
         qDebug() << "Setting dialog file name to draft file name:" << match.captured(0) + ".txt";
     } else {
-        dialog.setDirectory(fileInfo.dir());
+        if (fileInfo.exists()) {
+            dialog.setDirectory(fileInfo.dir());
+        }
         dialog.selectFile(fileInfo.fileName());
         qDebug() << "Setting dialog file name to current file name:" << fileInfo.fileName();
     }
@@ -1734,7 +1744,9 @@ bool Window::saveAsOtherTabFile(EditWrapper *wrapper)
         dialog.selectFile(match.captured(0) + ".txt");
         qDebug() << "Setting dialog file name to draft file name:" << match.captured(0) + ".txt";
     } else {
-        dialog.setDirectory(fileInfo.dir());
+        if (fileInfo.exists()) {
+            dialog.setDirectory(fileInfo.dir());
+        }
         dialog.selectFile(fileInfo.fileName());
         qDebug() << "Setting dialog file name to current file name:" << fileInfo.fileName();
     }
