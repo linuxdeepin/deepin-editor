@@ -1103,7 +1103,14 @@ bool Window::closeTab(const QString &filePath)
                     }
                 } else {
                     qDebug() << "File is not a backup file, saving normally";
-                    if (wrapper->saveFile()) {
+                    // 源文件可能已被外部删除（如移入回收站），需先检查文件是否存在
+                    if (!fileInfo.exists()) {
+                        qDebug() << "File no longer exists, using Save As instead";
+                        if (!saveAsFile()) {
+                            qWarning() << "Save as file cancelled or failed, keep tab open";
+                            return false;
+                        }
+                    } else if (wrapper->saveFile()) {
                         qDebug() << "File saved, removing wrapper and closing tab";
                         removeWrapper(filePath, true);
                         m_tabbar->closeCurrentTab(filePath);
@@ -1557,7 +1564,10 @@ QString Window::saveAsFileToDisk()
         dialog.selectFile(match.captured(0) + ".txt");
         qDebug() << "Setting dialog file name to draft file name:" << match.captured(0) + ".txt";
     } else {
-        dialog.setDirectory(fileInfo.dir());
+        // 源文件已被删除（如移入回收站）时，使用默认保存路径而非原始文件目录
+        if (fileInfo.exists()) {
+            dialog.setDirectory(fileInfo.dir());
+        }
         dialog.selectFile(fileInfo.fileName());
         qDebug() << "Setting dialog file name to current file name:" << fileInfo.fileName();
     }
@@ -1685,7 +1695,10 @@ QString Window::saveBlankFileToDisk()
         dialog.selectFile(match.captured(0) + ".txt");
         qDebug() << "Setting dialog file name to draft file name:" << match.captured(0) + ".txt";
     } else {
-        dialog.setDirectory(fileInfo.dir());
+        // 源文件已被删除（如移入回收站）时，使用默认保存路径而非原始文件目录
+        if (fileInfo.exists()) {
+            dialog.setDirectory(fileInfo.dir());
+        }
         dialog.selectFile(fileInfo.fileName());
         qDebug() << "Setting dialog file name to current file name:" << fileInfo.fileName();
     }
@@ -1734,7 +1747,10 @@ bool Window::saveAsOtherTabFile(EditWrapper *wrapper)
         dialog.selectFile(match.captured(0) + ".txt");
         qDebug() << "Setting dialog file name to draft file name:" << match.captured(0) + ".txt";
     } else {
-        dialog.setDirectory(fileInfo.dir());
+        // 源文件已被删除（如移入回收站）时，使用默认保存路径而非原始文件目录
+        if (fileInfo.exists()) {
+            dialog.setDirectory(fileInfo.dir());
+        }
         dialog.selectFile(fileInfo.fileName());
         qDebug() << "Setting dialog file name to current file name:" << fileInfo.fileName();
     }
