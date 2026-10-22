@@ -79,9 +79,9 @@ link_directories(${chardet_LIBRARY_DIRS})
 
 # Tell CMake to create the executable
 add_executable(deepin-editor ${SRCS} deepin-editor.qrc)
-if(CMAKE_BUILD_TYPE STREQUAL "Release")
-    target_compile_definitions(deepin-editor PRIVATE QT_NO_DEBUG_OUTPUT)
-endif()
+# 注意：不要在 Release 下定义 QT_NO_DEBUG_OUTPUT——它会把 qCDebug 编译成硬性空操作
+# （编译期 IsOutputEnabled=false），导致调试模式动态开到 debug 级也无法输出 qCDebug 日志；
+# 分类日志关闭时仅有一次布尔判断开销（Qt 惰性求值），参数不会被计算
 target_link_libraries(deepin-editor
     ${LINK_LIBS}
     ${chardet_LIBRARY_DIRS}
