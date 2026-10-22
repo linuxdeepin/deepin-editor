@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "ddlog.h"
 #include <QLabel>
 #include <QPainter>
 #include <QHBoxLayout>
@@ -34,7 +35,7 @@ BottomBar::BottomBar(QWidget *parent)
       m_progressLabel(new DLabel),
       m_progressBar(new DProgressBar)
 {
-    qDebug() << "BottomBar constructor";
+    qCDebug(appLog) << "BottomBar constructor";
     QFont font;
     m_pPositionLabel->setFont(font);
     m_pPositionLabel->setAccessibleName("PositionLabel");
@@ -131,13 +132,13 @@ BottomBar::BottomBar(QWidget *parent)
 
     //切换编码
     connect(m_pEncodeMenu, &DDropdownMenu::currentActionChanged, this,[this](QAction* pAct){
-        qInfo() << "Encoding changed to:" << pAct->text();
+        qCInfo(appLog) << "Encoding changed to:" << pAct->text();
         // 保持界面统一
         QString previousText = m_pEncodeMenu->getCurrentText();
 
         // 处于文件加载状态或转换失败则恢复默认编码格式
         if (m_pWrapper->getFileLoading() || !m_pWrapper->reloadFileEncode(pAct->text().toLocal8Bit())) {
-            qWarning() << "Failed to change encoding, reverting to:" << previousText;
+            qCWarning(appLog) << "Failed to change encoding, reverting to:" << previousText;
             m_pEncodeMenu->setCurrentTextOnly(previousText);
         } else {
             // 存储完成后更新底栏显示文本，重载时可能需要保存旧文本
@@ -147,7 +148,7 @@ BottomBar::BottomBar(QWidget *parent)
 
     //切换文件类型
     connect(m_pHighlightMenu, &DDropdownMenu::currentActionChanged, this,[this](QAction* pAct) {
-        qInfo() << "Highlight mode changed to:" << pAct->text();
+        qCInfo(appLog) << "Highlight mode changed to:" << pAct->text();
         m_pHighlightMenu->setCurrentTextOnly(pAct->text());
 
         // 更新使用格式高亮类型
@@ -169,7 +170,7 @@ BottomBar::BottomBar(QWidget *parent)
 
 BottomBar::~BottomBar()
 {
-    qDebug() << "BottomBar destructor";
+    qCDebug(appLog) << "BottomBar destructor";
     if (m_pEncodeMenu != nullptr) {
         delete m_pEncodeMenu;
         m_pEncodeMenu = nullptr;
@@ -288,12 +289,12 @@ void BottomBar::setProgress(int progress)
     if(progress<0){
         return;
     }
-    qDebug() << "Loading progress:" << progress << "%";
+    qCDebug(appLog) << "Loading progress:" << progress << "%";
     m_progressBar->show();
     m_progressLabel->show();
     m_progressBar->setValue(progress);
     if(progress >= 100){
-        qDebug() << "Loading completed";
+        qCDebug(appLog) << "Loading completed";
         m_progressBar->hide();
         m_progressLabel->hide();
     }
@@ -433,7 +434,7 @@ void BottomBar::onFormatMenuTrigged(QAction* action)
         return;
     }
 
-    qInfo() << "Endline format changed from" << m_endlineFormat << "to" << type;
+    qCInfo(appLog) << "Endline format changed from" << m_endlineFormat << "to" << type;
     m_pWrapper->textEditor()->onEndlineFormatChanged(m_endlineFormat,(EndlineFormat)type);
     m_endlineFormat = (EndlineFormat)type;
 

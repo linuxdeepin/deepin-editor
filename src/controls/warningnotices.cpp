@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "ddlog.h"
 #include "warningnotices.h"
 
 #include <DGuiApplicationHelper>
@@ -18,7 +19,7 @@ const int s_WNCloseBtnSizeCompact = 26;
 WarningNotices::WarningNotices(MessageType notifyType, QWidget *parent)
     : DFloatingMessage(notifyType, parent)
 {
-    qDebug() << "WarningNotices constructor start, type:" << notifyType;
+    qCDebug(appLog) << "WarningNotices constructor start, type:" << notifyType;
     this->setFont(qApp->font());
 
     setIcon(QIcon(":/images/warning.svg"));
@@ -35,17 +36,17 @@ WarningNotices::WarningNotices(MessageType notifyType, QWidget *parent)
     m_saveAsBtn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_editAnywayBtn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_editAnywayBtn->setVisible(false);
-    qDebug() << "Warning buttons initialized";
+    qCDebug(appLog) << "Warning buttons initialized";
 
     connect(m_reloadBtn, &QPushButton::clicked, this, &WarningNotices::slotreloadBtnClicked);
     connect(m_saveAsBtn, &QPushButton::clicked, this, &WarningNotices::slotsaveAsBtnClicked);
     connect(m_editAnywayBtn, &QPushButton::clicked, this, &WarningNotices::slotEditAnywayBtnClicked);
-    qDebug() << "Warning button signals connected";
+    qCDebug(appLog) << "Warning button signals connected";
 
 #ifdef DTKWIDGET_CLASS_DSizeMode
     DDialogCloseButton *closeBtn = findChild<DDialogCloseButton *>();
     if (closeBtn) {
-        qDebug() << "closeBtn is not null";
+        qCDebug(appLog) << "closeBtn is not null";
         closeBtn->setIconSize(DSizeModeHelper::element(QSize(26, 26), QSize(32, 32)));
         connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, [=]() {
             closeBtn->setIconSize(DSizeModeHelper::element(QSize(26, 26), QSize(32, 32)));
@@ -61,82 +62,82 @@ WarningNotices::WarningNotices(MessageType notifyType, QWidget *parent)
     // TODO: wait dtkwidget fixed, see dtkwidget PR-628
     connect(this, &DFloatingMessage::closeButtonClicked, this, [this]() {
         if (this->isVisible()) {
-            qDebug() << "closeButtonClicked";
+            qCDebug(appLog) << "closeButtonClicked";
             this->close();
         }
     });
-    qDebug() << "WarningNotices constructor end";
+    qCDebug(appLog) << "WarningNotices constructor end";
 }
 
 WarningNotices::~WarningNotices()
 {
-    qDebug() << "WarningNotices destructor";
+    qCDebug(appLog) << "WarningNotices destructor";
 }
 
 void WarningNotices::setReloadBtn()
 {
-    qDebug() << "setReloadBtn";
+    qCDebug(appLog) << "setReloadBtn";
     if (!m_reloadBtn->isVisible()) {
-        qDebug() << "m_reloadBtn->setVisible(true)";
+        qCDebug(appLog) << "m_reloadBtn->setVisible(true)";
         m_reloadBtn->setVisible(true);
     }
-    qDebug() << "m_reloadBtn->setVisible(true)";
+    qCDebug(appLog) << "m_reloadBtn->setVisible(true)";
     m_reloadBtn->setVisible(true);
     m_saveAsBtn->setVisible(false);
     setWidget(m_reloadBtn);
-    qDebug() << "setReloadBtn end";
+    qCDebug(appLog) << "setReloadBtn end";
 }
 
 void WarningNotices::setSaveAsBtn()
 {
-    qDebug() << "setSaveAsBtn";
+    qCDebug(appLog) << "setSaveAsBtn";
     if (!m_saveAsBtn->isVisible()) {
         m_saveAsBtn->setVisible(true);
     }
     m_saveAsBtn->setVisible(true);
     m_reloadBtn->setVisible(false);
     setWidget(m_saveAsBtn);
-    qDebug() << "setSaveAsBtn end";
+    qCDebug(appLog) << "setSaveAsBtn end";
 }
 
 void WarningNotices::clearBtn()
 {
-    qDebug() << "clearBtn";
+    qCDebug(appLog) << "clearBtn";
     m_saveAsBtn->setVisible(false);
     m_reloadBtn->setVisible(false);
-    qDebug() << "clearBtn end";
+    qCDebug(appLog) << "clearBtn end";
 }
 
 void WarningNotices::slotreloadBtnClicked()
 {
-    qDebug() << "slotreloadBtnClicked";
+    qCDebug(appLog) << "slotreloadBtnClicked";
     this->hide();
     emit reloadBtnClicked();
-    qDebug() << "slotreloadBtnClicked end";
+    qCDebug(appLog) << "slotreloadBtnClicked end";
 }
 
 void WarningNotices::slotsaveAsBtnClicked()
 {
-    qDebug() << "slotsaveAsBtnClicked";
+    qCDebug(appLog) << "slotsaveAsBtnClicked";
     this->hide();
     emit saveAsBtnClicked();
-    qDebug() << "slotsaveAsBtnClicked end";
+    qCDebug(appLog) << "slotsaveAsBtnClicked end";
 }
 
 void WarningNotices::setEditAnywayBtn()
 {
-    qDebug() << "setEditAnywayBtn";
+    qCDebug(appLog) << "setEditAnywayBtn";
     m_reloadBtn->setVisible(false);
     m_saveAsBtn->setVisible(false);
     m_editAnywayBtn->setVisible(true);
     setWidget(m_editAnywayBtn);
-    qDebug() << "setEditAnywayBtn end";
+    qCDebug(appLog) << "setEditAnywayBtn end";
 }
 
 void WarningNotices::slotEditAnywayBtnClicked()
 {
-    qDebug() << "slotEditAnywayBtnClicked";
+    qCDebug(appLog) << "slotEditAnywayBtnClicked";
     this->hide();
     emit editAnywayBtnClicked();
-    qDebug() << "slotEditAnywayBtnClicked end";
+    qCDebug(appLog) << "slotEditAnywayBtnClicked end";
 }

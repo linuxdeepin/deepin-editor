@@ -2,12 +2,13 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "ddlog.h"
 #include "FlashTween.h"
 #include <QDebug>
 
 FlashTween::FlashTween()
 {
-    qDebug() << "FlashTween created";
+    qCDebug(appLog) << "FlashTween created";
     m_timerX = new QTimer();
     QObject::connect(m_timerX, &QTimer::timeout, this ,&FlashTween::__runX);
 
@@ -17,15 +18,15 @@ FlashTween::FlashTween()
 
 FlashTween::~FlashTween()
 {
-    qDebug() << "FlashTween destroyed";
+    qCDebug(appLog) << "FlashTween destroyed";
     if (m_timerX != nullptr) {
-        qDebug() << "delete m_timerX";
+        qCDebug(appLog) << "delete m_timerX";
         delete m_timerX;
         m_timerX = nullptr;
     }
 
     if (m_timerY != nullptr) {
-        qDebug() << "delete m_timerY";
+        qCDebug(appLog) << "delete m_timerY";
         delete m_timerY;
         m_timerY = nullptr;
     }
@@ -33,7 +34,7 @@ FlashTween::~FlashTween()
 
 void FlashTween::startY(qreal t,qreal b,qreal c,qreal d, FunSlideInertial f)
 {
-    qInfo() << "FlashTween startY - time:" << t << "begin:" << b << "change:" << c << "duration:" << d;
+    qCInfo(appLog) << "FlashTween startY - time:" << t << "begin:" << b << "change:" << c << "duration:" << d;
     if(c==0.0 || d==0.0) return;
     m_currentTimeY = t;
     m_beginValueY = b;
@@ -45,16 +46,16 @@ void FlashTween::startY(qreal t,qreal b,qreal c,qreal d, FunSlideInertial f)
     m_directionY = m_changeValueY<0?1:-1;
 
     if (m_timerY != nullptr) {
-        qDebug() << "m_timerY is not null";
+        qCDebug(appLog) << "m_timerY is not null";
         m_timerY->stop();
         m_timerY->start(CELL_TIME);
     }
-    qDebug() << "FlashTween startY end";
+    qCDebug(appLog) << "FlashTween startY end";
 }
 
 void FlashTween::startX(qreal t,qreal b,qreal c,qreal d, FunSlideInertial f)
 {
-    qInfo() << "FlashTween startX - time:" << t << "begin:" << b << "change:" << c << "duration:" << d;
+    qCInfo(appLog) << "FlashTween startX - time:" << t << "begin:" << b << "change:" << c << "duration:" << d;
     if(c==0.0 || d==0.0) return;
     m_currentTimeX = t;
     m_beginValueX = b;
@@ -66,11 +67,11 @@ void FlashTween::startX(qreal t,qreal b,qreal c,qreal d, FunSlideInertial f)
     m_directionX = m_changeValueX<0?1:-1;
 
     if (m_timerX != nullptr) {
-        qDebug() << "m_timerX is not null";
+        qCDebug(appLog) << "m_timerX is not null";
         m_timerX->stop();
         m_timerX->start(CELL_TIME);
     }
-    qDebug() << "FlashTween startX end";
+    qCDebug(appLog) << "FlashTween startX end";
 }
 
 void FlashTween::__runY()
@@ -78,21 +79,21 @@ void FlashTween::__runY()
     qreal tempValue = m_lastValueY;
     m_lastValueY = FlashTween::sinusoidalEaseOut(m_currentTimeY, m_beginValueY, abs(m_changeValueY), m_durationTimeY);
     m_fSlideGestureY(m_directionY*(m_lastValueY-tempValue));
-    qDebug() << "FlashTween Y progress - current:" << m_currentTimeY << "/" << m_durationTimeY
+    qCDebug(appLog) << "FlashTween Y progress - current:" << m_currentTimeY << "/" << m_durationTimeY
              << "value:" << m_lastValueY << "delta:" << m_lastValueY-tempValue;
 
     if(m_currentTimeY<m_durationTimeY){
-        qDebug() << "m_currentTimeY < m_durationTimeY";
+        qCDebug(appLog) << "m_currentTimeY < m_durationTimeY";
         m_currentTimeY+=CELL_TIME;
     }
     else {
-        qDebug() << "FlashTween Y animation completed";
+        qCDebug(appLog) << "FlashTween Y animation completed";
         if (m_timerY != nullptr) {
-            qDebug() << "m_timerY is not null";
+            qCDebug(appLog) << "m_timerY is not null";
             m_timerY->stop();
         }
     }
-    qDebug() << "FlashTween Y animation completed";
+    qCDebug(appLog) << "FlashTween Y animation completed";
 }
 
 void FlashTween::__runX()
@@ -100,20 +101,20 @@ void FlashTween::__runX()
     qreal tempValue = m_lastValueX;
     m_lastValueX = FlashTween::sinusoidalEaseOut(m_currentTimeX, m_beginValueX, abs(m_changeValueX), m_durationTimeX);
     m_fSlideGestureX(m_directionX*(m_lastValueX - tempValue));
-    qDebug() << "FlashTween X progress - current:" << m_currentTimeX << "/" << m_durationTimeX
+    qCDebug(appLog) << "FlashTween X progress - current:" << m_currentTimeX << "/" << m_durationTimeX
              << "value:" << m_lastValueX << "delta:" << m_lastValueX-tempValue;
 
     if(m_currentTimeX<m_durationTimeX){
-        qDebug() << "m_currentTimeX < m_durationTimeX";
+        qCDebug(appLog) << "m_currentTimeX < m_durationTimeX";
         m_currentTimeX+=CELL_TIME;
     }
     else {
-        qDebug() << "FlashTween X animation completed";
+        qCDebug(appLog) << "FlashTween X animation completed";
         // 与 __runY 的防御风格保持一致
         if (m_timerX != nullptr) {
             m_timerX->stop();
         }
     }
-    qDebug() << "FlashTween X animation completed";
+    qCDebug(appLog) << "FlashTween X animation completed";
 }
 

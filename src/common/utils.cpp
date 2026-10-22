@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "ddlog.h"
 #include "utils.h"
 
 #include <DSettings>
@@ -92,23 +93,23 @@ QString Utils::m_systemLanguage;
 
 QString Utils::getQrcPath(const QString &imageName)
 {
-    qDebug() << "Enter getQrcPath, imageName:" << imageName;
+    qCDebug(appLog) << "Enter getQrcPath, imageName:" << imageName;
     QString path = QString(":/images/%1").arg(imageName);
-    qDebug() << "Exit getQrcPath, return path:" << path;
+    qCDebug(appLog) << "Exit getQrcPath, return path:" << path;
     return path;
 }
 
 QString Utils::getQssPath(const QString &qssName)
 {
-    qDebug() << "Enter getQssPath, qssName:" << qssName;
+    qCDebug(appLog) << "Enter getQssPath, qssName:" << qssName;
     QString path = QString(":/qss/%1").arg(qssName);
-    qDebug() << "Exit getQssPath, return path:" << path;
+    qCDebug(appLog) << "Exit getQssPath, return path:" << path;
     return path;
 }
 
 QSize Utils::getRenderSize(int fontSize, const QString &string)
 {
-    qDebug() << "Entering getRenderSize with fontSize:" << fontSize << "and string:" << string.left(50);
+    qCDebug(appLog) << "Entering getRenderSize with fontSize:" << fontSize << "and string:" << string.left(50);
     QFont font;
     font.setPointSize(fontSize);
     QFontMetrics fm(font);
@@ -121,41 +122,41 @@ QSize Utils::getRenderSize(int fontSize, const QString &string)
         int lineHeight = fm.height();
 
         if (lineWidth > width) {
-            qDebug() << "New max width found:" << lineWidth;
+            qCDebug(appLog) << "New max width found:" << lineWidth;
             width = lineWidth;
         }
 
         height += lineHeight;
     }
 
-    qDebug() << "Leaving getRenderSize, returning QSize(" << width << "," << height << ")";
+    qCDebug(appLog) << "Leaving getRenderSize, returning QSize(" << width << "," << height << ")";
     return QSize(width, height);
 }
 
 void Utils::setFontSize(QPainter &painter, int textSize)
 {
-    qDebug() << "Entering setFontSize with textSize:" << textSize;
+    qCDebug(appLog) << "Entering setFontSize with textSize:" << textSize;
     QFont font = painter.font();
     font.setPointSize(textSize);
     painter.setFont(font);
-    qDebug() << "Leaving setFontSize";
+    qCDebug(appLog) << "Leaving setFontSize";
 }
 
 void Utils::applyQss(QWidget *widget, const QString &qssName)
 {
-    qDebug() << "Entering applyQss for widget" << widget->objectName() << "with qss" << qssName;
+    qCDebug(appLog) << "Entering applyQss for widget" << widget->objectName() << "with qss" << qssName;
     QFile file(Utils::getQssPath(qssName));
     file.open(QFile::ReadOnly);
     QTextStream filetext(&file);
     QString stylesheet = filetext.readAll();
     widget->setStyleSheet(stylesheet);
     file.close();
-    qDebug() << "Leaving applyQss";
+    qCDebug(appLog) << "Leaving applyQss";
 }
 
 float Utils::codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country)
 {
-    qDebug() << "Entering codecConfidenceForData for codec:" << codec->name();
+    qCDebug(appLog) << "Entering codecConfidenceForData for codec:" << codec->name();
     qreal hep_count = 0;
     int non_base_latin_count = 0;
     qreal unidentification_count = 0;
@@ -168,34 +169,34 @@ float Utils::codecConfidenceForData(const QTextCodec *codec, const QByteArray &d
         const QChar &ch = unicode_data.at(i);
 
         if (ch.unicode() > 0x7f) {
-            qDebug() << "Non-base Latin character found:" << ch;
+            qCDebug(appLog) << "Non-base Latin character found:" << ch;
             ++non_base_latin_count;
         }
 
         switch (ch.script()) {
             case QChar::Script_Hiragana:
             case QChar::Script_Katakana:
-                qDebug() << "Hiragana or Katakana character found:" << ch;
+                qCDebug(appLog) << "Hiragana or Katakana character found:" << ch;
                 hep_count += (country == QLocale::Japan) ? 1.2 : 0.5;
                 unidentification_count += (country == QLocale::Japan) ? 0 : 0.3;
                 break;
             case QChar::Script_Han:
-                qDebug() << "Chinese character found:" << ch;
+                qCDebug(appLog) << "Chinese character found:" << ch;
                 hep_count += (country == QLocale::China) ? 1.2 : 0.5;
                 unidentification_count += (country == QLocale::China) ? 0 : 0.3;
                 break;
             case QChar::Script_Hangul:
-                qDebug() << "Hangul character found:" << ch;
+                qCDebug(appLog) << "Hangul character found:" << ch;
                 hep_count += (country == QLocale::NorthKorea) || (country == QLocale::SouthKorea) ? 1.2 : 0.5;
                 unidentification_count += (country == QLocale::NorthKorea) || (country == QLocale::SouthKorea) ? 0 : 0.3;
                 break;
             case QChar::Script_Cyrillic:
-                qDebug() << "Cyrillic character found:" << ch;
+                qCDebug(appLog) << "Cyrillic character found:" << ch;
                 hep_count += (country == QLocale::Russia) ? 1.2 : 0.5;
                 unidentification_count += (country == QLocale::Russia) ? 0 : 0.3;
                 break;
             case QChar::Script_Devanagari:
-                qDebug() << "Devanagari character found:" << ch;
+                qCDebug(appLog) << "Devanagari character found:" << ch;
                 hep_count += (country == QLocale::Nepal || country == QLocale::India) ? 1.2 : 0.5;
                 unidentification_count += (country == QLocale::Nepal || country == QLocale::India) ? 0 : 0.3;
                 break;
@@ -240,21 +241,21 @@ float Utils::codecConfidenceForData(const QTextCodec *codec, const QByteArray &d
     c -= qreal(replacement_count) / non_base_latin_count;
     c -= qreal(unidentification_count) / non_base_latin_count;
 
-    qDebug() << "Leaving codecConfidenceForData, confidence:" << c;
+    qCDebug(appLog) << "Leaving codecConfidenceForData, confidence:" << c;
     return qMax(0.0f, c);
 }
 
 QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
 {
-    qDebug() << "Entering detectEncode for file:" << fileName;
+    qCDebug(appLog) << "Entering detectEncode for file:" << fileName;
     // Return local encoding if nothing in file.
     if (data.isEmpty()) {
-        qDebug() << "Data is empty, returning codec for locale.";
+        qCDebug(appLog) << "Data is empty, returning codec for locale.";
         return QTextCodec::codecForLocale()->name();
     }
 
     if (QTextCodec *c = QTextCodec::codecForUtfText(data, nullptr)) {
-        qDebug() << "Detected UTF text, codec:" << c->name();
+        qCDebug(appLog) << "Detected UTF text, codec:" << c->name();
         return c->name();
     }
 
@@ -262,12 +263,12 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
     const QMimeType &mime_type =
         fileName.isEmpty() ? mime_database.mimeTypeForData(data) : mime_database.mimeTypeForFileNameAndData(fileName, data);
     const QString &mimetype_name = mime_type.name();
-    qDebug() << "MIME type:" << mimetype_name;
+    qCDebug(appLog) << "MIME type:" << mimetype_name;
     KEncodingProber::ProberType proberType = KEncodingProber::Universal;
 
     if (mimetype_name == QStringLiteral("application/xml") || mimetype_name == QStringLiteral("text/html") ||
         mimetype_name == QStringLiteral("application/xhtml+xml")) {
-        qDebug() << "XML/HTML mimetype found, checking for charset meta tag.";
+        qCDebug(appLog) << "XML/HTML mimetype found, checking for charset meta tag.";
         const QString &_data = QString::fromLatin1(data);
         QRegularExpression pattern("<\\bmeta.+\\bcharset=(?'charset'\\S+?)\\s*['\"/>]");
 
@@ -279,7 +280,7 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
                 .captured("charset");
 
         if (!charset.isEmpty()) {
-            qDebug() << "Found charset in meta tag:" << charset;
+            qCDebug(appLog) << "Found charset in meta tag:" << charset;
             return charset.toLatin1();
         }
 
@@ -292,7 +293,7 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
                 .captured("language");
 
         if (0 != language.size()) {
-            qDebug() << "Found language in meta tag:" << language;
+            qCDebug(appLog) << "Found language in meta tag:" << language;
             QLocale l(language);
 
             switch (l.script()) {
@@ -326,10 +327,10 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
                 default:
                     break;
             }
-            qDebug() << "Set prober type based on language:" << proberType;
+            qCDebug(appLog) << "Set prober type based on language:" << proberType;
         }
     } else if (mimetype_name == "text/x-python") {
-        qDebug() << "Python mimetype found, checking for coding meta tag.";
+        qCDebug(appLog) << "Python mimetype found, checking for coding meta tag.";
         QRegularExpression pattern("^#coding\\s*:\\s*(?'coding'\\S+)$");
         QTextStream stream(data);
 
@@ -378,42 +379,42 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
         QByteArray prober_encoding = prober.encoding();
 
         if (i.first != proberType && qFuzzyIsNull(prober_confidence)) {
-            qDebug() << "i.first != proberType && qFuzzyIsNull(prober_confidence)";
+            qCDebug(appLog) << "i.first != proberType && qFuzzyIsNull(prober_confidence)";
             prober_confidence = pre_confidence;
             prober_encoding = pre_encoding;
         }
 
     confidence:
-        qDebug() << "go to here: confidence!";
+        qCDebug(appLog) << "go to here: confidence!";
         if (QTextCodec *codec = QTextCodec::codecForName(prober_encoding)) {
             if (def_codec == codec) {
-                qDebug() << "def_codec == codec";
+                qCDebug(appLog) << "def_codec == codec";
                 def_codec = nullptr;
             }
 
             float c = Utils::codecConfidenceForData(codec, data, i.second);
 
             if (prober_confidence > 0.5) {
-                qDebug() << "prober_confidence > 0.5";
+                qCDebug(appLog) << "prober_confidence > 0.5";
                 c = c / 2 + prober_confidence / 2;
             } else {
-                qDebug() << "prober_confidence <= 0.5";
+                qCDebug(appLog) << "prober_confidence <= 0.5";
                 c = c / 3 * 2 + prober_confidence / 3;
             }
 
             if (c > confidence) {
-                qDebug() << "c > confidence!";
+                qCDebug(appLog) << "c > confidence!";
                 confidence = c;
                 encoding = prober_encoding;
             }
 
             if (i.first == KEncodingProber::ChineseTraditional && c < 0.5) {
-                qDebug() << "i.first == KEncodingProber::ChineseTraditional && c < 0.5";
+                qCDebug(appLog) << "i.first == KEncodingProber::ChineseTraditional && c < 0.5";
                 // test Big5
                 c = Utils::codecConfidenceForData(QTextCodec::codecForName("Big5"), data, i.second);
 
                 if (c > 0.5 && c > confidence) {
-                    qDebug() << " 0.5 set Big5";
+                    qCDebug(appLog) << " 0.5 set Big5";
                     confidence = c;
                     encoding = "Big5";
                 }
@@ -421,7 +422,7 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
         }
 
         if (i.first != proberType) {
-            qDebug() << "i.first != proberType";
+            qCDebug(appLog) << "i.first != proberType";
             // 使用 proberType 类型探测出的结果结合此国家再次做编码检查
             i.first = proberType;
             prober_confidence = pre_confidence;
@@ -431,20 +432,20 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
     }
 
     if (def_codec && Utils::codecConfidenceForData(def_codec, data, QLocale::system().country()) > confidence) {
-        qDebug() << "return codec's name";
+        qCDebug(appLog) << "return codec's name";
         return def_codec->name();
     }
 
-    qDebug() << "final return!";
+    qCDebug(appLog) << "final return!";
     return encoding;
 }
 
 QByteArray Utils::getEncode(const QByteArray &data)
 {
-    qDebug() << "Enter getEncode";
+    qCDebug(appLog) << "Enter getEncode";
     // try to get HTML header encoding.
     if (QTextCodec *codecForHtml = QTextCodec::codecForHtml(data, nullptr)) {
-        qDebug() << "codecForHtml" << codecForHtml->name();
+        qCDebug(appLog) << "codecForHtml" << codecForHtml->name();
         return codecForHtml->name();
     }
 
@@ -458,21 +459,21 @@ QByteArray Utils::getEncode(const QByteArray &data)
     }
 
     if (!codec) {
-        qDebug() << "codec is null";
+        qCDebug(appLog) << "codec is null";
         return QByteArray();
     }
 
-    qDebug() << "codec" << codec->name();
+    qCDebug(appLog) << "codec" << codec->name();
     return codec->name();
 }
 
 bool Utils::fileExists(const QString &path)
 {
-    qDebug() << "Enter fileExists, path:" << path;
+    qCDebug(appLog) << "Enter fileExists, path:" << path;
     QFileInfo check_file(path);
-    qDebug() << "check_file" << check_file.exists() << check_file.isFile();
+    qCDebug(appLog) << "check_file" << check_file.exists() << check_file.isFile();
     bool exists = check_file.exists() && check_file.isFile();
-    qDebug() << "Exit fileExists, file exists:" << exists;
+    qCDebug(appLog) << "Exit fileExists, file exists:" << exists;
     return exists;
 }
 
@@ -490,64 +491,64 @@ QString Utils::getFilePath(const QString &filePath)
 
 bool Utils::fileIsWritable(const QString &path)
 {
-    qDebug() << "Enter fileIsWritable, path:" << path;
+    qCDebug(appLog) << "Enter fileIsWritable, path:" << path;
     QFileDevice::Permissions permissions = QFile(path).permissions();
-    qDebug() << "permissions" << permissions;
+    qCDebug(appLog) << "permissions" << permissions;
     bool writable = permissions & QFileDevice::WriteUser;
-    qDebug() << "Exit fileIsWritable, is writable:" << writable;
+    qCDebug(appLog) << "Exit fileIsWritable, is writable:" << writable;
     return writable;
 }
 
 bool Utils::fileIsHome(const QString &path)
 {
-    qDebug() << "Enter fileIsHome, path:" << path;
+    qCDebug(appLog) << "Enter fileIsHome, path:" << path;
     bool isHome = path.startsWith(QDir::homePath());
-    qDebug() << "Exit fileIsHome, isHome:" << isHome;
+    qCDebug(appLog) << "Exit fileIsHome, isHome:" << isHome;
     return isHome;
 }
 
 QString Utils::getKeyshortcut(QKeyEvent *keyEvent)
 {
-    qDebug() << "Enter getKeyshortcut";
+    qCDebug(appLog) << "Enter getKeyshortcut";
     QStringList keys;
     Qt::KeyboardModifiers modifiers = keyEvent->modifiers();
     if (modifiers != Qt::NoModifier) {
-        qDebug() << "modifiers" << modifiers;
+        qCDebug(appLog) << "modifiers" << modifiers;
         if (modifiers.testFlag(Qt::MetaModifier)) {
-            qDebug() << "modifiers.testFlag(Qt::MetaModifier)";
+            qCDebug(appLog) << "modifiers.testFlag(Qt::MetaModifier)";
             keys.append("Meta");
         }
 
         if (modifiers.testFlag(Qt::ControlModifier)) {
-            qDebug() << "modifiers.testFlag(Qt::ControlModifier)";
+            qCDebug(appLog) << "modifiers.testFlag(Qt::ControlModifier)";
             keys.append("Ctrl");
         }
 
         if (modifiers.testFlag(Qt::AltModifier)) {
-            qDebug() << "modifiers.testFlag(Qt::AltModifier)";
+            qCDebug(appLog) << "modifiers.testFlag(Qt::AltModifier)";
             keys.append("Alt");
         }
 
         if (modifiers.testFlag(Qt::ShiftModifier)) {
-            qDebug() << "modifiers.testFlag(Qt::ShiftModifier)";
+            qCDebug(appLog) << "modifiers.testFlag(Qt::ShiftModifier)";
             keys.append("Shift");
         }
 
         // 添加小键盘处理，若为小键盘按键按下，组合键需添加 Num ，例如 Ctrl+Num+6 / Ctrl+Num+Up
         if (modifiers.testFlag(Qt::KeypadModifier)) {
-            qDebug() << "modifiers.testFlag(Qt::KeypadModifier)";
+            qCDebug(appLog) << "modifiers.testFlag(Qt::KeypadModifier)";
             keys.append("Num");
         }
     }
 
     if (keyEvent->key() != 0 && keyEvent->key() != Qt::Key_unknown) {
-        qDebug() << "keyEvent->key() != 0 && keyEvent->key() != Qt::Key_unknown";
+        qCDebug(appLog) << "keyEvent->key() != 0 && keyEvent->key() != Qt::Key_unknown";
         keys.append(QKeySequence(keyEvent->key()).toString());
     }
 
     for (int i = 0; i < keys.count(); i++) {
         if (keys.value(i).contains("Return")) {
-            qDebug() << "keys.value(i).contains(Return)";
+            qCDebug(appLog) << "keys.value(i).contains(Return)";
             keys.replace(i, "Enter");
         }
         // 与 Return→Enter 同理：统一为常见写法，和配置/显示 "Ctrl+Shift+Tab" 一致
@@ -556,19 +557,19 @@ QString Utils::getKeyshortcut(QKeyEvent *keyEvent)
         }
     }
 
-    qDebug() << "Exit getKeyshortcut, keys:" << keys.join("+");
+    qCDebug(appLog) << "Exit getKeyshortcut, keys:" << keys.join("+");
     return keys.join("+");
 }
 
 QString Utils::getKeyshortcutFromKeymap(Settings *settings, const QString &keyCategory, const QString &keyName)
 {
-    qDebug() << "Enter getKeyshortcutFromKeymap, keyCategory:" << keyCategory << "keyName:" << keyName;
+    qCDebug(appLog) << "Enter getKeyshortcutFromKeymap, keyCategory:" << keyCategory << "keyName:" << keyName;
     return settings->settings->option(QString("shortcuts.%1.%2").arg(keyCategory).arg(keyName))->value().toString();
 }
 
 QPixmap Utils::dropShadow(const QPixmap &source, qreal radius, const QColor &color, const QPoint &offset)
 {
-    qDebug() << "Enter dropShadow";
+    qCDebug(appLog) << "Enter dropShadow";
     QImage shadow = dropShadow(source, radius, color);
     shadow.setDevicePixelRatio(source.devicePixelRatio());
 
@@ -577,15 +578,15 @@ QPixmap Utils::dropShadow(const QPixmap &source, qreal radius, const QColor &col
     pa.drawPixmap(radius - offset.x(), radius - offset.y(), source);
     pa.end();
 
-    qDebug() << "Exit dropShadow";
+    qCDebug(appLog) << "Exit dropShadow";
     return QPixmap::fromImage(shadow);
 }
 
 QImage Utils::dropShadow(const QPixmap &px, qreal radius, const QColor &color)
 {
-    qDebug() << "Enter dropShadow";
+    qCDebug(appLog) << "Enter dropShadow";
     if (px.isNull()) {
-        qDebug() << "px is null";
+        qCDebug(appLog) << "px is null";
         return QImage();
     }
 
@@ -605,7 +606,7 @@ QImage Utils::dropShadow(const QPixmap &px, qreal radius, const QColor &color)
     qt_blurImage(&blurPainter, tmp, radius, false, true);
     blurPainter.end();
     if (color == QColor(Qt::black)) {
-        qDebug() << "color is black";
+        qCDebug(appLog) << "color is black";
         return blurred;
     }
     tmp = blurred;
@@ -616,46 +617,46 @@ QImage Utils::dropShadow(const QPixmap &px, qreal radius, const QColor &color)
     tmpPainter.fillRect(tmp.rect(), color);
     tmpPainter.end();
 
-    qDebug() << "Exit dropShadow";
+    qCDebug(appLog) << "Exit dropShadow";
     return tmp;
 }
 
 qreal Utils::easeInOut(qreal x)
 {
-    qDebug() << "Enter easeInOut, x:" << x;
+    qCDebug(appLog) << "Enter easeInOut, x:" << x;
     return (1 - qCos(M_PI * x)) / 2;
 }
 
 qreal Utils::easeInQuad(qreal x)
 {
-    qDebug() << "Enter easeInQuad, x:" << x;
+    qCDebug(appLog) << "Enter easeInQuad, x:" << x;
     return qPow(x, 2);
 }
 
 qreal Utils::easeOutQuad(qreal x)
 {
-    qDebug() << "Enter easeOutQuad, x:" << x;
+    qCDebug(appLog) << "Enter easeOutQuad, x:" << x;
     return -1 * qPow(x - 1, 2) + 1;
 }
 
 qreal Utils::easeInQuint(qreal x)
 {
-    qDebug() << "Enter easeInQuint, x:" << x;
+    qCDebug(appLog) << "Enter easeInQuint, x:" << x;
     return qPow(x, 5);
 }
 
 qreal Utils::easeOutQuint(qreal x)
 {
-    qDebug() << "Enter easeOutQuint, x:" << x;
+    qCDebug(appLog) << "Enter easeOutQuint, x:" << x;
     return qPow(x - 1, 5) + 1;
 }
 
 QVariantMap Utils::getThemeMapFromPath(const QString &filepath)
 {
-    qDebug() << "Enter getThemeMapFromPath, filepath:" << filepath;
+    qCDebug(appLog) << "Enter getThemeMapFromPath, filepath:" << filepath;
     QFile file(filepath);
     if (!file.open(QIODevice::ReadOnly)) {
-        qDebug() << "Failed to open theme file:" << filepath;
+        qCDebug(appLog) << "Failed to open theme file:" << filepath;
         return QVariantMap();
     }
 
@@ -667,28 +668,28 @@ QVariantMap Utils::getThemeMapFromPath(const QString &filepath)
     QJsonDocument document = QJsonDocument::fromJson(jsonBytes);
     QJsonObject object = document.object();
 
-    qDebug() << "Exit getThemeMapFromPath, object:" << object.toVariantMap();
+    qCDebug(appLog) << "Exit getThemeMapFromPath, object:" << object.toVariantMap();
     return object.toVariantMap();
 }
 
 bool Utils::isMimeTypeSupport(const QString &filepath)
 {
-    qDebug() << "Enter isMimeTypeSupport, filepath:" << filepath;
+    qCDebug(appLog) << "Enter isMimeTypeSupport, filepath:" << filepath;
     QMimeType mime = QMimeDatabase().mimeTypeForFile(filepath, QMimeDatabase::MatchMode::MatchContent);
     QString mimeType = mime.name();
-    qDebug() << "mimeType:" << mimeType;
+    qCDebug(appLog) << "mimeType:" << mimeType;
     if (mimeType.startsWith("text/")) {
-        qDebug() << "mimeType starts with text/";
+        qCDebug(appLog) << "mimeType starts with text/";
         return true;
     }
 
     if (filepath.endsWith("pub")) {
-        qDebug() << "filepath ends with pub";
+        qCDebug(appLog) << "filepath ends with pub";
         return true;
     }
 
     if (SupportedTextMimeTypes.contains(mimeType)) {
-        qDebug() << "mimeType contains textMimeTypes";
+        qCDebug(appLog) << "mimeType contains textMimeTypes";
         return true;
     }
 
@@ -703,26 +704,26 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
                 continue;
             }
             if (mime.inherits(supported)) {
-                qDebug() << "mimeType inherits from supported type:" << supported;
+                qCDebug(appLog) << "mimeType inherits from supported type:" << supported;
                 return true;
             }
         }
     }
 
-    qDebug() << "mimeType does not contain textMimeTypes";
+    qCDebug(appLog) << "mimeType does not contain textMimeTypes";
     return false;
 }
 
 bool Utils::isDraftFile(const QString &filepath)
 {
-    qDebug() << "Enter isDraftFile, filepath:" << filepath;
+    qCDebug(appLog) << "Enter isDraftFile, filepath:" << filepath;
     QString draftDir = QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation)).first())
                            .filePath("blank-files");
     draftDir = QDir::cleanPath(draftDir);
     QString dir = QFileInfo(filepath).dir().absolutePath();
-    qDebug() << "dir:" << dir;
-    qDebug() << "draftDir:" << draftDir;
-    qDebug() << "isDraftFile:" << (dir == draftDir);
+    qCDebug(appLog) << "dir:" << dir;
+    qCDebug(appLog) << "draftDir:" << draftDir;
+    qCDebug(appLog) << "isDraftFile:" << (dir == draftDir);
     return dir == draftDir;
 }
 
@@ -732,25 +733,25 @@ bool Utils::isDraftFile(const QString &filepath)
  */
 bool Utils::isBackupFile(const QString &filepath)
 {
-    qDebug() << "Enter isBackupFile, filepath:" << filepath;
+    qCDebug(appLog) << "Enter isBackupFile, filepath:" << filepath;
     QString backupDir = QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation)).first())
                             .filePath("backup-files");
     QString dir = QFileInfo(filepath).dir().absolutePath();
-    qDebug() << "dir:" << dir;
-    qDebug() << "backupDir:" << backupDir;
-    qDebug() << "isBackupFile:" << (dir == backupDir);
+    qCDebug(appLog) << "dir:" << dir;
+    qCDebug(appLog) << "backupDir:" << backupDir;
+    qCDebug(appLog) << "isBackupFile:" << (dir == backupDir);
     return dir == backupDir;
 }
 
 QStringList Utils::cleanPath(const QStringList &filePaths)
 {
-    qDebug() << "Enter cleanPath, filePaths:" << filePaths;
+    qCDebug(appLog) << "Enter cleanPath, filePaths:" << filePaths;
     QStringList paths;
     for (QString path : filePaths) {
         paths.push_back(QDir::cleanPath(path));
     }
 
-    qDebug() << "Exit cleanPath, paths:" << paths;
+    qCDebug(appLog) << "Exit cleanPath, paths:" << paths;
     return paths;
 }
 
@@ -761,15 +762,15 @@ QStringList Utils::cleanPath(const QStringList &filePaths)
  */
 QString Utils::localDataPath()
 {
-    qDebug() << "Enter localDataPath";
+    qCDebug(appLog) << "Enter localDataPath";
     auto dataPaths = Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation));
-    qDebug() << "dataPaths:" << dataPaths;
+    qCDebug(appLog) << "dataPaths:" << dataPaths;
     return dataPaths.isEmpty() ? QDir::homePath() + "/.local/share/deepin/deepin-editor/" : dataPaths.first();
 }
 
 const QStringList Utils::getEncodeList()
 {
-    qDebug() << "Enter getEncodeList";
+    qCDebug(appLog) << "Enter getEncodeList";
     QStringList encodeList;
 
     for (int mib : QTextCodec::availableMibs()) {
@@ -777,54 +778,54 @@ const QStringList Utils::getEncodeList()
         QString encodeName = QString(codec->name()).toUpper();
 
         if (encodeName != "UTF-8" && !encodeList.contains(encodeName)) {
-            qDebug() << "encodeName:" << encodeName;
+            qCDebug(appLog) << "encodeName:" << encodeName;
             encodeList.append(encodeName);
         }
     }
 
-    qDebug() << "encodeList:" << encodeList;
+    qCDebug(appLog) << "encodeList:" << encodeList;
     encodeList.sort();
     encodeList.prepend("UTF-8");
-    qDebug() << "Exit getEncodeList, encodeList:" << encodeList;
+    qCDebug(appLog) << "Exit getEncodeList, encodeList:" << encodeList;
     return encodeList;
 }
 
 QPixmap Utils::renderSVG(const QString &filePath, const QSize &size, bool bIsScale)
 {
-    qDebug() << "Enter renderSVG, filePath:" << filePath << "size:" << size << "bIsScale:" << bIsScale;
+    qCDebug(appLog) << "Enter renderSVG, filePath:" << filePath << "size:" << size << "bIsScale:" << bIsScale;
     int scaled = 1;
 
     if (qApp->devicePixelRatio() == 1.25 && bIsScale) {
-        qDebug() << "qApp->devicePixelRatio() == 1.25 && bIsScale";
+        qCDebug(appLog) << "qApp->devicePixelRatio() == 1.25 && bIsScale";
         scaled = 2;
     }
 
-    qDebug() << "scaled:" << scaled;
+    qCDebug(appLog) << "scaled:" << scaled;
     QPixmap pixmap(size * scaled);
     pixmap.fill(Qt::transparent);
-    qDebug() << "pixmap.fill(Qt::transparent)";
+    qCDebug(appLog) << "pixmap.fill(Qt::transparent)";
     QImageReader reader;
-    qDebug() << "reader.setFileName(filePath)";
+    qCDebug(appLog) << "reader.setFileName(filePath)";
     reader.setFileName(filePath);
-    qDebug() << "reader.canRead():" << reader.canRead();
+    qCDebug(appLog) << "reader.canRead():" << reader.canRead();
     if (reader.canRead()) {
         reader.setScaledSize(size * scaled);
-        qDebug() << "reader.setScaledSize(size * scaled)";
+        qCDebug(appLog) << "reader.setScaledSize(size * scaled)";
         pixmap = QPixmap::fromImage(reader.read());
-        qDebug() << "pixmap.setDevicePixelRatio(scaled)";
+        qCDebug(appLog) << "pixmap.setDevicePixelRatio(scaled)";
         pixmap.setDevicePixelRatio(scaled);
     } else {
-        qDebug() << "reader.canRead() is false";
+        qCDebug(appLog) << "reader.canRead() is false";
         pixmap.load(filePath);
     }
 
-    qDebug() << "Exit renderSVG, pixmap:" << pixmap;
+    qCDebug(appLog) << "Exit renderSVG, pixmap:" << pixmap;
     return pixmap;
 }
 
 QList<QColor> Utils::getHiglightColorList()
 {
-    qDebug() << "Enter getHiglightColorList";
+    qCDebug(appLog) << "Enter getHiglightColorList";
     QList<QColor> listColor;
     listColor.append(QColor("#FFA503"));
     listColor.append(QColor("#FF1C49"));
@@ -834,43 +835,43 @@ QList<QColor> Utils::getHiglightColorList()
     listColor.append(QColor("#05EA6B"));
     listColor.append(QColor("#FEF144"));
     listColor.append(QColor("#D5D5D1"));
-    qDebug() << "Exit getHiglightColorList, listColor:" << listColor;
+    qCDebug(appLog) << "Exit getHiglightColorList, listColor:" << listColor;
     return listColor;
 }
 
 void Utils::clearChildrenFocus(QObject *objParent)
 {
-    qDebug() << "Enter clearChildrenFocus, objParent:" << objParent;
+    qCDebug(appLog) << "Enter clearChildrenFocus, objParent:" << objParent;
     // 可以获取焦点的控件名称列表
     QStringList foucswidgetlist;
     // foucswidgetlist << "QLineEdit" << TERM_WIDGET_NAME;
 
-    // qDebug() << "checkChildrenFocus start" << objParent->children().size();
+    // qCDebug(appLog) << "checkChildrenFocus start" << objParent->children().size();
     for (QObject *obj : objParent->children()) {
         if (!obj->isWidgetType()) {
-            qDebug() << "obj is not a widget";
+            qCDebug(appLog) << "obj is not a widget";
             continue;
         }
         QWidget *widget = static_cast<QWidget *>(obj);
         if (Qt::NoFocus != widget->focusPolicy()) {
-            qDebug() << "widget->focusPolicy() != Qt::NoFocus";
-            // qDebug() << widget << widget->focusPolicy() << widget->metaObject()->className();
+            qCDebug(appLog) << "widget->focusPolicy() != Qt::NoFocus";
+            // qCDebug(appLog) << widget << widget->focusPolicy() << widget->metaObject()->className();
             if (!foucswidgetlist.contains(widget->metaObject()->className())) {
-                qDebug() << "widget->setFocusPolicy(Qt::NoFocus)";
+                qCDebug(appLog) << "widget->setFocusPolicy(Qt::NoFocus)";
                 widget->setFocusPolicy(Qt::NoFocus);
             }
         }
-        qDebug() << "clearChildrenFocus(obj)";
+        qCDebug(appLog) << "clearChildrenFocus(obj)";
         clearChildrenFocus(obj);
     }
 
-    // qDebug() << "checkChildrenFocus over" << objParent->children().size();
-    qDebug() << "Exit clearChildrenFocus";
+    // qCDebug(appLog) << "checkChildrenFocus over" << objParent->children().size();
+    qCDebug(appLog) << "Exit clearChildrenFocus";
 }
 
 void Utils::clearChildrenFoucusEx(QWidget *pWidget)
 {
-    qDebug() << "Enter clearChildrenFoucusEx, pWidget:" << pWidget;
+    qCDebug(appLog) << "Enter clearChildrenFoucusEx, pWidget:" << pWidget;
     pWidget->clearFocus();
 
     QObjectList childern = pWidget->children();
@@ -880,20 +881,20 @@ void Utils::clearChildrenFoucusEx(QWidget *pWidget)
 
     foreach (QObject *child, childern) {
         if (!child->isWidgetType()) {
-            qDebug() << "child is not a widget";
+            qCDebug(appLog) << "child is not a widget";
             continue;
         }
 
         QWidget *obj = static_cast<QWidget *>(child);
-        qDebug() << "clearChildrenFoucusEx(obj)";
+        qCDebug(appLog) << "clearChildrenFoucusEx(obj)";
         clearChildrenFoucusEx(obj);
     }
-    qDebug() << "Exit clearChildrenFoucusEx";
+    qCDebug(appLog) << "Exit clearChildrenFoucusEx";
 }
 
 void Utils::setChildrenFocus(QWidget *pWidget, Qt::FocusPolicy policy)
 {
-    qDebug() << "Enter setChildrenFocus, pWidget:" << pWidget << "policy:" << policy;
+    qCDebug(appLog) << "Enter setChildrenFocus, pWidget:" << pWidget << "policy:" << policy;
     pWidget->setFocusPolicy(policy);
 
     QObjectList childern = pWidget->children();
@@ -903,30 +904,30 @@ void Utils::setChildrenFocus(QWidget *pWidget, Qt::FocusPolicy policy)
 
     foreach (QObject *child, childern) {
         if (!child->isWidgetType()) {
-            qDebug() << "child is not a widget";
+            qCDebug(appLog) << "child is not a widget";
             continue;
         }
 
         QWidget *obj = static_cast<QWidget *>(child);
-        qDebug() << "setChildrenFocus(obj, policy)";
+        qCDebug(appLog) << "setChildrenFocus(obj, policy)";
         setChildrenFocus(obj, policy);
     }
-    qDebug() << "Exit setChildrenFocus";
+    qCDebug(appLog) << "Exit setChildrenFocus";
 }
 
 int Utils::getProcessCountByName(const char *pstrName)
 {
-    qDebug() << "Enter getProcessCountByName, pstrName:" << pstrName;
+    qCDebug(appLog) << "Enter getProcessCountByName, pstrName:" << pstrName;
 
     if (NULL == pstrName || strlen(pstrName) == 0) {
-        qDebug() << "pstrName is null";
+        qCDebug(appLog) << "pstrName is null";
         return -1;
     }
 
     QProcess process;
     process.start("ps", QStringList() << "-ef");
     if (!process.waitForFinished(5000)) {
-        qDebug() << "ps command timeout";
+        qCDebug(appLog) << "ps command timeout";
         return -1;
     }
 
@@ -940,16 +941,16 @@ int Utils::getProcessCountByName(const char *pstrName)
         }
     }
 
-    qDebug() << "Exit getProcessCountByName, count:" << count;
+    qCDebug(appLog) << "Exit getProcessCountByName, count:" << count;
     return count;
 }
 
 void Utils::killProcessByName(const char *pstrName)
 {
-    qDebug() << "Enter killProcessByName, pstrName:" << pstrName;
+    qCDebug(appLog) << "Enter killProcessByName, pstrName:" << pstrName;
 
     if (pstrName == NULL || strlen(pstrName) == 0) {
-        qDebug() << "pstrName is null or empty";
+        qCDebug(appLog) << "pstrName is null or empty";
         return;
     }
 
@@ -957,22 +958,22 @@ void Utils::killProcessByName(const char *pstrName)
     process.start("killall", QStringList() << QString::fromUtf8(pstrName));
     process.waitForFinished(5000);
 
-    qDebug() << "Exit killProcessByName";
+    qCDebug(appLog) << "Exit killProcessByName";
 }
 
 QString Utils::getStringMD5Hash(const QString &input)
 {
-    qDebug() << "Enter getStringMD5Hash, input:" << input;
+    qCDebug(appLog) << "Enter getStringMD5Hash, input:" << input;
     QByteArray byteArray = input.toUtf8();
-    qDebug() << "byteArray:" << byteArray;
+    qCDebug(appLog) << "byteArray:" << byteArray;
     QByteArray md5Path = QCryptographicHash::hash(byteArray, QCryptographicHash::Md5);
-    qDebug() << "md5Path:" << md5Path;
+    qCDebug(appLog) << "md5Path:" << md5Path;
     return md5Path.toHex();
 }
 
 bool Utils::activeWindowFromDock(quintptr winId)
 {
-    qDebug() << "Enter activeWindowFromDock, winId:" << winId;
+    qCDebug(appLog) << "Enter activeWindowFromDock, winId:" << winId;
     bool bRet = false;
     // 优先采用V23接口
     QDBusInterface dockDbusInterfaceV23(
@@ -980,9 +981,9 @@ bool Utils::activeWindowFromDock(quintptr winId)
     if (dockDbusInterfaceV23.isValid()) {
         QDBusReply<void> reply = dockDbusInterfaceV23.call("ActivateWindow", winId);
         if (!reply.isValid()) {
-            qDebug() << "call v23 org.deepin.dde.daemon.Dock1 failed" << reply.error();
+            qCDebug(appLog) << "call v23 org.deepin.dde.daemon.Dock1 failed" << reply.error();
         } else {
-            qDebug() << "call v23 org.deepin.dde.daemon.Dock1 success";
+            qCDebug(appLog) << "call v23 org.deepin.dde.daemon.Dock1 success";
             return true;
         }
     }
@@ -992,61 +993,61 @@ bool Utils::activeWindowFromDock(quintptr winId)
     if (dockDbusInterfaceV20.isValid() && !bRet) {
         QDBusReply<void> reply = dockDbusInterfaceV20.call("ActivateWindow", winId);
         if (!reply.isValid()) {
-            qDebug() << "call v20 com.deepin.dde.daemon.Dock failed" << reply.error();
+            qCDebug(appLog) << "call v20 com.deepin.dde.daemon.Dock failed" << reply.error();
             bRet = false;
         } else {
-            qDebug() << "call v20 com.deepin.dde.daemon.Dock success";
+            qCDebug(appLog) << "call v20 com.deepin.dde.daemon.Dock success";
             return true;
         }
     }
 
-    qDebug() << "Exit activeWindowFromDock, bRet:" << bRet;
+    qCDebug(appLog) << "Exit activeWindowFromDock, bRet:" << bRet;
     return bRet;
 }
 
 bool Utils::isShareDirAndReadOnly(const QString &filePath)
 {
-    qDebug() << "Enter isShareDirAndReadOnly, filePath:" << filePath;
+    qCDebug(appLog) << "Enter isShareDirAndReadOnly, filePath:" << filePath;
     bool ret = false;
 
     const QString sharePath = "/var/lib/samba/usershares";
     QDir shareDir(sharePath);
     if (shareDir.exists()) {
-        qDebug() << "shareDir exists";
+        qCDebug(appLog) << "shareDir exists";
         QFileInfo fileInfo(filePath);
         auto name = fileInfo.dir().dirName();
         if (shareDir.exists(name)) {
-            qDebug() << "shareDir.exists(name)";
+            qCDebug(appLog) << "shareDir.exists(name)";
             QFile file(sharePath + "/" + name);
             if (file.open(QIODevice::ReadOnly)) {
                 QString fileContent = file.readAll();
-                qDebug() << "fileContent:" << fileContent;
+                qCDebug(appLog) << "fileContent:" << fileContent;
                 // 精确匹配权限字段 ":R"：后跟逗号、行尾或文件末尾，
                 // 避免 contains(":R") 子串误命中 ":RW" 等可写配置
                 if (fileContent.contains(QRegularExpression(":R(,|\\n|$)")))
                     ret = true;
                 file.close();
             } else {
-                qDebug() << "file.open(QIODevice::ReadOnly) failed";
+                qCDebug(appLog) << "file.open(QIODevice::ReadOnly) failed";
             }
         }
     }
 
-    qDebug() << "Exit isShareDirAndReadOnly, ret:" << ret;
+    qCDebug(appLog) << "Exit isShareDirAndReadOnly, ret:" << ret;
     return ret;
 }
 
 QString Utils::getSystemLan()
 {
-    qDebug() << "Enter getSystemLan";
+    qCDebug(appLog) << "Enter getSystemLan";
     if (!m_systemLanguage.isEmpty()) {
-        qDebug() << "m_systemLanguage is not empty";
+        qCDebug(appLog) << "m_systemLanguage is not empty";
         return m_systemLanguage;
     } else {
         switch (getSystemVersion()) {
             case V23:
                 m_systemLanguage = QLocale::system().name();
-                qDebug() << "m_systemLanguage:" << m_systemLanguage;
+                qCDebug(appLog) << "m_systemLanguage:" << m_systemLanguage;
                 break;
             default: {
                 QDBusInterface ie("com.deepin.daemon.LangSelector",
@@ -1054,13 +1055,13 @@ QString Utils::getSystemLan()
                                   "com.deepin.daemon.LangSelector",
                                   QDBusConnection::sessionBus());
                 m_systemLanguage = ie.property("CurrentLocale").toString();
-                qDebug() << "m_systemLanguage:" << m_systemLanguage;
+                qCDebug(appLog) << "m_systemLanguage:" << m_systemLanguage;
                 break;
             }
         }
 
-        qDebug() << "getSystemLan is" << m_systemLanguage;
-        qDebug() << "Exit getSystemLan";
+        qCDebug(appLog) << "getSystemLan is" << m_systemLanguage;
+        qCDebug(appLog) << "Exit getSystemLan";
         return m_systemLanguage;
     }
 }
@@ -1073,13 +1074,13 @@ QString Utils::getSystemLan()
  */
 Utils::SystemVersion Utils::getSystemVersion()
 {
-    qDebug() << "Enter getSystemVersion";
+    qCDebug(appLog) << "Enter getSystemVersion";
     QString version = DSysInfo::majorVersion();
     if (version.toInt() >= 23) {
-        qDebug() << "version.toInt() >= 23";
+        qCDebug(appLog) << "version.toInt() >= 23";
         return V23;
     }
-    qDebug() << "Exit getSystemVersion, version:" << version;
+    qCDebug(appLog) << "Exit getSystemVersion, version:" << version;
     // 其它版本默认V20
     return V20;
 }
@@ -1087,56 +1088,56 @@ Utils::SystemVersion Utils::getSystemVersion()
 // judge whether the protocol is wayland
 bool Utils::isWayland()
 {
-    qDebug() << "Enter isWayland";
+    qCDebug(appLog) << "Enter isWayland";
     static QString protocol;
     if (protocol.isEmpty()) {
         protocol = QProcessEnvironment::systemEnvironment().value("XDG_SESSION_TYPE");
     }
-    qDebug() << "Exit isWayland, protocol:" << protocol;
+    qCDebug(appLog) << "Exit isWayland, protocol:" << protocol;
     return protocol.contains("wayland");
 }
 
 QString Utils::lineFeed(const QString &text, int nWidth, const QFont &font, int nElidedRow)
 {
-    qDebug() << "Enter lineFeed, text:" << text << "nWidth:" << nWidth << "font:" << font << "nElidedRow:" << nElidedRow;
+    qCDebug(appLog) << "Enter lineFeed, text:" << text << "nWidth:" << nWidth << "font:" << font << "nElidedRow:" << nElidedRow;
     if (nElidedRow < 0) {
-        qDebug() << "nElidedRow < 0";
+        qCDebug(appLog) << "nElidedRow < 0";
         nElidedRow = 2;
     }
-    qDebug() << "nElidedRow:" << nElidedRow;
+    qCDebug(appLog) << "nElidedRow:" << nElidedRow;
     QString strText = text;
     QStringList strListLine;
     QFontMetrics fm(font);
     // 一行就直接中间截断显示
     if (1 == nElidedRow) {
-        qDebug() << "1 == nElidedRow";
+        qCDebug(appLog) << "1 == nElidedRow";
         return fm.elidedText(text, Qt::ElideMiddle, nWidth);
     }
-    qDebug() << "strText:" << strText;
+    qCDebug(appLog) << "strText:" << strText;
     if (!strText.isEmpty()) {
         for (int i = 1; i <= strText.size(); i++) {
             if (fm.horizontalAdvance(strText.left(i)) >= nWidth) {
-                qDebug() << "fm.horizontalAdvance(strText.left(i)) >= nWidth";
+                qCDebug(appLog) << "fm.horizontalAdvance(strText.left(i)) >= nWidth";
                 if (strListLine.size() + 1 == nElidedRow) {
-                    qDebug() << "strListLine.size() + 1 == nElidedRow";
+                    qCDebug(appLog) << "strListLine.size() + 1 == nElidedRow";
                     break;
                 }
-                qDebug() << "strListLine.append(strText.left(i - 1))";
+                qCDebug(appLog) << "strListLine.append(strText.left(i - 1))";
                 strListLine.append(strText.left(i - 1));
                 strText = strText.right(strText.size() - i + 1);
-                qDebug() << "strText:" << strText;
+                qCDebug(appLog) << "strText:" << strText;
                 i = 0;
             }
         }
     }
-    qDebug() << "strListLine:" << strListLine;
+    qCDebug(appLog) << "strListLine:" << strListLine;
     // 多行时，对最后一行字符左侧省略
     if (!strListLine.isEmpty()) {
         strText = fm.elidedText(strText, Qt::ElideLeft, nWidth);
         strListLine.append(strText);
         strText = strListLine.join('\n');
     }
-    qDebug() << "Exit lineFeed, strText:" << strText;
+    qCDebug(appLog) << "Exit lineFeed, strText:" << strText;
     return strText;
 }
 
@@ -1150,12 +1151,12 @@ QString Utils::lineFeed(const QString &text, int nWidth, const QFont &font, int 
  */
 Utils::RegionIntersectType Utils::checkRegionIntersect(int x1, int y1, int x2, int y2)
 {
-    qDebug() << "Enter checkRegionIntersect, x1:" << x1 << "y1:" << y1 << "x2:" << x2 << "y2:" << y2;
+    qCDebug(appLog) << "Enter checkRegionIntersect, x1:" << x1 << "y1:" << y1 << "x2:" << x2 << "y2:" << y2;
     if (y1 < x2) {
-        qDebug() << "y1 < x2";
+        qCDebug(appLog) << "y1 < x2";
         return ERight;
     } else if (x1 > y2) {
-        qDebug() << "x1 > y2";
+        qCDebug(appLog) << "x1 > y2";
         return ELeft;
     } else {
         // 区间存在交集，判断交集类型
@@ -1165,20 +1166,20 @@ Utils::RegionIntersectType Utils::checkRegionIntersect(int x1, int y1, int x2, i
         bool outRightBound = y1 < y2;
 
         if (outLeftBound && outRightBound) {
-            qDebug() << "outLeftBound && outRightBound";
+            qCDebug(appLog) << "outLeftBound && outRightBound";
             return EIntersectOutter;
         } else if (outLeftBound) {
-            qDebug() << "outLeftBound";
+            qCDebug(appLog) << "outLeftBound";
             return EIntersectLeft;
         } else if (outRightBound) {
-            qDebug() << "outRightBound";
+            qCDebug(appLog) << "outRightBound";
             return EIntersectRight;
         } else {
-            qDebug() << "else";
+            qCDebug(appLog) << "else";
             return EIntersectInner;
         }
     }
-    qDebug() << "Exit checkRegionIntersect";
+    qCDebug(appLog) << "Exit checkRegionIntersect";
 }
 
 /**
@@ -1187,37 +1188,37 @@ Utils::RegionIntersectType Utils::checkRegionIntersect(int x1, int y1, int x2, i
  */
 QVector<QPair<QString, QStringList>> Utils::getSupportEncoding()
 {
-    qDebug() << "Enter getSupportEncoding";
+    qCDebug(appLog) << "Enter getSupportEncoding";
     static QVector<QPair<QString, QStringList>> s_groupEncodeVec;
     if (s_groupEncodeVec.isEmpty()) {
-        qDebug() << "s_groupEncodeVec is empty";
+        qCDebug(appLog) << "s_groupEncodeVec is empty";
         QVector<QPair<QString, QStringList>> tmpEncodeVec;
 
         QFile file(":/encodes/encodes.ini");
         QString data;
         if (file.open(QIODevice::ReadOnly)) {
-            qDebug() << "file.open(QIODevice::ReadOnly) success";
+            qCDebug(appLog) << "file.open(QIODevice::ReadOnly) success";
             data = QString::fromUtf8(file.readAll());
             file.close();
         } else {
-            qDebug() << "file.open(QIODevice::ReadOnly) failed";
+            qCDebug(appLog) << "file.open(QIODevice::ReadOnly) failed";
         }
-        qDebug() << "data:" << data;
+        qCDebug(appLog) << "data:" << data;
         QTextStream readStream(&data, QIODevice::ReadOnly);
         while (!readStream.atEnd()) {
-            qDebug() << "readStream.readLine()";
+            qCDebug(appLog) << "readStream.readLine()";
             QString group = readStream.readLine();
-            qDebug() << "group:" << group;
+            qCDebug(appLog) << "group:" << group;
             if (!group.startsWith('[') || !group.endsWith(']')) {
-                qWarning() << "unexpected group line, skipped:" << group;
+                qCWarning(appLog) << "unexpected group line, skipped:" << group;
                 continue;
             }
             QString key = group.mid(1, group.length() - 2).trimmed();
             QString encodes = readStream.readLine();
-            qDebug() << "encodes:" << encodes;
+            qCDebug(appLog) << "encodes:" << encodes;
             int eqIdx = encodes.indexOf('=');
             if (eqIdx == -1) {
-                qWarning() << "unexpected encodes line, skipped:" << encodes;
+                qCWarning(appLog) << "unexpected encodes line, skipped:" << encodes;
                 continue;
             }
             QString value = encodes.mid(eqIdx + 1).trimmed();
@@ -1229,13 +1230,13 @@ QVector<QPair<QString, QStringList>> Utils::getSupportEncoding()
                     encodeNames.append(name);
                 }
             }
-            qDebug() << "value:" << value;
+            qCDebug(appLog) << "value:" << value;
             tmpEncodeVec.append(QPair<QString, QStringList>(key, encodeNames));
         }
-        qDebug() << "tmpEncodeVec:" << tmpEncodeVec;
+        qCDebug(appLog) << "tmpEncodeVec:" << tmpEncodeVec;
         s_groupEncodeVec = tmpEncodeVec;
     }
-    qDebug() << "Exit getSupportEncoding, s_groupEncodeVec:" << s_groupEncodeVec;
+    qCDebug(appLog) << "Exit getSupportEncoding, s_groupEncodeVec:" << s_groupEncodeVec;
     return s_groupEncodeVec;
 }
 
@@ -1244,58 +1245,58 @@ QVector<QPair<QString, QStringList>> Utils::getSupportEncoding()
  */
 QStringList Utils::getSupportEncodingList()
 {
-    qDebug() << "Enter getSupportEncodingList";
+    qCDebug(appLog) << "Enter getSupportEncodingList";
     QStringList encodingList;
     auto supportEncoding = getSupportEncoding();
-    qDebug() << "supportEncoding:" << supportEncoding;
+    qCDebug(appLog) << "supportEncoding:" << supportEncoding;
     for (auto encodingData : supportEncoding) {
         encodingList.append(encodingData.second);
     }
     std::sort(encodingList.begin(), encodingList.end());
-    qDebug() << "Exit getSupportEncodingList, encodingList:" << encodingList;
+    qCDebug(appLog) << "Exit getSupportEncodingList, encodingList:" << encodingList;
     return encodingList;
 }
 
 QString Utils::libPath(const QString &strlib)
 {
-    qDebug() << "Enter libPath, strlib:" << strlib;
+    qCDebug(appLog) << "Enter libPath, strlib:" << strlib;
     QDir dir;
     QString path = QLibraryInfo::location(QLibraryInfo::LibrariesPath);
     dir.setPath(path);
     QStringList list =
         dir.entryList(QStringList() << (strlib + "*"), QDir::NoDotAndDotDot | QDir::Files);  // filter name with strlib
-    qDebug() << "list:" << list;
+    qCDebug(appLog) << "list:" << list;
     if (list.contains(strlib)) {
-        qDebug() << "list contains strlib";
+        qCDebug(appLog) << "list contains strlib";
         return strlib;
     }
-    qDebug() << "list does not contain strlib";
+    qCDebug(appLog) << "list does not contain strlib";
     list.sort();
-    qDebug() << "list sorted:" << list;
+    qCDebug(appLog) << "list sorted:" << list;
     if (list.size() <= 0) {
-        qDebug() << "list size <= 0";
+        qCDebug(appLog) << "list size <= 0";
         return "";
     }
-    qDebug() << "list size > 0";
+    qCDebug(appLog) << "list size > 0";
     return list.last();
 }
 
 void Utils::loadCustomDLL()
 {
-    qDebug() << "Enter loadCustomDLL";
+    qCDebug(appLog) << "Enter loadCustomDLL";
     // 解析ZPD定制需求提供的库libzpdcallback.so
     LoadLibNames tmp;
     QByteArray zpdDll = Utils::libPath("libzpdcallback.so").toLatin1();
-    qDebug() << "zpdDll:" << zpdDll;
+    qCDebug(appLog) << "zpdDll:" << zpdDll;
     if (QFile::exists(zpdDll)) {
-        qDebug() << "QFile::exists(zpdDll)";
+        qCDebug(appLog) << "QFile::exists(zpdDll)";
         tmp.chZPDDLL = zpdDll.data();
     } else {
-        qDebug() << "QFile::exists(zpdDll) failed";
+        qCDebug(appLog) << "QFile::exists(zpdDll) failed";
         tmp.chZPDDLL = NULL;
     }
     setLibNames(tmp);
-    qDebug() << "Exit loadCustomDLL";
+    qCDebug(appLog) << "Exit loadCustomDLL";
 }
 
 /**
@@ -1305,21 +1306,21 @@ void Utils::loadCustomDLL()
  */
 bool Utils::enableClipCopy(const QString &filePath)
 {
-    qDebug() << "Enter enableClipCopy, filePath:" << filePath;
+    qCDebug(appLog) << "Enter enableClipCopy, filePath:" << filePath;
 #if _ZPD_
     if (getLoadZPDLibsInstance()->m_document_clip_copy) {
         // intercept 输出为1,拦截操作
         static const int disableFlag = 1;
         int intercept = 1;
         getLoadZPDLibsInstance()->m_document_clip_copy(filePath.toUtf8().data(), &intercept);
-        qDebug() << "intercept:" << intercept;
+        qCDebug(appLog) << "intercept:" << intercept;
         if (disableFlag == intercept) {
-            qWarning() << qPrintable("ZPD access control! Disable clip or copy document!");
+            qCWarning(appLog) << qPrintable("ZPD access control! Disable clip or copy document!");
             return false;
         }
     }
 #endif
-    qDebug() << "Exit enableClipCopy, return true";
+    qCDebug(appLog) << "Exit enableClipCopy, return true";
     return true;
 }
 
@@ -1329,16 +1330,16 @@ bool Utils::enableClipCopy(const QString &filePath)
  */
 void Utils::recordCloseFile(const QString &filePath)
 {
-    qDebug() << "Enter recordCloseFile, filePath:" << filePath;
+    qCDebug(appLog) << "Enter recordCloseFile, filePath:" << filePath;
 #if _ZPD_
     if (getLoadZPDLibsInstance()->m_document_close) {
-        qDebug() << "getLoadZPDLibsInstance()->m_document_close";
+        qCDebug(appLog) << "getLoadZPDLibsInstance()->m_document_close";
         getLoadZPDLibsInstance()->m_document_close(filePath.toUtf8().data());
     } else {
-        qDebug() << "getLoadZPDLibsInstance()->m_document_close is null";
+        qCDebug(appLog) << "getLoadZPDLibsInstance()->m_document_close is null";
     }
 #endif
-    qDebug() << "Exit recordCloseFile";
+    qCDebug(appLog) << "Exit recordCloseFile";
 }
 
 /**
@@ -1348,7 +1349,7 @@ void Utils::recordCloseFile(const QString &filePath)
  */
 void Utils::sendFloatMessageFixedFont(QWidget *par, const QIcon &icon, const QString &message)
 {
-    qDebug() << "Enter sendFloatMessageFixedFont, par:" << par << "icon:" << icon << "message:" << message;
+    qCDebug(appLog) << "Enter sendFloatMessageFixedFont, par:" << par << "icon:" << icon << "message:" << message;
     // 以下代码和 DMessageManager::sendMessage() 流程一致。
     if (QWidget *content = par->findChild<QWidget *>("_d_message_manager_content", Qt::FindDirectChildrenOnly)) {
         auto msgWidgets = content->findChildren<DFloatingMessage *>(QString(), Qt::FindDirectChildrenOnly);
@@ -1358,7 +1359,7 @@ void Utils::sendFloatMessageFixedFont(QWidget *par, const QIcon &icon, const QSt
 
         // TransientType 类型的通知消息，最多只允许同时显示三个
         if (text_message_count >= 3) {
-            qDebug() << "text_message_count >= 3";
+            qCDebug(appLog) << "text_message_count >= 3";
             return;
         }
     }
@@ -1369,16 +1370,16 @@ void Utils::sendFloatMessageFixedFont(QWidget *par, const QIcon &icon, const QSt
     floMsg->setIcon(icon);
     floMsg->setMessage(message);
     floMsg->setFont(qApp->font());
-    qDebug() << "floMsg:" << floMsg;
+    qCDebug(appLog) << "floMsg:" << floMsg;
 #ifdef DTKWIDGET_CLASS_DSizeMode
     // 绑定 qApp 字体变更信号
     QObject::connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::fontChanged, floMsg, [=](const QFont &font) {
         floMsg->setFont(font);
     });
 #endif
-    qDebug() << "DMessageManager::instance()->sendMessage(par, floMsg)";
+    qCDebug(appLog) << "DMessageManager::instance()->sendMessage(par, floMsg)";
     DMessageManager::instance()->sendMessage(par, floMsg);
-    qDebug() << "Exit sendFloatMessageFixedFont";
+    qCDebug(appLog) << "Exit sendFloatMessageFixedFont";
 }
 
 /**
@@ -1389,7 +1390,7 @@ void Utils::sendFloatMessageFixedFont(QWidget *par, const QIcon &icon, const QSt
  */
 bool Utils::getSystemMemoryInfo(qlonglong &totalMemory, qlonglong &freeMemory)
 {
-    qDebug() << "Enter getSystemMemoryInfo";
+    qCDebug(appLog) << "Enter getSystemMemoryInfo";
     qlonglong memFree = 0;
     qlonglong buffers = 0;
     qlonglong cached = 0;
@@ -1397,7 +1398,7 @@ bool Utils::getSystemMemoryInfo(qlonglong &totalMemory, qlonglong &freeMemory)
 
     QFile file(PROC_MEMINFO_PATH);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qWarning() << "Utils: Failed to open" << PROC_MEMINFO_PATH << "for memory check.";
+        qCWarning(appLog) << "Utils: Failed to open" << PROC_MEMINFO_PATH << "for memory check.";
         return false;
     }
 
@@ -1410,27 +1411,27 @@ bool Utils::getSystemMemoryInfo(qlonglong &totalMemory, qlonglong &freeMemory)
         line = stream.readLine();
         if (line.startsWith("MemTotal:")) {
             totalMemory = line.section(':', 1, 1).trimmed().section(' ', 0, 0).toLongLong(&valueOk);
-            qDebug() << "totalMemory:" << totalMemory;
+            qCDebug(appLog) << "totalMemory:" << totalMemory;
         } else if (line.startsWith("MemFree:")) {
             memFree = line.section(':', 1, 1).trimmed().section(' ', 0, 0).toLongLong(&valueOk);
-            qDebug() << "memFree:" << memFree;
+            qCDebug(appLog) << "memFree:" << memFree;
         } else if (line.startsWith("Buffers:")) {
             buffers = line.section(':', 1, 1).trimmed().section(' ', 0, 0).toLongLong(&valueOk);
-            qDebug() << "buffers:" << buffers;
+            qCDebug(appLog) << "buffers:" << buffers;
         } else if (line.startsWith("Cached:")) {
             cached = line.section(':', 1, 1).trimmed().section(' ', 0, 0).toLongLong(&valueOk);
-            qDebug() << "cached:" << cached;
+            qCDebug(appLog) << "cached:" << cached;
         } else if (line.startsWith("MemAvailable:")) {
             freeMemory = line.section(':', 1, 1).trimmed().section(' ', 0, 0).toLongLong(&valueOk);
-            qDebug() << "freeMemory:" << freeMemory;
+            qCDebug(appLog) << "freeMemory:" << freeMemory;
             break;
         }
         if (stream.atEnd() && freeMemory == 0) {
             freeMemory = memFree + buffers + cached;
-            qDebug() << "freeMemory:" << freeMemory;
+            qCDebug(appLog) << "freeMemory:" << freeMemory;
         }
     }
-    qDebug() << "Exit getSystemMemoryInfo, totalMemory:" << totalMemory << "freeMemory:" << freeMemory;
+    qCDebug(appLog) << "Exit getSystemMemoryInfo, totalMemory:" << totalMemory << "freeMemory:" << freeMemory;
     return (totalMemory > 0 && freeMemory > 0);
 }
 
@@ -1443,14 +1444,14 @@ bool Utils::getSystemMemoryInfo(qlonglong &totalMemory, qlonglong &freeMemory)
  */
 bool Utils::isMemorySufficientForOperation(OperationType operationType, qlonglong operationDataSize, qlonglong currentDocumentSize)
 {
-    qDebug() << "Enter isMemorySufficientForOperation, operationType:" << operationType << "operationDataSize:" << operationDataSize << "currentDocumentSize:" << currentDocumentSize;
+    qCDebug(appLog) << "Enter isMemorySufficientForOperation, operationType:" << operationType << "operationDataSize:" << operationDataSize << "currentDocumentSize:" << currentDocumentSize;
 
     qlonglong memoryFree = 0;
     qlonglong memoryTotal = 0;
 
     if (!getSystemMemoryInfo(memoryTotal, memoryFree)) {
         // Conservatively allow the operation if memory info cannot be read
-        qWarning() << "Failed to get system memory info, conservatively allowing operation";
+        qCWarning(appLog) << "Failed to get system memory info, conservatively allowing operation";
         return true;
     }
 
@@ -1463,7 +1464,7 @@ bool Utils::isMemorySufficientForOperation(OperationType operationType, qlonglon
         case OperationType::RawOperation:
             // Raw operation: Directly compare the data size with available memory
             if (operationDataSize > availableMemoryBytes) {
-                qWarning() << "Utils: Insufficient memory for raw operation. Needed:" << operationDataSize << "Available:" << availableMemoryBytes;
+                qCWarning(appLog) << "Utils: Insufficient memory for raw operation. Needed:" << operationDataSize << "Available:" << availableMemoryBytes;
                 return false;
             }
             break;
@@ -1472,7 +1473,7 @@ bool Utils::isMemorySufficientForOperation(OperationType operationType, qlonglon
             // Copy operation: Estimated memory consumption = data size * factor
             qlonglong estimatedMemoryNeeded = operationDataSize * COPY_CONSUME_MEMORY_MULTIPLE;
             if (estimatedMemoryNeeded > availableMemoryBytes) {
-                qWarning() << "Utils: Insufficient memory for copy operation. Needed(est):" << estimatedMemoryNeeded << "Available:" << availableMemoryBytes;
+                qCWarning(appLog) << "Utils: Insufficient memory for copy operation. Needed(est):" << estimatedMemoryNeeded << "Available:" << availableMemoryBytes;
                 return false;
             }
             break;
@@ -1486,13 +1487,13 @@ bool Utils::isMemorySufficientForOperation(OperationType operationType, qlonglon
 
             // Check if pasting the data itself would cause insufficient memory
             if (estimatedMemoryNeededForPaste > availableMemoryBytes) {
-                qWarning() << "Utils: Insufficient memory for paste operation (paste data). Needed(est):" << estimatedMemoryNeededForPaste << "Available:" << availableMemoryBytes;
+                qCWarning(appLog) << "Utils: Insufficient memory for paste operation (paste data). Needed(est):" << estimatedMemoryNeededForPaste << "Available:" << availableMemoryBytes;
                 return false;
             }
 
             // Check if the estimated total document size after paste exceeds total system memory
             if (estimatedTotalDocMemory > totalMemoryBytes) {
-                qWarning() << "Utils: Paste operation might exceed total system memory. Estimated total doc memory:" << estimatedTotalDocMemory << "Total system memory:" << totalMemoryBytes;
+                qCWarning(appLog) << "Utils: Paste operation might exceed total system memory. Estimated total doc memory:" << estimatedTotalDocMemory << "Total system memory:" << totalMemoryBytes;
                 return false;
             }
 
@@ -1500,17 +1501,17 @@ bool Utils::isMemorySufficientForOperation(OperationType operationType, qlonglon
             const qlonglong DOC_SIZE_LIMIT_800MB = 800LL * DATA_SIZE_1024 * DATA_SIZE_1024;
             const qlonglong PASTE_SIZE_LIMIT_500KB = 500LL * DATA_SIZE_1024;
             if (currentDocumentSize > DOC_SIZE_LIMIT_800MB && operationDataSize > PASTE_SIZE_LIMIT_500KB) {
-                qWarning() << "Utils: Paste operation restricted. Document size exceeds 800MB and paste data exceeds 500KB.";
+                qCWarning(appLog) << "Utils: Paste operation restricted. Document size exceeds 800MB and paste data exceeds 500KB.";
                 return false;
             }
             break;
         }
 
         default:
-            qDebug() << "default";
+            qCDebug(appLog) << "default";
             break;
     }
 
-    qDebug() << "Exit isMemorySufficientForOperation, return true";
+    qCDebug(appLog) << "Exit isMemorySufficientForOperation, return true";
     return true; // Memory is sufficient
 }

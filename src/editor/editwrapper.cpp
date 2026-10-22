@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "ddlog.h"
 #include "editwrapper.h"
 #include "leftareaoftextedit.h"
 #include "drecentmanager.h"
@@ -71,24 +72,24 @@ public:
 ParseFileEvent::ParseFileEvent()
     : QEvent(static_cast<QEvent::Type>(EParseFile))
 {
-    qDebug() << "ParseFileEvent constructor";
+    qCDebug(appLog) << "ParseFileEvent constructor";
 }
 
 ParseFileEvent::~ParseFileEvent()
 {
-    qDebug() << "ParseFileEvent destructor";
+    qCDebug(appLog) << "ParseFileEvent destructor";
 }
 
 ParseFileEvent *ParseFileEvent::clone() const
 {
-    qDebug() << "ParseFileEvent clone";
+    qCDebug(appLog) << "ParseFileEvent clone";
     // 创建克隆对象，复制数据(浅拷贝)
     ParseFileEvent *cloneEvent = new ParseFileEvent;
     cloneEvent->m_contentData = this->m_contentData;
     cloneEvent->m_alreadyReadOffset = this->m_alreadyReadOffset;
     cloneEvent->m_cursor = this->m_cursor;
     cloneEvent->m_codec = this->m_codec;
-    qDebug() << "ParseFileEvent clone exit";
+    qCDebug(appLog) << "ParseFileEvent clone exit";
     return cloneEvent;
 }
 
@@ -101,7 +102,7 @@ EditWrapper::EditWrapper(Window *window, QWidget *parent)
       m_pWaringNotices(new WarningNotices(WarningNotices::ResidentType, this))
 
 {
-    qDebug() << "EditWrapper constructor";
+    qCDebug(appLog) << "EditWrapper constructor";
     // 更新单独添加的高亮格式文件
     m_Repository.addCustomSearchPath(KF5_HIGHLIGHT_PATH);
 
@@ -182,30 +183,30 @@ EditWrapper::EditWrapper(Window *window, QWidget *parent)
     connect(m_pWaringNotices, &WarningNotices::editAnywayBtnClicked, this, &EditWrapper::onEditAnyway);
     // NOTE: 文本高亮会触发重新布局，与界面布局(拖拽、放大窗口)变更时的布局操作冲突，因此调整更新顺序，在布局后刷新高亮
     connect(m_pTextEdit->verticalScrollBar(), &QScrollBar::valueChanged, this, [this](int) {
-        qDebug() << "EditWrapper connect verticalScrollBar valueChanged";
+        qCDebug(appLog) << "EditWrapper connect verticalScrollBar valueChanged";
         OnUpdateHighlighter();
         if ((m_pWindow->findBarIsVisiable() || m_pWindow->replaceBarIsVisiable()) &&
                 (QString::compare(m_pWindow->getKeywordForSearchAll(), m_pWindow->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
-            qDebug() << "EditWrapper connect verticalScrollBar valueChanged, highlightKeywordInView";
+            qCDebug(appLog) << "EditWrapper connect verticalScrollBar valueChanged, highlightKeywordInView";
             m_pTextEdit->highlightKeywordInView(m_pWindow->getKeywordForSearchAll());
         }
 
         m_pTextEdit->markAllKeywordInView();
     }, Qt::QueuedConnection);
-    qDebug() << "EditWrapper constructor exit";
+    qCDebug(appLog) << "EditWrapper constructor exit";
 }
 
 EditWrapper::~EditWrapper()
 {
-    qDebug() << "EditWrapper destructor";
+    qCDebug(appLog) << "EditWrapper destructor";
     if (m_pTextEdit != nullptr) {
-        qDebug() << "EditWrapper destructor, m_pTextEdit not nullptr";
+        qCDebug(appLog) << "EditWrapper destructor, m_pTextEdit not nullptr";
         disconnect(m_pTextEdit);
         delete m_pTextEdit;
         m_pTextEdit = nullptr;
     }
     if (m_pBottomBar != nullptr) {
-        qDebug() << "EditWrapper destructor, m_pBottomBar not nullptr";
+        qCDebug(appLog) << "EditWrapper destructor, m_pBottomBar not nullptr";
         disconnect(m_pBottomBar);
         delete m_pBottomBar;
         m_pBottomBar = nullptr;
@@ -216,31 +217,31 @@ EditWrapper::~EditWrapper()
 //        delete m_pWaringNotices;
 //        m_pWaringNotices = nullptr;
 //    }
-    qDebug() << "EditWrapper destructor exit";
+    qCDebug(appLog) << "EditWrapper destructor exit";
 }
 
 void EditWrapper::setQuitFlag()
 {
-    qDebug() << "EditWrapper setQuitFlag";
+    qCDebug(appLog) << "EditWrapper setQuitFlag";
     m_bQuit = true;
-    qDebug() << "EditWrapper setQuitFlag exit";
+    qCDebug(appLog) << "EditWrapper setQuitFlag exit";
 }
 
 bool EditWrapper::isQuit()
 {
-    qDebug() << "EditWrapper isQuit";
+    qCDebug(appLog) << "EditWrapper isQuit";
     return m_bQuit;
 }
 
 bool EditWrapper::getFileLoading()
 {
-    qDebug() << "EditWrapper getFileLoading";
+    qCDebug(appLog) << "EditWrapper getFileLoading";
     return (m_bQuit || m_bFileLoading);
 }
 
 void EditWrapper::openFile(const QString &filepath, QString qstrTruePath, bool bIsTemFile)
 {
-    qDebug() << "Opening file:" << filepath << "Real path:" << qstrTruePath << "Is temp:" << bIsTemFile;
+    qCDebug(appLog) << "Opening file:" << filepath << "Real path:" << qstrTruePath << "Is temp:" << bIsTemFile;
 
     m_bIsTemFile = bIsTemFile;
     // update file path.
@@ -251,17 +252,17 @@ void EditWrapper::openFile(const QString &filepath, QString qstrTruePath, bool b
 
     if (!bIsTemFile && !isDraftFile()) {
         QString absPath = QFileInfo(qstrTruePath).absolutePath();
-        qDebug() << "EditWrapper openFile, Setting save paths to:" << absPath;
+        qCDebug(appLog) << "EditWrapper openFile, Setting save paths to:" << absPath;
         Settings::instance()->setSavePath(PathSettingWgt::LastOptBox, absPath);
         Settings::instance()->setSavePath(PathSettingWgt::CurFileBox, absPath);
     }
 
     FileLoadThread *thread = new FileLoadThread(filepath);
-    qDebug() << "Created file load thread for:" << filepath;
+    qCDebug(appLog) << "Created file load thread for:" << filepath;
     // 优先使用历史记录的编码
     QByteArray storedEncode = TextEdit::getStoredEncode(filepath);
     if (!storedEncode.isEmpty()) {
-        qDebug() << "Using stored encoding from history:" << storedEncode;
+        qCDebug(appLog) << "Using stored encoding from history:" << storedEncode;
         thread->setEncodeHint(storedEncode);
     }
     // begin to load the file.
@@ -279,39 +280,39 @@ void EditWrapper::openFile(const QString &filepath, QString qstrTruePath, bool b
  */
 bool EditWrapper::readFile(QByteArray encode)
 {
-    qDebug() << "Reading file with encoding:" << encode;
+    qCDebug(appLog) << "Reading file with encoding:" << encode;
     QString filePath = m_pTextEdit->getTruePath();
-    qDebug() << "Reading file:" << filePath << "with encode:" << encode;
+    qCDebug(appLog) << "Reading file:" << filePath << "with encode:" << encode;
 
     QFile file(filePath);
     if (file.open(QIODevice::ReadOnly)) {
-        qDebug() << "File opened successfully";
+        qCDebug(appLog) << "File opened successfully";
         QByteArray fileContent = file.readAll();
         QByteArray newEncode = encode;
         if (newEncode.isEmpty()) {
-            qDebug() << "Auto detecting file encoding";
+            qCDebug(appLog) << "Auto detecting file encoding";
             // 接口修改，补充文件头内容，最多读取1MB文件头数据
             newEncode = DetectCode::GetFileEncodingFormat(
                             m_pTextEdit->getFilePath(), fileContent.left(DATA_SIZE_1024 * DATA_SIZE_1024));
-            qDebug() << "Detected file encoding:" << newEncode;
+            qCDebug(appLog) << "Detected file encoding:" << newEncode;
             m_sFirstEncode = newEncode;
         }
 
         QByteArray Outdata;
         bool encodeSuccess = DetectCode::ChangeFileEncodingFormat(fileContent, Outdata, newEncode, QString("UTF-8"));
         if (!encodeSuccess) {
-            qWarning() << "EditWrapper readFile, Failed to convert file encoding";
+            qCWarning(appLog) << "EditWrapper readFile, Failed to convert file encoding";
             return false;
         }
-        qDebug() << "File encoding converted successfully";
+        qCDebug(appLog) << "File encoding converted successfully";
         loadContent(Outdata);
         file.close();
         m_sCurEncode = newEncode;
         updateModifyStatus(false);
-        qDebug() << "EditWrapper readFile exit, return true";
+        qCDebug(appLog) << "EditWrapper readFile exit, return true";
         return true;
     }
-    qDebug() << "EditWrapper readFile exit, return false";
+    qCDebug(appLog) << "EditWrapper readFile exit, return false";
     return false;
 }
 
@@ -323,7 +324,7 @@ bool EditWrapper::readFile(QByteArray encode)
  */
 bool EditWrapper::saveAsFile(const QString &newFilePath, const QByteArray &encodeName)
 {
-    qDebug() << "Attempting to save file to:" << newFilePath << "with encoding:" << encodeName;
+    qCDebug(appLog) << "Attempting to save file to:" << newFilePath << "with encoding:" << encodeName;
 
     // Use TextFileSaver for safe file saving
     QPointer<QObject> guard(this);
@@ -338,7 +339,7 @@ bool EditWrapper::saveAsFile(const QString &newFilePath, const QByteArray &encod
         return false;
     }
     if (!saveSuccess) {
-        qWarning() << "Failed to save file:" << newFilePath << "Error:" << saver.errorString();
+        qCWarning(appLog) << "Failed to save file:" << newFilePath << "Error:" << saver.errorString();
         QWidget *curWidget = this->window()->getStackedWgt()->currentWidget();
         if (curWidget) {
             DMessageManager::instance()->sendMessage(
@@ -347,20 +348,20 @@ bool EditWrapper::saveAsFile(const QString &newFilePath, const QByteArray &encod
                 QString(tr("You do not have permission to save %1")).arg(QFileInfo(newFilePath).fileName())
             );
         }
-        qDebug() << "EditWrapper saveAsFile, Failed to save file:" << newFilePath << "Error:" << saver.errorString();
+        qCDebug(appLog) << "EditWrapper saveAsFile, Failed to save file:" << newFilePath << "Error:" << saver.errorString();
         return false;
     }
 
     QFileInfo fi(filePath());
     m_tModifiedDateTime = fi.lastModified();
 
-    qDebug() << "EditWrapper saveAsFile, save file success, return true";
+    qCDebug(appLog) << "EditWrapper saveAsFile, save file success, return true";
     return true;
 }
 
 bool EditWrapper::saveAsFile()
 {
-    qDebug() << "EditWrapper saveAsFile";
+    qCDebug(appLog) << "EditWrapper saveAsFile";
     // Create save file dialog
     DFileDialog dialog(this, tr("Save"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
@@ -375,7 +376,7 @@ bool EditWrapper::saveAsFile()
     if (QDialog::Accepted == mode) {
         const QString newFilePath = dialog.selectedFiles().value(0);
         if (newFilePath.isEmpty()) {
-            qDebug() << "EditWrapper saveAsFile, newFilePath is empty, return false";
+            qCDebug(appLog) << "EditWrapper saveAsFile, newFilePath is empty, return false";
             return false;
         }
 
@@ -387,14 +388,14 @@ bool EditWrapper::saveAsFile()
         saver.setQuitFlag(&m_bQuit);
 
         if (!saver.save()) {
-            qWarning() << "EditWrapper saveAsFile, Failed to save file:" << saver.errorString();
+            qCWarning(appLog) << "EditWrapper saveAsFile, Failed to save file:" << saver.errorString();
             return false;
         }
-        qDebug() << "EditWrapper saveAsFile, save file success, return true";
+        qCDebug(appLog) << "EditWrapper saveAsFile, save file success, return true";
         return true;
     }
 
-    qDebug() << "EditWrapper saveAsFile, save file failed, return false";
+    qCDebug(appLog) << "EditWrapper saveAsFile, save file failed, return false";
     return false;
 }
 
@@ -405,17 +406,17 @@ bool EditWrapper::saveAsFile()
  */
 bool EditWrapper::reloadFileEncode(QByteArray encode)
 {
-    qDebug() << "Reloading file with new encoding:" << encode.size();
+    qCDebug(appLog) << "Reloading file with new encoding:" << encode.size();
 
     //切换编码相同不重写加载
     if (m_sCurEncode == encode) {
-        qDebug() << "Encoding unchanged, skipping reload";
+        qCDebug(appLog) << "Encoding unchanged, skipping reload";
         return false;
     }
 
     //草稿文件 空白文件不保存
     if (Utils::isDraftFile(m_pTextEdit->getFilePath()) &&  m_pTextEdit->toPlainText().isEmpty()) {
-        qDebug() << "EditWrapper reloadFileEncode, isDraftFile and toPlainText is empty, return true";
+        qCDebug(appLog) << "EditWrapper reloadFileEncode, isDraftFile and toPlainText is empty, return true";
         m_sCurEncode = encode;
         m_sFirstEncode = encode;
         return true;
@@ -425,13 +426,13 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
     auto tabname = this->window()->getTabbar()->currentName();
     bool hasFlag = false;
     if (tabname.size() > 0 && "*" == tabname[0]) {
-        qDebug() << "EditWrapper reloadFileEncode, tabname is not empty and tabname[0] is *, hasFlag is true";
+        qCDebug(appLog) << "EditWrapper reloadFileEncode, tabname is not empty and tabname[0] is *, hasFlag is true";
         hasFlag = true;
     }
 
     //1.如果修改切换编码提示用户是否保存,不保存重新打开文件读取.2.没有修改是否另存为
     if (m_pTextEdit->getModified() || hasFlag) {
-        qDebug() << "EditWrapper reloadFileEncode, m_pTextEdit->getModified() or hasFlag is true";
+        qCDebug(appLog) << "EditWrapper reloadFileEncode, m_pTextEdit->getModified() or hasFlag is true";
         DDialog *dialog = new DDialog(tr("Encoding changed. Do you want to save the file now?"), "", this);
         //dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnBottomHint);
         dialog->setIcon(QIcon::fromTheme("deepin-editor"));
@@ -442,7 +443,7 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
 
         //关闭对话框
         if (res == 0) {
-            qDebug() << "EditWrapper reloadFileEncode, res is 0, return false";
+            qCDebug(appLog) << "EditWrapper reloadFileEncode, res is 0, return false";
             return false;
         }
 
@@ -457,44 +458,44 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
 
         //保存
         if (res == 1) {
-            qDebug() << "EditWrapper reloadFileEncode, res is 1, save file";
+            qCDebug(appLog) << "EditWrapper reloadFileEncode, res is 1, save file";
             // 保存文件前缓存当前文件的编码格式，文件将按之前的编码格式保存
             QString tempEncode = m_sCurEncode;
 
             //草稿文件
             bool reloadSucc = false;
             if (Utils::isDraftFile(m_pTextEdit->getFilePath())) {
-                qDebug() << "EditWrapper reloadFileEncode, Utils::isDraftFile(m_pTextEdit->getFilePath())";
+                qCDebug(appLog) << "EditWrapper reloadFileEncode, Utils::isDraftFile(m_pTextEdit->getFilePath())";
                 QString newFilePath;
                 if (saveDraftFile(newFilePath)) {
-                    qDebug() << "EditWrapper reloadFileEncode, saveDraftFile(newFilePath) success";
+                    qCDebug(appLog) << "EditWrapper reloadFileEncode, saveDraftFile(newFilePath) success";
                     reloadSucc = readFile(encode);
                 }
             } else {
-                qDebug() << "EditWrapper reloadFileEncode, !Utils::isDraftFile(m_pTextEdit->getFilePath())";
+                qCDebug(appLog) << "EditWrapper reloadFileEncode, !Utils::isDraftFile(m_pTextEdit->getFilePath())";
                 if (this->window()->saveAsFile()) {
-                    qDebug() << "EditWrapper reloadFileEncode, this->window()->saveAsFile() success";
+                    qCDebug(appLog) << "EditWrapper reloadFileEncode, this->window()->saveAsFile() success";
                     reloadSucc = readFile(encode);
                 }
             }
 
             if (reloadSucc) {
-                qDebug() << "EditWrapper reloadFileEncode, reloadSucc is true";
+                qCDebug(appLog) << "EditWrapper reloadFileEncode, reloadSucc is true";
                 // 保存成功，更新编码格式
                 m_pBottomBar->setEncodeName(encode);
             } else {
-                qDebug() << "EditWrapper reloadFileEncode, reloadSucc is false";
+                qCDebug(appLog) << "EditWrapper reloadFileEncode, reloadSucc is false";
                 // 未成功保存，复位编码格式
                 m_sCurEncode = tempEncode;
             }
-            qDebug() << "EditWrapper reloadFileEncode, reloadSucc:" << reloadSucc;
+            qCDebug(appLog) << "EditWrapper reloadFileEncode, reloadSucc:" << reloadSucc;
             return reloadSucc;
         }
 
-        qDebug() << "EditWrapper reloadFileEncode, return false";
+        qCDebug(appLog) << "EditWrapper reloadFileEncode, return false";
         return false;
     } else {
-        qDebug() << "EditWrapper reloadFileEncode, readFile(encode)";
+        qCDebug(appLog) << "EditWrapper reloadFileEncode, readFile(encode)";
         return readFile(encode);
     }
 }
@@ -506,18 +507,18 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
  */
 void EditWrapper::reloadFileHighlight(QString definitionName)
 {
-    qDebug() << "Reloading syntax highlight with definition:" << definitionName;
+    qCDebug(appLog) << "Reloading syntax highlight with definition:" << definitionName;
     m_Definition = m_Repository.definitionForName(definitionName);
     if (m_Definition.isValid() && !m_Definition.filePath().isEmpty()) {
-        qDebug() << "EditWrapper reloadFileHighlight, m_Definition.isValid() && !m_Definition.filePath().isEmpty()";
+        qCDebug(appLog) << "EditWrapper reloadFileHighlight, m_Definition.isValid() && !m_Definition.filePath().isEmpty()";
         if (!m_pSyntaxHighlighter) m_pSyntaxHighlighter = new CSyntaxHighlighter(m_pTextEdit->document());
         QString m_themePath = Settings::instance()->settings->option("advance.editor.theme")->value().toString();
-        qDebug() << "EditWrapper reloadFileHighlight, m_themePath:" << m_themePath;
+        qCDebug(appLog) << "EditWrapper reloadFileHighlight, m_themePath:" << m_themePath;
         if (m_themePath.contains("dark")) {
-            qDebug() << "EditWrapper reloadFileHighlight, m_themePath contains dark";
+            qCDebug(appLog) << "EditWrapper reloadFileHighlight, m_themePath contains dark";
             m_pSyntaxHighlighter->setTheme(m_Repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme));
         } else {
-            qDebug() << "EditWrapper reloadFileHighlight, m_themePath not contains dark";
+            qCDebug(appLog) << "EditWrapper reloadFileHighlight, m_themePath not contains dark";
             m_pSyntaxHighlighter->setTheme(m_Repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
         }
         if (m_pSyntaxHighlighter) m_pSyntaxHighlighter->setDefinition(m_Definition);
@@ -531,11 +532,11 @@ void EditWrapper::reloadFileHighlight(QString definitionName)
 
         QScrollBar *pScrollBar = m_pTextEdit->verticalScrollBar();
         if (pScrollBar->maximum() > 0) {
-            qDebug() << "EditWrapper reloadFileHighlight, pScrollBar->maximum() > 0";
+            qCDebug(appLog) << "EditWrapper reloadFileHighlight, pScrollBar->maximum() > 0";
             QPoint endPoint = QPointF(0, 1.5 * m_pTextEdit->height()).toPoint();
             endBlock = m_pTextEdit->cursorForPosition(endPoint).block();
         } else {
-            qDebug() << "EditWrapper reloadFileHighlight, pScrollBar->maximum() <= 0";
+            qCDebug(appLog) << "EditWrapper reloadFileHighlight, pScrollBar->maximum() <= 0";
             endBlock = m_pTextEdit->document()->lastBlock();
         }
 
@@ -545,7 +546,7 @@ void EditWrapper::reloadFileHighlight(QString definitionName)
         for (QTextBlock var = beginBlock; var.isValid(); var = var.next()) {
             var.layout()->clearFormats();
             if (var == endBlock) {
-                qDebug() << "EditWrapper reloadFileHighlight, var == endBlock, break!";
+                qCDebug(appLog) << "EditWrapper reloadFileHighlight, var == endBlock, break!";
                 break;
             }
         }
@@ -562,27 +563,27 @@ void EditWrapper::reloadFileHighlight(QString definitionName)
             }
         }
     } else {
-        qDebug() << "EditWrapper reloadFileHighlight, m_Definition.isValid() && !m_Definition.filePath().isEmpty() is false";
+        qCDebug(appLog) << "EditWrapper reloadFileHighlight, m_Definition.isValid() && !m_Definition.filePath().isEmpty() is false";
         // 不允许的高亮格式或无对应的高亮格式文件，例如“None”，移除高亮效果
         m_bHighlighterAll = false;
         m_Definition = KSyntaxHighlighting::Definition();
         if (m_pSyntaxHighlighter) {
-            qDebug() << "EditWrapper reloadFileHighlight, m_pSyntaxHighlighter is not nullptr";
+            qCDebug(appLog) << "EditWrapper reloadFileHighlight, m_pSyntaxHighlighter is not nullptr";
             m_pSyntaxHighlighter->deleteLater();
             m_pSyntaxHighlighter = nullptr;
         }
-        qDebug() << "EditWrapper reloadFileHighlight, m_pTextEdit->setSyntaxDefinition(m_Definition)";
+        qCDebug(appLog) << "EditWrapper reloadFileHighlight, m_pTextEdit->setSyntaxDefinition(m_Definition)";
         m_pTextEdit->setSyntaxDefinition(m_Definition);
     }
 
     // 语言切换钩子（§4.4）：刷新 Markdown 识别；识别丢失时按 FSM 回退（不强切默认视图）
     updateMarkdownRecognition(m_pTextEdit->getFilePath(), definitionName);
-    qDebug() << "EditWrapper reloadFileHighlight, exit";
+    qCDebug(appLog) << "EditWrapper reloadFileHighlight, exit";
 }
 
 void EditWrapper::reloadModifyFile()
 {
-    qDebug() << "EditWrapper reloadModifyFile";
+    qCDebug(appLog) << "EditWrapper reloadModifyFile";
     hideWarningNotices();
 
     int curPos = m_pTextEdit->textCursor().position();
@@ -590,14 +591,14 @@ void EditWrapper::reloadModifyFile()
     int xoffset = m_pTextEdit->horizontalScrollBar()->value();
 
     bool bIsModified = m_pTextEdit->getModified();
-    qDebug() << "EditWrapper reloadModifyFile, bIsModified:" << bIsModified;
+    qCDebug(appLog) << "EditWrapper reloadModifyFile, bIsModified:" << bIsModified;
     if (m_pWindow->getTabbar()->textAt(m_pWindow->getTabbar()->currentIndex()).front() == "*") {
-        qDebug() << "EditWrapper reloadModifyFile, m_pWindow->getTabbar()->textAt(m_pWindow->getTabbar()->currentIndex()).front() == *";
+        qCDebug(appLog) << "EditWrapper reloadModifyFile, m_pWindow->getTabbar()->textAt(m_pWindow->getTabbar()->currentIndex()).front() == *";
         bIsModified = true;
     }
     //如果文件修改提示用户是否保存  如果临时文件保存就是另存为
     if (bIsModified) {
-        qDebug() << "EditWrapper reloadModifyFile, bIsModified is true";
+        qCDebug(appLog) << "EditWrapper reloadModifyFile, bIsModified is true";
         DDialog *dialog = new DDialog(tr("Do you want to save this file?"), "", this);
         dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnBottomHint);
         dialog->setIcon(QIcon::fromTheme("deepin-editor"));
@@ -609,30 +610,30 @@ void EditWrapper::reloadModifyFile()
 
         //点击关闭
         if (res == 0) {
-            qDebug() << "EditWrapper reloadModifyFile, res is 0, return";
+            qCDebug(appLog) << "EditWrapper reloadModifyFile, res is 0, return";
             return;
         }
 
         //不保存
         if (res == 1) {
-            qDebug() << "EditWrapper reloadModifyFile, res is 1, readFile";
+            qCDebug(appLog) << "EditWrapper reloadModifyFile, res is 1, readFile";
             //重写加载文件
             readFile();
             m_bIsTemFile = false;
         }
         //另存
         if (res == 2) {
-            qDebug() << "EditWrapper reloadModifyFile, res is 2, saveAsFile";
+            qCDebug(appLog) << "EditWrapper reloadModifyFile, res is 2, saveAsFile";
             //临时文件保存另存为 需要删除源草稿文件文件
             if (Utils::isDraftFile(m_pTextEdit->getFilePath())) {
                 QString newFilePath;
                 if (!saveDraftFile(newFilePath)) {
-                    qDebug() << "EditWrapper reloadModifyFile, saveDraftFile(newFilePath) failed, return";
+                    qCDebug(appLog) << "EditWrapper reloadModifyFile, saveDraftFile(newFilePath) failed, return";
                     return;
                 }
             } else {
                 if (!this->window()->saveAsFile()) {
-                    qDebug() << "EditWrapper reloadModifyFile, this->window()->saveAsFile() failed, return";
+                    qCDebug(appLog) << "EditWrapper reloadModifyFile, this->window()->saveAsFile() failed, return";
                     return;
                 }
             }
@@ -642,11 +643,11 @@ void EditWrapper::reloadModifyFile()
         }
 
     } else {
-        qDebug() << "EditWrapper reloadModifyFile, bIsModified is false, readFile";
+        qCDebug(appLog) << "EditWrapper reloadModifyFile, bIsModified is false, readFile";
         //重写加载文件
         readFile();
     }
-    qDebug() << "EditWrapper reloadModifyFile, setBookMarkList";
+    qCDebug(appLog) << "EditWrapper reloadModifyFile, setBookMarkList";
     m_pTextEdit->setBookMarkList(QList<int>());
     QFileInfo fi(m_pTextEdit->getTruePath());
     m_tModifiedDateTime = fi.lastModified();
@@ -656,12 +657,12 @@ void EditWrapper::reloadModifyFile()
     m_pTextEdit->setTextCursor(textcur);
     m_pTextEdit->verticalScrollBar()->setValue(yoffset);
     m_pTextEdit->horizontalScrollBar()->setValue(xoffset);
-    qDebug() << "EditWrapper reloadModifyFile, exit";
+    qCDebug(appLog) << "EditWrapper reloadModifyFile, exit";
 }
 
 QString EditWrapper::getTextEncode()
 {
-    qDebug() << "EditWrapper getTextEncode, m_sCurEncode:" << m_sCurEncode;
+    qCDebug(appLog) << "EditWrapper getTextEncode, m_sCurEncode:" << m_sCurEncode;
     return m_sCurEncode;
 }
 
@@ -673,11 +674,11 @@ QString EditWrapper::getTextEncode()
  */
 bool EditWrapper::saveFile(QByteArray encode)
 {
-    qDebug() << "EditWrapper saveFile, encode:" << encode;
+    qCDebug(appLog) << "EditWrapper saveFile, encode:" << encode;
 
     // 预览模式下不允许直接静默保存，交由 Window 层确认弹窗
     if (m_bInvalidCharPreview) {
-        qDebug() << "EditWrapper saveFile, in preview mode, returning false";
+        qCDebug(appLog) << "EditWrapper saveFile, in preview mode, returning false";
         return false;
     }
 
@@ -686,7 +687,7 @@ bool EditWrapper::saveFile(QByteArray encode)
 
     // 更新编码设置
     if (!encode.isEmpty()) {
-        qDebug() << "EditWrapper saveFile, encode is not empty";
+        qCDebug(appLog) << "EditWrapper saveFile, encode is not empty";
         m_sCurEncode = encode;
         m_pBottomBar->setEncodeName(encode);
     }
@@ -706,7 +707,7 @@ bool EditWrapper::saveFile(QByteArray encode)
         return false;
     }
     if (ok) {
-        qDebug() << "EditWrapper saveFile, ok is true";
+        qCDebug(appLog) << "EditWrapper saveFile, ok is true";
         m_sFirstEncode = m_sCurEncode;
         QFileInfo fi(qstrFilePath);
         m_tModifiedDateTime = fi.lastModified();
@@ -716,20 +717,20 @@ bool EditWrapper::saveFile(QByteArray encode)
         m_pTextEdit->setTextEncode(m_sCurEncode);
         m_pTextEdit->writeEncodeHistoryRecord();
     } else {
-        qDebug() << "EditWrapper saveFile, ok is false";
+        qCDebug(appLog) << "EditWrapper saveFile, ok is false";
         DMessageManager::instance()->sendMessage(
             this->window()->getStackedWgt()->currentWidget(),
             QIcon(":/images/warning.svg"),
             QString(tr("You do not have permission to save %1")).arg(QFileInfo(qstrFilePath).fileName())
         );
     }
-    qDebug() << "EditWrapper saveFile, ok:" << ok;
+    qCDebug(appLog) << "EditWrapper saveFile, ok:" << ok;
     return ok;
 }
 
 void EditWrapper::onEditAnyway()
 {
-    qDebug() << "EditWrapper onEditAnyway, allowing edit in preview mode";
+    qCDebug(appLog) << "EditWrapper onEditAnyway, allowing edit in preview mode";
     m_bInvalidCharEditAllowed = true;
     m_pTextEdit->setReadOnly(false);
     m_pWaringNotices->hide();
@@ -738,7 +739,7 @@ void EditWrapper::onEditAnyway()
 
 void EditWrapper::exitInvalidCharPreview()
 {
-    qDebug() << "EditWrapper exitInvalidCharPreview, exiting preview mode";
+    qCDebug(appLog) << "EditWrapper exitInvalidCharPreview, exiting preview mode";
     m_bInvalidCharPreview = false;
     m_bInvalidCharEditAllowed = false;
     m_sInvalidCharOriginalPath.clear();
@@ -752,7 +753,7 @@ void EditWrapper::exitInvalidCharPreview()
 
 bool EditWrapper::forceSaveInvalidCharFile()
 {
-    qDebug() << "EditWrapper forceSaveInvalidCharFile, saving to original path:" << m_sInvalidCharOriginalPath;
+    qCDebug(appLog) << "EditWrapper forceSaveInvalidCharFile, saving to original path:" << m_sInvalidCharOriginalPath;
     QString savePath = m_sInvalidCharOriginalPath;
     QPointer<QObject> guard(this);
     TextFileSaver saver(m_pTextEdit->document());
@@ -766,7 +767,7 @@ bool EditWrapper::forceSaveInvalidCharFile()
         return false;
     }
     if (ok) {
-        qDebug() << "EditWrapper forceSaveInvalidCharFile, save succeeded";
+        qCDebug(appLog) << "EditWrapper forceSaveInvalidCharFile, save succeeded";
         m_sFirstEncode = m_sCurEncode;
         QFileInfo fi(savePath);
         m_tModifiedDateTime = fi.lastModified();
@@ -775,18 +776,18 @@ bool EditWrapper::forceSaveInvalidCharFile()
         m_pTextEdit->writeEncodeHistoryRecord();
         exitInvalidCharPreview();
     } else {
-        qDebug() << "EditWrapper forceSaveInvalidCharFile, save failed";
+        qCDebug(appLog) << "EditWrapper forceSaveInvalidCharFile, save failed";
     }
     return ok;
 }
 
 void EditWrapper::getPlainTextContent(QByteArray &plainTextContent)
 {
-    qDebug() << "EditWrapper getPlainTextContent";
+    qCDebug(appLog) << "EditWrapper getPlainTextContent";
     QString strPlainText = m_pTextEdit->toPlainText();
-    qDebug() << "EditWrapper getPlainTextContent, strPlainText:" << strPlainText;
+    qCDebug(appLog) << "EditWrapper getPlainTextContent, strPlainText:" << strPlainText;
     if (BottomBar::EndlineFormat::Windows == m_pBottomBar->getEndlineFormat()) {
-        qDebug() << "EditWrapper getPlainTextContent, BottomBar::EndlineFormat::Windows";
+        qCDebug(appLog) << "EditWrapper getPlainTextContent, BottomBar::EndlineFormat::Windows";
         strPlainText.replace("\n", "\r\n");
     }
 
@@ -796,7 +797,7 @@ void EditWrapper::getPlainTextContent(QByteArray &plainTextContent)
     /* 如果文本框里的文本内容小于等于300MB，无需分段转换 */
     if (iPlainTextAllLen <= iStep) {
         plainTextContent = QByteArray(strPlainText.toLocal8Bit());
-        qDebug() << "EditWrapper getPlainTextContent, iPlainTextAllLen <= iStep, plainTextContent:" << plainTextContent;
+        qCDebug(appLog) << "EditWrapper getPlainTextContent, iPlainTextAllLen <= iStep, plainTextContent:" << plainTextContent;
         return;
     }
 
@@ -815,7 +816,7 @@ void EditWrapper::getPlainTextContent(QByteArray &plainTextContent)
             plainTextContent += strPlainText.mid(iSections * iStep, iResidue).toLocal8Bit();
         }
     }
-    qDebug() << "EditWrapper getPlainTextContent, exit";
+    qCDebug(appLog) << "EditWrapper getPlainTextContent, exit";
 }
 
 /**
@@ -825,7 +826,7 @@ void EditWrapper::getPlainTextContent(QByteArray &plainTextContent)
  */
 bool EditWrapper::saveTemFile(QString qstrDir)
 {
-    qDebug() << "EditWrapper saveTemFile, qstrDir:" << qstrDir;
+    qCDebug(appLog) << "EditWrapper saveTemFile, qstrDir:" << qstrDir;
     // Use TextFileSaver for safe file saving
     QPointer<QObject> guard(this);
     TextFileSaver saver(m_pTextEdit->document());
@@ -839,46 +840,46 @@ bool EditWrapper::saveTemFile(QString qstrDir)
         return false;
     }
     if (ok) {
-        qDebug() << "EditWrapper saveTemFile, ok is true";
+        qCDebug(appLog) << "EditWrapper saveTemFile, ok is true";
         m_sFirstEncode = m_sCurEncode;
         updateModifyStatus(isModified());
         m_pTextEdit->setTextEncode(m_sCurEncode);
         m_pTextEdit->writeEncodeHistoryRecord();
     }
-    qDebug() << "EditWrapper saveTemFile, ok:" << ok;
+    qCDebug(appLog) << "EditWrapper saveTemFile, ok:" << ok;
     return ok;
 }
 
 void EditWrapper::updatePath(const QString &file, QString qstrTruePath)
 {
-    qDebug() << "EditWrapper updatePath, file:" << file << "qstrTruePath:" << qstrTruePath;
+    qCDebug(appLog) << "EditWrapper updatePath, file:" << file << "qstrTruePath:" << qstrTruePath;
     if (qstrTruePath.isEmpty()) {
-        qDebug() << "EditWrapper updatePath, qstrTruePath is empty";
+        qCDebug(appLog) << "EditWrapper updatePath, qstrTruePath is empty";
         qstrTruePath = file;
     }
-    qDebug() << "EditWrapper updatePath, qstrTruePath:" << qstrTruePath;
+    qCDebug(appLog) << "EditWrapper updatePath, qstrTruePath:" << qstrTruePath;
     QFileInfo fi(qstrTruePath);
     m_tModifiedDateTime = fi.lastModified();
-    qDebug() << "EditWrapper updatePath, m_tModifiedDateTime:" << m_tModifiedDateTime;
+    qCDebug(appLog) << "EditWrapper updatePath, m_tModifiedDateTime:" << m_tModifiedDateTime;
     m_pTextEdit->setFilePath(file);
-    qDebug() << "EditWrapper updatePath, m_pTextEdit->setFilePath(file)";
+    qCDebug(appLog) << "EditWrapper updatePath, m_pTextEdit->setFilePath(file)";
     m_pTextEdit->setTruePath(qstrTruePath);
-    qDebug() << "EditWrapper updatePath, m_pTextEdit->setTruePath(qstrTruePath)";
+    qCDebug(appLog) << "EditWrapper updatePath, m_pTextEdit->setTruePath(qstrTruePath)";
 }
 
 bool EditWrapper::isModified()
 {
-    qDebug() << "EditWrapper isModified";
+    qCDebug(appLog) << "EditWrapper isModified";
     //编码改变内容没有修改也算是文件修改
     // bool modified = (m_sFirstEncode != m_sCurEncode || m_pTextEdit->document()->isModified());
     bool modified =  m_pTextEdit->getModified();
-    qDebug() << "EditWrapper isModified, modified:" << modified << "m_bIsTemFile:" << m_bIsTemFile;
+    qCDebug(appLog) << "EditWrapper isModified, modified:" << modified << "m_bIsTemFile:" << m_bIsTemFile;
     return  modified | m_bIsTemFile;
 }
 
 bool EditWrapper::isDraftFile()
 {
-    qDebug() << "EditWrapper isDraftFile";
+    qCDebug(appLog) << "EditWrapper isDraftFile";
     return Utils::isDraftFile(m_pTextEdit->getFilePath());
 }
 
@@ -887,19 +888,19 @@ bool EditWrapper::isDraftFile()
  */
 bool EditWrapper::isBackupFile()
 {
-    qDebug() << "EditWrapper isBackupFile";
+    qCDebug(appLog) << "EditWrapper isBackupFile";
     return Utils::isBackupFile(m_pTextEdit->getFilePath());
 }
 
 bool EditWrapper::isPlainTextEmpty()
 {
-    qDebug() << "EditWrapper isPlainTextEmpty";
+    qCDebug(appLog) << "EditWrapper isPlainTextEmpty";
     return m_pTextEdit->document()->isEmpty();
 }
 
 bool EditWrapper::isTemFile()
 {
-    qDebug() << "EditWrapper isTemFile";
+    qCDebug(appLog) << "EditWrapper isTemFile";
     return m_bIsTemFile;
 }
 
@@ -911,7 +912,7 @@ bool EditWrapper::isTemFile()
  */
 bool EditWrapper::saveDraftFile(QString &newFilePath)
 {
-    qDebug() << "EditWrapper saveDraftFile, newFilePath:" << newFilePath;
+    qCDebug(appLog) << "EditWrapper saveDraftFile, newFilePath:" << newFilePath;
     DFileDialog dialog(this, tr("Save"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setDirectory(QDir::homePath());
@@ -935,7 +936,7 @@ bool EditWrapper::saveDraftFile(QString &newFilePath)
     hideWarningNotices();
 
     if (mode == 1) {
-        qDebug() << "EditWrapper saveDraftFile, mode is 1";
+        qCDebug(appLog) << "EditWrapper saveDraftFile, mode is 1";
         // Get selected encoding and file path
         const QByteArray encode = dialog.getComboBoxValue(QObject::tr("Encoding")).toUtf8();
         newFilePath = dialog.selectedFiles().value(0);
@@ -949,7 +950,7 @@ bool EditWrapper::saveDraftFile(QString &newFilePath)
         saver.setEndlineFormat(m_pBottomBar->getEndlineFormat() == BottomBar::EndlineFormat::Windows);
 
         if (!saver.save()) {
-            qDebug() << "EditWrapper saveDraftFile, saver.save() failed";
+            qCDebug(appLog) << "EditWrapper saveDraftFile, saver.save() failed";
             return false;
         }
 
@@ -961,77 +962,77 @@ bool EditWrapper::saveDraftFile(QString &newFilePath)
         m_bIsTemFile = false;
         m_pTextEdit->setTextEncode(m_sCurEncode);
         m_pTextEdit->writeEncodeHistoryRecord();
-        qDebug() << "EditWrapper saveDraftFile, saver.save() success";
+        qCDebug(appLog) << "EditWrapper saveDraftFile, saver.save() success";
         return true;
     }
 
-    qDebug() << "EditWrapper saveDraftFile, mode is not 1, return false";
+    qCDebug(appLog) << "EditWrapper saveDraftFile, mode is not 1, return false";
     return false;
 }
 
 void EditWrapper::hideWarningNotices()
 {
-    qDebug() << "EditWrapper hideWarningNotices";
+    qCDebug(appLog) << "EditWrapper hideWarningNotices";
     if (m_pWaringNotices->isVisible()) {
-        qDebug() << "EditWrapper hideWarningNotices, m_pWaringNotices->isVisible()";
+        qCDebug(appLog) << "EditWrapper hideWarningNotices, m_pWaringNotices->isVisible()";
         m_pWaringNotices->hide();
     }
-    qDebug() << "EditWrapper hideWarningNotices, exit";
+    qCDebug(appLog) << "EditWrapper hideWarningNotices, exit";
 }
 
 //除草稿文件 检查文件是否被删除,是否被修复
 void EditWrapper::checkForReload()
 {
-    qDebug() << "EditWrapper checkForReload";
+    qCDebug(appLog) << "EditWrapper checkForReload";
     if (Utils::isDraftFile(m_pTextEdit->getTruePath())) {
-        qDebug() << "EditWrapper checkForReload, Utils::isDraftFile(m_pTextEdit->getTruePath())";
+        qCDebug(appLog) << "EditWrapper checkForReload, Utils::isDraftFile(m_pTextEdit->getTruePath())";
         return;
     }
 
     QFileInfo fi(m_pTextEdit->getTruePath());
-    qDebug() << "EditWrapper checkForReload, fi:" << fi;
+    qCDebug(appLog) << "EditWrapper checkForReload, fi:" << fi;
     // 使用 QPointer 检查对象是否还存在
     QPointer<EditWrapper> self(this);
     QTimer::singleShot(50, [self, fi]() {
         if (self.isNull()) {
-            qWarning() << "EditWrapper obj is destroyed";
+            qCWarning(appLog) << "EditWrapper obj is destroyed";
             return; // 对象已被销毁
         }
 
         if (fi.lastModified() == self->m_tModifiedDateTime || self->m_pWaringNotices->isVisible()) {
-            qDebug() << "EditWrapper checkForReload, fi.lastModified() == m_tModifiedDateTime || m_pWaringNotices->isVisible()";
+            qCDebug(appLog) << "EditWrapper checkForReload, fi.lastModified() == m_tModifiedDateTime || m_pWaringNotices->isVisible()";
             return;
         }
-        qDebug() << "EditWrapper checkForReload, fi.lastModified() != m_tModifiedDateTime && !m_pWaringNotices->isVisible()";
+        qCDebug(appLog) << "EditWrapper checkForReload, fi.lastModified() != m_tModifiedDateTime && !m_pWaringNotices->isVisible()";
         if (self->m_pTextEdit == nullptr) {
-            qWarning() << "TextEdit obj is destroyed";
+            qCWarning(appLog) << "TextEdit obj is destroyed";
             return; // 对象已被销毁
         }
 
         QFileInfo finfo(self->m_pTextEdit->getTruePath());
-        qDebug() << "EditWrapper checkForReload, finfo:" << finfo;
+        qCDebug(appLog) << "EditWrapper checkForReload, finfo:" << finfo;
         if (!finfo.exists()) {
-            qDebug() << "EditWrapper checkForReload, finfo.exists() is false";
+            qCDebug(appLog) << "EditWrapper checkForReload, finfo.exists() is false";
             self->m_pWaringNotices->setMessage(tr("File removed on the disk. Save it now?"));
             self->m_pWaringNotices->setSaveAsBtn();
             self->m_pWaringNotices->show();
             DMessageManager::instance()->sendMessage(self->m_pTextEdit, self->m_pWaringNotices);
         } else if (!self->m_tModifiedDateTime.toString().isEmpty() && finfo.lastModified().toString() != self->m_tModifiedDateTime.toString()) {
-            qDebug() << "EditWrapper checkForReload, finfo.lastModified().toString() != m_tModifiedDateTime.toString()";
+            qCDebug(appLog) << "EditWrapper checkForReload, finfo.lastModified().toString() != m_tModifiedDateTime.toString()";
             self->m_pWaringNotices->setMessage(tr("File has changed on disk. Reload?"));
             self->m_pWaringNotices->setReloadBtn();
             self->m_pWaringNotices->show();
             DMessageManager::instance()->sendMessage(self->m_pTextEdit, self->m_pWaringNotices);
         }
     });
-    qDebug() << "EditWrapper checkForReload, exit";
+    qCDebug(appLog) << "EditWrapper checkForReload, exit";
 }
 
 void EditWrapper::showNotify(const QString &message, bool warning)
 {
-    qDebug() << "EditWrapper showNotify, message:" << message << "warning:" << warning;
+    qCDebug(appLog) << "EditWrapper showNotify, message:" << message << "warning:" << warning;
     if (message.isEmpty()) {
-        qDebug() << "EditWrapper showNotify, message is empty, return";
+        qCDebug(appLog) << "EditWrapper showNotify, message is empty, return";
         return;
     }
 
@@ -1039,26 +1040,26 @@ void EditWrapper::showNotify(const QString &message, bool warning)
     QWidget *target = (m_viewMode == ViewMode::ReadView && m_isMarkdown) ? m_pReadPage : m_pTextEdit;
 
     if (!target) {
-        qDebug() << "EditWrapper showNotify, target is null, return";
+        qCDebug(appLog) << "EditWrapper showNotify, target is null, return";
         return;
     }
 
     if (warning || m_pTextEdit->getReadOnlyPermission() || m_pTextEdit->getReadOnlyMode()) {
-        qDebug() << "EditWrapper showNotify, warning || m_pTextEdit->getReadOnlyPermission() || m_pTextEdit->getReadOnlyMode()";
+        qCDebug(appLog) << "EditWrapper showNotify, warning || m_pTextEdit->getReadOnlyPermission() || m_pTextEdit->getReadOnlyMode()";
 #ifdef DTKWIDGET_CLASS_DSizeMode
         Utils::sendFloatMessageFixedFont(target, QIcon(":/images/warning.svg"), message);
 #else
         DMessageManager::instance()->sendMessage(target, QIcon(":/images/warning.svg"), message);
 #endif
     } else {
-        qDebug() << "EditWrapper showNotify, warning is false";
+        qCDebug(appLog) << "EditWrapper showNotify, warning is false";
 #ifdef DTKWIDGET_CLASS_DSizeMode
         Utils::sendFloatMessageFixedFont(target, QIcon(":/images/ok.svg"), message);
 #else
         DMessageManager::instance()->sendMessage(target, QIcon(":/images/ok.svg"), message);
 #endif
     }
-    qDebug() << "EditWrapper showNotify, exit";
+    qCDebug(appLog) << "EditWrapper showNotify, exit";
 }
 
 
@@ -1071,7 +1072,7 @@ void EditWrapper::showNotify(const QString &message, bool warning)
  */
 void EditWrapper::handleFilePreProcess(const QByteArray &encode, const QByteArray &content)
 {
-    qDebug() << "EditWrapper handleFilePreProcess";
+    qCDebug(appLog) << "EditWrapper handleFilePreProcess";
     // 重新加载处理
     reinitOnFileLoad(encode);
     // 已进行预处理标识
@@ -1085,7 +1086,7 @@ void EditWrapper::handleFilePreProcess(const QByteArray &encode, const QByteArra
 
     QTextCodec *codec = QTextCodec::codecForName("UTF-8");
     if (!codec) {
-        qInfo() << "QTextCodec::codecForName \"UTF-8\" return nullptr";
+        qCInfo(appLog) << "QTextCodec::codecForName \"UTF-8\" return nullptr";
         return;
     }
 
@@ -1099,7 +1100,7 @@ void EditWrapper::handleFilePreProcess(const QByteArray &encode, const QByteArra
 
     m_pTextEdit->setLeftAreaUpdateState(TextEdit::FileOpenEnd);
     QApplication::restoreOverrideCursor();
-    qDebug() << "EditWrapper handleFilePreProcess, exit";
+    qCDebug(appLog) << "EditWrapper handleFilePreProcess, exit";
 }
 
 /**
@@ -1109,19 +1110,19 @@ void EditWrapper::handleFilePreProcess(const QByteArray &encode, const QByteArra
  */
 void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteArray &content, bool error, bool hasNul)
 {
-    qDebug() << "File load finished. Encoding:" << encode << "Error:" << error << "Preprocessed:" << m_bHasPreProcess;
+    qCDebug(appLog) << "File load finished. Encoding:" << encode << "Error:" << error << "Preprocessed:" << m_bHasPreProcess;
 
     // 判断是否预加载，若已预加载，则无需重新初始化
     if (!m_bHasPreProcess) {
-        qDebug() << "Performing initial file load initialization";
+        qCDebug(appLog) << "Performing initial file load initialization";
         reinitOnFileLoad(encode);
     }
 
     if (!error) {
-        qDebug() << "File content loaded successfully. Size:" << content.size() << "bytes";
+        qCDebug(appLog) << "File content loaded successfully. Size:" << content.size() << "bytes";
         bool flag = m_pTextEdit->getReadOnlyPermission();
         if (flag == true) {
-            qDebug() << "EditWrapper handleFileLoadFinished, flag is true";
+            qCDebug(appLog) << "EditWrapper handleFileLoadFinished, flag is true";
             // note: 特殊处理，由于需要TextEdit处于可编辑状态追加文件数据，临时设置非只读状态
             m_pTextEdit->setReadOnly(false);
         }
@@ -1130,7 +1131,7 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
 
         //备份显示修改状态
         if (m_bIsTemFile) {
-            qDebug() << "EditWrapper handleFileLoadFinished, m_bIsTemFile is true";
+            qCDebug(appLog) << "EditWrapper handleFileLoadFinished, m_bIsTemFile is true";
             updateModifyStatus(true);
         }
 
@@ -1139,19 +1140,19 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
         // 加载数据
         loadContent(content);
         if (checkPtr.isNull()) {
-            qDebug() << "EditWrapper handleFileLoadFinished, checkPtr is null, return";
+            qCDebug(appLog) << "EditWrapper handleFileLoadFinished, checkPtr is null, return";
             return;
         }
 
         m_bFileLoading = false;
         if (flag == true) {
-            qDebug() << "EditWrapper handleFileLoadFinished, flag is true, setReadOnly(true)";
+            qCDebug(appLog) << "EditWrapper handleFileLoadFinished, flag is true, setReadOnly(true)";
             m_pTextEdit->setReadOnly(true);
         }
 
         // 无效字符（NUL）预览模式初始化
         if (hasNul) {
-            qDebug() << "EditWrapper handleFileLoadFinished, hasNul is true, entering preview mode";
+            qCDebug(appLog) << "EditWrapper handleFileLoadFinished, hasNul is true, entering preview mode";
             m_bInvalidCharPreview = true;
             m_bInvalidCharEditAllowed = false;
             m_sInvalidCharOriginalPath = m_pTextEdit->getTruePath();
@@ -1176,12 +1177,12 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
         }
 
         if (m_bQuit) {
-            qDebug() << "EditWrapper handleFileLoadFinished, m_bQuit is true, return";
+            qCDebug(appLog) << "EditWrapper handleFileLoadFinished, m_bQuit is true, return";
             return;
         }
     } else {
         // 清除之前读取的数据
-        qDebug() << "EditWrapper handleFileLoadFinished, flag is false, clear";
+        qCDebug(appLog) << "EditWrapper handleFileLoadFinished, flag is false, clear";
         m_pTextEdit->clear();
     }
 
@@ -1209,25 +1210,25 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
                 QJsonDocument doucment = QJsonDocument::fromJson(temFileList.value(var).toUtf8(), &jsonError);
                 // 解析未发生错误
                 if (!doucment.isNull() && (jsonError.error == QJsonParseError::NoError)) {
-                    qDebug() << "EditWrapper handleFileLoadFinished, doucment is not null";
+                    qCDebug(appLog) << "EditWrapper handleFileLoadFinished, doucment is not null";
                     if (doucment.isObject()) {
-                        qDebug() << "EditWrapper handleFileLoadFinished, doucment is object";
+                        qCDebug(appLog) << "EditWrapper handleFileLoadFinished, doucment is object";
                         // JSON 文档为对象
                         QJsonObject object = doucment.object();  // 转化为对象
 
                         if (object.contains("localPath") || object.contains("temFilePath")) {
-                            qDebug() << "EditWrapper handleFileLoadFinished, doucment contains localPath or temFilePath";
+                            qCDebug(appLog) << "EditWrapper handleFileLoadFinished, doucment contains localPath or temFilePath";
                             // 包含指定的 key
                             QJsonValue localPathValue = object.value("localPath");  // 获取指定 key 对应的 value
                             QJsonValue temFilePathValue = object.value("temFilePath");  // 获取指定 key 对应的 value
 
                             if (localPathValue.toString() == m_pTextEdit->getFilePath()
                                     || temFilePathValue.toString() == m_pTextEdit->getFilePath()) {
-                                qDebug() << "EditWrapper handleFileLoadFinished, localPathValue or temFilePathValue is equal to m_pTextEdit->getFilePath()";
+                                qCDebug(appLog) << "EditWrapper handleFileLoadFinished, localPathValue or temFilePathValue is equal to m_pTextEdit->getFilePath()";
                                 QJsonValue value = object.value("cursorPosition");  // 获取指定 key 对应的 value
 
                                 if (value.isString()) {
-                                    qDebug() << "EditWrapper handleFileLoadFinished, value is string";
+                                    qCDebug(appLog) << "EditWrapper handleFileLoadFinished, value is string";
                                     QTextCursor cursor = m_pTextEdit->textCursor();
                                     cursor.setPosition(value.toString().toInt());
                                     m_pTextEdit->setTextCursor(cursor);
@@ -1244,12 +1245,12 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
 
     //备份显示修改状态
     if (m_bIsTemFile) {
-        qDebug() << "EditWrapper handleFileLoadFinished, m_bIsTemFile is true, updateModifyStatus(true)";
+        qCDebug(appLog) << "EditWrapper handleFileLoadFinished, m_bIsTemFile is true, updateModifyStatus(true)";
         updateModifyStatus(true);
     }
 
     if (m_pSyntaxHighlighter) {
-        qDebug() << "EditWrapper handleFileLoadFinished, m_pSyntaxHighlighter is not nullptr";
+        qCDebug(appLog) << "EditWrapper handleFileLoadFinished, m_pSyntaxHighlighter is not nullptr";
         m_pSyntaxHighlighter->setEnableHighlight(true);
         OnUpdateHighlighter();
     }
@@ -1258,21 +1259,21 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
 
     // 提示读取错误信息
     if (error) {
-        qDebug() << "EditWrapper handleFileLoadFinished, error is true, onReadAllocError()";
+        qCDebug(appLog) << "EditWrapper handleFileLoadFinished, error is true, onReadAllocError()";
         // 如果文件不存在，静默处理（可能是新建文件），不显示错误提示
         if (!QFileInfo::exists(m_pTextEdit->getTruePath())) {
-            qDebug() << "File does not exist, skipping error notification (new file scenario)";
+            qCDebug(appLog) << "File does not exist, skipping error notification (new file scenario)";
         } else {
             onReadAllocError();
         }
     }
-    qDebug() << "EditWrapper handleFileLoadFinished, exit";
+    qCDebug(appLog) << "EditWrapper handleFileLoadFinished, exit";
 }
 
 
 void EditWrapper::OnThemeChangeSlot(QString theme)
 {
-    qDebug() << "EditWrapper OnThemeChangeSlot, theme:" << theme;
+    qCDebug(appLog) << "EditWrapper OnThemeChangeSlot, theme:" << theme;
     QVariantMap jsonMap = Utils::getThemeMapFromPath(theme);
     QString backgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
     QString textColor = jsonMap["Normal"].toMap()["text-color"].toString();
@@ -1285,21 +1286,21 @@ void EditWrapper::OnThemeChangeSlot(QString theme)
 
     //设置编辑器
     if (m_pSyntaxHighlighter) {
-        qDebug() << "EditWrapper OnThemeChangeSlot, m_pSyntaxHighlighter is not nullptr";
+        qCDebug(appLog) << "EditWrapper OnThemeChangeSlot, m_pSyntaxHighlighter is not nullptr";
         if (QColor(backgroundColor).lightness() < 128) {
             m_pSyntaxHighlighter->setTheme(m_Repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme));
-            qDebug() << "EditWrapper OnThemeChangeSlot, QColor(backgroundColor).lightness() < 128, setTheme(DarkTheme)";
+            qCDebug(appLog) << "EditWrapper OnThemeChangeSlot, QColor(backgroundColor).lightness() < 128, setTheme(DarkTheme)";
         } else {
             m_pSyntaxHighlighter->setTheme(m_Repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
-            qDebug() << "EditWrapper OnThemeChangeSlot, QColor(backgroundColor).lightness() >= 128, setTheme(LightTheme)";
+            qCDebug(appLog) << "EditWrapper OnThemeChangeSlot, QColor(backgroundColor).lightness() >= 128, setTheme(LightTheme)";
         }
         m_pSyntaxHighlighter->setEnableHighlight(true);
         m_pSyntaxHighlighter->rehighlight();
-        qDebug() << "EditWrapper OnThemeChangeSlot, m_pSyntaxHighlighter->rehighlight()";
+        qCDebug(appLog) << "EditWrapper OnThemeChangeSlot, m_pSyntaxHighlighter->rehighlight()";
     }
 
     m_pTextEdit->setTheme(theme);
-    qDebug() << "EditWrapper OnThemeChangeSlot, m_pTextEdit->setTheme(theme)";
+    qCDebug(appLog) << "EditWrapper OnThemeChangeSlot, m_pTextEdit->setTheme(theme)";
 
     // Markdown 渲染视图跟随主题（§4.7：themeMap 序列化为 CSS 变量注入渲染页）
     if (m_pRenderer)
@@ -1308,7 +1309,7 @@ void EditWrapper::OnThemeChangeSlot(QString theme)
 
 void EditWrapper::UpdateBottomBarWordCnt(int cnt)
 {
-    qDebug() << "EditWrapper UpdateBottomBarWordCnt, cnt:" << cnt;
+    qCDebug(appLog) << "EditWrapper UpdateBottomBarWordCnt, cnt:" << cnt;
     m_pBottomBar->updateWordCount(cnt);
 }
 
@@ -1318,9 +1319,9 @@ void EditWrapper::UpdateBottomBarWordCnt(int cnt)
  */
 void EditWrapper::OnUpdateHighlighter()
 {
-    qDebug() << "EditWrapper OnUpdateHighlighter";
+    qCDebug(appLog) << "EditWrapper OnUpdateHighlighter";
     if (m_pSyntaxHighlighter  && !m_bQuit && !m_bHighlighterAll) {
-        qDebug() << "EditWrapper OnUpdateHighlighter, m_pSyntaxHighlighter is not nullptr";
+        qCDebug(appLog) << "EditWrapper OnUpdateHighlighter, m_pSyntaxHighlighter is not nullptr";
         QScrollBar *pScrollBar = m_pTextEdit->verticalScrollBar();
         QPoint startPoint = QPoint(0, 0);
         QTextBlock beginBlock = m_pTextEdit->cursorForPosition(startPoint).block();
@@ -1328,17 +1329,17 @@ void EditWrapper::OnUpdateHighlighter()
         QTextBlock foundBlock;
 
         if (pScrollBar->maximum() > 0) {
-            qDebug() << "EditWrapper OnUpdateHighlighter, pScrollBar->maximum() > 0";
+            qCDebug(appLog) << "EditWrapper OnUpdateHighlighter, pScrollBar->maximum() > 0";
             QPoint endPoint = QPointF(0, 1.5 * m_pTextEdit->height()).toPoint();
             endBlock = m_pTextEdit->cursorForPosition(endPoint).block();
         } else {
-            qDebug() << "EditWrapper OnUpdateHighlighter, pScrollBar->maximum() <= 0";
+            qCDebug(appLog) << "EditWrapper OnUpdateHighlighter, pScrollBar->maximum() <= 0";
             endBlock = m_pTextEdit->document()->lastBlock();
         }
 
         // 判断当前文件是否支持高亮处理
         if (m_pSyntaxHighlighter->definition().isValid()) {
-            qDebug() << "EditWrapper OnUpdateHighlighter, m_pSyntaxHighlighter->definition().isValid()";
+            qCDebug(appLog) << "EditWrapper OnUpdateHighlighter, m_pSyntaxHighlighter->definition().isValid()";
             // NOTE: 同样需要考虑极限条件下遍历全部文本的情况
             // 限制最多向上查找512个文本块
             static int s_MaxFindCount = 512;
@@ -1354,25 +1355,25 @@ void EditWrapper::OnUpdateHighlighter()
                     && maxFindBlockNumber < prevBlock.blockNumber()) {
                 // 逆序查询文本块数据，查找起始文本块
                 QString text = prevBlock.text();
-                qDebug() << "EditWrapper OnUpdateHighlighter, text:" << text;
+                qCDebug(appLog) << "EditWrapper OnUpdateHighlighter, text:" << text;
                 for (int i = text.size() - 1; i >= 0; i--) {
                     if (text.at(i) == end) {
-                        qDebug() << "EditWrapper OnUpdateHighlighter, text.at(i) == end";
+                        qCDebug(appLog) << "EditWrapper OnUpdateHighlighter, text.at(i) == end";
                         braceDepth++;
                     } else if (text.at(i) == begin) {
-                        qDebug() << "EditWrapper OnUpdateHighlighter, text.at(i) == begin";
+                        qCDebug(appLog) << "EditWrapper OnUpdateHighlighter, text.at(i) == begin";
                         braceDepth--;
 
                         // 防止'{'处于展示文本块中间的情况，查询不准确
                         if (braceDepth < 0) {
-                            qDebug() << "EditWrapper OnUpdateHighlighter, braceDepth < 0";
+                            qCDebug(appLog) << "EditWrapper OnUpdateHighlighter, braceDepth < 0";
                             braceDepth = 0;
                         }
 
                         // 判断是否查找到完整折叠区域
                         if (0 == braceDepth
                                 && prevBlock.blockNumber() <= beginBlock.blockNumber()) {
-                            qDebug() << "EditWrapper OnUpdateHighlighter, foundBrace";
+                            qCDebug(appLog) << "EditWrapper OnUpdateHighlighter, foundBrace";
                             foundBrace = true;
                             break;
                         }
@@ -1384,28 +1385,28 @@ void EditWrapper::OnUpdateHighlighter()
 
             // 仅在查询到折叠区域更新文本块
             if (foundBrace) {
-                qDebug() << "EditWrapper OnUpdateHighlighter, foundBrace";
+                qCDebug(appLog) << "EditWrapper OnUpdateHighlighter, foundBrace";
                 foundBlock = prevBlock;
             }
         }
 
         if (!beginBlock.isValid() || !endBlock.isValid()) {
-            qDebug() << "EditWrapper OnUpdateHighlighter, !beginBlock.isValid() || !endBlock.isValid()";
+            qCDebug(appLog) << "EditWrapper OnUpdateHighlighter, !beginBlock.isValid() || !endBlock.isValid()";
             return;
         }
 
         auto rehighlightBlock = [this](const QTextBlock &block) {
-            qDebug() << "EditWrapper OnUpdateHighlighter, rehighlightBlock";
+            qCDebug(appLog) << "EditWrapper OnUpdateHighlighter, rehighlightBlock";
             m_pSyntaxHighlighter->rehighlightBlock(block);
         };
 
         if (foundBlock.isValid() && foundBlock < beginBlock) {
-            qDebug() << "EditWrapper OnUpdateHighlighter, foundBlock.isValid() && foundBlock < beginBlock";
+            qCDebug(appLog) << "EditWrapper OnUpdateHighlighter, foundBlock.isValid() && foundBlock < beginBlock";
             for (QTextBlock var = foundBlock; var.isValid() && var != beginBlock; var = var.next())
             {
                 // Kate syntax highlighter 在高亮文本后会设置数据，通过此数据判断是否需要重复设置高亮
                 if (var.userData()) {
-                    qDebug() << "EditWrapper OnUpdateHighlighter, var.userData()";
+                    qCDebug(appLog) << "EditWrapper OnUpdateHighlighter, var.userData()";
                     continue;
                 }
 
@@ -1415,7 +1416,7 @@ void EditWrapper::OnUpdateHighlighter()
 
         for (QTextBlock var = beginBlock; var.isValid(); var = var.next()) {
             if (!var.userData()) {
-                qDebug() << "EditWrapper OnUpdateHighlighter, rehighlightBlock";
+                qCDebug(appLog) << "EditWrapper OnUpdateHighlighter, rehighlightBlock";
                 rehighlightBlock(var);
             }
             if (var == endBlock) {
@@ -1423,14 +1424,14 @@ void EditWrapper::OnUpdateHighlighter()
             }
         }
     }
-    qDebug() << "EditWrapper OnUpdateHighlighter, exit";
+    qCDebug(appLog) << "EditWrapper OnUpdateHighlighter, exit";
 }
 
 void EditWrapper::setTemFile(bool value)
 {
-    qDebug() << "EditWrapper setTemFile, value:" << value;
+    qCDebug(appLog) << "EditWrapper setTemFile, value:" << value;
     m_bIsTemFile = value;
-    qDebug() << "EditWrapper setTemFile, exit";
+    qCDebug(appLog) << "EditWrapper setTemFile, exit";
 }
 
 void EditWrapper::setRestoreCursorPosition(int position)
@@ -1440,14 +1441,14 @@ void EditWrapper::setRestoreCursorPosition(int position)
 
 void EditWrapper::updateHighlighterAll()
 {
-    qDebug() << "EditWrapper updateHighlighterAll";
+    qCDebug(appLog) << "EditWrapper updateHighlighterAll";
     if (m_pSyntaxHighlighter  && !m_bQuit && !m_bHighlighterAll) {
-        qDebug() << "EditWrapper updateHighlighterAll, m_pSyntaxHighlighter is not nullptr";
+        qCDebug(appLog) << "EditWrapper updateHighlighterAll, m_pSyntaxHighlighter is not nullptr";
         QTextBlock beginBlock = m_pTextEdit->document()->firstBlock();
         QTextBlock endBlock = m_pTextEdit->document()->lastBlock();
 
         if (!beginBlock.isValid() || !endBlock.isValid()) {
-            qDebug() << "EditWrapper updateHighlighterAll, !beginBlock.isValid() || !endBlock.isValid()";
+            qCDebug(appLog) << "EditWrapper updateHighlighterAll, !beginBlock.isValid() || !endBlock.isValid()";
             return;
         }
 
@@ -1459,18 +1460,18 @@ void EditWrapper::updateHighlighterAll()
 
         m_bHighlighterAll = true;
     }
-    qDebug() << "EditWrapper updateHighlighterAll, exit";
+    qCDebug(appLog) << "EditWrapper updateHighlighterAll, exit";
 }
 
 QDateTime EditWrapper::getLastModifiedTime() const
 {
-    qDebug() << "EditWrapper getLastModifiedTime";
+    qCDebug(appLog) << "EditWrapper getLastModifiedTime";
     return m_tModifiedDateTime;
 }
 
 void EditWrapper::setLastModifiedTime(const QString &time)
 {
-    qDebug() << "EditWrapper setLastModifiedTime, time:" << time;
+    qCDebug(appLog) << "EditWrapper setLastModifiedTime, time:" << time;
     // 与写入侧 toString(Qt::ISODate) 对称的显式格式解析；
     // 兼容历史记录中的默认 TextDate 格式，避免依赖 locale 相关默认重载
     QDateTime dt = QDateTime::fromString(time, Qt::ISODate);
@@ -1481,45 +1482,45 @@ void EditWrapper::setLastModifiedTime(const QString &time)
 }
 void EditWrapper::updateModifyStatus(bool bModified)
 {
-    qDebug() << "EditWrapper updateModifyStatus, bModified:" << bModified;
+    qCDebug(appLog) << "EditWrapper updateModifyStatus, bModified:" << bModified;
     if (getFileLoading()) {
-        qDebug() << "Skipping modify status update during file loading";
+        qCDebug(appLog) << "Skipping modify status update during file loading";
         return;
     }
 
     QString filePath = m_pTextEdit->getFilePath();
-    qDebug() << "Updating modify status for:" << filePath << "New status:" << bModified;
+    qCDebug(appLog) << "Updating modify status for:" << filePath << "New status:" << bModified;
 
     if (!bModified) {
-        qDebug() << "Updating save index for:" << filePath;
+        qCDebug(appLog) << "Updating save index for:" << filePath;
         m_pTextEdit->updateSaveIndex();
     }
 
     m_pTextEdit->document()->setModified(bModified);
     Window *pWindow = static_cast<Window *>(QWidget::window());
     pWindow->updateModifyStatus(filePath, bModified);
-    qDebug() << "EditWrapper updateModifyStatus, exit";
+    qCDebug(appLog) << "EditWrapper updateModifyStatus, exit";
 }
 
 void EditWrapper::updateSaveAsFileName(QString strOldFilePath, QString strNewFilePath)
 {
-    qDebug() << "EditWrapper updateSaveAsFileName, strOldFilePath:" << strOldFilePath << "strNewFilePath:" << strNewFilePath;
+    qCDebug(appLog) << "EditWrapper updateSaveAsFileName, strOldFilePath:" << strOldFilePath << "strNewFilePath:" << strNewFilePath;
     m_pWindow->updateSaveAsFileName(strOldFilePath, strNewFilePath);
 }
 
 //yanyuhan
 void EditWrapper::setLineNumberShow(bool bIsShow, bool bIsFirstShow)
 {
-    qDebug() << "EditWrapper setLineNumberShow, bIsShow:" << bIsShow << "bIsFirstShow:" << bIsFirstShow;
+    qCDebug(appLog) << "EditWrapper setLineNumberShow, bIsShow:" << bIsShow << "bIsFirstShow:" << bIsFirstShow;
     if (bIsShow && !bIsFirstShow) {
-        qDebug() << "EditWrapper setLineNumberShow, bIsShow && !bIsFirstShow";
+        qCDebug(appLog) << "EditWrapper setLineNumberShow, bIsShow && !bIsFirstShow";
         //int lineNumberAreaWidth = m_pTextEdit->getLeftAreaWidget()->m_pLineNumberArea->width();
         //int leftAreaWidth = m_pTextEdit->getLeftAreaWidget()->width();
         m_pTextEdit->getLeftAreaWidget()->m_pLineNumberArea->show();
         //m_pTextEdit->getLeftAreaWidget()->setFixedWidth(leftAreaWidth + lineNumberAreaWidth);
 
     } else if (!bIsShow) {
-        qDebug() << "EditWrapper setLineNumberShow, !bIsShow";
+        qCDebug(appLog) << "EditWrapper setLineNumberShow, !bIsShow";
         // int lineNumberAreaWidth = m_pTextEdit->getLeftAreaWidget()->m_pLineNumberArea->width();
         //int leftAreaWidth = m_pTextEdit->getLeftAreaWidget()->width();
         m_pTextEdit->getLeftAreaWidget()->m_pLineNumberArea->hide();
@@ -1527,15 +1528,15 @@ void EditWrapper::setLineNumberShow(bool bIsShow, bool bIsFirstShow)
     }
     m_pTextEdit->bIsSetLineNumberWidth = bIsShow;
     m_pTextEdit->updateLeftAreaWidget();
-    qDebug() << "EditWrapper setLineNumberShow, exit";
+    qCDebug(appLog) << "EditWrapper setLineNumberShow, exit";
 }
 
 //显示空白符
 void EditWrapper::setShowBlankCharacter(bool ok)
 {
-    qDebug() << "EditWrapper setShowBlankCharacter, ok:" << ok;
+    qCDebug(appLog) << "EditWrapper setShowBlankCharacter, ok:" << ok;
     if (ok) {
-        qDebug() << "EditWrapper setShowBlankCharacter, ok is true";
+        qCDebug(appLog) << "EditWrapper setShowBlankCharacter, ok is true";
         QTextOption opts = m_pTextEdit->document()->defaultTextOption();
         QTextOption::Flags flag = opts.flags();
         flag |= QTextOption::ShowTabsAndSpaces;
@@ -1543,7 +1544,7 @@ void EditWrapper::setShowBlankCharacter(bool ok)
         opts.setFlags(flag);
         m_pTextEdit->document()->setDefaultTextOption(opts);
     } else {
-        qDebug() << "EditWrapper setShowBlankCharacter, ok is false";
+        qCDebug(appLog) << "EditWrapper setShowBlankCharacter, ok is false";
         QTextOption opts = m_pTextEdit->document()->defaultTextOption();
         QTextOption::Flags flag = opts.flags();
         flag &= ~QTextOption::ShowTabsAndSpaces;
@@ -1551,49 +1552,49 @@ void EditWrapper::setShowBlankCharacter(bool ok)
         opts.setFlags(flag);
         m_pTextEdit->document()->setDefaultTextOption(opts);
     }
-    qDebug() << "EditWrapper setShowBlankCharacter, exit";
+    qCDebug(appLog) << "EditWrapper setShowBlankCharacter, exit";
 }
 
 BottomBar *EditWrapper::bottomBar()
 {
-    qDebug() << "EditWrapper bottomBar";
+    qCDebug(appLog) << "EditWrapper bottomBar";
     return m_pBottomBar;
 }
 
 QString EditWrapper::filePath()
 {
-    qDebug() << "EditWrapper filePath";
+    qCDebug(appLog) << "EditWrapper filePath";
     return  m_pTextEdit->getFilePath();
 }
 
 TextEdit *EditWrapper::textEditor()
 {
-    qDebug() << "EditWrapper textEditor";
+    qCDebug(appLog) << "EditWrapper textEditor";
     return m_pTextEdit;
 }
 
 Window *EditWrapper::window()
 {
-    qDebug() << "EditWrapper window";
+    qCDebug(appLog) << "EditWrapper window";
     Window *window = static_cast<Window *>(QWidget::window());
 
     if (m_pWindow != window) {
-        qDebug() << "EditWrapper window, m_pWindow != window";
+        qCDebug(appLog) << "EditWrapper window, m_pWindow != window";
         m_pWindow = window;
     }
 
-    qDebug() << "EditWrapper window, return m_pWindow";
+    qCDebug(appLog) << "EditWrapper window, return m_pWindow";
     return m_pWindow;
 }
 
 void EditWrapper::customEvent(QEvent *e)
 {
-    qDebug() << "EditWrapper customEvent";
+    qCDebug(appLog) << "EditWrapper customEvent";
     // 处理解析文件任务，大文件不会在单次事件任务中处理，而是每次读取一部分并将下次任务抛出
     if (static_cast<QEvent::Type>(ParseFileEvent::EParseFile) == e->type()) {
         // 中途退出则不继续处理
         if (m_bQuit) {
-            qDebug() << "EditWrapper customEvent, m_bQuit is true";
+            qCDebug(appLog) << "EditWrapper customEvent, m_bQuit is true";
             return;
         }
 
@@ -1605,13 +1606,13 @@ void EditWrapper::customEvent(QEvent *e)
 
             // 调整最大读取长度(单次读取最大长度)
             if (needReadLen > EReadStepSize) {
-                qDebug() << "EditWrapper customEvent, needReadLen > EReadStepSize";
+                qCDebug(appLog) << "EditWrapper customEvent, needReadLen > EReadStepSize";
                 needReadLen = EReadStepSize;
             }
 
             // 转码数据并插入光标位置
             QByteArray text = parseEvent->m_contentData.mid(parseEvent->m_alreadyReadOffset, needReadLen);
-            qDebug() << "EditWrapper customEvent, text:" << text;
+            qCDebug(appLog) << "EditWrapper customEvent, text:" << text;
             QTextCodec::ConverterState state;
             QString data = parseEvent->m_codec->toUnicode(text.constData(), text.size(), &state);
 
@@ -1621,13 +1622,13 @@ void EditWrapper::customEvent(QEvent *e)
 
             // 当前为首次读取
             if (0 == parseEvent->m_alreadyReadOffset) {
-                qDebug() << "EditWrapper customEvent, 0 == parseEvent->m_alreadyReadOffset";
+                qCDebug(appLog) << "EditWrapper customEvent, 0 == parseEvent->m_alreadyReadOffset";
                 QTextCursor firstLineCursor = m_pTextEdit->textCursor();
                 firstLineCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
                 m_pTextEdit->setTextCursor(firstLineCursor);
                 //秒开界面语法高亮
                 OnUpdateHighlighter();
-                qDebug() << "EditWrapper customEvent, OnUpdateHighlighter()";
+                qCDebug(appLog) << "EditWrapper customEvent, OnUpdateHighlighter()";
             }
 
             // 此次读取后的偏移量
@@ -1635,11 +1636,11 @@ void EditWrapper::customEvent(QEvent *e)
 
             // 是否已读取完成
             if (parseEvent->m_contentData.length() == curReadOffset) {
-                qDebug() << "EditWrapper customEvent, parseEvent->m_contentData.length() == curReadOffset";
+                qCDebug(appLog) << "EditWrapper customEvent, parseEvent->m_contentData.length() == curReadOffset";
                 // 异步读取结束
                 m_bAsyncReadFileFinished = true;
             } else {
-                qDebug() << "EditWrapper customEvent, parseEvent->m_contentData.length() != curReadOffset";
+                qCDebug(appLog) << "EditWrapper customEvent, parseEvent->m_contentData.length() != curReadOffset";
                 ParseFileEvent *nextEvent = parseEvent->clone();
                 // 调整已读取偏移位置
                 nextEvent->m_alreadyReadOffset = curReadOffset;
@@ -1649,31 +1650,31 @@ void EditWrapper::customEvent(QEvent *e)
 
         } catch (const std::bad_alloc &) {
             errorOccurred = true;
-            qWarning() << "Memory allocation failed";
+            qCWarning(appLog) << "Memory allocation failed";
         } catch (const std::exception &e) {
             errorOccurred = true;
-            qWarning() << QString("Error occurred: %1").arg(e.what());
+            qCWarning(appLog) << QString("Error occurred: %1").arg(e.what());
         }
 
         if (errorOccurred) {
-            qDebug() << "EditWrapper customEvent, errorOccurred is true";
+            qCDebug(appLog) << "EditWrapper customEvent, errorOccurred is true";
             m_bAsyncReadFileFinished = true;
             QMetaObject::invokeMethod(this, &EditWrapper::onReadAllocError, Qt::QueuedConnection);
         }
     }
-    qDebug() << "EditWrapper customEvent, exit";
+    qCDebug(appLog) << "EditWrapper customEvent, exit";
 }
 
 //支持大文本加载 界面不卡顿 秒关闭
 void EditWrapper::loadContent(const QByteArray &strContent)
 {
-    qDebug() << "EditWrapper loadContent, strContent:" << strContent;
+    qCDebug(appLog) << "EditWrapper loadContent, strContent:" << strContent;
     if (m_pBottomBar != nullptr) {
-        qDebug() << "EditWrapper loadContent, m_pBottomBar is not nullptr";
+        qCDebug(appLog) << "EditWrapper loadContent, m_pBottomBar is not nullptr";
         m_pBottomBar->setChildEnabled(false);
     }
     if (m_pWindow != nullptr) {
-        qDebug() << "EditWrapper loadContent, m_pWindow is not nullptr";
+        qCDebug(appLog) << "EditWrapper loadContent, m_pWindow is not nullptr";
         m_pWindow->setPrintEnabled(false);
     }
 
@@ -1692,7 +1693,7 @@ void EditWrapper::loadContent(const QByteArray &strContent)
     QTextCodec::ConverterState state;
     QTextCodec *codec = QTextCodec::codecForName("UTF-8");
     if (nullptr == codec) {
-        qInfo() << "QTextCodec::codecForName return nullptr";
+        qCInfo(appLog) << "QTextCodec::codecForName return nullptr";
         return;
     }
 
@@ -1705,7 +1706,7 @@ void EditWrapper::loadContent(const QByteArray &strContent)
     int inserted = 0;
 
     if (len > max) {
-        qDebug() << "EditWrapper loadContent, len > max";
+        qCDebug(appLog) << "EditWrapper loadContent, len > max";
         // 当读取大文件时，采用事件队列方式处理
         ParseFileEvent *parseEvent = new ParseFileEvent;
         parseEvent->m_contentData = strContent;
@@ -1733,7 +1734,7 @@ void EditWrapper::loadContent(const QByteArray &strContent)
     } else if (len > 0) {
         //初始化秒开
         if (!m_bQuit && len > InitContentPos) {
-            qDebug() << "EditWrapper loadContent, len > InitContentPos";
+            qCDebug(appLog) << "EditWrapper loadContent, len > InitContentPos";
             //data = strContent.mid(0, InitContentPos);
             QByteArray text = strContent.mid(0, InitContentPos);
             data = codec->toUnicode(text.constData(), text.size(), &state);
@@ -1748,7 +1749,7 @@ void EditWrapper::loadContent(const QByteArray &strContent)
             double progress = (inserted * 1.0) / len * 100;
             m_pBottomBar->setProgress(static_cast<int>(progress));
             if (!m_bQuit) {
-                qDebug() << "EditWrapper loadContent, !m_bQuit";
+                qCDebug(appLog) << "EditWrapper loadContent, !m_bQuit";
                 //data = strContent.mid(InitContentPos, len - InitContentPos);
                 QByteArray text = strContent.mid(InitContentPos, len - InitContentPos);
                 data = codec->toUnicode(text.constData(), text.size(), &state);
@@ -1758,9 +1759,9 @@ void EditWrapper::loadContent(const QByteArray &strContent)
                 m_pBottomBar->setProgress(static_cast<int>(progress));
             }
         } else {
-            qDebug() << "EditWrapper loadContent, m_bQuit";
+            qCDebug(appLog) << "EditWrapper loadContent, m_bQuit";
             if (!m_bQuit) {
-                qDebug() << "EditWrapper loadContent, !m_bQuit";
+                qCDebug(appLog) << "EditWrapper loadContent, !m_bQuit";
                 //cursor.insertText(strContent);
                 data = codec->toUnicode(strContent.constData(), strContent.size(), &state);
                 cursor.insertText(data);
@@ -1776,11 +1777,11 @@ void EditWrapper::loadContent(const QByteArray &strContent)
         }
     }
     if (m_pWindow != nullptr) {
-        qDebug() << "EditWrapper loadContent, m_pWindow is not nullptr";
+        qCDebug(appLog) << "EditWrapper loadContent, m_pWindow is not nullptr";
         m_pWindow->setPrintEnabled(true);
     }
     if (m_pBottomBar != nullptr) {
-        qDebug() << "EditWrapper loadContent, m_pBottomBar is not nullptr";
+        qCDebug(appLog) << "EditWrapper loadContent, m_pBottomBar is not nullptr";
         m_pBottomBar->setChildEnabled(true);
         auto format = BottomBar::getEndlineFormat(strContent);
         m_pBottomBar->setEndlineMenuText(format);
@@ -1788,7 +1789,7 @@ void EditWrapper::loadContent(const QByteArray &strContent)
     m_pTextEdit->setReadOnly(false);
     m_pTextEdit->setLeftAreaUpdateState(TextEdit::FileOpenEnd);
     QApplication::restoreOverrideCursor();
-    qDebug() << "EditWrapper loadContent, exit";
+    qCDebug(appLog) << "EditWrapper loadContent, exit";
 }
 
 /**
@@ -1797,31 +1798,31 @@ void EditWrapper::loadContent(const QByteArray &strContent)
  */
 void EditWrapper::reinitOnFileLoad(const QByteArray &encode)
 {
-    qDebug() << "EditWrapper reinitOnFileLoad";
+    qCDebug(appLog) << "EditWrapper reinitOnFileLoad";
     m_Definition = m_Repository.definitionForFileName(QFileInfo(m_pTextEdit->getFilePath()).fileName().toLower());
     if (m_Definition.isValid() && !m_Definition.filePath().isEmpty()) {
-        qDebug() << "EditWrapper reinitOnFileLoad, m_Definition.isValid() && !m_Definition.filePath().isEmpty()";
+        qCDebug(appLog) << "EditWrapper reinitOnFileLoad, m_Definition.isValid() && !m_Definition.filePath().isEmpty()";
         if (!m_pSyntaxHighlighter) m_pSyntaxHighlighter = new CSyntaxHighlighter(m_pTextEdit->document());
         QString m_themePath = Settings::instance()->settings->option("advance.editor.theme")->value().toString();
         if (m_themePath.contains("dark")) {
-            qDebug() << "EditWrapper reinitOnFileLoad, m_themePath contains dark";
+            qCDebug(appLog) << "EditWrapper reinitOnFileLoad, m_themePath contains dark";
             m_pSyntaxHighlighter->setTheme(m_Repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme));
         } else {
-            qDebug() << "EditWrapper reinitOnFileLoad, m_themePath does not contain dark";
+            qCDebug(appLog) << "EditWrapper reinitOnFileLoad, m_themePath does not contain dark";
             m_pSyntaxHighlighter->setTheme(m_Repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
         }
 
         if (m_pSyntaxHighlighter) {
-            qDebug() << "EditWrapper reinitOnFileLoad, m_pSyntaxHighlighter is not nullptr";
+            qCDebug(appLog) << "EditWrapper reinitOnFileLoad, m_pSyntaxHighlighter is not nullptr";
             m_pSyntaxHighlighter->setDefinition(m_Definition);
         }
         m_pTextEdit->setSyntaxDefinition(m_Definition);
         m_pBottomBar->getHighlightMenu()->setCurrentTextOnly(m_Definition.translatedName());
-        qDebug() << "EditWrapper reinitOnFileLoad, exit";
+        qCDebug(appLog) << "EditWrapper reinitOnFileLoad, exit";
     }
 
     if (!Utils::isDraftFile(m_pTextEdit->getFilePath())) {
-        qDebug() << "EditWrapper reinitOnFileLoad, !Utils::isDraftFile(m_pTextEdit->getFilePath())";
+        qCDebug(appLog) << "EditWrapper reinitOnFileLoad, !Utils::isDraftFile(m_pTextEdit->getFilePath())";
         DRecentData data;
         data.appName = "Deepin Editor";
         data.appExec = "deepin-editor";
@@ -1835,15 +1836,15 @@ void EditWrapper::reinitOnFileLoad(const QByteArray &encode)
     // 初始化设置编码
     m_sCurEncode = encode;
     m_sFirstEncode = encode;
-    qDebug() << "EditWrapper reinitOnFileLoad, exit";
+    qCDebug(appLog) << "EditWrapper reinitOnFileLoad, exit";
 }
 
 void EditWrapper::onReadAllocError()
 {
-    qDebug() << "EditWrapper onReadAllocError";
+    qCDebug(appLog) << "EditWrapper onReadAllocError";
     // 设置文本为只读模式，且不显示通知
     if (!m_pTextEdit->getReadOnlyMode()) {
-        qDebug() << "EditWrapper onReadAllocError, !m_pTextEdit->getReadOnlyMode()";
+        qCDebug(appLog) << "EditWrapper onReadAllocError, !m_pTextEdit->getReadOnlyMode()";
         m_pTextEdit->toggleReadOnlyMode(true);
     }
 
@@ -1851,22 +1852,22 @@ void EditWrapper::onReadAllocError()
     m_pWaringNotices->clearBtn();
     m_pWaringNotices->show();
     DMessageManager::instance()->sendMessage(m_pTextEdit, m_pWaringNotices);
-    qDebug() << "EditWrapper onReadAllocError, exit";
+    qCDebug(appLog) << "EditWrapper onReadAllocError, exit";
 }
 
 void EditWrapper::clearDoubleCharaterEncode()
 {
-    qDebug() << "EditWrapper clearDoubleCharaterEncode";
+    qCDebug(appLog) << "EditWrapper clearDoubleCharaterEncode";
     if (QFileInfo(filePath()).baseName().contains("double")
             || QFileInfo(filePath()).baseName().contains("user")
             || QFileInfo(filePath()).baseName().contains("four")) {
         if (QFileInfo(filePath()).size() > 500 * 1024) {
-            qDebug() << "EditWrapper size > 500 * 1024, return";
+            qCDebug(appLog) << "EditWrapper size > 500 * 1024, return";
             return;
         }
         emit sigClearDoubleCharaterEncode();
     }
-    qDebug() << "EditWrapper clearDoubleCharaterEncode, exit";
+    qCDebug(appLog) << "EditWrapper clearDoubleCharaterEncode, exit";
 }
 
 //

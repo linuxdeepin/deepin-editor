@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "ddlog.h"
 #include "performancemonitor.h"
 #include <QDebug>
 
@@ -20,54 +21,54 @@ qint64 PerformanceMonitor::openFileFinishMs      = 0;
 
 PerformanceMonitor::PerformanceMonitor()
 {
-    qDebug() << "PerformanceMonitor instance created";
+    qCDebug(appLog) << "PerformanceMonitor instance created";
 }
 
 void PerformanceMonitor::initializeAppStart()
 {
     QDateTime current = QDateTime::currentDateTime();
-    qDebug() << qPrintable(LOG_FLAG)
+    qCDebug(appLog) << qPrintable(LOG_FLAG)
              << QDateTime::currentDateTime().toString(Qt::ISODateWithMs)
              << "start to initialize app";
     initializeAppStartMs = current.toMSecsSinceEpoch();
-    qDebug() << "Application start timestamp recorded:" << initializeAppStartMs;
+    qCDebug(appLog) << "Application start timestamp recorded:" << initializeAppStartMs;
 }
 
 void PerformanceMonitor::initializeAppFinish()
 {
     QDateTime current = QDateTime::currentDateTime();
-    qDebug() << qPrintable(LOG_FLAG)
+    qCDebug(appLog) << qPrintable(LOG_FLAG)
              << QDateTime::currentDateTime().toString(Qt::ISODateWithMs)
              << " finish to initialize app";
 
     inittalizeApoFinishMs = current.toMSecsSinceEpoch();
     qint64 time = inittalizeApoFinishMs - initializeAppStartMs;
-    qInfo() << qPrintable(QString("%1 startduration=%2ms #(Init app time)").arg(GRAB_POINT_INIT_APP_TIME).arg(time));
+    qCInfo(appLog) << qPrintable(QString("%1 startduration=%2ms #(Init app time)").arg(GRAB_POINT_INIT_APP_TIME).arg(time));
 }
 
 void PerformanceMonitor::closeAppStart()
 {
     QDateTime current = QDateTime::currentDateTime();
     closeAppStartMs = current.toMSecsSinceEpoch();
-    qDebug() << "Application close process started, timestamp:" << closeAppStartMs;
+    qCDebug(appLog) << "Application close process started, timestamp:" << closeAppStartMs;
 }
 
 void PerformanceMonitor::closeAppFinish()
 {
     QDateTime current = QDateTime::currentDateTime();
-    qDebug() << qPrintable(LOG_FLAG)
+    qCDebug(appLog) << qPrintable(LOG_FLAG)
              << QDateTime::currentDateTime().toString(Qt::ISODateWithMs)
              << " finish to close app";
 
     closeAppFinishMs = current.toMSecsSinceEpoch();
     qint64 time = closeAppFinishMs - closeAppStartMs;
-    qInfo() << qPrintable(QString("%1 closeduration=%2ms #(Close app time)").arg(GRAB_POINT_CLOSE_APP_TIME).arg(time));
+    qCInfo(appLog) << qPrintable(QString("%1 closeduration=%2ms #(Close app time)").arg(GRAB_POINT_CLOSE_APP_TIME).arg(time));
 }
 
 void PerformanceMonitor::openFileStart()
 {
     QDateTime current = QDateTime::currentDateTime();
-    qDebug() << qPrintable(LOG_FLAG)
+    qCDebug(appLog) << qPrintable(LOG_FLAG)
              << QDateTime::currentDateTime().toString(Qt::ISODateWithMs)
              << "start to open file";
     openFileStartMs = current.toMSecsSinceEpoch();
@@ -76,12 +77,12 @@ void PerformanceMonitor::openFileStart()
 void PerformanceMonitor::openFileFinish(const QString &strFileName, qint64 iFileSize)
 {
     QDateTime current = QDateTime::currentDateTime();
-    qDebug() << qPrintable(LOG_FLAG)
+    qCDebug(appLog) << qPrintable(LOG_FLAG)
              << QDateTime::currentDateTime().toString(Qt::ISODateWithMs)
              << " finish to open file";
 
     openFileFinishMs = current.toMSecsSinceEpoch();
     qint64 time = openFileFinishMs - openFileStartMs;
     float fFilesize = iFileSize;
-    qInfo() << qPrintable(QString("%1 filename=%2 filesize=%3M opentime=%4ms #(Open file time)").arg(GRAB_POINT_OPEN_FILE_TIME).arg(strFileName).arg(QString::number(fFilesize/(1024*1024), 'f', 6)).arg(time));
+    qCInfo(appLog) << qPrintable(QString("%1 filename=%2 filesize=%3M opentime=%4ms #(Open file time)").arg(GRAB_POINT_OPEN_FILE_TIME).arg(strFileName).arg(QString::number(fFilesize/(1024*1024), 'f', 6)).arg(time));
 }

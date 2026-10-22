@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "ddlog.h"
 #include "themepanel.h"
 #include "../widgets/window.h"
 
@@ -18,7 +19,7 @@ ThemePanel::ThemePanel(QWidget *parent)
       m_themeModel(new ThemeListModel),
       m_window(static_cast<Window *>(parent))
 {
-    qDebug() << "ThemePanel constructor";
+    qCDebug(appLog) << "ThemePanel constructor";
     // init view.
     m_themeView->setAccessibleName("ThemeListView");
     m_themeView->setObjectName("ThemeView");
@@ -43,12 +44,12 @@ ThemePanel::ThemePanel(QWidget *parent)
         m_themeView->setCurrentIndex(idx);
         m_themeView->scrollTo(idx);
     });
-    qDebug() << "ThemePanel initialized";
+    qCDebug(appLog) << "ThemePanel initialized";
 }
 
 ThemePanel::~ThemePanel()
 {
-    qDebug() << "ThemePanel destructor";
+    qCDebug(appLog) << "ThemePanel destructor";
 }
 
 void ThemePanel::paintEvent(QPaintEvent *e)
@@ -67,27 +68,27 @@ void ThemePanel::paintEvent(QPaintEvent *e)
 }
 void ThemePanel::setBackground(const QString &color)
 {
-    qDebug() << "Setting panel background color:" << color;
+    qCDebug(appLog) << "Setting panel background color:" << color;
     m_backgroundColor = QColor(color);
 
     if (m_backgroundColor.lightness() < 128) {
-        qDebug() << "Background color is dark";
+        qCDebug(appLog) << "Background color is dark";
         m_frameColor = m_frameDarkColor;
     } else {
-        qDebug() << "Background color is light";
+        qCDebug(appLog) << "Background color is light";
         m_frameColor = m_frameLightColor;
     }
 
     update();
-    qDebug() << "Panel background color set";
+    qCDebug(appLog) << "Panel background color set";
 }
 
 void ThemePanel::popup()
 {
-    qDebug() << "Showing theme panel with animation";
+    qCDebug(appLog) << "Showing theme panel with animation";
     // parent 非 Window（或为空）时 m_window 无效，直接早退避免空指针解引用
     if (!m_window) {
-        qWarning() << "Theme panel has no host window, skip popup";
+        qCWarning(appLog) << "Theme panel has no host window, skip popup";
         QWidget::show();
         return;
     }
@@ -107,15 +108,15 @@ void ThemePanel::popup()
 
     connect(animation, &QPropertyAnimation::valueChanged, this, [=] { m_themeView->adjustScrollbarMargins(); });
     connect(animation, &QPropertyAnimation::finished, animation, &QPropertyAnimation::deleteLater);
-    qDebug() << "popup end";
+    qCDebug(appLog) << "popup end";
 }
 
 void ThemePanel::hide()
 {
-    qDebug() << "Hiding theme panel with animation";
+    qCDebug(appLog) << "Hiding theme panel with animation";
     // parent 非 Window（或为空）时 m_window 无效，直接早退避免空指针解引用
     if (!m_window) {
-        qWarning() << "Theme panel has no host window, hide directly";
+        qCWarning(appLog) << "Theme panel has no host window, hide directly";
         QWidget::hide();
         return;
     }
@@ -131,17 +132,17 @@ void ThemePanel::hide()
 
     connect(animation, &QPropertyAnimation::finished, this, &QWidget::hide);
     connect(animation, &QPropertyAnimation::finished, animation, &QPropertyAnimation::deleteLater);
-    qDebug() << "hide end";
+    qCDebug(appLog) << "hide end";
 }
 
 void ThemePanel::setFrameColor(const QString &selectedColor, const QString &normalColor)
 {
-    qDebug() << "Setting frame color:" << selectedColor << normalColor;
+    qCDebug(appLog) << "Setting frame color:" << selectedColor << normalColor;
     m_themeModel->setFrameColor(selectedColor, normalColor);
 }
 
 void ThemePanel::setSelectionTheme(const QString &path)
 {
-    qDebug() << "Setting selected theme path:" << path;
+    qCDebug(appLog) << "Setting selected theme path:" << path;
     m_themeModel->setSelection(path);
 }

@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "ddlog.h"
 #include "markdownview.h"
 #include "themeserializer.h"
 #include <QTimer>
@@ -50,7 +51,7 @@ protected:
             path = QLatin1Char('/') + url.host() + path;
         QFileInfo fi(path);
         if (!fi.exists() || !fi.isFile()) {
-            qWarning() << "mdimg: resource not found:" << path;
+            qCWarning(appLog) << "mdimg: resource not found:" << path;
             job->fail(QWebEngineUrlRequestJob::UrlNotFound);
             return;
         }
@@ -62,7 +63,7 @@ protected:
         const QString canonical = fi.canonicalFilePath();
         const QString mime = QMimeDatabase().mimeTypeForFile(fi).name();
         if (canonical.isEmpty() || !mime.startsWith(QLatin1String("image/"))) {
-            qWarning() << "mdimg: request denied (traversal or non-image):" << path << "mime:" << mime;
+            qCWarning(appLog) << "mdimg: request denied (traversal or non-image):" << path << "mime:" << mime;
             job->fail(QWebEngineUrlRequestJob::RequestDenied);
             return;
         }
@@ -91,15 +92,15 @@ MarkdownView::MarkdownView(QWidget *parent)
         const QUrl url(urlStr);
         const QString scheme = url.scheme().toLower();
         if (scheme == QLatin1String("http") || scheme == QLatin1String("https")) {
-            qInfo() << "MarkdownView: open external link in system browser:" << urlStr;
+            qCInfo(appLog) << "MarkdownView: open external link in system browser:" << urlStr;
             QDesktopServices::openUrl(url);
         } else {
-            qWarning() << "MarkdownView: blocked link with non-whitelisted scheme:" << urlStr;
+            qCWarning(appLog) << "MarkdownView: blocked link with non-whitelisted scheme:" << urlStr;
         }
     });
     // §4 阶段 4 崩溃恢复：WebEngine 渲染进程终止时重新加载页面
     connect(this, &QWebEngineView::renderProcessTerminated, this, [this](QWebEnginePage::RenderProcessTerminationStatus, int) {
-        qWarning() << "MarkdownView: render process terminated, reloading";
+        qCWarning(appLog) << "MarkdownView: render process terminated, reloading";
         m_ready = false;
         QTimer::singleShot(300, this, [this]() {
             page()->triggerAction(QWebEnginePage::Reload);
@@ -131,7 +132,7 @@ void MarkdownView::init()
     connect(page(), &QWebEnginePage::urlChanged, this, [this](const QUrl &url) {
         const QString scheme = url.scheme();
         if (scheme == QLatin1String("http") || scheme == QLatin1String("https")) {
-            qWarning() << "MarkdownView: external navigation blocked, delegating to browser:" << url;
+            qCWarning(appLog) << "MarkdownView: external navigation blocked, delegating to browser:" << url;
             QDesktopServices::openUrl(url);
             load(QUrl(QStringLiteral("qrc:/editor/markdown/web/milkdown.html")));
         }

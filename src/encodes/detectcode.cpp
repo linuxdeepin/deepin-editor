@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "ddlog.h"
 #include "detectcode.h"
 #include "../common/config.h"
 
@@ -125,7 +126,7 @@ DetectCode::DetectCode() {}
  */
 QByteArray DetectCode::GetFileEncodingFormat(QString filepath, QByteArray content)
 {
-    qDebug() << "Enter GetFileEncodingFormat";
+    qCDebug(appLog) << "Enter GetFileEncodingFormat";
     QString charDetectedResult;
     QByteArray ucharDetectdRet;
     QByteArrayList icuDetectRetList;
@@ -142,26 +143,26 @@ QByteArray DetectCode::GetFileEncodingFormat(QString filepath, QByteArray conten
 #endif
     bool bFlag = str.contains(reg);
     if (bFlag) {
-        qDebug() << "Content contains Chinese characters";
+        qCDebug(appLog) << "Content contains Chinese characters";
         const QByteArray suffix = "为增加探测率保留的中文";
         QByteArray newContent = content;
         //手动添加中文字符，避免字符长度太短而导致判断编码错误
         newContent += suffix;
         DetectCode::ChartDet_DetectingTextCoding(newContent, charDetectedResult, chardetconfidence);
-        qDebug() << "Initial chardet confidence for Chinese content:" << chardetconfidence;
+        qCDebug(appLog) << "Initial chardet confidence for Chinese content:" << chardetconfidence;
 
         // 大文本数据存在从文档中间截断的可能，导致unicode中文字符被截断，解析为乱码，处理部分情况
         // 根据文本中断的情况，每次尝试解析编码后移除尾部字符，直到识别率达到90%以上
         int tryCount = 5;
         while (chardetconfidence < gs_dMinConfidence && newContent.size() > suffix.size() && tryCount-- > 0) {
-            qDebug() << "Confidence too low, retrying. Try count left:" << tryCount << ", current confidence:" << chardetconfidence;
+            qCDebug(appLog) << "Confidence too low, retrying. Try count left:" << tryCount << ", current confidence:" << chardetconfidence;
             // 移除可能的乱码尾部字符
             newContent.remove(newContent.size() - suffix.size(), 1);
             DetectCode::ChartDet_DetectingTextCoding(newContent, charDetectedResult, chardetconfidence);
         }
-        qDebug() << "Final chardet confidence after retries:" << chardetconfidence;
+        qCDebug(appLog) << "Final chardet confidence after retries:" << chardetconfidence;
     } else {
-        qDebug() << "Content does not contain Chinese characters";
+        qCDebug(appLog) << "Content does not contain Chinese characters";
         DetectCode::ChartDet_DetectingTextCoding(content, charDetectedResult, chardetconfidence);
 
         // 部分非unicode编码同为中文，例如 GB18030, BIG5 等中文编码，同样判断识别率，识别率较低手动干预多次检测
@@ -171,42 +172,42 @@ QByteArray DetectCode::GetFileEncodingFormat(QString filepath, QByteArray conten
             newContent.chop(1);
             DetectCode::ChartDet_DetectingTextCoding(newContent, charDetectedResult, chardetconfidence);
         }
-        qDebug() << "Final chardet confidence for non-Chinese after retries:" << chardetconfidence;
+        qCDebug(appLog) << "Final chardet confidence for non-Chinese after retries:" << chardetconfidence;
     }
     ucharDetectdRet = charDetectedResult.toLatin1();
 
     // uchardet识别编码 若识别率过低, 考虑是否非单字节编码格式。
     if (ucharDetectdRet.contains("unknown") || ucharDetectdRet.contains("ASCII") || ucharDetectdRet.contains("???") ||
         ucharDetectdRet.isEmpty() || chardetconfidence < gs_dMinConfidence) {
-        qDebug() << "Uchardet detection needed or confidence too low, calling UchardetCode";
+        qCDebug(appLog) << "Uchardet detection needed or confidence too low, calling UchardetCode";
         ucharDetectdRet = DetectCode::UchardetCode(filepath);
     }
 
     if (ucharDetectdRet.contains("ASCII")) {
-        qDebug() << "Detected ASCII, using default encoding";
+        qCDebug(appLog) << "Detected ASCII, using default encoding";
         // 使用配置的默认文件编码，默认为UTF-8
         detectRet = Config::instance()->defaultEncoding();
     } else {
-        qDebug() << "Detected non-ASCII, trying ICU and selecting coding";
+        qCDebug(appLog) << "Detected non-ASCII, trying ICU and selecting coding";
         // icu识别编码
         icuDetectTextEncoding(filepath, icuDetectRetList);
         detectRet = selectCoding(ucharDetectdRet, icuDetectRetList, chardetconfidence);
 
         if (detectRet.contains("ASCII") || detectRet.isEmpty()) {
-            qDebug() << "Selected encoding is ASCII or empty, using default encoding";
+            qCDebug(appLog) << "Selected encoding is ASCII or empty, using default encoding";
             // 使用配置的默认文件编码，默认为UTF-8
             detectRet = Config::instance()->defaultEncoding();
         }
     }
 
-    qDebug() << "GetFileEncodingFormat exit, detected encoding:" << detectRet.toUpper();
-    qDebug() << "Exit GetFileEncodingFormat";
+    qCDebug(appLog) << "GetFileEncodingFormat exit, detected encoding:" << detectRet.toUpper();
+    qCDebug(appLog) << "Exit GetFileEncodingFormat";
     return detectRet.toUpper();
 }
 
 QByteArray DetectCode::UchardetCode(QString filepath)
 {
-    qDebug() << "Enter UchardetCode, file:" << filepath;
+    qCDebug(appLog) << "Enter UchardetCode, file:" << filepath;
 
     FILE *fp;
     QByteArray charset;
@@ -222,13 +223,13 @@ QByteArray DetectCode::UchardetCode(QString filepath)
     fp = fopen(filepath.toLocal8Bit().data(), "rb");
 
     if (fp) {
-        qDebug() << "File opened successfully for UchardetCode:" << filepath;
+        qCDebug(appLog) << "File opened successfully for UchardetCode:" << filepath;
         while (!feof(fp)) {
             size_t len = fread(buff, 1, buffer_size, fp);
-            qDebug() << "Reading data for UchardetCode, len:" << len;
+            qCDebug(appLog) << "Reading data for UchardetCode, len:" << len;
             int retval = uchardet_handle_data(handle, buff, len);
             if (retval != 0) {
-                qWarning() << "uchardet_handle_data returned non-zero value:" << retval;
+                qCWarning(appLog) << "uchardet_handle_data returned non-zero value:" << retval;
                 continue;
             }
 
@@ -238,9 +239,9 @@ QByteArray DetectCode::UchardetCode(QString filepath)
 
         uchardet_data_end(handle);
         charset = uchardet_get_charset(handle);
-        qDebug() << "Uchardet detected charset:" << charset;
+        qCDebug(appLog) << "Uchardet detected charset:" << charset;
     } else {
-        qWarning() << "Failed to open file for UchardetCode:" << filepath;
+        qCWarning(appLog) << "Failed to open file for UchardetCode:" << filepath;
     }
 
     uchardet_delete(handle);
@@ -248,19 +249,19 @@ QByteArray DetectCode::UchardetCode(QString filepath)
     buff = nullptr;
 
     if (charset == "MAC-CENTRALEUROPE") {
-        qDebug() << "Correcting charset from MAC-CENTRALEUROPE";
+        qCDebug(appLog) << "Correcting charset from MAC-CENTRALEUROPE";
         charset = "MACCENTRALEUROPE";
     }
     if (charset == "MAC-CYRILLIC") {
-        qDebug() << "Correcting charset from MAC-CYRILLIC";
+        qCDebug(appLog) << "Correcting charset from MAC-CYRILLIC";
         charset = "MACCYRILLIC";
     }
     if (charset.contains("WINDOWS-")) {
-        qDebug() << "Correcting charset from WINDOWS-";
+        qCDebug(appLog) << "Correcting charset from WINDOWS-";
         charset = charset.replace("WINDOWS-", "CP");
     }
 
-    qDebug() << "Exit UchardetCode";
+    qCDebug(appLog) << "Exit UchardetCode";
     return charset;
 }
 
@@ -271,12 +272,12 @@ QByteArray DetectCode::UchardetCode(QString filepath)
  **/
 void DetectCode::icuDetectTextEncoding(const QString &filePath, QByteArrayList &listDetectRet)
 {
-    qDebug() << "Enter icuDetectTextEncoding, file:" << filePath;
+    qCDebug(appLog) << "Enter icuDetectTextEncoding, file:" << filePath;
     FILE *file;
     file = fopen(filePath.toLocal8Bit().data(), "rb");
     if (file == nullptr) {
-        qWarning() << "Failed to open file for icuDetectTextEncoding:" << filePath;
-        qInfo() << "fopen file failed.";
+        qCWarning(appLog) << "Failed to open file for icuDetectTextEncoding:" << filePath;
+        qCInfo(appLog) << "fopen file failed.";
         return;
     }
 
@@ -289,14 +290,14 @@ void DetectCode::icuDetectTextEncoding(const QString &filePath, QByteArrayList &
     while (!feof(file)) {
         size_t len = fread(buffer, 1, iBuffSize, file);
         readed += len;
-        qDebug() << "Reading data for icuDetectTextEncoding, len:" << len << ", total read:" << readed;
+        qCDebug(appLog) << "Reading data for icuDetectTextEncoding, len:" << len << ", total read:" << readed;
         if (readed > 1 * 1024 * 1024) {
-            qDebug() << "Read limit exceeded (1MB), breaking loop";
+            qCDebug(appLog) << "Read limit exceeded (1MB), breaking loop";
             break;
         }
 
         if (detectTextEncoding(buffer, len, &detected, listDetectRet)) {
-            qDebug() << "Text encoding detected, breaking loop";
+            qCDebug(appLog) << "Text encoding detected, breaking loop";
             break;
         }
     }
@@ -304,7 +305,7 @@ void DetectCode::icuDetectTextEncoding(const QString &filePath, QByteArrayList &
     delete[] buffer;
     buffer = nullptr;
     fclose(file);
-    qDebug() << "Exit icuDetectTextEncoding, detected encodings:" << listDetectRet;
+    qCDebug(appLog) << "Exit icuDetectTextEncoding, detected encodings:" << listDetectRet;
 }
 
 /**
@@ -316,7 +317,7 @@ void DetectCode::icuDetectTextEncoding(const QString &filePath, QByteArrayList &
  **/
 bool DetectCode::detectTextEncoding(const char *data, size_t len, char **detected, QByteArrayList &listDetectRet)
 {
-    qDebug() << "[DetectCode] Enter detectTextEncoding, data size:" << len;
+    qCDebug(appLog) << "[DetectCode] Enter detectTextEncoding, data size:" << len;
 
     Q_UNUSED(detected);
 
@@ -327,46 +328,46 @@ bool DetectCode::detectTextEncoding(const char *data, size_t len, char **detecte
     UErrorCode status = U_ZERO_ERROR;
     csd = ucsdet_open(&status);
     if (status != U_ZERO_ERROR) {
-        qWarning() << "ucsdet_open failed, status:" << status;
+        qCWarning(appLog) << "ucsdet_open failed, status:" << status;
         return false;
     }
 
     ucsdet_setText(csd, data, len, &status);
     if (status != U_ZERO_ERROR) {
-        qWarning() << "ucsdet_setText failed, status:" << status;
+        qCWarning(appLog) << "ucsdet_setText failed, status:" << status;
         return false;
     }
 
     csm = ucsdet_detectAll(csd, &matchCount, &status);
     if (status != U_ZERO_ERROR) {
-        qWarning() << "ucsdet_detectAll failed, status:" << status;
+        qCWarning(appLog) << "ucsdet_detectAll failed, status:" << status;
         return false;
     }
-    qDebug() << "matchCount from ucsdet_detectAll:" << matchCount;
+    qCDebug(appLog) << "matchCount from ucsdet_detectAll:" << matchCount;
 
     int readMax = 0;
     // 提高GB18030识别率时，拓展允许读取的编码列表
     if (Config::instance()->enableImproveGB18030()) {
-        qDebug() << "Improving GB18030 recognition, setting readMax to min(6, matchCount)";
+        qCDebug(appLog) << "Improving GB18030 recognition, setting readMax to min(6, matchCount)";
         readMax = qMin(6, matchCount);
     } else {
-        qDebug() << "Not improving GB18030 recognition, setting readMax to min(3, matchCount)";
+        qCDebug(appLog) << "Not improving GB18030 recognition, setting readMax to min(3, matchCount)";
         readMax = qMin(3, matchCount);
     }
-    qDebug() << "Final readMax:" << readMax;
+    qCDebug(appLog) << "Final readMax:" << readMax;
 
     for (int i = 0; i < readMax; i++) {
         auto str = ucsdet_getName(csm[i], &status);
         if (status != U_ZERO_ERROR) {
-            qWarning() << "ucsdet_getName failed for index" << i << ", status:" << status;
+            qCWarning(appLog) << "ucsdet_getName failed for index" << i << ", status:" << status;
             return false;
         }
         listDetectRet << QByteArray(str);
-        qDebug() << "Detected encoding:" << str << "(index:" << i << ")";
+        qCDebug(appLog) << "Detected encoding:" << str << "(index:" << i << ")";
     }
 
     ucsdet_close(csd);
-    qDebug() << "Exit detectTextEncoding, result:" << !listDetectRet.isEmpty();
+    qCDebug(appLog) << "Exit detectTextEncoding, result:" << !listDetectRet.isEmpty();
 
     return true;
 }
@@ -379,62 +380,62 @@ bool DetectCode::detectTextEncoding(const char *data, size_t len, char **detecte
  **/
 QByteArray DetectCode::selectCoding(QByteArray ucharDetectdRet, QByteArrayList icuDetectRetList, float confidence)
 {
-    qDebug() << "[DetectCode] Enter selectCoding, uchardet:" << ucharDetectdRet
+    qCDebug(appLog) << "[DetectCode] Enter selectCoding, uchardet:" << ucharDetectdRet
              << "icu:" << icuDetectRetList << "confidence:" << confidence;
 
     // 列表不允许为空
     if (icuDetectRetList.isEmpty()) {
-        qDebug() << "[DetectCode] Exit selectCoding, selected:" << (icuDetectRetList.isEmpty() ? QByteArray() : icuDetectRetList[0]);
+        qCDebug(appLog) << "[DetectCode] Exit selectCoding, selected:" << (icuDetectRetList.isEmpty() ? QByteArray() : icuDetectRetList[0]);
         return QByteArray();
     }
 
     if (!ucharDetectdRet.isEmpty()) {
-        qDebug() << "ucharDetectdRet is not empty";
+        qCDebug(appLog) << "ucharDetectdRet is not empty";
         // 获取是否允许提高GB18030编码的策略
         if (Config::instance()->enableImproveGB18030()) {
-            qDebug() << "GB18030 improvement enabled";
+            qCDebug(appLog) << "GB18030 improvement enabled";
             // 中文环境优先匹配GB18030编码
             if (QLocale::Chinese == QLocale::system().language()) {
-                qDebug() << "System language is Chinese";
+                qCDebug(appLog) << "System language is Chinese";
                 if (confidence < gs_dMinConfidence && icuDetectRetList.contains("GB18030")) {
-                    qDebug() << "Confidence low and GB18030 in list, returning GB18030";
+                    qCDebug(appLog) << "Confidence low and GB18030 in list, returning GB18030";
                     return QByteArray("GB18030");
                 }
             }
         }
 
         if (ucharDetectdRet.contains(icuDetectRetList[0])) {
-            qDebug() << "ucharDetectdRet contains first ICU result, returning uchardetDetectRet";
+            qCDebug(appLog) << "ucharDetectdRet contains first ICU result, returning uchardetDetectRet";
             return ucharDetectdRet;
         } else {
-            qDebug() << "ucharDetectdRet does not contain first ICU result";
+            qCDebug(appLog) << "ucharDetectdRet does not contain first ICU result";
             if (icuDetectRetList.contains("GB18030")) {
-                qDebug() << "ICU list contains GB18030, returning GB18030";
+                qCDebug(appLog) << "ICU list contains GB18030, returning GB18030";
                 return QByteArray("GB18030");
             } else {
                 // 筛选部分带后缀的编码格式，例如 UTF-16 BE 和 UTF-16
                 if (icuDetectRetList[0].contains(ucharDetectdRet)) {
-                    qDebug() << "First ICU result contains uchardetDetectRet, returning first ICU result";
+                    qCDebug(appLog) << "First ICU result contains uchardetDetectRet, returning first ICU result";
                     return icuDetectRetList[0];
                 }
-                qDebug() << "Returning uchardetDetectRet as fallback";
+                qCDebug(appLog) << "Returning uchardetDetectRet as fallback";
                 return ucharDetectdRet;
             }
         }
     }
 
     if (ucharDetectdRet.isEmpty()) {
-        qDebug() << "ucharDetectdRet is empty, checking ICU list for GB18030";
+        qCDebug(appLog) << "ucharDetectdRet is empty, checking ICU list for GB18030";
         if (icuDetectRetList.contains("GB18030")) {
-            qDebug() << "ICU list contains GB18030, returning GB18030";
+            qCDebug(appLog) << "ICU list contains GB18030, returning GB18030";
             return QByteArray("GB18030");
         } else {
-            qDebug() << "ICU list does not contain GB18030, returning first ICU result";
+            qCDebug(appLog) << "ICU list does not contain GB18030, returning first ICU result";
             return icuDetectRetList[0];
         }
     }
 
-    qDebug() << "Exit selectCoding, selected:" << (icuDetectRetList.isEmpty() ? QByteArray() : icuDetectRetList[0]);
+    qCDebug(appLog) << "Exit selectCoding, selected:" << (icuDetectRetList.isEmpty() ? QByteArray() : icuDetectRetList[0]);
     return QByteArray();
 }
 
@@ -483,7 +484,7 @@ QByteArray DetectCode::EncaDetectCode(QString filepath)
                 size_t len = fread(buff, 1, buffer_size, fp);
                 EncaEncoding encoding = enca_analyse(analyser, buff, len);
                 charset = enca_charset_name(encoding.charset, EncaNameStyle::ENCA_NAME_STYLE_MIME);
-                qDebug() << QStringLiteral("ENCA文本的编码方式是:") << charset;
+                qCDebug(appLog) << QStringLiteral("ENCA文本的编码方式是:") << charset;
                 //识别文本编码识别
                 if (encoding.charset == -1) continue;
                 break;
@@ -497,7 +498,7 @@ QByteArray DetectCode::EncaDetectCode(QString filepath)
 
             fclose(fp);
         } else {
-            qDebug() << QStringLiteral("ENCA打开失败:") << filepath;
+            qCDebug(appLog) << QStringLiteral("ENCA打开失败:") << filepath;
         }
 
         if (charset == "US-ASCII") charset = "ASCII";
@@ -522,7 +523,7 @@ int DetectCode::ChartDet_DetectingTextCoding(const char *str, QString &encoding,
     DetectObj *obj = detect_obj_init();
 
     if (obj == nullptr) {
-        // qInfo() << "Memory Allocation failed\n";
+        // qCInfo(appLog) << "Memory Allocation failed\n";
         return CHARDET_MEM_ALLOCATED_FAIL;
     }
 
@@ -538,7 +539,7 @@ int DetectCode::ChartDet_DetectingTextCoding(const char *str, QString &encoding,
             size_t len = fread(buff, 1, buffer_size, fp);
             detect(buff, &obj);
             QString encoding = obj->encoding;
-            qInfo() << "==== encoding: " << encoding;
+            qCInfo(appLog) << "==== encoding: " << encoding;
             if (encoding == "") {
                 continue;
             } else if (!encoding.isEmpty()) {
@@ -560,19 +561,19 @@ int DetectCode::ChartDet_DetectingTextCoding(const char *str, QString &encoding,
 #endif
     {
         case CHARDET_OUT_OF_MEMORY:
-            qInfo() << "On handle processing, occured out of memory\n";
+            qCInfo(appLog) << "On handle processing, occured out of memory\n";
             detect_obj_free(&obj);
             return CHARDET_OUT_OF_MEMORY;
         case CHARDET_NULL_OBJECT:
-            qInfo() << "2st argument of chardet() is must memory allocation with detect_obj_init API\n";
+            qCInfo(appLog) << "2st argument of chardet() is must memory allocation with detect_obj_init API\n";
             return CHARDET_NULL_OBJECT;
     }
 
 #ifndef CHARDET_BOM_CHECK
-        // qInfo() << "encoding:" << obj->encoding << "; confidence: " << obj->confidence;
+        // qCInfo(appLog) << "encoding:" << obj->encoding << "; confidence: " << obj->confidence;
 #else
     // from 1.0.6 support return whether exists BOM
-    qInfo() << "encoding:" << obj->encoding << "; confidence: " << obj->confidence << "; bom: " << obj->bom;
+    qCInfo(appLog) << "encoding:" << obj->encoding << "; confidence: " << obj->confidence << "; bom: " << obj->bom;
 #endif
 
     encoding = obj->encoding;
@@ -595,7 +596,7 @@ int DetectCode::ChartDet_DetectingTextCoding(const char *str, QString &encoding,
  */
 int utf8MultiByteCount(char *buf, size_t size)
 {
-    qDebug() << "utf8MultiByteCount() entry, size:" << size;
+    qCDebug(appLog) << "utf8MultiByteCount() entry, size:" << size;
     // UTF 字符类型，单字符，中间字符，双字节，三字节，四字节
     enum UtfCharType {
         Single,
@@ -618,25 +619,25 @@ int utf8MultiByteCount(char *buf, size_t size)
 
     int count = 0;
     while (size > 0 && count < FourBytes) {
-        qDebug() << "Looping in utf8MultiByteCount, current size:" << size << ", count:" << count;
+        qCDebug(appLog) << "Looping in utf8MultiByteCount, current size:" << size << ", count:" << count;
         int leftBits = LeftBitFunc(*buf);
-        qDebug() << "Left bits for current byte:" << leftBits;
+        qCDebug(appLog) << "Left bits for current byte:" << leftBits;
         switch (leftBits) {
             case Mid:
-                qDebug() << "Case Mid, incrementing count";
+                qCDebug(appLog) << "Case Mid, incrementing count";
                 count++;
                 break;
             case DoubleBytes:
-                qDebug() << "Case DoubleBytes, returning leftBits";
+                qCDebug(appLog) << "Case DoubleBytes, returning leftBits";
                 return leftBits;
             case ThreeBytes:
-                qDebug() << "Case ThreeBytes, returning leftBits";
+                qCDebug(appLog) << "Case ThreeBytes, returning leftBits";
                 return leftBits;
             case FourBytes:
-                qDebug() << "Case FourBytes, returning leftBits";
+                qCDebug(appLog) << "Case FourBytes, returning leftBits";
                 return leftBits;
             default:
-                qDebug() << "Case default (single byte or >4 bytes), returning 1";
+                qCDebug(appLog) << "Case default (single byte or >4 bytes), returning 1";
                 // 超过4字节或单字节，均返回1
                 return 1;
         }
@@ -645,7 +646,7 @@ int utf8MultiByteCount(char *buf, size_t size)
         size--;
     }
 
-    qDebug() << "utf8MultiByteCount() exit, returning count:" << count;
+    qCDebug(appLog) << "utf8MultiByteCount() exit, returning count:" << count;
     return count;
 }
 
@@ -688,33 +689,33 @@ int utf8MultiByteCount(char *buf, size_t size)
  */
 bool checkGB18030ToUtf8Error(char *buf, size_t size, size_t &replaceLen, QByteArray &appendChar)
 {
-    qDebug() << "checkGB18030ToUtf8Error() entry, size:" << size;
+    qCDebug(appLog) << "checkGB18030ToUtf8Error() entry, size:" << size;
     // 对于GB18030-2005编码规范PUA区域的字符，iconv报错，替换为对应的字符序。
     static const int sc_minGB18030PUACharLen = 4;
     if (size < sc_minGB18030PUACharLen) {
-        qDebug() << "Size is less than min GB18030 PUA char length, returning false";
+        qCDebug(appLog) << "Size is less than min GB18030 PUA char length, returning false";
         replaceLen = 1;
         appendChar = "?";
         return false;
     }
 
     quint32 puaChar = *reinterpret_cast<quint32 *>(buf);
-    qDebug() << "Processing puaChar:" << QString::number(puaChar, 16);
+    qCDebug(appLog) << "Processing puaChar:" << QString::number(puaChar, 16);
     appendChar = gs_UTF8MapGB18030Data.key(puaChar);
     if (appendChar.isEmpty()) {
-        qDebug() << "appendChar from gs_UTF8MapGB18030Data is empty, checking gs_ReplaceToUTF8_2005Error";
+        qCDebug(appLog) << "appendChar from gs_UTF8MapGB18030Data is empty, checking gs_ReplaceToUTF8_2005Error";
         // FFFFFF0X -> \uE816...\uE855
         appendChar = gs_ReplaceToUTF8_2005Error.key(QByteArray(buf, sc_minGB18030PUACharLen));
     }
-    qDebug() << "appendChar after first check:" << appendChar;
+    qCDebug(appLog) << "appendChar after first check:" << appendChar;
 
     if (appendChar.isEmpty()) {
-        qDebug() << "appendChar is still empty, returning false";
+        qCDebug(appLog) << "appendChar is still empty, returning false";
         replaceLen = 1;
         appendChar = "?";
         return false;
     } else {
-        qDebug() << "appendChar found, returning true, replaceLen:" << sc_minGB18030PUACharLen;
+        qCDebug(appLog) << "appendChar found, returning true, replaceLen:" << sc_minGB18030PUACharLen;
         replaceLen = sc_minGB18030PUACharLen;
         return true;
     }
@@ -725,43 +726,43 @@ bool checkGB18030ToUtf8Error(char *buf, size_t size, size_t &replaceLen, QByteAr
  */
 bool checkUTF8ToGB18030Error(char *buf, size_t size, size_t &replaceLen, QByteArray &appendChar)
 {
-    qDebug() << "checkUTF8ToGB18030Error() entry, size:" << size;
+    qCDebug(appLog) << "checkUTF8ToGB18030Error() entry, size:" << size;
     // 待转换的PUA字符均为3
     static const int sc_minUTFPUACharLen = 3;
     if (size < sc_minUTFPUACharLen) {
-        qDebug() << "Size is less than min UTF PUA char length, returning false";
+        qCDebug(appLog) << "Size is less than min UTF PUA char length, returning false";
         replaceLen = 1;
         appendChar = "?";
         return false;
     }
 
     QByteArray puaChar(buf, sc_minUTFPUACharLen);
-    qDebug() << "Processing puaChar:" << puaChar.toHex();
+    qCDebug(appLog) << "Processing puaChar:" << puaChar.toHex();
     quint32 gb18030char = gs_UTF8MapGB18030Data.value(puaChar, 0);
-    qDebug() << "gb18030char from gs_UTF8MapGB18030Data:" << QString::number(gb18030char, 16);
+    qCDebug(appLog) << "gb18030char from gs_UTF8MapGB18030Data:" << QString::number(gb18030char, 16);
     if (!gb18030char) {
-        qDebug() << "gb18030char is null, checking gs_ReplaceUtf8ToGB18030_2005Error";
+        qCDebug(appLog) << "gb18030char is null, checking gs_ReplaceUtf8ToGB18030_2005Error";
         // \uE816 -> 0xFE51
         appendChar = gs_ReplaceUtf8ToGB18030_2005Error.value(puaChar);
         if (appendChar.isEmpty()) {
-            qDebug() << "appendChar from gs_ReplaceUtf8ToGB18030_2005Error is empty, checking gs_ReplaceFromUtf8_2020Error";
+            qCDebug(appLog) << "appendChar from gs_ReplaceUtf8ToGB18030_2005Error is empty, checking gs_ReplaceFromUtf8_2020Error";
             // 0xFFFF11 -> 0x95329031
             appendChar = gs_ReplaceFromUtf8_2020Error.key(puaChar);
         }
-        qDebug() << "appendChar after second check:" << appendChar;
+        qCDebug(appLog) << "appendChar after second check:" << appendChar;
 
         if (!appendChar.isEmpty()) {
-            qDebug() << "appendChar found, returning true, replaceLen:" << sc_minUTFPUACharLen;
+            qCDebug(appLog) << "appendChar found, returning true, replaceLen:" << sc_minUTFPUACharLen;
             replaceLen = sc_minUTFPUACharLen;
             return true;
         }
 
-        qDebug() << "appendChar is empty, returning false";
+        qCDebug(appLog) << "appendChar is empty, returning false";
         replaceLen = 1;
         appendChar = "?";
         return false;
     } else {
-        qDebug() << "gb18030char found, returning true, replaceLen:" << sc_minUTFPUACharLen;
+        qCDebug(appLog) << "gb18030char found, returning true, replaceLen:" << sc_minUTFPUACharLen;
         replaceLen = sc_minUTFPUACharLen;
         appendChar = QByteArray(reinterpret_cast<char *>(&gb18030char), sizeof(gb18030char));
         return true;
@@ -777,17 +778,17 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr,
                                           const QString &fromCode,
                                           const QString &toCode)
 {
-    qDebug() << "[DetectCode] Enter ChangeFileEncodingFormat, from:" << fromCode << "to:" << toCode
+    qCDebug(appLog) << "[DetectCode] Enter ChangeFileEncodingFormat, from:" << fromCode << "to:" << toCode
              << "input size:" << inputStr.size();
 
     if (fromCode == toCode) {
-        qDebug() << "fromCode and toCode are the same, no conversion needed";
+        qCDebug(appLog) << "fromCode and toCode are the same, no conversion needed";
         outStr = inputStr;
         return true;
     }
 
     if (inputStr.isEmpty()) {
-        qDebug() << "Input string is empty, clearing output and returning true";
+        qCDebug(appLog) << "Input string is empty, clearing output and returning true";
         outStr.clear();
         return true;
     }
@@ -796,40 +797,40 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr,
     // 使用QTextCodec对部分编码进行处理
     static QStringList codecList{"GB18030"};
     if (codecList.contains(fromCode) || codecList.contains(toCode)) {
-        qDebug() << "Codec list contains fromCode or toCode, using convertEncodingTextCodec";
+        qCDebug(appLog) << "Codec list contains fromCode or toCode, using convertEncodingTextCodec";
         return convertEncodingTextCodec(inputStr, outStr, fromCode, toCode);
     }
 #endif
 
     iconv_t handle = iconv_open(toCode.toLocal8Bit().data(), fromCode.toLocal8Bit().data());
     if (handle != reinterpret_cast<iconv_t>(-1)) {
-        qDebug() << "iconv_open successful";
+        qCDebug(appLog) << "iconv_open successful";
         MibEncoding fromMib = UnknownMib;
         QTextCodec *fromCodec = QTextCodec::codecForName(fromCode.toUtf8());
         if (fromCodec) {
             fromMib = static_cast<MibEncoding>(fromCodec->mibEnum());
-            qDebug() << "fromMib:" << fromMib;
+            qCDebug(appLog) << "fromMib:" << fromMib;
         }
         // 不使用上层修改的Iconv处理时，不检测转换的编码格式，跳过GB18030转换特殊处理
         MibEncoding toMib = UnknownMib;
 
         const bool enablePatchedIconv = Config::instance()->enablePatchedIconv();
         if (enablePatchedIconv) {
-            qDebug() << "Patched Iconv enabled";
+            qCDebug(appLog) << "Patched Iconv enabled";
             QTextCodec *toCodec = QTextCodec::codecForName(toCode.toUtf8());
             if (toCodec) {
                 toMib = static_cast<MibEncoding>(toCodec->mibEnum());
-                qDebug() << "toMib:" << toMib;
+                qCDebug(appLog) << "toMib:" << toMib;
             }
 
             // 替换需手动修改 UTF-8 和 GB180303 编码转换的部分
             if (GB18030 == fromMib && UTF_8 == toMib) {
-                qDebug() << "Converting from GB18030 to UTF-8, applying 2005 error replacements";
+                qCDebug(appLog) << "Converting from GB18030 to UTF-8, applying 2005 error replacements";
                 for (auto itr = gs_ReplaceFromGB18030_2005Error.begin(); itr != gs_ReplaceFromGB18030_2005Error.end(); ++itr) {
                     inputStr.replace(itr.key(), itr.value());
                 }
             } else if (UTF_8 == fromMib && GB18030 == toMib) {
-                qDebug() << "Converting from UTF-8 to GB18030, applying 2020 error replacements";
+                qCDebug(appLog) << "Converting from UTF-8 to GB18030, applying 2020 error replacements";
                 for (auto itr = gs_ReplaceToGB18030_2020Error.begin(); itr != gs_ReplaceToGB18030_2020Error.end(); ++itr) {
                     inputStr.replace(itr.key(), itr.value());
                 }
@@ -851,16 +852,16 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr,
             do {
                 ret = iconv(handle, &inbuf, &inbytesleft, &outbuf, &outbytesleft);
                 if (static_cast<size_t>(-1) == ret) {
-                    qWarning() << "iconv conversion failed, errno:" << errno;
+                    qCWarning(appLog) << "iconv conversion failed, errno:" << errno;
                     // 记录错误信息
                     errorNum = errno;
 
                     // 遇到错误的输入，错误码 EILSEQ (84)，跳过当前位置并添加'?'
                     if (EILSEQ == errorNum) {
-                        qDebug() << "EILSEQ error encountered";
+                        qCDebug(appLog) << "EILSEQ error encountered";
                         // 缓冲区不足跳出
                         if (outbytesleft == 0) {
-                            qWarning() << "Output buffer exhausted, breaking conversion";
+                            qCWarning(appLog) << "Output buffer exhausted, breaking conversion";
                             break;
                         }
 
@@ -870,10 +871,10 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr,
 
                         switch (fromMib) {
                             case UTF_8: {
-                                qDebug() << "UTF-8 source encoding detected";
+                                qCDebug(appLog) << "UTF-8 source encoding detected";
                                 // 特殊处理，若为UTF-8 到 GB18030的转换，优先排查异常数据
                                 if (GB18030 == toMib) {
-                                    qDebug() << "Target is GB18030, checking for UTF8ToGB18030Error";
+                                    qCDebug(appLog) << "Target is GB18030, checking for UTF8ToGB18030Error";
                                     if (checkUTF8ToGB18030Error(inbuf, inbytesleft, replaceLen, appendChar)) {
                                         break;
                                     }
@@ -881,37 +882,37 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr,
 
                                 // 源编码为 UTF-8 时，可计算需跳过的字符数
                                 replaceLen = static_cast<size_t>(utf8MultiByteCount(inbuf, inbytesleft));
-                                qDebug() << "Calculated replaceLen for UTF-8:" << replaceLen;
+                                qCDebug(appLog) << "Calculated replaceLen for UTF-8:" << replaceLen;
                             } break;
                             case GB18030:
-                                qDebug() << "GB18030 source encoding detected";
+                                qCDebug(appLog) << "GB18030 source encoding detected";
                                 // 特殊处理，若为GB18030 到 UTF-8 的转换，优先排查异常数据
                                 if (UTF_8 == toMib) {
-                                    qDebug() << "Target is UTF-8, checking for GB18030ToUtf8Error";
+                                    qCDebug(appLog) << "Target is UTF-8, checking for GB18030ToUtf8Error";
                                     if (checkGB18030ToUtf8Error(inbuf, inbytesleft, replaceLen, appendChar)) {
                                         break;
                                     }
                                 }
                                 break;
                             default:
-                                qDebug() << "Default case for fromMib, no special handling";
+                                qCDebug(appLog) << "Default case for fromMib, no special handling";
                                 break;
                         }
 
                         // 替换错误字符为对应字符
                         size_t appendSize = static_cast<size_t>(appendChar.size());
                         if (outbytesleft < appendSize) {
-                            qWarning() << "Output buffer too small for appendChar, breaking";
+                            qCWarning(appLog) << "Output buffer too small for appendChar, breaking";
                             break;
                         }
 
                         outbytesleft -= appendSize;
                         ::memcpy(outbuf, appendChar.data(), appendSize);
                         outbuf += appendSize;
-                        qDebug() << "Appended error character:" << appendChar << ", remaining outbytesleft:" << outbytesleft;
+                        qCDebug(appLog) << "Appended error character:" << appendChar << ", remaining outbytesleft:" << outbytesleft;
 
                         if (inbytesleft <= replaceLen) {
-                            qDebug() << "No more input bytes left or replaceLen covers remaining, moving to end";
+                            qCDebug(appLog) << "No more input bytes left or replaceLen covers remaining, moving to end";
                             // 移动至末尾
                             inbuf += inbytesleft;
                             inbytesleft = 0;
@@ -920,41 +921,41 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr,
 
                         inbuf += replaceLen;
                         inbytesleft -= replaceLen;
-                        qDebug() << "Skipped" << replaceLen << "bytes from input, remaining inbytesleft:" << inbytesleft;
+                        qCDebug(appLog) << "Skipped" << replaceLen << "bytes from input, remaining inbytesleft:" << inbytesleft;
                     } else {
-                        qWarning() << "[DetectCode] iconv_open failed for conversion from" << fromCode << "to" << toCode;
+                        qCWarning(appLog) << "[DetectCode] iconv_open failed for conversion from" << fromCode << "to" << toCode;
                         break;
                     }
                 }
             } while (static_cast<size_t>(-1) == ret);
 
         } catch (const std::exception &e) {
-            qWarning() << qPrintable("iconv convert encoding catching exception") << qPrintable(e.what());
+            qCWarning(appLog) << qPrintable("iconv convert encoding catching exception") << qPrintable(e.what());
         }
 
         if (errorNum) {
-            qWarning() << qPrintable("iconv() convert text encoding error, errocode:") << errorNum;
+            qCWarning(appLog) << qPrintable("iconv() convert text encoding error, errocode:") << errorNum;
         }
         iconv_close(handle);
 
         // 手动添加 UTF BOM 信息
         outStr.append(gs_byteOrderMark.value(toCode));
-        qDebug() << "Appended BOM for toCode:" << toCode;
+        qCDebug(appLog) << "Appended BOM for toCode:" << toCode;
 
         // 计算 iconv() 实际转换的字节数
         size_t realConvertSize = maxBufferSize - outbytesleft;
         outStr += QByteArray(bufferHeader, static_cast<int>(realConvertSize));
-        qDebug() << "Converted data size:" << realConvertSize;
+        qCDebug(appLog) << "Converted data size:" << realConvertSize;
 
         delete[] bufferHeader;
         bufferHeader = nullptr;
 
-        qDebug() << "Exit convertEncodingTextCodec, output size:" << outStr.size();
+        qCDebug(appLog) << "Exit convertEncodingTextCodec, output size:" << outStr.size();
 
         return true;
 
     } else {
-        qWarning() << qPrintable("Text encoding convert error, iconv_open() failed.");
+        qCWarning(appLog) << qPrintable("Text encoding convert error, iconv_open() failed.");
         // 尝试使用QTextCodec加载
         return convertEncodingTextCodec(inputStr, outStr, fromCode, toCode);
     }
@@ -969,41 +970,41 @@ bool DetectCode::convertEncodingTextCodec(QByteArray &inputStr,
                                           const QString &fromCode,
                                           const QString &toCode)
 {
-    qDebug() << "Enter convertEncodingTextCodec, from:" << fromCode << "to:" << toCode
+    qCDebug(appLog) << "Enter convertEncodingTextCodec, from:" << fromCode << "to:" << toCode
              << "input size:" << inputStr.size();
 
     QString convertData;
     if (fromCode != "UTF-8") {
-        qDebug() << "fromCode is not UTF-8";
+        qCDebug(appLog) << "fromCode is not UTF-8";
         QTextCodec *fromCodec = QTextCodec::codecForName(fromCode.toUtf8());
         if (!fromCodec) {
-            qWarning() << "Failed to get codec for fromCode:" << fromCode;
+            qCWarning(appLog) << "Failed to get codec for fromCode:" << fromCode;
             return false;
         }
 
         convertData = fromCodec->toUnicode(inputStr);
     } else {
-        qDebug() << "fromCode is UTF-8";
+        qCDebug(appLog) << "fromCode is UTF-8";
         convertData = QString::fromUtf8(inputStr);
     }
 
     if (toCode != "UTF-8") {
-        qDebug() << "toCode is not UTF-8";
+        qCDebug(appLog) << "toCode is not UTF-8";
         QTextCodec *toCodec = QTextCodec::codecForName(toCode.toUtf8());
         if (!toCodec) {
-            qWarning() << "Failed to get codec for toCode:" << toCode;
+            qCWarning(appLog) << "Failed to get codec for toCode:" << toCode;
             return false;
         }
 
         outStr = toCodec->fromUnicode(convertData);
     } else {
-        qDebug() << "toCode is UTF-8";
+        qCDebug(appLog) << "toCode is UTF-8";
         outStr = convertData.toUtf8();
     }
 
     // 手动添加 UTF BOM 信息：BOM 必须写在转换结果之前（BOM+data），
     // 与上方 iconv 主路径的字节序保持一致，否则 UTF-16 目标产生 "data+BOM" 错误序列
     outStr.prepend(gs_byteOrderMark.value(toCode));
-    qDebug() << "Exit convertEncodingTextCodec, output size:" << outStr.size();
+    qCDebug(appLog) << "Exit convertEncodingTextCodec, output size:" << outStr.size();
     return true;
 }

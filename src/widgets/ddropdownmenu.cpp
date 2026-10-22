@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "ddlog.h"
 #include "../common/utils.h"
 #include "../common/settings.h"
 #include "ddropdownmenu.h"
@@ -75,7 +76,7 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     , m_pToolButton(new LabelToolButton(this, this))
     , m_menu(new DMenu)
 {
-    qDebug() << "DDropdownMenu constructor";
+    qCDebug(appLog) << "DDropdownMenu constructor";
     // 更新单独添加的高亮格式文件
     m_Repository.addCustomSearchPath(KF5_HIGHLIGHT_PATH);
 
@@ -117,34 +118,34 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
         updateButtonSize();
     });
 #endif
-    qDebug() << "DDropdownMenu constructor end";
+    qCDebug(appLog) << "DDropdownMenu constructor end";
 }
 
 DDropdownMenu::~DDropdownMenu()
 {
-    qDebug() << "DDropdownMenu destructor";
+    qCDebug(appLog) << "DDropdownMenu destructor";
     deleteMenuActionGroup();
     deleteMenu();
-    qDebug() << "DDropdownMenu destructor end";
+    qCDebug(appLog) << "DDropdownMenu destructor end";
 }
 
 void DDropdownMenu::setFontEx(const QFont& font)
 {
-    qDebug() << "DDropdownMenu setFontEx";
+    qCDebug(appLog) << "DDropdownMenu setFontEx";
     m_pToolButton->setFont(font);
     m_font = font;
     //字体变化影响文本宽度，需重算按钮尺寸
     updateButtonSize();
-    qDebug() << "DDropdownMenu setFontEx end";
+    qCDebug(appLog) << "DDropdownMenu setFontEx end";
 }
 
 void DDropdownMenu::setCurrentAction(QAction *pAct)
 {
-    qDebug() << "DDropdownMenu setCurrentAction";
+    qCDebug(appLog) << "DDropdownMenu setCurrentAction";
     if(pAct){
-        qDebug() << "pAct is not null";
+        qCDebug(appLog) << "pAct is not null";
         if (m_menu == nullptr) {
-            qDebug() << "DDropdownMenu setCurrentAction: menu is null";
+            qCDebug(appLog) << "DDropdownMenu setCurrentAction: menu is null";
             setText(pAct->text());
             return;
         }
@@ -162,12 +163,12 @@ void DDropdownMenu::setCurrentAction(QAction *pAct)
         }
         setText(pAct->text());
     }
-    qDebug() << "DDropdownMenu setCurrentAction end";
+    qCDebug(appLog) << "DDropdownMenu setCurrentAction end";
 }
 
 void DDropdownMenu::setCurrentTextOnly(const QString &name)
 {
-    qDebug() << "DDropdownMenu setCurrentTextOnly";
+    qCDebug(appLog) << "DDropdownMenu setCurrentTextOnly";
     // QList<QAction*> menuList = m_menu->actions();
 
 //   for (int i = 0; i < menuList.size(); i++) {
@@ -193,43 +194,43 @@ void DDropdownMenu::setCurrentTextOnly(const QString &name)
    }
 
    setText(name);
-   qDebug() << "DDropdownMenu setCurrentTextOnly end";
+   qCDebug(appLog) << "DDropdownMenu setCurrentTextOnly end";
 }
 
 
 void DDropdownMenu::setCheckedExclusive(QAction* action,const QString& name)
 {
-    qDebug() << "DDropdownMenu setCheckedExclusive";
+    qCDebug(appLog) << "DDropdownMenu setCheckedExclusive";
     if (nullptr == action) {
-        qDebug() << "action is null, return";
+        qCDebug(appLog) << "action is null, return";
         return;
     }
 
     if (action->menu()) {
-        qDebug() << "action has menu";
+        qCDebug(appLog) << "action has menu";
         for(auto ac:action->menu()->actions()){
             setCheckedExclusive(ac,name);
         }
     } else {
-        qDebug() << "action has no menu";
+        qCDebug(appLog) << "action has no menu";
         if (action->text() != name) {
-            qDebug() << "action text is not equal to name";
+            qCDebug(appLog) << "action text is not equal to name";
             action->setCheckable(false);
             action->setChecked(false);
         } else {
-            qDebug() << "action text is equal to name";
+            qCDebug(appLog) << "action text is equal to name";
             action->setCheckable(true);
             action->setChecked(true);
         }
     }
-    qDebug() << "DDropdownMenu setCheckedExclusive end";
+    qCDebug(appLog) << "DDropdownMenu setCheckedExclusive end";
 }
 
 void DDropdownMenu::slotRequestMenu(bool request)
 {
-    qDebug() << "DDropdownMenu slotRequestMenu";
+    qCDebug(appLog) << "DDropdownMenu slotRequestMenu";
     if (request) {
-        qDebug() << "request is true";
+        qCDebug(appLog) << "request is true";
         //如果鼠标点击清除ｆｏｃｕｓ
         m_pToolButton->clearFocus();
     }
@@ -251,21 +252,21 @@ void DDropdownMenu::slotRequestMenu(bool request)
     QApplication::sendEvent(m_pToolButton, &event);
 #endif
     emit sigSetTextEditFocus();
-    qDebug() << "DDropdownMenu slotRequestMenu end";
+    qCDebug(appLog) << "DDropdownMenu slotRequestMenu end";
 }
 
 void DDropdownMenu::setText(const QString &text)
 {
-    qDebug() << "DDropdownMenu setText:" << text;
+    qCDebug(appLog) << "DDropdownMenu setText:" << text;
     m_text = text;
     //文本宽度变化时重算按钮尺寸（文本原生绘制，无需重建位图图标）
     updateButtonSize();
-    qDebug() << "DDropdownMenu setText end";
+    qCDebug(appLog) << "DDropdownMenu setText end";
 }
 
 void DDropdownMenu::setMenu(DMenu *menu)
 {
-    qDebug() << "DDropdownMenu setMenu";
+    qCDebug(appLog) << "DDropdownMenu setMenu";
     deleteMenu();
     m_menu = menu;
     if (m_menu != nullptr) {
@@ -276,38 +277,38 @@ void DDropdownMenu::setMenu(DMenu *menu)
 
 void DDropdownMenu::deleteMenu()
 {
-    qDebug() << "DDropdownMenu deleteMenu";
+    qCDebug(appLog) << "DDropdownMenu deleteMenu";
     if (m_menu != nullptr) {
-        qDebug() << "m_menu is not null, deleting";
+        qCDebug(appLog) << "m_menu is not null, deleting";
         delete m_menu;
         m_menu = nullptr;
     }
-    qDebug() << "DDropdownMenu deleteMenu end";
+    qCDebug(appLog) << "DDropdownMenu deleteMenu end";
 }
 
 void DDropdownMenu::setMenuActionGroup(QActionGroup *actionGroup)
 {
-    qDebug() << "DDropdownMenu setMenuActionGroup";
+    qCDebug(appLog) << "DDropdownMenu setMenuActionGroup";
     deleteMenuActionGroup();
     m_actionGroup = actionGroup;
     m_actionGroup->setObjectName("ActionGroup");
-    qDebug() << "DDropdownMenu setMenuActionGroup end";
+    qCDebug(appLog) << "DDropdownMenu setMenuActionGroup end";
 }
 
 void DDropdownMenu::deleteMenuActionGroup()
 {
-    qDebug() << "DDropdownMenu deleteMenuActionGroup";
+    qCDebug(appLog) << "DDropdownMenu deleteMenuActionGroup";
     if (m_actionGroup != nullptr) {
-        qDebug() << "m_actionGroup is not null, deleting";
+        qCDebug(appLog) << "m_actionGroup is not null, deleting";
         delete m_actionGroup;
         m_actionGroup = nullptr;
     }
-    qDebug() << "DDropdownMenu deleteMenuActionGroup end";
+    qCDebug(appLog) << "DDropdownMenu deleteMenuActionGroup end";
 }
 
 void DDropdownMenu::setTheme(const QString &theme)
 {
-    qDebug() << "DDropdownMenu setTheme:" << theme;
+    qCDebug(appLog) << "DDropdownMenu setTheme:" << theme;
     m_theme = theme;
     QString arrowSvgPath = QString(":/images/dropdown_arrow_%1.svg").arg(theme);
     // 根据当前显示缩放转换图片
@@ -325,51 +326,51 @@ void DDropdownMenu::setTheme(const QString &theme)
     //按下态箭头依赖旧调色板颜色，置空待下次按下时按当前调色板重建
     m_pressedArrowPixmap = QPixmap();
     m_pToolButton->update();
-    qDebug() << "DDropdownMenu setTheme end";
+    qCDebug(appLog) << "DDropdownMenu setTheme end";
 }
 
 void DDropdownMenu::setChildrenFocus(bool ok)
 {
-    qDebug() << "DDropdownMenu setChildrenFocus:" << ok;
+    qCDebug(appLog) << "DDropdownMenu setChildrenFocus:" << ok;
     if (ok) {
-        qDebug() << "setChildrenFocus is true";
+        qCDebug(appLog) << "setChildrenFocus is true";
         m_pToolButton->setFocusPolicy(Qt::StrongFocus);
     } else  {
-        qDebug() << "setChildrenFocus is false";
+        qCDebug(appLog) << "setChildrenFocus is false";
         m_pToolButton->clearFocus();
         m_pToolButton->setFocusPolicy(Qt::NoFocus);
     }
-    qDebug() << "DDropdownMenu setChildrenFocus end";
+    qCDebug(appLog) << "DDropdownMenu setChildrenFocus end";
 }
 
 void DDropdownMenu::setRequestMenu(bool request)
 {
-    qDebug() << "DDropdownMenu setRequestMenu:" << request;
+    qCDebug(appLog) << "DDropdownMenu setRequestMenu:" << request;
     isRequest = request;
-    qDebug() << "DDropdownMenu setRequestMenu end";
+    qCDebug(appLog) << "DDropdownMenu setRequestMenu end";
 }
 
 DToolButton *DDropdownMenu::getButton()
 {
-    qDebug() << "DDropdownMenu getButton";
+    qCDebug(appLog) << "DDropdownMenu getButton";
     return m_pToolButton;
 }
 
 QString DDropdownMenu::getCurrentText() const
 {
-    qDebug() << "DDropdownMenu getCurrentText";
+    qCDebug(appLog) << "DDropdownMenu getCurrentText";
     return m_text;
 }
 
 DDropdownMenu *DDropdownMenu::createEncodeMenu()
 {
-    qDebug() << "DDropdownMenu createEncodeMenu";
+    qCDebug(appLog) << "DDropdownMenu createEncodeMenu";
     DDropdownMenu *m_pEncodeMenu = new DDropdownMenu();
     DMenu* m_pMenu = new DMenu();
 
     auto groupEncodeVec = Utils::getSupportEncoding();
     if (!groupEncodeVec.isEmpty()) {
-        qDebug() << "groupEncodeVec is not empty, creating menu";
+        qCDebug(appLog) << "groupEncodeVec is not empty, creating menu";
         int cnt = groupEncodeVec.size();
         for (int i = 0; i < cnt;i++) {
             QMenu* groupMenu = new QMenu(QObject::tr(groupEncodeVec[i].first.toLocal8Bit().data()));
@@ -377,13 +378,13 @@ DDropdownMenu *DDropdownMenu::createEncodeMenu()
              {
                QAction *act= groupMenu->addAction(QObject::tr(var.toLocal8Bit().data()));
                if (act->text() == "UTF-8") {
-                    qDebug() << "Adding UTF-8 action";
+                    qCDebug(appLog) << "Adding UTF-8 action";
                     m_pEncodeMenu->m_pActUtf8 = act;
                     act->setCheckable(true);
                     act->setChecked(true);
                     m_pEncodeMenu->m_pActUtf8->setObjectName("PActUtf8");
                } else {
-                    qDebug() << "Adding other action";
+                    qCDebug(appLog) << "Adding other action";
                     act->setCheckable(false);
                }
             }
@@ -393,10 +394,10 @@ DDropdownMenu *DDropdownMenu::createEncodeMenu()
     }
 
     connect(m_pMenu, &DMenu::triggered, m_pEncodeMenu,[m_pEncodeMenu](QAction *action) {
-        qInfo() << "Encoding changed to:" << action->text();
+        qCInfo(appLog) << "Encoding changed to:" << action->text();
         //编码内容改变触发内容改变和信号发射 梁卫东 2020.7.7
         if (m_pEncodeMenu->m_text != action->text()) {
-            qDebug() << "Encoding changed to:" << action->text();
+            qCDebug(appLog) << "Encoding changed to:" << action->text();
             emit m_pEncodeMenu->currentActionChanged(action);
         }
     });
@@ -404,13 +405,13 @@ DDropdownMenu *DDropdownMenu::createEncodeMenu()
     m_pEncodeMenu->setText("UTF-8");
     m_pEncodeMenu->setMenu(m_pMenu);
 
-    qDebug() << "DDropdownMenu createEncodeMenu end";
+    qCDebug(appLog) << "DDropdownMenu createEncodeMenu end";
     return  m_pEncodeMenu;
 }
 
 DDropdownMenu *DDropdownMenu::createHighLightMenu()
 {
-    qDebug() << "DDropdownMenu createHighLightMenu";
+    qCDebug(appLog) << "DDropdownMenu createHighLightMenu";
     DDropdownMenu *m_pHighLightMenu = new DDropdownMenu();
     DMenu *m_pMenu = new DMenu;
     QAction *noHlAction = m_pMenu->addAction(tr("None"));
@@ -429,22 +430,22 @@ DDropdownMenu *DDropdownMenu::createHighLightMenu()
         if(def.translatedName()=="Intel x86 (NASM)"&&intel)
         {
             intel = false;
-            qDebug() << "Intel x86 (NASM) is hidden, continue";
+            qCDebug(appLog) << "Intel x86 (NASM) is hidden, continue";
             continue;
         }
         if (def.isHidden()) {
-            qDebug() << "def is hidden, continue";
+            qCDebug(appLog) << "def is hidden, continue";
             continue;
         }
 
         if (currentGroup != def.section()) {
-            qDebug() << "currentGroup is not equal to def.section(), creating new submenu";
+            qCDebug(appLog) << "currentGroup is not equal to def.section(), creating new submenu";
             currentGroup = def.section();
             pSubMenu = m_pMenu->addMenu(def.translatedSection());
         }
 
         if (!pSubMenu) {
-            qDebug() << "pSubMenu is null, continue";
+            qCDebug(appLog) << "pSubMenu is null, continue";
             continue;
         }
 
@@ -457,7 +458,7 @@ DDropdownMenu *DDropdownMenu::createHighLightMenu()
     // 转发选中“None“无高亮选项的信号
     connect(noHlAction, &QAction::triggered, m_pHighLightMenu, [noHlAction, m_pHighLightMenu] (bool checked) {
         if (checked) {
-            qInfo() << "Highlight mode changed to None";
+            qCInfo(appLog) << "Highlight mode changed to None";
             emit m_pHighLightMenu->currentActionChanged(noHlAction);
         }
     });
@@ -466,11 +467,11 @@ DDropdownMenu *DDropdownMenu::createHighLightMenu()
         const auto defName = action->text();
         const auto def = m_pHighLightMenu->m_Repository.definitionForName(defName);
         if (def.isValid() && m_pHighLightMenu->m_text != action->text()) {
-            qInfo() << "Highlight mode changed to:" << defName;
+            qCInfo(appLog) << "Highlight mode changed to:" << defName;
             emit m_pHighLightMenu->currentActionChanged(action);
         }
         else {
-            qDebug() << "Invalid highlight definition, setting to None";
+            qCDebug(appLog) << "Invalid highlight definition, setting to None";
             m_pHighLightMenu->setText(tr("None"));
         }
         
@@ -480,7 +481,7 @@ DDropdownMenu *DDropdownMenu::createHighLightMenu()
     m_pHighLightMenu->setMenu(m_pMenu);
     m_pHighLightMenu->setMenuActionGroup(m_pActionGroup);
 
-    qDebug() << "DDropdownMenu createHighLightMenu end";
+    qCDebug(appLog) << "DDropdownMenu createHighLightMenu end";
     return m_pHighLightMenu;
 }
 
@@ -504,14 +505,14 @@ void DDropdownMenu::updateButtonSize()
 
 void DDropdownMenu::OnFontChangedSlot(const QFont &font)
 {
-    qDebug() << "DDropdownMenu OnFontChangedSlot";
+    qCDebug(appLog) << "DDropdownMenu OnFontChangedSlot";
     m_font = font;
     //字体族跟随系统字体，但字号保持底栏 T9（原 Qt6 分支漏设字号会导致文字随应用字号变化）
     int fontsize = DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T9);
     m_font.setPixelSize(fontsize);
     m_pToolButton->setFont(m_font);
     updateButtonSize();
-    qDebug() << "DDropdownMenu OnFontChangedSlot end";
+    qCDebug(appLog) << "DDropdownMenu OnFontChangedSlot end";
 }
 
 
@@ -535,21 +536,21 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
     if(object == m_pToolButton){
         if(event->type() == QEvent::KeyPress){
             QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-            qDebug() << "Key pressed:" << keyEvent->key();
+            qCDebug(appLog) << "Key pressed:" << keyEvent->key();
             if(keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Space)        //按下enter展开列表
             {
-                qDebug() << "Triggering context menu via keyboard";
+                qCDebug(appLog) << "Triggering context menu via keyboard";
                 Q_EMIT requestContextMenu(false);
                 return true;
             }
-            qDebug() << "Key event not handled, return false";
+            qCDebug(appLog) << "Key event not handled, return false";
             return false;
         }
 
         if(event->type() == QEvent::MouseButtonPress){
             QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
             if(mouseEvent->button() == Qt::LeftButton){
-                qDebug() << "Left mouse button pressed on dropdown menu";
+                qCDebug(appLog) << "Left mouse button pressed on dropdown menu";
                 m_bPressed = true;
                 //按下时按当前调色板高亮色重建箭头，文本颜色由 paintEvent 实时取色
                 DPalette dpalette = DPaletteHelper::instance()->palette(m_pToolButton);
@@ -559,24 +560,24 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
             }
 
             if(mouseEvent->button() == Qt::RightButton){
-                qDebug() << "Right mouse button pressed on dropdown menu, return true";
+                qCDebug(appLog) << "Right mouse button pressed on dropdown menu, return true";
                 return true;
             }
         }
 
         if(event->type() == QEvent::MouseButtonRelease){
-            qDebug() << "Left mouse button released on dropdown menu";
+            qCDebug(appLog) << "Left mouse button released on dropdown menu";
             QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
             if(mouseEvent->button() == Qt::LeftButton){
                 m_bPressed = false;
                 m_pToolButton->update();
                 if (isEnabled()) {
-                    qDebug() << "Left mouse button released, showing context menu";
+                    qCDebug(appLog) << "Left mouse button released, showing context menu";
                     Q_EMIT requestContextMenu(true);
                 }
                 m_pToolButton->clearFocus();
             }
-            qDebug() << "Left mouse button released, return true";
+            qCDebug(appLog) << "Left mouse button released, return true";
             return true;
         }
     }
@@ -586,12 +587,12 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
 
 QPixmap DDropdownMenu::setSvgColor(QString color)
 {
-    qDebug() << "DDropdownMenu setSvgColor";
+    qCDebug(appLog) << "DDropdownMenu setSvgColor";
     //设置图标颜色
     QString path = QString(":/images/arrow_dark.svg");
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly)) {
-        qWarning() << "DDropdownMenu setSvgColor: failed to open" << path << file.errorString();
+        qCWarning(appLog) << "DDropdownMenu setSvgColor: failed to open" << path << file.errorString();
         return QPixmap();
     }
     QByteArray data = file.readAll();
@@ -613,16 +614,16 @@ QPixmap DDropdownMenu::setSvgColor(QString color)
     QPainter painter(&pixmap);
     svg_render.render(&painter,QRect(0,0,8,5));
 
-    qDebug() << "DDropdownMenu setSvgColor end";
+    qCDebug(appLog) << "DDropdownMenu setSvgColor end";
     return pixmap;
 }
 
 void DDropdownMenu::SetSVGBackColor(QDomElement &elem, QString strattr, QString strattrval)
 {
-    qDebug() << "DDropdownMenu SetSVGBackColor";
+    qCDebug(appLog) << "DDropdownMenu SetSVGBackColor";
     if (elem.tagName().compare("g") == 0 && elem.attribute("id").compare("color") == 0)
     {
-        qDebug() << "DDropdownMenu SetSVGBackColor, found color group";
+        qCDebug(appLog) << "DDropdownMenu SetSVGBackColor, found color group";
         elem.setAttribute(strattr, strattrval);
     }
     for (int i = 0; i < elem.childNodes().count(); i++)
@@ -631,5 +632,5 @@ void DDropdownMenu::SetSVGBackColor(QDomElement &elem, QString strattr, QString 
         QDomElement element = elem.childNodes().at(i).toElement();
         SetSVGBackColor(element, strattr, strattrval);
     }
-    qDebug() << "DDropdownMenu SetSVGBackColor end";
+    qCDebug(appLog) << "DDropdownMenu SetSVGBackColor end";
 }

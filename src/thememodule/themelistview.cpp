@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "ddlog.h"
 #include "themelistview.h"
 #include "themelistmodel.h"
 #include <QScrollBar>
@@ -12,7 +13,7 @@
 ThemeListView::ThemeListView(QWidget *parent)
     : QListView(parent)
 {
-    qDebug() << "ThemeListView constructor";
+    qCDebug(appLog) << "ThemeListView constructor";
     installEventFilter(this);
 
     setVerticalScrollMode(ScrollPerPixel);
@@ -24,17 +25,17 @@ ThemeListView::ThemeListView(QWidget *parent)
 
 ThemeListView::~ThemeListView()
 {
-    qDebug() << "ThemeListView destructor";
+    qCDebug(appLog) << "ThemeListView destructor";
 }
 
 void ThemeListView::adjustScrollbarMargins()
 {
     if (!isVisible()) {
-        qDebug() << "View not visible, skipping scrollbar adjustment";
+        qCDebug(appLog) << "View not visible, skipping scrollbar adjustment";
         return;
     }
 
-    qInfo() << "Adjusting scrollbar margins";
+    qCInfo(appLog) << "Adjusting scrollbar margins";
     QEvent event(QEvent::LayoutRequest);
     QApplication::sendEvent(this, &event);
 
@@ -46,7 +47,7 @@ void ThemeListView::adjustScrollbarMargins()
 bool ThemeListView::eventFilter(QObject *, QEvent *event)
 {
     if (event->type() == QEvent::FocusOut) {
-        qDebug() << "Focus out event detected";
+        qCDebug(appLog) << "Focus out event detected";
         emit focusOut();
     }
 
@@ -55,13 +56,13 @@ bool ThemeListView::eventFilter(QObject *, QEvent *event)
 
 void ThemeListView::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
-    qDebug() << "Selection changed";
+    qCDebug(appLog) << "Selection changed";
     QListView::selectionChanged(selected, deselected);
 
     QModelIndexList list = selectionModel()->selectedIndexes();
     for (const QModelIndex &index : list) {
         const QString &themePath = index.data(ThemeListModel::ThemePath).toString();
-        qDebug() << "Selected theme path:" << themePath;
+        qCDebug(appLog) << "Selected theme path:" << themePath;
 
         emit themeChanged(themePath);
     }

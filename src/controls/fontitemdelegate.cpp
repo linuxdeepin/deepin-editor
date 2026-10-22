@@ -1,7 +1,8 @@
-// SPDX-FileCopyrightText: 2017 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "ddlog.h"
 #include "fontitemdelegate.h"
 #include <QPainter>
 #include <QDebug>
@@ -9,28 +10,28 @@
 FontItemDelegate::FontItemDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
 {
-    qDebug() << "FontItemDelegate constructor";
+    qCDebug(appLog) << "FontItemDelegate constructor";
 }
 
 FontItemDelegate::~FontItemDelegate()
 {
-    qDebug() << "FontItemDelegate destructor";
+    qCDebug(appLog) << "FontItemDelegate destructor";
 }
 
 void FontItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    // qDebug() << "FontItemDelegate paint";
+    // qCDebug(appLog) << "FontItemDelegate paint";
     const QString text = index.data(Qt::DisplayRole).toString();
     bool isSelected = option.state & QStyle::State_Selected;
-    // qDebug() << "isSelected" << isSelected;
+    // qCDebug(appLog) << "isSelected" << isSelected;
     painter->setPen(Qt::black);
-    // qDebug() << "setPen";
+    // qCDebug(appLog) << "setPen";
     if (isSelected) {
         painter->setPen(Qt::NoPen);
         painter->setBrush(QColor("#2CA7F8"));
         painter->drawRect(option.rect);
         painter->setPen(Qt::white);
-        // qDebug() << "setPen white";
+        // qCDebug(appLog) << "setPen white";
     }
 
     QFont font(painter->font());
@@ -46,6 +47,6 @@ void FontItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 
 QSize FontItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    // qDebug() << "FontItemDelegate sizeHint";
+    // qCDebug(appLog) << "FontItemDelegate sizeHint";
     return QSize(-1, 30);
 }
