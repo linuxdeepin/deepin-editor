@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "ddlog.h"
 #include "iflytek_ai_assistant.h"
 
 #include <mutex>
@@ -53,29 +54,29 @@ public:
      * @return 是否有可用设备
      */
     static bool hasEnabledPorts(PortDirection direction) {
-        qDebug() << "Checking audio device availability for direction:" << direction;
+        qCDebug(appLog) << "Checking audio device availability for direction:" << direction;
         
         QDBusInterface audioInter(AUDIO_SERVICE, AUDIO_PATH, AUDIO_INTERFACE, QDBusConnection::sessionBus());
         
         if (!audioInter.isValid()) {
-            qWarning() << "Failed to connect to DDE Audio service:" << audioInter.lastError().message();
+            qCWarning(appLog) << "Failed to connect to DDE Audio service:" << audioInter.lastError().message();
             return false;
         }
         
         // 获取声卡信息
         QVariant cardsVariant = audioInter.property("CardsWithoutUnavailable");
         if (!cardsVariant.isValid()) {
-            qWarning() << "Failed to get CardsWithoutUnavailable property";
+            qCWarning(appLog) << "Failed to get CardsWithoutUnavailable property";
             return false;
         }
         
         QString cardsJson = cardsVariant.toString();
-        qDebug() << "Cards JSON:" << cardsJson;
+        qCDebug(appLog) << "Cards JSON:" << cardsJson;
         
         QJsonParseError parseError;
         QJsonDocument cardsDoc = QJsonDocument::fromJson(cardsJson.toUtf8(), &parseError);
         if (parseError.error != QJsonParseError::NoError) {
-            qWarning() << "Failed to parse cards JSON:" << parseError.errorString();
+            qCWarning(appLog) << "Failed to parse cards JSON:" << parseError.errorString();
             return false;
         }
         
@@ -101,12 +102,12 @@ private:
             
             QJsonValue portsValue = cardObj["Ports"];
             if (portsValue.isNull()) {
-                qDebug() << "Card" << cardName << "has no ports, skipping";
+                qCDebug(appLog) << "Card" << cardName << "has no ports, skipping";
                 continue;
             }
             
             QJsonArray portsArray = portsValue.toArray();
-            qDebug() << "Checking card:" << cardName << "(ID:" << cardId << ") with" << portsArray.size() << "ports";
+            qCDebug(appLog) << "Checking card:" << cardName << "(ID:" << cardId << ") with" << portsArray.size() << "ports";
             
             // 遍历该声卡的所有端口
             for (const QJsonValue &portValue : portsArray) {
@@ -117,13 +118,13 @@ private:
                 
                 // 检查是否为目标方向且启用的端口
                 if (portDirection == direction && enabled) {
-                    qDebug() << "Found enabled" << directionName << "port:" << portId << "on card:" << cardName;
+                    qCDebug(appLog) << "Found enabled" << directionName << "port:" << portId << "on card:" << cardName;
                     enabledPorts++;
                 }
             }
         }
         
-        qDebug() << "Total enabled" << directionName << "ports:" << enabledPorts;
+        qCDebug(appLog) << "Total enabled" << directionName << "ports:" << enabledPorts;
         return enabledPorts;
     }
 };
@@ -141,7 +142,7 @@ IflytekAiAssistant::IflytekAiAssistant(QObject *parent)
     : QObject(parent)
     , m_copilot{new QDBusInterface(kCopilotService, kCopilotPath, kCopilotInterface)}
 {
-    qDebug() << "IflytekAiAssistant created";
+    qCDebug(appLog) << "IflytekAiAssistant created";
     m_copilot->setTimeout(2000);
 }
 
@@ -167,12 +168,12 @@ IflytekAiAssistant *IflytekAiAssistant::instance()
  */
 IflytekAiAssistant::CallStatus IflytekAiAssistant::checkValid()
 {
-    qDebug() << "checkValid status:" << m_status;
+    qCDebug(appLog) << "checkValid status:" << m_status;
     switch (m_status) {
         case NotInstalled:
             m_status = copilotInstalled(m_copilot);
             if (Enable != m_status) {
-                qDebug() << "status is not enable!";;
+                qCDebug(appLog) << "status is not enable!";;
                 break;
             }
             // If detect installed first, detect the user argreement is valid.
@@ -181,10 +182,10 @@ IflytekAiAssistant::CallStatus IflytekAiAssistant::checkValid()
             // Detect current state every call
             m_status = isCopilotEnabled(m_copilot);
             if (NoUserAgreement == m_status) {
-                qDebug() << "user agreement not agreed!";
+                qCDebug(appLog) << "user agreement not agreed!";
                 // 感知拉起结果，失败时输出告警日志，便于问题定位
                 if (launchCopilotChat(m_copilot) != Enable) {
-                    qWarning() << "Launch copilot chat window failed!";
+                    qCWarning(appLog) << "Launch copilot chat window failed!";
                 }
             }
         } break;
@@ -192,14 +193,14 @@ IflytekAiAssistant::CallStatus IflytekAiAssistant::checkValid()
             break;
     }
 
-    qDebug() << "checkValid status, return:" << m_status;
+    qCDebug(appLog) << "checkValid status, return:" << m_status;
     return m_status;
 }
 
 IflytekAiAssistant::CallStatus IflytekAiAssistant::isTtsInWorking() const
 {
     if (Enable != status()) {
-        qDebug() << "status is not enable!";
+        qCDebug(appLog) << "status is not enable!";
         return status();
     }
 
@@ -208,7 +209,7 @@ IflytekAiAssistant::CallStatus IflytekAiAssistant::isTtsInWorking() const
 
     QDBusReply<bool> ret = interface.call("isTTSInWorking");
     if (ret.isValid()) {
-        qDebug() << "isTtsInWorking ret:" << ret.value();
+        qCDebug(appLog) << "isTtsInWorking ret:" << ret.value();
         return ret.value() ? Enable : Disable;
     }
     return Invalid;
@@ -217,13 +218,13 @@ IflytekAiAssistant::CallStatus IflytekAiAssistant::isTtsInWorking() const
 IflytekAiAssistant::CallStatus IflytekAiAssistant::isTtsEnable() const
 {
     if (Enable != status()) {
-        qDebug() << "status is not enable!";
+        qCDebug(appLog) << "status is not enable!";
         return status();
     }
 
     // 首先检查音频输出设备是否存在
     if (!hasAudioOutputDevice()) {
-        qDebug() << "No audio output device available";
+        qCDebug(appLog) << "No audio output device available";
         return NoOutputDevice;
     }
 
@@ -232,7 +233,7 @@ IflytekAiAssistant::CallStatus IflytekAiAssistant::isTtsEnable() const
 
     QDBusReply<bool> ret = interface.call("getTTSEnable");
     if (ret.isValid()) {
-        qDebug() << "getTTSEnable ret:" << ret.value();
+        qCDebug(appLog) << "getTTSEnable ret:" << ret.value();
         return ret.value() ? Enable : Disable;
     }
     return Invalid;
@@ -241,20 +242,20 @@ IflytekAiAssistant::CallStatus IflytekAiAssistant::isTtsEnable() const
 IflytekAiAssistant::CallStatus IflytekAiAssistant::textToSpeech()
 {
     if (Enable != checkValid()) {
-        qDebug() << "checkValid failed!";
+        qCDebug(appLog) << "checkValid failed!";
         return status();
     }
 
     CallStatus ret = isTtsEnable();
     if (Enable != ret) {
-        qDebug() << "no output device!";
+        qCDebug(appLog) << "no output device!";
         return NoOutputDevice;
     }
 
     // playing, stop first
     if (isTtsInWorking()) {
         if (Success != stopTtsDirectlyInternal()) {
-            qWarning() << "stopTtsDirectlyInternal failed!";
+            qCWarning(appLog) << "stopTtsDirectlyInternal failed!";
             return Failed;
         }
     }
@@ -262,7 +263,7 @@ IflytekAiAssistant::CallStatus IflytekAiAssistant::textToSpeech()
     QDBusInterface interface(copilotService(), "/aiassistant/deepinmain", "com.iflytek.aiassistant.mainWindow");
     interface.asyncCall("TextToSpeech");
 
-    qDebug() << "textToSpeech success!";
+    qCDebug(appLog) << "textToSpeech success!";
     return Success;
 }
 
@@ -270,10 +271,10 @@ IflytekAiAssistant::CallStatus IflytekAiAssistant::stopTtsDirectly() const
 {
     // BUG-301561 : disable stop tts when close tab or window
 #ifdef ENABLE_STOP_TTS
-    qDebug() << "ENABLE_STOP_TTS is defined!";
+    qCDebug(appLog) << "ENABLE_STOP_TTS is defined!";
     return stopTtsDirectlyInternal();
 #else
-    qDebug() << "ENABLE_STOP_TTS is not defined!, return Enable";
+    qCDebug(appLog) << "ENABLE_STOP_TTS is not defined!, return Enable";
     return Enable;
 #endif
 }
@@ -281,26 +282,26 @@ IflytekAiAssistant::CallStatus IflytekAiAssistant::stopTtsDirectly() const
 IflytekAiAssistant::CallStatus IflytekAiAssistant::stopTtsDirectlyInternal() const
 {
     if (Enable != status()) {
-        qDebug() << "status is not enable!";
+        qCDebug(appLog) << "status is not enable!";
         return status();
     }
 
     QDBusInterface interface(copilotService(), "/aiassistant/tts", "com.iflytek.aiassistant.tts");
     interface.asyncCall("stopTTSDirectly");
-    qDebug() << "stopTtsDirectly success!";
+    qCDebug(appLog) << "stopTtsDirectly success!";
     return Success;
 }
 
 IflytekAiAssistant::CallStatus IflytekAiAssistant::getIatEnable() const
 {
     if (Enable != status()) {
-        qDebug() << "status is not enable!";
+        qCDebug(appLog) << "status is not enable!";
         return status();
     }
 
     // 首先检查音频输入设备是否存在
     if (!hasAudioInputDevice()) {
-        qDebug() << "No audio input device available";
+        qCDebug(appLog) << "No audio input device available";
         return NoInputDevice;
     }
 
@@ -309,7 +310,7 @@ IflytekAiAssistant::CallStatus IflytekAiAssistant::getIatEnable() const
 
     QDBusReply<bool> ret = interface.call("getIatEnable");
     if (ret.isValid()) {
-        qDebug() << "getIatEnable ret:" << ret.value();
+        qCDebug(appLog) << "getIatEnable ret:" << ret.value();
         return ret.value() ? Enable : Disable;
     }
     return Invalid;
@@ -318,27 +319,27 @@ IflytekAiAssistant::CallStatus IflytekAiAssistant::getIatEnable() const
 IflytekAiAssistant::CallStatus IflytekAiAssistant::speechToText()
 {
     if (Enable != checkValid()) {
-        qDebug() << "checkValid failed!";
+        qCDebug(appLog) << "checkValid failed!";
         return status();
     }
 
     CallStatus ret = getIatEnable();
     if (Enable != ret) {
-        qDebug() << "no input device!";
+        qCDebug(appLog) << "no input device!";
         return NoInputDevice;
     }
 
     QDBusInterface interface(copilotService(), "/aiassistant/deepinmain", "com.iflytek.aiassistant.mainWindow");
     interface.asyncCall("SpeechToText");
 
-    qDebug() << "speechToText success!";
+    qCDebug(appLog) << "speechToText success!";
     return Success;
 }
 
 IflytekAiAssistant::CallStatus IflytekAiAssistant::getTransEnable() const
 {
     if (Enable != status()) {
-        qDebug() << "status is not enable!";
+        qCDebug(appLog) << "status is not enable!";
         return status();
     }
 
@@ -347,36 +348,36 @@ IflytekAiAssistant::CallStatus IflytekAiAssistant::getTransEnable() const
 
     QDBusReply<bool> ret = interface.call("getTransEnable");
     if (ret.isValid()) {
-        qDebug() << "getTransEnable ret:" << ret.value();
+        qCDebug(appLog) << "getTransEnable ret:" << ret.value();
         return ret.value() ? Enable : Disable;
     }
-    qDebug() << "getTransEnable failed! return Invalid";
+    qCDebug(appLog) << "getTransEnable failed! return Invalid";
     return Invalid;
 }
 
 IflytekAiAssistant::CallStatus IflytekAiAssistant::textToTranslate()
 {
     if (Enable != checkValid()) {
-        qDebug() << "checkValid failed!";
+        qCDebug(appLog) << "checkValid failed!";
         return status();
     }
 
     CallStatus ret = getTransEnable();
     if (Enable != ret) {
-        qWarning() << "getTransEnable is not enable!";
+        qCWarning(appLog) << "getTransEnable is not enable!";
         return Invalid;
     }
 
     QDBusInterface interface(copilotService(), "/aiassistant/deepinmain", "com.iflytek.aiassistant.mainWindow");
     interface.asyncCall("TextToTranslate");
 
-    qDebug() << "textToTranslate success!";
+    qCDebug(appLog) << "textToTranslate success!";
     return Success;
 }
 
 QString IflytekAiAssistant::errorString(CallStatus ret) const
 {
-    qDebug() << "errorString ret:" << ret;
+    qCDebug(appLog) << "errorString ret:" << ret;
     switch (ret) {
         case NotInstalled:
             return QObject::tr("Please install 'UOS AI' from the App Store before using");
@@ -386,7 +387,7 @@ QString IflytekAiAssistant::errorString(CallStatus ret) const
             return QObject::tr("No audio output device detected. Please check and try again");
         default:
             // Unknown error
-            qDebug() << "unknown error ret:" << ret;
+            qCDebug(appLog) << "unknown error ret:" << ret;
             return {};
     }
 }
@@ -395,11 +396,11 @@ IflytekAiAssistant::CallStatus IflytekAiAssistant::copilotInstalled(const QShare
 {
     QDBusReply<QString> version = copilot->call("version");
     if (version.isValid()) {
-        qInfo() << "current uos-ai version:" << version.value();
+        qCInfo(appLog) << "current uos-ai version:" << version.value();
         return Enable;
     }
 
-    qWarning() << "Query uos-ai installed faild! Maybe need install";
+    qCWarning(appLog) << "Query uos-ai installed faild! Maybe need install";
     return NotInstalled;
 }
 
@@ -411,12 +412,12 @@ IflytekAiAssistant::CallStatus IflytekAiAssistant::isCopilotEnabled(const QShare
 {
     QDBusReply<bool> state = copilot->call("isCopilotEnabled");
     if (state.isValid()) {
-        qDebug() << "current uos-ai user exp state:" << state.value();
+        qCDebug(appLog) << "current uos-ai user exp state:" << state.value();
         return state.value() ? Enable : NoUserAgreement;
     }
 
     // NOTE: Adapt old version, if dbus interface not valid, assume the user agreement agreed.
-    qWarning() << "Query uos-ai user exp state failed!" << state.error().message();
+    qCWarning(appLog) << "Query uos-ai user exp state failed!" << state.error().message();
     return Enable;
 }
 
@@ -427,7 +428,7 @@ IflytekAiAssistant::CallStatus IflytekAiAssistant::launchCopilotChat(const QShar
 {
     QDBusMessage message = copilot->call("launchChatPage");
     if (!message.errorMessage().isEmpty()) {
-        qWarning() << "Launch uos-ai chat page failed!" << message.errorMessage();
+        qCWarning(appLog) << "Launch uos-ai chat page failed!" << message.errorMessage();
         return Disable;
     }
 
@@ -436,7 +437,7 @@ IflytekAiAssistant::CallStatus IflytekAiAssistant::launchCopilotChat(const QShar
 
 void IflytekAiAssistant::checkAiExists()
 {
-    qDebug() << "checkAiExists status:" << m_status;
+    qCDebug(appLog) << "checkAiExists status:" << m_status;
     static std::once_flag kAiFlag;
     std::call_once(kAiFlag, [this]() {
         QtConcurrent::run([this]() {
@@ -447,7 +448,7 @@ void IflytekAiAssistant::checkAiExists()
                 status = IflytekAiAssistant::isCopilotEnabled(copilot);
             }
 
-            qInfo() << QString("backend uos-ai status: %1(%2)").arg(Enable == status).arg(status);
+            qCInfo(appLog) << QString("backend uos-ai status: %1(%2)").arg(Enable == status).arg(status);
 
             // call on non-gui thread, so queued connection.
             QMetaObject::invokeMethod(

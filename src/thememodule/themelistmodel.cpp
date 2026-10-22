@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "ddlog.h"
 #include "themelistmodel.h"
 #include "../common/utils.h"
 #include <QFileInfoList>
@@ -13,31 +14,31 @@
 ThemeListModel::ThemeListModel(QObject *parent)
     : QAbstractListModel(parent)
 {
-    qDebug() << "ThemeListModel constructor";
+    qCDebug(appLog) << "ThemeListModel constructor";
     initThemes();
 }
 
 ThemeListModel::~ThemeListModel()
 {
-    qDebug() << "ThemeListModel destructor";
+    qCDebug(appLog) << "ThemeListModel destructor";
 }
 
 void ThemeListModel::setFrameColor(const QString &selectedColor, const QString &normalColor)
 {
-    qInfo() << "Setting frame colors - selected:" << selectedColor << "normal:" << normalColor;
+    qCInfo(appLog) << "Setting frame colors - selected:" << selectedColor << "normal:" << normalColor;
     m_frameSelectedColor = selectedColor;
     m_frameNormalColor = normalColor;
 }
 
 void ThemeListModel::setSelection(const QString &path)
 {
-    qDebug() << "Setting selection for theme path:" << path;
+    qCDebug(appLog) << "Setting selection for theme path:" << path;
     for (auto pair : m_themes) {
         if (path == pair.second) {
             const int row = m_themes.indexOf(pair);
             const QModelIndex &idx = QAbstractListModel::index(row, 0);
             emit requestCurrentIndex(idx);
-            qDebug() << "Break, Selection set for theme path:" << path;
+            qCDebug(appLog) << "Break, Selection set for theme path:" << path;
             break;
         }
     }
@@ -52,10 +53,10 @@ QVariant ThemeListModel::data(const QModelIndex &index, int role) const
 {
     // 按 QAbstractItemModel 契约校验索引有效性，无效索引返回 QVariant()
     if (!index.isValid() || index.row() < 0 || index.row() >= m_themes.size()) {
-        qWarning() << "Invalid index for row:" << index.row();
+        qCWarning(appLog) << "Invalid index for row:" << index.row();
         return QVariant();
     }
-    qDebug() << "Getting data for row:" << index.row() << "role:" << role;
+    qCDebug(appLog) << "Getting data for row:" << index.row() << "role:" << role;
     const int r = index.row();
 
     const QString &name = m_themes.at(r).first;
@@ -63,26 +64,26 @@ QVariant ThemeListModel::data(const QModelIndex &index, int role) const
 
     switch (role) {
     case ThemeName:
-        qDebug() << "Theme name:" << name;
+        qCDebug(appLog) << "Theme name:" << name;
         return name;
     case ThemePath:
-        qDebug() << "Theme path:" << path;
+        qCDebug(appLog) << "Theme path:" << path;
         return path;
     case FrameNormalColor:
-        qDebug() << "Frame normal color:" << m_frameNormalColor;
+        qCDebug(appLog) << "Frame normal color:" << m_frameNormalColor;
         return m_frameNormalColor;
     case FrameSelectedColor:
-        qDebug() << "Frame selected color:" << m_frameSelectedColor;
+        qCDebug(appLog) << "Frame selected color:" << m_frameSelectedColor;
         return m_frameSelectedColor;
     }
 
-    qDebug() << "No data for role:" << role;
+    qCDebug(appLog) << "No data for role:" << role;
     return QVariant();
 }
 
 void ThemeListModel::initThemes()
 {
-    qDebug() << "Initializing theme list";
+    qCDebug(appLog) << "Initializing theme list";
     QFileInfoList infoList = QDir(QString("%1share/deepin-editor/themes").arg(LINGLONG_PREFIX)).entryInfoList(QDir::Files | QDir::NoDotAndDotDot);
 
     for (QFileInfo info : infoList) {
@@ -91,11 +92,11 @@ void ThemeListModel::initThemes()
         pair.first = jsonMap["metadata"].toMap()["name"].toString();
         pair.second = info.filePath();
 
-        qDebug() << "Found theme:" << pair.first << "at path:" << pair.second;
+        qCDebug(appLog) << "Found theme:" << pair.first << "at path:" << pair.second;
         m_themes << pair;
     }
 
-    qDebug() << "Sorting themes by background lightness";
+    qCDebug(appLog) << "Sorting themes by background lightness";
     std::sort(m_themes.begin(), m_themes.end(),
               [=] (QPair<QString, QString> &a, QPair<QString, QString> &b) {
                   QVariantMap firstMap = Utils::getThemeMapFromPath(a.second);
@@ -107,5 +108,5 @@ void ThemeListModel::initThemes()
                   return QColor(firstColor).lightness() < QColor(secondColor).lightness();
               });
 
-    qDebug() << "Themes:" << m_themes;
+    qCDebug(appLog) << "Themes:" << m_themes;
 }

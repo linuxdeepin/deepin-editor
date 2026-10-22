@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "ddlog.h"
 #include "indenttextcommond.h"
 #include "dtextedit.h"
 #include <QDebug>
@@ -13,19 +14,19 @@ IndentTextCommand::IndentTextCommand(TextEdit* edit,int startpos,int endpos,int 
     m_startline(startline),
     m_endline(endline)
 {
-    qDebug() << "IndentTextCommand created - startpos:" << startpos
+    qCDebug(appLog) << "IndentTextCommand created - startpos:" << startpos
              << "endpos:" << endpos << "lines:" << startline << "-" << endline
              << "hasSelection:" << m_edit->textCursor().hasSelection();
     m_hasselected = m_edit->textCursor().hasSelection();
 }
 IndentTextCommand::~IndentTextCommand()
 {
-    qDebug() << "IndentTextCommand destroyed";
+    qCDebug(appLog) << "IndentTextCommand destroyed";
 }
 
 void IndentTextCommand::redo()
 {
-    qInfo() << "IndentTextCommand redo - adding indents to lines:"
+    qCInfo(appLog) << "IndentTextCommand redo - adding indents to lines:"
             << m_startline << "-" << m_endline;
     auto cursor = m_edit->textCursor();
 
@@ -40,37 +41,37 @@ void IndentTextCommand::redo()
 
     //reset selection.
     if(m_hasselected){
-        qDebug() << "IndentTextCommand redo, m_hasselected";
+        qCDebug(appLog) << "IndentTextCommand redo, m_hasselected";
         if(m_startline == m_endline){
-            qDebug() << "IndentTextCommand redo, m_startline == m_endline";
+            qCDebug(appLog) << "IndentTextCommand redo, m_startline == m_endline";
             cursor.setPosition(m_startpos);
             cursor.movePosition(QTextCursor::StartOfBlock);
             cursor.movePosition(QTextCursor::EndOfBlock,QTextCursor::KeepAnchor);
             m_edit->setTextCursor(cursor);
         }
         else{
-            qDebug() << "IndentTextCommand redo, m_startline != m_endline";
+            qCDebug(appLog) << "IndentTextCommand redo, m_startline != m_endline";
             cursor.setPosition(m_startpos+1);
             cursor.setPosition(m_endpos + m_endline - m_startline +1,QTextCursor::KeepAnchor);
             m_edit->setTextCursor(cursor);
         }
 
     }
-    qDebug() << "IndentTextCommand redo exit";
+    qCDebug(appLog) << "IndentTextCommand redo exit";
 }
 
 
 
 void IndentTextCommand::undo()
 {
-    qInfo() << "IndentTextCommand undo - removing indents from lines:"
+    qCInfo(appLog) << "IndentTextCommand undo - removing indents from lines:"
             << m_startline << "-" << m_endline;
     auto cursor = m_edit->textCursor();
 
     //delete "\t" in front of multiple lines.
     cursor.setPosition(m_startpos);
     for(int i=m_startline;i<=m_endline;i++){
-        qDebug() << "IndentTextCommand undo, i:" << i;
+        qCDebug(appLog) << "IndentTextCommand undo, i:" << i;
         cursor.movePosition(QTextCursor::StartOfBlock);
         cursor.deleteChar();
 
@@ -79,12 +80,12 @@ void IndentTextCommand::undo()
 
     //reset selection
     if(m_hasselected){
-        qDebug() << "IndentTextCommand undo, m_hasselected";
+        qCDebug(appLog) << "IndentTextCommand undo, m_hasselected";
         cursor.setPosition(m_startpos);
         cursor.setPosition(m_endpos,QTextCursor::KeepAnchor);
         m_edit->setTextCursor(cursor);
     }
-    qDebug() << "IndentTextCommand undo exit";
+    qCDebug(appLog) << "IndentTextCommand undo exit";
 }
 
 UnindentTextCommand::UnindentTextCommand(TextEdit* edit,int startpos,int endpos,int startline,int endline,int tabSpaceNumber):
@@ -95,7 +96,7 @@ UnindentTextCommand::UnindentTextCommand(TextEdit* edit,int startpos,int endpos,
     m_endline(endline),
     m_tabSpaceNumber(tabSpaceNumber)
 {
-    qDebug() << "UnindentTextCommand created - startpos:" << startpos
+    qCDebug(appLog) << "UnindentTextCommand created - startpos:" << startpos
              << "endpos:" << endpos << "lines:" << startline << "-" << endline
              << "hasSelection:" << m_edit->textCursor().hasSelection();
     m_hasselected = m_edit->textCursor().hasSelection();
@@ -104,12 +105,12 @@ UnindentTextCommand::UnindentTextCommand(TextEdit* edit,int startpos,int endpos,
 
 UnindentTextCommand::~UnindentTextCommand()
 {
-    qDebug() << "UnindentTextCommand destroyed";
+    qCDebug(appLog) << "UnindentTextCommand destroyed";
 }
 
 void UnindentTextCommand::redo()
 {
-    qInfo() << "UnindentTextCommand redo - removing indents from lines:"
+    qCInfo(appLog) << "UnindentTextCommand redo - removing indents from lines:"
             << m_startline << "-" << m_endline;
     auto cursor = m_edit->textCursor();
 
@@ -150,9 +151,9 @@ void UnindentTextCommand::redo()
 
     //reset selection.
     if(m_hasselected){
-        qDebug() << "UnindentTextCommand redo, m_hasselected, totalRemoved:" << totalRemoved;
+        qCDebug(appLog) << "UnindentTextCommand redo, m_hasselected, totalRemoved:" << totalRemoved;
         if(m_startline == m_endline){
-            qDebug() << "UnindentTextCommand redo, m_startline == m_endline";
+            qCDebug(appLog) << "UnindentTextCommand redo, m_startline == m_endline";
             int newStartPos = m_startpos - m_removedChars[0];
             if(newStartPos < 0) newStartPos = 0;
             cursor.setPosition(newStartPos);
@@ -161,7 +162,7 @@ void UnindentTextCommand::redo()
             m_edit->setTextCursor(cursor);
         }
         else{
-            qDebug() << "UnindentTextCommand redo, m_startline != m_endline";
+            qCDebug(appLog) << "UnindentTextCommand redo, m_startline != m_endline";
             int firstLineRemoved = m_removedChars[0];
             int newStartPos = m_startpos - firstLineRemoved;
             int newEndPos = m_endpos - totalRemoved;
@@ -175,19 +176,19 @@ void UnindentTextCommand::redo()
             m_edit->setTextCursor(cursor);
         }
     }
-    qDebug() << "UnindentTextCommand redo exit";
+    qCDebug(appLog) << "UnindentTextCommand redo exit";
 }
 
 void UnindentTextCommand::undo()
 {
-    qInfo() << "UnindentTextCommand undo - restoring indents to lines:"
+    qCInfo(appLog) << "UnindentTextCommand undo - restoring indents to lines:"
             << m_startline << "-" << m_endline;
     auto cursor = m_edit->textCursor();
 
     //restore indentation to multiple lines.
     cursor.setPosition(m_startpos);
     for(int i=m_startline;i<=m_endline;i++){
-        qDebug() << "UnindentTextCommand undo, i:" << i;
+        qCDebug(appLog) << "UnindentTextCommand undo, i:" << i;
         cursor.movePosition(QTextCursor::StartOfBlock);
         int removed = m_removedChars[i - m_startline];
 
@@ -205,10 +206,10 @@ void UnindentTextCommand::undo()
 
     //reset selection
     if(m_hasselected){
-        qDebug() << "UnindentTextCommand undo, m_hasselected";
+        qCDebug(appLog) << "UnindentTextCommand undo, m_hasselected";
         cursor.setPosition(m_startpos);
         cursor.setPosition(m_endpos, QTextCursor::KeepAnchor);
         m_edit->setTextCursor(cursor);
     }
-    qDebug() << "UnindentTextCommand undo exit";
+    qCDebug(appLog) << "UnindentTextCommand undo exit";
 }

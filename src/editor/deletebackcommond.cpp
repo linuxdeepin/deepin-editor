@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "ddlog.h"
 #include "deletebackcommond.h"
 
 #include <QTextBlock>
@@ -16,18 +17,18 @@ DeleteBackCommand::DeleteBackCommand(QTextCursor cursor, QPlainTextEdit *edit)
     m_delPos = std::min(m_cursor.position(), m_cursor.anchor());
     m_insertPos = m_delPos;
     
-    qDebug() << "DeleteBackCommand created - delete pos:" << m_delPos
+    qCDebug(appLog) << "DeleteBackCommand created - delete pos:" << m_delPos
                 << ", text length:" << m_delText.length();
 }
 
 DeleteBackCommand::~DeleteBackCommand()
 {
-    qDebug() << "DeleteBackCommand destroyed";
+    qCDebug(appLog) << "DeleteBackCommand destroyed";
 }
 
 void DeleteBackCommand::undo()
 {
-    qDebug() << "DeleteBackCommand undo - inserting text at:" << m_insertPos
+    qCDebug(appLog) << "DeleteBackCommand undo - inserting text at:" << m_insertPos
                 << ", length:" << m_delText.length();
     if (nullptr == m_edit) {
         return;
@@ -43,7 +44,7 @@ void DeleteBackCommand::undo()
 
 void DeleteBackCommand::redo()
 {
-    qDebug() << "DeleteBackCommand redo - deleting text at:" << m_delPos
+    qCDebug(appLog) << "DeleteBackCommand redo - deleting text at:" << m_delPos
                 << ", length:" << m_delText.length();
     if (nullptr == m_edit) {
         return;
@@ -67,7 +68,7 @@ DeleteBackAltCommand::DeleteBackAltCommand(const QList<QTextEdit::ExtraSelection
     : m_columnEditSelections(selections)
     , m_edit(edit)
 {
-    qDebug() << "DeleteBackAltCommand created with" << selections.size()
+    qCDebug(appLog) << "DeleteBackAltCommand created with" << selections.size()
                 << "selections, backward:" << backward;
     int sum = 0;
     for (int i = 0; i < m_columnEditSelections.size(); i++) {
@@ -75,20 +76,20 @@ DeleteBackAltCommand::DeleteBackAltCommand(const QList<QTextEdit::ExtraSelection
         auto cursor = m_columnEditSelections[i].cursor;
 
         if (!cursor.hasSelection()) {
-            qDebug() << "cursor.hasSelection() is false";
+            qCDebug(appLog) << "cursor.hasSelection() is false";
             // keyboard 'delete' button
             if (backward) {
-                qDebug() << "backward is true";
+                qCDebug(appLog) << "backward is true";
                 if (!cursor.atEnd()) {
-                    qDebug() << "cursor.atEnd() is false";
+                    qCDebug(appLog) << "cursor.atEnd() is false";
                     cursor.setPosition(cursor.position() + 1, QTextCursor::KeepAnchor);
                 }
 
             } else {
-                qDebug() << "backward is false";
+                qCDebug(appLog) << "backward is false";
                 // keyboard 'backspace' button
                 if (!cursor.atStart()) {
-                    qDebug() << "cursor.atStart() is false";
+                    qCDebug(appLog) << "cursor.atStart() is false";
                     cursor.setPosition(cursor.position() - 1);
                     cursor.setPosition(cursor.position() + 1, QTextCursor::KeepAnchor);
                 }
@@ -97,7 +98,7 @@ DeleteBackAltCommand::DeleteBackAltCommand(const QList<QTextEdit::ExtraSelection
 
         text = cursor.selectedText();
         if (!text.isEmpty()) {
-            qDebug() << "text is not empty";
+            qCDebug(appLog) << "text is not empty";
             int pos = std::min(cursor.anchor(), cursor.position());
             DelNode node;
             node.cursor = cursor;
@@ -111,17 +112,17 @@ DeleteBackAltCommand::DeleteBackAltCommand(const QList<QTextEdit::ExtraSelection
             sum += text.size();
         }
     }
-    qDebug() << "DeleteBackAltCommand created end";
+    qCDebug(appLog) << "DeleteBackAltCommand created end";
 }
 
 DeleteBackAltCommand::~DeleteBackAltCommand()
 {
-    qDebug() << "DeleteBackAltCommand destroyed";
+    qCDebug(appLog) << "DeleteBackAltCommand destroyed";
 }
 
 void DeleteBackAltCommand::undo()
 {
-    qDebug() << "DeleteBackAltCommand undo - restoring" << m_deletions.size() << "deletions";
+    qCDebug(appLog) << "DeleteBackAltCommand undo - restoring" << m_deletions.size() << "deletions";
     for (const DelNode &node : m_deletions) {
         auto cursor = node.cursor;
         const int pos = node.insertPos;
@@ -130,14 +131,14 @@ void DeleteBackAltCommand::undo()
         cursor.insertText(text);
 
         if (0 <= node.idInColumn && node.idInColumn < m_columnEditSelections.size()) {
-            qDebug() << "node.idInColumn is not empty";
+            qCDebug(appLog) << "node.idInColumn is not empty";
             const int endPos = pos + text.size();
             if (node.leftToRight) {
-                qDebug() << "node.leftToRight is true";
+                qCDebug(appLog) << "node.leftToRight is true";
                 cursor.setPosition(pos);
                 cursor.setPosition(endPos, QTextCursor::KeepAnchor);
             } else {
-                qDebug() << "node.leftToRight is false";
+                qCDebug(appLog) << "node.leftToRight is false";
                 cursor.setPosition(endPos);
                 cursor.setPosition(pos, QTextCursor::KeepAnchor);
             }
@@ -146,16 +147,16 @@ void DeleteBackAltCommand::undo()
     }
 
     if (m_edit && !m_columnEditSelections.isEmpty()) {
-        qDebug() << "m_edit is not null";
+        qCDebug(appLog) << "m_edit is not null";
         m_edit->restoreColumnEditSelection(m_columnEditSelections);
         m_edit->setTextCursor(m_columnEditSelections.last().cursor);
     }
-    qDebug() << "DeleteBackAltCommand undo end";
+    qCDebug(appLog) << "DeleteBackAltCommand undo end";
 }
 
 void DeleteBackAltCommand::redo()
 {
-    qDebug() << "DeleteBackAltCommand redo - executing" << m_deletions.size() << "deletions";
+    qCDebug(appLog) << "DeleteBackAltCommand redo - executing" << m_deletions.size() << "deletions";
     for (int i = 0; i < m_deletions.size(); i++) {
         auto cursor = m_deletions[i].cursor;
         const int pos = m_deletions[i].delPos;
@@ -168,15 +169,15 @@ void DeleteBackAltCommand::redo()
     }
 
     if (m_edit && !m_columnEditSelections.isEmpty()) {
-        qDebug() << "m_edit is not null";
+        qCDebug(appLog) << "m_edit is not null";
         m_edit->restoreColumnEditSelection(m_columnEditSelections);
         m_edit->setTextCursor(m_columnEditSelections.last().cursor);
     }
-    qDebug() << "DeleteBackAltCommand redo end";
+    qCDebug(appLog) << "DeleteBackAltCommand redo end";
 }
 
 int DeleteBackAltCommand::id() const
 {
-    qDebug() << "DeleteBackAltCommand id";
+    qCDebug(appLog) << "DeleteBackAltCommand id";
     return Utils::IdColumnEditDelete;
 }

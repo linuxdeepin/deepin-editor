@@ -1,7 +1,8 @@
-// SPDX-FileCopyrightText: 2017 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "ddlog.h"
 #include "toolbar.h"
 #include <QLabel>
 #include <QDebug>
@@ -13,20 +14,20 @@ ToolBar::ToolBar(QWidget *parent)
     : QWidget(parent),
       m_layout(new QHBoxLayout(this))
 {
-    qDebug() << "ToolBar constructor start";
+    qCDebug(appLog) << "ToolBar constructor start";
     m_layout->setContentsMargins(0, 0, 0, 0);
-    qDebug() << "ToolBar layout initialized with zero margins";
+    qCDebug(appLog) << "ToolBar layout initialized with zero margins";
 }
 
 ToolBar::~ToolBar()
 {
-    qDebug() << "ToolBar destructor";
+    qCDebug(appLog) << "ToolBar destructor";
 }
 
 void ToolBar::setTabbar(QWidget *w)
 {
-    qDebug() << "Setting tabbar widget";
+    qCDebug(appLog) << "Setting tabbar widget";
     m_layout->addWidget(w, 0);
     m_layout->addSpacing(70);
-    qDebug() << "Tabbar widget added to toolbar with spacing";
+    qCDebug(appLog) << "Tabbar widget added to toolbar with spacing";
 }

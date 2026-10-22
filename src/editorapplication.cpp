@@ -2,67 +2,68 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "ddlog.h"
 #include "editorapplication.h"
 #include "common/settings.h"
 #include <QDebug>
 
 EditorApplication::EditorApplication(int &argc, char *argv[]) : DApplication(argc, argv)
 {
-    qDebug() << "Enter EditorApplication constructor";
+    qCDebug(appLog) << "Enter EditorApplication constructor";
     const char *descriptionText = QT_TRANSLATE_NOOP(
         "MainWindow", "Text Editor is a powerful tool for viewing and editing text files.");
     const QString acknowledgementLink = "https://www.deepin.org/original/deepin-editor/";
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    qDebug() << "Setting Qt::AA_UseHighDpiPixmaps attribute for Qt version < 6.0.0";
+    qCDebug(appLog) << "Setting Qt::AA_UseHighDpiPixmaps attribute for Qt version < 6.0.0";
     setAttribute(Qt::AA_UseHighDpiPixmaps);
 #else
-    qDebug() << "Running with Qt version >= 6.0.0, skipping AA_UseHighDpiPixmaps";
+    qCDebug(appLog) << "Running with Qt version >= 6.0.0, skipping AA_UseHighDpiPixmaps";
 #endif
-    qDebug() << "Loading translator";
+    qCDebug(appLog) << "Loading translator";
     loadTranslator();
-    qDebug() << "Setting organization name: deepin";
+    qCDebug(appLog) << "Setting organization name: deepin";
     setOrganizationName("deepin");
-    qDebug() << "Setting application name: deepin-editor";
+    qCDebug(appLog) << "Setting application name: deepin-editor";
     setApplicationName("deepin-editor");
-    qDebug() << "Setting application display name: Text Editor";
+    qCDebug(appLog) << "Setting application display name: Text Editor";
     setApplicationDisplayName(QObject::tr("Text Editor"));
-    qDebug() << "Setting application version:" << VERSION;
+    qCDebug(appLog) << "Setting application version:" << VERSION;
     setApplicationVersion(VERSION);
-    qDebug() << "Setting product icon from theme: deepin-editor";
+    qCDebug(appLog) << "Setting product icon from theme: deepin-editor";
     setProductIcon(QIcon::fromTheme("deepin-editor"));
-    qDebug() << "Setting product name: Text Editor";
+    qCDebug(appLog) << "Setting product name: Text Editor";
     setProductName(DApplication::translate("MainWindow", "Text Editor"));
-    qDebug() << "Setting application description";
+    qCDebug(appLog) << "Setting application description";
     setApplicationDescription(DApplication::translate("MainWindow", descriptionText) + "\n");
-    qDebug() << "Setting acknowledgement page:" << acknowledgementLink;
+    qCDebug(appLog) << "Setting acknowledgement page:" << acknowledgementLink;
     setApplicationAcknowledgementPage(acknowledgementLink);
-    qDebug() << "Setting quitOnLastWindowClosed to false";
+    qCDebug(appLog) << "Setting quitOnLastWindowClosed to false";
     setQuitOnLastWindowClosed(false);
-    qDebug() << "Exit EditorApplication constructor";
-    qInfo() << "Application initialized with version:" << VERSION;
+    qCDebug(appLog) << "Exit EditorApplication constructor";
+    qCInfo(appLog) << "Application initialized with version:" << VERSION;
 }
 
 EditorApplication::~EditorApplication()
 {
-    qDebug() << "Enter EditorApplication destructor";
+    qCDebug(appLog) << "Enter EditorApplication destructor";
     // StartManager 生命周期由 main() 接管（创建于 create()，事件循环结束后显式释放），
     // 析构不得触碰，否则 D-Bus 转发进程会在退出期意外实例化单例（BUG-378901）
-    qDebug() << "Exit EditorApplication destructor";
-    qInfo() << "Application resources released";
+    qCDebug(appLog) << "Exit EditorApplication destructor";
+    qCInfo(appLog) << "Application resources released";
 }
 
 void EditorApplication::handleQuitAction()
 {
-    qDebug() << "Enter handleQuitAction";
+    qCDebug(appLog) << "Enter handleQuitAction";
     QWidget* active = activeWindow();
     if (active) {
-        qDebug() << "Active window found, closing it";
+        qCDebug(appLog) << "Active window found, closing it";
         active->close();
     } else {
-        qWarning() << "No active window found to close";
+        qCWarning(appLog) << "No active window found to close";
     }
-    qDebug() << "Exit handleQuitAction";
-    qInfo() << "Quit action triggered, closing active window";
+    qCDebug(appLog) << "Exit handleQuitAction";
+    qCInfo(appLog) << "Quit action triggered, closing active window";
 }
 
 bool EditorApplication::notify(QObject *object, QEvent *event)
@@ -87,7 +88,7 @@ bool EditorApplication::notify(QObject *object, QEvent *event)
             DPushButton *pushButton = static_cast<DPushButton *>(object);
             // 模拟空格键按下事件
             pressSpace(pushButton);
-            qDebug() << "Return/Enter key event processed, simulated space key press";
+            qCDebug(appLog) << "Return/Enter key event processed, simulated space key press";
             return true;
         }
         /***add end by ut001121***/
@@ -100,10 +101,10 @@ bool EditorApplication::notify(QObject *object, QEvent *event)
             DPushButton *pushButton = static_cast<DPushButton *>(object);
             // 模拟空格键按下事件
             pressSpace(pushButton);
-            qDebug() << "Left key event processed, simulated space key press";
+            qCDebug(appLog) << "Left key event processed, simulated space key press";
             return true;
         }
-        qDebug() << "KeyPress event delegated to QApplication::notify";
+        qCDebug(appLog) << "KeyPress event delegated to QApplication::notify";
         return QApplication::notify(object, event);
     }
 
@@ -112,17 +113,17 @@ bool EditorApplication::notify(QObject *object, QEvent *event)
 
 void EditorApplication::pressSpace(DPushButton *pushButton)
 {
-    qDebug() << "Enter pressSpace, button:" << pushButton->objectName();
+    qCDebug(appLog) << "Enter pressSpace, button:" << pushButton->objectName();
     // 模拟空格键按下事件
     QKeyEvent pressSpace(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier, " ");
-    qDebug() << "Sending space key press event to button";
+    qCDebug(appLog) << "Sending space key press event to button";
     QApplication::sendEvent(pushButton, &pressSpace);
     // 设置定时
     QTimer::singleShot(80, this, [pushButton]() {
-        qDebug() << "Timer triggered, sending space key release to button:" << pushButton->objectName();
+        qCDebug(appLog) << "Timer triggered, sending space key release to button:" << pushButton->objectName();
         // 模拟空格键松开事件
         QKeyEvent releaseSpace(QEvent::KeyRelease, Qt::Key_Space, Qt::NoModifier, " ");
         QApplication::sendEvent(pushButton, &releaseSpace);
     });
-    qDebug() << "Exit pressSpace, scheduled release event in 80ms";
+    qCDebug(appLog) << "Exit pressSpace, scheduled release event in 80ms";
 }

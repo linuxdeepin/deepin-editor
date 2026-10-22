@@ -25,6 +25,7 @@
  * Homepage: http://tarot.freeshell.org/leafpad/
  */
 
+#include "ddlog.h"
 #include <QLocale>
 #include <stdlib.h> // getenv (not used but, maybe, for *BSD)
 #include <langinfo.h> // CODESET, nl_langinfo
@@ -117,19 +118,19 @@ static const std::string encodingTable[TOTAL_NUM][ENCODING_MAX_ITEM_NUM] =
 /*************************/
 static unsigned int getLocaleNum()
 {
-    qDebug() << "Entering getLocaleNum";
+    qCDebug(appLog) << "Entering getLocaleNum";
     static unsigned int code = 0; // for me
     QStringList langs (QLocale::system().uiLanguages());
     if (!langs.isEmpty())
     {
-        qDebug() << "System UI languages found:" << langs;
+        qCDebug(appLog) << "System UI languages found:" << langs;
         QString lang = langs.first().replace ('-', '_');
         if (lang.length() >= 2)
         {
             std::string env = lang.toStdString();
             if (!env.empty() && env.length() >= 2)
             {
-                qDebug() << "Detecting locale number for env:" << env.c_str();
+                qCDebug(appLog) << "Detecting locale number for env:" << env.c_str();
                 int j = 1;
                 while (code == 0 && j < TOTAL_NUM)
                 {
@@ -140,7 +141,7 @@ static unsigned int getLocaleNum()
                         if (env.compare (0, countryTable[j][i].length(), countryTable[j][i]) == 0)
                         {
                             code = j;
-                            qDebug() << "Found matching country table, code:" << code;
+                            qCDebug(appLog) << "Found matching country table, code:" << code;
                             break;
                         }
                     }
@@ -149,9 +150,9 @@ static unsigned int getLocaleNum()
             }
         }
     } else {
-        qDebug() << "No system UI languages found.";
+        qCDebug(appLog) << "No system UI languages found.";
     }
-    qDebug() << "Leaving getLocaleNum, returning code:" << code;
+    qCDebug(appLog) << "Leaving getLocaleNum, returning code:" << code;
     return code;
 }
 /*************************/
@@ -162,7 +163,7 @@ static const std::string encodingItem[ENCODING_MAX_ITEM_NUM] = {encodingTable[lo
 /*************************/
 static const std::string detectCharsetLatin (const char *text)
 {
-    qDebug() << "Entering detectCharsetLatin";
+    qCDebug(appLog) << "Entering detectCharsetLatin";
     uint8_t c = *text;
     bool noniso = false;
     bool noniso15 = false;
@@ -174,57 +175,57 @@ static const std::string detectCharsetLatin (const char *text)
     {
         if (c >= 0x41 && c <= 0x7A)
         {
-            qDebug() << "Ordinary Latin letters";
+            qCDebug(appLog) << "Ordinary Latin letters";
             /* ordinary Latin letters */
             xl ++;
         }
         else if (c >= 0x80 && c <= 0x9F)
         {
-            qDebug() << "Non-ISO letters";
+            qCDebug(appLog) << "Non-ISO letters";
             noniso = true;
         }
         else if (c >= 0xC0)
         {
-            qDebug() << "Arabic or Cyrillic letters";
+            qCDebug(appLog) << "Arabic or Cyrillic letters";
             /* Arabic or Cyrillic letters */
             xac ++;
             if (c >= 0xC0 && c <= 0xCF)
             {
-                qDebug() << "Cyrillic capital letters";
+                qCDebug(appLog) << "Cyrillic capital letters";
                 /* Cyrillic capital letters */
                 xcC++;
             }
             else if (c >= 0xD0 && c <= 0xDF)
             {
-                qDebug() << "Cyrillic capital letters again";
+                qCDebug(appLog) << "Cyrillic capital letters again";
                 /* Cyrillic capital letters again */
                 xcC1++;
                 if (c == 0xDE || c == 0xDF)
                 {
-                    qDebug() << "Not used in ISO-8859-15 (Icelandic or German)";
+                    qCDebug(appLog) << "Not used in ISO-8859-15 (Icelandic or German)";
                     /* not used in ISO-8859-15 (Icelandic or German) */
                     noniso15 = true;
                 }
             }
             else if (c >= 0xE0)
             {
-                qDebug() << "Cyrillic small letters";
+                qCDebug(appLog) << "Cyrillic small letters";
                 /* Cyrillic small letters */
                 xcS++;
                 /* Cyrillic but not Arabic letters */
-                qDebug() << "Cyrillic but not Arabic letters";
+                qCDebug(appLog) << "Cyrillic but not Arabic letters";
                 if (c == 0xE0 || c == 0xE2 || (c >= 0xE7 && c <= 0xEB)
                     || c == 0xEE || c == 0xEF || c == 0xF4 || c == 0xF9
                     || c == 0xFB || c == 0xFC)
                 {
-                    qDebug() << "Arabic LAM to HEH";
+                    qCDebug(appLog) << "Arabic LAM to HEH";
                     xcna ++;
                 }
                 /* Arabic LAM to HEH */
                 else if (c == 0xE1 || c == 0xE3 || c == 0xE4
                          || c == 0xE5 || c == 0xE6)
                 {
-                    qDebug() << "Arabic LAM to HEH";
+                    qCDebug(appLog) << "Arabic LAM to HEH";
                     xa++;
                 }
             }
@@ -238,54 +239,54 @@ static const std::string detectCharsetLatin (const char *text)
     if (noniso && xl >= xac && (xcC1 + xcS >= xcC || xcna == 0))
     {
         charset = "CP1252"; // Windows-1252
-        qDebug() << "Charset detected as CP1252";
+        qCDebug(appLog) << "Charset detected as CP1252";
     }
     else // if (xl < xac)
     {
         if (!noniso && xcC + xcS < xcC1)
         {
             charset = "ISO-8859-15"; // FIXME: ISO-8859-5 ?
-            qDebug() << "Charset detected as ISO-8859-15 (case 1)";
+            qCDebug(appLog) << "Charset detected as ISO-8859-15 (case 1)";
         }
         /* this is very tricky and I added it later */
         else if (!noniso && xcC + xcC1 + xa >= xcS - xa && !(xcC1 + xcS < xcC && xcna > 0))
         {
             charset = "ISO-8859-1";
-            qDebug() << "Charset detected as ISO-8859-1";
+            qCDebug(appLog) << "Charset detected as ISO-8859-1";
         }
         else if (xcC + xcC1 < xcS && xcna > 0)
         {
             if (noniso || noniso15) // FIXME: this is very inefficient
             {
                 charset = "CP1251"; // Cyrillic-1251
-                qDebug() << "Charset detected as CP1251";
+                qCDebug(appLog) << "Charset detected as CP1251";
             }
             else
             {
                 charset = "ISO-8859-15";
-                qDebug() << "Charset detected as ISO-8859-15 (case 2)";
+                qCDebug(appLog) << "Charset detected as ISO-8859-15 (case 2)";
             }
         }
         else if (xcC1 + xcS < xcC && xcna > 0)
         {
             charset = "KOI8-U"; // Cyrillic-KOI
-            qDebug() << "Charset detected as KOI8-U";
+            qCDebug(appLog) << "Charset detected as KOI8-U";
         }
         /* this should cover most cases */
         else if (noniso || xcC + xcC1 + xa >= xcS - xa)
         {
             charset = "CP1256"; // MS Windows Arabic
-            qDebug() << "Charset detected as CP1256";
+            qCDebug(appLog) << "Charset detected as CP1256";
         }
     }
 
-    qDebug() << "Leaving detectCharsetLatin, returning charset:" << charset.c_str();
+    qCDebug(appLog) << "Leaving detectCharsetLatin, returning charset:" << charset.c_str();
     return charset;
 }
 /*************************/
 static const std::string detectCharsetCyrillic (const char *text)
 {
-    qDebug() << "Entering detectCharsetCyrillic";
+    qCDebug(appLog) << "Entering detectCharsetCyrillic";
     uint8_t c = *text;
     bool noniso = false;
     uint32_t xl = 0, xa = 0, xac = 0, xcC = 0, xcC1 = 0, xcS = 0, xcna = 0;
@@ -325,7 +326,7 @@ static const std::string detectCharsetCyrillic (const char *text)
 
     if (xl < xac)
     {
-        qDebug() << "Cyrillic letters are more than Latin ones";
+        qCDebug(appLog) << "Cyrillic letters are more than Latin ones";
         if (!noniso && (xcC + xcS < xcC1))
             charset = "ISO-8859-5";
         else if (xcC + xcC1 < xcS && xcna > 0)
@@ -336,13 +337,13 @@ static const std::string detectCharsetCyrillic (const char *text)
             charset = "CP1256";
     }
 
-    qDebug() << "Leaving detectCharsetCyrillic, returning charset:" << charset.c_str();
+    qCDebug(appLog) << "Leaving detectCharsetCyrillic, returning charset:" << charset.c_str();
     return charset;
 }
 /*************************/
 static const std::string detectCharsetWinArabic (const char *text)
 {
-    qDebug() << "Entering detectCharsetWinArabic";
+    qCDebug(appLog) << "Entering detectCharsetWinArabic";
     uint8_t c = *text;
     uint32_t xl = 0, xa = 0;
     std::string charset = encodingItem[IANA];
@@ -359,13 +360,13 @@ static const std::string detectCharsetWinArabic (const char *text)
     if (xl < xa)
         charset = "CP1256";
 
-    qDebug() << "Leaving detectCharsetWinArabic, returning charset:" << charset.c_str();
+    qCDebug(appLog) << "Leaving detectCharsetWinArabic, returning charset:" << charset.c_str();
     return charset;
 }
 /*************************/
 static const std::string detectCharsetChinese (const char *text)
 {
-    qDebug() << "Entering detectCharsetChinese";
+    qCDebug(appLog) << "Entering detectCharsetChinese";
     uint8_t c = *text;
     std::string charset = encodingItem[IANA];
 
@@ -373,57 +374,57 @@ static const std::string detectCharsetChinese (const char *text)
     {
         if (c >= 0x81 && c <= 0x87)
         {
-            qDebug() << "c >= 0x81 && c <= 0x87";
+            qCDebug(appLog) << "c >= 0x81 && c <= 0x87";
             charset = "GB18030";
             break;
         }
         else if (c >= 0x88 && c <= 0xA0)
         {
-            qDebug() << "c >= 0x88 && c <= 0xA0";
+            qCDebug(appLog) << "c >= 0x88 && c <= 0xA0";
             c = *text++;
             if ((c >= 0x30 && c <= 0x39) || (c >= 0x80 && c <= 0xA0))
             {
-                qDebug() << "c >= 0x30 && c <= 0x39 || c >= 0x80 && c <= 0xA0";
+                qCDebug(appLog) << "c >= 0x30 && c <= 0x39 || c >= 0x80 && c <= 0xA0";
                 charset = "GB18030";
                 break;
             } //else GBK/Big5-HKSCS cannot determine
         }
         else if ((c >= 0xA1 && c <= 0xC6) || (c >= 0xC9 && c <= 0xF9))
         {
-            qDebug() << "c >= 0xA1 && c <= 0xC6 || c >= 0xC9 && c <= 0xF9";
+            qCDebug(appLog) << "c >= 0xA1 && c <= 0xC6 || c >= 0xC9 && c <= 0xF9";
             c = *text++;
             if (c >= 0x40 && c <= 0x7E)
             {
-                qDebug() << "c >= 0x40 && c <= 0x7E";
+                qCDebug(appLog) << "c >= 0x40 && c <= 0x7E";
                 charset = "BIG5";
             }
             else if ((c >= 0x30 && c <= 0x39) || (c >= 0x80 && c <= 0xA0))
             {
-                qDebug() << "c >= 0x30 && c <= 0x39 || c >= 0x80 && c <= 0xA0";
+                qCDebug(appLog) << "c >= 0x30 && c <= 0x39 || c >= 0x80 && c <= 0xA0";
                 charset = "GB18030";
                 break;
             }
         }
         else if (c >= 0xC7)
         {
-            qDebug() << "c >= 0xC7";
+            qCDebug(appLog) << "c >= 0xC7";
             c = *text++;
             if ((c >= 0x30 && c <= 0x39) || (c >= 0x80 && c <= 0xA0))
             {
-                qDebug() << "c >= 0x30 && c <= 0x39 || c >= 0x80 && c <= 0xA0";
+                qCDebug(appLog) << "c >= 0x30 && c <= 0x39 || c >= 0x80 && c <= 0xA0";
                 charset = "GB18030";
                 break;
             }
         }
     }
 
-    qDebug() << "Leaving detectCharsetChinese, returning charset:" << charset.c_str();
+    qCDebug(appLog) << "Leaving detectCharsetChinese, returning charset:" << charset.c_str();
     return charset;
 }
 /*************************/
 static const std::string detectCharsetJapanese (const char *text)
 {
-    qDebug() << "Entering detectCharsetJapanese";
+    qCDebug(appLog) << "Entering detectCharsetJapanese";
     uint8_t c = *text;
     std::string charset = "";
 
@@ -431,26 +432,26 @@ static const std::string detectCharsetJapanese (const char *text)
     {
         if (c >= 0x81 && c <= 0x9F)
         {
-            qDebug() << "c >= 0x81 && c <= 0x9F";
+            qCDebug(appLog) << "c >= 0x81 && c <= 0x9F";
             if (c == 0x8E) /* SS2 */
             {
-                qDebug() << "c == 0x8E";
+                qCDebug(appLog) << "c == 0x8E";
                 c = *text++;
                 if ((c >= 0x40 && c <= 0xA0) || (c >= 0xE0 && c <= 0xFC))
                     charset = "CP932";
             }
             else if (c == 0x8F) /* SS3 */
             {
-                qDebug() << "c == 0x8F";
+                qCDebug(appLog) << "c == 0x8F";
                 c = *text++;
                 if (c >= 0x40 && c <= 0xA0)
                 {
-                    qDebug() << "c >= 0x40 && c <= 0xA0";
+                    qCDebug(appLog) << "c >= 0x40 && c <= 0xA0";
                     charset = "CP932";
                 }
                 else if (c >= 0xFD)
                 {
-                    qDebug() << "c >= 0xFD";
+                    qCDebug(appLog) << "c >= 0xFD";
                     break;
                 }
             }
@@ -459,48 +460,48 @@ static const std::string detectCharsetJapanese (const char *text)
         }
         else if (c >= 0xA1 && c <= 0xDF)
         {
-            qDebug() << "c >= 0xA1 && c <= 0xDF";
+            qCDebug(appLog) << "c >= 0xA1 && c <= 0xDF";
             c = *text++;
             if (c <= 0x9F)
             {
-                qDebug() << "c <= 0x9F";
+                qCDebug(appLog) << "c <= 0x9F";
                 charset = "CP932";
             }
             else if (c >= 0xFD)
             {
-                qDebug() << "c >= 0xFD";
+                qCDebug(appLog) << "c >= 0xFD";
                 break;
             }
         }
         else if (c >= 0xE0 && c <= 0xEF)
         {
-            qDebug() << "c >= 0xE0 && c <= 0xEF";
+            qCDebug(appLog) << "c >= 0xE0 && c <= 0xEF";
             c = *text++;
             if (c >= 0x40 && c <= 0xA0)
             {
-                qDebug() << "c >= 0x40 && c <= 0xA0";
+                qCDebug(appLog) << "c >= 0x40 && c <= 0xA0";
                 charset = "CP932";
             }
             else if (c >= 0xFD)
             {
-                qDebug() << "c >= 0xFD";
+                qCDebug(appLog) << "c >= 0xFD";
                 break;
             }
         }
         else if (c >= 0xF0)
         {
-            qDebug() << "c >= 0xF0";
+            qCDebug(appLog) << "c >= 0xF0";
             break;
         }
     }
 
     if (charset.empty())
     {
-        qDebug() << "charset is empty";
+        qCDebug(appLog) << "charset is empty";
         charset = "EUC-JP";
     }
 
-    qDebug() << "Leaving detectCharsetJapanese, returning charset:" << charset.c_str();
+    qCDebug(appLog) << "Leaving detectCharsetJapanese, returning charset:" << charset.c_str();
     return charset;
 }
 /*************************/
@@ -511,107 +512,107 @@ static const std::string detectCharsetKorean (const char *text)
     bool nonjohab = false;
     std::string charset = "";
 
-    qDebug() << "Entering detectCharsetKorean";
+    qCDebug(appLog) << "Entering detectCharsetKorean";
     while (charset.empty() && (c = *text++) != '\0')
     {
         if (c >= 0x81 && c < 0x84)
         {
-            qDebug() << "c >= 0x81 && c < 0x84";
+            qCDebug(appLog) << "c >= 0x81 && c < 0x84";
             charset = "CP949";
         }
         else if (c >= 0x84 && c < 0xA1)
         {
-            qDebug() << "c >= 0x84 && c < 0xA1";
+            qCDebug(appLog) << "c >= 0x84 && c < 0xA1";
             noneuc = true;
             c = *text++;
             if ((c > 0x5A && c < 0x61) || (c > 0x7A && c < 0x81))
             {
-                qDebug() << "c > 0x5A && c < 0x61 || c > 0x7A && c < 0x81";
+                qCDebug(appLog) << "c > 0x5A && c < 0x61 || c > 0x7A && c < 0x81";
                 charset = "CP1361";
             }
             else if (c == 0x52 || c == 0x72 || c == 0x92 || (c > 0x9D && c < 0xA1)
                      || c == 0xB2 || (c > 0xBD && c < 0xC1) || c == 0xD2
                      || (c > 0xDD && c < 0xE1) || c == 0xF2 || c == 0xFE)
             {
-                qDebug() << "c == 0x52 || c == 0x72 || c == 0x92 || (c > 0x9D && c < 0xA1) || c == 0xB2 || (c > 0xBD && c < 0xC1) || c == 0xD2 || (c > 0xDD && c < 0xE1) || c == 0xF2 || c == 0xFE";
+                qCDebug(appLog) << "c == 0x52 || c == 0x72 || c == 0x92 || (c > 0x9D && c < 0xA1) || c == 0xB2 || (c > 0xBD && c < 0xC1) || c == 0xD2 || (c > 0xDD && c < 0xE1) || c == 0xF2 || c == 0xFE";
                 charset = "CP949";
             }
         }
         else if (c >= 0xA1 && c <= 0xC6)
         {
-            qDebug() << "c > 0xC6 && c <= 0xD3";
+            qCDebug(appLog) << "c > 0xC6 && c <= 0xD3";
             c = *text++;
             if (c < 0xA1)
             {
-                qDebug() << "c < 0xA1";
+                qCDebug(appLog) << "c < 0xA1";
                 noneuc = true;
                 if ((c > 0x5A && c < 0x61) || (c > 0x7A && c < 0x81))
                 {
-                    qDebug() << "c > 0x5A && c < 0x61 || c > 0x7A && c < 0x81";
+                    qCDebug(appLog) << "c > 0x5A && c < 0x61 || c > 0x7A && c < 0x81";
                     charset = "CP1361";
                 }
                 else if (c == 0x52 || c == 0x72 || c == 0x92 || (c > 0x9D && c < 0xA1))
                 {
-                    qDebug() << "c == 0x52 || c == 0x72 || c == 0x92 || (c > 0x9D && c < 0xA1)";
+                    qCDebug(appLog) << "c == 0x52 || c == 0x72 || c == 0x92 || (c > 0x9D && c < 0xA1)";
                     charset = "CP949";
                 }
                 else if (c == 0xB2 || (c > 0xBD && c < 0xC1) || c == 0xD2
                          || (c > 0xDD && c < 0xE1) || c == 0xF2 || c == 0xFE)
                 {
-                    qDebug() << "c == 0xB2 || (c > 0xBD && c < 0xC1) || c == 0xD2 || (c > 0xDD && c < 0xE1) || c == 0xF2 || c == 0xFE";
+                    qCDebug(appLog) << "c == 0xB2 || (c > 0xBD && c < 0xC1) || c == 0xD2 || (c > 0xDD && c < 0xE1) || c == 0xF2 || c == 0xFE";
                     nonjohab = true;
                 }
             }
         }
         else if (c > 0xC6 && c <= 0xD3)
         {
-            qDebug() << "c > 0xD3 && c < 0xD8";
+            qCDebug(appLog) << "c > 0xD3 && c < 0xD8";
             c = *text++;
             if (c < 0xA1)
             {
-                qDebug() << "c < 0xA1";
+                qCDebug(appLog) << "c < 0xA1";
                 charset = "CP1361";
             }
         }
         else if (c > 0xD3 && c < 0xD8)
         {
-            qDebug() << "c >= 0xD8";
+            qCDebug(appLog) << "c >= 0xD8";
             nonjohab = true;
             c = *text++;
         }
         else if (c >= 0xD8)
         {
-            qDebug() << "c >= 0xD8";
+            qCDebug(appLog) << "c >= 0xD8";
             c = *text++;
             if (c < 0xA1)
             {
-                qDebug() << "c < 0xA1";
+                qCDebug(appLog) << "c < 0xA1";
                 charset = "CP1361";
             }
         }
         if (noneuc && nonjohab)
         {
-            qDebug() << "noneuc && nonjohab";
+            qCDebug(appLog) << "noneuc && nonjohab";
             charset = "CP949";
         }
     }
 
     if (charset.empty())
     {
-        qDebug() << "charset is empty";
+        qCDebug(appLog) << "charset is empty";
         if (noneuc)
         {
-            qDebug() << "noneuc";
+            qCDebug(appLog) << "noneuc";
             charset = "CP949";
         }
         else
         {
-            qDebug() << "nonjohab";
+            qCDebug(appLog) << "nonjohab";
             charset = "EUC-KR";
         }
     }
 
-    qDebug() << "Leaving detectCharsetKorean, returning charset:" << charset.c_str();
+    qCDebug(appLog) << "Leaving detectCharsetKorean, returning charset:" << charset.c_str();
     return charset;
 }
 /*************************/
@@ -619,31 +620,31 @@ static const std::string detectCharsetKorean (const char *text)
 // ("UTF-8" for me)
 static const std::string getDefaultCharset()
 {
-    qDebug() << "Entering getDefaultCharset";
+    qCDebug(appLog) << "Entering getDefaultCharset";
     if (setlocale (LC_ALL, "") == NULL)
     {
-        qDebug() << "setlocale (LC_ALL, \"\") == NULL";
+        qCDebug(appLog) << "setlocale (LC_ALL, \"\") == NULL";
         return "UTF-8"; // something's wrong; fall back to UTF-8
     }
     const std::string charset = nl_langinfo (CODESET);
-    qDebug() << "Leaving getDefaultCharset, returning charset:" << charset.c_str();
+    qCDebug(appLog) << "Leaving getDefaultCharset, returning charset:" << charset.c_str();
     return charset;
 }
 /*************************/
 static bool detect_noniso (const char *text)
 {
-    qDebug() << "Entering detect_noniso";
+    qCDebug(appLog) << "Entering detect_noniso";
     uint8_t c = *text;
 
     while ((c = *text++) != '\0')
     {
         if (c >= 0x80 && c <= 0x9F)
         {
-            qDebug() << "Non-ISO character detected. Leaving detect_noniso, returning true.";
+            qCDebug(appLog) << "Non-ISO character detected. Leaving detect_noniso, returning true.";
             return true;
         }
     }
-    qDebug() << "No Non-ISO characters detected. Leaving detect_noniso, returning false.";
+    qCDebug(appLog) << "No Non-ISO characters detected. Leaving detect_noniso, returning false.";
     return false;
 }
 /*************************/
@@ -653,7 +654,7 @@ static bool detect_noniso (const char *text)
    with QTextCodec::toUnicode(), which may give incorrect results. */
 bool validateUTF8 (const QByteArray byteArray)
 {
-    qDebug() << "Entering validateUTF8";
+    qCDebug(appLog) << "Entering validateUTF8";
     const char *string = byteArray.constData();
     if (!string) return true;
 
@@ -667,31 +668,31 @@ bool validateUTF8 (const QByteArray byteArray)
            we find the code point and the number of bytes */
         if ((*bytes & 0x80) == 0x00)
         { // 0xxxxxxx, all ASCII characters (0-127)
-            qDebug() << "(*bytes & 0x80) == 0x00";
+            qCDebug(appLog) << "(*bytes & 0x80) == 0x00";
             cp = (*bytes & 0x7F);
             bn = 1;
         }
         else if ((*bytes & 0xE0) == 0xC0)
         { // 110xxxxx 10xxxxxx
-            qDebug() << "(*bytes & 0xE0) == 0xC0";
+            qCDebug(appLog) << "(*bytes & 0xE0) == 0xC0";
             cp = (*bytes & 0x1F);
             bn = 2;
         }
         else if ((*bytes & 0xF0) == 0xE0)
         { // 1110xxxx 10xxxxxx 10xxxxxx
-            qDebug() << "(*bytes & 0xF0) == 0xE0";
+            qCDebug(appLog) << "(*bytes & 0xF0) == 0xE0";
             cp = (*bytes & 0x0F);
             bn = 3;
         }
         else if ((*bytes & 0xF8) == 0xF0)
         { // 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
-            qDebug() << "(*bytes & 0xF8) == 0xF0";
+            qCDebug(appLog) << "(*bytes & 0xF8) == 0xF0";
             cp = (*bytes & 0x07);
             bn = 4;
         }
         else
         {
-            qDebug() << "else";
+            qCDebug(appLog) << "else";
             return false;
         }
 
@@ -701,7 +702,7 @@ bool validateUTF8 (const QByteArray byteArray)
             /* all the other bytes should be of the form 10xxxxxx */
             if ((*bytes & 0xC0) != 0x80)
             {
-                qDebug() << "(*bytes & 0xC0) != 0x80";
+                qCDebug(appLog) << "(*bytes & 0xC0) != 0x80";
                 return false;
             }
             cp = (cp << 6) | (*bytes & 0x3F);
@@ -718,49 +719,49 @@ bool validateUTF8 (const QByteArray byteArray)
             || (cp >= 0x0800 && cp <= 0xFFFF && bn != 3)
             || (cp >= 0x10000 && cp <= 0x1FFFFF && bn != 4))
         {
-            qDebug() << "cp > 0x10FFFF || (cp >= 0xD800 && cp <= 0xDFFF) || (cp <= 0x007F && bn != 1) || (cp >= 0x0080 && cp <= 0x07FF && bn != 2) || (cp >= 0x0800 && cp <= 0xFFFF && bn != 3) || (cp >= 0x10000 && cp <= 0x1FFFFF && bn != 4)";
+            qCDebug(appLog) << "cp > 0x10FFFF || (cp >= 0xD800 && cp <= 0xDFFF) || (cp <= 0x007F && bn != 1) || (cp >= 0x0080 && cp <= 0x07FF && bn != 2) || (cp >= 0x0800 && cp <= 0xFFFF && bn != 3) || (cp >= 0x10000 && cp <= 0x1FFFFF && bn != 4)";
             return false;
         }
     }
-    qDebug() << "UTF-8 validation successful. Leaving validateUTF8, returning true.";
+    qCDebug(appLog) << "UTF-8 validation successful. Leaving validateUTF8, returning true.";
     return true;
 }
 /*************************/
 const QString detectCharset (const QByteArray& byteArray)
 {
-    qDebug() << "Entering detectCharset";
+    qCDebug(appLog) << "Entering detectCharset";
     const char* text = byteArray.constData();
     uint8_t c = *text;
     std::string charset;
 
     if (validateUTF8 (byteArray))
     {
-        qDebug() << "validateUTF8 is true";
+        qCDebug(appLog) << "validateUTF8 is true";
         while ((c = *text++) != '\0')
         {
             if (c > 0x7F)
             {
-                qDebug() << "c > 0x7F";
+                qCDebug(appLog) << "c > 0x7F";
                 charset = "UTF-8";
                 break;
             }
             if (c == 0x1B) /* ESC */
             {
-                qDebug() << "c == 0x1B";
+                qCDebug(appLog) << "c == 0x1B";
                 c = *text++;
                 if (c == '$')
                 {
-                    qDebug() << "c == '$'";
+                    qCDebug(appLog) << "c == '$'";
                     c = *text++;
                     switch (c)
                     {
                     case 'B': // JIS X 0208-1983
                     case '@': // JIS X 0208-1978
-                        qDebug() << "c == 'B' || c == '@'";
+                        qCDebug(appLog) << "c == 'B' || c == '@'";
                         charset = "ISO-2022-JP";
                         continue;
                     case 'A': // GB2312-1980
-                        qDebug() << "c == 'A'";
+                        qCDebug(appLog) << "c == 'A'";
                         charset = "ISO-2022-JP-2";
                         break;
                     case '(':
@@ -769,7 +770,7 @@ const QString detectCharset (const QByteArray& byteArray)
                         {
                         case 'C': // KSC5601-1987
                         case 'D': // JIS X 0212-1990
-                            qDebug() << "c == 'C' || c == 'D'";
+                            qCDebug(appLog) << "c == 'C' || c == 'D'";
                             charset = "ISO-2022-JP-2";
                         }
                         break;
@@ -777,7 +778,7 @@ const QString detectCharset (const QByteArray& byteArray)
                         c = *text++;
                         if (c == 'C')
                         {
-                            qDebug() << "c == 'C'";
+                            qCDebug(appLog) << "c == 'C'";
                             charset = "ISO-2022-KR"; // KSC5601-1987
                         }
                     }
@@ -787,79 +788,79 @@ const QString detectCharset (const QByteArray& byteArray)
         }
         if (charset.empty())
         {
-            qDebug() << "charset is empty";
+            qCDebug(appLog) << "charset is empty";
             charset = getDefaultCharset();
         }
     }
 
     if (charset.empty())
     {
-        qDebug() << "charset is empty";
+        qCDebug(appLog) << "charset is empty";
         switch (localeNum)
         {
             case LATIN1:
                 /* Windows-1252 */
-                qDebug() << "LATIN1";
+                qCDebug(appLog) << "LATIN1";
                 charset = detectCharsetLatin (text);
                 break;
             case LATINC:
             case LATINC_UA:
             case LATINC_TJ:
                 /* Cyrillic */
-                qDebug() << "Cyrillic";
+                qCDebug(appLog) << "Cyrillic";
                 charset = detectCharsetCyrillic (text);
                 break;
             case LATINA:
                 /* MS Windows Arabic */
-                qDebug() << "MS Windows Arabic";
+                qCDebug(appLog) << "MS Windows Arabic";
                 charset = detectCharsetWinArabic (text);
                 break;
             case CHINESE_CN:
             case CHINESE_TW:
             case CHINESE_HK:
-                qDebug() << "Chinese";
+                qCDebug(appLog) << "Chinese";
                 charset = detectCharsetChinese (text);
                 break;
             case JAPANESE:
-                qDebug() << "Japanese";
+                qCDebug(appLog) << "Japanese";
                 charset = detectCharsetJapanese (text);
                 break;
             case KOREAN:
-                qDebug() << "Korean";
+                qCDebug(appLog) << "Korean";
                 charset = detectCharsetKorean (text);
                 break;
             case VIETNAMESE:
             case THAI:
             case GEORGIAN:
-                qDebug() << "Vietnamese, Thai, Georgian";
+                qCDebug(appLog) << "Vietnamese, Thai, Georgian";
                 charset = encodingItem[OPENI18N];
                 break;
             default:
-                qDebug() << "default";
+                qCDebug(appLog) << "default";
                 if (getDefaultCharset() != "UTF-8")
                 {
-                    qDebug() << "getDefaultCharset() != 'UTF-8'";
+                    qCDebug(appLog) << "getDefaultCharset() != 'UTF-8'";
                     charset = getDefaultCharset();
                 }
                 else if (detect_noniso (text))
                 {
-                    qDebug() << "detect_noniso is true";
+                    qCDebug(appLog) << "detect_noniso is true";
                     charset = encodingItem[CODEPAGE];
                 }
                 else
                 {
-                    qDebug() << "detect_noniso is false";
+                    qCDebug(appLog) << "detect_noniso is false";
                     charset = encodingItem[OPENI18N];
                 }
                 if (charset.empty())
                 {
-                    qDebug() << "charset is empty";
+                    qCDebug(appLog) << "charset is empty";
                     charset = encodingItem[IANA];
                 }
         }
     }
 
-    qDebug() << "Leaving detectCharset, returning charset:" << charset.c_str();
+    qCDebug(appLog) << "Leaving detectCharset, returning charset:" << charset.c_str();
     return QString::fromStdString (charset);
 }
 

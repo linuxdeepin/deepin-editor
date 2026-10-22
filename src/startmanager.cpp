@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "ddlog.h"
 #include "startmanager.h"
 //#include <settings.h>
 #include <malloc.h>
@@ -35,7 +36,7 @@ StartManager *StartManager::m_instance = nullptr;
 StartManager *StartManager::create()
 {
     if (m_instance == nullptr) {
-        qDebug() << "StartManager instance is null, creating new instance";
+        qCDebug(appLog) << "StartManager instance is null, creating new instance";
         m_instance = new StartManager;
     }
 
@@ -49,7 +50,7 @@ StartManager *StartManager::instance()
 
 StartManager::~StartManager()
 {
-    qDebug() << "Enter StartManager destructor";
+    qCDebug(appLog) << "Enter StartManager destructor";
     // 单例被销毁（应用退出/测试 deleteLater）后置空，避免 instance() 返回悬空指针
     if (m_instance == this) {
         m_instance = nullptr;
@@ -64,31 +65,31 @@ StartManager::~StartManager()
 StartManager::StartManager(QObject *parent)
     : QObject(parent)
 {
-    qDebug() << "Enter StartManager constructor";
+    qCDebug(appLog) << "Enter StartManager constructor";
     //m_bIsDragEnter = false;
     //Create blank directory if it not exist.
 
     initBlockShutdown();
-    qDebug() << "inited block shutdown";
+    qCDebug(appLog) << "inited block shutdown";
 
     m_blankFileDir = QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation)).first()).filePath("blank-files");
     m_backupDir = QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation)).first()).filePath("backup-files");
     m_autoBackupDir = QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation)).first()).filePath("autoBackup-files");
 
     if (!QFileInfo(m_blankFileDir).exists()) {
-        qDebug() << "blank file dir not exist, create it";
+        qCDebug(appLog) << "blank file dir not exist, create it";
         QDir().mkpath(m_blankFileDir);
     }
 
     if (!QFileInfo(m_backupDir).exists()) {
-        qDebug() << "backup file dir not exist, create it";
+        qCDebug(appLog) << "backup file dir not exist, create it";
         QDir().mkpath(m_backupDir);
     }
 
     m_qlistTemFile = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();
     // 初始化书签信息记录表
     initBookmark();
-    qDebug() << "inited bookmark";
+    qCDebug(appLog) << "inited bookmark";
 
     //按时间自动备份（5分钟）
     m_pTimer = new QTimer;
@@ -97,13 +98,13 @@ StartManager::StartManager(QObject *parent)
 
     // init flytek backend, check service valid
     IflytekAiAssistant::instance()->checkAiExists();
-    qInfo() << "StartManager initialized with backup interval:" << EAutoBackupInterval << "ms";
-    qDebug() << "Exit StartManager constructor";
+    qCInfo(appLog) << "StartManager initialized with backup interval:" << EAutoBackupInterval << "ms";
+    qCDebug(appLog) << "Exit StartManager constructor";
 }
 
 bool StartManager::checkPath(const QString &file)
 {
-    qDebug() << "Enter checkPath, file:" << file;
+    qCDebug(appLog) << "Enter checkPath, file:" << file;
     for (int i = 0; i < m_windows.count(); i++) {
         EditWrapper *wrapper = m_windows.value(i)->wrapper(file);
 
@@ -112,47 +113,47 @@ bool StartManager::checkPath(const QString &file)
             // Open exist tab if file has opened.
             popupExistTabs(info);
 
-            qDebug() << "Exit checkPath, return false";
+            qCDebug(appLog) << "Exit checkPath, return false";
             return false;
         }
     }
 
-    qDebug() << "Exit checkPath, return true";
+    qCDebug(appLog) << "Exit checkPath, return true";
 
     return true;
 }
 
 bool StartManager::ifKlu()
 {
-    qDebug() << "Enter ifKlu";
+    qCDebug(appLog) << "Enter ifKlu";
     auto e = QProcessEnvironment::systemEnvironment();
     QString XDG_SESSION_TYPE = e.value(QStringLiteral("XDG_SESSION_TYPE"));
     QString WAYLAND_DISPLAY = e.value(QStringLiteral("WAYLAND_DISPLAY"));
 
     if (XDG_SESSION_TYPE == QLatin1String("wayland") || WAYLAND_DISPLAY.contains(QLatin1String("wayland"), Qt::CaseInsensitive)) {
-        qDebug() << "Exit ifKlu, return true";
+        qCDebug(appLog) << "Exit ifKlu, return true";
         return true;
     } else {
-        qDebug() << "Exit ifKlu, return false";
+        qCDebug(appLog) << "Exit ifKlu, return false";
         return false;
     }
 }
 
 bool StartManager::isMultiWindow()
 {
-    qDebug() << "Enter isMultiWindow";
+    qCDebug(appLog) << "Enter isMultiWindow";
     if (m_windows.count() > 1) {
-        qDebug() << "Exit isMultiWindow, return true";
+        qCDebug(appLog) << "Exit isMultiWindow, return true";
         return true;
     }
 
-    qDebug() << "Exit isMultiWindow, return false";
+    qCDebug(appLog) << "Exit isMultiWindow, return false";
     return false;
 }
 
 bool StartManager::hasEmptyTemFile()
 {
-    qDebug() << "Enter hasEmptyTemFile";
+    qCDebug(appLog) << "Enter hasEmptyTemFile";
     bool bIsEmpty = false;
 
     for (auto temFile : m_qlistTemFile) {
@@ -161,28 +162,28 @@ bool StartManager::hasEmptyTemFile()
         }
     }
 
-    qDebug() << "Exit hasEmptyTemFile, return" << bIsEmpty;
+    qCDebug(appLog) << "Exit hasEmptyTemFile, return" << bIsEmpty;
     return bIsEmpty;
 }
 
 void StartManager::autoBackupFile()
 {
-    qDebug() << "Enter autoBackupFile";
+    qCDebug(appLog) << "Enter autoBackupFile";
     // 标签页在拖拽状态时不执行备份
     if (m_bIsTagDragging) {
-        qDebug() << "Exit autoBackupFile, return";
+        qCDebug(appLog) << "Exit autoBackupFile, return";
         return;
     }
 
     //如果自动备份文件夹不存在，创建自动备份文件夹
     if (!QFileInfo(m_autoBackupDir).exists()) {
-        qDebug() << "Auto backup dir not exist, create it";
+        qCDebug(appLog) << "Auto backup dir not exist, create it";
         QDir().mkpath(m_autoBackupDir);
     } else {
-        qDebug() << "Auto backup dir exist, remove user backup";
+        qCDebug(appLog) << "Auto backup dir exist, remove user backup";
         //有用户备份时删除用户备份
         if (!QDir(m_backupDir).isEmpty()) {
-            qDebug() << "User backup exist, remove it";
+            qCDebug(appLog) << "User backup exist, remove it";
             QDir(m_backupDir).removeRecursively();
         }
     }
@@ -209,7 +210,7 @@ void StartManager::autoBackupFile()
         for (EditWrapper *wrapper : wrappers) {
             //大文件加载时不备份
             if (wrapper->getFileLoading()) {
-                qDebug() << "File loading, skip auto backup, continue";
+                qCDebug(appLog) << "File loading, skip auto backup, continue";
                 continue;
             }
 
@@ -219,7 +220,7 @@ void StartManager::autoBackupFile()
             // 懒加载兼容：使用当前窗口 TabBar 的本地索引，避免跨窗口索引错位
             int tabIndex = tabbar->indexOf(filePath);
             if (tabIndex < 0) {
-                qWarning() << "autoBackupFile: tab not found for path:" << filePath << ", skip";
+                qCWarning(appLog) << "autoBackupFile: tab not found for path:" << filePath << ", skip";
                 continue;
             }
             curPos = QString::number(wrapper->textEditor()->textCursor().position());
@@ -237,7 +238,7 @@ void StartManager::autoBackupFile()
             QList<int> bookmarkList = wrapper->textEditor()->getBookmarkInfo();
 
             if (!bookmarkList.isEmpty()) {
-                qDebug() << "File has bookmark, record it";
+                qCDebug(appLog) << "File has bookmark, record it";
                 QString bookmarkInfo;
 
                 for (int i = 0; i < bookmarkList.count(); i++) {
@@ -253,7 +254,7 @@ void StartManager::autoBackupFile()
                 // 更新记录全局书签信息
                 m_bookmarkTable.insert(localPath, bookmarkList);
             } else {
-                qDebug() << "File has no bookmark, remove it";
+                qCDebug(appLog) << "File has no bookmark, remove it";
                 // 无书签，移除
                 m_bookmarkTable.remove(localPath);
             }
@@ -267,12 +268,12 @@ void StartManager::autoBackupFile()
 
             //保存备份文件
             if (Utils::isDraftFile(filePath)) {
-                qDebug() << "File is draft, save it as temporary file";
+                qCDebug(appLog) << "File is draft, save it as temporary file";
                 wrapper->saveTemFile(filePath);
             } else {
-                qDebug() << "File is not draft, save it as backup file";
+                qCDebug(appLog) << "File is not draft, save it as backup file";
                 if (wrapper->isModified()) {
-                    qDebug() << "File is modified, save it as backup file";
+                    qCDebug(appLog) << "File is modified, save it as backup file";
                     QString name = fileInfo.absolutePath().replace("/", "_");
                     QString qstrFilePath = m_autoBackupDir + "/" + Utils::getStringMD5Hash(fileInfo.baseName()) + "." + name + "." + fileInfo.suffix();
                     jsonObject.insert("temFilePath", qstrFilePath);
@@ -287,7 +288,7 @@ void StartManager::autoBackupFile()
             if (tabIndex < list.size()) {
                 list.replace(tabIndex, byteArray);
             } else {
-                qWarning() << "autoBackupFile: tabIndex" << tabIndex << "out of range (size" << list.size() << "), appending";
+                qCWarning(appLog) << "autoBackupFile: tabIndex" << tabIndex << "out of range (size" << list.size() << "), appending";
                 list.append(byteArray);
             }
         }
@@ -320,36 +321,36 @@ void StartManager::autoBackupFile()
         m_qlistTemFile.append(list);
     }
 
-    qDebug() << "Exit autoBackupFile";
+    qCDebug(appLog) << "Exit autoBackupFile";
     //将json串列表写入配置文件
-    qInfo() << __func__ << "history file counts:" << m_qlistTemFile.size();
+    qCInfo(appLog) << __func__ << "history file counts:" << m_qlistTemFile.size();
     Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->setValue(m_qlistTemFile);
     // 备份书签信息
     saveBookmark();
-    qDebug() << "Exit autoBackupFile";
+    qCDebug(appLog) << "Exit autoBackupFile";
 }
 
 int StartManager::recoverFile(Window *window)
 {
-    qDebug() << "Enter recoverFile";
+    qCDebug(appLog) << "Enter recoverFile";
 
     Window *pFocusWindow = nullptr;
     QString focusPath;
     QStringList blankFiles = QDir(m_blankFileDir).entryList(QStringList(), QDir::Files);
-    qDebug() << "Found" << blankFiles.size() << "blank files in directory:" << m_blankFileDir;
+    qCDebug(appLog) << "Found" << blankFiles.size() << "blank files in directory:" << m_blankFileDir;
     int recFilesSum = 0;
     QStringList files = blankFiles;
     //去除非新建文件
     for (auto file : blankFiles) {
         if (!file.contains("blank_file")) {
             files.removeOne(file);
-            qDebug() << "Removed non-blank file from list:" << file;
+            qCDebug(appLog) << "Removed non-blank file from list:" << file;
         }
     }
-    qDebug() << "After filtering, found" << files.size() << "blank files";
+    qCDebug(appLog) << "After filtering, found" << files.size() << "blank files";
 
     // 第一阶段：解析所有 JSON 记录
-    qDebug() << "Processing" << m_qlistTemFile.count() << "temporary files for recovery";
+    qCDebug(appLog) << "Processing" << m_qlistTemFile.count() << "temporary files for recovery";
     QVector<QJsonObject> tabRecords;
     for (int i = 0; i < m_qlistTemFile.count(); i++) {
         QJsonParseError jsonError;
@@ -358,7 +359,7 @@ int StartManager::recoverFile(Window *window)
             tabRecords.append(doucment.object());
         }
     }
-    qDebug() << "Parsed" << tabRecords.size() << "valid tab records";
+    qCDebug(appLog) << "Parsed" << tabRecords.size() << "valid tab records";
 
     // 找到焦点标签页
     int focusIndex = -1;
@@ -366,14 +367,14 @@ int StartManager::recoverFile(Window *window)
         const QJsonObject &obj = tabRecords[i];
         if (obj.contains("focus") && obj.value("focus").toBool()) {
             focusIndex = i;
-            qDebug() << "Found focus tab at index:" << focusIndex;
+            qCDebug(appLog) << "Found focus tab at index:" << focusIndex;
             break;
         }
     }
     // 如果没有焦点标签页，默认第一个
     if (focusIndex == -1 && !tabRecords.isEmpty()) {
         focusIndex = 0;
-        qDebug() << "No focus tab found, using first tab as focus";
+        qCDebug(appLog) << "No focus tab found, using first tab as focus";
     }
 
     int windowIndex = -1;
@@ -393,7 +394,7 @@ int StartManager::recoverFile(Window *window)
         int cursorPosition = -1;
         QList<int> bookmarks;
 
-        qDebug() << "Processing record" << (i + 1) << "of" << tabRecords.size()
+        qCDebug(appLog) << "Processing record" << (i + 1) << "of" << tabRecords.size()
                  << "(focus:" << (i == focusIndex) << ")";
 
         // 解析公共字段
@@ -415,9 +416,9 @@ int StartManager::recoverFile(Window *window)
         if (object.contains("localPath") && object.value("localPath").isString()) {
             localPath = object.value("localPath").toString();
             QFileInfo fi(localPath);
-            qDebug() << "Local file path:" << localPath << "exists:" << fi.exists();
+            qCDebug(appLog) << "Local file path:" << localPath << "exists:" << fi.exists();
             if (!fi.exists()) {
-                qWarning() << "Local file does not exist, skipping:" << localPath;
+                qCWarning(appLog) << "Local file does not exist, skipping:" << localPath;
                 continue;
             }
         }
@@ -445,10 +446,10 @@ int StartManager::recoverFile(Window *window)
             int newWindowIdx = static_cast<int>(object.value("window").toDouble());
             if (windowIndex == -1) {
                 windowIndex = newWindowIdx;
-                qDebug() << "First window index:" << windowIndex;
+                qCDebug(appLog) << "First window index:" << windowIndex;
             } else if (windowIndex != newWindowIdx) {
                 windowIndex = newWindowIdx;
-                qDebug() << "New window index:" << windowIndex << ", creating window";
+                qCDebug(appLog) << "New window index:" << windowIndex << ", creating window";
                 window = createWindow(true);
                 window->showCenterWindow(false);
                 window->setBatchAddingPendingTabs(true);
@@ -464,11 +465,11 @@ int StartManager::recoverFile(Window *window)
 
             // 恢复书签
             if (!bookmarks.isEmpty()) {
-                qDebug() << "Setting bookmarks for focus tab:" << bookmarks;
+                qCDebug(appLog) << "Setting bookmarks for focus tab:" << bookmarks;
                 if (auto *w = window->wrapper(openPath))
                     w->textEditor()->setBookMarkList(bookmarks);
             } else if (m_bookmarkTable.contains(openPath)) {
-                qDebug() << "Setting bookmarks from global config for focus tab:" << openPath;
+                qCDebug(appLog) << "Setting bookmarks from global config for focus tab:" << openPath;
                 if (auto *w = window->wrapper(openPath))
                     w->textEditor()->setBookMarkList(m_bookmarkTable.value(openPath));
             }
@@ -490,7 +491,7 @@ int StartManager::recoverFile(Window *window)
             recFilesSum++;
         }
     }
-    qDebug() << "Pending tabs added, total:" << recFilesSum << "tabs";
+    qCDebug(appLog) << "Pending tabs added, total:" << recFilesSum << "tabs";
 
     // 恢复所有参与恢复窗口的 handleCurrentChanged 懒加载能力
     for (Window *w : recoveryWindows) {
@@ -499,103 +500,103 @@ int StartManager::recoverFile(Window *window)
 
     // 激活焦点标签页
     if (pFocusWindow != nullptr && !focusPath.isNull()) {
-        qDebug() << "Activating focus tab:" << focusPath;
+        qCDebug(appLog) << "Activating focus tab:" << focusPath;
         FileTabInfo info;
         info.windowIndex = m_windows.indexOf(pFocusWindow);
         info.tabIndex = pFocusWindow->getTabIndex(focusPath);
         popupExistTabs(info);
     } else if (recFilesSum > 0 && window->getTabbar()->count() > 0) {
         // 焦点标签页文件不存在或无焦点记录，加载第一个可用标签页
-        qDebug() << "No focus tab available, loading first tab";
+        qCDebug(appLog) << "No focus tab available, loading first tab";
         window->activeTab(0);
     }
 
-    qInfo() << "Recovered files count:" << recFilesSum;
-    qDebug() << "Exit recoverFile";
+    qCInfo(appLog) << "Recovered files count:" << recFilesSum;
+    qCDebug(appLog) << "Exit recoverFile";
     return recFilesSum;
 }
 
 void StartManager::openFilesInWindow(QStringList files)
 {
-    qDebug() << "Enter openFilesInWindow, file count:" << files.size();
+    qCDebug(appLog) << "Enter openFilesInWindow, file count:" << files.size();
     // Open window with blank tab if no files need open.
     if (files.isEmpty()) {
         if (m_windows.count() >= 20) {
-            qWarning() << "Maximum window limit (20) reached, cannot create new window";
+            qCWarning(appLog) << "Maximum window limit (20) reached, cannot create new window";
             return;
         }
         Window *window = createWindow();
-        qDebug() << "Created new window with no files";
+        qCDebug(appLog) << "Created new window with no files";
 
         if (m_windows.count() > 0) {
-            qDebug() << "Multiple windows exist, showing new window without centering";
+            qCDebug(appLog) << "Multiple windows exist, showing new window without centering";
             window->showCenterWindow(false);
         } else {
-            qDebug() << "First window, showing centered";
+            qCDebug(appLog) << "First window, showing centered";
             window->showCenterWindow(true);
         }
 
         window->addBlankTab();
         window->activateWindow();
-        qDebug() << "Added blank tab and activated window";
+        qCDebug(appLog) << "Added blank tab and activated window";
     } else {
-        qDebug() << "Processing files to open in window:" << files;
+        qCDebug(appLog) << "Processing files to open in window:" << files;
         for (const QString &file : files) {
             QString resolvedFile = Utils::getFilePath(file);
-            qDebug() << "Processing file:" << file << "resolved path:" << resolvedFile;
+            qCDebug(appLog) << "Processing file:" << file << "resolved path:" << resolvedFile;
             FileTabInfo info = getFileTabInfo(resolvedFile);
 
             // Open exist tab if file has opened.
             if (info.windowIndex != -1) {
-                qDebug() << "File already open in window" << info.windowIndex << "tab" << info.tabIndex << ", activating";
+                qCDebug(appLog) << "File already open in window" << info.windowIndex << "tab" << info.tabIndex << ", activating";
                 popupExistTabs(info);
             }
             // Add new tab in current window.
             else {
-                qDebug() << "File not open, creating new window and tab";
+                qCDebug(appLog) << "File not open, creating new window and tab";
                 Window *window = createWindow();
                 window->showCenterWindow(true);
                 window->addTab(resolvedFile);
-                qDebug() << "Added tab for file:" << resolvedFile;
+                qCDebug(appLog) << "Added tab for file:" << resolvedFile;
             }
         }
     }
-    qDebug() << "Exit openFilesInWindow";
+    qCDebug(appLog) << "Exit openFilesInWindow";
 }
 
 void StartManager::openFilesInTab(QStringList files)
 {
-    qDebug() << "Enter openFilesInTab, file count:" << files.size();
+    qCDebug(appLog) << "Enter openFilesInTab, file count:" << files.size();
     if (files.isEmpty()) {
-        qDebug() << "No files to open, checking blank files directory";
+        qCDebug(appLog) << "No files to open, checking blank files directory";
         QDir blankDirectory = QDir(QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation)).first()).filePath("blank-files"));
         QStringList blankFiles = blankDirectory.entryList(QStringList(), QDir::Files);
-        qDebug() << "Found" << blankFiles.size() << "blank files";
+        qCDebug(appLog) << "Found" << blankFiles.size() << "blank files";
 
         if (m_windows.isEmpty()) {
-            qDebug() << "No windows exist, creating first window";
+            qCDebug(appLog) << "No windows exist, creating first window";
             Window *window = createWindow(true);
             window->showCenterWindow(true);
 
             if (!hasEmptyTemFile()) {
-                qDebug() << "Temporary files exist, attempting to recover";
+                qCDebug(appLog) << "Temporary files exist, attempting to recover";
                 int recoveredCount = recoverFile(window);
-                qDebug() << "Recovered" << recoveredCount << "files";
+                qCDebug(appLog) << "Recovered" << recoveredCount << "files";
                 if (recoveredCount == 0) {
-                    qDebug() << "No files recovered, adding blank tab";
+                    qCDebug(appLog) << "No files recovered, adding blank tab";
                     window->addBlankTab();
                 }
             } else {
-                qDebug() << "No temporary files, checking blank files";
+                qCDebug(appLog) << "No temporary files, checking blank files";
                 if (blankFiles.isEmpty()) {
-                    qDebug() << "No blank files, adding new blank tab";
+                    qCDebug(appLog) << "No blank files, adding new blank tab";
                     window->addBlankTab();
                 } else {
-                    qDebug() << "Cleaning up blank files and adding new blank tab";
+                    qCDebug(appLog) << "Cleaning up blank files and adding new blank tab";
                     for (auto file : blankFiles) {
                         if (file.contains("blank_file")) {
                             blankDirectory.remove(file);
-                            qDebug() << "Removed blank file:" << file;
+                            qCDebug(appLog) << "Removed blank file:" << file;
                         }
                     }
 
@@ -605,19 +606,19 @@ void StartManager::openFilesInTab(QStringList files)
         }
         // Just active first window if no file is need opened.
         else {
-            qDebug() << "Windows already exist, creating new window with blank tab";
+            qCDebug(appLog) << "Windows already exist, creating new window with blank tab";
             Window *window = createWindow();
             window->show();
             window->addBlankTab();
         }
     } else {
-        qDebug() << "Processing" << files.size() << "files to open in tabs";
+        qCDebug(appLog) << "Processing" << files.size() << "files to open in tabs";
         for (const QString &file : files) {
             QString resolvedFile = Utils::getFilePath(file);
-            qDebug() << "Processing file:" << file << "resolved path:" << resolvedFile;
+            qCDebug(appLog) << "Processing file:" << file << "resolved path:" << resolvedFile;
 
             if (!checkPath(resolvedFile)) {
-                qDebug() << "File already open, skipping:" << resolvedFile;
+                qCDebug(appLog) << "File already open, skipping:" << resolvedFile;
                 // 存在已打开文件时，进行下一文件判断
                 continue;
             }
@@ -626,44 +627,44 @@ void StartManager::openFilesInTab(QStringList files)
 
             // Open exist tab if file has opened.
             if (info.windowIndex != -1) {
-                qDebug() << "File found in existing window" << info.windowIndex << ", activating tab" << info.tabIndex;
+                qCDebug(appLog) << "File found in existing window" << info.windowIndex << ", activating tab" << info.tabIndex;
                 popupExistTabs(info);
             }
             // Create new window with file if haven't window exist.
             else if (m_windows.size() == 0) {
-                qDebug() << "No windows exist, creating first window for file";
+                qCDebug(appLog) << "No windows exist, creating first window for file";
                 Window *window = createWindow(true);
                 window->showCenterWindow(true);
                 // 以 window 为 context：窗口在延时期间被销毁则不触发，避免悬空调用
                 QTimer::singleShot(50, window, [ = ] {
-                    qDebug() << "Delayed file opening for:" << resolvedFile;
+                    qCDebug(appLog) << "Delayed file opening for:" << resolvedFile;
                     recoverFile(window);
                     window->addTab(resolvedFile);
                 });
             }
             // Open file tab in first window of window list.
             else {
-                qDebug() << "Opening file in first existing window";
+                qCDebug(appLog) << "Opening file in first existing window";
                 Window *window = m_windows[0];
                 window->addTab(resolvedFile);
-                qDebug() << "Added tab for file:" << resolvedFile << "in existing window";
+                qCDebug(appLog) << "Added tab for file:" << resolvedFile << "in existing window";
                 //window->setWindowState(Qt::WindowActive);
                 //通过dbus接口从任务栏激活窗口
                 if (!Q_LIKELY(Utils::activeWindowFromDock(window->winId()))) {
-                    qDebug() << "Activating window via Qt (DBus activation failed)";
+                    qCDebug(appLog) << "Activating window via Qt (DBus activation failed)";
                     window->activateWindow();
                 } else {
-                    qDebug() << "Window activated via DBus";
+                    qCDebug(appLog) << "Window activated via DBus";
                 }
             }
         }
     }
-    qDebug() << "Exit openFilesInTab";
+    qCDebug(appLog) << "Exit openFilesInTab";
 }
 
 void StartManager::createWindowFromWrapper(const QString &tabName, const QString &filePath, const QString &qstrTruePath, EditWrapper *buffer, bool isModifyed)
 {
-    qDebug() << "Enter createWindowFromWrapper";
+    qCDebug(appLog) << "Enter createWindowFromWrapper";
     Window *pWindow = createWindow();
     //window->showCenterWindow();
     QRect rect = pWindow->rect();
@@ -677,18 +678,18 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
 
     if ((pos.x() + rect.width()) > desktopRect.width()) {
         startPos.setX(desktopRect.width() - rect.width());
-        qDebug() << "Window position out of desktop, adjusting x";
+        qCDebug(appLog) << "Window position out of desktop, adjusting x";
     } else if (pos.x() < 0) {
         startPos.setX(0);
-        qDebug() << "Window position out of desktop, adjusting x";
+        qCDebug(appLog) << "Window position out of desktop, adjusting x";
     }
 
     if ((pos.y() + rect.height()) > desktopRect.height()) {
         startPos.setY(desktopRect.height() - rect.height());
-        qDebug() << "Window position out of desktop, adjusting y";
+        qCDebug(appLog) << "Window position out of desktop, adjusting y";
     } else if (pos.y() < 0) {
         startPos.setY(0);
-        qDebug() << "Window position out of desktop, adjusting y";
+        qCDebug(appLog) << "Window position out of desktop, adjusting y";
     }
 
     // 拖拽 pixmap 仅在真实鼠标拖拽时创建；编程式触发（如 handleTabDroped 回退）下可能为空，回退为窗口尺寸
@@ -730,7 +731,7 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
         geometry->deleteLater();
         group->deleteLater();
         if (bufferGuard.isNull()) {
-            qDebug() << "createWindowFromWrapper: buffer destroyed during animation, drop tear-off";
+            qCDebug(appLog) << "createWindowFromWrapper: buffer destroyed during animation, drop tear-off";
             return;
         }
 
@@ -747,45 +748,45 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
     group->addAnimation(geometry);
     // group->addAnimation(Opacity);
     group->start();
-    qDebug() << "Exit createWindowFromWrapper";
+    qCDebug(appLog) << "Exit createWindowFromWrapper";
 }
 
 void StartManager::loadTheme(const QString &themeName)
 {
-    qDebug() << "Enter loadTheme, themeName:" << themeName;
+    qCDebug(appLog) << "Enter loadTheme, themeName:" << themeName;
     for (Window *window : m_windows) {
         window->loadTheme(themeName);
     }
-    qDebug() << "Exit loadTheme";
+    qCDebug(appLog) << "Exit loadTheme";
 }
 
 Window *StartManager::createWindow(bool alwaysCenter)
 {
-    qDebug() << "Enter createWindow, alwaysCenter:" << alwaysCenter;
+    qCDebug(appLog) << "Enter createWindow, alwaysCenter:" << alwaysCenter;
     // Create window.
     Window *window = new Window;
-    qDebug() << "Window object created, connecting signals";
+    qCDebug(appLog) << "Window object created, connecting signals";
     connect(window, &Window::themeChanged, this, &StartManager::loadTheme, Qt::QueuedConnection);
     connect(window, &Window::sigJudgeBlockShutdown, this, &StartManager::slotCheckUnsaveTab, Qt::QueuedConnection);
     connect(window, &Window::tabChanged, this, &StartManager::slotDelayBackupFile, Qt::QueuedConnection);
 
     // Quit application if close last window.
     connect(window, &Window::closeWindow, this, &StartManager::slotCloseWindow);
-    qDebug() << "Window signals connected";
+    qCDebug(appLog) << "Window signals connected";
 
     // Init window position.
     initWindowPosition(window, alwaysCenter);
-    qDebug() << "Window position initialized, alwaysCenter:" << alwaysCenter;
+    qCDebug(appLog) << "Window position initialized, alwaysCenter:" << alwaysCenter;
 
     connect(window, &Window::newWindow, this, &StartManager::slotCreatNewwindow);
 
     // 标签页拖拽状态变更时触发，防止在拖拽过程中备份导致获取的标签状态异常
     connect(window->getTabbar(), &DTabBar::dragStarted, this, [this](){
-        qDebug() << "Tab drag started, pausing backup";
+        qCDebug(appLog) << "Tab drag started, pausing backup";
         m_bIsTagDragging = true;
     });
     connect(window->getTabbar(), &DTabBar::dragEnd, this, [this](){
-        qDebug() << "Tab drag ended, resuming backup";
+        qCDebug(appLog) << "Tab drag ended, resuming backup";
         m_bIsTagDragging = false;
         slotDelayBackupFile();
     });
@@ -793,25 +794,25 @@ Window *StartManager::createWindow(bool alwaysCenter)
     // Append window in window list.
     m_windows << window;
 
-    qInfo() << "Window created, total windows:" << m_windows.size();
-    qDebug() << "Exit createWindow";
+    qCInfo(appLog) << "Window created, total windows:" << m_windows.size();
+    qCDebug(appLog) << "Exit createWindow";
     return window;
 }
 
 
 void StartManager::slotCloseWindow()
 {
-    qDebug() << "Enter slotCloseWindow";
+    qCDebug(appLog) << "Enter slotCloseWindow";
     Window *pWindow = static_cast<Window *>(sender());
     int windowIndex = m_windows.indexOf(pWindow);
 
     if (windowIndex >= 0) {
-        qDebug() << "Window closed, index:" << windowIndex;
+        qCDebug(appLog) << "Window closed, index:" << windowIndex;
         m_windows.takeAt(windowIndex);
     }
 
     if (m_windows.isEmpty()) {
-        qDebug() << "No remaining windows, saving bookmark";
+        qCDebug(appLog) << "No remaining windows, saving bookmark";
         // 保存书签信息
         saveBookmark();
 
@@ -823,10 +824,10 @@ void StartManager::slotCloseWindow()
         QStringList nameList = path.entryList();
         foreach (auto name, nameList) {
             if (name.contains("tabPaths.txt")) {
-                qDebug() << "Delete tabPaths.txt";
+                qCDebug(appLog) << "Delete tabPaths.txt";
                 // entryList 返回裸文件名，拼绝对路径后再删除，避免落点依赖进程工作目录
                 if (!QFile::remove(path.absoluteFilePath(name))) {
-                    qWarning() << "Failed to remove tabPaths.txt:" << path.absoluteFilePath(name);
+                    qCWarning(appLog) << "Failed to remove tabPaths.txt:" << path.absoluteFilePath(name);
                 }
             }
         }
@@ -843,18 +844,18 @@ void StartManager::slotCloseWindow()
 
         PerformanceMonitor::closeAppFinish();
     }
-    qDebug() << "Exit slotCloseWindow";
+    qCDebug(appLog) << "Exit slotCloseWindow";
 }
 
 void StartManager::slotDelayBackupFile()
 {
-    qDebug() << "Enter slotDelayBackupFile";
+    qCDebug(appLog) << "Enter slotDelayBackupFile";
     // 判断定时器是否已在触发状态，防止短时间内的多次触发，标签页拖拽状态不触发
     if (!m_DelayTimer.isActive() && !m_bIsTagDragging) {
-        qDebug() << "Start timer for delay backup";
+        qCDebug(appLog) << "Start timer for delay backup";
         m_DelayTimer.start(EDelayBackupInterval, this);
     }
-    qDebug() << "Exit slotDelayBackupFile";
+    qCDebug(appLog) << "Exit slotDelayBackupFile";
 }
 
 void StartManager::delayMallocTrim()
@@ -866,10 +867,10 @@ void StartManager::delayMallocTrim()
 
 void StartManager::timerEvent(QTimerEvent *e)
 {
-    qDebug() << "Enter timerEvent";
+    qCDebug(appLog) << "Enter timerEvent";
     // 判断是否为延迟备份
     if (e->timerId() == m_DelayTimer.timerId()) {
-        qDebug() << "Timer expired, backup file";
+        qCDebug(appLog) << "Timer expired, backup file";
         m_DelayTimer.stop();
         // 执行配置文件备份
         autoBackupFile();
@@ -877,29 +878,29 @@ void StartManager::timerEvent(QTimerEvent *e)
         // 重启周期定时备份
         m_pTimer->start(EAutoBackupInterval);
     }
-    qDebug() << "Exit timerEvent";
+    qCDebug(appLog) << "Exit timerEvent";
 
     if (e->timerId() == m_FreeMemTimer.timerId()) {
         m_FreeMemTimer.stop();
         malloc_trim(0);
-        qInfo() << "malloc_trim over";
+        qCInfo(appLog) << "malloc_trim over";
     }
 }
 
 void StartManager::slotCreatNewwindow()
 {
-    qDebug() << "Enter slotCreatNewwindow";
+    qCDebug(appLog) << "Enter slotCreatNewwindow";
     openFilesInWindow(QStringList());
 }
 
 void StartManager::initWindowPosition(Window *window, bool alwaysCenter)
 {
-    qDebug() << "Enter initWindowPosition";
+    qCDebug(appLog) << "Enter initWindowPosition";
     if (m_windows.isEmpty() || alwaysCenter) {
-        qDebug() << "No existing windows or alwaysCenter is true, centering window";
+        qCDebug(appLog) << "No existing windows or alwaysCenter is true, centering window";
         //Dtk::Widget::moveToCenter(window);
     } else {
-        qDebug() << "Adding window offset to avoid all editor window popup at same coordinate";
+        qCDebug(appLog) << "Adding window offset to avoid all editor window popup at same coordinate";
         // Add window offset to avoid all editor window popup at same coordinate.
         int windowOffset = m_windows.size() * 50;
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -909,19 +910,19 @@ void StartManager::initWindowPosition(Window *window, bool alwaysCenter)
 #endif
         window->move(screenGeometry.x() + windowOffset, screenGeometry.y() + windowOffset);
     }
-    qDebug() << "Exit initWindowPosition";
+    qCDebug(appLog) << "Exit initWindowPosition";
 }
 
 void StartManager::popupExistTabs(FileTabInfo info)
 {
-    qDebug() << "Enter popupExistTabs";
+    qCDebug(appLog) << "Enter popupExistTabs";
     Window *window = m_windows[info.windowIndex];
     //window->showNormal();
     window->activeTab(info.tabIndex);
     //window->setWindowState(Qt::WindowActive);
     //通过dbus接口从任务栏激活窗口
     if (!Q_LIKELY(Utils::activeWindowFromDock(window->winId()))) {
-        qDebug() << "Window not active from Dock, activating manually";
+        qCDebug(appLog) << "Window not active from Dock, activating manually";
         window->activateWindow();
     }
 
@@ -963,33 +964,33 @@ void StartManager::popupExistTabs(FileTabInfo info)
     active << winid;
     QDBusConnection::sessionBus().call(active, QDBus::BlockWithGui);
 #endif
-    qDebug() << "Exit popupExistTabs";
+    qCDebug(appLog) << "Exit popupExistTabs";
 }
 
 StartManager::FileTabInfo StartManager::getFileTabInfo(QString file)
 {
-    qDebug() << "Enter getFileTabInfo";
+    qCDebug(appLog) << "Enter getFileTabInfo";
     FileTabInfo info = {-1, -1};
 
-    //qDebug() << "Windows size: " << m_windows.size();
+    //qCDebug(appLog) << "Windows size: " << m_windows.size();
 
     for (Window *window : m_windows) {
         int tabIndex = window->getTabIndex(file);
         if (tabIndex >= 0) {
             info.windowIndex = m_windows.indexOf(window);
             info.tabIndex = tabIndex;
-            qDebug() << "Break, File found in window " << info.windowIndex << " tab " << tabIndex;
+            qCDebug(appLog) << "Break, File found in window " << info.windowIndex << " tab " << tabIndex;
             break;
         }
     }
 
-    qDebug() << "Exit getFileTabInfo";
+    qCDebug(appLog) << "Exit getFileTabInfo";
     return info;
 }
 
 QList<int> StartManager::analyzeBookmakeInfo(QString bookmarkInfo)
 {
-    qDebug() << "Enter analyzeBookmakeInfo";
+    qCDebug(appLog) << "Enter analyzeBookmakeInfo";
     QList<int> bookmarkList;
     int nLeftPosition = 0;
     int nRightPosition = bookmarkInfo.indexOf(",");
@@ -1002,7 +1003,7 @@ QList<int> StartManager::analyzeBookmakeInfo(QString bookmarkInfo)
         nLeftPosition = nRightPosition;
     }
 
-    qDebug() << "Exit analyzeBookmakeInfo";
+    qCDebug(appLog) << "Exit analyzeBookmakeInfo";
     return bookmarkList;
 }
 
@@ -1013,9 +1014,9 @@ QList<int> StartManager::analyzeBookmakeInfo(QString bookmarkInfo)
  */
 void StartManager::recordBookmark(const QString &localPath, const QList<int> &bookmark)
 {
-    qDebug() << "Enter recordBookmark";
+    qCDebug(appLog) << "Enter recordBookmark";
     m_bookmarkTable.insert(localPath, bookmark);
-    qDebug() << "Exit recordBookmark";
+    qCDebug(appLog) << "Exit recordBookmark";
 }
 
 /**
@@ -1023,15 +1024,15 @@ void StartManager::recordBookmark(const QString &localPath, const QList<int> &bo
  */
 QList<int> StartManager::findBookmark(const QString &localPath)
 {
-    qDebug() << "Enter findBookmark";
+    qCDebug(appLog) << "Enter findBookmark";
     return m_bookmarkTable.value(localPath);
 }
 
 void StartManager::initBlockShutdown()
 {
-    qDebug() << "Enter initBlockShutdown";
+    qCDebug(appLog) << "Enter initBlockShutdown";
     if (m_reply.value().isValid()) {
-        qDebug() << "reply is valid, block shutdown";
+        qCDebug(appLog) << "reply is valid, block shutdown";
         return;
     }
 
@@ -1047,10 +1048,10 @@ void StartManager::initBlockShutdown()
 
     m_reply = m_pLoginManager->callWithArgumentList(QDBus::Block, "Inhibit", m_arg);
     if (m_reply.isValid()) {
-        qDebug() << "Inhibit reply is valid";
+        qCDebug(appLog) << "Inhibit reply is valid";
         //m_reply.value().fileDescriptor();
     }
-    qDebug() << "Exit initBlockShutdown";
+    qCDebug(appLog) << "Exit initBlockShutdown";
 }
 
 /**
@@ -1059,7 +1060,7 @@ void StartManager::initBlockShutdown()
  */
 void StartManager::initBookmark()
 {
-    qDebug() << "Enter initBookmark";
+    qCDebug(appLog) << "Enter initBookmark";
     // 遍历书签信息列表
     QStringList bookmarkInfoList = Settings::instance()->settings->value(s_bookMarkKey).toStringList();
     for (const QString &bookmarkInfo : bookmarkInfoList) {
@@ -1075,10 +1076,10 @@ void StartManager::initBookmark()
                     && QFileInfo::exists(filePath)) {
                 QString bookmarkStr = obj.value("bookmark").toString();
                 if (!bookmarkStr.isEmpty()) {
-                    qDebug() << "bookmarkStr:" << bookmarkStr;
+                    qCDebug(appLog) << "bookmarkStr:" << bookmarkStr;
                     QList<int> bookmarkList = analyzeBookmakeInfo(bookmarkStr);
                     if (!bookmarkList.isEmpty()) {
-                        qDebug() << "bookmarkList:" << bookmarkList;
+                        qCDebug(appLog) << "bookmarkList:" << bookmarkList;
                         // 文件存在且书签标记非空，缓存书签信息
                         m_bookmarkTable.insert(filePath, bookmarkList);
                     }
@@ -1086,7 +1087,7 @@ void StartManager::initBookmark()
             }
         }
     }
-    qDebug() << "Exit initBookmark";
+    qCDebug(appLog) << "Exit initBookmark";
 }
 
 /**
@@ -1095,7 +1096,7 @@ void StartManager::initBookmark()
  */
 void StartManager::saveBookmark()
 {
-    qDebug() << "Enter saveBookmark";
+    qCDebug(appLog) << "Enter saveBookmark";
     QStringList recordInfo;
     // 遍历记录
     for (auto itr = m_bookmarkTable.begin(); itr != m_bookmarkTable.end();) {
@@ -1103,9 +1104,9 @@ void StartManager::saveBookmark()
                 || itr.value().isEmpty()) {
             // 文件不存在则销毁记录
             itr = m_bookmarkTable.erase(itr);
-            qDebug() << "File not exist, remove bookmark record";
+            qCDebug(appLog) << "File not exist, remove bookmark record";
         } else {
-            qDebug() << "File exist, save bookmark record";
+            qCDebug(appLog) << "File exist, save bookmark record";
             QJsonObject obj;
             obj.insert("localPath", itr.key());
 
@@ -1125,53 +1126,53 @@ void StartManager::saveBookmark()
             recordInfo.append(doc.toJson(QJsonDocument::Compact));
 
             ++itr;
-            qDebug() << "Exit slotCheckUnsaveTab";
+            qCDebug(appLog) << "Exit slotCheckUnsaveTab";
         }
     }
 
     // 将书签信息保存至配置文件
     Settings::instance()->settings->option(s_bookMarkKey)->setValue(recordInfo);
-    qDebug() << "Exit saveBookmark";
+    qCDebug(appLog) << "Exit saveBookmark";
 }
 
 void StartManager::slotCheckUnsaveTab()
 {
-    qDebug() << "Enter slotCheckUnsaveTab";
+    qCDebug(appLog) << "Enter slotCheckUnsaveTab";
     for (Window *pWindow : m_windows) {
         //如果返回true，则表示有未保存的tab项，则阻塞系统关机
         bool bRet = pWindow->checkBlockShutdown();
         if (bRet == true) {
             m_reply = m_pLoginManager->callWithArgumentList(QDBus::Block, "Inhibit", m_arg);
             if (m_reply.isValid()) {
-                qDebug() << "Inhibit reply is valid";
+                qCDebug(appLog) << "Inhibit reply is valid";
             }
 
-            qDebug() << "Find unsaved tab, block shutdown";
+            qCDebug(appLog) << "Find unsaved tab, block shutdown";
             return;
         }
     }
 
     //如果for结束则表示没有发现未保存的tab项，则放开阻塞关机
     if (m_reply.isValid()) {
-        qDebug() << "No unsaved tab, unblock shutdown";
+        qCDebug(appLog) << "No unsaved tab, unblock shutdown";
         m_reply = QDBusReply<QDBusUnixFileDescriptor>();
     }
-    qDebug() << "Exit slotCheckUnsaveTab";
+    qCDebug(appLog) << "Exit slotCheckUnsaveTab";
 }
 
 void StartManager::closeAboutForWindow(Window *window)
 {
-    qDebug() << "Enter closeAboutForWindow";
+    qCDebug(appLog) << "Enter closeAboutForWindow";
     if (qApp != nullptr) {
         DAboutDialog *pAboutDialog = qApp->aboutDialog();
         if (pAboutDialog != nullptr) {
             if (pAboutDialog->parent() != nullptr) {
                 if (pAboutDialog->parent() == window) {
                     pAboutDialog->close();
-                    qDebug() << "Close about dialog for window";
+                    qCDebug(appLog) << "Close about dialog for window";
                 }
             }
         }
     }
-    qDebug() << "Exit closeAboutForWindow";
+    qCDebug(appLog) << "Exit closeAboutForWindow";
 }

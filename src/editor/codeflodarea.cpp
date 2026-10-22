@@ -1,7 +1,8 @@
-// SPDX-FileCopyrightText: 2019 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "ddlog.h"
 #include "codeflodarea.h"
 #include "leftareaoftextedit.h"
 
@@ -10,19 +11,19 @@
 
 CodeFlodArea::CodeFlodArea(LeftAreaTextEdit *leftAreaWidget)
 {
-    qDebug() << "CodeFlodArea created";
+    qCDebug(appLog) << "CodeFlodArea created";
     m_pLeftAreaWidget = leftAreaWidget;
 }
 
 CodeFlodArea::~CodeFlodArea()
 {
-    qDebug() << "CodeFlodArea destroyed";
+    qCDebug(appLog) << "CodeFlodArea destroyed";
 
 }
 
 void CodeFlodArea::paintEvent(QPaintEvent *e)
 {
-    qDebug() << "CodeFlodArea paintEvent";
+    qCDebug(appLog) << "CodeFlodArea paintEvent";
     m_pLeftAreaWidget->codeFlodAreaPaintEvent(e);
 }
 

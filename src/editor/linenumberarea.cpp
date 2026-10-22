@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "ddlog.h"
 #include "linenumberarea.h"
 #include "dtextedit.h"
 #include "leftareaoftextedit.h"
@@ -10,7 +11,7 @@
 
 LineNumberArea::LineNumberArea(LeftAreaTextEdit *leftAreaWidget)
 {
-    qDebug() << "LineNumberArea created with leftAreaWidget:" << leftAreaWidget;
+    qCDebug(appLog) << "LineNumberArea created with leftAreaWidget:" << leftAreaWidget;
     m_leftAreaWidget = leftAreaWidget;
     setContentsMargins(0, 0, 0, 0);
     //m_textEdit = textEdit;
@@ -18,12 +19,12 @@ LineNumberArea::LineNumberArea(LeftAreaTextEdit *leftAreaWidget)
 
 LineNumberArea::~LineNumberArea()
 {
-    qDebug() << "LineNumberArea destroyed";
+    qCDebug(appLog) << "LineNumberArea destroyed";
 }
 
 void LineNumberArea::paintEvent(QPaintEvent *e)
 {
-    //qDebug() << "LineNumberArea::paintEvent ";
+    //qCDebug(appLog) << "LineNumberArea::paintEvent ";
     m_leftAreaWidget->lineNumberAreaPaintEvent(e);
     //m_textEdit->lineNumberAreaPaintEvent(e);
 }
@@ -36,7 +37,7 @@ QSize LineNumberArea::sizeHint() const
 
 void LineNumberArea::mousePressEvent(QMouseEvent *e)
 {
-    qDebug() << "LineNumberArea mousePressEvent at position:" << e->pos();
+    qCDebug(appLog) << "LineNumberArea mousePressEvent at position:" << e->pos();
     m_pressPoint = e->pos();
 //    m_leftAreaWidget->update();
     m_leftAreaWidget->getEdit()->onPressedLineNumber(e->pos());

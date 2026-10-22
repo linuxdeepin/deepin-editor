@@ -1,7 +1,8 @@
-// SPDX-FileCopyrightText: 2019 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "ddlog.h"
 #include "endlineformatcommond.h"
 #include <QDebug>
 EndlineFormartCommand::EndlineFormartCommand(TextEdit* edit,BottomBar* bar,BottomBar::EndlineFormat from,BottomBar::EndlineFormat to):
@@ -10,22 +11,22 @@ EndlineFormartCommand::EndlineFormartCommand(TextEdit* edit,BottomBar* bar,Botto
     m_from(from),
     m_to(to)
 {
-    qDebug() << "EndlineFormartCommand created - edit:" << edit
+    qCDebug(appLog) << "EndlineFormartCommand created - edit:" << edit
              << "bar:" << bar << "from:" << from << "to:" << to;
 }
 EndlineFormartCommand::~EndlineFormartCommand()
 {
-    qDebug() << "EndlineFormartCommand destroyed";
+    qCDebug(appLog) << "EndlineFormartCommand destroyed";
 }
 
 void EndlineFormartCommand::undo()
 {
-   qInfo() << "EndlineFormartCommand undo - setting format to:" << m_from;
+   qCInfo(appLog) << "EndlineFormartCommand undo - setting format to:" << m_from;
    m_bar->setEndlineMenuText(m_from);
 }
 void EndlineFormartCommand::redo()
 {
-    qInfo() << "EndlineFormartCommand redo - setting format to:" << m_to;
+    qCInfo(appLog) << "EndlineFormartCommand redo - setting format to:" << m_to;
     auto cursor = m_edit->textCursor();
     auto pos = cursor.position();
     cursor.insertText(" ");

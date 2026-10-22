@@ -7,6 +7,7 @@
  * @brief Implementation of FileSaver class for safe file saving with encoding conversion
  */
 
+#include "ddlog.h"
 #include "text_file_saver.h"
 #include "utils.h"
 #include "../encodes/detectcode.h"
@@ -29,12 +30,12 @@ TextFileSaver::TextFileSaver(QTextDocument *document)
     , m_fromEncode("UTF-16")
     , m_toEncode("UTF-8")
 {
-    qDebug() << "TextFileSaver created for document with" << document->characterCount() << "characters";
+    qCDebug(appLog) << "TextFileSaver created for document with" << document->characterCount() << "characters";
 }
 
 TextFileSaver::~TextFileSaver()
 {
-    qDebug() << "TextFileSaver destructor entry";
+    qCDebug(appLog) << "TextFileSaver destructor entry";
 }
 
 /**
@@ -43,7 +44,7 @@ TextFileSaver::~TextFileSaver()
  */
 void TextFileSaver::setFilePath(const QString &filePath)
 {
-    qDebug() << "Setting file path to:" << filePath;
+    qCDebug(appLog) << "Setting file path to:" << filePath;
     m_filePath = filePath;
 }
 
@@ -53,7 +54,7 @@ void TextFileSaver::setFilePath(const QString &filePath)
  */
 void TextFileSaver::setEncoding(const QByteArray &toEncode)
 {
-    qDebug() << "Setting target encoding to:" << toEncode;
+    qCDebug(appLog) << "Setting target encoding to:" << toEncode;
     m_toEncode = toEncode;
 }
 
@@ -69,10 +70,10 @@ void TextFileSaver::setEndlineFormat(bool useCRLF)
  */
 bool TextFileSaver::save()
 {
-    qDebug() << "Entering save";
+    qCDebug(appLog) << "Entering save";
     if (m_filePath.isEmpty()) {
         m_errorString = QObject::tr("File path is empty");
-        qWarning() << "Cannot save - file path is empty";
+        qCWarning(appLog) << "Cannot save - file path is empty";
         return false;
     }
 
@@ -90,7 +91,7 @@ bool TextFileSaver::save()
     //     }
     //     return saveFile.commit();
     // } else {
-    //     qWarning() << "File name too long, disable QSaveFile. path:" << m_filePath;
+    //     qCWarning(appLog) << "File name too long, disable QSaveFile. path:" << m_filePath;
     QFile file(m_filePath);
     if (!saveToFile(file)) {
         return false;
@@ -107,15 +108,15 @@ bool TextFileSaver::save()
  */
 bool TextFileSaver::saveAs(const QString &newFilePath)
 {
-    qDebug() << "Saving as new file:" << newFilePath;
+    qCDebug(appLog) << "Saving as new file:" << newFilePath;
     QString oldPath = m_filePath;
     m_filePath = newFilePath;
     bool result = save();
     if (!result) {
-        qWarning() << "SaveAs failed, reverting to original path:" << oldPath;
+        qCWarning(appLog) << "SaveAs failed, reverting to original path:" << oldPath;
         m_filePath = oldPath;
     } else {
-        qDebug() << "SaveAs completed successfully";
+        qCDebug(appLog) << "SaveAs completed successfully";
     }
     return result;
 }
@@ -126,7 +127,7 @@ bool TextFileSaver::saveAs(const QString &newFilePath)
  */
 QString TextFileSaver::errorString() const
 {
-    qDebug() << "errorString" << m_errorString;
+    qCDebug(appLog) << "errorString" << m_errorString;
     return m_errorString;
 }
 
@@ -137,7 +138,7 @@ QString TextFileSaver::errorString() const
  */
 bool TextFileSaver::saveToFile(QFileDevice &file)
 {
-    qDebug() << "Entering saveToFile";
+    qCDebug(appLog) << "Entering saveToFile";
     try {
         // 先完成前置校验（内存检查等），再打开/截断目标文件，
         // 避免校验失败时目标文件已被 Truncate 清空
@@ -146,18 +147,18 @@ bool TextFileSaver::saveToFile(QFileDevice &file)
         qlonglong docMemoryNeeded = characterCount * 2;
         if (!Utils::isMemorySufficientForOperation(Utils::OperationType::RawOperation, docMemoryNeeded, characterCount)) {
             m_errorString = QObject::tr("Insufficient memory to load document content");
-            qWarning() << m_errorString << "- needed:" << docMemoryNeeded << "bytes";
+            qCWarning(appLog) << m_errorString << "- needed:" << docMemoryNeeded << "bytes";
             return false;
         }
 
-        qDebug() << "Attempting to open file for writing:" << m_filePath;
+        qCDebug(appLog) << "Attempting to open file for writing:" << m_filePath;
         if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
             m_errorString = file.errorString();
-            qWarning() << "Failed to open file:" << m_errorString;
+            qCWarning(appLog) << "Failed to open file:" << m_errorString;
             return false;
         }
-        qDebug() << "file opened";
-        qDebug() << "memory sufficient";
+        qCDebug(appLog) << "file opened";
+        qCDebug(appLog) << "memory sufficient";
         QString content = m_document->toPlainText();
         if (m_useCRLF) {
             content.replace(QStringLiteral("\n"), QStringLiteral("\r\n"));
@@ -167,13 +168,13 @@ bool TextFileSaver::saveToFile(QFileDevice &file)
 
         // Dynamically calculate chunk size (10MB or 1/8 of total length, whichever is larger)
         const int chunkSize = qMax(10 * 1024 * 1024, length / 8);
-        qDebug() << "chunkSize" << chunkSize;
-        qDebug() << "Saving document in chunks, total size:" << length << "chars, chunk size:" << chunkSize;
+        qCDebug(appLog) << "chunkSize" << chunkSize;
+        qCDebug(appLog) << "Saving document in chunks, total size:" << length << "chars, chunk size:" << chunkSize;
         for (int i = 0; i < length; i += chunkSize) {
             int currentChunkSize = qMin(chunkSize, length - i);
-            qDebug() << "Processing chunk" << i << "-" << i+currentChunkSize-1 << "of" << length;
+            qCDebug(appLog) << "Processing chunk" << i << "-" << i+currentChunkSize-1 << "of" << length;
             QByteArray input(reinterpret_cast<const char *>(data + i), currentChunkSize * sizeof(ushort));
-            qDebug() << "input" << input;
+            qCDebug(appLog) << "input" << input;
             // Check memory for encoding conversion (input + estimated output size)
             qlonglong conversionMemoryNeeded = input.size() * 2;  // Estimate 2x for worst case
             if (!Utils::isMemorySufficientForOperation(
@@ -181,21 +182,21 @@ bool TextFileSaver::saveToFile(QFileDevice &file)
                 m_errorString = QObject::tr("Insufficient memory for encoding conversion");
                 return false;
             }
-            qDebug() << "memory sufficient";
+            qCDebug(appLog) << "memory sufficient";
             QByteArray outData;
             if (!convertEncoding(input, outData)) {
                 m_errorString = QObject::tr("Encoding conversion failed");
-                qWarning() << m_errorString << "from" << m_fromEncode << "to" << m_toEncode;
+                qCWarning(appLog) << m_errorString << "from" << m_fromEncode << "to" << m_toEncode;
                 return false;
             }
-            qDebug() << "outData" << outData;
+            qCDebug(appLog) << "outData" << outData;
             if (outData.isEmpty()) {
                 m_errorString = QObject::tr("Converted content is empty");
                 return false;
             }
-            qDebug() << "outData is not empty";
+            qCDebug(appLog) << "outData is not empty";
             QApplication::processEvents();
-            qDebug() << "processEvents";
+            qCDebug(appLog) << "processEvents";
             // processEvents() may deliver a queued QCloseEvent that deletes the
             // EditWrapper (and thus the QTextDocument) while the save loop is
             // still running.  Abort immediately when the document is gone or the
@@ -208,37 +209,37 @@ bool TextFileSaver::saveToFile(QFileDevice &file)
             // prevents dereferencing a dangling pointer.  Do not reorder.
             if (!m_document || (m_quitFlag && *m_quitFlag)) {
                 m_errorString = QObject::tr("Save aborted: editor is closing");
-                qWarning() << "Save aborted: document destroyed or quit requested";
+                qCWarning(appLog) << "Save aborted: document destroyed or quit requested";
                 file.close();
                 return false;
             }
             qint64 written = file.write(outData);
             if (written != outData.size()) {
                 m_errorString = file.errorString();
-                qWarning() << "Failed to write full chunk. Expected:" << outData.size()
+                qCWarning(appLog) << "Failed to write full chunk. Expected:" << outData.size()
                              << "bytes, wrote:" << written << "bytes. Error:" << m_errorString;
                 return false;
             }
         }
 
-        qDebug() << "File saved successfully:" << m_filePath;
+        qCDebug(appLog) << "File saved successfully:" << m_filePath;
         // 成功保存后清空历史错误信息，保证 errorString() 不返回上次失败内容
         m_errorString.clear();
         return true;
     } catch (const std::bad_alloc &) {
         m_errorString = QObject::tr("Memory allocation failed");
-        qDebug() << "Memory allocation failed";
+        qCDebug(appLog) << "Memory allocation failed";
         return false;
     } catch (const std::exception &e) {
         m_errorString = QObject::tr("Error occurred: %1").arg(e.what());
-        qDebug() << "Error occurred: " << e.what();
+        qCDebug(appLog) << "Error occurred: " << e.what();
         return false;
     } catch (...) {
         m_errorString = QObject::tr("Unknown error occurred");
-        qDebug() << "Unknown error occurred";
+        qCDebug(appLog) << "Unknown error occurred";
         return false;
     }
-    qDebug() << "saveToFile failed";
+    qCDebug(appLog) << "saveToFile failed";
 }
 
 /**
@@ -250,18 +251,18 @@ bool TextFileSaver::saveToFile(QFileDevice &file)
  */
 bool TextFileSaver::convertEncoding(QByteArray &input, QByteArray &output) const
 {
-    qDebug() << "Entering convertEncoding";
+    qCDebug(appLog) << "Entering convertEncoding";
     if (m_fromEncode == m_toEncode) {
-        qDebug() << "No encoding conversion needed (same encoding)";
+        qCDebug(appLog) << "No encoding conversion needed (same encoding)";
         output = input;
         return true;
     }
 
-    qDebug() << "Converting encoding from" << m_fromEncode << "to" << m_toEncode;
+    qCDebug(appLog) << "Converting encoding from" << m_fromEncode << "to" << m_toEncode;
     if (!DetectCode::ChangeFileEncodingFormat(input, output, m_fromEncode, m_toEncode)) {
-        qWarning() << "Encoding conversion failed using DetectCode";
+        qCWarning(appLog) << "Encoding conversion failed using DetectCode";
         return false;
     }
-    qDebug() << "convertEncoding success";
+    qCDebug(appLog) << "convertEncoding success";
     return true;
 }

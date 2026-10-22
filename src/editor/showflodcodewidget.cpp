@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "ddlog.h"
 #include "showflodcodewidget.h"
 #include <QFileInfo>
 #include <QDebug>
@@ -22,7 +23,7 @@ DWIDGET_USE_NAMESPACE
 ShowFlodCodeWidget::ShowFlodCodeWidget(DWidget *parent)
     : DFrame(parent)
 {
-    qDebug() << "ShowFlodCodeWidget created with parent:" << parent;
+    qCDebug(appLog) << "ShowFlodCodeWidget created with parent:" << parent;
     //setFrameRounded(false);
     QGraphicsDropShadowEffect *effert = new QGraphicsDropShadowEffect(this);
     effert->setOffset(0,6);
@@ -50,23 +51,23 @@ ShowFlodCodeWidget::ShowFlodCodeWidget(DWidget *parent)
 
 ShowFlodCodeWidget::~ShowFlodCodeWidget()
 {
-    qDebug() << "ShowFlodCodeWidget destroyed";
+    qCDebug(appLog) << "ShowFlodCodeWidget destroyed";
     m_highlighter->deleteLater();
     m_highlighter = nullptr;
 }
 
 void ShowFlodCodeWidget::clear()
 {
-    qDebug() << "ShowFlodCodeWidget clear content";
+    qCDebug(appLog) << "ShowFlodCodeWidget clear content";
     m_pContentEdit->document()->clear();
     m_nTextWidth = 0;
     adjustSize();
-    qDebug() << "ShowFlodCodeWidget::clear() exit";
+    qCDebug(appLog) << "ShowFlodCodeWidget::clear() exit";
 }
 
 void ShowFlodCodeWidget::initHighLight(QString filepath, bool bIsLight)
 {
-    qInfo() << "ShowFlodCodeWidget initHighLight - file:" << filepath << "light theme:" << bIsLight;
+    qCInfo(appLog) << "ShowFlodCodeWidget initHighLight - file:" << filepath << "light theme:" << bIsLight;
     if (m_highlighter != nullptr) {
         if (!bIsLight) {
             m_highlighter->setTheme(m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme));
@@ -77,24 +78,24 @@ void ShowFlodCodeWidget::initHighLight(QString filepath, bool bIsLight)
    // m_highlighter->rehighlight();
     const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName().toLower());
     m_highlighter->setDefinition(def);
-    qDebug() << "Syntax definition set to:" << def.name();
+    qCDebug(appLog) << "Syntax definition set to:" << def.name();
 }
 
 void ShowFlodCodeWidget::setStyle(bool bIsLineWrap)
 {
-    qDebug() << "ShowFlodCodeWidget setStyle - lineWrap:" << bIsLineWrap;
+    qCDebug(appLog) << "ShowFlodCodeWidget setStyle - lineWrap:" << bIsLineWrap;
     QPalette pa = palette();
     QColor color(25,25,25);
 
     if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType) {
-        qDebug() << "Setting dark theme style";
+        qCDebug(appLog) << "Setting dark theme style";
         color.setAlphaF(0.8);
         pa.setColor(QPalette::Base,color);
         m_pContentEdit->setPalette(pa);
         pa.setColor(QPalette::Base,QColor(25,25,25));
         setPalette(pa);
     } else {
-        qDebug() << "Setting light theme style";
+        qCDebug(appLog) << "Setting light theme style";
         color = QColor(247,247,247);
         color.setAlphaF(0.6);
         pa.setColor(QPalette::Base,color);
@@ -104,18 +105,18 @@ void ShowFlodCodeWidget::setStyle(bool bIsLineWrap)
     }
 
     if (bIsLineWrap) {
-        qDebug() << "Setting line wrap mode to WidgetWidth";
+        qCDebug(appLog) << "Setting line wrap mode to WidgetWidth";
         m_pContentEdit->setLineWrapMode(QPlainTextEdit::WidgetWidth);
     } else {
-        qDebug() << "Setting line wrap mode to NoWrap";
+        qCDebug(appLog) << "Setting line wrap mode to NoWrap";
         m_pContentEdit->setLineWrapMode(QPlainTextEdit::NoWrap);
     }
-    qDebug() << "ShowFlodCodeWidget::setStyle() exit";
+    qCDebug(appLog) << "ShowFlodCodeWidget::setStyle() exit";
 }
 
 void ShowFlodCodeWidget::hideFirstBlock()
 {
-    qDebug() << "ShowFlodCodeWidget hideFirstBlock";
+    qCDebug(appLog) << "ShowFlodCodeWidget hideFirstBlock";
     m_pContentEdit->document()->firstBlock().setVisible(false);
     m_pContentEdit->document()->lastBlock().setVisible(false);
     int editHight = 0;
@@ -123,7 +124,7 @@ void ShowFlodCodeWidget::hideFirstBlock()
     for (auto block = m_pContentEdit->document()->firstBlock(); block.isValid(); block = block.next()) {
 
         if (block == m_pContentEdit->document()->lastBlock()) {
-            qDebug() << "Reached last block, breaking loop";
+            qCDebug(appLog) << "Reached last block, breaking loop";
             break;
         }
 
@@ -131,38 +132,38 @@ void ShowFlodCodeWidget::hideFirstBlock()
     }
 
     m_pContentEdit->setFixedHeight(editHight + 10);
-    qDebug() << "Adjusted height to:" << editHight + 10;
-    qDebug() << "ShowFlodCodeWidget::hideFirstBlock() exit";
+    qCDebug(appLog) << "Adjusted height to:" << editHight + 10;
+    qCDebug(appLog) << "ShowFlodCodeWidget::hideFirstBlock() exit";
 }
 
 void ShowFlodCodeWidget::appendText(QString strText, int maxWidth)
 {
-    qDebug() << "ShowFlodCodeWidget appendText - text length:" << strText.length() << "maxWidth:" << maxWidth;
+    qCDebug(appLog) << "ShowFlodCodeWidget appendText - text length:" << strText.length() << "maxWidth:" << maxWidth;
     int textWidth = m_pContentEdit->fontMetrics().horizontalAdvance(strText) + 10;
 
     if (m_nTextWidth < textWidth) {
-        qDebug() << "Updating text width, old:" << m_nTextWidth << ", new:" << textWidth;
+        qCDebug(appLog) << "Updating text width, old:" << m_nTextWidth << ", new:" << textWidth;
         m_nTextWidth = textWidth;
         if (m_nTextWidth > maxWidth - 50) {
-            qDebug() << "Adjusting text width to fit maxWidth - 50";
+            qCDebug(appLog) << "Adjusting text width to fit maxWidth - 50";
             m_nTextWidth = maxWidth - 50;
         }
     }
 
     m_pContentEdit->setFixedWidth(m_nTextWidth);
-    qDebug() << "Text width set to:" << m_nTextWidth;
+    qCDebug(appLog) << "Text width set to:" << m_nTextWidth;
 
     if (m_pContentEdit->document()->isEmpty()) {
-        qDebug() << "Document is empty, setting plain text";
+        qCDebug(appLog) << "Document is empty, setting plain text";
         m_pContentEdit->setPlainText(strText);
     } else {
-        qDebug() << "Document not empty, appending plain text";
+        qCDebug(appLog) << "Document not empty, appending plain text";
         m_pContentEdit->appendPlainText(strText);
     }
 
     QTextCursor cursor = m_pContentEdit->textCursor();
     cursor.movePosition(QTextCursor::Start);
     m_pContentEdit->setTextCursor(cursor);
-    qDebug() << "ShowFlodCodeWidget::appendText() exit";
+    qCDebug(appLog) << "ShowFlodCodeWidget::appendText() exit";
 }
 

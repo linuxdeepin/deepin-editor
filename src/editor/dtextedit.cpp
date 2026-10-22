@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 
+#include "ddlog.h"
 #include "../common/utils.h"
 #include "../widgets/window.h"
 #include "../widgets/bottombar.h"
@@ -65,7 +66,7 @@ TextEdit::TextEdit(QWidget *parent)
     : DPlainTextEdit(parent),
       m_wrapper(nullptr)
 {
-    qDebug() << "Initializing TextEdit component";
+    qCDebug(appLog) << "Initializing TextEdit component";
     // 更新单独添加的高亮格式文件
     m_repository.addCustomSearchPath(KF5_HIGHLIGHT_PATH);
 
@@ -137,14 +138,14 @@ TextEdit::TextEdit(QWidget *parent)
     QDBusConnection dbus = QDBusConnection::sessionBus();
     switch (Utils::getSystemVersion()) {
         case Utils::V23:
-            qDebug() << "Utils::V23";
+            qCDebug(appLog) << "Utils::V23";
             dbus.systemBus().connect("org.deepin.dde.Gesture1",
                                     "/org/deepin/dde/Gesture1", "org.deepin.dde.Gesture1",
                                     "Event",
                                     this, SLOT(fingerZoom(QString, QString, int)));
             break;
         default:
-            qDebug() << "default";
+            qCDebug(appLog) << "default";
             dbus.systemBus().connect("com.deepin.daemon.Gesture",
                                     "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture",
                                     "Event",
@@ -194,12 +195,12 @@ TextEdit::TextEdit(QWidget *parent)
     // Recover blink when not selecting text.
     connect(this, &TextEdit::selectionChanged, this, &TextEdit::slotSelectionChanged, Qt::QueuedConnection);
     connect(this, &QPlainTextEdit::textChanged, this, &TextEdit::invalidateMatchCountCache);
-    qDebug() << "TextEdit initialized";
+    qCDebug(appLog) << "TextEdit initialized";
 }
 
 TextEdit::~TextEdit()
 {
-    qDebug() << "Destroying TextEdit component";
+    qCDebug(appLog) << "Destroying TextEdit component";
         // Disconnect D-Bus signals to prevent callbacks to destroyed object
     QDBusConnection dbus = QDBusConnection::sessionBus();
     switch (Utils::getSystemVersion()) {
@@ -229,7 +230,7 @@ TextEdit::~TextEdit()
                                 this, SLOT(onAudioPortEnabledChanged(quint32, QString, bool)));
 #endif
     if (m_scrollAnimation != nullptr) {
-        qDebug() << "m_scrollAnimation is not null";
+        qCDebug(appLog) << "m_scrollAnimation is not null";
         if (m_scrollAnimation->state() != QAbstractAnimation::Stopped) {
             m_scrollAnimation->stop();
         }
@@ -237,34 +238,34 @@ TextEdit::~TextEdit()
         m_scrollAnimation = nullptr;
     }
     if (m_colorMarkMenu != nullptr) {
-        qDebug() << "m_colorMarkMenu is not null";
+        qCDebug(appLog) << "m_colorMarkMenu is not null";
         delete m_colorMarkMenu;
         m_colorMarkMenu = nullptr;
     }
     if (m_convertCaseMenu != nullptr) {
-        qDebug() << "m_convertCaseMenu is not null";
+        qCDebug(appLog) << "m_convertCaseMenu is not null";
         delete m_convertCaseMenu;
         m_convertCaseMenu = nullptr;
     }
     if (m_rightMenu != nullptr) {
-        qDebug() << "m_rightMenu is not null";
+        qCDebug(appLog) << "m_rightMenu is not null";
         delete m_rightMenu;
         m_rightMenu = nullptr;
     }
 
     if (m_pUndoStack != nullptr) {
-        qDebug() << "m_pUndoStack is not null";
+        qCDebug(appLog) << "m_pUndoStack is not null";
         m_pUndoStack->deleteLater();
     }
 }
 
 void TextEdit::insertTextEx(QTextCursor cursor, QString text)
 {
-    qDebug() << "Inserting text at position:" << cursor.position() << "Length:" << text.length();
+    qCDebug(appLog) << "Inserting text at position:" << cursor.position() << "Length:" << text.length();
     QUndoCommand *pInsertStack = new InsertTextUndoCommand(cursor, text, this);
     m_pUndoStack->push(pInsertStack);
     ensureCursorVisible();
-    qDebug() << "Text inserted successfully";
+    qCDebug(appLog) << "Text inserted successfully";
 }
 
 /**
@@ -273,9 +274,9 @@ void TextEdit::insertTextEx(QTextCursor cursor, QString text)
  */
 void TextEdit::insertMultiTextEx(const QList<QPair<QTextCursor, QString> > &multiText)
 {
-    qDebug() << "Inserting multiple texts, count:" << multiText.size();
+    qCDebug(appLog) << "Inserting multiple texts, count:" << multiText.size();
     if (multiText.isEmpty()) {
-        qDebug() << "Multi text insert skipped - empty input";
+        qCDebug(appLog) << "Multi text insert skipped - empty input";
         return;
     }
 
@@ -287,36 +288,36 @@ void TextEdit::insertMultiTextEx(const QList<QPair<QTextCursor, QString> > &mult
     }
     m_pUndoStack->push(pMultiCommand);
     ensureCursorVisible();
-    qDebug() << "Multi text inserted successfully";
+    qCDebug(appLog) << "Multi text inserted successfully";
 }
 
 void TextEdit::deleteSelectTextEx(QTextCursor cursor)
 {
-    qDebug() << "Deleting selected text at position:" << cursor.position()
+    qCDebug(appLog) << "Deleting selected text at position:" << cursor.position()
                << "Selection length:" << cursor.selectedText().length();
     if (cursor.hasSelection()) {
-        qDebug() << "cursor.hasSelection() is true";
+        qCDebug(appLog) << "cursor.hasSelection() is true";
         QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(cursor, this);
         m_pUndoStack->push(pDeleteStack);
     }
-    qDebug() << "Selected text deleted successfully";
+    qCDebug(appLog) << "Selected text deleted successfully";
 }
 
 void TextEdit::deleteSelectTextEx(QTextCursor cursor, QString text, bool currLine)
 {
-    qDebug() << "Deleting selected text at position:" << cursor.position();
+    qCDebug(appLog) << "Deleting selected text at position:" << cursor.position();
     QUndoCommand *pDeleteStack = new DeleteTextUndoCommand2(cursor, text, this, currLine);
     m_pUndoStack->push(pDeleteStack);
-    qDebug() << "Selected text deleted successfully";
+    qCDebug(appLog) << "Selected text deleted successfully";
 }
 
 void TextEdit::deleteTextEx(QTextCursor cursor)
 {
-    qDebug() << "Deleting text at position:" << cursor.position();
+    qCDebug(appLog) << "Deleting text at position:" << cursor.position();
     flushDeferredCursorUpdate();
     QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(cursor, this);
     m_pUndoStack->push(pDeleteStack);
-    qDebug() << "Text deleted successfully";
+    qCDebug(appLog) << "Text deleted successfully";
 }
 
 /**
@@ -325,9 +326,9 @@ void TextEdit::deleteTextEx(QTextCursor cursor)
  */
 void TextEdit::deleteMultiTextEx(const QList<QTextCursor> &multiText)
 {
-    qDebug() << "Deleting multiple texts, count:" << multiText.size();
+    qCDebug(appLog) << "Deleting multiple texts, count:" << multiText.size();
     if (multiText.isEmpty()) {
-        qDebug() << "Multi text delete skipped - empty input";
+        qCDebug(appLog) << "Multi text delete skipped - empty input";
         return;
     }
 
@@ -338,12 +339,12 @@ void TextEdit::deleteMultiTextEx(const QList<QTextCursor> &multiText)
         (void)new DeleteTextUndoCommand(textCursor, this, pMultiCommand);
     }
     m_pUndoStack->push(pMultiCommand);
-    qDebug() << "Multi text deleted successfully";
+    qCDebug(appLog) << "Multi text deleted successfully";
 }
 
 void TextEdit::insertSelectTextEx(QTextCursor cursor, QString text)
 {
-    qDebug() << "Inserting selected text at position:" << cursor.position() << "Length:" << text.length();
+    qCDebug(appLog) << "Inserting selected text at position:" << cursor.position() << "Length:" << text.length();
 
     const bool deferHeavyUpdate = shouldDeferCursorHeavyUpdate(cursor, text);
     if (!deferHeavyUpdate) {
@@ -363,12 +364,12 @@ void TextEdit::insertSelectTextEx(QTextCursor cursor, QString text)
     if (deferHeavyUpdate) {
         scheduleDeferredCursorUpdateBurst();
     }
-    qDebug() << "Selected text inserted successfully";
+    qCDebug(appLog) << "Selected text inserted successfully";
 }
 
 void TextEdit::insertColumnEditTextEx(QString text)
 {
-    qDebug() << "Inserting column text";
+    qCDebug(appLog) << "Inserting column text";
     flushDeferredCursorUpdate();
     if (m_isSelectAll) {
         QPlainTextEdit::selectAll();
@@ -377,12 +378,12 @@ void TextEdit::insertColumnEditTextEx(QString text)
     QUndoCommand *pInsertStack = new InsertTextUndoCommand(m_altModSelections, text, this);
     m_pUndoStack->push(pInsertStack);
     ensureCursorVisible();
-    qDebug() << "Column text inserted successfully";
+    qCDebug(appLog) << "Column text inserted successfully";
 }
 
 void TextEdit::initRightClickedMenu()
 {
-    qDebug() << "Initializing right clicked menu";
+    qCDebug(appLog) << "Initializing right clicked menu";
     // Init menu.
     m_rightMenu = new DMenu();
     m_rightMenu->setAccessibleName("EditorContextMenu");
@@ -471,7 +472,7 @@ void TextEdit::initRightClickedMenu()
     m_markCurrentAct = new QAction(tr("Mark"), this);
     m_markCurrentAct->setObjectName("MarkCurrentLine");
     connect(m_markCurrentAct, &QAction::triggered, this, [this, pColorsSelectWdg]() {
-        qDebug() << "Marking current line";
+        qCDebug(appLog) << "Marking current line";
         isMarkCurrentLine(true, pColorsSelectWdg->getDefaultColor().name());
         renderAllSelections();
     });
@@ -485,7 +486,7 @@ void TextEdit::initRightClickedMenu()
     m_markAllAct = new QAction(tr("Mark All"), this);
     m_markAllAct->setObjectName("MarkAll");
     connect(m_markAllAct, &QAction::triggered, this, [this, pColorsAllSelectWdg]() {
-        qDebug() << "Marking all lines";
+        qCDebug(appLog) << "Marking all lines";
         m_strMarkAllLineColorName = pColorsAllSelectWdg->getDefaultColor().name();
         isMarkAllLine(true, pColorsAllSelectWdg->getDefaultColor().name());
         renderAllSelections();
@@ -568,12 +569,12 @@ void TextEdit::initRightClickedMenu()
 
     connect(this, &TextEdit::undoAvailable, this, &TextEdit::slotUndoAvailable);
     connect(this, &TextEdit::redoAvailable, this, &TextEdit::slotRedoAvailable);
-    qDebug() << "Right clicked menu initialized";
+    qCDebug(appLog) << "Right clicked menu initialized";
 }
 
 void TextEdit::popRightMenu(QPoint pos, bool asReadOnly)
 {
-    qDebug() << "Popping right clicked menu";
+    qCDebug(appLog) << "Popping right clicked menu";
     //清除菜单分割线残影
     if (m_rightMenu != nullptr) {
         delete m_rightMenu;
@@ -598,26 +599,26 @@ void TextEdit::popRightMenu(QPoint pos, bool asReadOnly)
 
     bool isAddUndoRedo = false;
     if (m_pUndoStack->canUndo() && !hideEdit) {
-        qDebug() << "Adding undo action";
+        qCDebug(appLog) << "Adding undo action";
         m_undoAction->setEnabled(!blockEdit);
         m_rightMenu->addAction(m_undoAction);
         isAddUndoRedo = true;
     }
 
     if (m_pUndoStack->canRedo() && !hideEdit) {
-        qDebug() << "Adding redo action";
+        qCDebug(appLog) << "Adding redo action";
         m_redoAction->setEnabled(!blockEdit);
         m_rightMenu->addAction(m_redoAction);
         isAddUndoRedo = true;
     }
 
     if (isAddUndoRedo) {
-        qDebug() << "Adding separator";
+        qCDebug(appLog) << "Adding separator";
         m_rightMenu->addSeparator();
     }
 
     if (textCursor().hasSelection() || m_hasColumnSelection) {
-        qDebug() << "Adding cut action";
+        qCDebug(appLog) << "Adding cut action";
         if (!hideEdit) {
             m_cutAction->setEnabled(!blockEdit);
             m_rightMenu->addAction(m_cutAction);
@@ -626,7 +627,7 @@ void TextEdit::popRightMenu(QPoint pos, bool asReadOnly)
     }
 
     if (canPaste()) {
-        qDebug() << "Adding paste action";
+        qCDebug(appLog) << "Adding paste action";
         if (!hideEdit) {
             m_pasteAction->setEnabled(!blockEdit);
             m_rightMenu->addAction(m_pasteAction);
@@ -634,7 +635,7 @@ void TextEdit::popRightMenu(QPoint pos, bool asReadOnly)
     }
 
     if (textCursor().hasSelection() || m_hasColumnSelection) {
-        qDebug() << "Adding delete action";
+        qCDebug(appLog) << "Adding delete action";
         if (!hideEdit) {
             m_deleteAction->setEnabled(!blockEdit);
             m_rightMenu->addAction(m_deleteAction);
@@ -643,33 +644,33 @@ void TextEdit::popRightMenu(QPoint pos, bool asReadOnly)
     }
 
     if (!document()->isEmpty()) {
-        qDebug() << "Adding select all action";
+        qCDebug(appLog) << "Adding select all action";
         m_rightMenu->addAction(m_selectAllAction);
     }
 
     m_rightMenu->addSeparator();
 
     if (!document()->isEmpty()) {
-        qDebug() << "Adding find action";
+        qCDebug(appLog) << "Adding find action";
         m_rightMenu->addAction(m_findAction);
         if (!hideEdit) {
-            qDebug() << "Adding replace action";
+            qCDebug(appLog) << "Adding replace action";
             m_replaceAction->setEnabled(!blockEdit);
             m_rightMenu->addAction(m_replaceAction);
         }
-        qDebug() << "Adding jump line action";
+        qCDebug(appLog) << "Adding jump line action";
         m_rightMenu->addAction(m_jumpLineAction);
         m_rightMenu->addSeparator();
     }
 
     if (textCursor().hasSelection()) {
-        qDebug() << "Adding convert case menu";
+        qCDebug(appLog) << "Adding convert case menu";
         if (!hideEdit) {
             QAction *pCaseMenuAct = m_rightMenu->addMenu(m_convertCaseMenu);
             pCaseMenuAct->setEnabled(!blockEdit);
         }
     } else {
-        qDebug() << "Hiding convert case menu";
+        qCDebug(appLog) << "Hiding convert case menu";
         m_convertCaseMenu->hide();
     }
 
@@ -678,7 +679,7 @@ void TextEdit::popRightMenu(QPoint pos, bool asReadOnly)
     if (characterCount() &&
             (textCursor().hasSelection() || !isBlankLine) &&
             !def.filePath().isEmpty()) {
-        qDebug() << "Adding add comment action";
+        qCDebug(appLog) << "Adding add comment action";
         /*
          * 不支持注释的文件类型，右键菜单不显示“添加注释/取消注释”
          * 不支持注释的文件类型：Markdown(.d)/vCard(.vcf)/JSON(.json)
@@ -686,18 +687,18 @@ void TextEdit::popRightMenu(QPoint pos, bool asReadOnly)
         if (def.name() != "Markdown"
                 && !def.name().contains(QString("vCard"))
                 && !def.name().contains(QString("JSON"))) {
-            qDebug() << "Adding add comment action";
+            qCDebug(appLog) << "Adding add comment action";
             m_rightMenu->addAction(m_addComment);
             m_rightMenu->addAction(m_cancelComment);
         }
     }
 
     if (blockEdit) {
-        qDebug() << "Adding add comment action";
+        qCDebug(appLog) << "Adding add comment action";
         m_addComment->setEnabled(false);
         m_cancelComment->setEnabled(false);
     } else {
-        qDebug() << "Adding add comment action";
+        qCDebug(appLog) << "Adding add comment action";
         m_addComment->setEnabled(true);
         m_cancelComment->setEnabled(true);
     }
@@ -709,21 +710,21 @@ void TextEdit::popRightMenu(QPoint pos, bool asReadOnly)
     m_rightMenu->addAction(m_openInFileManagerAction);
     m_rightMenu->addSeparator();
     if (static_cast<Window *>(this->window())->isFullScreen()) {
-        qDebug() << "Adding exit fullscreen action";
+        qCDebug(appLog) << "Adding exit fullscreen action";
         m_rightMenu->addAction(m_exitFullscreenAction);
     } else {
-        qDebug() << "Adding fullscreen action";
+        qCDebug(appLog) << "Adding fullscreen action";
         m_rightMenu->addAction(m_fullscreenAction);
     }
 
     // Block ai actions on mips by default.
 #ifdef __mips__
     if (IflytekAiAssistant::instance()->valid()) {
-        qDebug() << "Adding ai actions";
+        qCDebug(appLog) << "Adding ai actions";
 #endif // __mips__
 
     // 'UOS AI' actions
-    qDebug() << "Adding voice reading action";
+    qCDebug(appLog) << "Adding voice reading action";
     m_rightMenu->addAction(m_voiceReadingAction);
     m_voiceReadingAction->setEnabled((textCursor().hasSelection() || m_hasColumnSelection));
 
@@ -741,7 +742,7 @@ void TextEdit::popRightMenu(QPoint pos, bool asReadOnly)
 #endif  // __mips__
 
     if (!this->document()->isEmpty()) {
-        qDebug() << "Adding color mark menu";
+        qCDebug(appLog) << "Adding color mark menu";
 
         m_colorMarkMenu->clear();
         // 清空 tab order list
@@ -765,7 +766,7 @@ void TextEdit::popRightMenu(QPoint pos, bool asReadOnly)
         m_MarkColorMenuTabOrder.append(QPair<QAction *, bool>(m_actionAllColorStyles, false));
 
         if (m_markOperations.size() > 0) {
-            qDebug() << "Adding cancel last mark action";
+            qCDebug(appLog) << "Adding cancel last mark action";
             // 增加 Mark Color Menu Item
             m_colorMarkMenu->addAction(m_cancleLastMark);
             m_colorMarkMenu->addSeparator();
@@ -777,7 +778,7 @@ void TextEdit::popRightMenu(QPoint pos, bool asReadOnly)
 
         m_rightMenu->addSeparator();
         if (!hideEdit) {
-            qDebug() << "Adding column edit action";
+            qCDebug(appLog) << "Adding column edit action";
             m_columnEditAction->setEnabled(!blockEdit);
             m_rightMenu->addAction(m_columnEditAction);
         }
@@ -791,131 +792,131 @@ void TextEdit::popRightMenu(QPoint pos, bool asReadOnly)
         pos1.setX((this->rect().width()) / 2);
     }
     if (pos.isNull()) {
-        qDebug() << "pos is null";
+        qCDebug(appLog) << "pos is null";
         m_rightMenu->exec(mapToGlobal(pos1));
     } else {
-        qDebug() << "Executing right menu at position:" << pos;
+        qCDebug(appLog) << "Executing right menu at position:" << pos;
         m_rightMenu->exec(pos);
     }
 }
 
 void TextEdit::setWrapper(EditWrapper *w)
 {
-    qDebug() << "Setting wrapper";
+    qCDebug(appLog) << "Setting wrapper";
     m_wrapper = w;
 }
 
 EditWrapper *TextEdit::getWrapper()
 {
-    qDebug() << "Getting wrapper";
+    qCDebug(appLog) << "Getting wrapper";
     return m_wrapper;
 }
 
 bool TextEdit::isUndoRedoOpt()
 {
-    qDebug() << "Checking undo/redo availability";
+    qCDebug(appLog) << "Checking undo/redo availability";
     return (m_pUndoStack->canRedo() || m_pUndoStack->canUndo());
 }
 
 bool TextEdit::getModified()
 {
-    qDebug() << "Checking modified status";
+    qCDebug(appLog) << "Checking modified status";
     return (document()->isModified() && (m_pUndoStack->canUndo() || m_pUndoStack->index() != m_lastSaveIndex));
 }
 
 
 int TextEdit::getCurrentLine()
 {
-    qDebug() << "Getting current line";
+    qCDebug(appLog) << "Getting current line";
     return textCursor().blockNumber() + 1;
 }
 
 int TextEdit::getCurrentColumn()
 {
-    qDebug() << "Getting current column";
+    qCDebug(appLog) << "Getting current column";
     return textCursor().columnNumber();
 }
 
 int TextEdit::getPosition()
 {
-    qDebug() << "Getting position";
+    qCDebug(appLog) << "Getting position";
     return textCursor().position();
 }
 
 int TextEdit::getScrollOffset()
 {
-    qDebug() << "Getting scroll offset";
+    qCDebug(appLog) << "Getting scroll offset";
     return verticalScrollBar()->value();
 }
 
 void TextEdit::forwardChar()
 {
-    qDebug() << "Moving forward by character";
+    qCDebug(appLog) << "Moving forward by character";
     if (m_cursorMark) {
-        qDebug() << "Moving forward by character with mark";
+        qCDebug(appLog) << "Moving forward by character with mark";
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
         setTextCursor(cursor);
     } else {
-        qDebug() << "Moving forward by character without mark";
+        qCDebug(appLog) << "Moving forward by character without mark";
         moveCursorNoBlink(QTextCursor::NextCharacter);
     }
 }
 
 void TextEdit::backwardChar()
 {
-    qDebug() << "Moving backward by character";
+    qCDebug(appLog) << "Moving backward by character";
     if (m_cursorMark) {
-        qDebug() << "Moving backward by character with mark";
+        qCDebug(appLog) << "Moving backward by character with mark";
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
         setTextCursor(cursor);
     } else {
-        qDebug() << "Moving backward by character without mark";
+        qCDebug(appLog) << "Moving backward by character without mark";
         moveCursorNoBlink(QTextCursor::PreviousCharacter);
     }
-    qDebug() << "Moving backward by character successfully";
+    qCDebug(appLog) << "Moving backward by character successfully";
 }
 
 void TextEdit::forwardWord()
 {
-    qDebug() << "Moving forward by word";
+    qCDebug(appLog) << "Moving forward by word";
     QTextCursor cursor = textCursor();
 
     if (m_cursorMark) {
-        qDebug() << "Moving forward by word with mark";
+        qCDebug(appLog) << "Moving forward by word with mark";
         cursor.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
     } else {
-        qDebug() << "Moving forward by word without mark";
+        qCDebug(appLog) << "Moving forward by word without mark";
         cursor.movePosition(QTextCursor::NextWord, QTextCursor::MoveAnchor);
     }
 
     setTextCursor(cursor);
-    qDebug() << "Moving forward by word successfully";
+    qCDebug(appLog) << "Moving forward by word successfully";
 }
 
 void TextEdit::backwardWord()
 {
-    qDebug() << "Moving backward by word";
+    qCDebug(appLog) << "Moving backward by word";
     QTextCursor cursor = textCursor();
 
     if (m_cursorMark) {
-        qDebug() << "Moving backward by word with mark";
+        qCDebug(appLog) << "Moving backward by word with mark";
         // cursor.setPosition(getPrevWordPosition(cursor, QTextCursor::KeepAnchor), QTextCursor::KeepAnchor);
         cursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
     } else {
-        qDebug() << "Moving backward by word without mark";
+        qCDebug(appLog) << "Moving backward by word without mark";
         // cursor.setPosition(getPrevWordPosition(cursor, QTextCursor::MoveAnchor), QTextCursor::MoveAnchor);
         cursor.movePosition(QTextCursor::PreviousWord, QTextCursor::MoveAnchor);
     }
 
     setTextCursor(cursor);
-    qDebug() << "Moving backward by word successfully";
+    qCDebug(appLog) << "Moving backward by word successfully";
 }
 
 void TextEdit::forwardPair()
 {
-    qDebug() << "Moving forward by pair";
+    qCDebug(appLog) << "Moving forward by pair";
     // Record cursor and seleciton position before move cursor.
     int actionStartPos = textCursor().position();
     int selectionStartPos = textCursor().selectionStart();
@@ -929,37 +930,37 @@ void TextEdit::forwardPair()
 
     // Start search.
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    qDebug() << "Moving forward by pair with mark";
+    qCDebug(appLog) << "Moving forward by pair with mark";
     QRegExp regExp("[\\]>)}]");
 #else
     QRegularExpression regExp("[\\]>)}]");
 #endif
-    qDebug() << "Moving forward by pair without mark";
+    qCDebug(appLog) << "Moving forward by pair without mark";
     if (find(regExp)) {
-        qDebug() << "Moving forward by pair successfully";
+        qCDebug(appLog) << "Moving forward by pair successfully";
         int findPos = textCursor().position();
 
         QTextCursor cursor = textCursor();
         auto moveMode = m_cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
 
         if (actionStartPos == selectionStartPos) {
-            qDebug() << "Moving forward by pair with mark";
+            qCDebug(appLog) << "Moving forward by pair with mark";
             cursor.setPosition(selectionEndPos, QTextCursor::MoveAnchor);
             cursor.setPosition(findPos, moveMode);
         } else {
-            qDebug() << "Moving forward by pair without mark";
+            qCDebug(appLog) << "Moving forward by pair without mark";
             cursor.setPosition(selectionStartPos, QTextCursor::MoveAnchor);
             cursor.setPosition(findPos, moveMode);
         }
 
         setTextCursor(cursor);
     }
-    qDebug() << "Moving forward by pair successfully";
+    qCDebug(appLog) << "Moving forward by pair successfully";
 }
 
 void TextEdit::backwardPair()
 {
-    qDebug() << "Moving backward by pair";
+    qCDebug(appLog) << "Moving backward by pair";
     // Record cursor and seleciton position before move cursor.
     int actionStartPos = textCursor().position();
     int selectionStartPos = textCursor().selectionStart();
@@ -980,7 +981,7 @@ void TextEdit::backwardPair()
     QRegularExpression regExp("[\[<({]");
 #endif
     if (find(regExp, options)) {
-        qDebug() << "Moving backward by pair successfully";
+        qCDebug(appLog) << "Moving backward by pair successfully";
         QTextCursor cursor = textCursor();
         auto moveMode = m_cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
 
@@ -989,35 +990,35 @@ void TextEdit::backwardPair()
         int findPos = cursor.position();
 
         if (actionStartPos == selectionStartPos) {
-            qDebug() << "Moving backward by pair with mark";
+            qCDebug(appLog) << "Moving backward by pair with mark";
             cursor.setPosition(selectionEndPos, QTextCursor::MoveAnchor);
             cursor.setPosition(findPos, moveMode);
             setTextCursor(cursor);
         } else {
-            qDebug() << "Moving backward by pair without mark";
+            qCDebug(appLog) << "Moving backward by pair without mark";
             cursor.setPosition(selectionStartPos, QTextCursor::MoveAnchor);
             cursor.setPosition(findPos, moveMode);
             setTextCursor(cursor);
         }
     }
-    qDebug() << "Moving backward by pair successfully";
+    qCDebug(appLog) << "Moving backward by pair successfully";
 }
 
 int TextEdit::blockCount() const
 {
-    qDebug() << "Getting block count";
+    qCDebug(appLog) << "Getting block count";
     return document()->blockCount();
 }
 
 int TextEdit::characterCount() const
 {
-    qDebug() << "Getting character count";
+    qCDebug(appLog) << "Getting character count";
     return document()->characterCount();
 }
 
 QTextBlock TextEdit::firstVisibleBlock()
 {
-    qDebug() << "Getting first visible block";
+    qCDebug(appLog) << "Getting first visible block";
     return document()->findBlockByLineNumber(getFirstVisibleBlockId());
 }
 
@@ -1029,74 +1030,74 @@ int TextEdit::topVisibleBlockNumber() const
 
 void TextEdit::moveToStart()
 {
-    qDebug() << "Moving to start";
+    qCDebug(appLog) << "Moving to start";
     verticalScrollBar()->setValue(0);
     if (m_cursorMark) {
-        qDebug() << "Moving to start with mark";
+        qCDebug(appLog) << "Moving to start with mark";
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
         setTextCursor(cursor);
     } else {
-        qDebug() << "Moving to start without mark";
+        qCDebug(appLog) << "Moving to start without mark";
         moveCursorNoBlink(QTextCursor::Start);
     }
 
     // 移动展示区域，手动高亮文本
     m_wrapper->OnUpdateHighlighter();
-    qDebug() << "Moving to start successfully";
+    qCDebug(appLog) << "Moving to start successfully";
 }
 
 void TextEdit::moveToEnd()
 {
-    qDebug() << "Moving to end";
+    qCDebug(appLog) << "Moving to end";
     if (m_cursorMark) {
-        qDebug() << "Moving to end with mark";
+        qCDebug(appLog) << "Moving to end with mark";
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
         setTextCursor(cursor);
     } else {
-        qDebug() << "Moving to end without mark";
+        qCDebug(appLog) << "Moving to end without mark";
         moveCursorNoBlink(QTextCursor::End);
     }
 
     // 移动展示区域，手动高亮文本
     m_wrapper->OnUpdateHighlighter();
-    qDebug() << "Moving to end successfully";
+    qCDebug(appLog) << "Moving to end successfully";
 }
 
 void TextEdit::moveToStartOfLine()
 {
-    qDebug() << "Moving to start of line";
+    qCDebug(appLog) << "Moving to start of line";
     if (m_cursorMark) {
-        qDebug() << "Moving to start of line with mark";
+        qCDebug(appLog) << "Moving to start of line with mark";
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
         setTextCursor(cursor);
     } else {
-        qDebug() << "Moving to start of line without mark";
+        qCDebug(appLog) << "Moving to start of line without mark";
         moveCursorNoBlink(QTextCursor::StartOfBlock);
     }
-    qDebug() << "Moving to start of line successfully";
+    qCDebug(appLog) << "Moving to start of line successfully";
 }
 
 void TextEdit::moveToEndOfLine()
 {
-    qDebug() << "Moving to end of line";
+    qCDebug(appLog) << "Moving to end of line";
     if (m_cursorMark) {
-        qDebug() << "Moving to end of line with mark";
+        qCDebug(appLog) << "Moving to end of line with mark";
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
         setTextCursor(cursor);
     } else {
-        qDebug() << "Moving to end of line without mark";
+        qCDebug(appLog) << "Moving to end of line without mark";
         moveCursorNoBlink(QTextCursor::EndOfBlock);
     }
-    qDebug() << "Moving to end of line successfully";
+    qCDebug(appLog) << "Moving to end of line successfully";
 }
 
 void TextEdit::moveToLineIndentation()
 {
-    qDebug() << "Moving to line indentation";
+    qCDebug(appLog) << "Moving to line indentation";
     // Init cursor and move type.
     QTextCursor cursor = textCursor();
     // Get line start position.
@@ -1113,14 +1114,14 @@ void TextEdit::moveToLineIndentation()
         QChar currentChar = *cursor.selection().toPlainText().data();
         if (!currentChar.isSpace())
         {
-            qDebug() << "Moving to line indentation successfully";
+            qCDebug(appLog) << "Moving to line indentation successfully";
             //stop and reset anchor while be at row indentation.
             cursor.setPosition(cursor.position(), QTextCursor::MoveAnchor);
             break;
         }
         else
         {
-            qDebug() << "Moving to line indentation with space";
+            qCDebug(appLog) << "Moving to line indentation with space";
             //while including 'space',just move ahead.
             cursor.setPosition(cursor.position() + 1, QTextCursor::KeepAnchor);
         }
@@ -1128,81 +1129,81 @@ void TextEdit::moveToLineIndentation()
     }
     cursor.clearSelection();
     setTextCursor(cursor);
-    qDebug() << "Moving to line indentation successfully";
+    qCDebug(appLog) << "Moving to line indentation successfully";
 }
 
 void TextEdit::nextLine()
 {
-    qDebug() << "Moving to next line";
+    qCDebug(appLog) << "Moving to next line";
     m_isSelectAll = false;
     if (!characterCount()) {
-        qDebug() << "No character count";
+        qCDebug(appLog) << "No character count";
         return;
     }
 
     if (m_cursorMark) {
-        qDebug() << "Moving to next line with mark";
+        qCDebug(appLog) << "Moving to next line with mark";
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::Down, QTextCursor::KeepAnchor);
         setTextCursor(cursor);
     } else {
-        qDebug() << "Moving to next line without mark";
+        qCDebug(appLog) << "Moving to next line without mark";
         moveCursorNoBlink(QTextCursor::Down);
     }
 
     if (m_wrapper != nullptr) {
-        qDebug() << "Updating highlighter";
+        qCDebug(appLog) << "Updating highlighter";
         m_wrapper->OnUpdateHighlighter();
         if ((m_wrapper->window()->findBarIsVisiable() || m_wrapper->window()->replaceBarIsVisiable()) &&
                 (QString::compare(m_wrapper->window()->getKeywordForSearchAll(), m_wrapper->window()->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
-            qDebug() << "Highlighting keyword in view";
+            qCDebug(appLog) << "Highlighting keyword in view";
             highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
         }
 
-        qDebug() << "Marking all keyword in view";
+        qCDebug(appLog) << "Marking all keyword in view";
         markAllKeywordInView();
     }
 
-    qDebug() << "Moving to next line successfully";
+    qCDebug(appLog) << "Moving to next line successfully";
 }
 
 void TextEdit::prevLine()
 {
-    qDebug() << "Moving to previous line";
+    qCDebug(appLog) << "Moving to previous line";
     m_isSelectAll = false;
     if (!characterCount()) {
-        qDebug() << "No character count";
+        qCDebug(appLog) << "No character count";
         return;
     }
 
     if (m_cursorMark) {
-        qDebug() << "Moving to previous line with mark";
+        qCDebug(appLog) << "Moving to previous line with mark";
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::Up, QTextCursor::KeepAnchor);
         setTextCursor(cursor);
     } else {
-        qDebug() << "Moving to previous line without mark";
+        qCDebug(appLog) << "Moving to previous line without mark";
         moveCursorNoBlink(QTextCursor::Up);
     }
 
     if (m_wrapper != nullptr) {
-        qDebug() << "Updating highlighter";
+        qCDebug(appLog) << "Updating highlighter";
         m_wrapper->OnUpdateHighlighter();
         if ((m_wrapper->window()->findBarIsVisiable() || m_wrapper->window()->replaceBarIsVisiable()) &&
                 (QString::compare(m_wrapper->window()->getKeywordForSearchAll(), m_wrapper->window()->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
-            qDebug() << "Highlighting keyword in view";
+            qCDebug(appLog) << "Highlighting keyword in view";
             highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
         }
 
-        qDebug() << "Marking all keyword in view";
+        qCDebug(appLog) << "Marking all keyword in view";
         markAllKeywordInView();
     }
-    qDebug() << "Moving to previous line successfully";
+    qCDebug(appLog) << "Moving to previous line successfully";
 }
 
 void TextEdit::moveCursorNoBlink(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode)
 {
-    qDebug() << "Moving cursor without blink";
+    qCDebug(appLog) << "Moving cursor without blink";
     // Function moveCursorNoBlink will blink cursor when move cursor.
     // But function movePosition won't, so we use movePosition to avoid that cursor link when moving cursor.
     QTextCursor cursor = textCursor();
@@ -1212,23 +1213,23 @@ void TextEdit::moveCursorNoBlink(QTextCursor::MoveOperation operation, QTextCurs
 
 void TextEdit::jumpToLine(int line, bool keepLineAtCenter)
 {
-    qDebug() << "Jumping to line";
+    qCDebug(appLog) << "Jumping to line";
     QTextCursor cursor(document()->findBlockByNumber(line - 1)); // line - 1 because line number starts from 0
     //verticalScrollBar()->setValue(fontMetrics().height() * line - height());
     // Update cursor.
     setTextCursor(cursor);
 
     if (keepLineAtCenter) {
-        qDebug() << "Keeping current line at center";
+        qCDebug(appLog) << "Keeping current line at center";
         keepCurrentLineAtCenter();
     }
-    qDebug() << "Jumping to line successfully";
+    qCDebug(appLog) << "Jumping to line successfully";
     m_pLeftAreaWidget->m_pLineNumberArea->update();
 }
 
 void TextEdit::newline()
 {
-    qDebug() << "Opening new line";
+    qCDebug(appLog) << "Opening new line";
     // Stop mark if mark is set.
     tryUnsetMark();
 
@@ -1236,24 +1237,24 @@ void TextEdit::newline()
     auto com = new InsertTextUndoCommand(cursor, "\n", this);
     m_pUndoStack->push(com);
     setTextCursor(cursor);
-    qDebug() << "Opening new line successfully";
+    qCDebug(appLog) << "Opening new line successfully";
 }
 
 void TextEdit::openNewlineAbove()
 {
-    qDebug() << "Opening new line above";
+    qCDebug(appLog) << "Opening new line above";
     QTextCursor cursor = textCursor();
     cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
     InsertTextUndoCommand *com = new InsertTextUndoCommand(cursor, "\n", this);
     m_pUndoStack->push(com);
     cursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
     setTextCursor(cursor);
-    qDebug() << "Opening new line above successfully";
+    qCDebug(appLog) << "Opening new line above successfully";
 }
 
 void TextEdit::openNewlineBelow()
 {
-    qDebug() << "Opening new line below";
+    qCDebug(appLog) << "Opening new line below";
     QTextCursor cursor = textCursor();
     cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
     InsertTextUndoCommand *com = new InsertTextUndoCommand(cursor, "\n", this);
@@ -1261,7 +1262,7 @@ void TextEdit::openNewlineBelow()
 
     //make the vertical scroll bar change together.
     this->setTextCursor(cursor);
-    qDebug() << "Opening new line below successfully";
+    qCDebug(appLog) << "Opening new line below successfully";
 }
 
 /*
@@ -1271,9 +1272,9 @@ void TextEdit::openNewlineBelow()
  * */
 void TextEdit::moveLineDownUp(bool up)
 {
-    qDebug() << "Moving line down/up";
+    qCDebug(appLog) << "Moving line down/up";
     if (up) {
-        qDebug() << "Moving line up";
+        qCDebug(appLog) << "Moving line up";
         QTextCursor cursor = this->textCursor();
         //current line isn't the first line of this document
         if (0 != cursor.blockNumber()) {
@@ -1290,12 +1291,12 @@ void TextEdit::moveLineDownUp(bool up)
             cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
             QString uptext = cursor.selectedText();
 
-            qDebug() << "Moving line down from:" << cursor.blockNumber() << "to:" << cursor.blockNumber()+1;
+            qCDebug(appLog) << "Moving line down from:" << cursor.blockNumber() << "to:" << cursor.blockNumber()+1;
             cursor.setPosition(startpos);
             cursor.setPosition(endpos, QTextCursor::KeepAnchor);
             InsertTextUndoCommand *com = new InsertTextUndoCommand(cursor, curtext + "\n" + uptext, this);
             m_pUndoStack->push(com);
-            qDebug() << "Line move completed";
+            qCDebug(appLog) << "Line move completed";
 
             //ensure that this operation can be performed multiple times in succession.
             //and make the vertical scroll bar change together at the same time.
@@ -1303,11 +1304,11 @@ void TextEdit::moveLineDownUp(bool up)
             this->setTextCursor(cursor);
         }
     } else {
-        qDebug() << "Moving line down";
+        qCDebug(appLog) << "Moving line down";
         QTextCursor cursor = this->textCursor();
         //current line isn't the last line of this document
         if (cursor.blockNumber() + 1 != this->document()->blockCount()) {
-            qDebug() << "Moving line down";
+            qCDebug(appLog) << "Moving line down";
             int startpos = 0;
             int endpos = 0;
             cursor.movePosition(QTextCursor::StartOfLine);
@@ -1321,12 +1322,12 @@ void TextEdit::moveLineDownUp(bool up)
             endpos = cursor.position();
             QString downtext = cursor.selectedText();
 
-            qDebug() << "Moving line up from:" << cursor.blockNumber()+1 << "to:" << cursor.blockNumber();
+            qCDebug(appLog) << "Moving line up from:" << cursor.blockNumber()+1 << "to:" << cursor.blockNumber();
             cursor.setPosition(startpos);
             cursor.setPosition(endpos, QTextCursor::KeepAnchor);
             InsertTextUndoCommand *com = new InsertTextUndoCommand(cursor, downtext + "\n" + curtext, this);
             m_pUndoStack->push(com);
-            qDebug() << "Line move completed";
+            qCDebug(appLog) << "Line move completed";
 
             //make the vertical scroll bar change together.
             cursor.setPosition(endpos);
@@ -1334,52 +1335,52 @@ void TextEdit::moveLineDownUp(bool up)
         }
     }
 
-    qDebug() << "Moving line down/up successfully";
+    qCDebug(appLog) << "Moving line down/up successfully";
 }
 
 void TextEdit::scrollLineUp()
 {
-    qDebug() << "Scrolling line up";
+    qCDebug(appLog) << "Scrolling line up";
     QScrollBar *scrollbar = verticalScrollBar();
 
     scrollbar->setValue(scrollbar->value() - 1);
 
     if (cursorRect().y() > rect().height() - fontMetrics().height()) {
-        qDebug() << "Scrolling line up with mark";
+        qCDebug(appLog) << "Scrolling line up with mark";
         auto moveMode = m_cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
 
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::Up, moveMode);
         setTextCursor(cursor);
     } else {
-        qDebug() << "Scrolling line up without mark";
+        qCDebug(appLog) << "Scrolling line up without mark";
     }
-    qDebug() << "Scrolling line up successfully";
+    qCDebug(appLog) << "Scrolling line up successfully";
 }
 
 void TextEdit::scrollLineDown()
 {
-    qDebug() << "Scrolling line down";
+    qCDebug(appLog) << "Scrolling line down";
     QScrollBar *scrollbar = verticalScrollBar();
 
     scrollbar->setValue(scrollbar->value() + 1);
 
     if (cursorRect().y() < 0) {
-        qDebug() << "Scrolling line down with mark";
+        qCDebug(appLog) << "Scrolling line down with mark";
         auto moveMode = m_cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
 
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::Down, moveMode);
         setTextCursor(cursor);
     } else {
-        qDebug() << "Scrolling line down without mark";
+        qCDebug(appLog) << "Scrolling line down without mark";
     }
-    qDebug() << "Scrolling line down successfully";
+    qCDebug(appLog) << "Scrolling line down successfully";
 }
 
 void TextEdit::scrollUp()
 {
-    qDebug() << "Scrolling up";
+    qCDebug(appLog) << "Scrolling up";
     QScrollBar *scrollbar = verticalScrollBar();
     scrollbar->triggerAction(QAbstractSlider::SliderPageStepSub);
 
@@ -1388,7 +1389,7 @@ void TextEdit::scrollUp()
     //m_pLeftAreaWidget->m_pBookMarkArea->update();
 
     if (verticalScrollBar()->maximum() > 0) {
-        qDebug() << "Scrolling up with mark";
+        qCDebug(appLog) << "Scrolling up with mark";
         auto moveMode = m_cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
         QPoint startPoint = QPointF(0, fontMetrics().height()).toPoint();
         QTextCursor cur = cursorForPosition(startPoint);
@@ -1398,22 +1399,22 @@ void TextEdit::scrollUp()
     }
 
     if (m_wrapper != nullptr) {
-        qDebug() << "Updating highlighter";
+        qCDebug(appLog) << "Updating highlighter";
         m_wrapper->OnUpdateHighlighter();
         if ((m_wrapper->window()->findBarIsVisiable() || m_wrapper->window()->replaceBarIsVisiable()) &&
                 (QString::compare(m_wrapper->window()->getKeywordForSearchAll(), m_wrapper->window()->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
-            qDebug() << "Highlighting keyword in view";
+            qCDebug(appLog) << "Highlighting keyword in view";
             highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
         }
 
         markAllKeywordInView();
     }
-    qDebug() << "Scrolling up successfully";
+    qCDebug(appLog) << "Scrolling up successfully";
 }
 
 void TextEdit::scrollDown()
 {
-    qDebug() << "Scrolling down";
+    qCDebug(appLog) << "Scrolling down";
     QScrollBar *scrollbar = verticalScrollBar();
     scrollbar->triggerAction(QAbstractSlider::SliderPageStepAdd);
 
@@ -1422,7 +1423,7 @@ void TextEdit::scrollDown()
     //m_pLeftAreaWidget->m_pBookMarkArea->update();
 
     if (verticalScrollBar()->maximum() > 0) {
-        qDebug() << "Scrolling down with mark";
+        qCDebug(appLog) << "Scrolling down with mark";
         auto moveMode = m_cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
         QPoint endPoint = QPointF(0, height() - fontMetrics().height()).toPoint();
         QTextCursor cur = cursorForPosition(endPoint);
@@ -1432,17 +1433,17 @@ void TextEdit::scrollDown()
     }
 
     if (m_wrapper != nullptr) {
-        qDebug() << "Updating highlighter";
+        qCDebug(appLog) << "Updating highlighter";
         m_wrapper->OnUpdateHighlighter();
         if ((m_wrapper->window()->findBarIsVisiable() || m_wrapper->window()->replaceBarIsVisiable()) &&
                 (QString::compare(m_wrapper->window()->getKeywordForSearchAll(), m_wrapper->window()->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
-            qDebug() << "Highlighting keyword in view";
+            qCDebug(appLog) << "Highlighting keyword in view";
             highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
         }
 
         markAllKeywordInView();
     }
-    qDebug() << "Scrolling down successfully";
+    qCDebug(appLog) << "Scrolling down successfully";
 }
 
 /*
@@ -1452,7 +1453,7 @@ void TextEdit::scrollDown()
  * */
 void TextEdit::duplicateLine()
 {
-    qDebug() << "Duplicating line";
+    qCDebug(appLog) << "Duplicating line";
     auto cursor = textCursor();
     cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
@@ -1465,15 +1466,15 @@ void TextEdit::duplicateLine()
 
     //make the vertical scroll bar change together.
     this->setTextCursor(cursor);
-    qDebug() << "Duplicating line successfully";
+    qCDebug(appLog) << "Duplicating line successfully";
 }
 
 void TextEdit::copyLines()
 {
-    qDebug() << "Copying lines";
+    qCDebug(appLog) << "Copying lines";
     // 添加权限判断是否允许拷贝，剪切；防止后续可能调用接口，冗余处理
     if (!Utils::enableClipCopy(getFilePath())) {
-        qDebug() << "Copying lines failed";
+        qCDebug(appLog) << "Copying lines failed";
         return;
     }
 
@@ -1482,13 +1483,13 @@ void TextEdit::copyLines()
     QTextCursor copyCursor = textCursor();
 
     if (textCursor().hasSelection()) {
-        qDebug() << "Copying lines with selection";
+        qCDebug(appLog) << "Copying lines with selection";
         // Sort selection bound cursors.
         int startPos = textCursor().anchor();
         int endPos = textCursor().position();
 
         if (startPos > endPos) {
-            qDebug() << "Swapping start and end positions";
+            qCDebug(appLog) << "Swapping start and end positions";
             std::swap(startPos, endPos);
         }
 
@@ -1506,7 +1507,7 @@ void TextEdit::copyLines()
 
         popupNotify(tr("Selected line(s) copied"));
     } else {
-        qDebug() << "Copying lines without selection";
+        qCDebug(appLog) << "Copying lines without selection";
         // Selection current line.
         copyCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
         copyCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
@@ -1521,29 +1522,29 @@ void TextEdit::copyLines()
     // Reset cursor before copy lines.
     copyCursor.setPosition(currentCursor.position(), QTextCursor::MoveAnchor);
     setTextCursor(copyCursor);
-    qDebug() << "Copying lines successfully";
+    qCDebug(appLog) << "Copying lines successfully";
 }
 
 void TextEdit::cutlines()
 {
-    qDebug() << "Cutting lines";
+    qCDebug(appLog) << "Cutting lines";
     // 添加权限判断是否允许拷贝，剪切；防止后续可能调用接口，冗余处理
     if (!Utils::enableClipCopy(getFilePath())) {
-        qDebug() << "Cutting lines failed";
+        qCDebug(appLog) << "Cutting lines failed";
         return;
     }
 
     if(m_isSelectAll) {
-        qDebug() << "Cutting lines with select all";
+        qCDebug(appLog) << "Cutting lines with select all";
         QPlainTextEdit::selectAll();
     }
 
     if (textCursor().hasSelection() || m_bIsAltMod) {
-        qDebug() << "Cutting lines with selection";
+        qCDebug(appLog) << "Cutting lines with selection";
         this->cut(true);
         popupNotify(tr("Selected line(s) clipped"));
     } else {
-        qDebug() << "Cutting lines without selection";
+        qCDebug(appLog) << "Cutting lines without selection";
         auto cursor = textCursor();
         cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
@@ -1556,16 +1557,16 @@ void TextEdit::cutlines()
             popupNotify(tr("Current line clipped"));
         }
     }
-    qDebug() << "Cutting lines successfully";
+    qCDebug(appLog) << "Cutting lines successfully";
 }
 
 void TextEdit::joinLines()
 {
-    qDebug() << "Joining lines";
+    qCDebug(appLog) << "Joining lines";
     QTextCursor cursor = this->textCursor();
     //the current line isn't the last line of text.
     if (cursor.blockNumber() + 1 != this->document()->blockCount()) {
-        qDebug() << "Joining lines with next line";
+        qCDebug(appLog) << "Joining lines with next line";
         int startpos = 0;
         int endpos = 0;
         cursor.movePosition(QTextCursor::EndOfBlock);
@@ -1583,128 +1584,128 @@ void TextEdit::joinLines()
         cursor.setPosition(startpos);
         this->setTextCursor(cursor);
     }
-    qDebug() << "Joining lines successfully";
+    qCDebug(appLog) << "Joining lines successfully";
 }
 
 void TextEdit::killLine()
 {
-    qDebug() << "Killing line";
+    qCDebug(appLog) << "Killing line";
     if (tryUnsetMark()) {
-        qDebug() << "Killing line failed";
+        qCDebug(appLog) << "Killing line failed";
         return;
     }
 
     // Remove selection content if has selection.
     if (m_isSelectAll) {
-        qDebug() << "Killing line with select all";
+        qCDebug(appLog) << "Killing line with select all";
         QPlainTextEdit::selectAll();
     }
 
     if (textCursor().hasSelection()) {
-        qDebug() << "Killing line with selection";
+        qCDebug(appLog) << "Killing line with selection";
         //textCursor().removeSelectedText();
         //deleteSelectTextEx(textCursor());
         deleteSelectTextEx(textCursor(), textCursor().selectedText(), false);
     } else {
-        qDebug() << "Killing line without selection";
+        qCDebug(appLog) << "Killing line without selection";
         auto cursor = this->textCursor();
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
 
         //the right of current line has no text but it is not the end line of this document
         if (cursor.selectedText().isEmpty() && cursor.blockNumber() + 1 != this->document()->blockCount()) {
-            qDebug() << "Killing line with next block";
+            qCDebug(appLog) << "Killing line with next block";
             cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
         }
 
         if (!cursor.selectedText().isEmpty()) {
-            qDebug() << "Killing line with selected text";
+            qCDebug(appLog) << "Killing line with selected text";
             DeleteBackCommand *com = new DeleteBackCommand(cursor, this);
             m_pUndoStack->push(com);
         }
     }
-    qDebug() << "Killing line successfully";
+    qCDebug(appLog) << "Killing line successfully";
 }
 
 void TextEdit::killCurrentLine()
 {
-    qDebug() << "Killing current line";
+    qCDebug(appLog) << "Killing current line";
     if (tryUnsetMark()) {
-        qDebug() << "Killing current line failed";
+        qCDebug(appLog) << "Killing current line failed";
         return;
     }
 
     if (m_isSelectAll) {
-        qDebug() << "Killing current line with select all";
+        qCDebug(appLog) << "Killing current line with select all";
         QPlainTextEdit::selectAll();
     }
 
     auto cursor = this->textCursor();
     cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
     if (cursor.blockNumber() + 1 != this->document()->blockCount()) {
-        qDebug() << "Killing current line with next block";
+        qCDebug(appLog) << "Killing current line with next block";
         cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
     } else {
-        qDebug() << "Killing current line with end block";
+        qCDebug(appLog) << "Killing current line with end block";
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
     }
     if (!cursor.selectedText().isEmpty()) {
-        qDebug() << "Killing current line with selected text";
+        qCDebug(appLog) << "Killing current line with selected text";
         DeleteBackCommand *com = new DeleteBackCommand(cursor, this);
         m_pUndoStack->push(com);
     }
-    qDebug() << "Killing current line successfully";
+    qCDebug(appLog) << "Killing current line successfully";
 }
 
 void TextEdit::killBackwardWord()
 {
-    qDebug() << "Killing backward word";
+    qCDebug(appLog) << "Killing backward word";
     tryUnsetMark();
 
     if (m_isSelectAll) {
-        qDebug() << "Killing backward word with select all";
+        qCDebug(appLog) << "Killing backward word with select all";
         QPlainTextEdit::selectAll();
     }
 
     if (textCursor().hasSelection()) {
-        qDebug() << "Killing backward word with selection";
+        qCDebug(appLog) << "Killing backward word with selection";
         //textCursor().removeSelectedText();
     } else {
-        qDebug() << "Killing backward word without selection";
+        qCDebug(appLog) << "Killing backward word without selection";
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
         deleteSelectTextEx(cursor);
     }
-    qDebug() << "Killing backward word successfully";
+    qCDebug(appLog) << "Killing backward word successfully";
 }
 
 void TextEdit::killForwardWord()
 {
-    qDebug() << "Killing forward word";
+    qCDebug(appLog) << "Killing forward word";
     tryUnsetMark();
 
     if (m_isSelectAll) {
-        qDebug() << "Killing forward word with select all";
+        qCDebug(appLog) << "Killing forward word with select all";
         QPlainTextEdit::selectAll();
     }
 
     if (textCursor().hasSelection()) {
-        qDebug() << "Killing forward word with selection";
+        qCDebug(appLog) << "Killing forward word with selection";
         //textCursor().removeSelectedText();
     } else {
-        qDebug() << "Killing forward word without selection";
+        qCDebug(appLog) << "Killing forward word without selection";
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
         deleteSelectTextEx(cursor);
     }
-    qDebug() << "Killing forward word successfully";
+    qCDebug(appLog) << "Killing forward word successfully";
 }
 
 void TextEdit::indentText()
 {
-    qDebug() << "Indenting text";
+    qCDebug(appLog) << "Indenting text";
     auto cursor = this->textCursor();
     if (cursor.hasSelection()) {
-        qDebug() << "Indenting text with selection";
+        qCDebug(appLog) << "Indenting text with selection";
         //calculate the start postion and the end postion of current selection.
         int pos1 = cursor.position();
         int pos2 = cursor.anchor();
@@ -1721,16 +1722,16 @@ void TextEdit::indentText()
         auto com = new IndentTextCommand(this, pos1, pos2, line1, line2);
         m_pUndoStack->push(com);
     }
-    qDebug() << "Indenting text successfully";
+    qCDebug(appLog) << "Indenting text successfully";
 }
 
 void TextEdit::unindentText()
 {
-    qDebug() << "Unindenting text";
+    qCDebug(appLog) << "Unindenting text";
     QTextCursor cursor = this->textCursor();
 
     if (cursor.hasSelection()) {
-        qDebug() << "Unindenting text with selection";
+        qCDebug(appLog) << "Unindenting text with selection";
         //calculate the start postion and the end postion of current selection.
         int pos1 = cursor.position();
         int pos2 = cursor.anchor();
@@ -1754,13 +1755,13 @@ void TextEdit::unindentText()
 
         //the text in front of current line is '\t'.
         if ("\t" == cursor.selectedText()) {
-            qDebug() << "Unindenting text with tab";
+            qCDebug(appLog) << "Unindenting text with tab";
             DeleteBackCommand *com = new DeleteBackCommand(cursor, this);
             m_pUndoStack->push(com);
         }
         //the text in front of current line is ' '.
         else if (" " == cursor.selectedText()) {
-            qDebug() << "Unindenting text with space";
+            qCDebug(appLog) << "Unindenting text with space";
             int startpos = pos;
             int cnt = 0;
             // calculate the number of ' '.
@@ -1774,47 +1775,47 @@ void TextEdit::unindentText()
             m_pUndoStack->push(com);
         }
     }
-    qDebug() << "Unindenting text successfully";
+    qCDebug(appLog) << "Unindenting text successfully";
 }
 
 void TextEdit::setTabSpaceNumber(int number)
 {
-    qDebug() << "Setting tab space number";
+    qCDebug(appLog) << "Setting tab space number";
     m_tabSpaceNumber = number;
     updateFont();
     //updateLineNumber();
     updateLeftAreaWidget();
-    qDebug() << "Setting tab space number successfully";
+    qCDebug(appLog) << "Setting tab space number successfully";
 }
 
 void TextEdit::upcaseWord()
 {
-    qDebug() << "Uppercasing word";
+    qCDebug(appLog) << "Uppercasing word";
     tryUnsetMark();
     convertWordCase(UPPER);
-    qDebug() << "Uppercasing word successfully";
+    qCDebug(appLog) << "Uppercasing word successfully";
 }
 
 void TextEdit::downcaseWord()
 {
-    qDebug() << "Lowercasing word";
+    qCDebug(appLog) << "Lowercasing word";
     tryUnsetMark();
     convertWordCase(LOWER);
-    qDebug() << "Lowercasing word successfully";
+    qCDebug(appLog) << "Lowercasing word successfully";
 }
 
 void TextEdit::capitalizeWord()
 {
-    qDebug() << "Capitalizing word";
+    qCDebug(appLog) << "Capitalizing word";
     tryUnsetMark();
 
     convertWordCase(CAPITALIZE);
-    qDebug() << "Capitalizing word successfully";
+    qCDebug(appLog) << "Capitalizing word successfully";
 }
 
 void TextEdit::transposeChar()
 {
-    qDebug() << "Transposing character";
+    qCDebug(appLog) << "Transposing character";
     QTextCursor cursor = this->textCursor();
     int pos = cursor.position();
     cursor.setPosition(pos + 1, QTextCursor::KeepAnchor);
@@ -1824,70 +1825,70 @@ void TextEdit::transposeChar()
     QString l = cursor.selectedText();
 
     if (!l.isEmpty() && !r.isEmpty()) {
-        qDebug() << "Transposing character with selected text";
+        qCDebug(appLog) << "Transposing character with selected text";
         cursor.setPosition(pos - 1);
         cursor.setPosition(pos + 1, QTextCursor::KeepAnchor);
         auto com = new InsertTextUndoCommand(cursor, r + l, this);
         m_pUndoStack->push(com);
         ensureCursorVisible();
     }
-    qDebug() << "Transposing character successfully";
+    qCDebug(appLog) << "Transposing character successfully";
 }
 
 void TextEdit::handleCursorMarkChanged(bool mark, QTextCursor cursor)
 {
-    qDebug() << "Handling cursor mark changed";
+    qCDebug(appLog) << "Handling cursor mark changed";
     if (mark) {
-        qDebug() << "Handling cursor mark changed with mark";
+        qCDebug(appLog) << "Handling cursor mark changed with mark";
         m_markStartLine = cursor.blockNumber() + 1;
     } else {
-        qDebug() << "Handling cursor mark changed without mark";
+        qCDebug(appLog) << "Handling cursor mark changed without mark";
         m_markStartLine = -1;
     }
 
     m_pLeftAreaWidget->m_pLineNumberArea->update();
     m_pLeftAreaWidget->m_pBookMarkArea->update();
-    qDebug() << "Handling cursor mark changed successfully";
+    qCDebug(appLog) << "Handling cursor mark changed successfully";
 }
 
 void TextEdit::slotValueChanged(int iValue)
 {
-    qDebug() << "Value changed";
+    qCDebug(appLog) << "Value changed";
     Q_UNUSED(iValue);
     if (m_isSelectAll) {
-        qDebug() << "Value changed with select all";
+        qCDebug(appLog) << "Value changed with select all";
         this->selectTextInView();
     }
 
     this->updateLeftAreaWidget();
-    qDebug() << "Value changed successfully";
+    qCDebug(appLog) << "Value changed successfully";
 }
 
 void TextEdit::convertWordCase(ConvertCase convertCase)
 {
-    qDebug() << "Converting word case";
+    qCDebug(appLog) << "Converting word case";
 #if 0
     if (textCursor().hasSelection()) {
-        qDebug() << "Converting word case with selection";
+        qCDebug(appLog) << "Converting word case with selection";
         QString text = textCursor().selectedText();
 
         if (convertCase == UPPER) {
-            qDebug() << "Converting word case with upper";
+            qCDebug(appLog) << "Converting word case with upper";
             textCursor().insertText(text.toUpper());
         } else if (convertCase == LOWER) {
-            qDebug() << "Converting word case with lower";
+            qCDebug(appLog) << "Converting word case with lower";
             textCursor().insertText(text.toLower());
         } else {
-            qDebug() << "Converting word case with capitalize";
+            qCDebug(appLog) << "Converting word case with capitalize";
             textCursor().insertText(capitalizeText(text));
         }
     } else {
-        qDebug() << "Converting word case without selection";
+        qCDebug(appLog) << "Converting word case without selection";
         QTextCursor cursor;
 
         // Move cursor to mouse position first. if have word under mouse pointer.
         if (m_haveWordUnderCursor) {
-            qDebug() << "Converting word case with word under cursor";
+            qCDebug(appLog) << "Converting word case with word under cursor";
             setTextCursor(m_wordUnderPointerCursor);
         }
 
@@ -1897,13 +1898,13 @@ void TextEdit::convertWordCase(ConvertCase convertCase)
 
         QString text = cursor.selectedText();
         if (convertCase == UPPER) {
-            qDebug() << "Converting word case with upper";
+            qCDebug(appLog) << "Converting word case with upper";
             cursor.insertText(text.toUpper());
         } else if (convertCase == LOWER) {
-            qDebug() << "Converting word case with lower";
+            qCDebug(appLog) << "Converting word case with lower";
             cursor.insertText(text.toLower());
         } else {
-            qDebug() << "Converting word case with capitalize";
+            qCDebug(appLog) << "Converting word case with capitalize";
             cursor.insertText(capitalizeText(text));
         }
 
@@ -1914,37 +1915,37 @@ void TextEdit::convertWordCase(ConvertCase convertCase)
 #endif
 
     if (m_isSelectAll) {
-        qDebug() << "Converting word case with select all";
+        qCDebug(appLog) << "Converting word case with select all";
         QPlainTextEdit::selectAll();
     }
 
     if (textCursor().hasSelection()) {
-        qDebug() << "Converting word case with selection";
+        qCDebug(appLog) << "Converting word case with selection";
         QString text = textCursor().selectedText();
         if (convertCase == UPPER) {
-            qDebug() << "Converting word case with upper";
+            qCDebug(appLog) << "Converting word case with upper";
             text = text.toUpper();
         } else if (convertCase == LOWER) {
-            qDebug() << "Converting word case with lower";
+            qCDebug(appLog) << "Converting word case with lower";
             text = text.toLower();
         } else {
-            qDebug() << "Converting word case with capitalize";
+            qCDebug(appLog) << "Converting word case with capitalize";
             text = capitalizeText(text);
         }
 
         // 如果没有实际文本更改效果，不进行文本替换操作
         if (text != textCursor().selectedText()) {
-            qDebug() << "Converting word case with selected text";
+            qCDebug(appLog) << "Converting word case with selected text";
             InsertTextUndoCommand *insertCommand = new InsertTextUndoCommand(textCursor(), text, this);
             m_pUndoStack->push(insertCommand);
         }
     } else {
-        qDebug() << "Converting word case without selection";
+        qCDebug(appLog) << "Converting word case without selection";
         QTextCursor cursor;
 
         // Move cursor to mouse position first. if have word under mouse pointer.
         if (m_haveWordUnderCursor) {
-            qDebug() << "Converting word case with word under cursor";
+            qCDebug(appLog) << "Converting word case with word under cursor";
             setTextCursor(m_wordUnderPointerCursor);
         }
 
@@ -1955,17 +1956,17 @@ void TextEdit::convertWordCase(ConvertCase convertCase)
         QString text = cursor.selectedText();
         if (!text.isEmpty()) {
             if (convertCase == UPPER) {
-                qDebug() << "Converting word case with upper";
+                qCDebug(appLog) << "Converting word case with upper";
                 text = text.toUpper();
             } else if (convertCase == LOWER) {
-                qDebug() << "Converting word case with lower";
+                qCDebug(appLog) << "Converting word case with lower";
                 text = text.toLower();
             } else {
-                qDebug() << "Converting word case with capitalize";
+                qCDebug(appLog) << "Converting word case with capitalize";
                 text = capitalizeText(text);
             }
 
-            qDebug() << "Converting word case with selected text";
+            qCDebug(appLog) << "Converting word case with selected text";
             InsertTextUndoCommand *insertCommand = new InsertTextUndoCommand(cursor, text, this);
             m_pUndoStack->push(insertCommand);
 
@@ -1974,12 +1975,12 @@ void TextEdit::convertWordCase(ConvertCase convertCase)
             m_haveWordUnderCursor = false;
         }
     }
-    qDebug() << "Converting word case successfully";
+    qCDebug(appLog) << "Converting word case successfully";
 }
 
 QString TextEdit::capitalizeText(QString text)
 {
-    qDebug() << "Capitalizing text";
+    qCDebug(appLog) << "Capitalizing text";
     QString newText = text.toLower();
     QChar currentChar;
     QChar nextChar;
@@ -1990,33 +1991,33 @@ QString TextEdit::capitalizeText(QString text)
     for (int i = 0; i < newText.size(); i++) {
         currentChar = newText.at(i);
         if (i + 1 < newText.size()) {
-            qDebug() << "Capitalizing text with next char";
+            qCDebug(appLog) << "Capitalizing text with next char";
             nextChar = newText.at(i + 1);
         }
         if (currentChar.isSpace() && !nextChar.isSpace()) {
-            qDebug() << "Capitalizing text with space and next char";
+            qCDebug(appLog) << "Capitalizing text with space and next char";
             newText.replace(i + 1, 1, nextChar.toUpper());
         }
     }
 
-    qDebug() << "Capitalizing text successfully";
+    qCDebug(appLog) << "Capitalizing text successfully";
     return newText;
 }
 
 void TextEdit::keepCurrentLineAtCenter()
 {
-    qDebug() << "Keeping current line at center";
+    qCDebug(appLog) << "Keeping current line at center";
     QScrollBar *scrollbar = verticalScrollBar();
 
     int currentLine = cursorRect().top() / cursorRect().height();
     int halfEditorLines = rect().height() / 2 / cursorRect().height();
     scrollbar->setValue(scrollbar->value() + currentLine - halfEditorLines);
-    qDebug() << "Keeping current line at center successfully";
+    qCDebug(appLog) << "Keeping current line at center successfully";
 }
 
 void TextEdit::scrollToLine(int scrollOffset, int row, int column)
 {
-    qDebug() << "Scrolling to line";
+    qCDebug(appLog) << "Scrolling to line";
     // Save cursor postion.
     m_restoreRow = row;
     m_restoreColumn = column;
@@ -2025,12 +2026,12 @@ void TextEdit::scrollToLine(int scrollOffset, int row, int column)
     m_scrollAnimation->setStartValue(verticalScrollBar()->value());
     m_scrollAnimation->setEndValue(scrollOffset);
     m_scrollAnimation->start();
-    qDebug() << "Scrolling to line successfully";
+    qCDebug(appLog) << "Scrolling to line successfully";
 }
 
 void TextEdit::setLineWrapMode(bool enable)
 {
-    qDebug() << "Setting line wrap mode";
+    qCDebug(appLog) << "Setting line wrap mode";
     QTextCursor cursor = textCursor();
     int nJumpLine = textCursor().blockNumber() + 1;
     this->setWordWrapMode(QTextOption::WrapAnywhere);
@@ -2041,34 +2042,34 @@ void TextEdit::setLineWrapMode(bool enable)
 
     jumpToLine(nJumpLine, false);
     setTextCursor(cursor);
-    qDebug() << "Setting line wrap mode successfully";
+    qCDebug(appLog) << "Setting line wrap mode successfully";
 }
 
 void TextEdit::setFontFamily(QString name)
 {
-    qDebug() << "Setting font family";
+    qCDebug(appLog) << "Setting font family";
     // Update font.
     m_fontName = name;
     updateFont();
     updateLeftAreaWidget();
-    qDebug() << "Setting font family successfully";
+    qCDebug(appLog) << "Setting font family successfully";
 }
 
 void TextEdit::setFontSize(qreal size)
 {
-    qDebug() << "Setting font size";
+    qCDebug(appLog) << "Setting font size";
     // Update font.
     m_fontSize = size;
     updateFont();
 
     // Update line number after adjust font size.
     updateLeftAreaWidget();
-    qDebug() << "Setting font size successfully";
+    qCDebug(appLog) << "Setting font size successfully";
 }
 
 void TextEdit::updateFont()
 {
-    qDebug() << "Updating font";
+    qCDebug(appLog) << "Updating font";
     QFont font = document()->defaultFont();
     font.setFixedPitch(true);
     font.setPointSizeF(m_fontSize);
@@ -2077,33 +2078,33 @@ void TextEdit::updateFont()
     setTabStopDistance(m_tabSpaceNumber * QFontMetrics(font).horizontalAdvance(QChar(0x2192)));
 
     if (m_isSelectAll) {
-        qDebug() << "Updating font with select all";
+        qCDebug(appLog) << "Updating font with select all";
         selectTextInView();
     }
-    qDebug() << "Updating font successfully";
+    qCDebug(appLog) << "Updating font successfully";
 }
 
 void TextEdit::replaceAll(const QString &replaceText, const QString &withText, Qt::CaseSensitivity caseFlag)
 {
-    qDebug() << "Starting replace all operation";
+    qCDebug(appLog) << "Starting replace all operation";
     
     if (m_readOnlyMode || m_bReadOnlyPermission) {
-        qDebug() << "Replace cancelled - read only mode";
+        qCDebug(appLog) << "Replace cancelled - read only mode";
         return;
     }
 
     if (replaceText.isEmpty()) {
-        qDebug() << "Replace cancelled - empty search text";
+        qCDebug(appLog) << "Replace cancelled - empty search text";
         return;
     }
 
     // 替换文本相同，返回
     if (replaceText == withText) {
-        qDebug() << "Replace cancelled - same replace text";
+        qCDebug(appLog) << "Replace cancelled - same replace text";
         return;
     }
 
-    qDebug() << "Replacing all occurrences of:" << replaceText.left(20) << "with:" << withText.left(20);
+    qCDebug(appLog) << "Replacing all occurrences of:" << replaceText.left(20) << "with:" << withText.left(20);
 
     QTextCursor cursor = textCursor();
     cursor.movePosition(QTextCursor::Start);
@@ -2121,30 +2122,30 @@ void TextEdit::replaceAll(const QString &replaceText, const QString &withText, Q
     newText.replace(replaceText, withText, caseFlag);
 
     if (oldText != newText) {
-        qDebug() << "Replace all operation with old text and new text";
+        qCDebug(appLog) << "Replace all operation with old text and new text";
         ChangeMarkCommand *pChangeMark = new ChangeMarkCommand(this, backupMarkList, replaceList);
         // 设置替换撤销项为颜色标记变更撤销项的子项
         new ReplaceAllCommand(oldText, newText, cursor, pChangeMark);
         m_pUndoStack->push(pChangeMark);
     }
-    qDebug() << "Replace all operation completed";
+    qCDebug(appLog) << "Replace all operation completed";
 }
 
 void TextEdit::replaceNext(const QString &replaceText, const QString &withText, Qt::CaseSensitivity caseFlag)
 {
-    qDebug() << "Starting replace next operation";
+    qCDebug(appLog) << "Starting replace next operation";
     if (m_readOnlyMode || m_bReadOnlyPermission) {
-        qDebug() << "Replace next operation cancelled - read only mode";
+        qCDebug(appLog) << "Replace next operation cancelled - read only mode";
         return;
     }
 
     if (m_isSelectAll) {
-        qDebug() << "Replace next operation with select all";
+        qCDebug(appLog) << "Replace next operation with select all";
         QPlainTextEdit::selectAll();
     }
 
     if (replaceText.isEmpty() || !m_findHighlightSelection.cursor.hasSelection()) {
-        qDebug() << "Replace next operation cancelled - empty search text";
+        qCDebug(appLog) << "Replace next operation cancelled - empty search text";
         //无限替换的根源
         return;
     }
@@ -2152,11 +2153,11 @@ void TextEdit::replaceNext(const QString &replaceText, const QString &withText, 
     QTextCursor cursor = textCursor();
 
     if (m_cursorStart != -1) {
-        qDebug() << "Replace next operation with cursor start";
+        qCDebug(appLog) << "Replace next operation with cursor start";
         cursor.setPosition(m_cursorStart);
         m_cursorStart = -1;
     } else {
-        qDebug() << "Replace next operation with find highlight selection";
+        qCDebug(appLog) << "Replace next operation with find highlight selection";
         cursor.setPosition(m_findHighlightSelection.cursor.selectionStart());
     }
     cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
@@ -2168,10 +2169,10 @@ void TextEdit::replaceNext(const QString &replaceText, const QString &withText, 
     QList<TextEdit::MarkReplaceInfo> backupMarkList = convertMarkToReplace(m_markOperations);
     auto replaceList = backupMarkList;
     for (auto &info : replaceList) {
-        qDebug() << "Replace next operation with mark info";
+        qCDebug(appLog) << "Replace next operation with mark info";
         if (MarkAll == info.opt.type
                 || MarkAllMatch == info.opt.type) {
-            qDebug() << "Replace next operation with mark info - mark all";
+            qCDebug(appLog) << "Replace next operation with mark info - mark all";
             continue;
         }
 
@@ -2182,51 +2183,51 @@ void TextEdit::replaceNext(const QString &replaceText, const QString &withText, 
         switch (type) {
         case Utils::ELeft:
             // 当前无交集，颜色标记在替换文本左侧，表示当前颜色标记已经经过
-            qDebug() << "Replace next operation with mark info - left";
+            qCDebug(appLog) << "Replace next operation with mark info - left";
             break;
         case Utils::ERight: {
             // 颜色标记位于右侧
-            qDebug() << "Replace next operation with mark info - right";
+            qCDebug(appLog) << "Replace next operation with mark info - right";
             info.start += adjustlen;
             info.end += adjustlen;
             break;
         }
         case Utils::EIntersectLeft: {
             // 交集在替换文本左侧，拓展颜色标记右侧到替换文本右侧
-            qDebug() << "Replace next operation with mark info - intersect left";
+            qCDebug(appLog) << "Replace next operation with mark info - intersect left";
             info.end = cursor.selectionStart() + withText.size();
             break;
         }
         case Utils::EIntersectRight: {
             // 交集在替换文本右侧，拓展颜色标记左侧到替换文本左侧
-            qDebug() << "Replace next operation with mark info - intersect right";
+            qCDebug(appLog) << "Replace next operation with mark info - intersect right";
             info.start = cursor.selectionStart();
             info.end += adjustlen;
             break;
         }
         case Utils::EIntersectOutter: {
             // 标记内容包含替换文本
-            qDebug() << "Replace next operation with mark info - intersect outter";
+            qCDebug(appLog) << "Replace next operation with mark info - intersect outter";
             info.end += adjustlen;
             break;
         }
         case Utils::EIntersectInner: {
             // 替换文本内容包含标记信息, 取消当前文本标记（无论单个文本还是单行文本，均移除）
             // 在 manualUpdateAllMark() 函数处理会移除此标记
-            qDebug() << "Replace next operation with mark info - intersect inner";
+            qCDebug(appLog) << "Replace next operation with mark info - intersect inner";
             info.start = 0;
             info.end = 0;
             break;
         }
         default:
-            qDebug() << "Replace next operation with mark info - default";
+            qCDebug(appLog) << "Replace next operation with mark info - default";
             break;
         }
     }
 
     QString strSelection(cursor.selectedText());
     if (!strSelection.compare(replaceText, caseFlag) || replaceText.contains("\n")) {
-        qDebug() << "Replace next operation with mark info - replace text";
+        qCDebug(appLog) << "Replace next operation with mark info - replace text";
         ChangeMarkCommand *pChangeMark = new ChangeMarkCommand(this, backupMarkList, replaceList);
         // 设置插入撤销项为颜色标记变更撤销项的子项
         new InsertTextUndoCommand(cursor, withText, this, pChangeMark);
@@ -2237,31 +2238,31 @@ void TextEdit::replaceNext(const QString &replaceText, const QString &withText, 
     }
 
     highlightKeyword(replaceText, getPosition(), caseFlag);
-    qDebug() << "Replace all operation completed for:" << replaceText.left(20);
+    qCDebug(appLog) << "Replace all operation completed for:" << replaceText.left(20);
 }
 
 void TextEdit::replaceRest(const QString &replaceText, const QString &withText, Qt::CaseSensitivity caseFlag)
 {
-    qDebug() << "Starting replace rest operation";
+    qCDebug(appLog) << "Starting replace rest operation";
     
     if (m_readOnlyMode || m_bReadOnlyPermission) {
-        qDebug() << "Replace cancelled - read only mode";
+        qCDebug(appLog) << "Replace cancelled - read only mode";
         return;
     }
 
     // If replace text is nothing, don't do replace action.
     if (replaceText.isEmpty()) {
-        qDebug() << "Replace cancelled - empty search text";
+        qCDebug(appLog) << "Replace cancelled - empty search text";
         return;
     }
 
     // 替换文本相同，返回
     if (replaceText == withText) {
-        qDebug() << "Replace cancelled - same replace text";
+        qCDebug(appLog) << "Replace cancelled - same replace text";
         return;
     }
 
-    qDebug() << "Replacing rest occurrences of:" << replaceText.left(20) << "with:" << withText.left(20);
+    qCDebug(appLog) << "Replacing rest occurrences of:" << replaceText.left(20) << "with:" << withText.left(20);
 
     QTextCursor cursor = textCursor();
     QTextCursor startCursor = textCursor();
@@ -2282,34 +2283,34 @@ void TextEdit::replaceRest(const QString &replaceText, const QString &withText, 
     newText += right;
 
     if (oldText != newText) {
-        qDebug() << "Replace rest operation with old text and new text";
+        qCDebug(appLog) << "Replace rest operation with old text and new text";
         ChangeMarkCommand *pChangeMark = new ChangeMarkCommand(this, backupMarkList, replaceList);
         // 设置替换撤销项为颜色标记变更撤销项的子项
         new ReplaceAllCommand(oldText, newText, cursor, pChangeMark);
         m_pUndoStack->push(pChangeMark);
     }
-    qDebug() << "Replace rest operation completed";
+    qCDebug(appLog) << "Replace rest operation completed";
     startCursor.endEditBlock();
     setTextCursor(startCursor);
-    qDebug() << "Replace rest operation completed for:" << replaceText.left(20);
+    qCDebug(appLog) << "Replace rest operation completed for:" << replaceText.left(20);
 }
 
 void TextEdit::beforeReplace(const QString &strReplaceText, Qt::CaseSensitivity caseFlag)
 {
-    qDebug() << "Starting before replace operation";
+    qCDebug(appLog) << "Starting before replace operation";
     if (strReplaceText.isEmpty() || !m_findHighlightSelection.cursor.hasSelection()) {
-        qDebug() << "Before replace operation with empty search text";
+        qCDebug(appLog) << "Before replace operation with empty search text";
         highlightKeyword(strReplaceText, getPosition(), caseFlag);
     }
-    qDebug() << "Before replace operation completed";
+    qCDebug(appLog) << "Before replace operation completed";
 }
 
 bool TextEdit::findKeywordForward(const QString &keyword)
 {
-    qDebug() << "Finding keyword forward:" << keyword.left(20);
+    qCDebug(appLog) << "Finding keyword forward:" << keyword.left(20);
 
     if (textCursor().hasSelection()) {
-        qDebug() << "Finding keyword forward with selection";
+        qCDebug(appLog) << "Finding keyword forward with selection";
         // Get selection bound.
         int startPos = textCursor().anchor();
         int endPos = textCursor().position();
@@ -2320,7 +2321,7 @@ bool TextEdit::findKeywordForward(const QString &keyword)
 
         QTextDocument::FindFlags options;
         if (Qt::CaseSensitive == defaultCaseSensitive) {
-            qDebug() << "Finding keyword forward with case sensitive";
+            qCDebug(appLog) << "Finding keyword forward with case sensitive";
             options |= QTextDocument::FindCaseSensitively;
         }
         bool foundOne = find(keyword, options);
@@ -2329,10 +2330,10 @@ bool TextEdit::findKeywordForward(const QString &keyword)
         cursor.setPosition(startPos, QTextCursor::KeepAnchor);
         //setTextCursor(cursor);
 
-        qDebug() << "Finding keyword forward with selection successfully: " << foundOne;
+        qCDebug(appLog) << "Finding keyword forward with selection successfully: " << foundOne;
         return foundOne;
     } else {
-        qDebug() << "Finding keyword forward without selection";
+        qCDebug(appLog) << "Finding keyword forward without selection";
         QTextCursor recordCursor = textCursor();
 
         QTextCursor cursor = textCursor();
@@ -2341,21 +2342,21 @@ bool TextEdit::findKeywordForward(const QString &keyword)
 
         QTextDocument::FindFlags options;
         if (Qt::CaseSensitive == defaultCaseSensitive) {
-            qDebug() << "Finding keyword forward with case sensitive";
+            qCDebug(appLog) << "Finding keyword forward with case sensitive";
             options |= QTextDocument::FindCaseSensitively;
         }
         bool foundOne = find(keyword, options);
 
         //setTextCursor(recordCursor);
 
-        qDebug() << "Finding keyword forward without selection successfully: " << foundOne;
+        qCDebug(appLog) << "Finding keyword forward without selection successfully: " << foundOne;
         return foundOne;
     }
 }
 
 void TextEdit::removeKeywords()
 {
-    qDebug() << "Removing keywords";
+    qCDebug(appLog) << "Removing keywords";
     m_findHighlightSelection.cursor = textCursor();
     m_findHighlightSelection.cursor.clearSelection();
 
@@ -2367,13 +2368,13 @@ void TextEdit::removeKeywords()
 
     syncRendererFindHighlight(QString());
 
-    qDebug() << "Removing keywords successfully";
+    qCDebug(appLog) << "Removing keywords successfully";
     //setFocus();
 }
 
 bool TextEdit::highlightKeyword(const QString &keyword, int position, Qt::CaseSensitivity caseFlag)
 {
-    qDebug() << "Highlighting keyword";
+    qCDebug(appLog) << "Highlighting keyword";
     Q_UNUSED(position)
     m_findMatchSelections.clear();
     updateHighlightLineSelection();
@@ -2383,13 +2384,13 @@ bool TextEdit::highlightKeyword(const QString &keyword, int position, Qt::CaseSe
 
     syncRendererFindHighlight(keyword, caseFlag);
 
-    qDebug() << "Highlighting keyword successfully: " << bRet;
+    qCDebug(appLog) << "Highlighting keyword successfully: " << bRet;
     return bRet;
 }
 
 bool TextEdit::highlightKeywordInView(const QString &keyword, Qt::CaseSensitivity caseFlag)
 {
-    qDebug() << "Highlighting keyword in view";
+    qCDebug(appLog) << "Highlighting keyword in view";
     m_findMatchSelections.clear();
     bool bRet = updateKeywordSelectionsInView(keyword, m_findMatchFormat, &m_findMatchSelections, caseFlag);
     // 直接设置 setExtraSelections 会导致无法显示颜色标记，调用 renderAllSelections 进行显示更新
@@ -2398,7 +2399,7 @@ bool TextEdit::highlightKeywordInView(const QString &keyword, Qt::CaseSensitivit
 
     syncRendererFindHighlight(keyword, caseFlag);
 
-    qDebug() << "Highlighting keyword in view successfully: " << bRet;
+    qCDebug(appLog) << "Highlighting keyword in view successfully: " << bRet;
     return bRet;
 }
 
@@ -2427,45 +2428,45 @@ void TextEdit::syncRendererFindHighlight(const QString &keyword, Qt::CaseSensiti
 
 void TextEdit::clearFindMatchSelections()
 {
-    qDebug() << "Clearing find match selections";
+    qCDebug(appLog) << "Clearing find match selections";
     m_findMatchSelections.clear();
 }
 
 void TextEdit::setFindHighlightSelection(const QTextCursor &cursor)
 {
-    qDebug() << "Setting find highlight selection";
+    qCDebug(appLog) << "Setting find highlight selection";
     m_findHighlightSelection.cursor = cursor;
-    qDebug() << "Find highlight selection set to position:" << cursor.position() << "with selection:" << cursor.hasSelection();
+    qCDebug(appLog) << "Find highlight selection set to position:" << cursor.position() << "with selection:" << cursor.hasSelection();
 }
 
 void TextEdit::updateCursorKeywordSelection(QString keyword, bool findNext,
                                              Qt::CaseSensitivity caseFlag)
 {
-    qDebug() << "Updating cursor keyword selection";
+    qCDebug(appLog) << "Updating cursor keyword selection";
     bool findOne = searchKeywordSeletion(keyword, textCursor(), findNext, caseFlag);
 
-    qDebug() << "Updating cursor keyword selection successfully: " << findOne;
+    qCDebug(appLog) << "Updating cursor keyword selection successfully: " << findOne;
     if (!findOne) {
-        qDebug() << "Updating cursor keyword selection with no find";
+        qCDebug(appLog) << "Updating cursor keyword selection with no find";
         QTextCursor cursor = textCursor();
         cursor.movePosition(findNext ? QTextCursor::Start : QTextCursor::End, QTextCursor::MoveAnchor);
         if (!searchKeywordSeletion(keyword, cursor, findNext, caseFlag)) {
             m_findHighlightSelection.cursor = textCursor();
             m_findMatchSelections.clear();
             renderAllSelections();
-            qDebug() << "Updating cursor keyword selection with no find successfully";
+            qCDebug(appLog) << "Updating cursor keyword selection with no find successfully";
         }
     }
-    qDebug() << "Updating cursor keyword selection completed";
+    qCDebug(appLog) << "Updating cursor keyword selection completed";
     updateMatchCount(keyword, caseFlag);
 }
 
 void TextEdit::updateHighlightLineSelection()
 {
-    qDebug() << "Updating highlight line selection";
+    qCDebug(appLog) << "Updating highlight line selection";
     if (m_gestureAction == GA_slide) {
         QTextCursor textCursor = QPlainTextEdit::textCursor();
-        qDebug() << "Updating highlight line selection with gesture action slide";
+        qCDebug(appLog) << "Updating highlight line selection with gesture action slide";
         return;
     }
 
@@ -2476,18 +2477,18 @@ void TextEdit::updateHighlightLineSelection()
     selection.cursor = textCursor();
     selection.cursor.clearSelection();
     m_currentLineSelection = selection;
-    qDebug() << "Updating highlight line selection completed";
+    qCDebug(appLog) << "Updating highlight line selection completed";
 }
 
 bool TextEdit::updateKeywordSelections(QString keyword, QTextCharFormat charFormat, QList<QTextEdit::ExtraSelection> &listSelection)
 {
-    qDebug() << "Updating keyword selections";
+    qCDebug(appLog) << "Updating keyword selections";
     // Clear keyword selections first.
     listSelection.clear();
 
     // Update selections with keyword.
     if (!keyword.isEmpty()) {
-        qDebug() << "Updating keyword selections with keyword";
+        qCDebug(appLog) << "Updating keyword selections with keyword";
         QTextCursor cursor(document());
         QTextDocument::FindFlags flags;
         if (Qt::CaseSensitive == defaultCaseSensitive) {
@@ -2498,7 +2499,7 @@ bool TextEdit::updateKeywordSelections(QString keyword, QTextCharFormat charForm
         cursor = document()->find(keyword, cursor, flags);
 
         if (cursor.isNull()) {
-            qDebug() << "Updating keyword selections with no find";
+            qCDebug(appLog) << "Updating keyword selections with no find";
             return false;
         }
 
@@ -2508,21 +2509,21 @@ bool TextEdit::updateKeywordSelections(QString keyword, QTextCharFormat charForm
             cursor = document()->find(keyword, cursor, flags);
         }
 
-        qDebug() << "Updating keyword selections with keyword successfully";
+        qCDebug(appLog) << "Updating keyword selections with keyword successfully";
         return true;
     }
 
-    qDebug() << "Updating keyword selections with no keyword";
+    qCDebug(appLog) << "Updating keyword selections with no keyword";
     return false;
 }
 
 QList<int> TextEdit::scanAllMatchPositions(const QString &keyword, Qt::CaseSensitivity caseFlag) const
 {
-    qDebug() << "Scanning all match positions for keyword:" << keyword;
+    qCDebug(appLog) << "Scanning all match positions for keyword:" << keyword;
     QList<int> positions;
 
     if (keyword.isEmpty()) {
-        qDebug() << "Empty keyword, return empty list";
+        qCDebug(appLog) << "Empty keyword, return empty list";
         return positions;
     }
 
@@ -2538,15 +2539,15 @@ QList<int> TextEdit::scanAllMatchPositions(const QString &keyword, Qt::CaseSensi
         cursor = document()->find(keyword, cursor, flags);
     }
 
-    qDebug() << "Scan completed, total positions:" << positions.size();
+    qCDebug(appLog) << "Scan completed, total positions:" << positions.size();
     return positions;
 }
 
 int TextEdit::findCurrentMatchIndex() const
 {
-    qDebug() << "Finding current match index";
+    qCDebug(appLog) << "Finding current match index";
     if (m_allMatchPositions.isEmpty()) {
-        qDebug() << "Empty cache, return 0";
+        qCDebug(appLog) << "Empty cache, return 0";
         return 0;
     }
 
@@ -2554,26 +2555,26 @@ int TextEdit::findCurrentMatchIndex() const
     auto it = std::lower_bound(m_allMatchPositions.begin(), m_allMatchPositions.end(), cursorPos);
     if (it != m_allMatchPositions.end() && *it == cursorPos) {
         int index = static_cast<int>(std::distance(m_allMatchPositions.begin(), it));
-        qDebug() << "Found at index" << index;
+        qCDebug(appLog) << "Found at index" << index;
         return index + 1;
     }
 
-    qDebug() << "Not found in cache, return 0";
+    qCDebug(appLog) << "Not found in cache, return 0";
     return 0;
 }
 
 void TextEdit::updateMatchCount(const QString &keyword, Qt::CaseSensitivity caseFlag)
 {
-    qDebug() << "updateMatchCount keyword:" << keyword << "case:" << caseFlag;
+    qCDebug(appLog) << "updateMatchCount keyword:" << keyword << "case:" << caseFlag;
 
     if (keyword.isEmpty()) {
-        qDebug() << "Empty keyword, emit (0, 0)";
+        qCDebug(appLog) << "Empty keyword, emit (0, 0)";
         emit findMatchCountChanged(0, 0);
         return;
     }
 
     if (keyword != m_countedKeyword || caseFlag != m_countedCase) {
-        qDebug() << "Cache miss, rescan";
+        qCDebug(appLog) << "Cache miss, rescan";
         m_allMatchPositions = scanAllMatchPositions(keyword, caseFlag);
         m_countedKeyword = keyword;
         m_countedCase = caseFlag;
@@ -2581,13 +2582,13 @@ void TextEdit::updateMatchCount(const QString &keyword, Qt::CaseSensitivity case
 
     int total = m_allMatchPositions.size();
     int current = findCurrentMatchIndex();
-    qDebug() << "Emit findMatchCountChanged current:" << current << "total:" << total;
+    qCDebug(appLog) << "Emit findMatchCountChanged current:" << current << "total:" << total;
     emit findMatchCountChanged(current, total);
 }
 
 void TextEdit::invalidateMatchCountCache()
 {
-    qDebug() << "Invalidating match count cache";
+    qCDebug(appLog) << "Invalidating match count cache";
     m_countedKeyword.clear();
     m_allMatchPositions.clear();
 }
@@ -2595,13 +2596,13 @@ void TextEdit::invalidateMatchCountCache()
 bool TextEdit::updateKeywordSelectionsInView(QString keyword, QTextCharFormat charFormat,
                                              QList<QTextEdit::ExtraSelection> *listSelection, Qt::CaseSensitivity caseFlag)
 {
-    qDebug() << "Updating keyword selections in view";
+    qCDebug(appLog) << "Updating keyword selections in view";
     // Clear keyword selections first.
     listSelection->clear();
 
     // Update selections with keyword.
     if (!keyword.isEmpty()) {
-        qDebug() << "Updating keyword selections in view with keyword";
+        qCDebug(appLog) << "Updating keyword selections in view with keyword";
         QTextCursor cursor(document());
         QTextEdit::ExtraSelection extra;
         extra.format = charFormat;
@@ -2613,11 +2614,11 @@ bool TextEdit::updateKeywordSelectionsInView(QString keyword, QTextCharFormat ch
         QTextBlock endBlock;
 
         if (pScrollBar->maximum() > 0) {
-            qDebug() << "Updating keyword selections in view with scroll bar maximum";
+            qCDebug(appLog) << "Updating keyword selections in view with scroll bar maximum";
             QPoint endPoint = QPointF(0, 1.5 * height()).toPoint();
             endBlock = cursorForPosition(endPoint).block();
         } else {
-            qDebug() << "Updating keyword selections in view with no scroll bar maximum";
+            qCDebug(appLog) << "Updating keyword selections in view with no scroll bar maximum";
             endBlock = document()->lastBlock();
         }
         int endPos = endBlock.position() + endBlock.length() - 1;
@@ -2627,11 +2628,11 @@ bool TextEdit::updateKeywordSelectionsInView(QString keyword, QTextCharFormat ch
         QString multiLineText;
         QTextDocument::FindFlags flags;
         if (Qt::CaseSensitive == caseFlag) {
-            qDebug() << "Updating keyword selections in view with case sensitive";
+            qCDebug(appLog) << "Updating keyword selections in view with case sensitive";
             flags |= QTextDocument::FindCaseSensitively;
         }
         if (keyword.contains(endLine)) {
-            qDebug() << "Updating keyword selections in view with end line";
+            qCDebug(appLog) << "Updating keyword selections in view with end line";
             auto temp = this->textCursor();
             temp.setPosition(beginPos);
             while (temp.position() < endPos) {
@@ -2642,12 +2643,12 @@ bool TextEdit::updateKeywordSelectionsInView(QString keyword, QTextCharFormat ch
             }
             cursor = findCursor(keyword, multiLineText, 0, false, beginPos, caseFlag);
         } else {
-            qDebug() << "Updating keyword selections in view with no end line";
+            qCDebug(appLog) << "Updating keyword selections in view with no end line";
             cursor = document()->find(keyword, beginPos, flags);
         }
 
         if (cursor.isNull()) {
-            qDebug() << "Updating keyword selections in view with no find";
+            qCDebug(appLog) << "Updating keyword selections in view with no find";
             return false;
         }
 
@@ -2658,7 +2659,7 @@ bool TextEdit::updateKeywordSelectionsInView(QString keyword, QTextCharFormat ch
 
             // 防止光标位置未前进导致死循环
             if (currentMatchPos <= lastMatchPos) {
-                qDebug() << "Updating keyword selections in view, cursor not advancing, break";
+                qCDebug(appLog) << "Updating keyword selections in view, cursor not advancing, break";
                 break;
             }
             lastMatchPos = currentMatchPos;
@@ -2667,39 +2668,39 @@ bool TextEdit::updateKeywordSelectionsInView(QString keyword, QTextCharFormat ch
             // 查找小写 f 时大写 F 同样会入高亮列表
             Qt::CaseSensitivity option = defaultCaseSensitive;
             if (!extra.cursor.selectedText().compare(keyword, option) || keyword.contains(endLine, option)) {
-                qDebug() << "Updating keyword selections in view with selected text";
+                qCDebug(appLog) << "Updating keyword selections in view with selected text";
                 listSelection->append(extra);
             }
 
             if (keyword.contains(endLine)) {
                 int pos = std::max(extra.cursor.position(), extra.cursor.anchor());
-                qDebug() << "Updating keyword selections in view with max pos";
+                qCDebug(appLog) << "Updating keyword selections in view with max pos";
                 cursor = findCursor(keyword, multiLineText, pos - beginPos, false, beginPos, caseFlag);
             } else {
-                qDebug() << "Updating keyword selections in view with no end line";
+                qCDebug(appLog) << "Updating keyword selections in view with no end line";
                 cursor = document()->find(keyword, cursor, flags);
             }
 
             if (!cursor.isNull() && cursor.position() > endPos) {
-                qDebug() << "Updating keyword selections in view with position greater than end pos, break";
+                qCDebug(appLog) << "Updating keyword selections in view with position greater than end pos, break";
                 break;
             }
         }
 
-        qDebug() << "Updating keyword selections in view with keyword successfully";
+        qCDebug(appLog) << "Updating keyword selections in view with keyword successfully";
         return true;
     }
 
-    qDebug() << "Updating keyword selections in view with no keyword";
+    qCDebug(appLog) << "Updating keyword selections in view with no keyword";
     return false;
 }
 
 bool TextEdit::searchKeywordSeletion(QString keyword, QTextCursor cursor, bool findNext,
                                       Qt::CaseSensitivity caseFlag)
 {
-    qDebug() << "Searching keyword seletion";
+    qCDebug(appLog) << "Searching keyword seletion";
     if (keyword.isEmpty()) {
-        qDebug() << "Searching keyword seletion with empty keyword";
+        qCDebug(appLog) << "Searching keyword seletion with empty keyword";
         return false;
     }
 
@@ -2707,42 +2708,42 @@ bool TextEdit::searchKeywordSeletion(QString keyword, QTextCursor cursor, bool f
     int offsetLines = 3;
 
     if (findNext) {
-        qDebug() << "Searching keyword seletion with find next";
+        qCDebug(appLog) << "Searching keyword seletion with find next";
         QTextDocument::FindFlags options;
         if (Qt::CaseSensitive == caseFlag) {
-            qDebug() << "Searching keyword seletion with find next and case sensitive";
+            qCDebug(appLog) << "Searching keyword seletion with find next and case sensitive";
             options |= QTextDocument::FindCaseSensitively;
         }
 
         QTextCursor next = document()->find(keyword, cursor, options);
         if (keyword.contains("\n")) {
-            qDebug() << "Searching keyword seletion with find next and contains newline";
+            qCDebug(appLog) << "Searching keyword seletion with find next and contains newline";
             int pos = std::max(cursor.position(), cursor.anchor());
             next = findCursor(keyword, this->toPlainText(), pos, false, 0, caseFlag);
         }
         if (!next.isNull()) {
-            qDebug() << "Searching keyword seletion with find next and not null";
+            qCDebug(appLog) << "Searching keyword seletion with find next and not null";
             m_findHighlightSelection.cursor = next;
             jumpToLine(next.blockNumber() + offsetLines, false);
             setTextCursor(next);
             ret = true;
         }
     } else {
-        qDebug() << "Searching keyword seletion with find previous";
+        qCDebug(appLog) << "Searching keyword seletion with find previous";
         QTextDocument::FindFlags options = QTextDocument::FindBackward;
         if (Qt::CaseSensitive == caseFlag) {
-            qDebug() << "Searching keyword seletion with find previous and case sensitive";
+            qCDebug(appLog) << "Searching keyword seletion with find previous and case sensitive";
             options |= QTextDocument::FindCaseSensitively;
         }
 
         QTextCursor prev = document()->find(keyword, cursor, options);
         if (keyword.contains("\n")) {
             int pos = std::min(cursor.position(), cursor.anchor());
-            qDebug() << "Searching keyword seletion with find previous and contains newline";
+            qCDebug(appLog) << "Searching keyword seletion with find previous and contains newline";
             prev = findCursor(keyword, this->toPlainText().mid(0, pos), -1, true, 0, caseFlag);
         }
         if (!prev.isNull()) {
-            qDebug() << "Searching keyword seletion with find previous and not null";
+            qCDebug(appLog) << "Searching keyword seletion with find previous and not null";
             m_findHighlightSelection.cursor = prev;
             jumpToLine(prev.blockNumber() + offsetLines, false);
             setTextCursor(prev);
@@ -2750,19 +2751,19 @@ bool TextEdit::searchKeywordSeletion(QString keyword, QTextCursor cursor, bool f
         }
     }
 
-    qDebug() << "Searching keyword seletion completed: " << ret;
+    qCDebug(appLog) << "Searching keyword seletion completed: " << ret;
     return ret;
 }
 
 void TextEdit::renderAllSelections()
 {
-    qDebug() << "Rendering all selections";
+    qCDebug(appLog) << "Rendering all selections";
     QList<QTextEdit::ExtraSelection> finalSelections;
     QList<QPair<QTextEdit::ExtraSelection, qint64>> selectionsSortList;
 
     // 标记当前行的浅灰色
     if (m_HightlightYes) {
-        qDebug() << "Rendering all selections with highlight yes";
+        qCDebug(appLog) << "Rendering all selections with highlight yes";
         finalSelections.append(m_currentLineSelection);
     }
     // 此处代码无作用，去除
@@ -2831,37 +2832,37 @@ void TextEdit::renderAllSelections()
 
     // 设置到 QPlainText 中进行渲染
     setExtraSelections(finalSelections);
-    qDebug() << "Rendering all selections completed";
+    qCDebug(appLog) << "Rendering all selections completed";
 }
 
 void TextEdit::updateMarkAllSelectColor()
 {
-    qDebug() << "Updating mark all select color";
+    qCDebug(appLog) << "Updating mark all select color";
     isMarkAllLine(m_bIsMarkAllLine, m_strMarkAllLineColorName);
     renderAllSelections();
-    qDebug() << "Updating mark all select color completed";
+    qCDebug(appLog) << "Updating mark all select color completed";
 }
 
 DMenu *TextEdit::getHighlightMenu()
 {
-    qDebug() << "Getting highlight menu";
+    qCDebug(appLog) << "Getting highlight menu";
     return m_hlGroupMenu;
 }
 
 void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
-    qDebug() << "Painting line number area";
+    qCDebug(appLog) << "Painting line number area";
     QPainter painter(m_pLeftAreaWidget->m_pLineNumberArea);
     QColor lineNumberAreaBackgroundColor;
 
     if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::ColorType::DarkType) {
-        qDebug() << "Painting line number area with dark type";
+        qCDebug(appLog) << "Painting line number area with dark type";
         lineNumberAreaBackgroundColor = palette().brightText().color();
         lineNumberAreaBackgroundColor.setAlphaF(0.06);
 
         m_lineNumbersColor.setAlphaF(0.2);
     } else {
-        qDebug() << "Painting line number area with light type";
+        qCDebug(appLog) << "Painting line number area with light type";
         lineNumberAreaBackgroundColor = palette().brightText().color();
         lineNumberAreaBackgroundColor.setAlphaF(0.03);
         m_lineNumbersColor.setAlphaF(0.3);
@@ -2878,7 +2879,7 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
     QPoint endPoint;
 
     if (verticalScrollBar()->maximum() > 0) {
-        qDebug() << "Painting line number area with scroll bar maximum";
+        qCDebug(appLog) << "Painting line number area with scroll bar maximum";
         endPoint = QPointF(0, height() + height() / verticalScrollBar()->maximum() * verticalScrollBar()->value()).toPoint();
     }
 
@@ -2889,17 +2890,17 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 
     if (verticalScrollBar()->maximum() == 0) {
         nPageLine = blockCount() - 1;
-        qDebug() << "Painting line number area with no scroll bar maximum";
+        qCDebug(appLog) << "Painting line number area with no scroll bar maximum";
     }
 
     auto currentCursor = this->textCursor();
     cur = textCursor();
     for (int i = nStartLine; i <= nPageLine; i++) {
         if (i + 1 == m_markStartLine) {
-            qDebug() << "Painting line number area with mark start line";
+            qCDebug(appLog) << "Painting line number area with mark start line";
             painter.setPen(m_regionMarkerColor);
         } else {
-            qDebug() << "Painting line number area with no mark start line";
+            qCDebug(appLog) << "Painting line number area with no mark start line";
             painter.setPen(m_lineNumbersColor);
         }
 
@@ -2909,7 +2910,7 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
         cur.setPosition(block.position(), QTextCursor::MoveAnchor);
 
         if (block.isVisible()) {
-            qDebug() << "Painting line number area with block visible";
+            qCDebug(appLog) << "Painting line number area with block visible";
             int w = this->m_fontSize <= 15 ? 15 : m_fontSize;
             updateLeftWidgetWidth(w);
             int offset = 0;
@@ -2918,7 +2919,7 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
                 offset = 2;
             }
             if (cur.blockNumber() == currentCursor.blockNumber()) {
-                qDebug() << "Painting line number area with current cursor block number";
+                qCDebug(appLog) << "Painting line number area with current cursor block number";
                 painter.setPen(qApp->palette().highlight().color());
             }
             painter.drawText(0, cursorRect(cur).y() + offset,
@@ -2930,24 +2931,24 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
         top = bottom/* + document()->documentMargin()*/;
         bottom = top + static_cast<int>(document()->documentLayout()->blockBoundingRect(block).height());
     }
-    qDebug() << "Painting line number area completed";
+    qCDebug(appLog) << "Painting line number area completed";
 }
 
 void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
 {
-    qDebug() << "Painting code flod area";
+    qCDebug(appLog) << "Painting code flod area";
     m_listFlodIconPos.clear();
     QPainter painter(m_pLeftAreaWidget->m_pFlodArea);
 
     QColor codeFlodAreaBackgroundColor;
     if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::ColorType::DarkType) {
-        qDebug() << "Painting code flod area with dark type";
+        qCDebug(appLog) << "Painting code flod area with dark type";
         codeFlodAreaBackgroundColor = palette().brightText().color();
         codeFlodAreaBackgroundColor.setAlphaF(0.06);
 
         m_lineNumbersColor.setAlphaF(0.2);
     } else {
-        qDebug() << "Painting code flod area with light type";
+        qCDebug(appLog) << "Painting code flod area with light type";
         codeFlodAreaBackgroundColor = palette().brightText().color();
         codeFlodAreaBackgroundColor.setAlphaF(0.03);
         m_lineNumbersColor.setAlphaF(0.3);
@@ -2960,10 +2961,10 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
     QString theme  = "";
 
     if (guiAppHelp->themeType() == DGuiApplicationHelper::ColorType::DarkType) {  //暗色主题
-        qDebug() << "Painting code flod area with dark type";
+        qCDebug(appLog) << "Painting code flod area with dark type";
         theme = "d";
     } else {  //浅色主题
-        qDebug() << "Painting code flod area with light type";
+        qCDebug(appLog) << "Painting code flod area with light type";
         theme = "l";
     }
 
@@ -2973,7 +2974,7 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
     QPoint endPoint;
 
     if (verticalScrollBar()->maximum() > 0) {
-        qDebug() << "Painting code flod area with scroll bar maximum";
+        qCDebug(appLog) << "Painting code flod area with scroll bar maximum";
         endPoint = QPointF(0, height() + height() / verticalScrollBar()->maximum() * verticalScrollBar()->value()).toPoint();
     }
 
@@ -2983,14 +2984,14 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
 
     if (verticalScrollBar()->maximum() == 0) {
         nPageLine = blockCount() - 1;
-        qDebug() << "Painting code flod area with no scroll bar maximum";
+        qCDebug(appLog) << "Painting code flod area with no scroll bar maximum";
     }
 
     cur = textCursor();
 
     for (int iBlockCount = blockNumber ; iBlockCount <= nPageLine; ++iBlockCount) {
         if (block.isVisible()) {
-            qDebug() << "Painting code flod area with block visible";
+            qCDebug(appLog) << "Painting code flod area with block visible";
             //判定是否包含注释代码左括号、是否整行是注释，isNeedShowFoldIcon该函数是为了做判定当前行是否包含成对的括号，如果包括，则不显示折叠标志
 
             //获取行数文本块 出去字符串判断　梁卫东２０２０年０９月０１日１７：１６：１７
@@ -3009,20 +3010,20 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
             QString singleLineCommentMark;
 
             if (m_commentDefinition.isValid()) {
-                qDebug() << "Painting code flod area with comment definition";
+                qCDebug(appLog) << "Painting code flod area with comment definition";
                 multiLineCommentMark = m_commentDefinition.multiLineStart.trimmed();
                 singleLineCommentMark = m_commentDefinition.singleLine.trimmed();
                 //判断是否包含单行或多行注释
                 if (!multiLineCommentMark.isEmpty()) bHasCommnent = block.text().trimmed().startsWith(multiLineCommentMark);
                 if (!singleLineCommentMark.isEmpty()) bHasCommnent = block.text().trimmed().startsWith(singleLineCommentMark);
             } else {
-                qDebug() << "Painting code flod area with no comment definition";
+                qCDebug(appLog) << "Painting code flod area with no comment definition";
                 bHasCommnent = false;
             }
 
             //添加注释判断 存在不显示折叠标志　不存在显示折叠标准　梁卫东　２０２０年０９月０３日１７：２８：５０
             if (curText.contains("{") && isNeedShowFoldIcon(block) && !bHasCommnent) {
-                qDebug() << "Painting code flod area with contains {";
+                qCDebug(appLog) << "Painting code flod area with contains {";
                 cur.setPosition(block.position(), QTextCursor::MoveAnchor);
 
                 painter.setRenderHint(QPainter::Antialiasing, true);
@@ -3039,15 +3040,15 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
 
                 QRect rect(0, cursorRect(cur).y() + offset, w, w);
                 if (block.next().isVisible()) {
-                    qDebug() << "Painting code flod area with block next visible";
+                    qCDebug(appLog) << "Painting code flod area with block next visible";
                     if (block.isVisible()) {
-                        qDebug() << "Painting code flod area with block next visible";
+                        qCDebug(appLog) << "Painting code flod area with block next visible";
                         paintCodeFlod(&painter, rect);
                     }
                 } else {
-                    qDebug() << "Painting code flod area with block next not visible";
+                    qCDebug(appLog) << "Painting code flod area with block next not visible";
                     if (block.isVisible()) {
-                        qDebug() << "Painting code flod area with block next not visible";
+                        qCDebug(appLog) << "Painting code flod area with block next not visible";
                         paintCodeFlod(&painter, rect, true);
                     }
                 }
@@ -3057,42 +3058,42 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
 
         block = block.next();
     }
-    qDebug() << "Painting code flod area completed";
+    qCDebug(appLog) << "Painting code flod area completed";
 }
 
 void TextEdit::setBookmarkFlagVisable(bool isVisable, bool bIsFirstOpen)
 {
-    qDebug() << "Setting bookmark flag visible";
+    qCDebug(appLog) << "Setting bookmark flag visible";
     int w = this->m_fontSize <= 15 ? 15 : m_fontSize;
     updateLeftWidgetWidth(w);
 
     m_pIsShowBookmarkArea = isVisable;
     m_pLeftAreaWidget->m_pBookMarkArea->setVisible(isVisable);
-    qDebug() << "Setting bookmark flag visible completed";
+    qCDebug(appLog) << "Setting bookmark flag visible completed";
 }
 
 void TextEdit::setCodeFlodFlagVisable(bool isVisable, bool bIsFirstOpen)
 {
-    qDebug() << "Setting code flod flag visible";
+    qCDebug(appLog) << "Setting code flod flag visible";
     int w = this->m_fontSize <= 15 ? 15 : m_fontSize;
     updateLeftWidgetWidth(w);
 
     m_pIsShowCodeFoldArea = isVisable;
     m_pLeftAreaWidget->m_pFlodArea->setVisible(isVisable);
-    qDebug() << "Setting code flod flag visible completed";
+    qCDebug(appLog) << "Setting code flod flag visible completed";
 }
 
 void TextEdit::setHighLineCurrentLine(bool ok)
 {
-    qDebug() << "Setting high line current line";
+    qCDebug(appLog) << "Setting high line current line";
     m_HightlightYes = ok;
     renderAllSelections();
-    qDebug() << "Setting high line current line completed";
+    qCDebug(appLog) << "Setting high line current line completed";
 }
 
 void TextEdit::updateLeftAreaWidget()
 {
-    qDebug() << "Updating left area widget";
+    qCDebug(appLog) << "Updating left area widget";
 #if 0
 // not used anymore
     int blockSize = QString::number(blockCount()).size();
@@ -3100,28 +3101,28 @@ void TextEdit::updateLeftAreaWidget()
 
     //跟新左边框宽度
     if (m_pIsShowBookmarkArea) {
-        qDebug() << "Updating left area widget with bookmark area";
+        qCDebug(appLog) << "Updating left area widget with bookmark area";
         leftAreaWidth += m_pLeftAreaWidget->m_pBookMarkArea->width();
     }
     if (m_pIsShowCodeFoldArea) {
-        qDebug() << "Updating left area widget with code fold area";
+        qCDebug(appLog) << "Updating left area widget with code fold area";
         leftAreaWidth += m_pLeftAreaWidget->m_pFlodArea->width();
     }
 
     if (bIsSetLineNumberWidth) {
-        qDebug() << "Updating left area widget with line number width";
+        qCDebug(appLog) << "Updating left area widget with line number width";
         leftAreaWidth += blockSize * fontMetrics().width('9') + 5;
     }
     // m_pLeftAreaWidget->setFixedWidth(leftAreaWidth);
 #endif
     m_pLeftAreaWidget->updateAll();
-    qDebug() << "Updating left area widget completed";
+    qCDebug(appLog) << "Updating left area widget completed";
 }
 
 
 void TextEdit::handleScrollFinish()
 {
-    qDebug() << "Handling scroll finish";
+    qCDebug(appLog) << "Handling scroll finish";
     // Restore cursor postion.
     jumpToLine(m_restoreRow, false);
 
@@ -3131,12 +3132,12 @@ void TextEdit::handleScrollFinish()
 
     // Update cursor.
     setTextCursor(cursor);
-    qDebug() << "Handling scroll finish completed";
+    qCDebug(appLog) << "Handling scroll finish completed";
 }
 
 void TextEdit::setSyntaxDefinition(KSyntaxHighlighting::Definition def)
 {
-    qDebug() << "Setting syntax definition";
+    qCDebug(appLog) << "Setting syntax definition";
     m_commentDefinition.setComments(def.singleLineCommentMarker(), def.multiLineCommentMarker().first,  def.multiLineCommentMarker().second);
 }
 
@@ -3198,7 +3199,7 @@ void TextEdit::updateCursorPositionStatusLightweight()
 
 void TextEdit::applyCursorHeavyUpdate()
 {
-    qDebug() << "Cursor position changed";
+    qCDebug(appLog) << "Cursor position changed";
     // 以赋值形式，清空 Bracket 括号的selection
     // m_beginBracketSelection 和 m_endBracketSelection 将在 updateHighlightBrackets 重新设置
     m_beginBracketSelection = QTextEdit::ExtraSelection();
@@ -3215,7 +3216,7 @@ void TextEdit::applyCursorHeavyUpdate()
     m_pLeftAreaWidget->m_pLineNumberArea->update();
     m_pLeftAreaWidget->m_pBookMarkArea->update();
     m_pLeftAreaWidget->m_pFlodArea->update();
-    qDebug() << "Cursor position changed completed";
+    qCDebug(appLog) << "Cursor position changed completed";
 }
 
 void TextEdit::cursorPositionChanged()
@@ -3240,21 +3241,21 @@ void TextEdit::cursorPositionChanged()
  */
 void TextEdit::cut(bool ignoreCheck)
 {
-    qDebug() << "Cutting text";
+    qCDebug(appLog) << "Cutting text";
     // 添加权限判断是否允许拷贝，剪切；防止后续可能调用接口，冗余处理
     if (!ignoreCheck && !Utils::enableClipCopy(getFilePath())) {
-        qDebug() << "Cutting text with no permission, return";
+        qCDebug(appLog) << "Cutting text with no permission, return";
         return;
     }
 
     if (m_isSelectAll) {
-        qDebug() << "Cutting text with select all";
+        qCDebug(appLog) << "Cutting text with select all";
         QPlainTextEdit::selectAll();
     }
 
     //列编辑添加撤销重做
     if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
-        qDebug() << "Cutting text with alt mod";
+        qCDebug(appLog) << "Cutting text with alt mod";
         QString data;
         for (auto it = m_altModSelections.begin(); it != m_altModSelections.end(); it++) {
             auto text = (*it).cursor.selectedText();
@@ -3270,11 +3271,11 @@ void TextEdit::cut(bool ignoreCheck)
         QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
         clipboard->setText(data);
     } else {
-        qDebug() << "Cutting text with no alt mod";
+        qCDebug(appLog) << "Cutting text with no alt mod";
         QTextCursor cursor = textCursor();
         //有选择内容才剪切
         if (cursor.hasSelection()) {
-            qDebug() << "Cutting text with selection";
+            qCDebug(appLog) << "Cutting text with selection";
             QString data = this->selectedText(true);
             QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(cursor, this);
             m_pUndoStack->push(pDeleteStack);
@@ -3282,9 +3283,9 @@ void TextEdit::cut(bool ignoreCheck)
             clipboard->setText(data);
         }
     }
-    qDebug() << "Cutting text completed";
+    qCDebug(appLog) << "Cutting text completed";
     unsetMark();
-    qDebug() << "Cutting text unset mark completed";
+    qCDebug(appLog) << "Cutting text unset mark completed";
 }
 
 /**
@@ -3293,15 +3294,15 @@ void TextEdit::cut(bool ignoreCheck)
  */
 void TextEdit::copy(bool ignoreCheck)
 {
-    qDebug() << "Copying text";
+    qCDebug(appLog) << "Copying text";
     // 添加权限判断是否允许拷贝，剪切；防止后续可能调用接口，冗余处理
     if (!ignoreCheck && !Utils::enableClipCopy(getFilePath())) {
-        qDebug() << "Copying text with no permission, return";
+        qCDebug(appLog) << "Copying text with no permission, return";
         return;
     }
 
     if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
-        qDebug() << "Copying text with alt mod";
+        qCDebug(appLog) << "Copying text with alt mod";
         QString data;
         for (auto it = m_altModSelections.begin(); it != m_altModSelections.end(); it++) {
             auto text = (*it).cursor.selectedText();
@@ -3313,32 +3314,32 @@ void TextEdit::copy(bool ignoreCheck)
         clipboard->setText(data);
         tryUnsetMark();
     } else {
-        qDebug() << "Copying text with no alt mod";
+        qCDebug(appLog) << "Copying text with no alt mod";
         if (!m_isSelectAll) {
-            qDebug() << "Copying text with no alt mod";
+            qCDebug(appLog) << "Copying text with no alt mod";
             QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
             if (textCursor().hasSelection()) {
-                qDebug() << "Copying text with selection";
+                qCDebug(appLog) << "Copying text with selection";
                 //clipboard->setText(textCursor().selection().toPlainText());
                 clipboard->setText(this->selectedText(true));
                 tryUnsetMark();
             } else {
-                qDebug() << "Copying text with no selection";
+                qCDebug(appLog) << "Copying text with no selection";
                 clipboard->setText(m_highlightWordCacheCursor.selectedText());
             }
         } else {
-            qDebug() << "Copying text with select all";
+            qCDebug(appLog) << "Copying text with select all";
             QClipboard *clipboard = QApplication::clipboard();
             QString text = this->toPlainText();
             clipboard->setText(text);
         }
     }
-    qDebug() << "Copying text completed";
+    qCDebug(appLog) << "Copying text completed";
 }
 
 void TextEdit::paste()
 {
-    qDebug() << "Pasting text";
+    qCDebug(appLog) << "Pasting text";
 #if 0
     //2021-05-25:为解决大文本粘贴卡顿而注释重写
     if (m_isSelectAll)
@@ -3347,16 +3348,16 @@ void TextEdit::paste()
     const QClipboard *clipboard = QApplication::clipboard(); //获取剪切版内容
     auto text = clipboard->text();
     if (text.isEmpty()) {
-        qDebug() << "Pasting text with empty text, return";
+        qCDebug(appLog) << "Pasting text with empty text, return";
         return;
     }
     if (!m_bIsAltMod) {
-        qDebug() << "Pasting text with no alt mod";
+        qCDebug(appLog) << "Pasting text with no alt mod";
         QTextCursor cursor = textCursor();
         insertSelectTextEx(cursor, text);
         unsetMark();
     } else {
-        qDebug() << "Pasting text with alt mod";
+        qCDebug(appLog) << "Pasting text with alt mod";
         insertColumnEditTextEx(text);
     }
 
@@ -3365,7 +3366,7 @@ void TextEdit::paste()
 
     //大文件粘贴-采用分块插入
     if (m_isSelectAll) {
-        qDebug() << "Pasting text with select all";
+        qCDebug(appLog) << "Pasting text with select all";
         QPlainTextEdit::selectAll();
     }
 
@@ -3373,52 +3374,52 @@ void TextEdit::paste()
     auto text = clipboard->text();
 
     if (text.isEmpty()) {
-        qDebug() << "Pasting text with empty text, return";
+        qCDebug(appLog) << "Pasting text with empty text, return";
         return;
     }
     if (!m_bIsAltMod) {
-        qDebug() << "Pasting text with no alt mod";
+        qCDebug(appLog) << "Pasting text with no alt mod";
         int block = 1 * 1024 * 1024;
         int size = text.size();
         if (size > block) {
-            qDebug() << "Pasting text with size greater than block";
+            qCDebug(appLog) << "Pasting text with size greater than block";
             InsertBlockByTextCommand *commond = new InsertBlockByTextCommand(text, this, m_wrapper);
             m_pUndoStack->push(commond);
         } else {
-            qDebug() << "Pasting text with size less than block";
+            qCDebug(appLog) << "Pasting text with size less than block";
             QTextCursor cursor = textCursor();
             insertSelectTextEx(cursor, text);
             unsetMark();
         }
     } else {
-        qDebug() << "Pasting text with alt mod";
+        qCDebug(appLog) << "Pasting text with alt mod";
         insertColumnEditTextEx(text);
     }
 
     m_isSelectAll = false;
-    qDebug() << "Pasting text completed";
+    qCDebug(appLog) << "Pasting text completed";
 }
 
 void TextEdit::highlight()
 {
     QTimer::singleShot(0, this, [&]() {
         if (nullptr != m_wrapper) {
-            qDebug() << "Highlighting with wrapper";
+            qCDebug(appLog) << "Highlighting with wrapper";
             m_wrapper->OnUpdateHighlighter();
         }
     });
-    qDebug() << "Highlighting completed";
+    qCDebug(appLog) << "Highlighting completed";
 }
 
 void TextEdit::selectTextInView()
 {
-    qDebug() << "Selecting text in view";
+    qCDebug(appLog) << "Selecting text in view";
     // 重入守卫：setTextCursor 会触发 QInputMethod::update（在 fcitx5 环境下会
     // 异步回查光标矩形），并改变滚动条/布局，这些会分别触发 slotValueChanged、
     // resizeEvent；它们在 m_isSelectAll 时会再次调用 selectTextInView，形成
     // 自激振荡导致主线程死循环卡死。这里阻断重入。
     if (m_isSelectingInView) {
-        qDebug() << "Selecting text in view skipped: already in progress";
+        qCDebug(appLog) << "Selecting text in view skipped: already in progress";
         return;
     }
     m_isSelectingInView = true;
@@ -3434,7 +3435,7 @@ void TextEdit::selectTextInView()
     this->horizontalScrollBar()->setValue(0);
 
     m_isSelectingInView = false;
-    qDebug() << "Selecting text in view completed";
+    qCDebug(appLog) << "Selecting text in view completed";
 }
 
 /**
@@ -3445,9 +3446,9 @@ void TextEdit::selectTextInView()
  */
 void TextEdit::setSelectAll()
 {
-    qDebug() << "Setting select all";
+    qCDebug(appLog) << "Setting select all";
     if (m_wrapper->getFileLoading()) {
-        qDebug() << "Setting select all with file loading, return";
+        qCDebug(appLog) << "Setting select all with file loading, return";
         return;
     }
 
@@ -3456,18 +3457,18 @@ void TextEdit::setSelectAll()
     selectTextInView();
 
     if (!document()->isEmpty() && IflytekAiAssistant::instance()->valid()) {
-        qDebug() << "Setting select all with valid";
+        qCDebug(appLog) << "Setting select all with valid";
         if (auto clip = qApp->clipboard()) {
-            qDebug() << "Setting select all with clipboard";
+            qCDebug(appLog) << "Setting select all with clipboard";
             // limit the size of the text to avoid performance issue
             static const int kMaxSelectCount = 200000;
             int charCount = document()->characterCount();
 
             if (charCount < kMaxSelectCount) {
-                qDebug() << "Setting select all with clipboard and char count less than kMaxSelectCount";
+                qCDebug(appLog) << "Setting select all with clipboard and char count less than kMaxSelectCount";
                 clip->setText(toPlainText(), QClipboard::Selection);
             } else {
-                qDebug() << "Setting select all with clipboard and char count greater than kMaxSelectCount";
+                qCDebug(appLog) << "Setting select all with clipboard and char count greater than kMaxSelectCount";
                 auto selectCursor = textCursor();
                 selectCursor.setPosition(0);
                 selectCursor.setPosition(kMaxSelectCount, QTextCursor::KeepAnchor);
@@ -3475,350 +3476,350 @@ void TextEdit::setSelectAll()
             }
         }
     }
-    qDebug() << "Setting select all completed";
+    qCDebug(appLog) << "Setting select all completed";
 }
 
 void TextEdit::slotSigColorSelected(bool bSelected, QColor color)
 {
-    qDebug() << "Slot sig color selected";
+    qCDebug(appLog) << "Slot sig color selected";
     if (m_isSelectAll) {
-        qDebug() << "Slot sig color selected with select all";
+        qCDebug(appLog) << "Slot sig color selected with select all";
         QPlainTextEdit::selectAll();
     }
     isMarkCurrentLine(bSelected, color.name());
     renderAllSelections();
     m_colorMarkMenu->close();
     m_rightMenu->close(); //选择颜色关闭菜单　梁卫东　２０２０－０８－２１　０９：３４：５３
-    qDebug() << "Slot sig color selected completed";
+    qCDebug(appLog) << "Slot sig color selected completed";
 }
 
 void TextEdit::slotSigColorAllSelected(bool bSelected, QColor color)
 {
-    qDebug() << "Slot sig color all selected";
+    qCDebug(appLog) << "Slot sig color all selected";
     if (m_isSelectAll) {
-        qDebug() << "Slot sig color all selected with select all";
+        qCDebug(appLog) << "Slot sig color all selected with select all";
         QPlainTextEdit::selectAll();
     }
     isMarkAllLine(bSelected, color.name());
     renderAllSelections();
     m_colorMarkMenu->close();
     m_rightMenu->close(); //选择颜色关闭菜单　梁卫东　２０２０－０８－２１　０９：３４：５３
-    qDebug() << "Slot sig color all selected completed";
+    qCDebug(appLog) << "Slot sig color all selected completed";
 }
 
 void TextEdit::slotCutAction(bool checked)
 {
-    qDebug() << "Slot cut action";
+    qCDebug(appLog) << "Slot cut action";
     Q_UNUSED(checked);
     this->cut();
-    qDebug() << "Slot cut action completed";
+    qCDebug(appLog) << "Slot cut action completed";
 }
 
 void TextEdit::slotCopyAction(bool checked)
 {
-    qDebug() << "Slot copy action";
+    qCDebug(appLog) << "Slot copy action";
     Q_UNUSED(checked);
 
     if (isAbleOperation(Utils::CopyOperation)) {
-        qDebug() << "Slot copy action with able operation";
+        qCDebug(appLog) << "Slot copy action with able operation";
         copy();
     } else {
 #ifdef DTKWIDGET_CLASS_DSizeMode
-        qDebug() << "Slot copy action with dsize mode";
+        qCDebug(appLog) << "Slot copy action with dsize mode";
         Utils::sendFloatMessageFixedFont(this, QIcon(":/images/warning.svg"), tr("Copy failed: not enough memory"));
 #else
-        qDebug() << "Slot copy action with no dsize mode";
+        qCDebug(appLog) << "Slot copy action with no dsize mode";
         DMessageManager::instance()->sendMessage(this, QIcon(":/images/warning.svg"), tr("Copy failed: not enough memory"));
 #endif
     }
-    qDebug() << "Slot copy action completed";
+    qCDebug(appLog) << "Slot copy action completed";
 }
 
 void TextEdit::slotPasteAction(bool checked)
 {
-    qDebug() << "Slot paste action";
+    qCDebug(appLog) << "Slot paste action";
     Q_UNUSED(checked);
     if (isAbleOperation(Utils::PasteOperation)) {
-        qDebug() << "Slot paste action with able operation";
+        qCDebug(appLog) << "Slot paste action with able operation";
         paste();
     } else {
 #ifdef DTKWIDGET_CLASS_DSizeMode
-        qDebug() << "Slot paste action with dsize mode";
+        qCDebug(appLog) << "Slot paste action with dsize mode";
         Utils::sendFloatMessageFixedFont(this, QIcon(":/images/warning.svg"), tr("Paste failed: not enough memory"));
 #else
-        qDebug() << "Slot paste action with no dsize mode";
+        qCDebug(appLog) << "Slot paste action with no dsize mode";
         DMessageManager::instance()->sendMessage(this, QIcon(":/images/warning.svg"), tr("Paste failed: not enough memory"));
 #endif
     }
-    qDebug() << "Slot paste action completed";
+    qCDebug(appLog) << "Slot paste action completed";
 }
 
 void TextEdit::slotDeleteAction(bool checked)
 {
-    qDebug() << "Slot delete action";
+    qCDebug(appLog) << "Slot delete action";
     Q_UNUSED(checked);
     if (m_isSelectAll) {
-        qDebug() << "Slot delete action with select all";
+        qCDebug(appLog) << "Slot delete action with select all";
         QPlainTextEdit::selectAll();
     }
 
     if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
-        qDebug() << "Slot delete action with alt mod";
+        qCDebug(appLog) << "Slot delete action with alt mod";
         QUndoCommand *pDeleteStack = new DeleteBackAltCommand(m_altModSelections, this);
         m_pUndoStack->push(pDeleteStack);
     } else {
         if (textCursor().hasSelection()) {
-            qDebug() << "Slot delete action with selection";
+            qCDebug(appLog) << "Slot delete action with selection";
             QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(textCursor(), this);
             m_pUndoStack->push(pDeleteStack);
         } else {
-            qDebug() << "Slot delete action with no selection";
+            qCDebug(appLog) << "Slot delete action with no selection";
             setTextCursor(m_highlightWordCacheCursor);
         }
     }
-    qDebug() << "Slot delete action completed";
+    qCDebug(appLog) << "Slot delete action completed";
 }
 
 void TextEdit::slotSelectAllAction(bool checked)
 {
-    qDebug() << "Slot select all action";
+    qCDebug(appLog) << "Slot select all action";
     Q_UNUSED(checked);
     setSelectAll();
-    qDebug() << "Slot select all action completed";
+    qCDebug(appLog) << "Slot select all action completed";
 }
 
 bool TextEdit::slotOpenInFileManagerAction(bool checked)
 {
-    qDebug() << "Slot open in file manager action";
+    qCDebug(appLog) << "Slot open in file manager action";
     Q_UNUSED(checked);
     return DDesktopServices::showFileItem(this->getTruePath());
 }
 
 void TextEdit::slotAddComment(bool checked)
 {
-    qDebug() << "Slot add comment action";
+    qCDebug(appLog) << "Slot add comment action";
     Q_UNUSED(checked);
     toggleComment(true);
-    qDebug() << "Slot add comment action completed";
+    qCDebug(appLog) << "Slot add comment action completed";
 }
 
 void TextEdit::slotCancelComment(bool checked)
 {
-    qDebug() << "Slot cancel comment action";
+    qCDebug(appLog) << "Slot cancel comment action";
     Q_UNUSED(checked);
     toggleComment(false);
-    qDebug() << "Slot cancel comment action completed";
+    qCDebug(appLog) << "Slot cancel comment action completed";
 }
 
 void TextEdit::slotVoiceReadingAction(bool checked)
 {
-    qDebug() << "Slot voice reading action";
+    qCDebug(appLog) << "Slot voice reading action";
     Q_UNUSED(checked);
     auto ret = IflytekAiAssistant::instance()->textToSpeech();
     if (IflytekAiAssistant::Success != ret) {
-        qDebug() << "Slot voice reading action with error";
+        qCDebug(appLog) << "Slot voice reading action with error";
         Q_EMIT popupNotify(IflytekAiAssistant::instance()->errorString(ret), true);
     }
 
     emit signal_readingPath();
-    qDebug() << "Slot voice reading action completed";
+    qCDebug(appLog) << "Slot voice reading action completed";
 }
 
 bool TextEdit::slotStopReadingAction(bool checked)
 {
-    qDebug() << "Slot stop reading action";
+    qCDebug(appLog) << "Slot stop reading action";
     Q_UNUSED(checked);
     bool ret = IflytekAiAssistant::instance()->stopTtsDirectly();
-    qDebug() << "Slot stop reading action completed";
+    qCDebug(appLog) << "Slot stop reading action completed";
     return ret;
 }
 
 void TextEdit::slotdictationAction(bool checked)
 {
-    qDebug() << "Slot dictation action";
+    qCDebug(appLog) << "Slot dictation action";
     Q_UNUSED(checked);
     auto ret = IflytekAiAssistant::instance()->speechToText();
     if (IflytekAiAssistant::Success != ret) {
-        qDebug() << "Slot dictation action with error";
+        qCDebug(appLog) << "Slot dictation action with error";
         Q_EMIT popupNotify(IflytekAiAssistant::instance()->errorString(ret), true);
     }
-    qDebug() << "Slot dictation action completed";
+    qCDebug(appLog) << "Slot dictation action completed";
 }
 
 void TextEdit::slotColumnEditAction(bool checked)
 {
     Q_UNUSED(checked);
-    qDebug() << "Slot column edit action";
+    qCDebug(appLog) << "Slot column edit action";
 #ifdef DTKWIDGET_CLASS_DSizeMode
     Utils::sendFloatMessageFixedFont(this, QIcon(":/images/ok.svg"), tr("Press ALT and click lines to edit in column mode"));
 #else
     DMessageManager::instance()->sendMessage(this, QIcon(":/images/ok.svg"), tr("Press ALT and click lines to edit in column mode"));
 #endif
-    qDebug() << "Slot column edit action completed";
+    qCDebug(appLog) << "Slot column edit action completed";
 }
 
 void TextEdit::slotPreBookMarkAction(bool checked)
 {
-    qDebug() << "Slot pre book mark action";
+    qCDebug(appLog) << "Slot pre book mark action";
     Q_UNUSED(checked);
     int line = getLineFromPoint(m_mouseClickPos);
     int index = m_listBookmark.indexOf(line);
 
     if (index == 0) {
-        qDebug() << "Slot pre book mark action with index 0";
+        qCDebug(appLog) << "Slot pre book mark action with index 0";
         jumpToLine(m_listBookmark.last(), true);
     } else {
-        qDebug() << "Slot pre book mark action with index not 0";
+        qCDebug(appLog) << "Slot pre book mark action with index not 0";
         jumpToLine(m_listBookmark.value(index - 1), true);
     }
-    qDebug() << "Slot pre book mark action completed";
+    qCDebug(appLog) << "Slot pre book mark action completed";
 }
 
 void TextEdit::slotNextBookMarkAction(bool checked)
 {
-    qDebug() << "Slot next book mark action";
+    qCDebug(appLog) << "Slot next book mark action";
     Q_UNUSED(checked);
     int line = getLineFromPoint(m_mouseClickPos);
     int index = m_listBookmark.indexOf(line);
 
     if (index == -1 && !m_listBookmark.isEmpty()) {
-        qDebug() << "Slot next book mark action with index -1";
+        qCDebug(appLog) << "Slot next book mark action with index -1";
         jumpToLine(m_listBookmark.last(), false);
         // 无书签命中时跳至末个书签后直接返回，避免落入下方 if/else 二次跳转
         return;
     }
 
     if (index == m_listBookmark.count() - 1) {
-        qDebug() << "Slot next book mark action with index equal to count - 1";
+        qCDebug(appLog) << "Slot next book mark action with index equal to count - 1";
         jumpToLine(m_listBookmark.first(), false);
     } else {
-        qDebug() << "Slot next book mark action with index not equal to count - 1";
+        qCDebug(appLog) << "Slot next book mark action with index not equal to count - 1";
         jumpToLine(m_listBookmark.value(index + 1), false);
     }
-    qDebug() << "Slot next book mark action completed";
+    qCDebug(appLog) << "Slot next book mark action completed";
 }
 
 void TextEdit::slotClearBookMarkAction(bool checked)
 {
-    qDebug() << "Slot clear book mark action";
+    qCDebug(appLog) << "Slot clear book mark action";
     Q_UNUSED(checked);
     m_listBookmark.clear();
-    qDebug() << "ClearBookMark:" << m_listBookmark;
+    qCDebug(appLog) << "ClearBookMark:" << m_listBookmark;
     m_pLeftAreaWidget->m_pBookMarkArea->update();
-    qDebug() << "Slot clear book mark action completed";
+    qCDebug(appLog) << "Slot clear book mark action completed";
 }
 
 void TextEdit::slotFlodAllLevel(bool checked)
 {
-    qDebug() << "Slot flod all level action";
+    qCDebug(appLog) << "Slot flod all level action";
     Q_UNUSED(checked);
     flodOrUnflodAllLevel(true);
-    qDebug() << "Slot flod all level action completed";
+    qCDebug(appLog) << "Slot flod all level action completed";
 }
 
 void TextEdit::slotUnflodAllLevel(bool checked)
 {
-    qDebug() << "Slot unflod all level action";
+    qCDebug(appLog) << "Slot unflod all level action";
     Q_UNUSED(checked);
     flodOrUnflodAllLevel(false);
-    qDebug() << "Slot unflod all level action completed";
+    qCDebug(appLog) << "Slot unflod all level action completed";
 }
 
 void TextEdit::slotFlodCurrentLevel(bool checked)
 {
-    qDebug() << "Slot flod current level action";
+    qCDebug(appLog) << "Slot flod current level action";
     Q_UNUSED(checked);
     flodOrUnflodCurrentLevel(true);
-    qDebug() << "Slot flod current level action completed";
+    qCDebug(appLog) << "Slot flod current level action completed";
 }
 
 void TextEdit::slotUnflodCurrentLevel(bool checked)
 {
-    qDebug() << "Slot unflod current level action";
+    qCDebug(appLog) << "Slot unflod current level action";
     Q_UNUSED(checked);
     flodOrUnflodCurrentLevel(false);
-    qDebug() << "Slot unflod current level action completed";
+    qCDebug(appLog) << "Slot unflod current level action completed";
 }
 
 void TextEdit::slotCancleMarkAllLine(bool checked)
 {
-    qDebug() << "Slot cancle mark all line action";
+    qCDebug(appLog) << "Slot cancle mark all line action";
     Q_UNUSED(checked);
     isMarkAllLine(false);
-    qDebug() << "Slot cancle mark all line action completed";
+    qCDebug(appLog) << "Slot cancle mark all line action completed";
 }
 
 void TextEdit::slotCancleLastMark(bool checked)
 {
-    qDebug() << "Slot cancle last mark action";
+    qCDebug(appLog) << "Slot cancle last mark action";
     Q_UNUSED(checked);
     cancelLastMark();
-    qDebug() << "Slot cancle last mark action completed";
+    qCDebug(appLog) << "Slot cancle last mark action completed";
 }
 
 void TextEdit::slotUndoAvailable(bool undoIsAvailable)
 {
-    qDebug() << "Slot undo available action";
+    qCDebug(appLog) << "Slot undo available action";
     m_canUndo = undoIsAvailable;
-    qDebug() << "Slot undo available action completed";
+    qCDebug(appLog) << "Slot undo available action completed";
 }
 
 void TextEdit::slotRedoAvailable(bool redoIsAvailable)
 {
-    qDebug() << "Slot redo available action";
+    qCDebug(appLog) << "Slot redo available action";
     m_canRedo = redoIsAvailable;
-    qDebug() << "Slot redo available action completed";
+    qCDebug(appLog) << "Slot redo available action completed";
 }
 
 void TextEdit::redo_()
 {
-    qDebug() << "Starting redo operation";
+    qCDebug(appLog) << "Starting redo operation";
     flushDeferredCursorUpdate();
     if (!m_pUndoStack->canRedo()) {
-        qDebug() << "Redo operation skipped - nothing to redo";
+        qCDebug(appLog) << "Redo operation skipped - nothing to redo";
         return;
     }
 
     // Get current stack info before redo
     const bool needUpdate = refreshUndoRedoColumnStatus();
-    qDebug() << "Redo operation - need update selections:" << needUpdate;
+    qCDebug(appLog) << "Redo operation - need update selections:" << needUpdate;
 
     m_pUndoStack->redo();
-    qDebug() << "Redo operation executed, new stack index:" << m_pUndoStack->index();
+    qCDebug(appLog) << "Redo operation executed, new stack index:" << m_pUndoStack->index();
 
     if (needUpdate) {
         renderAllSelections();
         update();
-        qDebug() << "Selections updated after redo";
+        qCDebug(appLog) << "Selections updated after redo";
     }
 
     if (m_pUndoStack->index() == m_lastSaveIndex) {
         this->m_wrapper->window()->updateModifyStatus(m_sFilePath, false);
         this->m_wrapper->setTemFile(false);
         this->document()->setModified(false);
-        qDebug() << "File modification status reset after redo";
+        qCDebug(appLog) << "File modification status reset after redo";
     }
-    qDebug() << "Redo operation completed successfully";
+    qCDebug(appLog) << "Redo operation completed successfully";
 }
 
 void TextEdit::undo_()
 {
-    qDebug() << "Starting undo operation";
-    qDebug() << "Starting undo operation";
+    qCDebug(appLog) << "Starting undo operation";
+    qCDebug(appLog) << "Starting undo operation";
     flushDeferredCursorUpdate();
     if (!m_pUndoStack->canUndo()) {
-        qDebug() << "Undo operation skipped - nothing to undo";
+        qCDebug(appLog) << "Undo operation skipped - nothing to undo";
         return;
     }
 
     m_pUndoStack->undo();
-    qDebug() << "Undo operation executed, new stack index:" << m_pUndoStack->index();
+    qCDebug(appLog) << "Undo operation executed, new stack index:" << m_pUndoStack->index();
 
     const bool needUpdate = refreshUndoRedoColumnStatus();
     if (needUpdate) {
         renderAllSelections();
         update();
-        qDebug() << "Selections updated after undo";
+        qCDebug(appLog) << "Selections updated after undo";
     }
 
     // 对撤销栈清空的情况下，有两种文件仍需保留*号(重做无需如下判定)
@@ -3830,9 +3831,9 @@ void TextEdit::undo_()
         this->m_wrapper->window()->updateModifyStatus(m_sFilePath, false);
         this->m_wrapper->setTemFile(false);
         this->document()->setModified(false);
-        qDebug() << "File modification status reset after undo";
+        qCDebug(appLog) << "File modification status reset after undo";
     }
-    qDebug() << "Undo operation completed successfully";
+    qCDebug(appLog) << "Undo operation completed successfully";
 }
 
 /*!
@@ -3845,14 +3846,14 @@ void TextEdit::undo_()
  */
 void TextEdit::moveText(int from, int to, const QString &text, bool copy)
 {
-    qDebug() << "Moving text from" << from << "to" << to << "with text" << text << "and copy" << copy;
+    qCDebug(appLog) << "Moving text from" << from << "to" << to << "with text" << text << "and copy" << copy;
     auto cursor = this->textCursor();
     auto list = new UndoList;
     cursor.setPosition(from);
     QUndoCommand *delCommand = nullptr;
     // 拷贝模式下无需删除文本
     if (!copy) {
-        qDebug() << "Moving text with delete";
+        qCDebug(appLog) << "Moving text with delete";
         cursor.setPosition(from + text.size(), QTextCursor::KeepAnchor);
         delCommand = new DeleteBackCommand(cursor, this);
     }
@@ -3863,17 +3864,17 @@ void TextEdit::moveText(int from, int to, const QString &text, bool copy)
     //the positon of 'from' is on the left of the position of 'to',
     //therefore,firstly do the insert operation.
     if (from < to) {
-        qDebug() << "Moving text with from < to";
+        qCDebug(appLog) << "Moving text with from < to";
         list->appendCom(insertCommand);
         if (!copy) {
-            qDebug() << "Moving text with delete and from < to";
+            qCDebug(appLog) << "Moving text with delete and from < to";
             list->appendCom(delCommand);
         }
         m_pUndoStack->push(list);
     } else if (from > to) {
-        qDebug() << "Moving text with from > to";
+        qCDebug(appLog) << "Moving text with from > to";
         if (!copy) {
-            qDebug() << "Moving text with delete and from > to";
+            qCDebug(appLog) << "Moving text with delete and from > to";
             list->appendCom(delCommand);
         }
         list->appendCom(insertCommand);
@@ -3885,7 +3886,7 @@ void TextEdit::moveText(int from, int to, const QString &text, bool copy)
             delete delCommand;
         }
     }
-    qDebug() << "Moving text completed";
+    qCDebug(appLog) << "Moving text completed";
 }
 
 /**
@@ -3900,33 +3901,33 @@ void TextEdit::moveText(int from, int to, const QString &text, bool copy)
 QTextCursor TextEdit::findCursor(const QString &substr, const QString &text, int from, bool backward,
                                  int cursorPos, Qt::CaseSensitivity caseFlag)
 {
-    qDebug() << "Finding text:" << substr.left(20) << "from position:" << from
+    qCDebug(appLog) << "Finding text:" << substr.left(20) << "from position:" << from
                << "direction:" << (backward ? "backward" : "forward");
 
     // 处理换行符为 \r\n (光标计算时被视为单个字符)的情况，移除多计算的字符数
     // text 均为 \n 结尾
     QString findSubStr = substr;
     if (BottomBar::Windows == m_wrapper->bottomBar()->getEndlineFormat()) {
-        qDebug() << "Finding text with windows endline format";
+        qCDebug(appLog) << "Finding text with windows endline format";
         findSubStr.replace("\r\n", "\n");
     }
 
     int index = -1;
     if (backward) {
-        qDebug() << "Finding text with backward direction";
+        qCDebug(appLog) << "Finding text with backward direction";
         index = text.lastIndexOf(findSubStr, from, caseFlag);
     } else {
-        qDebug() << "Finding text with forward direction";
+        qCDebug(appLog) << "Finding text with forward direction";
         index = text.indexOf(findSubStr, from, caseFlag);
     }
     if (-1 != index) {
-        qDebug() << "Find successful at position:" << index;
+        qCDebug(appLog) << "Find successful at position:" << index;
         auto cursor = this->textCursor();
         cursor.setPosition(index + cursorPos);
         cursor.setPosition(cursor.position() + findSubStr.size(), QTextCursor::KeepAnchor);
         return cursor;
     } else {
-        qDebug() << "Find failed - text not found";
+        qCDebug(appLog) << "Find failed - text not found";
         return QTextCursor();
     }
 }
@@ -3938,22 +3939,22 @@ QTextCursor TextEdit::findCursor(const QString &substr, const QString &text, int
  */
 void TextEdit::onPressedLineNumber(const QPoint &point)
 {
-    qDebug() << "On pressed line number";
+    qCDebug(appLog) << "On pressed line number";
     // 在执行大文件加载过程中，由于 cursorForPosition() 计算耗时，不响应点击处理
     if (TextEdit::FileOpenBegin == m_LeftAreaUpdateState) {
-        qDebug() << "On pressed line number with file open begin, return";
+        qCDebug(appLog) << "On pressed line number with file open begin, return";
         return;
     }
 
     if (point.x() < 0 || point.x() > m_pLeftAreaWidget->m_pLineNumberArea->width()) {
-        qDebug() << "On pressed line number with point x out of range, return";
+        qCDebug(appLog) << "On pressed line number with point x out of range, return";
         return;
     }
 
     int offset = 0;
     //the language currently set by the system is Tibetan.
     if ("bo_CN" == Utils::getSystemLan()) {
-        qDebug() << "On pressed line number with Tibetan language";
+        qCDebug(appLog) << "On pressed line number with Tibetan language";
         offset = 2;
     }
 
@@ -3961,22 +3962,22 @@ void TextEdit::onPressedLineNumber(const QPoint &point)
     QTextBlock possibleBlock = cursorForPosition(checkPoint).block();
 
     if (possibleBlock.isValid()) {
-        qDebug() << "On pressed line number with possible block";
+        qCDebug(appLog) << "On pressed line number with possible block";
         QTextCursor cursor = textCursor();
         cursor.setPosition(possibleBlock.position(), QTextCursor::MoveAnchor);
 
         // 尾行光标不调整到下一行
         if (possibleBlock == document()->lastBlock()) {
-            qDebug() << "On pressed line number with last block";
+            qCDebug(appLog) << "On pressed line number with last block";
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
         } else {
-            qDebug() << "On pressed line number with not last block";
+            qCDebug(appLog) << "On pressed line number with not last block";
             cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
         }
 
         setTextCursor(cursor);
     }
-    qDebug() << "On pressed line number completed";
+    qCDebug(appLog) << "On pressed line number completed";
 }
 
 /**
@@ -3987,7 +3988,7 @@ void TextEdit::onPressedLineNumber(const QPoint &point)
  */
 QString TextEdit::selectedText(bool checkCRLF)
 {
-    qDebug() << "Getting selected text";
+    qCDebug(appLog) << "Getting selected text";
     auto cursor = this->textCursor();
     auto temp = cursor;
     int startpos = std::min(cursor.anchor(), cursor.position());
@@ -3999,7 +4000,7 @@ QString TextEdit::selectedText(bool checkCRLF)
     endblock = cursor.blockNumber();
     // 仅单个文本块，直接提取文本数据
     if (startblock == endblock) {
-        qDebug() << "Getting selected text with single block, return";
+        qCDebug(appLog) << "Getting selected text with single block, return";
         return temp.selectedText();
     }
 
@@ -4013,7 +4014,7 @@ QString TextEdit::selectedText(bool checkCRLF)
     // 不同风格使用不同换行符，默认不替换，仅在剪贴板、保存文件等时设置
     QString endLine = "\n";
     if (checkCRLF && BottomBar::Windows == m_wrapper->bottomBar()->getEndlineFormat()) {
-        qDebug() << "Getting selected text with windows endline format";
+        qCDebug(appLog) << "Getting selected text with windows endline format";
         endLine = "\r\n";
     }
 
@@ -4027,7 +4028,7 @@ QString TextEdit::selectedText(bool checkCRLF)
 
     // 取得尾部文本块内容
     if (cursor.position() < endpos) {
-        qDebug() << "Getting selected text with tail block";
+        qCDebug(appLog) << "Getting selected text with tail block";
         // 判断是否尾部文本块达到当前文本块末尾，到达末尾需要将 U+2029 替换为 \n
         bool needAdjustNewline = bool(cursor.position() + cursor.block().length() == endpos);
         cursor.setPosition(endpos, QTextCursor::KeepAnchor);
@@ -4039,7 +4040,7 @@ QString TextEdit::selectedText(bool checkCRLF)
         }
     }
 
-    qDebug() << "Getting selected text completed";
+    qCDebug(appLog) << "Getting selected text completed";
     return text;
 }
 
@@ -4052,11 +4053,11 @@ QString TextEdit::selectedText(bool checkCRLF)
 
 void TextEdit::onEndlineFormatChanged(BottomBar::EndlineFormat from, BottomBar::EndlineFormat to)
 {
-    qDebug() << "On endline format changed";
+    qCDebug(appLog) << "On endline format changed";
     //auto endlineCom = new EndlineFormartCommand(this,m_wrapper->bottomBar(),from,to);
     //m_pUndoStack->push(endlineCom);
     m_wrapper->bottomBar()->setEndlineMenuText(to);
-    qDebug() << "On endline format changed completed";
+    qCDebug(appLog) << "On endline format changed completed";
 }
 
 /**
@@ -4064,10 +4065,10 @@ void TextEdit::onEndlineFormatChanged(BottomBar::EndlineFormat from, BottomBar::
  */
 void TextEdit::onAppPaletteChanged()
 {
-    qDebug() << "On app palette changed";
+    qCDebug(appLog) << "On app palette changed";
     // 判断是否处于列选取状态
     if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
-        qDebug() << "On app palette changed with alt mod";
+        qCDebug(appLog) << "On app palette changed with alt mod";
         QColor highlightBackground = DGuiApplicationHelper::instance()->applicationPalette().color(QPalette::Highlight);
         for (auto &selection : m_altModSelections) {
             selection.format.setBackground(highlightBackground);
@@ -4075,12 +4076,12 @@ void TextEdit::onAppPaletteChanged()
         // 更新高亮状态
         renderAllSelections();
     }
-    qDebug() << "On app palette changed completed";
+    qCDebug(appLog) << "On app palette changed completed";
 }
 
 void TextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &closeChar)
 {
-    qDebug() << "Updating highlight brackets";
+    qCDebug(appLog) << "Updating highlight brackets";
     QTextDocument *doc = document();
     QTextCursor cursor = textCursor();
     int position = cursor.position();
@@ -4090,7 +4091,7 @@ void TextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &close
     cursor.clearSelection();
 
     if (!bracketBeginCursor.isNull() || !bracketEndCursor.isNull()) {
-        qDebug() << "Updating highlight brackets with null";
+        qCDebug(appLog) << "Updating highlight brackets with null";
         bracketBeginCursor.setCharFormat(QTextCharFormat());
         bracketEndCursor.setCharFormat(QTextCharFormat());
         bracketBeginCursor = bracketEndCursor = QTextCursor();
@@ -4102,30 +4103,30 @@ void TextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &close
             doc->characterAt(position) == closeChar ||
             doc->characterAt(position - 1) == openChar ||
             doc->characterAt(position - 1) == closeChar) {
-        qDebug() << "Updating highlight brackets with character at position";
+        qCDebug(appLog) << "Updating highlight brackets with character at position";
         bool forward = doc->characterAt(position) == openChar ||
                        doc->characterAt(position - 1) == openChar;
 
         if (forward) {
-            qDebug() << "Updating highlight brackets with forward";
+            qCDebug(appLog) << "Updating highlight brackets with forward";
             if (doc->characterAt(position) == openChar) {
-                qDebug() << "Updating highlight brackets with openChar";
+                qCDebug(appLog) << "Updating highlight brackets with openChar";
                 position++;
             } else {
-                qDebug() << "Updating highlight brackets with closeChar";
+                qCDebug(appLog) << "Updating highlight brackets with closeChar";
                 cursor.setPosition(position - 1);
             }
 
             begin = openChar;
             end = closeChar;
         } else {
-            qDebug() << "Updating highlight brackets with backward";
+            qCDebug(appLog) << "Updating highlight brackets with backward";
             if (doc->characterAt(position) == closeChar) {
-                qDebug() << "Updating highlight brackets with closeChar";
+                qCDebug(appLog) << "Updating highlight brackets with closeChar";
                 cursor.setPosition(position + 1);
                 position -= 1;
             } else {
-                qDebug() << "Updating highlight brackets with openChar";
+                qCDebug(appLog) << "Updating highlight brackets with openChar";
                 position -= 2;
             }
 
@@ -4143,20 +4144,20 @@ void TextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &close
         QChar c;
         while (!(c = doc->characterAt(position)).isNull()) {
             if (inCodeString) {
-                qDebug() << "Updating highlight brackets with in code string";
+                qCDebug(appLog) << "Updating highlight brackets with in code string";
                 // 判断 " 是否存在转义字符，若不存在，则退出字符串模式
                 // 注意回退(!forward)模式下，position = 0，characterAt(position - 1) 将返回空字符，同样符合判断，不会触发越界访问
                 if ('"' == c && '\\' != doc->characterAt(position - 1)) {
-                    qDebug() << "Updating highlight brackets with not in code string";
+                    qCDebug(appLog) << "Updating highlight brackets with not in code string";
                     inCodeString = false;
                 }
             } else {
-                qDebug() << "Updating highlight brackets with not in code string";
+                qCDebug(appLog) << "Updating highlight brackets with not in code string";
                 if (c == begin) {
-                    qDebug() << "Updating highlight brackets with begin";
+                    qCDebug(appLog) << "Updating highlight brackets with begin";
                     braceDepth++;
                 } else if (c == end) {
-                    qDebug() << "Updating highlight brackets with end";
+                    qCDebug(appLog) << "Updating highlight brackets with end";
                     braceDepth--;
 
                     if (!braceDepth) {
@@ -4166,7 +4167,7 @@ void TextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &close
                         break;
                     }
                 } else if ('"' == c) {
-                    qDebug() << "Updating highlight brackets with \"";
+                    qCDebug(appLog) << "Updating highlight brackets with \"";
                     inCodeString = true;
                 }
             }
@@ -4176,7 +4177,7 @@ void TextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &close
 
         // cannot find the end bracket to not need to highlight.
         if (!bracketEndCursor.isNull()) {
-            qDebug() << "Updating highlight brackets with not null";
+            qCDebug(appLog) << "Updating highlight brackets with not null";
             m_beginBracketSelection.cursor = bracketBeginCursor;
             m_beginBracketSelection.format = m_bracketMatchFormat;
 
@@ -4184,15 +4185,15 @@ void TextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &close
             m_endBracketSelection.format = m_bracketMatchFormat;
         }
     }
-    qDebug() << "Updating highlight brackets completed";
+    qCDebug(appLog) << "Updating highlight brackets completed";
 }
 
 int TextEdit::getFirstVisibleBlockId() const
 {
-    qDebug() << "Getting first visible block id";
+    qCDebug(appLog) << "Getting first visible block id";
     QTextCursor cur = QTextCursor(this->document());
     if (cur.isNull()) {
-        qDebug() << "Getting first visible block id with null, return 0";
+        qCDebug(appLog) << "Getting first visible block id with null, return 0";
         return 0;
     }
     cur.movePosition(QTextCursor::Start);
@@ -4201,11 +4202,11 @@ int TextEdit::getFirstVisibleBlockId() const
     QTextBlock startBlock, endBlock;
 
     if (verticalScrollBar()->maximum() > height()) {
-        qDebug() << "Getting first visible block id with maximum > height";
+        qCDebug(appLog) << "Getting first visible block id with maximum > height";
         startPoint = QPointF(0, height() / verticalScrollBar()->maximum() * verticalScrollBar()->value()).toPoint();
         //endPoint = QPointF(0,height() + height()/verticalScrollBar()->maximum()*verticalScrollBar()->value()).toPoint();
     } else if (verticalScrollBar()->maximum() > 0 && verticalScrollBar()->maximum() <= height()) {
-        qDebug() << "Getting first visible block id with maximum > 0 and maximum <= height";
+        qCDebug(appLog) << "Getting first visible block id with maximum > 0 and maximum <= height";
         startPoint = QPointF(0, verticalScrollBar()->value() / verticalScrollBar()->maximum()).toPoint();
     }
 
@@ -4213,47 +4214,47 @@ int TextEdit::getFirstVisibleBlockId() const
     startBlock = document()->findBlock(cur.position());
     cur.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
     if (startBlock.text() != cur.selection().toPlainText()) {
-        qDebug() << "Getting first visible block id with text not equal to selection";
+        qCDebug(appLog) << "Getting first visible block id with text not equal to selection";
         return startBlock.blockNumber() + 1;
     }
 
-    qDebug() << "Getting first visible block id completed";
+    qCDebug(appLog) << "Getting first visible block id completed";
     return startBlock.blockNumber();
 }
 
 void TextEdit::setLeftAreaUpdateState(TextEdit::UpdateOperationType statevalue)
 {
-    qDebug() << "Setting left area update state";
+    qCDebug(appLog) << "Setting left area update state";
     if (statevalue != m_LeftAreaUpdateState) {
-        qDebug() << "Setting left area update state with statevalue not equal to m_LeftAreaUpdateState";
+        qCDebug(appLog) << "Setting left area update state with statevalue not equal to m_LeftAreaUpdateState";
         m_LeftAreaUpdateState = statevalue;
 
         // 当文件读取完成时，手动触发更新界面
         if (TextEdit::FileOpenEnd == m_LeftAreaUpdateState) {
-            qDebug() << "Setting left area update state with FileOpenEnd";
+            qCDebug(appLog) << "Setting left area update state with FileOpenEnd";
             m_pLeftAreaWidget->updateAll();
         }
     }
-    qDebug() << "Setting left area update state completed";
+    qCDebug(appLog) << "Setting left area update state completed";
 }
 
 TextEdit::UpdateOperationType TextEdit::getLeftAreaUpdateState()
 {
-    qDebug() << "Getting left area update state";
+    qCDebug(appLog) << "Getting left area update state";
     return m_LeftAreaUpdateState;
 }
 //line 开始处理的行号  isvisable是否折叠  iInitnum左括号默认开始计算的数量  isFirstLine是否是第一行，因为第一行默认不折叠
 bool TextEdit::getNeedControlLine(int line, bool isVisable)
 {
-    qDebug() << "Processing code fold control for line" << line << "visibility:" << (isVisable ? "show" : "hide");
+    qCDebug(appLog) << "Processing code fold control for line" << line << "visibility:" << (isVisable ? "show" : "hide");
     // 查询折叠区域文本块范围
     QTextBlock beginBlock, endBlock, curBlock;
     bool bFoundBrace = findFoldBlock(line, beginBlock, endBlock, curBlock);
 
-    qDebug() << "Found matching brace:" << bFoundBrace;
+    qCDebug(appLog) << "Found matching brace:" << bFoundBrace;
     //没有找到右括弧折叠左括弧后面所有行
     if (!bFoundBrace) {
-        qDebug() << "No matching closing brace found, folding all subsequent lines";
+        qCDebug(appLog) << "No matching closing brace found, folding all subsequent lines";
         //遍历最后右括弧文本块 设置块隐藏或显示
         int blockCount = 0;
         while (beginBlock.isValid()) {
@@ -4262,14 +4263,14 @@ bool TextEdit::getNeedControlLine(int line, bool isVisable)
             beginBlock = beginBlock.next();
             blockCount++;
         }
-        qDebug() << "Processed" << blockCount << "blocks with visibility:" << (isVisable ? "shown" : "hidden");
+        qCDebug(appLog) << "Processed" << blockCount << "blocks with visibility:" << (isVisable ? "shown" : "hidden");
         return true;
         //没有找到匹配左右括弧 //如果左右"{" "}"在同一行不折叠
     } else if (!bFoundBrace || endBlock == curBlock) {
-        qDebug() << "Braces on same line or no proper match found, skipping fold operation";
+        qCDebug(appLog) << "Braces on same line or no proper match found, skipping fold operation";
         return false;
     } else {
-        qDebug() << "Processing fold region from line" << line << "to line" << endBlock.blockNumber();
+        qCDebug(appLog) << "Processing fold region from line" << line << "to line" << endBlock.blockNumber();
         //遍历最后右括弧文本块 设置块隐藏或显示
         int blockCount = 0;
         while (beginBlock != endBlock && beginBlock.isValid()) {
@@ -4288,7 +4289,7 @@ bool TextEdit::getNeedControlLine(int line, bool isVisable)
             viewport()->adjustSize();
         }
 
-        qDebug() << "Fold operation completed, processed" << blockCount << "blocks with visibility:" << (isVisable ? "shown" : "hidden");
+        qCDebug(appLog) << "Fold operation completed, processed" << blockCount << "blocks with visibility:" << (isVisable ? "shown" : "hidden");
         return true;
     }
 }
@@ -4297,11 +4298,11 @@ bool TextEdit::event(QEvent *event)
 {
     switch (event->type()) {
         case QEvent::Gesture:
-            qDebug() << "Event gesture";
+            qCDebug(appLog) << "Event gesture";
             gestureEvent(static_cast<QGestureEvent *>(event));
             break;
         case QEvent::PaletteChange:
-            qDebug() << "Event palette change";
+            qCDebug(appLog) << "Event palette change";
             // 调色板更新时更新选取高亮颜色
             onAppPaletteChanged();
             break;
@@ -4314,134 +4315,134 @@ bool TextEdit::event(QEvent *event)
 
 bool TextEdit::gestureEvent(QGestureEvent *event)
 {
-    qDebug() << "Gesture event";
+    qCDebug(appLog) << "Gesture event";
     if (QGesture *tap = event->gesture(Qt::TapGesture)) {
-        qDebug() << "Gesture tap";
+        qCDebug(appLog) << "Gesture tap";
         tapGestureTriggered(static_cast<QTapGesture *>(tap));
     }
     if (QGesture *tapAndHold = event->gesture(Qt::TapAndHoldGesture)) {
-        qDebug() << "Gesture tap and hold";
+        qCDebug(appLog) << "Gesture tap and hold";
         tapAndHoldGestureTriggered(static_cast<QTapAndHoldGesture *>(tapAndHold));
     }
     if (QGesture *pan = event->gesture(Qt::PanGesture)) {
-        qDebug() << "Gesture pan";
+        qCDebug(appLog) << "Gesture pan";
         panTriggered(static_cast<QPanGesture *>(pan));
     }
     if (QGesture *pinch = event->gesture(Qt::PinchGesture)) {
-        qDebug() << "Gesture pinch";
+        qCDebug(appLog) << "Gesture pinch";
         pinchTriggered(static_cast<QPinchGesture *>(pinch));
     }
     if (QGesture *swipe = event->gesture(Qt::SwipeGesture)) {
-        qDebug() << "Gesture swipe";
+        qCDebug(appLog) << "Gesture swipe";
         swipeTriggered(static_cast<QSwipeGesture *>(swipe));
     }
-    qDebug() << "Gesture event completed, return true";
+    qCDebug(appLog) << "Gesture event completed, return true";
     return true;
 }
 
 void TextEdit::tapGestureTriggered(QTapGesture *tap)
 {
-    qDebug() << "Tap gesture triggered";
+    qCDebug(appLog) << "Tap gesture triggered";
     //单指点击函数
     switch (tap->state()) {
     case Qt::GestureStarted: {
         m_gestureAction = GA_tap;
         m_tapBeginTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-        qDebug() << "Tap gesture triggered with started";
+        qCDebug(appLog) << "Tap gesture triggered with started";
         break;
     }
     case Qt::GestureUpdated: {
         m_gestureAction = GA_slide;
-        qDebug() << "Tap gesture triggered with updated";
+        qCDebug(appLog) << "Tap gesture triggered with updated";
         break;
     }
     case Qt::GestureCanceled: {
-        qDebug() << "Tap gesture triggered with canceled";
+        qCDebug(appLog) << "Tap gesture triggered with canceled";
         //根据时间长短区分轻触滑动
         qint64 timeSpace = QDateTime::currentDateTime().toMSecsSinceEpoch() - m_tapBeginTime;
         if (timeSpace < TAP_MOVE_DELAY || m_slideContinueX || m_slideContinueY) {
             m_slideContinueX = false;
             m_slideContinueY = false;
             m_gestureAction = GA_slide;
-            qDebug() << "slide start" << timeSpace;
+            qCDebug(appLog) << "slide start" << timeSpace;
         } else {
-            qDebug() << "null start" << timeSpace;
+            qCDebug(appLog) << "null start" << timeSpace;
             m_gestureAction = GA_null;
         }
         break;
     }
     case Qt::GestureFinished: {
-        qDebug() << "Tap gesture triggered with finished";
+        qCDebug(appLog) << "Tap gesture triggered with finished";
         m_gestureAction = GA_null;
         break;
     }
     default: {
-        qDebug() << "Tap gesture triggered with default";
+        qCDebug(appLog) << "Tap gesture triggered with default";
         Q_ASSERT(false);
         break;
     }
     }
-    qDebug() << "Tap gesture triggered completed";
+    qCDebug(appLog) << "Tap gesture triggered completed";
 }
 
 void TextEdit::tapAndHoldGestureTriggered(QTapAndHoldGesture *tapAndHold)
 {
-    qDebug() << "Tap and hold gesture triggered";
+    qCDebug(appLog) << "Tap and hold gesture triggered";
     //单指长按
     switch (tapAndHold->state()) {
     case Qt::GestureStarted:
         m_gestureAction = GA_hold;
-        qDebug() << "Tap and hold gesture triggered with started";
+        qCDebug(appLog) << "Tap and hold gesture triggered with started";
         break;
     case Qt::GestureUpdated:
-        qDebug() << "Tap and hold gesture triggered with updated";
+        qCDebug(appLog) << "Tap and hold gesture triggered with updated";
         break;
     case Qt::GestureCanceled:
-        qDebug() << "Tap and hold gesture triggered with canceled";
+        qCDebug(appLog) << "Tap and hold gesture triggered with canceled";
         break;
     case Qt::GestureFinished:
-        qDebug() << "Tap and hold gesture triggered with finished";
+        qCDebug(appLog) << "Tap and hold gesture triggered with finished";
         m_gestureAction = GA_null;
         break;
     default:
         break;
     }
-    qDebug() << "Tap and hold gesture triggered completed";
+    qCDebug(appLog) << "Tap and hold gesture triggered completed";
 }
 
 void TextEdit::panTriggered(QPanGesture *pan)
 {
-    qDebug() << "Pan gesture triggered";
+    qCDebug(appLog) << "Pan gesture triggered";
     //两指平移
     switch (pan->state()) {
     case Qt::GestureStarted:
         m_gestureAction = GA_pan;
-        qDebug() << "Pan gesture triggered with started";
+        qCDebug(appLog) << "Pan gesture triggered with started";
         break;
     case Qt::GestureUpdated:
-        qDebug() << "Pan gesture triggered with updated";
+        qCDebug(appLog) << "Pan gesture triggered with updated";
         break;
     case Qt::GestureCanceled:
-        qDebug() << "Pan gesture triggered with canceled";
+        qCDebug(appLog) << "Pan gesture triggered with canceled";
         break;
     case Qt::GestureFinished:
         m_gestureAction = GA_null;
-        qDebug() << "Pan gesture triggered with finished";
+        qCDebug(appLog) << "Pan gesture triggered with finished";
         break;
     default:
-        qDebug() << "Pan gesture triggered with default";
+        qCDebug(appLog) << "Pan gesture triggered with default";
         break;
     }
-    qDebug() << "Pan gesture triggered completed";
+    qCDebug(appLog) << "Pan gesture triggered completed";
 }
 
 void TextEdit::pinchTriggered(QPinchGesture *pinch)
 {
-    qDebug() << "Pinch gesture triggered";
+    qCDebug(appLog) << "Pinch gesture triggered";
     //两指拉伸   -----缩放or放大
     switch (pinch->state()) {
     case Qt::GestureStarted: {
-        qDebug() << "Pinch gesture triggered with started";
+        qCDebug(appLog) << "Pinch gesture triggered with started";
         m_gestureAction = GA_pinch;
         if (static_cast<int>(m_scaleFactor) != m_fontSize) {
             m_scaleFactor = m_fontSize;
@@ -4449,7 +4450,7 @@ void TextEdit::pinchTriggered(QPinchGesture *pinch)
         break;
     }
     case Qt::GestureUpdated: {
-        qDebug() << "Pinch gesture triggered with updated";
+        qCDebug(appLog) << "Pinch gesture triggered with updated";
         QPinchGesture::ChangeFlags changeFlags = pinch->changeFlags();
         if (changeFlags & QPinchGesture::ScaleFactorChanged) {
             m_currentStepScaleFactor = pinch->totalScaleFactor();
@@ -4457,18 +4458,18 @@ void TextEdit::pinchTriggered(QPinchGesture *pinch)
         break;
     }
     case Qt::GestureCanceled: {
-        qDebug() << "Pinch gesture triggered with canceled";
+        qCDebug(appLog) << "Pinch gesture triggered with canceled";
         break;
     }
     case Qt::GestureFinished: {
-        qDebug() << "Pinch gesture triggered with finished";
+        qCDebug(appLog) << "Pinch gesture triggered with finished";
         m_gestureAction = GA_null;
         m_scaleFactor *= m_currentStepScaleFactor;
         m_currentStepScaleFactor = 1;
         break;
     }
     default: {
-        qDebug() << "Pinch gesture triggered with default";
+        qCDebug(appLog) << "Pinch gesture triggered with default";
         break;
     }
     }//switch
@@ -4483,12 +4484,12 @@ void TextEdit::pinchTriggered(QPinchGesture *pinch)
     setFontSize(size);
     //同步设置界面字体栏数值
     qobject_cast<Window *>(this->window())->changeSettingDialogComboxFontNumber(size);
-    qDebug() << "Pinch gesture triggered completed, size:" << size;
+    qCDebug(appLog) << "Pinch gesture triggered completed, size:" << size;
 }
 
 void TextEdit::swipeTriggered(QSwipeGesture *swipe)
 {
-    qDebug() << "Swipe gesture triggered";
+    qCDebug(appLog) << "Swipe gesture triggered";
     //三指滑动
 //    switch (swipe->state()) {
 //    case Qt::GestureStarted:
@@ -4511,29 +4512,29 @@ void TextEdit::swipeTriggered(QSwipeGesture *swipe)
 
 void TextEdit::slideGestureY(qreal diff)
 {
-    qDebug() << "Slide gesture y, diff:" << diff;
+    qCDebug(appLog) << "Slide gesture y, diff:" << diff;
     static qreal delta = 0.0;
     int step = static_cast<int>(diff + delta);
     delta = diff + delta - step;
 
     verticalScrollBar()->setValue(verticalScrollBar()->value() + step);
-    qDebug() << "Slide gesture y, verticalScrollBar()->value():" << verticalScrollBar()->value();
+    qCDebug(appLog) << "Slide gesture y, verticalScrollBar()->value():" << verticalScrollBar()->value();
 }
 
 void TextEdit::slideGestureX(qreal diff)
 {
-    qDebug() << "Slide gesture x, diff:" << diff;
+    qCDebug(appLog) << "Slide gesture x, diff:" << diff;
     static qreal delta = 0.0;
     int step = static_cast<int>(diff + delta);
     delta = diff + delta - step;
 
     horizontalScrollBar()->setValue(horizontalScrollBar()->value() + step * 30);
-    qDebug() << "Slide gesture x, horizontalScrollBar()->value():" << horizontalScrollBar()->value();
+    qCDebug(appLog) << "Slide gesture x, horizontalScrollBar()->value():" << horizontalScrollBar()->value();
 }
 
 void TextEdit::setTheme(const QString &path)
 {
-    qDebug() << "Set theme, path:" << path;
+    qCDebug(appLog) << "Set theme, path:" << path;
     QVariantMap jsonMap = Utils::getThemeMapFromPath(path);
     QVariantMap textStylesMap = jsonMap["text-styles"].toMap();
     QString themeCurrentLineColor = jsonMap["editor-colors"].toMap()["current-line"].toString();
@@ -4575,12 +4576,12 @@ void TextEdit::setTheme(const QString &path)
 
     updateHighlightLineSelection();
     renderAllSelections();
-    qDebug() << "Set theme completed";
+    qCDebug(appLog) << "Set theme completed";
 }
 
 void TextEdit::removeHighlightWordUnderCursor()
 {
-    qDebug() << "Remove highlight word under cursor";
+    qCDebug(appLog) << "Remove highlight word under cursor";
     //m_highlightWordCacheCursor = m_wordUnderCursorSelection.cursor;
     QTextEdit::ExtraSelection selection;
     //m_wordUnderCursorSelection = selection;
@@ -4588,12 +4589,12 @@ void TextEdit::removeHighlightWordUnderCursor()
     renderAllSelections();
     m_nBookMarkHoverLine = -1;
     m_pLeftAreaWidget->m_pBookMarkArea->update();
-    qDebug() << "Remove highlight word under cursor completed";
+    qCDebug(appLog) << "Remove highlight word under cursor completed";
 }
 
 void TextEdit::setSettings(Settings *keySettings)
 {
-    qDebug() << "Set settings, keySettings:" << keySettings;
+    qCDebug(appLog) << "Set settings, keySettings:" << keySettings;
     m_settings = keySettings;
 }
 
@@ -4603,15 +4604,15 @@ void TextEdit::setSettings(Settings *keySettings)
  */
 void TextEdit::copySelectedText(bool ignoreCheck)
 {
-    qDebug() << "Copy selected text, ignoreCheck:" << ignoreCheck;
+    qCDebug(appLog) << "Copy selected text, ignoreCheck:" << ignoreCheck;
     // 添加权限判断是否允许拷贝，剪切；防止后续可能调用接口，冗余处理
     if (!ignoreCheck && !Utils::enableClipCopy(getFilePath())) {
-        qDebug() << "Copy selected text, ignoreCheck is false and enableClipCopy is false";
+        qCDebug(appLog) << "Copy selected text, ignoreCheck is false and enableClipCopy is false";
         return;
     }
 
     if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
-        qDebug() << "Copy selected text, m_bIsAltMod is true and m_altModSelections is not empty";
+        qCDebug(appLog) << "Copy selected text, m_bIsAltMod is true and m_altModSelections is not empty";
         QString data;
         for (auto sel : m_altModSelections) {
             data.append(sel.cursor.selectedText());
@@ -4619,19 +4620,19 @@ void TextEdit::copySelectedText(bool ignoreCheck)
         QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
         clipboard->setText(data);
     } else {
-        qDebug() << "Copy selected text, m_bIsAltMod is false or m_altModSelections is empty";
+        qCDebug(appLog) << "Copy selected text, m_bIsAltMod is false or m_altModSelections is empty";
         QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
         if (textCursor().hasSelection()) {
             clipboard->setText(textCursor().selection().toPlainText());
-            qDebug() << "Copy selected text, textCursor().hasSelection() is true";
+            qCDebug(appLog) << "Copy selected text, textCursor().hasSelection() is true";
             tryUnsetMark();
         } else {
-            qDebug() << "Copy selected text, textCursor().hasSelection() is false";
+            qCDebug(appLog) << "Copy selected text, textCursor().hasSelection() is false";
             clipboard->setText(m_highlightWordCacheCursor.selectedText());
         }
     }
     tryUnsetMark();
-    qDebug() << "Copy selected text completed";
+    qCDebug(appLog) << "Copy selected text completed";
 }
 
 /**
@@ -4640,10 +4641,10 @@ void TextEdit::copySelectedText(bool ignoreCheck)
  */
 void TextEdit::cutSelectedText(bool ignoreCheck)
 {
-    qDebug() << "Cut selected text, ignoreCheck:" << ignoreCheck;
+    qCDebug(appLog) << "Cut selected text, ignoreCheck:" << ignoreCheck;
     // 添加权限判断是否允许拷贝，剪切；防止后续可能调用接口，冗余处理
     if (!ignoreCheck && !Utils::enableClipCopy(getFilePath())) {
-        qDebug() << "Cut selected text, ignoreCheck is false and enableClipCopy is false";
+        qCDebug(appLog) << "Cut selected text, ignoreCheck is false and enableClipCopy is false";
         return;
     }
 
@@ -4655,64 +4656,64 @@ void TextEdit::cutSelectedText(bool ignoreCheck)
     setTextCursor(cursor);
 
     unsetMark();
-    qDebug() << "Cut selected text completed";
+    qCDebug(appLog) << "Cut selected text completed";
 }
 
 void TextEdit::pasteText()
 {
-    qDebug() << "Paste text";
+    qCDebug(appLog) << "Paste text";
     QPlainTextEdit::paste();
     unsetMark();
-    qDebug() << "Paste text unsetMark completed";
+    qCDebug(appLog) << "Paste text unsetMark completed";
 }
 
 void TextEdit::setMark()
 {
-    qDebug() << "Set mark";
+    qCDebug(appLog) << "Set mark";
     bool currentMark = m_cursorMark;
     bool markCursorChanged = false;
     if (m_cursorMark) {
-        qDebug() << "Set mark, m_cursorMark is true";
+        qCDebug(appLog) << "Set mark, m_cursorMark is true";
         if (textCursor().hasSelection()) {
-            qDebug() << "Set mark, textCursor().hasSelection() is true";
+            qCDebug(appLog) << "Set mark, textCursor().hasSelection() is true";
             markCursorChanged = true;
 
             QTextCursor cursor = textCursor();
             cursor.clearSelection();
             setTextCursor(cursor);
         } else {
-            qDebug() << "Set mark, textCursor().hasSelection() is false";
+            qCDebug(appLog) << "Set mark, textCursor().hasSelection() is false";
             m_cursorMark = false;
         }
     } else {
-        qDebug() << "Set mark, m_cursorMark is false";
+        qCDebug(appLog) << "Set mark, m_cursorMark is false";
         m_cursorMark = true;
     }
 
     if (m_cursorMark != currentMark || markCursorChanged) {
-        qDebug() << "Set mark, m_cursorMark != currentMark || markCursorChanged";
+        qCDebug(appLog) << "Set mark, m_cursorMark != currentMark || markCursorChanged";
         cursorMarkChanged(m_cursorMark, textCursor());
     }
-    qDebug() << "Set mark completed";
+    qCDebug(appLog) << "Set mark completed";
 }
 
 void TextEdit::unsetMark()
 {
-    qDebug() << "Unset mark";
+    qCDebug(appLog) << "Unset mark";
     bool currentMark = m_cursorMark;
 
     m_cursorMark = false;
 
     if (m_cursorMark != currentMark) {
-        qDebug() << "Unset mark, m_cursorMark != currentMark";
+        qCDebug(appLog) << "Unset mark, m_cursorMark != currentMark";
         cursorMarkChanged(m_cursorMark, textCursor());
     }
-    qDebug() << "Unset mark completed";
+    qCDebug(appLog) << "Unset mark completed";
 }
 
 bool TextEdit::tryUnsetMark()
 {
-    qDebug() << "Try unset mark";
+    qCDebug(appLog) << "Try unset mark";
     if (m_cursorMark) {
         QTextCursor cursor = textCursor();
         cursor.clearSelection();
@@ -4720,22 +4721,22 @@ bool TextEdit::tryUnsetMark()
 
         unsetMark();
 
-        qDebug() << "Try unset mark, m_cursorMark is true, return true";
+        qCDebug(appLog) << "Try unset mark, m_cursorMark is true, return true";
         return true;
     } else {
-        qDebug() << "Try unset mark, m_cursorMark is false";
+        qCDebug(appLog) << "Try unset mark, m_cursorMark is false";
         return false;
     }
 }
 
 void TextEdit::exchangeMark()
 {
-    qDebug() << "Exchange mark";
+    qCDebug(appLog) << "Exchange mark";
     unsetMark();
 
-    qDebug() << "Exchange mark, textCursor().hasSelection():" << textCursor().hasSelection();
+    qCDebug(appLog) << "Exchange mark, textCursor().hasSelection():" << textCursor().hasSelection();
     if (textCursor().hasSelection()) {
-        qDebug() << "Exchange mark, textCursor().hasSelection() is true";
+        qCDebug(appLog) << "Exchange mark, textCursor().hasSelection() is true";
         // Record cursor and seleciton position before move cursor.
         int actionStartPos = textCursor().position();
         int selectionStartPos = textCursor().selectionStart();
@@ -4743,33 +4744,33 @@ void TextEdit::exchangeMark()
 
         QTextCursor cursor = textCursor();
         if (actionStartPos == selectionStartPos) {
-            qDebug() << "Exchange mark, actionStartPos == selectionStartPos";
+            qCDebug(appLog) << "Exchange mark, actionStartPos == selectionStartPos";
             cursor.setPosition(selectionStartPos, QTextCursor::MoveAnchor);
             cursor.setPosition(selectionEndPos, QTextCursor::KeepAnchor);
         } else {
-            qDebug() << "Exchange mark, actionStartPos != selectionStartPos";
+            qCDebug(appLog) << "Exchange mark, actionStartPos != selectionStartPos";
             cursor.setPosition(selectionEndPos, QTextCursor::MoveAnchor);
             cursor.setPosition(selectionStartPos, QTextCursor::KeepAnchor);
         }
 
         setTextCursor(cursor);
     }
-    qDebug() << "Exchange mark completed";
+    qCDebug(appLog) << "Exchange mark completed";
 }
 
 void TextEdit::saveMarkStatus()
 {
-    qDebug() << "Save mark status";
+    qCDebug(appLog) << "Save mark status";
     m_cursorMarkStatus = m_cursorMark;
     m_cursorMarkPosition = textCursor().anchor();
-    qDebug() << "Save mark status completed";
+    qCDebug(appLog) << "Save mark status completed";
 }
 
 void TextEdit::restoreMarkStatus()
 {
-    qDebug() << "Restore mark status";
+    qCDebug(appLog) << "Restore mark status";
     if (m_cursorMarkStatus) {
-        qDebug() << "Restore mark status, m_cursorMarkStatus is true";
+        qCDebug(appLog) << "Restore mark status, m_cursorMarkStatus is true";
         QTextCursor currentCursor = textCursor();
 
         QTextCursor cursor = textCursor();
@@ -4778,31 +4779,31 @@ void TextEdit::restoreMarkStatus()
 
         setTextCursor(cursor);
     }
-    qDebug() << "Restore mark status completed";
+    qCDebug(appLog) << "Restore mark status completed";
 }
 
 
 void TextEdit::slot_translate()
 {
-    qDebug() << "Translate";
+    qCDebug(appLog) << "Translate";
     auto ret = IflytekAiAssistant::instance()->textToTranslate();
     if (IflytekAiAssistant::Success != ret) {
-        qDebug() << "Translate, ret is not Success";
+        qCDebug(appLog) << "Translate, ret is not Success";
         Q_EMIT popupNotify(IflytekAiAssistant::instance()->errorString(ret), true);
     }
-    qDebug() << "Translate completed";
+    qCDebug(appLog) << "Translate completed";
 }
 
 QString TextEdit::getWordAtCursor()
 {
-    qDebug() << "Get word at cursor";
+    qCDebug(appLog) << "Get word at cursor";
     // QTextDocument::characterCount() 恒 >= 1（含结尾分隔符），不能作为空文档判据；
     // 空文档下 toPlainText().at(0) 会触发 QString 越界断言
     if (document()->isEmpty()) {
-        qDebug() << "Get word at cursor, document is empty";
+        qCDebug(appLog) << "Get word at cursor, document is empty";
         return "";
     } else {
-        qDebug() << "Get word at cursor, characterCount() is not 0";
+        qCDebug(appLog) << "Get word at cursor, characterCount() is not 0";
         QTextCursor cursor = textCursor();
         QChar currentChar = toPlainText().at(std::max(cursor.position() - 1, 0));
 
@@ -4817,20 +4818,20 @@ QString TextEdit::getWordAtCursor()
             }
         }
 
-        qDebug() << "Get word at cursor, cursor.selectedText():" << cursor.selectedText();
+        qCDebug(appLog) << "Get word at cursor, cursor.selectedText():" << cursor.selectedText();
         return cursor.selectedText();
     }
-    qDebug() << "Get word at cursor completed";
+    qCDebug(appLog) << "Get word at cursor completed";
 }
 
 QString TextEdit::getWordAtMouse()
 {
-    qDebug() << "Get word at mouse";
+    qCDebug(appLog) << "Get word at mouse";
     if (!characterCount()) {
-        qDebug() << "Get word at mouse, characterCount() is 0";
+        qCDebug(appLog) << "Get word at mouse, characterCount() is 0";
         return "";
     } else {
-        qDebug() << "Get word at mouse, characterCount() is not 0";
+        qCDebug(appLog) << "Get word at mouse, characterCount() is not 0";
         auto pos = mapFromGlobal(QCursor::pos());
         QTextCursor cursor(cursorForPosition(pos));
 
@@ -4847,26 +4848,26 @@ QString TextEdit::getWordAtMouse()
                 (pos.y() <= rect.y() + rect.height())) {
             cursor.select(QTextCursor::WordUnderCursor);
 
-            qDebug() << "Get word at mouse, cursor.selectedText():" << cursor.selectedText();
+            qCDebug(appLog) << "Get word at mouse, cursor.selectedText():" << cursor.selectedText();
             return cursor.selectedText();
         } else {
-            qDebug() << "Get word at mouse, cursor.selectedText() is empty";
+            qCDebug(appLog) << "Get word at mouse, cursor.selectedText() is empty";
             return "";
         }
     }
-    qDebug() << "Get word at mouse completed";
+    qCDebug(appLog) << "Get word at mouse completed";
 }
 
 void TextEdit::toggleReadOnlyMode(bool notNotify)
 {
-    qDebug() << "Toggle read only mode, notNotify:" << notNotify;
+    qCDebug(appLog) << "Toggle read only mode, notNotify:" << notNotify;
     if (m_readOnlyMode) {
-        qDebug() << "Toggle read only mode, m_readOnlyMode is true";
+        qCDebug(appLog) << "Toggle read only mode, m_readOnlyMode is true";
         if (m_cursorMode == Overwrite) {
-            qDebug() << "Toggle read only mode, m_cursorMode is Overwrite";
+            qCDebug(appLog) << "Toggle read only mode, m_cursorMode is Overwrite";
             emit cursorModeChanged(Overwrite);
         } else {
-            qDebug() << "Toggle read only mode, m_cursorMode is Insert";
+            qCDebug(appLog) << "Toggle read only mode, m_cursorMode is Insert";
             emit cursorModeChanged(Insert);
         }
         setReadOnly(false);
@@ -4875,11 +4876,11 @@ void TextEdit::toggleReadOnlyMode(bool notNotify)
         updateHighlightLineSelection();
 
         if (!notNotify) {
-            qDebug() << "Toggle read only mode, notNotify is false";
+            qCDebug(appLog) << "Toggle read only mode, notNotify is false";
             popupNotify(tr("Read-Only mode is off"));
         }
     } else {
-        qDebug() << "Toggle read only mode, m_readOnlyMode is false";
+        qCDebug(appLog) << "Toggle read only mode, m_readOnlyMode is false";
         m_readOnlyMode = true;
         setReadOnly(true);
         setCursorWidth(0); //隐藏光标
@@ -4887,17 +4888,17 @@ void TextEdit::toggleReadOnlyMode(bool notNotify)
         updateHighlightLineSelection();
 
         if (!notNotify) {
-            qDebug() << "Toggle read only mode, notNotify is false";
+            qCDebug(appLog) << "Toggle read only mode, notNotify is false";
             popupNotify(tr("Read-Only mode is on"));
         }
         emit cursorModeChanged(Readonly);
     }
-    qDebug() << "Toggle read only mode completed";
+    qCDebug(appLog) << "Toggle read only mode completed";
 }
 
 void TextEdit::toggleComment(bool bValue)
 {
-    qDebug() << "Toggle comment, bValue:" << bValue;
+    qCDebug(appLog) << "Toggle comment, bValue:" << bValue;
     const auto def = m_repository.definitionForFileName(QFileInfo(m_sFilePath).fileName().toLower());
     QTextCursor selectionCursor = textCursor();
     selectionCursor.movePosition(QTextCursor::StartOfBlock);
@@ -4906,12 +4907,12 @@ void TextEdit::toggleComment(bool bValue)
     // init base.
     bool isBlankLine = text.trimmed().isEmpty();
     if (characterCount() == 0 || isBlankLine || def.filePath().isEmpty()) {
-        qDebug() << "Toggle comment, characterCount() is 0 or isBlankLine or def.filePath().isEmpty()";
+        qCDebug(appLog) << "Toggle comment, characterCount() is 0 or isBlankLine or def.filePath().isEmpty()";
         return;
     }
 
     if (m_readOnlyMode) {
-        qDebug() << "Toggle comment, m_readOnlyMode is true";
+        qCDebug(appLog) << "Toggle comment, m_readOnlyMode is true";
         popupNotify(tr("Read-Only mode is on"));
         return;
     }
@@ -4928,40 +4929,40 @@ void TextEdit::toggleComment(bool bValue)
         }
     }
     if (!bHasCommnent) {
-        qDebug() << "Toggle comment, !bHasCommnent";
+        qCDebug(appLog) << "Toggle comment, !bHasCommnent";
         return;
     }
 
     QString name = def.name();
     if (name == "Markdown") {
-        qDebug() << "Toggle comment, name is Markdown";
+        qCDebug(appLog) << "Toggle comment, name is Markdown";
         return;
     }
 
     if (!def.filePath().isEmpty()) {
-        qDebug() << "Toggle comment, def.filePath() is not empty";
+        qCDebug(appLog) << "Toggle comment, def.filePath() is not empty";
         if (bValue) {
-            qDebug() << "Toggle comment, bValue is true";
+            qCDebug(appLog) << "Toggle comment, bValue is true";
             setComment();
         } else {
-            qDebug() << "Toggle comment, bValue is false";
+            qCDebug(appLog) << "Toggle comment, bValue is false";
             removeComment();
             //unCommentSelection();
         }
     } else {
-        qDebug() << "Toggle comment, def.filePath() is empty";
+        qCDebug(appLog) << "Toggle comment, def.filePath() is empty";
         // do not need to prompt the user.
         // popupNotify(tr("File does not support syntax comments"));
     }
-    qDebug() << "Toggle comment completed";
+    qCDebug(appLog) << "Toggle comment completed";
 }
 
 int TextEdit::getNextWordPosition(QTextCursor &cursor, QTextCursor::MoveMode moveMode)
 {
-    qDebug() << "Get next word position, cursor:" << cursor.position();
+    qCDebug(appLog) << "Get next word position, cursor:" << cursor.position();
     // FIXME(rekols): if is empty text, it will crash.
     if (!characterCount()) {
-        qDebug() << "Get next word position, characterCount() is 0";
+        qCDebug(appLog) << "Get next word position, characterCount() is 0";
         return 0;
     }
 
@@ -4972,7 +4973,7 @@ int TextEdit::getNextWordPosition(QTextCursor &cursor, QTextCursor::MoveMode mov
 
     // Just to next non-space char if current char is space.
     if (currentChar.data()->isSpace()) {
-        qDebug() << "Get next word position, currentChar is space";
+        qCDebug(appLog) << "Get next word position, currentChar is space";
         while (copyCursor.position() < characterCount() - 1 && currentChar.data()->isSpace()) {
             copyCursor.movePosition(QTextCursor::NextCharacter, moveMode);
             currentChar = copyCursor.selection().toPlainText();
@@ -4985,21 +4986,21 @@ int TextEdit::getNextWordPosition(QTextCursor &cursor, QTextCursor::MoveMode mov
     }
     // Just to next word-separator char.
     else {
-        qDebug() << "Get next word position, currentChar is not space";
+        qCDebug(appLog) << "Get next word position, currentChar is not space";
         while (copyCursor.position() < characterCount() - 1 && !atWordSeparator(copyCursor.position())) {
             copyCursor.movePosition(QTextCursor::NextCharacter, moveMode);
         }
     }
 
-    qDebug() << "Get next word position, copyCursor.position():" << copyCursor.position();
+    qCDebug(appLog) << "Get next word position, copyCursor.position():" << copyCursor.position();
     return copyCursor.position();
 }
 
 int TextEdit::getPrevWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode)
 {
-    qDebug() << "Get prev word position, cursor:" << cursor.position();
+    qCDebug(appLog) << "Get prev word position, cursor:" << cursor.position();
     if (!characterCount()) {
-        qDebug() << "Get prev word position, characterCount() is 0";
+        qCDebug(appLog) << "Get prev word position, characterCount() is 0";
         return 0;
     }
 
@@ -5010,7 +5011,7 @@ int TextEdit::getPrevWordPosition(QTextCursor cursor, QTextCursor::MoveMode move
 
     // Just to next non-space char if current char is space.
     if (currentChar.data()->isSpace()) {
-        qDebug() << "Get prev word position, currentChar is space";
+        qCDebug(appLog) << "Get prev word position, currentChar is space";
         while (copyCursor.position() > 0 && currentChar.data()->isSpace()) {
             copyCursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
             currentChar = copyCursor.selection().toPlainText();
@@ -5018,64 +5019,64 @@ int TextEdit::getPrevWordPosition(QTextCursor cursor, QTextCursor::MoveMode move
     }
     // Just to next word-separator char.
     else {
-        qDebug() << "Get prev word position, currentChar is not space";
+        qCDebug(appLog) << "Get prev word position, currentChar is not space";
         while (copyCursor.position() > 0 && !atWordSeparator(copyCursor.position())) {
             copyCursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
         }
     }
 
-    qDebug() << "Get prev word position, copyCursor.position():" << copyCursor.position();
+    qCDebug(appLog) << "Get prev word position, copyCursor.position():" << copyCursor.position();
     return copyCursor.position();
 }
 
 bool TextEdit::atWordSeparator(int position)
 {
-    qDebug() << "At word separator, position:" << position;
+    qCDebug(appLog) << "At word separator, position:" << position;
     QTextCursor copyCursor = textCursor();
     copyCursor.setPosition(position, QTextCursor::MoveAnchor);
     copyCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
     QString currentChar = copyCursor.selection().toPlainText();
-    qDebug() << "At word separator, currentChar:" << currentChar;
+    qCDebug(appLog) << "At word separator, currentChar:" << currentChar;
     return m_wordSepartors.contains(currentChar);
 }
 
 void TextEdit::showCursorBlink()
 {
-    qDebug() << "Show cursor blink";
+    qCDebug(appLog) << "Show cursor blink";
     // -1 表示恢复Qt的默认值
     QApplication::setCursorFlashTime(-1);
 }
 
 void TextEdit::hideCursorBlink()
 {
-    qDebug() << "Hide cursor blink";
+    qCDebug(appLog) << "Hide cursor blink";
     QApplication::setCursorFlashTime(0);
 }
 
 void TextEdit::setReadOnlyPermission(bool permission)
 {
-    qDebug() << "Set read only permission, permission:" << permission;
+    qCDebug(appLog) << "Set read only permission, permission:" << permission;
     m_bReadOnlyPermission = permission; //true为不可读
     if (permission) {
-        qDebug() << "Set read only permission, permission is true";
+        qCDebug(appLog) << "Set read only permission, permission is true";
         m_Permission2 = true;
         setReadOnly(true);
         emit cursorModeChanged(Readonly);
     } else {
-        qDebug() << "Set read only permission, permission is false";
+        qCDebug(appLog) << "Set read only permission, permission is false";
         m_Permission = false;
         if (!m_readOnlyMode) {
-            qDebug() << "Set read only permission, m_readOnlyMode is false";
+            qCDebug(appLog) << "Set read only permission, m_readOnlyMode is false";
             setReadOnly(false);
             //emit cursorModeChanged(Insert);
         } else {
-            qDebug() << "Set read only permission, m_readOnlyMode is true";
+            qCDebug(appLog) << "Set read only permission, m_readOnlyMode is true";
             setReadOnly(true);
             emit cursorModeChanged(Readonly);
         }
     }
     SendtoggleReadOnlyMode();
-    qDebug() << "Set read only permission completed";
+    qCDebug(appLog) << "Set read only permission completed";
 }
 
 // 右键菜单「视图模式」入口（§8.1）：由 EditWrapper 在 viewModeChanged/markdownAvailabilityChanged 时回写
@@ -5104,44 +5105,44 @@ void TextEdit::updateViewModeActions(ViewMode mode, bool isMarkdown)
 
 void TextEdit::SendtoggleReadmessage()
 {
-    qDebug() << "Send toggle read only message";
+    qCDebug(appLog) << "Send toggle read only message";
     if (!m_bReadOnlyPermission) {
-        qDebug() << "Send toggle read only message, m_bReadOnlyPermission is false";
+        qCDebug(appLog) << "Send toggle read only message, m_bReadOnlyPermission is false";
         if (m_cursorMode == Overwrite) {
-            qDebug() << "Send toggle read only message, m_cursorMode is Overwrite";
+            qCDebug(appLog) << "Send toggle read only message, m_cursorMode is Overwrite";
             emit cursorModeChanged(Overwrite);
         } else {
-            qDebug() << "Send toggle read only message, m_cursorMode is Insert";
+            qCDebug(appLog) << "Send toggle read only message, m_cursorMode is Insert";
             emit cursorModeChanged(Insert);
         }
         setReadOnly(false);
         setCursorWidth(1);
         updateHighlightLineSelection();
     } else {
-        qDebug() << "Send toggle read only message, m_bReadOnlyPermission is true";
+        qCDebug(appLog) << "Send toggle read only message, m_bReadOnlyPermission is true";
         setReadOnly(true);
         setCursorWidth(0); //隐藏光标
         document()->clearUndoRedoStacks();
         updateHighlightLineSelection();
         emit cursorModeChanged(Readonly);
     }
-    qDebug() << "Send toggle read only message completed";
+    qCDebug(appLog) << "Send toggle read only message completed";
 }
 
 bool TextEdit::isAbleOperation(Utils::OperationType iOperationType)
 {
-    qDebug() << "Is able operation, iOperationType:" << iOperationType;
+    qCDebug(appLog) << "Is able operation, iOperationType:" << iOperationType;
     bool bRet = true;
     qlonglong operationDataSize = 0;
     qlonglong currentDocSize = document()->characterCount();
 
     if (iOperationType == Utils::CopyOperation) {
-        qDebug() << "Is able operation, iOperationType is CopyOperation";
+        qCDebug(appLog) << "Is able operation, iOperationType is CopyOperation";
         if (m_isSelectAll) {
-            qDebug() << "Is able operation, m_isSelectAll is true";
+            qCDebug(appLog) << "Is able operation, m_isSelectAll is true";
             operationDataSize = currentDocSize;
         } else if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
-            qDebug() << "Is able operation, m_bIsAltMod is true and m_altModSelections is not empty";
+            qCDebug(appLog) << "Is able operation, m_bIsAltMod is true and m_altModSelections is not empty";
             for (auto it = m_altModSelections.begin(); it != m_altModSelections.end(); it++) {
                 auto &itCursor = (*it).cursor;
                 operationDataSize += (itCursor.selectionEnd() - itCursor.selectionStart());
@@ -5149,86 +5150,86 @@ bool TextEdit::isAbleOperation(Utils::OperationType iOperationType)
                     operationDataSize++;
             }
         } else if (textCursor().hasSelection()) {
-            qDebug() << "Is able operation, textCursor().hasSelection() is true";
+            qCDebug(appLog) << "Is able operation, textCursor().hasSelection() is true";
             operationDataSize = textCursor().selectionEnd() - textCursor().selectionStart();
         }
-        qDebug() << "Is able operation, operationDataSize:" << operationDataSize;
+        qCDebug(appLog) << "Is able operation, operationDataSize:" << operationDataSize;
         bRet = Utils::isMemorySufficientForOperation(iOperationType, operationDataSize, currentDocSize);
-        qDebug() << "Is able operation, bRet:" << bRet;
+        qCDebug(appLog) << "Is able operation, bRet:" << bRet;
 
     } else if (iOperationType == Utils::PasteOperation) {
-        qDebug() << "Is able operation, iOperationType is PasteOperation";
+        qCDebug(appLog) << "Is able operation, iOperationType is PasteOperation";
         const QClipboard *clipboard = QApplication::clipboard();
         QString strClipboardText = clipboard->text();
         operationDataSize = strClipboardText.size();
-        qDebug() << "Is able operation, operationDataSize:" << operationDataSize;
+        qCDebug(appLog) << "Is able operation, operationDataSize:" << operationDataSize;
         bRet = Utils::isMemorySufficientForOperation(iOperationType, operationDataSize, currentDocSize);
-        qDebug() << "Is able operation, bRet:" << bRet;
+        qCDebug(appLog) << "Is able operation, bRet:" << bRet;
     }
 
-    qDebug() << "Is able operation completed";
+    qCDebug(appLog) << "Is able operation completed";
     return bRet;
 }
 
 void TextEdit::SendtoggleReadOnlyMode()
 {
-    qDebug() << "Send toggle read only mode";
+    qCDebug(appLog) << "Send toggle read only mode";
     if (m_bReadOnlyPermission && !m_Permission) {
-        qDebug() << "Send toggle read only mode, m_bReadOnlyPermission is true and m_Permission is false";
+        qCDebug(appLog) << "Send toggle read only mode, m_bReadOnlyPermission is true and m_Permission is false";
         m_Permission = m_bReadOnlyPermission;
         SendtoggleReadmessage();
     } else if (m_Permission2 && !m_bReadOnlyPermission) {
-        qDebug() << "Send toggle read only mode, m_Permission2 is true and m_bReadOnlyPermission is false";
+        qCDebug(appLog) << "Send toggle read only mode, m_Permission2 is true and m_bReadOnlyPermission is false";
         m_Permission2 = m_bReadOnlyPermission;
         SendtoggleReadmessage();
     }
-    qDebug() << "Send toggle read only mode completed";
+    qCDebug(appLog) << "Send toggle read only mode completed";
 }
 
 bool TextEdit::getReadOnlyPermission()
 {
-    qDebug() << "Get read only permission";
+    qCDebug(appLog) << "Get read only permission";
     return m_bReadOnlyPermission;
 }
 
 bool TextEdit::getReadOnlyMode()
 {
-    qDebug() << "Get read only mode";
+    qCDebug(appLog) << "Get read only mode";
     return m_readOnlyMode;
 }
 
 void TextEdit::setReadOnlyState(bool readOnly)
 {
-    qDebug() << "Set read only state:" << readOnly;
+    qCDebug(appLog) << "Set read only state:" << readOnly;
     m_readOnlyMode = readOnly;
     setReadOnly(readOnly);
 }
 
 void TextEdit::hideRightMenu()
 {
-    qDebug() << "Hide right menu";
+    qCDebug(appLog) << "Hide right menu";
     //arm平台全屏然后恢复窗口，右键菜单不会消失，所以加了这个函数
     if (m_rightMenu) {
-        qDebug() << "Send toggle read only mode, m_rightMenu is not null";
+        qCDebug(appLog) << "Send toggle read only mode, m_rightMenu is not null";
         m_rightMenu->hide();
     }
-    qDebug() << "Hide right menu completed";
+    qCDebug(appLog) << "Hide right menu completed";
 }
 
 void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
 {
-    qDebug() << "Book mark area paint event";
+    qCDebug(appLog) << "Book mark area paint event";
     BookMarkWidget *bookMarkArea = m_pLeftAreaWidget->m_pBookMarkArea;
     QPainter painter(bookMarkArea);
     QColor lineNumberAreaBackgroundColor;
     if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::ColorType::DarkType) {
-        qDebug() << "Book mark area paint event, DGuiApplicationHelper::ColorType::DarkType";
+        qCDebug(appLog) << "Book mark area paint event, DGuiApplicationHelper::ColorType::DarkType";
         lineNumberAreaBackgroundColor = palette().brightText().color();
         lineNumberAreaBackgroundColor.setAlphaF(0.06);
 
         m_lineNumbersColor.setAlphaF(0.2);
     } else {
-        qDebug() << "Book mark area paint event, DGuiApplicationHelper::ColorType::LightType";
+        qCDebug(appLog) << "Book mark area paint event, DGuiApplicationHelper::ColorType::LightType";
         lineNumberAreaBackgroundColor = palette().brightText().color();
         lineNumberAreaBackgroundColor.setAlphaF(0.03);
         m_lineNumbersColor.setAlphaF(0.3);
@@ -5241,10 +5242,10 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
     bool bIsContains = false;
 
     if (!m_listBookmark.contains(m_nBookMarkHoverLine) && m_nBookMarkHoverLine != -1 && m_nBookMarkHoverLine <= blockCount()) {
-        qDebug() << "Book mark area paint event, m_listBookmark does not contain m_nBookMarkHoverLine";
+        qCDebug(appLog) << "Book mark area paint event, m_listBookmark does not contain m_nBookMarkHoverLine";
         list << m_nBookMarkHoverLine;
     } else {
-        qDebug() << "Book mark area paint event, m_listBookmark contains m_nBookMarkHoverLine";
+        qCDebug(appLog) << "Book mark area paint event, m_listBookmark contains m_nBookMarkHoverLine";
         bIsContains = true;
     }
 
@@ -5253,7 +5254,7 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
         QTextCursor cur = textCursor();
         cur.setPosition(lineBlock.position(), QTextCursor::MoveAnchor);
         if (line == m_nBookMarkHoverLine && !bIsContains) {
-            qDebug() << "Book mark area paint event, line == m_nBookMarkHoverLine and !bIsContains";
+            qCDebug(appLog) << "Book mark area paint event, line == m_nBookMarkHoverLine and !bIsContains";
             if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::ColorType::DarkType) {
                 pixmapPath = ":/images/like_hover_dark.svg";
                 image = QImage(":/images/like_hover_dark.svg");
@@ -5262,16 +5263,16 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
                 pixmapPath = ":/images/like_hover_light.svg";
             }
         } else {
-            qDebug() << "Book mark area paint event, line != m_nBookMarkHoverLine or bIsContains";
+            qCDebug(appLog) << "Book mark area paint event, line != m_nBookMarkHoverLine or bIsContains";
             image = QImage(":/images/bookmark.svg");
             pixmapPath = ":/images/bookmark.svg";
         }
 
         if (line > 0) {
-            qDebug() << "Book mark area paint event, line > 0";
+            qCDebug(appLog) << "Book mark area paint event, line > 0";
             lineBlock = document()->findBlockByNumber(line - 1);
             if (!lineBlock.isVisible()) {
-                qDebug() << "Book mark area paint event, lineBlock is not visible";
+                qCDebug(appLog) << "Book mark area paint event, lineBlock is not visible";
                 continue;
             }
 
@@ -5290,21 +5291,21 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
             render.render(&painter, rect);
         }
     }
-    qDebug() << "Book mark area paint event completed";
+    qCDebug(appLog) << "Book mark area paint event completed";
 }
 
 int TextEdit::getLineFromPoint(const QPoint &point)
 {
-    qDebug() << "Get line from point, point:" << point;
+    qCDebug(appLog) << "Get line from point, point:" << point;
     QTextCursor cursor = cursorForPosition(point);
     QTextBlock block = cursor.block();
-    qDebug() << "Get line from point, block.blockNumber():" << block.blockNumber();
+    qCDebug(appLog) << "Get line from point, block.blockNumber():" << block.blockNumber();
     return block.blockNumber() + 1;
 }
 
 void TextEdit::addOrDeleteBookMark()
 {
-    qDebug() << "Add or delete book mark";
+    qCDebug(appLog) << "Add or delete book mark";
     int line = 0;
     if (m_bIsShortCut) {
         line = getCurrentLine();
@@ -5314,106 +5315,106 @@ void TextEdit::addOrDeleteBookMark()
     }
 
     if (line > blockCount()) {
-        qDebug() << "Add or delete book mark, line > blockCount()";
+        qCDebug(appLog) << "Add or delete book mark, line > blockCount()";
         return;
     }
 
     if (m_listBookmark.contains(line)) {
-        qDebug() << "Add or delete book mark, m_listBookmark contains line";
+        qCDebug(appLog) << "Add or delete book mark, m_listBookmark contains line";
         m_listBookmark.removeOne(line);
         m_nBookMarkHoverLine = -1;
-        qDebug() << "DeleteBookMark:" << line << m_listBookmark;
+        qCDebug(appLog) << "DeleteBookMark:" << line << m_listBookmark;
     } else {
-        qDebug() << "Add or delete book mark, m_listBookmark does not contain line";
+        qCDebug(appLog) << "Add or delete book mark, m_listBookmark does not contain line";
         m_listBookmark.push_back(line);
-        qDebug() << "AddBookMark:" << line << m_listBookmark;
+        qCDebug(appLog) << "AddBookMark:" << line << m_listBookmark;
     }
 
     m_pLeftAreaWidget->m_pBookMarkArea->update();
-    qDebug() << "Add or delete book mark completed";
+    qCDebug(appLog) << "Add or delete book mark completed";
 }
 
 void TextEdit::moveToPreviousBookMark()
 {
-    qDebug() << "Move to previous book mark";
+    qCDebug(appLog) << "Move to previous book mark";
     int line = getCurrentLine();
     int index = m_listBookmark.indexOf(line);
 
     if (index == -1 && !m_listBookmark.isEmpty()) {
         jumpToLine(m_listBookmark.last(), false);
-        qDebug() << "Move to previous book mark, index == -1 and !m_listBookmark.isEmpty(), return";
+        qCDebug(appLog) << "Move to previous book mark, index == -1 and !m_listBookmark.isEmpty(), return";
         return;
     }
 
     if (index == 0) {
-        qDebug() << "Move to previous book mark, index == 0";
+        qCDebug(appLog) << "Move to previous book mark, index == 0";
         jumpToLine(m_listBookmark.last(), false);
     } else {
-        qDebug() << "index != 0";
+        qCDebug(appLog) << "index != 0";
         jumpToLine(m_listBookmark.value(index - 1), false);
     }
-    qDebug() << "Move to previous book mark completed";
+    qCDebug(appLog) << "Move to previous book mark completed";
 }
 
 void TextEdit::moveToNextBookMark()
 {
-    qDebug() << "Move to next book mark";
+    qCDebug(appLog) << "Move to next book mark";
     int line = getCurrentLine();
     int index = m_listBookmark.indexOf(line);
 
     if (index == -1 && !m_listBookmark.isEmpty()) {
         jumpToLine(m_listBookmark.first(), false);
-        qDebug() << "Move to next book mark, index == -1 and !m_listBookmark.isEmpty(), return";
+        qCDebug(appLog) << "Move to next book mark, index == -1 and !m_listBookmark.isEmpty(), return";
         return;
     }
 
     if (index == m_listBookmark.count() - 1) {
-        qDebug() << "Move to next book mark, index == m_listBookmark.count() - 1";
+        qCDebug(appLog) << "Move to next book mark, index == m_listBookmark.count() - 1";
         jumpToLine(m_listBookmark.first(), false);
     } else {
-        qDebug() << "Move to next book mark, index != m_listBookmark.count() - 1";
+        qCDebug(appLog) << "Move to next book mark, index != m_listBookmark.count() - 1";
         jumpToLine(m_listBookmark.value(index + 1), false);
     }
-    qDebug() << "Move to next book mark completed";
+    qCDebug(appLog) << "Move to next book mark completed";
 }
 
 void TextEdit::checkBookmarkLineMove(int from, int charsRemoved, int charsAdded)
 {
-    qDebug() << "Check bookmark line move, from:" << from << "charsRemoved:" << charsRemoved << "charsAdded:" << charsAdded;
+    qCDebug(appLog) << "Check bookmark line move, from:" << from << "charsRemoved:" << charsRemoved << "charsAdded:" << charsAdded;
     Q_UNUSED(charsRemoved);
     Q_UNUSED(charsAdded);
 
     if (m_bIsFileOpen) {
-        qDebug() << "Check bookmark line move, m_bIsFileOpen is true, return";
+        qCDebug(appLog) << "Check bookmark line move, m_bIsFileOpen is true, return";
         return;
     }
 
     if (m_nLines != blockCount()) {
-        qDebug() << "Check bookmark line move, m_nLines != blockCount()";
+        qCDebug(appLog) << "Check bookmark line move, m_nLines != blockCount()";
         QTextCursor cursor = textCursor();
         int nAddorDeleteLine = document()->findBlock(from).blockNumber() + 1;
         int currLine = textCursor().blockNumber() + 1;
 
         if (m_nLines > blockCount()) {
-            qDebug() << "Check bookmark line move, m_nLines > blockCount()";
+            qCDebug(appLog) << "Check bookmark line move, m_nLines > blockCount()";
             foreach (const auto line, m_listBookmark) {
-                qDebug() << "Check bookmark line move, foreach line:" << line;
+                qCDebug(appLog) << "Check bookmark line move, foreach line:" << line;
                 if (m_nSelectEndLine != -1) {
-                    qDebug() << "Check bookmark line move, m_nSelectEndLine != -1";
+                    qCDebug(appLog) << "Check bookmark line move, m_nSelectEndLine != -1";
                     if (nAddorDeleteLine < line && line <= m_nSelectEndLine) {
-                        qDebug() << "Check bookmark line move, nAddorDeleteLine < line && line <= m_nSelectEndLine";
+                        qCDebug(appLog) << "Check bookmark line move, nAddorDeleteLine < line && line <= m_nSelectEndLine";
                         m_listBookmark.removeOne(line);
                     } else if (line > m_nSelectEndLine) {
-                        qDebug() << "Check bookmark line move, line > m_nSelectEndLine";
+                        qCDebug(appLog) << "Check bookmark line move, line > m_nSelectEndLine";
                         m_listBookmark.replace(m_listBookmark.indexOf(line), line - m_nSelectEndLine + nAddorDeleteLine);
                     }
                 } else {
-                    qDebug() << "Check bookmark line move, m_nSelectEndLine == -1";
+                    qCDebug(appLog) << "Check bookmark line move, m_nSelectEndLine == -1";
                     if (line == currLine + 1) {
-                        qDebug() << "Check bookmark line move, line == currLine + 1";
+                        qCDebug(appLog) << "Check bookmark line move, line == currLine + 1";
                         m_listBookmark.removeOne(currLine + 1);
                     } else if (line > currLine + 1) {
-                        qDebug() << "Check bookmark line move, line > currLine + 1";
+                        qCDebug(appLog) << "Check bookmark line move, line > currLine + 1";
                         m_listBookmark.replace(m_listBookmark.indexOf(line), line  - m_nLines + blockCount());
                     }
                 }
@@ -5421,19 +5422,19 @@ void TextEdit::checkBookmarkLineMove(int from, int charsRemoved, int charsAdded)
         } else {
             foreach (const auto line, m_listBookmark) {
                 if (nAddorDeleteLine < line) {
-                    qDebug() << "Check bookmark line move, nAddorDeleteLine < line";
+                    qCDebug(appLog) << "Check bookmark line move, nAddorDeleteLine < line";
                     m_listBookmark.replace(m_listBookmark.indexOf(line), line + blockCount() - m_nLines);
                 }
             }
         }
     }
     m_nLines = blockCount();
-    qDebug() << "Check bookmark line move completed";
+    qCDebug(appLog) << "Check bookmark line move completed";
 }
 
 void TextEdit::flodOrUnflodAllLevel(bool isFlod)
 {
-    qDebug() << "Processing" << (isFlod ? "fold" : "unfold") << "all code blocks in document";
+    qCDebug(appLog) << "Processing" << (isFlod ? "fold" : "unfold") << "all code blocks in document";
     m_listMainFlodAllPos.clear();
     
     int totalBlocks = document()->blockCount();
@@ -5442,7 +5443,7 @@ void TextEdit::flodOrUnflodAllLevel(bool isFlod)
     
     //折叠
     if (isFlod) {
-        qDebug() << "Searching for visible blocks with opening braces to fold";
+        qCDebug(appLog) << "Searching for visible blocks with opening braces to fold";
         for (int line = 0; line < totalBlocks; line++) {
             if (blockContainStrBrackets(line)
                     && document()->findBlockByNumber(line).isVisible()
@@ -5453,14 +5454,14 @@ void TextEdit::flodOrUnflodAllLevel(bool isFlod)
                     foldPointsFound++;
                     
                     if (foldPointsFound % 20 == 0) {
-                        qDebug() << "Found" << foldPointsFound << "fold points so far";
+                        qCDebug(appLog) << "Found" << foldPointsFound << "fold points so far";
                     }
                 }
             }
         }
         //展开
     } else {
-        qDebug() << "Searching for hidden blocks with opening braces to unfold";
+        qCDebug(appLog) << "Searching for hidden blocks with opening braces to unfold";
         for (int line = 0; line < totalBlocks; line++) {
             if (blockContainStrBrackets(line)
                     && !document()->findBlockByNumber(line + 1).isVisible()
@@ -5471,14 +5472,14 @@ void TextEdit::flodOrUnflodAllLevel(bool isFlod)
                     foldPointsFound++;
                     
                     if (foldPointsFound % 20 == 0) {
-                        qDebug() << "Found" << foldPointsFound << "unfold points so far";
+                        qCDebug(appLog) << "Found" << foldPointsFound << "unfold points so far";
                     }
                 }
             }
         }
     }
     
-    qDebug() << "Found" << foldPointsFound << "fold points after processing" << processedBlocks 
+    qCDebug(appLog) << "Found" << foldPointsFound << "fold points after processing" << processedBlocks 
              << "blocks out of" << totalBlocks << "total blocks";
 
     //折叠时出现点击光标选择行变短
@@ -5487,7 +5488,7 @@ void TextEdit::flodOrUnflodAllLevel(bool isFlod)
     this->setWordWrapMode(QTextOption::WrapAnywhere);
     this->setLineWrapMode(WrapMode);
 
-    qDebug() << "Updating UI components after fold/unfold operation";
+    qCDebug(appLog) << "Updating UI components after fold/unfold operation";
     m_pLeftAreaWidget->m_pFlodArea->update();
     m_pLeftAreaWidget->m_pLineNumberArea->update();
     m_pLeftAreaWidget->m_pBookMarkArea->update();
@@ -5497,34 +5498,34 @@ void TextEdit::flodOrUnflodAllLevel(bool isFlod)
 
     this->setLineWrapMode(curMode);
     viewport()->update();
-    qDebug() << (isFlod ? "Fold" : "Unfold") << "all operation completed with" << foldPointsFound << "points processed";
+    qCDebug(appLog) << (isFlod ? "Fold" : "Unfold") << "all operation completed with" << foldPointsFound << "points processed";
 }
 
 void TextEdit::flodOrUnflodCurrentLevel(bool isFlod)
 {
-    qDebug() << "Processing" << (isFlod ? "fold" : "unfold") << "operation at cursor position";
+    qCDebug(appLog) << "Processing" << (isFlod ? "fold" : "unfold") << "operation at cursor position";
     int line = getLineFromPoint(m_mouseClickPos);
-    qDebug() << "Target line for fold/unfold:" << (line - 1) << "based on mouse position at line" << line;
+    qCDebug(appLog) << "Target line for fold/unfold:" << (line - 1) << "based on mouse position at line" << line;
     
     bool success = getNeedControlLine(line - 1, !isFlod);
     if (success) {
-        qDebug() << "Successfully" << (!isFlod ? "unfolded" : "folded") << "code block at line" << (line - 1);
+        qCDebug(appLog) << "Successfully" << (!isFlod ? "unfolded" : "folded") << "code block at line" << (line - 1);
     } else {
-        qDebug() << "Could not" << (!isFlod ? "unfold" : "fold") << "code block at line" << (line - 1) << "- no valid fold point found";
+        qCDebug(appLog) << "Could not" << (!isFlod ? "unfold" : "fold") << "code block at line" << (line - 1) << "- no valid fold point found";
     }
     
-    qDebug() << "Updating UI components after fold/unfold operation";
+    qCDebug(appLog) << "Updating UI components after fold/unfold operation";
     m_pLeftAreaWidget->m_pFlodArea->update();
     m_pLeftAreaWidget->m_pLineNumberArea->update();
     m_pLeftAreaWidget->m_pBookMarkArea->update();
     viewport()->update();
     document()->adjustSize();
-    qDebug() << (isFlod ? "Fold" : "Unfold") << "operation completed at line" << (line - 1);
+    qCDebug(appLog) << (isFlod ? "Fold" : "Unfold") << "operation completed at line" << (line - 1);
 }
 
 void TextEdit::getHideRowContent(int iLine)
 {
-    qDebug() << "Preparing fold preview content for line" << iLine;
+    qCDebug(appLog) << "Preparing fold preview content for line" << iLine;
     // 预览文本块没有必要读取所有文本数据，调整为仅读取部分
     // Note:需要注意单个文本块(一般为一行数据)过长的情况
     // 最大显示的预览文本块数量，不超过1000
@@ -5536,14 +5537,14 @@ void TextEdit::getHideRowContent(int iLine)
 
     // 根据背景色亮度设置高亮模式
     bool isDarkTheme = QColor(m_backgroundColor).lightness() < 128;
-    qDebug() << "Setting highlight mode based on theme:" << (isDarkTheme ? "dark" : "light");
+    qCDebug(appLog) << "Setting highlight mode based on theme:" << (isDarkTheme ? "dark" : "light");
     m_foldCodeShow->initHighLight(m_sFilePath, !isDarkTheme);
 
     m_foldCodeShow->appendText("{", width());
     
     //左右括弧没有匹配到
     if (!bFoundBrace) {
-        qDebug() << "No matching braces found, showing all subsequent content";
+        qCDebug(appLog) << "No matching braces found, showing all subsequent content";
         // 读取文本块索引
         int curIndex = 0;
         int blocksAdded = 0;
@@ -5554,14 +5555,14 @@ void TextEdit::getHideRowContent(int iLine)
             beginBlock = beginBlock.next();
             blocksAdded++;
         }
-        qDebug() << "Added" << blocksAdded << "blocks to fold preview";
+        qCDebug(appLog) << "Added" << blocksAdded << "blocks to fold preview";
 
         //如果左右"{" "}"在同一行不折叠
     } else if (endBlock == curBlock) {
-        qDebug() << "Braces on same line, no fold preview needed";
+        qCDebug(appLog) << "Braces on same line, no fold preview needed";
         return;
     } else {
-        qDebug() << "Found matching braces from line" << beginBlock.blockNumber() << "to" << endBlock.blockNumber();
+        qCDebug(appLog) << "Found matching braces from line" << beginBlock.blockNumber() << "to" << endBlock.blockNumber();
         // 读取文本块索引
         int curIndex = 0;
         int blocksAdded = 0;
@@ -5578,19 +5579,19 @@ void TextEdit::getHideRowContent(int iLine)
         }
 
         if (endBlock.text().simplified() == "}") {
-            qDebug() << "Adding closing brace from end block to preview";
+            qCDebug(appLog) << "Adding closing brace from end block to preview";
             m_foldCodeShow->appendText("}", width());
         }
 
         m_foldCodeShow->appendText("}", width());
-        qDebug() << "Added" << blocksAdded << "blocks to fold preview";
+        qCDebug(appLog) << "Added" << blocksAdded << "blocks to fold preview";
     }
-    qDebug() << "Fold preview content preparation completed for line" << iLine;
+    qCDebug(appLog) << "Fold preview content preparation completed for line" << iLine;
 }
 
 bool TextEdit::isNeedShowFoldIcon(QTextBlock block)
 {
-    qDebug() << "Checking if fold icon needed for block at line" << block.blockNumber();
+    qCDebug(appLog) << "Checking if fold icon needed for block at line" << block.blockNumber();
     QString blockText = block.text();
     bool hasFindLeft = false; // 是否已经找到当前行第一个左括号
     int rightNum = 0, leftNum = 0;//右括号数目、左括号数目
@@ -5607,15 +5608,15 @@ bool TextEdit::isNeedShowFoldIcon(QTextBlock block)
         }
     }
 
-    qDebug() << "Block analysis: found" << leftNum << "opening and" << rightNum << "closing braces";
+    qCDebug(appLog) << "Block analysis: found" << leftNum << "opening and" << rightNum << "closing braces";
     
     // 判断是否需要显示折叠图标
     bool needFoldIcon = (rightNum != leftNum);
     
     if (needFoldIcon) {
-        qDebug() << "Fold icon needed - unbalanced braces in line" << block.blockNumber();
+        qCDebug(appLog) << "Fold icon needed - unbalanced braces in line" << block.blockNumber();
     } else {
-        qDebug() << "No fold icon needed - balanced braces in line" << block.blockNumber();
+        qCDebug(appLog) << "No fold icon needed - balanced braces in line" << block.blockNumber();
     }
     
     return needFoldIcon;
@@ -5623,7 +5624,7 @@ bool TextEdit::isNeedShowFoldIcon(QTextBlock block)
 
 int TextEdit::getHighLightRowContentLineNum(int iLine)
 {
-    qDebug() << "Calculating highlight range end line for fold starting at line" << iLine;
+    qCDebug(appLog) << "Calculating highlight range end line for fold starting at line" << iLine;
     // 查询折叠区域文本块范围
     QTextBlock beginBlock, endBlock, curBlock;
     bool bFoundBrace = findFoldBlock(iLine, beginBlock, endBlock, curBlock);
@@ -5633,7 +5634,7 @@ int TextEdit::getHighLightRowContentLineNum(int iLine)
     
     //左右括弧没有匹配到
     if (!bFoundBrace) {
-        qDebug() << "No matching closing brace found, counting all subsequent blocks";
+        qCDebug(appLog) << "No matching closing brace found, counting all subsequent blocks";
         //遍历最后右括弧文本块 设置块隐藏或显示
         int blockCount = 0;
         while (beginBlock.isValid()) {
@@ -5641,14 +5642,14 @@ int TextEdit::getHighLightRowContentLineNum(int iLine)
             beginBlock = beginBlock.next();
             blockCount++;
         }
-        qDebug() << "Found" << blockCount << "blocks after line" << iLine << ", resulting end line:" << resultLine;
+        qCDebug(appLog) << "Found" << blockCount << "blocks after line" << iLine << ", resulting end line:" << resultLine;
         return resultLine;
         //如果左右"{" "}"在同一行不折叠
     } else if (!bFoundBrace || endBlock == curBlock) {
-        qDebug() << "Braces on same line or invalid fold point, returning original line" << iLine;
+        qCDebug(appLog) << "Braces on same line or invalid fold point, returning original line" << iLine;
         return resultLine;
     } else {
-        qDebug() << "Found matching brace at line" << endBlock.blockNumber() << ", counting blocks in between";
+        qCDebug(appLog) << "Found matching brace at line" << endBlock.blockNumber() << ", counting blocks in between";
         int blockCount = 0;
         while (beginBlock != endBlock && beginBlock.isValid()) {
             resultLine++;
@@ -5657,7 +5658,7 @@ int TextEdit::getHighLightRowContentLineNum(int iLine)
         }
 
         resultLine++;
-        qDebug() << "Found" << blockCount << "blocks between braces, resulting end line:" << resultLine 
+        qCDebug(appLog) << "Found" << blockCount << "blocks between braces, resulting end line:" << resultLine 
                  << "(+" << (resultLine - initialLine) << " lines)";
         return resultLine;
     }
@@ -5665,7 +5666,7 @@ int TextEdit::getHighLightRowContentLineNum(int iLine)
 
 void TextEdit::paintCodeFlod(QPainter *painter, QRect rect, bool flod)
 {
-    qDebug() << "Paint code flod, painter:" << painter << "rect:" << rect << "flod:" << flod;
+    qCDebug(appLog) << "Paint code flod, painter:" << painter << "rect:" << rect << "flod:" << flod;
     painter->save();
 
     painter->translate(rect.width() / 2.0, rect.height() / 2.0);
@@ -5682,7 +5683,7 @@ void TextEdit::paintCodeFlod(QPainter *painter, QRect rect, bool flod)
     path.lineTo(p2);
 
     if (flod) {
-        qDebug() << "Paint code flod, flod is true";
+        qCDebug(appLog) << "Paint code flod, flod is true";
         painter->rotate(-90);
     }
 
@@ -5692,18 +5693,18 @@ void TextEdit::paintCodeFlod(QPainter *painter, QRect rect, bool flod)
     painter->drawPath(path);
 
     painter->restore();
-    qDebug() << "Paint code flod completed";
+    qCDebug(appLog) << "Paint code flod completed";
 }
 
 QColor TextEdit::getBackColor()
 {
-    qDebug() << "Get back color";
+    qCDebug(appLog) << "Get back color";
     return m_backgroundColor;
 }
 
 int TextEdit::lineNumberAreaWidth()
 {
-    qDebug() << "Line number area width";
+    qCDebug(appLog) << "Line number area width";
     int digits = 1;
     int max = qMax(1, this->document()->blockCount());
     while (max >= 10) {
@@ -5714,25 +5715,25 @@ int TextEdit::lineNumberAreaWidth()
     QFontMetrics fm(m_fontLineNumberArea);
     int w = fm.horizontalAdvance(QLatin1Char('9')) * digits;
 
-    qDebug() << "Line number area width completed";
+    qCDebug(appLog) << "Line number area width completed";
     return w > 15 ? w : 15;
 }
 
 void TextEdit::updateLeftWidgetWidth(int width)
 {
-    qDebug() << "Update left widget width, width:" << width;
+    qCDebug(appLog) << "Update left widget width, width:" << width;
     if (m_LeftAreaUpdateState != TextEdit::FileOpenBegin) {
         m_pLeftAreaWidget->m_pFlodArea->setFixedWidth(width);
         m_pLeftAreaWidget->m_pLineNumberArea->setFixedWidth(lineNumberAreaWidth());
         m_pLeftAreaWidget->m_pBookMarkArea->setFixedWidth(width);
         setLeftAreaUpdateState(TextEdit::Normal);
     }
-    qDebug() << "Update left widget width completed";
+    qCDebug(appLog) << "Update left widget width completed";
 }
 
 int TextEdit::getLinePosYByLineNum(int iLine)
 {
-    qDebug() << "Get line pos y by line num, iLine:" << iLine;
+    qCDebug(appLog) << "Get line pos y by line num, iLine:" << iLine;
     QTextBlock block = document()->findBlockByNumber(iLine);
     QTextCursor cur = textCursor();
 
@@ -5741,43 +5742,43 @@ int TextEdit::getLinePosYByLineNum(int iLine)
     }
 
     cur.setPosition(block.position(), QTextCursor::MoveAnchor);
-    qDebug() << "Get line pos y by line num completed";
+    qCDebug(appLog) << "Get line pos y by line num completed";
     return cursorRect(cur).y();
 }
 
 bool TextEdit::ifHasHighlight()
 {
-    qDebug() << "If has highlight";
+    qCDebug(appLog) << "If has highlight";
     if (!m_findHighlightSelection.cursor.isNull()) {
-        qDebug() << "If has highlight, m_findHighlightSelection.cursor is not null";
+        qCDebug(appLog) << "If has highlight, m_findHighlightSelection.cursor is not null";
         return m_findHighlightSelection.cursor.hasSelection();
     } else {
-        qDebug() << "If has highlight, m_findHighlightSelection.cursor is null";
+        qCDebug(appLog) << "If has highlight, m_findHighlightSelection.cursor is null";
         return  false;
     }
-    qDebug() << "If has highlight completed";
+    qCDebug(appLog) << "If has highlight completed";
 }
 
 void TextEdit::setIsFileOpen()
 {
-    qDebug() << "Set is file open";
+    qCDebug(appLog) << "Set is file open";
     m_bIsFileOpen = true;
 }
 
 void TextEdit::setTextFinished()
 {
-    qDebug() << "Set text finished";
+    qCDebug(appLog) << "Set text finished";
     m_bIsFileOpen = false;
     m_nLines = blockCount();
     m_lastLeftAreaBlockCount = m_nLines;
 
     if (!m_settings) {
-        qDebug() << "Set text finished, m_settings is null, skip";
+        qCDebug(appLog) << "Set text finished, m_settings is null, skip";
         return;
     }
 
     if (!m_listBookmark.isEmpty()) {
-        qDebug() << "Set text finished, m_listBookmark is not empty";
+        qCDebug(appLog) << "Set text finished, m_listBookmark is not empty";
         return;
     }
 
@@ -5788,7 +5789,7 @@ void TextEdit::setTextFinished()
     QString qstrPath = m_sFilePath;
 
     if (filePathList.contains(qstrPath)) {
-        qDebug() << "Set text finished, filePathList contains qstrPath";
+        qCDebug(appLog) << "Set text finished, filePathList contains qstrPath";
         int index = 2;
         QString qstrLines = bookmarkList.value(filePathList.indexOf(qstrPath));
         QString sign;
@@ -5798,29 +5799,29 @@ void TextEdit::setTextFinished()
             sign.append(qstrLines.at(i + 1));
 
             if (sign == ",*" || sign == ")*") {
-                qDebug() << "Set text finished, sign == \",*\" || sign == \")\"";
+                qCDebug(appLog) << "Set text finished, sign == \",*\" || sign == \")\"";
                 linesList << qstrLines.mid(index, i - index).toInt();
                 index = i + 2;
             }
         }
-        qDebug() << "Set text finished, filePathList does not contain qstrPath";
+        qCDebug(appLog) << "Set text finished, filePathList does not contain qstrPath";
     }
 
     foreach (const auto line, linesList) {
         if (line <= document()->blockCount()) {
             if (!m_listBookmark.contains(line)) {
-                qDebug() << "Set text finished, line <= document()->blockCount()";
+                qCDebug(appLog) << "Set text finished, line <= document()->blockCount()";
                 m_listBookmark << line;
             }
         }
     }
-    qDebug() << "Set text finished, completed";
-//    qDebug() << m_listBookmark << document()->blockCount();
+    qCDebug(appLog) << "Set text finished, completed";
+//    qCDebug(appLog) << m_listBookmark << document()->blockCount();
 }
 
 QStringList TextEdit::readHistoryRecord(QString key)
 {
-    qDebug() << "Read history record, key:" << key;
+    qCDebug(appLog) << "Read history record, key:" << key;
     QString history = m_settings->settings->option(key)->value().toString();
     QStringList historyList;
     int nLeftPosition = history.indexOf("*{");
@@ -5832,13 +5833,13 @@ QStringList TextEdit::readHistoryRecord(QString key)
         nRightPosition = history.indexOf("}*", nRightPosition + 2);
     }
 
-    qDebug() << "Read history record completed";
+    qCDebug(appLog) << "Read history record completed";
     return historyList;
 }
 
 QStringList TextEdit::readHistoryRecordofBookmark()
 {
-    qDebug() << "Read history record of bookmark";
+    qCDebug(appLog) << "Read history record of bookmark";
     QString history = m_settings->settings->option("advance.editor.browsing_history_file")->value().toString();
     QStringList bookmarkList;
     int nLeftPosition = history.indexOf("*(");
@@ -5850,13 +5851,13 @@ QStringList TextEdit::readHistoryRecordofBookmark()
         nRightPosition = history.indexOf(")*", nRightPosition + 2);
     }
 
-    qDebug() << "Read history record of bookmark completed";
+    qCDebug(appLog) << "Read history record of bookmark completed";
     return bookmarkList;
 }
 
 QStringList TextEdit::readHistoryRecordofFilePath(QString key)
 {
-    qDebug() << "Read history record of file path, key:" << key;
+    qCDebug(appLog) << "Read history record of file path, key:" << key;
     QString history = m_settings->settings->option(key)->value().toString();
     QStringList filePathList;
     int nLeftPosition = history.indexOf("*[");
@@ -5868,17 +5869,17 @@ QStringList TextEdit::readHistoryRecordofFilePath(QString key)
         nRightPosition = history.indexOf("]*", nRightPosition + 2);
     }
 
-    qDebug() << "Read history record of file path completed";
+    qCDebug(appLog) << "Read history record of file path completed";
     return filePathList;
 }
 
 void TextEdit::writeEncodeHistoryRecord()
 {
-    qDebug() << "Write encode history record";
+    qCDebug(appLog) << "Write encode history record";
     // EditWrapper 可能脱离 Window 独立构造（m_settings 未注入），
     // 使用前判空，与 setTextFinished 的空判保护保持一致
     if (!m_settings || !m_settings->settings) {
-        qWarning() << "Write encode history record, m_settings is null, skip";
+        qCWarning(appLog) << "Write encode history record, m_settings is null, skip";
         return;
     }
     QString history = m_settings->settings->option("advance.editor.browsing_encode_history")->value().toString();
@@ -5888,7 +5889,7 @@ void TextEdit::writeEncodeHistoryRecord()
     foreach (auto path, pathList) {
         QFileInfo f(path);
         if (!f.isFile()) {
-            qDebug() << "Write encode history record, path is not a file";
+            qCDebug(appLog) << "Write encode history record, path is not a file";
             int nLeftPosition = history.indexOf(path);
             int nRightPosition = history.indexOf("}*", nLeftPosition);
             history.remove(nLeftPosition - 4, nRightPosition + 6 - nLeftPosition);
@@ -5899,18 +5900,18 @@ void TextEdit::writeEncodeHistoryRecord()
     int nRightPosition = history.indexOf("}*", nLeftPosition);
 
     if (history.contains(m_sFilePath)) {
-        qDebug() << "Write encode history record, history contains m_sFilePath";
+        qCDebug(appLog) << "Write encode history record, history contains m_sFilePath";
         history.remove(nLeftPosition - 4, nRightPosition + 6 - nLeftPosition);
     }
 
     QString encodeHistory = history + "*{*[" + m_sFilePath + "]*" + m_textEncode + "}*";
     m_settings->settings->option("advance.editor.browsing_encode_history")->setValue(encodeHistory);
-    qDebug() << "Write encode history record completed";
+    qCDebug(appLog) << "Write encode history record completed";
 }
 
 QStringList TextEdit::readEncodeHistoryRecord()
 {
-    qDebug() << "Read encode history record";
+    qCDebug(appLog) << "Read encode history record";
     QString history = m_settings->settings->option("advance.editor.browsing_encode_history")->value().toString();
     QStringList filePathList;
     int nLeftPosition = history.indexOf("]*");
@@ -5922,7 +5923,7 @@ QStringList TextEdit::readEncodeHistoryRecord()
         nRightPosition = history.indexOf("}*", nRightPosition + 2);
     }
 
-    qDebug() << "Read encode history record completed";
+    qCDebug(appLog) << "Read encode history record completed";
     return filePathList;
 }
 
@@ -5950,13 +5951,13 @@ void TextEdit::setTextEncode(const QString &encode)
 
 void TextEdit::tellFindBarClose()
 {
-    qDebug() << "Tell find bar close";
+    qCDebug(appLog) << "Tell find bar close";
     m_bIsFindClose = true;
 }
 
 void TextEdit::setEditPalette(const QString &activeColor, const QString &inactiveColor)
 {
-    qDebug() << "Set edit palette, activeColor:" << activeColor << "inactiveColor:" << inactiveColor;
+    qCDebug(appLog) << "Set edit palette, activeColor:" << activeColor << "inactiveColor:" << inactiveColor;
     // Not recommend manually setPalette()
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     Q_UNUSED(activeColor)
@@ -5967,68 +5968,68 @@ void TextEdit::setEditPalette(const QString &activeColor, const QString &inactiv
     pa.setColor(QPalette::Active, QPalette::Text, QColor(activeColor));
     setPalette(pa);
 #endif
-    qDebug() << "Set edit palette completed";
+    qCDebug(appLog) << "Set edit palette completed";
 }
 
 void TextEdit::setCodeFoldWidgetHide(bool isHidden)
 {
-    qDebug() << "Set code fold widget hide, isHidden:" << isHidden;
+    qCDebug(appLog) << "Set code fold widget hide, isHidden:" << isHidden;
     if (m_foldCodeShow) {
-        qDebug() << "Set code fold widget hide, m_foldCodeShow is not null";
+        qCDebug(appLog) << "Set code fold widget hide, m_foldCodeShow is not null";
         m_foldCodeShow->setHidden(isHidden);
     }
-    qDebug() << "Set code fold widget hide completed";
+    qCDebug(appLog) << "Set code fold widget hide completed";
 }
 
 
 void TextEdit::setTruePath(QString qstrTruePath)
 {
-    qDebug() << "Set true path, qstrTruePath:" << qstrTruePath;
+    qCDebug(appLog) << "Set true path, qstrTruePath:" << qstrTruePath;
     m_qstrTruePath = qstrTruePath;
-    qDebug() << "Set true path completed";
+    qCDebug(appLog) << "Set true path completed";
 }
 
 QString TextEdit::getTruePath()
 {
-    qDebug() << "Get true path";
+    qCDebug(appLog) << "Get true path";
     if (m_qstrTruePath.isEmpty()) {
-        qDebug() << "Get true path, m_qstrTruePath is empty";
+        qCDebug(appLog) << "Get true path, m_qstrTruePath is empty";
         return m_sFilePath;
     }
-    qDebug() << "Get true path completed";
+    qCDebug(appLog) << "Get true path completed";
     return  m_qstrTruePath;
 }
 
 QList<int> TextEdit::getBookmarkInfo()
 {
-    qDebug() << "Get bookmark info";
+    qCDebug(appLog) << "Get bookmark info";
     return m_listBookmark;
 }
 
 void TextEdit::setBookMarkList(QList<int> bookMarkList)
 {
     m_listBookmark = bookMarkList;
-    qDebug() << "Set bookmark list completed";
+    qCDebug(appLog) << "Set bookmark list completed";
 }
 
 void TextEdit::updateSaveIndex()
 {
-    qDebug() << "Update save index";
+    qCDebug(appLog) << "Update save index";
     m_lastSaveIndex = m_pUndoStack->index();
-    qDebug() << "Update save index completed";
+    qCDebug(appLog) << "Update save index completed";
 }
 
 void TextEdit::isMarkCurrentLine(bool isMark, QString strColor,  qint64 timeStamp)
 {
-    qDebug() << "Is mark current line, isMark:" << isMark << "strColor:" << strColor << "timeStamp:" << timeStamp;
+    qCDebug(appLog) << "Is mark current line, isMark:" << isMark << "strColor:" << strColor << "timeStamp:" << timeStamp;
     qint64 operationTimeStamp = timeStamp;
     if (operationTimeStamp < 0) {
-        qDebug() << "Is mark current line, timeStamp is less than 0";
+        qCDebug(appLog) << "Is mark current line, timeStamp is less than 0";
         operationTimeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch();
     }
 
     if (isMark) {
-        qDebug() << "Is mark current line, isMark is true";
+        qCDebug(appLog) << "Is mark current line, isMark is true";
         QTextEdit::ExtraSelection selection;
         selection.cursor = textCursor();
         selection.format.setBackground(QColor(strColor));
@@ -6038,9 +6039,9 @@ void TextEdit::isMarkCurrentLine(bool isMark, QString strColor,  qint64 timeStam
 
         if (textCursor().hasSelection()) {
             markOperation.type = MarkOnce;
-            qDebug() << "Is mark current line, textCursor().hasSelection() is true";
+            qCDebug(appLog) << "Is mark current line, textCursor().hasSelection() is true";
         } else {
-            qDebug() << "Is mark current line, textCursor().hasSelection() is false";
+            qCDebug(appLog) << "Is mark current line, textCursor().hasSelection() is false";
             markOperation.type = MarkLine;
             int beginPos = textCursor().block().position();
             int endPos = beginPos + textCursor().block().length() - 1;
@@ -6049,7 +6050,7 @@ void TextEdit::isMarkCurrentLine(bool isMark, QString strColor,  qint64 timeStam
         }
         //alt选中光标单独处理
         if (m_bIsAltMod) {
-            qDebug() << "Is mark current line, m_bIsAltMod is true";
+            qCDebug(appLog) << "Is mark current line, m_bIsAltMod is true";
             for (int i = 0; i < m_altModSelections.size(); ++i) {
                 markOperation.cursor = m_altModSelections[i].cursor;
                 selection.cursor = m_altModSelections[i].cursor;
@@ -6059,7 +6060,7 @@ void TextEdit::isMarkCurrentLine(bool isMark, QString strColor,  qint64 timeStam
                     (selection, operationTimeStamp));
             }
         } else {
-            qDebug() << "Is mark current line, m_bIsAltMod is false";
+            qCDebug(appLog) << "Is mark current line, m_bIsAltMod is false";
             markOperation.cursor = selection.cursor;
             m_markOperations.append(QPair<TextEdit::MarkOperation, qint64>(markOperation, operationTimeStamp));
             m_wordMarkSelections.append(
@@ -6067,17 +6068,17 @@ void TextEdit::isMarkCurrentLine(bool isMark, QString strColor,  qint64 timeStam
                 (selection, operationTimeStamp));
         }
     } else {
-        qDebug() << "Is mark current line, isMark is false";
+        qCDebug(appLog) << "Is mark current line, isMark is false";
         clearMarksForTextCursor();
     }
-    qDebug() << "Is mark current line completed";
+    qCDebug(appLog) << "Is mark current line completed";
 }
 
 void TextEdit::markAllKeywordInView()
 {
-    qDebug() << "Mark all keyword in view";
+    qCDebug(appLog) << "Mark all keyword in view";
     if (m_markOperations.isEmpty()) {
-        qDebug() << "Mark all keyword in view, m_markOperations is empty, return";
+        qCDebug(appLog) << "Mark all keyword in view, m_markOperations is empty, return";
         return;
     }
 
@@ -6085,30 +6086,30 @@ void TextEdit::markAllKeywordInView()
 
     for (it = m_markOperations.begin(); it != m_markOperations.end(); ++it) {
         if (MarkAllMatch == it->first.type) {
-            qDebug() << "Mark all keyword in view, type is MarkAllMatch";
+            qCDebug(appLog) << "Mark all keyword in view, type is MarkAllMatch";
             // 标记当前视图根据匹配文本查找的所有文本
             markKeywordInView(it->first.matchText, it->first.color, it->second);
         } else if (MarkAll == it->first.type) {
-            qDebug() << "Mark all keyword in view, type is MarkAll";
+            qCDebug(appLog) << "Mark all keyword in view, type is MarkAll";
             markAllInView(it->first.color, it->second);
         }
     }
 
     renderAllSelections();
-    qDebug() << "Mark all keyword in view completed";
+    qCDebug(appLog) << "Mark all keyword in view completed";
 }
 
 bool TextEdit::markKeywordInView(QString keyword, QString color, qint64 timeStamp)
 {
-    qDebug() << "Mark keyword in view, keyword:" << keyword << "color:" << color << "timeStamp:" << timeStamp;
+    qCDebug(appLog) << "Mark keyword in view, keyword:" << keyword << "color:" << color << "timeStamp:" << timeStamp;
     qint64 operationTimeStamp = timeStamp;
     if (operationTimeStamp < 0) {
-        qDebug() << "Mark keyword in view, timeStamp is less than 0";
+        qCDebug(appLog) << "Mark keyword in view, timeStamp is less than 0";
         operationTimeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch();
     }
 
     if (keyword.isEmpty()) {
-        qDebug() << "Mark keyword in view, keyword is empty, retun false";
+        qCDebug(appLog) << "Mark keyword in view, keyword is empty, retun false";
         return false;
     }
 
@@ -6127,21 +6128,21 @@ bool TextEdit::markKeywordInView(QString keyword, QString color, qint64 timeStam
     }
 
     if (ret) {
-        qDebug() << "Mark keyword in view, ret is true";
+        qCDebug(appLog) << "Mark keyword in view, ret is true";
         m_mapKeywordMarkSelections[keyword] = listExtraSelectionWithTimeStamp;
     }
 
-    qDebug() << "Mark keyword in view completed";
+    qCDebug(appLog) << "Mark keyword in view completed";
     return ret;
 }
 
 void TextEdit::markAllInView(QString color, qint64 timeStamp)
 {
-    qDebug() << "Mark all keyword in view, color:" << color << "timeStamp:" << timeStamp;
+    qCDebug(appLog) << "Mark all keyword in view, color:" << color << "timeStamp:" << timeStamp;
     // 增加时间戳
     qint64 operationTimeStamp = timeStamp;
     if (operationTimeStamp < 0) {
-        qDebug() << "Mark all keyword in view, timeStamp is less than 0";
+        qCDebug(appLog) << "Mark all keyword in view, timeStamp is less than 0";
         operationTimeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch();
     }
 
@@ -6177,20 +6178,20 @@ void TextEdit::markAllInView(QString color, qint64 timeStamp)
                           (selection, operationTimeStamp));
 
     m_mapKeywordMarkSelections[TEXT_EIDT_MARK_ALL] = listSelections;
-    qDebug() << "Mark all keyword in view completed";
+    qCDebug(appLog) << "Mark all keyword in view completed";
 }
 
 void TextEdit::isMarkAllLine(bool isMark, QString strColor)
 {
-    qDebug() << "Is mark all line, isMark:" << isMark << "strColor:" << strColor;
+    qCDebug(appLog) << "Is mark all line, isMark:" << isMark << "strColor:" << strColor;
     // 增加时间戳
     qint64 timeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch();
 
     if (isMark) {
-        qDebug() << "Is mark all line, isMark is true";
+        qCDebug(appLog) << "Is mark all line, isMark is true";
         QString selectionText = textCursor().selectedText();
         if (selectionText.length() != 0 && selectionText.length() < (document()->characterCount() - 1)) {
-            qDebug() << "Is mark all line, selectionText is not empty";
+            qCDebug(appLog) << "Is mark all line, selectionText is not empty";
             // 没有使用的变量，去除
             // QList<QTextEdit::ExtraSelection> wordMarkSelections = m_wordMarkSelections;
             QList<QTextEdit::ExtraSelection> listExtraSelection;
@@ -6210,7 +6211,7 @@ void TextEdit::isMarkAllLine(bool isMark, QString strColor)
             m_markOperations.append(QPair<TextEdit::MarkOperation, qint64>(markOperation, timeStamp));
 
             if (updateKeywordSelectionsInView(selectionText, format, &listExtraSelection)) {
-                qDebug() << "Is mark all line, updateKeywordSelectionsInView is true";
+                qCDebug(appLog) << "Is mark all line, updateKeywordSelectionsInView is true";
 
                 QList<QPair<QTextEdit::ExtraSelection, qint64>> listExtraSelectionWithTimeStamp;
                 for (int i = 0; i < listExtraSelection.size(); i++) {
@@ -6220,7 +6221,7 @@ void TextEdit::isMarkAllLine(bool isMark, QString strColor)
 
                 m_mapKeywordMarkSelections[selectionText] = listExtraSelectionWithTimeStamp;
             } else {
-                qDebug() << "Is mark all line, updateKeywordSelectionsInView is false";
+                qCDebug(appLog) << "Is mark all line, updateKeywordSelectionsInView is false";
                 // 选中部分在文档中仅此一个，查找标记失败了，进行补充处理
                 QTextEdit::ExtraSelection extraSelect;
                 listExtraSelection.append(extraSelection);
@@ -6234,7 +6235,7 @@ void TextEdit::isMarkAllLine(bool isMark, QString strColor)
             }
 
         } else if (!textCursor().hasSelection() || selectionText.length() == (document()->characterCount() - 1)) {
-            qDebug() << "Is mark all line, selectionText is empty or equal to document length";
+            qCDebug(appLog) << "Is mark all line, selectionText is empty or equal to document length";
             TextEdit::MarkOperation markOperation;
             markOperation.type = MarkAll;
             markOperation.color = strColor;
@@ -6242,7 +6243,7 @@ void TextEdit::isMarkAllLine(bool isMark, QString strColor)
             markAllInView(strColor, timeStamp);
         }
     } else {
-        qDebug() << "Is mark all line, isMark is false";
+        qCDebug(appLog) << "Is mark all line, isMark is false";
         m_markOperations.clear();
         m_wordMarkSelections.clear();
         m_mapKeywordMarkSelections.clear();
@@ -6256,29 +6257,29 @@ void TextEdit::isMarkAllLine(bool isMark, QString strColor)
     }
 
     renderAllSelections();
-    qDebug() << "Cancel last mark completed";
+    qCDebug(appLog) << "Cancel last mark completed";
 }
 
 void TextEdit::cancelLastMark()
 {
-    qDebug() << "Cancel last mark";
+    qCDebug(appLog) << "Cancel last mark";
     if (m_markOperations.isEmpty()) {
-        qDebug() << "Cancel last mark, m_markOperations is empty";
+        qCDebug(appLog) << "Cancel last mark, m_markOperations is empty";
         return;
     }
 
     switch (m_markOperations.last().first.type) {
     case MarkOnce:
     case MarkLine: {
-        qDebug() << "Cancel last mark, type is MarkOnce or MarkLine";
+        qCDebug(appLog) << "Cancel last mark, type is MarkOnce or MarkLine";
         if (!m_wordMarkSelections.isEmpty()) {
-            qDebug() << "Cancel last mark, m_wordMarkSelections is not empty";
+            qCDebug(appLog) << "Cancel last mark, m_wordMarkSelections is not empty";
             // m_wordMarkSelections.removeLast();
             // 考虑到可能的插入操作，需要同步清理时间戳一样的selection
             const qint64 operationTimeStamp = m_markOperations.last().second;
             for (int i = 0; i < m_wordMarkSelections.size(); i++) {
                 if (operationTimeStamp == m_wordMarkSelections.at(i).second) {
-                    qDebug() << "Cancel last mark, find same time stamp selection";
+                    qCDebug(appLog) << "Cancel last mark, find same time stamp selection";
                     m_wordMarkSelections.removeAt(i);
                     i--;
                 }
@@ -6288,7 +6289,7 @@ void TextEdit::cancelLastMark()
     }
 
     case MarkAllMatch: {
-        qDebug() << "Cancel last mark, type is MarkAllMatch";
+        qCDebug(appLog) << "Cancel last mark, type is MarkAllMatch";
         // QString keyword = m_markOperations.last().first.cursor.selectedText();
         QString keyword;
         qint64 timeStamp = m_markOperations.last().second;
@@ -6296,10 +6297,10 @@ void TextEdit::cancelLastMark()
         QMap<QString, QList<QPair<QTextEdit::ExtraSelection, qint64>>>::Iterator it;
         for (it = m_mapKeywordMarkSelections.begin(); it != m_mapKeywordMarkSelections.end(); ++it) {
             if (it.value().size() > 0) {
-                qDebug() << "Cancel last mark, find keyword in map";
+                qCDebug(appLog) << "Cancel last mark, find keyword in map";
                 qint64 itsTimeStamp = it.value().first().second;
                 if (itsTimeStamp == timeStamp) {
-                    qDebug() << "Cancel last mark, find keyword in map, time stamp is same";
+                    qCDebug(appLog) << "Cancel last mark, find keyword in map, time stamp is same";
                     keyword = it.key();
                     break;
                 }
@@ -6307,14 +6308,14 @@ void TextEdit::cancelLastMark()
         }
 
         if (m_mapKeywordMarkSelections.contains(keyword)) {
-            qDebug() << "Cancel last mark, find keyword in map, remove";
+            qCDebug(appLog) << "Cancel last mark, find keyword in map, remove";
             m_mapKeywordMarkSelections.remove(keyword);
         }
         break;
     }
 
     case MarkAll: {
-        qDebug() << "Cancel last mark, type is MarkAll";
+        qCDebug(appLog) << "Cancel last mark, type is MarkAll";
         if (m_mapKeywordMarkSelections.contains(TEXT_EIDT_MARK_ALL)) {
             m_mapKeywordMarkSelections.remove(TEXT_EIDT_MARK_ALL);
         }
@@ -6328,36 +6329,36 @@ void TextEdit::cancelLastMark()
     // 如果在标记颜色操作后，更改文本内容，如果存在残留，补充一个清除处理
     if (m_markOperations.isEmpty() &&
             (m_wordMarkSelections.size() > 0 || m_mapKeywordMarkSelections.size() > 0)) {
-        qWarning() << __FUNCTION__ << __LINE__ << " cancle mark color operation,"
+        qCWarning(appLog) << __FUNCTION__ << __LINE__ << " cancle mark color operation,"
                    << "find exist remain selections, will clear!";
         m_wordMarkSelections.clear();
         m_mapKeywordMarkSelections.clear();
     }
 
     renderAllSelections();
-    qDebug() << "Cancel last mark completed";
+    qCDebug(appLog) << "Cancel last mark completed";
 }
 
 bool TextEdit::clearMarkOperationForCursor(QTextCursor cursor)
 {
-    qDebug() << "Cancel last mark, find cursor in m_markOperations";
+    qCDebug(appLog) << "Cancel last mark, find cursor in m_markOperations";
     bool bRet = false;
     for (int i = m_markOperations.size() - 1; i >= 0; --i) {
         if (m_markOperations.at(i).first.cursor == cursor) {
             m_markOperations.removeAt(i);
             bRet = true;
-            qDebug() << "Cancel last mark, find cursor in m_markOperations, break!";
+            qCDebug(appLog) << "Cancel last mark, find cursor in m_markOperations, break!";
             break;
         }
     }
 
-    qDebug() << "Cancel last mark, find cursor in m_markOperations, return: " << bRet;
+    qCDebug(appLog) << "Cancel last mark, find cursor in m_markOperations, return: " << bRet;
     return bRet;
 }
 
 bool TextEdit::clearMarksForTextCursor()
 {
-    qDebug() << "Cancel last mark, find cursor in m_wordMarkSelections";
+    qCDebug(appLog) << "Cancel last mark, find cursor in m_wordMarkSelections";
     bool bFind = false;
     QTextCursor cursor;
     QTextCursor textcursor = textCursor();
@@ -6365,17 +6366,17 @@ bool TextEdit::clearMarksForTextCursor()
     for (int i = m_wordMarkSelections.size() - 1; i >= 0; --i) {
         cursor = m_wordMarkSelections.at(i).first.cursor;
         if (textcursor.hasSelection()) {
-            qDebug() << "Cancel last mark, find cursor in m_wordMarkSelections, has selection";
+            qCDebug(appLog) << "Cancel last mark, find cursor in m_wordMarkSelections, has selection";
             if (textcursor == cursor) {
                 bFind = true;
                 clearMarkOperationForCursor(cursor);
                 m_wordMarkSelections.removeAt(i);
-                qDebug() << "Cancel last mark, find cursor in m_wordMarkSelections, has selection, equal, break";
+                qCDebug(appLog) << "Cancel last mark, find cursor in m_wordMarkSelections, has selection, equal, break";
                 break;
             }
 
         } else {
-            qDebug() << "Cancel last mark, find cursor in m_wordMarkSelections, has no selection";
+            qCDebug(appLog) << "Cancel last mark, find cursor in m_wordMarkSelections, has no selection";
             if (textcursor.position() >= cursor.selectionStart() && textcursor.position() <= cursor.selectionEnd()) {
                 bFind = true;
                 clearMarkOperationForCursor(cursor);
@@ -6384,21 +6385,21 @@ bool TextEdit::clearMarksForTextCursor()
         }
     }
 
-    qDebug() << "Cancel last mark, find cursor in m_wordMarkSelections, return: " << bFind;
+    qCDebug(appLog) << "Cancel last mark, find cursor in m_wordMarkSelections, return: " << bFind;
     return bFind;
 }
 
 void TextEdit::toggleMarkSelections()
 {
-    qDebug() << "Cancel last mark, find cursor in m_wordMarkSelections, toggle";
+    qCDebug(appLog) << "Cancel last mark, find cursor in m_wordMarkSelections, toggle";
     if (!clearMarksForTextCursor()) {
-        qDebug() << "Cancel last mark, find cursor in m_wordMarkSelections, toggle, no find";
+        qCDebug(appLog) << "Cancel last mark, find cursor in m_wordMarkSelections, toggle, no find";
         ColorSelectWdg *pColorSelectWdg = static_cast<ColorSelectWdg *>(m_actionColorStyles->defaultWidget());
         isMarkCurrentLine(true, pColorSelectWdg->getDefaultColor().name());
     }
 
     renderAllSelections();
-    qDebug() << "Cancel last mark, find cursor in m_wordMarkSelections, toggle end";
+    qCDebug(appLog) << "Cancel last mark, find cursor in m_wordMarkSelections, toggle end";
 }
 
 /**
@@ -6409,7 +6410,7 @@ void TextEdit::toggleMarkSelections()
  */
 QList<QPair<TextEdit::MarkOperation, qint64> > TextEdit::convertReplaceToMark(const QList<TextEdit::MarkReplaceInfo> &replaceInfo)
 {
-    qDebug() << "Cancel last mark, find cursor in m_wordMarkSelections, toggle, convert";
+    qCDebug(appLog) << "Cancel last mark, find cursor in m_wordMarkSelections, toggle, convert";
     QList<QPair<TextEdit::MarkOperation, qint64> > markList;
     for (auto info : replaceInfo) {
         MarkOperation markOpt = info.opt;
@@ -6421,7 +6422,7 @@ QList<QPair<TextEdit::MarkOperation, qint64> > TextEdit::convertReplaceToMark(co
         markList.append(qMakePair(markOpt, info.time));
     }
 
-    qDebug() << "Cancel last mark, find cursor in m_wordMarkSelections, toggle, convert end";
+    qCDebug(appLog) << "Cancel last mark, find cursor in m_wordMarkSelections, toggle, convert end";
     return markList;
 }
 
@@ -6433,7 +6434,7 @@ QList<QPair<TextEdit::MarkOperation, qint64> > TextEdit::convertReplaceToMark(co
  */
 QList<TextEdit::MarkReplaceInfo> TextEdit::convertMarkToReplace(const QList<QPair<TextEdit::MarkOperation, qint64> > &markInfo)
 {
-    qDebug() << "Cancel last mark, find cursor in m_wordMarkSelections, toggle, convert";
+    qCDebug(appLog) << "Cancel last mark, find cursor in m_wordMarkSelections, toggle, convert";
     QList<TextEdit::MarkReplaceInfo> replaceMarkList;
     for (auto info : markInfo) {
         MarkReplaceInfo replace;
@@ -6447,7 +6448,7 @@ QList<TextEdit::MarkReplaceInfo> TextEdit::convertMarkToReplace(const QList<QPai
         replaceMarkList.append(replace);
     }
 
-    qDebug() << "Cancel last mark, find cursor in m_wordMarkSelections, toggle, convert end";
+    qCDebug(appLog) << "Cancel last mark, find cursor in m_wordMarkSelections, toggle, convert end";
     return replaceMarkList;
 }
 
@@ -6457,7 +6458,7 @@ QList<TextEdit::MarkReplaceInfo> TextEdit::convertMarkToReplace(const QList<QPai
  */
 void TextEdit::manualUpdateAllMark(const QList<QPair<MarkOperation, qint64> > &markInfo)
 {
-    qDebug() << "Cancel last mark, find cursor in m_wordMarkSelections, manualUpdateAllMark";
+    qCDebug(appLog) << "Cancel last mark, find cursor in m_wordMarkSelections, manualUpdateAllMark";
     m_markOperations = markInfo;
 
     // 全部标记更新后，修改手动标记文本部分
@@ -6469,20 +6470,20 @@ void TextEdit::manualUpdateAllMark(const QList<QPair<MarkOperation, qint64> > &m
         if (MarkAll == (*itr).first.type
                 || MarkAllMatch == (*itr).first.type) {
             ++itr;
-            qDebug() << "Cancel last mark, find cursor in m_wordMarkSelections, manualUpdateAllMark, all mark, continue";
+            qCDebug(appLog) << "Cancel last mark, find cursor in m_wordMarkSelections, manualUpdateAllMark, all mark, continue";
             continue;
         }
 
         // 若无选中项，则过滤此颜色标记
         if (!(*itr).first.cursor.hasSelection()) {
-            qDebug() << "Cancel last mark, find cursor in m_wordMarkSelections, manualUpdateAllMark, no selection, erase";
+            qCDebug(appLog) << "Cancel last mark, find cursor in m_wordMarkSelections, manualUpdateAllMark, no selection, erase";
             itr = m_markOperations.erase(itr);
             continue;
         }
 
         auto &info = *itr;
         if (MarkOnce == info.first.type) {
-            qDebug() << "Cancel last mark, find cursor in m_wordMarkSelections, manualUpdateAllMark, once mark";
+            qCDebug(appLog) << "Cancel last mark, find cursor in m_wordMarkSelections, manualUpdateAllMark, once mark";
             QTextEdit::ExtraSelection selection;
             selection.format.setBackground(QColor(info.first.color));
             selection.cursor = info.first.cursor;
@@ -6491,7 +6492,7 @@ void TextEdit::manualUpdateAllMark(const QList<QPair<MarkOperation, qint64> > &m
             m_wordMarkSelections.append(qMakePair(selection, info.second));
 
         } else if (MarkLine == info.first.type) {
-            qDebug() << "Cancel last mark, find cursor in m_wordMarkSelections, manualUpdateAllMark, line mark";
+            qCDebug(appLog) << "Cancel last mark, find cursor in m_wordMarkSelections, manualUpdateAllMark, line mark";
             int selectStart = info.first.cursor.selectionStart();
             int selectEnd = info.first.cursor.selectionEnd();
             QTextBlock startBlock = document()->findBlock(selectStart);
@@ -6527,7 +6528,7 @@ void TextEdit::manualUpdateAllMark(const QList<QPair<MarkOperation, qint64> > &m
             // 若为多行颜色标记，会将当前文本颜色标记移除，后续添加为多行颜色标记
             if (isMultiLine) {
                 itr = m_markOperations.erase(itr);
-                qDebug() << "Cancel last mark, find cursor in m_wordMarkSelections, manualUpdateAllMark, multi line, erase";
+                qCDebug(appLog) << "Cancel last mark, find cursor in m_wordMarkSelections, manualUpdateAllMark, multi line, erase";
                 continue;
             }
         }
@@ -6551,7 +6552,7 @@ void TextEdit::manualUpdateAllMark(const QList<QPair<MarkOperation, qint64> > &m
 
     // 计算全文标记部分并刷新界面颜色标记
     markAllKeywordInView();
-    qDebug() << "Cancel last mark, find cursor in m_wordMarkSelections, manualUpdateAllMark, end";
+    qCDebug(appLog) << "Cancel last mark, find cursor in m_wordMarkSelections, manualUpdateAllMark, end";
 }
 
 /**
@@ -6565,11 +6566,11 @@ void TextEdit::manualUpdateAllMark(const QList<QPair<MarkOperation, qint64> > &m
  */
 static QPair<int, int> findMatchRange(const QList<int> &posList, int markStart, int markEnd, const QString &replaceText)
 {
-    qDebug() << "findMatchRange, markStart" << markStart << "markEnd" << markEnd << "replaceText" << replaceText;
+    qCDebug(appLog) << "findMatchRange, markStart" << markStart << "markEnd" << markEnd << "replaceText" << replaceText;
     // 判断颜色标记 info 范围内是否包含替换文本索引信息
     QPair<int, int> foundPosRange {-1, -1};
     if (posList.isEmpty()) {
-        qDebug() << "findMatchRange, posList is empty, return";
+        qCDebug(appLog) << "findMatchRange, posList is empty, return";
         return foundPosRange;
     }
 
@@ -6580,7 +6581,7 @@ static QPair<int, int> findMatchRange(const QList<int> &posList, int markStart, 
     auto leftfindItr = std::upper_bound(posList.begin(), posList.end(), adjustMarkStart);
     if (leftfindItr != posList.end()
             && (*leftfindItr) < markEnd) {
-        qDebug() << "findMatchRange, leftfindItr" << (*leftfindItr) << "markEnd" << markEnd;
+        qCDebug(appLog) << "findMatchRange, leftfindItr" << (*leftfindItr) << "markEnd" << markEnd;
         // 设置查询的左边界
         foundPosRange.first = static_cast<int>(std::distance(posList.begin(), leftfindItr));
     }
@@ -6589,15 +6590,15 @@ static QPair<int, int> findMatchRange(const QList<int> &posList, int markStart, 
     auto rightFindItr = std::lower_bound(posList.rbegin(), posList.rend(), markEnd - 1, std::greater<int>());
     if (rightFindItr != posList.rend()
             && markStart < (*rightFindItr)) {
-        qDebug() << "findMatchRange, rightFindItr" << (*rightFindItr) << "markStart" << markStart;
+        qCDebug(appLog) << "findMatchRange, rightFindItr" << (*rightFindItr) << "markStart" << markStart;
         // 设置右边界
         foundPosRange.second = static_cast<int>(std::distance(rightFindItr, posList.rend() - 1));
     } else if (-1 != foundPosRange.first) {
-        qDebug() << "findMatchRange, foundPosRange.first" << foundPosRange.first;
+        qCDebug(appLog) << "findMatchRange, foundPosRange.first" << foundPosRange.first;
         foundPosRange.second = foundPosRange.first;
     }
 
-    qDebug() << "findMatchRange, foundPosRange" << foundPosRange;
+    qCDebug(appLog) << "findMatchRange, foundPosRange" << foundPosRange;
     return foundPosRange;
 }
 
@@ -6610,7 +6611,7 @@ static QPair<int, int> findMatchRange(const QList<int> &posList, int markStart, 
  */
 static void updateMarkReplaceRange(const QList<int> &foundPosList, TextEdit::MarkReplaceInfo &info, const QString &replaceText, const QString &withText)
 {
-    qDebug() << "updateMarkReplaceRange, info";
+    qCDebug(appLog) << "updateMarkReplaceRange, info";
     // 文本替换长度变更调整量
     int adjustlen = withText.size() - replaceText.size();
     // 获取替换文本位置索引列表
@@ -6618,7 +6619,7 @@ static void updateMarkReplaceRange(const QList<int> &foundPosList, TextEdit::Mar
 
     if (-1 == posIndexRange.first
             && -1 == posIndexRange.second) {
-        qDebug() << "updateMarkReplaceRange, posIndexRange, first" << posIndexRange.first << "second" << posIndexRange.second;
+        qCDebug(appLog) << "updateMarkReplaceRange, posIndexRange, first" << posIndexRange.first << "second" << posIndexRange.second;
         // 颜色标记内不包含替换文本，和替换文本无交集
         // 根据当前查询位置判断 foundPosList[findCount - 1] 方向
         if (!foundPosList.isEmpty()
@@ -6632,7 +6633,7 @@ static void updateMarkReplaceRange(const QList<int> &foundPosList, TextEdit::Mar
             info.end += foundPosList.size() * adjustlen;
         }
     } else {
-        qDebug() << "updateMarkReplaceRange, posIndexRange, first" << posIndexRange.first << "second" << posIndexRange.second;
+        qCDebug(appLog) << "updateMarkReplaceRange, posIndexRange, first" << posIndexRange.first << "second" << posIndexRange.second;
         // 判断左侧是否有交集，拓展颜色标记到替换文本
         if (-1 != posIndexRange.first
                 && foundPosList[posIndexRange.first] <= info.start) {
@@ -6651,7 +6652,7 @@ static void updateMarkReplaceRange(const QList<int> &foundPosList, TextEdit::Mar
             info.end += (posIndexRange.second + 1) * adjustlen;
         }
     }
-    qDebug() << "updateMarkReplaceRange exit";
+    qCDebug(appLog) << "updateMarkReplaceRange exit";
 }
 
 /**
@@ -6678,11 +6679,11 @@ static void updateMarkReplaceRange(const QList<int> &foundPosList, TextEdit::Mar
 void TextEdit::calcMarkReplaceList(QList<TextEdit::MarkReplaceInfo> &replaceList, const QString &oldText,
                                    const QString &replaceText, const QString &withText, int offset, Qt::CaseSensitivity caseFlag) const
 {
-    qDebug() << "calcMarkReplaceList, replaceList, size=" << replaceList.size();
+    qCDebug(appLog) << "calcMarkReplaceList, replaceList, size=" << replaceList.size();
     // 当前替换项为空或相同，退出
     if (replaceList.isEmpty()
             || replaceText == withText) {
-        qDebug() << "calcMarkReplaceList, replaceList is empty or replaceText == withText, return";
+        qCDebug(appLog) << "calcMarkReplaceList, replaceList is empty or replaceText == withText, return";
         return;
     }
 
@@ -6697,27 +6698,27 @@ void TextEdit::calcMarkReplaceList(QList<TextEdit::MarkReplaceInfo> &replaceList
     QPair<int, int> curMarkRange {0, 0};
     // 更新当前标记替换项索引和其对应的标记范围
     auto updateMarkIndexAndRange = [&]() {
-        qDebug() << "updateMarkIndexAndRange, currentMarkIndex" << currentMarkIndex;
+        qCDebug(appLog) << "updateMarkIndexAndRange, currentMarkIndex" << currentMarkIndex;
         currentMarkIndex++;
         while (currentMarkIndex >= 0 && currentMarkIndex < replaceList.size()) {
             auto &markInfo = replaceList.at(currentMarkIndex);
-            qDebug() << "updateMarkIndexAndRange, markInfo, start" << markInfo.start << "end" << markInfo.end;
+            qCDebug(appLog) << "updateMarkIndexAndRange, markInfo, start" << markInfo.start << "end" << markInfo.end;
             // 标记类型为标记全文或文本全文标记(使用文本查找而非光标位置)，不进行替换处理
             if (MarkAllMatch == markInfo.opt.type
                     || MarkAll == markInfo.opt.type) {
-                qDebug() << "updateMarkIndexAndRange, markInfo, type is MarkAllMatch or MarkAll, continue";
+                qCDebug(appLog) << "updateMarkIndexAndRange, markInfo, type is MarkAllMatch or MarkAll, continue";
                 currentMarkIndex++;
                 continue;
             }
 
             curMarkRange = qMakePair(markInfo.start, markInfo.end);
-            qDebug() << "updateMarkIndexAndRange, curMarkRange" << curMarkRange;
+            qCDebug(appLog) << "updateMarkIndexAndRange, curMarkRange" << curMarkRange;
             break;
         }
     };
-    qDebug() << "updateMarkIndexAndRange, before updateMarkIndexAndRange";
+    qCDebug(appLog) << "updateMarkIndexAndRange, before updateMarkIndexAndRange";
     updateMarkIndexAndRange();
-    qDebug() << "updateMarkIndexAndRange, after updateMarkIndexAndRange";
+    qCDebug(appLog) << "updateMarkIndexAndRange, after updateMarkIndexAndRange";
 
     // 查找统计及已查找偏移量
     int findOffset = 0;
@@ -6728,7 +6729,7 @@ void TextEdit::calcMarkReplaceList(QList<TextEdit::MarkReplaceInfo> &replaceList
     // 需要取得左侧所有的变更相对偏移，从文本左侧开始循环遍历
     while (-1 != findPos
             && currentMarkIndex < replaceList.size()) {
-        qDebug() << "calcMarkReplaceList, findPos" << findPos << "offset" << offset;
+        qCDebug(appLog) << "calcMarkReplaceList, findPos" << findPos << "offset" << offset;
         // 转换为相对全文的偏移
         int realPos = findPos + offset;
         // 记录已查询的索引位置
@@ -6741,11 +6742,11 @@ void TextEdit::calcMarkReplaceList(QList<TextEdit::MarkReplaceInfo> &replaceList
         // 判断是否处于查询范围内，处于右侧区间则后续处理
         while (Utils::ERight != type) {
             auto &info = replaceList[currentMarkIndex];
-            qDebug() << "calcMarkReplaceList, info, start" << info.start << "end" << info.end;
+            qCDebug(appLog) << "calcMarkReplaceList, info, start" << info.start << "end" << info.end;
             bool checkNext = false;
             switch (type) {
             case Utils::EIntersectInner: {
-                qDebug() << "calcMarkReplaceList, type is EIntersectInner";
+                qCDebug(appLog) << "calcMarkReplaceList, type is EIntersectInner";
                 // 替换文本内容包含标记信息, 取消当前文本标记（无论单个文本还是单行文本，均移除）
                 // 在 manualUpdateAllMark() 函数处理会移除此标记
                 info.start = 0;
@@ -6754,7 +6755,7 @@ void TextEdit::calcMarkReplaceList(QList<TextEdit::MarkReplaceInfo> &replaceList
                 break;
             }
             case Utils::ELeft: {
-                qDebug() << "calcMarkReplaceList, type is ELeft";
+                qCDebug(appLog) << "calcMarkReplaceList, type is ELeft";
                 // 当前无交集，颜色标记在替换文本左侧，表示当前颜色标记已经经过
                 updateMarkReplaceRange(foundPosList, info, replaceText, withText);
 
@@ -6767,25 +6768,25 @@ void TextEdit::calcMarkReplaceList(QList<TextEdit::MarkReplaceInfo> &replaceList
             }
 
             if (checkNext) {
-                qDebug() << "calcMarkReplaceList, checkNext is true";
+                qCDebug(appLog) << "calcMarkReplaceList, checkNext is true";
                 // 更新当前计算的颜色标记和范围
                 updateMarkIndexAndRange();
                 // 判断颜色标记是否计算完成
                 if (currentMarkIndex == replaceList.size()) {
-                    qDebug() << "calcMarkReplaceList, currentMarkIndex == replaceList.size(), break";
+                    qCDebug(appLog) << "calcMarkReplaceList, currentMarkIndex == replaceList.size(), break";
                     break;
                 }
 
                 // 继续查找下一颜色标记和当前查询位置的交叉范围
                 type = Utils::checkRegionIntersect(realPos, realPos + replaceText.size(), curMarkRange.first, curMarkRange.second);
             } else {
-                qDebug() << "calcMarkReplaceList, checkNext is false, break";
+                qCDebug(appLog) << "calcMarkReplaceList, checkNext is false, break";
                 break;
             }
         }
 
         if (currentMarkIndex == replaceList.size()) {
-            qDebug() << "calcMarkReplaceList, currentMarkIndex == replaceList.size(), break";
+            qCDebug(appLog) << "calcMarkReplaceList, currentMarkIndex == replaceList.size(), break";
             break;
         }
 
@@ -6796,19 +6797,19 @@ void TextEdit::calcMarkReplaceList(QList<TextEdit::MarkReplaceInfo> &replaceList
 
     // 继续处理剩余颜色标记偏移
     while (currentMarkIndex != replaceList.size()) {
-        qDebug() << "calcMarkReplaceList, currentMarkIndex != replaceList.size(), while";
+        qCDebug(appLog) << "calcMarkReplaceList, currentMarkIndex != replaceList.size(), while";
         // 将后续未处理到的颜色标记调整偏移量
         auto &info = replaceList[currentMarkIndex];
         updateMarkReplaceRange(foundPosList, info, replaceText, withText);
 
         updateMarkIndexAndRange();
     }
-    qDebug() << "calcMarkReplaceList, completed";
+    qCDebug(appLog) << "calcMarkReplaceList, completed";
 }
 
 void TextEdit::markSelectWord()
 {
-    qDebug() << "markSelectWord";
+    qCDebug(appLog) << "markSelectWord";
     bool isFind  = false;
     for (int i = 0 ; i < m_wordMarkSelections.size(); ++i) {
         QTextCursor curson = m_wordMarkSelections.at(i).first.cursor;
@@ -6817,7 +6818,7 @@ void TextEdit::markSelectWord()
         currentCurson.movePosition(QTextCursor::EndOfLine);
         //if (m_wordMarkSelections.at(i).cursor == textCursor()) {
         if (curson == currentCurson) {
-            qDebug() << "markSelectWord, curson == currentCurson";
+            qCDebug(appLog) << "markSelectWord, curson == currentCurson";
             isFind = true;
             m_wordMarkSelections.removeAt(i);
             renderAllSelections();
@@ -6825,22 +6826,22 @@ void TextEdit::markSelectWord()
         }
     }
     if (!isFind) {
-        qDebug() << "markSelectWord, isFind is false";
+        qCDebug(appLog) << "markSelectWord, isFind is false";
         //添加快捷键标记颜色
         ColorSelectWdg *pColorSelectWdg = static_cast<ColorSelectWdg *>(m_actionColorStyles->defaultWidget());
         isMarkCurrentLine(true, pColorSelectWdg->getDefaultColor().name());
         renderAllSelections();
     }
-    qDebug() << "markSelectWord, completed";
+    qCDebug(appLog) << "markSelectWord, completed";
 }
 
 void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
 {
-    qDebug() << "updateMark, from" << from << "charsRemoved" << charsRemoved << "charsAdded" << charsAdded;
+    qCDebug(appLog) << "updateMark, from" << from << "charsRemoved" << charsRemoved << "charsAdded" << charsAdded;
     //只读模式下实现禁止语音输入的效果
     if (m_readOnlyMode) {
         //undo();
-        qDebug() << "updateMark, readOnlyMode, return";
+        qCDebug(appLog) << "updateMark, readOnlyMode, return";
         return;
     }
 
@@ -6856,7 +6857,7 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
         return;
     }
 
-    qDebug() << "updateMark, charsRemoved" << charsRemoved << "charsAdded" << charsAdded;
+    qCDebug(appLog) << "updateMark, charsRemoved" << charsRemoved << "charsAdded" << charsAdded;
     //更新标记
     int nStartPos = 0,///< 标记的起始位置
         nEndPos = 0,///< 标记的结束位置
@@ -6869,7 +6870,7 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
 
     //如果是删除字符
     if (charsRemoved > 0) {
-        qDebug() << "updateMark, charsRemoved > 0";
+        qCDebug(appLog) << "updateMark, charsRemoved > 0";
         QList<int> listRemoveItem;///< 要移除标记的indexs
 
         //寻找要移除标记的index
@@ -6881,13 +6882,13 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
 
             //如果有文字被选择
             if (m_nSelectEndLine != -1) {
-                qDebug() << "updateMark, charsRemoved > 0, m_nSelectEndLine != -1";
+                qCDebug(appLog) << "updateMark, charsRemoved > 0, m_nSelectEndLine != -1";
                 //如果删除的内容，完全包含标记内容
                 if (m_nSelectStart <= nStartPos && m_nSelectEnd >= nEndPos) {
                     listRemoveItem.append(i);
                 }
             } else {
-                qDebug() << "updateMark, charsRemoved > 0, m_nSelectEndLine == -1";
+                qCDebug(appLog) << "updateMark, charsRemoved > 0, m_nSelectEndLine == -1";
                 //如果标记内容全部被删除
                 if (wordMarkSelections.value(i).first.cursor.selection().toPlainText().isEmpty()) {
                     // 此时 remove m_wordMarkSelections中的元素
@@ -6908,21 +6909,21 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
                     m_wordMarkSelections.removeAt(i);
                 }
             }
-            qDebug() << "updateMark: Removed marks, remaining:" << m_wordMarkSelections.size();
+            qCDebug(appLog) << "updateMark: Removed marks, remaining:" << m_wordMarkSelections.size();
 #else
             QSet<int> removeSet(listRemoveItem.begin(), listRemoveItem.end());
             int index = 0;
             int removedCount = m_wordMarkSelections.removeIf([&removeSet, &index](const auto&) {
                 return removeSet.contains(index++);
             });
-            qDebug() << "updateMark: Removed" << removedCount << "marks, remaining:" << m_wordMarkSelections.size();
+            qCDebug(appLog) << "updateMark: Removed" << removedCount << "marks, remaining:" << m_wordMarkSelections.size();
 #endif
         }
     }
 
     //如果是添加字符
     if (charsAdded > 0) {
-        qDebug() << "updateMark, charsAdded > 0";
+        qCDebug(appLog) << "updateMark, charsAdded > 0";
         for (int i = 0; i < wordMarkSelections.count(); i++) {
             nEndPos = wordMarkSelections.value(i).first.cursor.selectionEnd();
             nStartPos = wordMarkSelections.value(i).first.cursor.selectionStart();
@@ -6931,25 +6932,25 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
 
             //如果字符添加在标记中
             if (nCurrentPos > nStartPos && nCurrentPos < nEndPos) {
-                qDebug() << "updateMark, charsAdded > 0, nCurrentPos > nStartPos && nCurrentPos < nEndPos";
+                qCDebug(appLog) << "updateMark, charsAdded > 0, nCurrentPos > nStartPos && nCurrentPos < nEndPos";
                 //Qt已自动调整cursor范围以包含新插入的文本，保持标记为整体不做分割，
                 //避免分割后新输入文本落在两段标记间隙中导致颜色丢失
                 //BUG-345731
                 break;
 
             } else if (nCurrentPos == nEndPos) { //如果字符添加在标记后
-                qDebug() << "updateMark, charsAdded > 0, nCurrentPos == nEndPos";
+                qCDebug(appLog) << "updateMark, charsAdded > 0, nCurrentPos == nEndPos";
                 m_wordMarkSelections.removeAt(i);
                 selection.format.setBackground(strColor);
                 selection.cursor = textCursor();
 
                 if (m_bIsInputMethod) {
-                    qDebug() << "updateMark, charsAdded > 0, m_bIsInputMethod";
+                    qCDebug(appLog) << "updateMark, charsAdded > 0, m_bIsInputMethod";
                     selection.cursor.setPosition(nStartPos, QTextCursor::MoveAnchor);
                     selection.cursor.setPosition(nEndPos - m_qstrCommitString.size(), QTextCursor::KeepAnchor);
                     m_bIsInputMethod = false;
                 } else {
-                    qDebug() << "updateMark, charsAdded > 0, !m_bIsInputMethod";
+                    qCDebug(appLog) << "updateMark, charsAdded > 0, !m_bIsInputMethod";
                     selection.cursor.setPosition(nStartPos, QTextCursor::MoveAnchor);
                     selection.cursor.setPosition(from + charsAdded, QTextCursor::KeepAnchor);
                 }
@@ -6967,7 +6968,7 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
                             listSelections = list;
                             listSelections.insert(k, selection);
                             bIsFind = true;
-                            qDebug() << "updateMark, charsAdded > 0, bIsFind, break";
+                            qCDebug(appLog) << "updateMark, charsAdded > 0, bIsFind, break";
                             break;
                         }
                     }
@@ -6975,11 +6976,11 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
                     if (bIsFind) {
                         m_mapWordMarkSelections.remove(j);
                         m_mapWordMarkSelections.insert(j, listSelections);
-                        qDebug() << "updateMark, charsAdded > 0, bIsFind, break";
+                        qCDebug(appLog) << "updateMark, charsAdded > 0, bIsFind, break";
                         break;
                     }
                 }
-                qDebug() << "updateMark, charsAdded > 0, break";
+                qCDebug(appLog) << "updateMark, charsAdded > 0, break";
                 break;
             }
         }
@@ -6987,40 +6988,40 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
 
     //渲染所有的指定字符格式
     renderAllSelections();
-    qDebug() << "updateMark, completed";
+    qCDebug(appLog) << "updateMark, completed";
 }
 
 void TextEdit::setCursorStart(int pos)
 {
-    qDebug() << "setCursorStart, pos" << pos;
+    qCDebug(appLog) << "setCursorStart, pos" << pos;
     m_cursorStart = pos;
 }
 
 
 void TextEdit::completionWord(QString word)
 {
-    qDebug() << "completionWord, word" << word;
+    qCDebug(appLog) << "completionWord, word" << word;
     QString wordAtCursor = getWordAtCursor();
     QTextCursor cursor = textCursor();
 
     QString completionString = word.remove(0, wordAtCursor.size());
     if (completionString.size() > 0) {
-        qDebug() << "completionWord, completionString" << completionString;
+        qCDebug(appLog) << "completionWord, completionString" << completionString;
         cursor = textCursor();
         cursor.insertText(completionString);
         setTextCursor(cursor);
     }
-    qDebug() << "completionWord, completed";
+    qCDebug(appLog) << "completionWord, completed";
 }
 
 bool TextEdit::eventFilter(QObject *object, QEvent *event)
 {
-    // qDebug() << "eventFilter, event->type()" << event->type();
+    // qCDebug(appLog) << "eventFilter, event->type()" << event->type();
     switch (event->type()) {
     case QEvent::TouchBegin:
     case QEvent::TouchUpdate:
     case QEvent::TouchEnd: {
-        qDebug() << "eventFilter, case QEvent::TouchBegin, QEvent::TouchUpdate, QEvent::TouchEnd";
+        qCDebug(appLog) << "eventFilter, case QEvent::TouchBegin, QEvent::TouchUpdate, QEvent::TouchEnd";
         QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
         QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
         QMouseEvent *event2 = static_cast<QMouseEvent *>(event);
@@ -7033,12 +7034,12 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
     default: break;
     }
     if (event->type() == QEvent::MouseButtonPress) {
-        qDebug() << "eventFilter, case QEvent::MouseButtonPress";
+        qCDebug(appLog) << "eventFilter, case QEvent::MouseButtonPress";
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
         m_mouseClickPos = mouseEvent->pos();
 
         if (object == m_pLeftAreaWidget->m_pBookMarkArea) {
-            qDebug() << "eventFilter, case QEvent::MouseButtonPress, object == m_pLeftAreaWidget->m_pBookMarkArea";
+            qCDebug(appLog) << "eventFilter, case QEvent::MouseButtonPress, object == m_pLeftAreaWidget->m_pBookMarkArea";
             m_mouseClickPos = mouseEvent->pos();
             if (mouseEvent->button() == Qt::RightButton) {
                 m_rightMenu->clear();
@@ -7050,31 +7051,31 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                 if (m_listBookmark.contains(line)) {
                     m_rightMenu->addAction(m_cancelBookMarkAction);
                     if (m_listBookmark.count() > 1) {
-                        qDebug() << "eventFilter, case QEvent::MouseButtonPress, object == m_pLeftAreaWidget->m_pBookMarkArea, m_listBookmark.count() > 1";
+                        qCDebug(appLog) << "eventFilter, case QEvent::MouseButtonPress, object == m_pLeftAreaWidget->m_pBookMarkArea, m_listBookmark.count() > 1";
                         m_rightMenu->addAction(m_preBookMarkAction);
                         m_rightMenu->addAction(m_nextBookMarkAction);
                     }
                 } else {
-                    qDebug() << "eventFilter, case QEvent::MouseButtonPress, object == m_pLeftAreaWidget->m_pBookMarkArea, m_listBookmark.isEmpty()";
+                    qCDebug(appLog) << "eventFilter, case QEvent::MouseButtonPress, object == m_pLeftAreaWidget->m_pBookMarkArea, m_listBookmark.isEmpty()";
                     m_rightMenu->addAction(m_addBookMarkAction);
                 }
 
                 if (!m_listBookmark.isEmpty()) {
-                    qDebug() << "eventFilter, case QEvent::MouseButtonPress, object == m_pLeftAreaWidget->m_pBookMarkArea, !m_listBookmark.isEmpty()";
+                    qCDebug(appLog) << "eventFilter, case QEvent::MouseButtonPress, object == m_pLeftAreaWidget->m_pBookMarkArea, !m_listBookmark.isEmpty()";
                     m_rightMenu->addAction(m_clearBookMarkAction);
                 }
 
                 m_rightMenu->exec(mouseEvent->globalPos());
             } else {
-                qDebug() << "eventFilter, case QEvent::MouseButtonPress, object == m_pLeftAreaWidget->m_pBookMarkArea, else";
+                qCDebug(appLog) << "eventFilter, case QEvent::MouseButtonPress, object == m_pLeftAreaWidget->m_pBookMarkArea, else";
                 addOrDeleteBookMark();
             }
             return true;
         } else if (object == m_pLeftAreaWidget->m_pFlodArea) {
-            qDebug() << "eventFilter, case QEvent::MouseButtonPress, object == m_pLeftAreaWidget->m_pFlodArea";
+            qCDebug(appLog) << "eventFilter, case QEvent::MouseButtonPress, object == m_pLeftAreaWidget->m_pFlodArea";
             m_foldCodeShow->hide();
             if (mouseEvent->button() == Qt::LeftButton) {
-                qDebug() << "eventFilter, case QEvent::MouseButtonPress, object == m_pLeftAreaWidget->m_pFlodArea, mouseEvent->button() == Qt::LeftButton";
+                qCDebug(appLog) << "eventFilter, case QEvent::MouseButtonPress, object == m_pLeftAreaWidget->m_pFlodArea, mouseEvent->button() == Qt::LeftButton";
                 int line = getLineFromPoint(mouseEvent->pos());
                 m_markFoldHighLightSelections.clear();
                 renderAllSelections();
@@ -7087,7 +7088,7 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                 if (m_commentDefinition.isValid()) {
                     multiLineCommentMark = m_commentDefinition.multiLineStart.trimmed();
                     singleLineCommentMark = m_commentDefinition.singleLine.trimmed();
-                    //qDebug()<<"CommentMark:"<<multiLineCommentMark<<singleLineCommentMark;
+                    //qCDebug(appLog)<<"CommentMark:"<<multiLineCommentMark<<singleLineCommentMark;
                     //判断是否包含单行或多行注释
                     if (!multiLineCommentMark.isEmpty()) bHasCommnent = document()->findBlockByNumber(line - 1).text().trimmed().startsWith(multiLineCommentMark);
                     if (!singleLineCommentMark.isEmpty()) bHasCommnent = document()->findBlockByNumber(line - 1).text().trimmed().startsWith(singleLineCommentMark);
@@ -7097,7 +7098,7 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
 
                 // 当前行line-1 判断下行line是否隐藏
                 if (document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line - 1).text().contains("{") && !bHasCommnent) {
-                    qDebug() << "Processing visible block at line" << line << "with opening brace, folding code";
+                    qCDebug(appLog) << "Processing visible block at line" << line << "with opening brace, folding code";
                     getNeedControlLine(line - 1, false);
                     document()->adjustSize();
 
@@ -7110,11 +7111,11 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                     m_pLeftAreaWidget->updateCodeFlod();
                     m_pLeftAreaWidget->updateLineNumber();
                     this->setLineWrapMode(curMode);
-                    qDebug() << "Code fold completed for visible block at line" << line;
+                    qCDebug(appLog) << "Code fold completed for visible block at line" << line;
                     viewport()->update();
 
                 } else if (!document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line - 1).text().contains("{") && !bHasCommnent) {
-                    qDebug() << "Processing hidden block at line" << line << "with opening brace, unfolding code";
+                    qCDebug(appLog) << "Processing hidden block at line" << line << "with opening brace, unfolding code";
                     getNeedControlLine(line - 1, true);
                     document()->adjustSize();
 
@@ -7127,10 +7128,10 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                     m_pLeftAreaWidget->updateCodeFlod();
                     m_pLeftAreaWidget->updateLineNumber();
                     this->setLineWrapMode(curMode);
-                    qDebug() << "Code unfold completed for hidden block at line" << line;
+                    qCDebug(appLog) << "Code unfold completed for hidden block at line" << line;
                     viewport()->update();
                 } else {
-                    qDebug() << "No fold/unfold action needed for line" << line;
+                    qCDebug(appLog) << "No fold/unfold action needed for line" << line;
                     //其他不做处理
                 }
 
@@ -7311,7 +7312,7 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                         }
 
                         if (currentIndex == -1) {
-                            qWarning() << " can not find current item in tab order list , need check 'Mark Color Menu' tab order setting!";
+                            qCWarning(appLog) << " can not find current item in tab order list , need check 'Mark Color Menu' tab order setting!";
                             return;
                         }
 
@@ -7342,7 +7343,7 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                         if (nextAction != nullptr) {
                             menuGuard->setActiveAction(nextAction);
                         } else {
-                            qWarning() << " can not find valid item , need check 'Mark Color Menu' tab order setting!";
+                            qCWarning(appLog) << " can not find valid item , need check 'Mark Color Menu' tab order setting!";
                         }
                     }
                 });
@@ -9121,7 +9122,7 @@ bool TextEdit::blockContainStrBrackets(int line)
  */
 bool TextEdit::findFoldBlock(int line, QTextBlock &beginBlock, QTextBlock &endBlock, QTextBlock &curBlock)
 {
-    qDebug() << "Finding fold block for line" << line;
+    qCDebug(appLog) << "Finding fold block for line" << line;
     //使用统一 折叠判断算法 根据左右"{""}"高亮算法
     QTextDocument *doc = document();
     //获取行号对应文本块
@@ -9133,7 +9134,7 @@ bool TextEdit::findFoldBlock(int line, QTextBlock &beginBlock, QTextBlock &endBl
 
     //如果是第一行不包括左括弧"{"
     if (line == 0 && !curBlock.text().contains("{")) {
-        qDebug() << "First line without opening brace, moving to next block";
+        qCDebug(appLog) << "First line without opening brace, moving to next block";
         curBlock = curBlock.next();
     }
 
@@ -9169,17 +9170,17 @@ bool TextEdit::findFoldBlock(int line, QTextBlock &beginBlock, QTextBlock &endBl
         } else {
             if (c == begin) {
                 braceDepth++;
-                qDebug() << "Found opening brace at position" << position << ", depth now" << braceDepth;
+                qCDebug(appLog) << "Found opening brace at position" << position << ", depth now" << braceDepth;
             } else if (c == end) {
                 braceDepth--;
-                qDebug() << "Found closing brace at position" << position << ", depth now" << braceDepth;
+                qCDebug(appLog) << "Found closing brace at position" << position << ", depth now" << braceDepth;
 
                 if (0 == braceDepth) {
                     bracketEndCursor = QTextCursor(doc);
                     bracketEndCursor.setPosition(position);
                     bracketEndCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
                     endBlock = bracketEndCursor.block();
-                    qDebug() << "Matching closing brace found at line" << endBlock.blockNumber() << "position" << position;
+                    qCDebug(appLog) << "Matching closing brace found at line" << endBlock.blockNumber() << "position" << position;
                     break;
                 }
             } else if ('"' == c) {
@@ -9191,7 +9192,7 @@ bool TextEdit::findFoldBlock(int line, QTextBlock &beginBlock, QTextBlock &endBl
     }
 
     bool result = (0 == braceDepth);
-    qDebug() << "Fold block search result:" << result << "for line" << line << "ending at line" << endBlock.blockNumber();
+    qCDebug(appLog) << "Fold block search result:" << result << "for line" << line << "ending at line" << endBlock.blockNumber();
     return result;
 }
 

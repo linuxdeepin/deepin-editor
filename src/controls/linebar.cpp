@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "ddlog.h"
 #include "linebar.h"
 #include "../common/utils.h"
 
@@ -23,7 +24,7 @@ const int s_nRightMargin = 6;          // 清除按钮右边缘距输入框右�
 LineBar::LineBar(DLineEdit *parent)
     : DLineEdit(parent)
 {
-    qDebug() << "LineBar constructor start";
+    qCDebug(appLog) << "LineBar constructor start";
 
     // ★ 关键：禁用 DLineEdit 内置清除按钮。
     // 原因：Qt6 下 QLineEdit::addAction(TrailingPosition) 和 DLineEdit::setRightWidgets
@@ -55,12 +56,12 @@ LineBar::LineBar(DLineEdit *parent)
     m_autoSaveInternal = 50;
     m_autoSaveTimer = new QTimer(this);
     m_autoSaveTimer->setSingleShot(true);
-    qDebug() << "Auto-save timer initialized with interval:" << m_autoSaveInternal << "ms";
+    qCDebug(appLog) << "Auto-save timer initialized with interval:" << m_autoSaveInternal << "ms";
 
     connect(m_autoSaveTimer, &QTimer::timeout, this, &LineBar::handleTextChangeTimer);
     connect(this, &DLineEdit::textEdited, this, &LineBar::sendText, Qt::QueuedConnection);
     connect(this, &DLineEdit::textChanged, this, &LineBar::handleTextChanged, Qt::QueuedConnection);
-    qDebug() << "Signal connections established";
+    qCDebug(appLog) << "Signal connections established";
 
     // 自绘清除按钮：点击清空文本；可见性跟随文本是否为空
     connect(m_clearButton, &DIconButton::clicked, this, [this]() {
@@ -77,7 +78,7 @@ LineBar::LineBar(DLineEdit *parent)
 
 void LineBar::handleTextChangeTimer()
 {
-    qDebug() << "Text change timer triggered, emitting contentChanged";
+    qCDebug(appLog) << "Text change timer triggered, emitting contentChanged";
     // Emit contentChanged signal.
     contentChanged();
 }
@@ -86,11 +87,11 @@ void LineBar::handleTextChanged(const QString &str)
 {
     // Stop timer if new character is typed, avoid unused timer run.
     if (m_autoSaveTimer->isActive()) {
-        qDebug() << "Restarting text change timer";
+        qCDebug(appLog) << "Restarting text change timer";
         m_autoSaveTimer->stop();
     }
     if(str.isEmpty()) {
-        qDebug() << "Text cleared, disabling alert";
+        qCDebug(appLog) << "Text cleared, disabling alert";
         setAlert(false);
         m_clearButton->hide();          // 文本为空时隐藏清除按钮
     } else {
@@ -98,7 +99,7 @@ void LineBar::handleTextChanged(const QString &str)
     }
     // Start new timer.
     m_autoSaveTimer->start(m_autoSaveInternal);
-    qDebug() << "Text changed, length:" << str.length();
+    qCDebug(appLog) << "Text changed, length:" << str.length();
 }
 
 void LineBar::sendText(QString t)
@@ -108,7 +109,7 @@ void LineBar::sendText(QString t)
 
 void LineBar::focusOutEvent(QFocusEvent *e)
 {
-    qDebug() << "Focus lost";
+    qCDebug(appLog) << "Focus lost";
     // Emit focus out signal.
     focusOut();
 
@@ -120,19 +121,19 @@ void LineBar::keyPressEvent(QKeyEvent *e)
 {
     QString key = Utils::getKeyshortcut(e);
     Qt::KeyboardModifiers modifiers = e->modifiers();
-    qDebug() << "Key pressed:" << key << "modifiers:" << modifiers;
+    qCDebug(appLog) << "Key pressed:" << key << "modifiers:" << modifiers;
 
     if(modifiers == Qt::ControlModifier && e->text() == "\r"){
-       qDebug() << "Ctrl+Enter pressed";
+       qCDebug(appLog) << "Ctrl+Enter pressed";
        pressCtrlEnter();
     }else if(modifiers == Qt::AltModifier && e->text() == "\r"){
-       qDebug() << "Alt+Enter pressed";
+       qCDebug(appLog) << "Alt+Enter pressed";
        pressAltEnter();
     }else if(modifiers == Qt::MetaModifier && e->text() == "\r"){
-       qDebug() << "Meta+Enter pressed";
+       qCDebug(appLog) << "Meta+Enter pressed";
        pressMetaEnter();
     }else if(modifiers == Qt::NoModifier && e->text() == "\r"){
-       qDebug() << "Enter pressed";
+       qCDebug(appLog) << "Enter pressed";
        pressEnter();
     }else {
       // Pass event to DLineEdit continue, otherwise you can't type anything after here. ;)

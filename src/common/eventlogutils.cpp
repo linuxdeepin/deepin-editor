@@ -1,7 +1,8 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "ddlog.h"
 #include "eventlogutils.h"
 #include <QLibrary>
 #include <QDir>
@@ -12,7 +13,7 @@
 Eventlogutils *Eventlogutils::m_pInstance = nullptr;
 Eventlogutils *Eventlogutils::GetInstance()
 {
-    qDebug() << "Eventlogutils::GetInstance()";
+    qCDebug(appLog) << "Eventlogutils::GetInstance()";
     if (m_pInstance == nullptr) {
         m_pInstance  = new Eventlogutils();
     }
@@ -22,7 +23,7 @@ Eventlogutils *Eventlogutils::GetInstance()
 void Eventlogutils::writeLogs(QJsonObject &data)
 {
     if (!writeEventLogFunc) {
-        qWarning() << "writeEventLogFunc is not initialized";
+        qCWarning(appLog) << "writeEventLogFunc is not initialized";
         return;
     }
 
@@ -31,13 +32,13 @@ void Eventlogutils::writeLogs(QJsonObject &data)
 
 Eventlogutils::Eventlogutils()
 {
-    qDebug() << "Eventlogutils::Eventlogutils()";
+    qCDebug(appLog) << "Eventlogutils::Eventlogutils()";
     QLibrary library("libdeepin-event-log.so");
     initFunc = reinterpret_cast<bool (*)(const std::string &, bool)>(library.resolve("Initialize"));
     writeEventLogFunc = reinterpret_cast<void (*)(const std::string &)>(library.resolve("WriteEventLog"));
 
     if (!initFunc) {
-        qWarning() << "Failed to load libdeepin-event-log.so";
+        qCWarning(appLog) << "Failed to load libdeepin-event-log.so";
         return;
     }
 

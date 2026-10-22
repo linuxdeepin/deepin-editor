@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "ddlog.h"
+#include "logger.h"
 #include "environments.h"
 #include "utils.h"
 #include "window.h"
@@ -30,7 +32,11 @@ DWIDGET_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
-    qDebug() << "Application starting with arguments:" << QCoreApplication::arguments();
+    // 动态日志规则初始化：从 DConfig 读取 log_rules 并监听变更（调试模式），
+    // 必须在任何日志打印之前实例化
+    MLogger logger;
+
+    qCDebug(appLog) << "Application starting with arguments:" << QCoreApplication::arguments();
     DCORE_USE_NAMESPACE
     PerformanceMonitor::initializeAppStart();
 
@@ -46,18 +52,18 @@ int main(int argc, char *argv[])
     // sw_64（申威）：V8 JIT 不支持，必须 jitless 纯解释执行，否则渲染进程崩溃；
     // 合并 --disable-gpu 一次性设置，避免被分段设置覆盖（参考 deepin-manual bug-347387）
     qputenv("QTWEBENGINE_CHROMIUM_FLAGS", "--disable-gpu --single-process --js-flags=--jitless");
-    qDebug() << "Set QTWEBENGINE_CHROMIUM_FLAGS for sw_64: --disable-gpu --single-process --js-flags=--jitless";
+    qCDebug(appLog) << "Set QTWEBENGINE_CHROMIUM_FLAGS for sw_64: --disable-gpu --single-process --js-flags=--jitless";
 #else
     // 通用（含 x86/arm64/loongarch64/mips）：禁用 GPU 合成走软件渲染，
     // 规避国产平台显卡驱动兼容问题（参考 deepin-manual 全架构处理）
     qputenv("QTWEBENGINE_CHROMIUM_FLAGS", "--disable-gpu");
-    qDebug() << "Set QTWEBENGINE_CHROMIUM_FLAGS=--disable-gpu";
+    qCDebug(appLog) << "Set QTWEBENGINE_CHROMIUM_FLAGS=--disable-gpu";
 #  ifndef __mips__
     // 非 Wayland 会话追加 --single-process（渲染进程并入主进程，加快首屏并规避
     // 欧拉 root 下 no-sandbox 报错）；mips 上实测有问题须禁用（deepin-manual de2df4a4）
     if (!isWaylandSession) {
         qputenv("QTWEBENGINE_CHROMIUM_FLAGS", "--disable-gpu --single-process");
-        qDebug() << "Non-Wayland session, set --single-process additionally";
+        qCDebug(appLog) << "Non-Wayland session, set --single-process additionally";
     }
 #  endif
 #endif
@@ -66,71 +72,71 @@ int main(int argc, char *argv[])
     qputenv("DTK_FORCE_RASTER_WIDGETS", "FALSE");
 
     if (!QString(qgetenv("XDG_CURRENT_DESKTOP")).toLower().startsWith("deepin")) {
-        qDebug() << "XDG_CURRENT_DESKTOP not set to Deepin, setting environment variable";
+        qCDebug(appLog) << "XDG_CURRENT_DESKTOP not set to Deepin, setting environment variable";
         setenv("XDG_CURRENT_DESKTOP", "Deepin", 1);
     } else {
-        qDebug() << "XDG_CURRENT_DESKTOP already set to:" << qgetenv("XDG_CURRENT_DESKTOP");
+        qCDebug(appLog) << "XDG_CURRENT_DESKTOP already set to:" << qgetenv("XDG_CURRENT_DESKTOP");
     }
-    qDebug() << "XDG_CURRENT_DESKTOP set to:" << qgetenv("XDG_CURRENT_DESKTOP");
+    qCDebug(appLog) << "XDG_CURRENT_DESKTOP set to:" << qgetenv("XDG_CURRENT_DESKTOP");
     QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
     // QWebEngineView 硬性前提：共享 GL 上下文必须在 QApplication 构造前设置，
     // 否则 Markdown 渲染视图无法创建共享上下文导致白屏（Qt6 文档要求）
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
-    qDebug() << "Qt::AA_UseOpenGLES / AA_ShareOpenGLContexts attributes set";
+    qCDebug(appLog) << "Qt::AA_UseOpenGLES / AA_ShareOpenGLContexts attributes set";
 
     EditorApplication app(argc, argv);
-    qInfo() << "Application instance created, version:" << app.applicationVersion();
+    qCInfo(appLog) << "Application instance created, version:" << app.applicationVersion();
     // save theme
     // DApplicationSettings savetheme;
 
     // 需在App构造后初始化日志设置
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
-    qDebug() << "Log system initialized";
+    qCDebug(appLog) << "Log system initialized";
     // Parser input arguments.
     QCommandLineParser parser;
     const QCommandLineOption newWindowOption("w", "Open file in new window");
     const QCommandLineOption helpOption = parser.addHelpOption();
     parser.addOption(newWindowOption);
     parser.process(app);
-    qDebug() << "Command line arguments processed, positional args:" << parser.positionalArguments().size();
+    qCDebug(appLog) << "Command line arguments processed, positional args:" << parser.positionalArguments().size();
 
-    qInfo() << qPrintable(QString("App start, pid: %1, version: %2").arg(app.applicationPid()).arg(app.applicationVersion()));
+    qCInfo(appLog) << qPrintable(QString("App start, pid: %1, version: %2").arg(app.applicationPid()).arg(app.applicationVersion()));
 
     QStringList urls;
     QStringList arguments = parser.positionalArguments();
-    qDebug() << "Processing" << arguments.size() << "file arguments";
+    qCDebug(appLog) << "Processing" << arguments.size() << "file arguments";
 
     for (const QString &path : arguments) {
         UrlInfo info(path);
         urls << info.url.toLocalFile();
 
         QFileInfo fileInfo(path);
-        qInfo() << qPrintable(QString("Open file, isFile: %1, suffix: %2, size: %3, permssion: %4").arg(fileInfo.isFile())
+        qCInfo(appLog) << qPrintable(QString("Open file, isFile: %1, suffix: %2, size: %3, permssion: %4").arg(fileInfo.isFile())
                               .arg(fileInfo.suffix()).arg(fileInfo.size()).arg(static_cast<int>(fileInfo.permissions())));
     }
 
     bool hasWindowFlag = parser.isSet(newWindowOption);
-    qDebug() << "New window flag set:" << hasWindowFlag;
+    qCDebug(appLog) << "New window flag set:" << hasWindowFlag;
 
     QDBusConnection dbus = QDBusConnection::sessionBus();
     // Start editor process if not found any editor use DBus.
-    qDebug() << "Attempting to register DBus service";
+    qCDebug(appLog) << "Attempting to register DBus service";
     if (dbus.registerService("com.deepin.Editor")) {
-        qInfo() << "DBus service registered successfully";
+        qCInfo(appLog) << "DBus service registered successfully";
 #ifdef DTKWIDGET_CLASS_DSizeMode
-        qDebug() << "DTKWIDGET_CLASS_DSizeMode defined, setting up size mode handler";
+        qCDebug(appLog) << "DTKWIDGET_CLASS_DSizeMode defined, setting up size mode handler";
         // 不同模式下的基础字体像素大小不同，系统级别为 T6 的字体大小, 默认是 14px ；在紧凑模式下 T6 为 12px
         QObject::connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, []() {
             const int genericPixelSize = 14;
             const int genericPixelSizeCompact = 12;
             bool isCompact = DGuiApplicationHelper::isCompactMode();
-            qDebug() << "Size mode changed, compact mode:" << isCompact;
+            qCDebug(appLog) << "Size mode changed, compact mode:" << isCompact;
             DFontSizeManager::instance()->setFontGenericPixelSize(
                 DGuiApplicationHelper::isCompactMode() ? genericPixelSizeCompact : genericPixelSize);
         });
 #else
-        qDebug() << "DTKWIDGET_CLASS_DSizeMode not defined, skipping size mode handler";
+        qCDebug(appLog) << "DTKWIDGET_CLASS_DSizeMode not defined, skipping size mode handler";
 #endif
 
         // 单例唯一创建点；D-Bus 转发进程走不到这里，不会实例化 StartManager
@@ -143,42 +149,42 @@ int main(int argc, char *argv[])
             {"mode", 1},
         };
         Eventlogutils::GetInstance()->writeLogs(objStartEvent);
-        qDebug() << "Startup event logged with version:" << VERSION;
+        qCDebug(appLog) << "Startup event logged with version:" << VERSION;
 
         bool save_tab_before_close =
             Settings::instance()->settings->option("advance.startup.save_tab_before_close")->value().toBool();
         if (!save_tab_before_close && urls.isEmpty()) {
-            qDebug() << "No files to open and save_tab_before_close is false, creating window with blank tab";
+            qCDebug(appLog) << "No files to open and save_tab_before_close is false, creating window with blank tab";
             auto window = startManager->createWindow(true);
             window->addBlankTab();
         } else {
             if (hasWindowFlag) {
-                qDebug() << "Opening" << urls.size() << "files in new window";
+                qCDebug(appLog) << "Opening" << urls.size() << "files in new window";
                 startManager->openFilesInWindow(urls);
             } else {
-                qDebug() << "Opening" << urls.size() << "files in current window";
+                qCDebug(appLog) << "Opening" << urls.size() << "files in current window";
                 startManager->openFilesInTab(urls);
             }
         }
 #if _ZPD_
-        qDebug() << "ZPD customization enabled, loading custom DLL";
+        qCDebug(appLog) << "ZPD customization enabled, loading custom DLL";
         // 解析ZPD定制需求提供的库libzpdcallback.so
         Utils::loadCustomDLL();
 #endif
         dbus.registerObject("/com/deepin/Editor", startManager, QDBusConnection::ExportScriptableSlots);
-        qDebug() << "DBus object registered at /com/deepin/Editor";
+        qCDebug(appLog) << "DBus object registered at /com/deepin/Editor";
 
         PerformanceMonitor::initializeAppFinish();
-        qDebug() << "Entering main event loop";
+        qCDebug(appLog) << "Entering main event loop";
         int ret = app.exec();
         // 事件循环已停止，在此显式释放单例；~EditorApplication 不再管理其生命周期
-        qDebug() << "Deleting StartManager instance on exit";
+        qCDebug(appLog) << "Deleting StartManager instance on exit";
         delete StartManager::instance();
         return ret;
     }
     // Just send dbus message to exist editor process.
     else {
-        qInfo() << "Another editor instance detected, sending commands via DBus";
+        qCInfo(appLog) << "Another editor instance detected, sending commands via DBus";
         QDBusInterface notification(
             "com.deepin.Editor", "/com/deepin/Editor", "com.deepin.Editor", QDBusConnection::sessionBus());
 
@@ -186,14 +192,14 @@ int main(int argc, char *argv[])
         args << urls;
 
         if (hasWindowFlag) {
-            qDebug() << "Calling openFilesInWindow via DBus with" << urls.size() << "files";
+            qCDebug(appLog) << "Calling openFilesInWindow via DBus with" << urls.size() << "files";
             notification.callWithArgumentList(QDBus::AutoDetect, "openFilesInWindow", args);
         } else {
-            qDebug() << "Calling openFilesInTab via DBus with" << urls.size() << "files";
+            qCDebug(appLog) << "Calling openFilesInTab via DBus with" << urls.size() << "files";
             notification.callWithArgumentList(QDBus::AutoDetect, "openFilesInTab", args);
         }
     }
 
-    qDebug() << "Application exiting with code 0";
+    qCDebug(appLog) << "Application exiting with code 0";
     return 0;
 }
