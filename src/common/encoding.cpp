@@ -156,10 +156,23 @@ static unsigned int getLocaleNum()
     return code;
 }
 /*************************/
-static unsigned int localeNum = getLocaleNum();
-static const std::string encodingItem[ENCODING_MAX_ITEM_NUM] = {encodingTable[localeNum][0],
-                                                                encodingTable[localeNum][1],
-                                                                encodingTable[localeNum][2]};
+// 延迟到首次使用时初始化，避免在 main() 之前的静态初始化阶段打日志
+// （此时动态日志规则尚未生效，qCDebug 会在 info/warning 级别泄漏）
+static unsigned int currentLocaleNum()
+{
+    static unsigned int num = getLocaleNum();
+    return num;
+}
+
+static const std::string *encodingItems()
+{
+    static const std::string items[ENCODING_MAX_ITEM_NUM] = {
+        encodingTable[currentLocaleNum()][0],
+        encodingTable[currentLocaleNum()][1],
+        encodingTable[currentLocaleNum()][2]};
+    return items;
+}
+#define encodingItem (encodingItems())
 /*************************/
 static const std::string detectCharsetLatin (const char *text)
 {
@@ -796,7 +809,7 @@ const QString detectCharset (const QByteArray& byteArray)
     if (charset.empty())
     {
         qCDebug(appLog) << "charset is empty";
-        switch (localeNum)
+        switch (currentLocaleNum())
         {
             case LATIN1:
                 /* Windows-1252 */
