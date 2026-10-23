@@ -73,6 +73,9 @@ void DeleteTextUndoCommand::undo()
 
         if (m_edit && !m_ColumnEditSelections.isEmpty()) {
             m_edit->setTextCursor(m_ColumnEditSelections.last().cursor);
+            if (TextEdit *textEdit = qobject_cast<TextEdit*>(m_edit)) {
+                textEdit->syncColumnEditSelections(m_ColumnEditSelections);
+            }
         }
     }
 }

@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "inserttextundocommand.h"
+#include "dtextedit.h"
 
 InsertTextUndoCommand::InsertTextUndoCommand(const QTextCursor &textcursor, const QString &text, QPlainTextEdit *edit, QUndoCommand *parent)
     : QUndoCommand(parent)
@@ -49,6 +50,9 @@ void InsertTextUndoCommand::undo()
 
         if (m_pEdit && !m_ColumnEditSelections.isEmpty()) {
             m_pEdit->setTextCursor(m_ColumnEditSelections.last().cursor);
+            if (TextEdit *textEdit = qobject_cast<TextEdit*>(m_pEdit)) {
+                textEdit->syncColumnEditSelections(m_ColumnEditSelections);
+            }
         }
     }
 }
