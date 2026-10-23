@@ -21,6 +21,8 @@ public:
                                    QUndoCommand *parent = nullptr);
     virtual void undo();
     virtual void redo();
+    int id() const override;
+    bool mergeWith(const QUndoCommand *other) override;
 
 private:
     QPlainTextEdit *m_pEdit = nullptr;
@@ -30,6 +32,7 @@ private:
     QString m_sInsertText;
     QList<QTextEdit::ExtraSelection> m_ColumnEditSelections;
     QString m_selectText = QString();
+    static constexpr int kColumnEditInsertCommandId = 1001;
 };
 
 /**
