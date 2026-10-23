@@ -44,7 +44,12 @@ void InsertTextUndoCommand::undo()
     } else {
         int cnt = m_ColumnEditSelections.size();
         for (int i = 0; i < cnt; i++) {
-            m_ColumnEditSelections[i].cursor.deleteChar();
+            QTextCursor &cursor = m_ColumnEditSelections[i].cursor;
+            int endPos = cursor.selectionEnd();
+            int startPos = endPos - m_sInsertText.length();
+            cursor.setPosition(startPos);
+            cursor.setPosition(endPos, QTextCursor::KeepAnchor);
+            cursor.deleteChar();
         }
 
         if (m_pEdit && !m_ColumnEditSelections.isEmpty()) {
@@ -76,7 +81,7 @@ void InsertTextUndoCommand::redo()
         int cnt = m_ColumnEditSelections.size();
         for (int i = 0; i < cnt; i++) {
             m_ColumnEditSelections[i].cursor.insertText(m_sInsertText);
-            m_ColumnEditSelections[i].cursor.setPosition(m_ColumnEditSelections[i].cursor.position() - m_sInsertText.length() + 1,
+            m_ColumnEditSelections[i].cursor.setPosition(m_ColumnEditSelections[i].cursor.position() - m_sInsertText.length(),
                                                          QTextCursor::KeepAnchor);
         }
 
@@ -86,6 +91,24 @@ void InsertTextUndoCommand::redo()
             m_pEdit->setTextCursor(curCursor);
         }
     }
+}
+
+int InsertTextUndoCommand::id() const
+{
+    return kColumnEditInsertCommandId;
+}
+
+bool InsertTextUndoCommand::mergeWith(const QUndoCommand *other)
+{
+    if (other->id() != id())
+        return false;
+
+    const auto *cmd = static_cast<const InsertTextUndoCommand *>(other);
+    if (m_ColumnEditSelections.isEmpty() || cmd->m_ColumnEditSelections.isEmpty())
+        return false;
+
+    m_sInsertText += cmd->m_sInsertText;
+    return true;
 }
 
 /**
