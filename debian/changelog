@@ -1,3 +1,9 @@
+deepin-editor (6.5.64) unstable; urgency=medium
+
+  * chore: bump version to 6.5.64
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Fri, 23 Oct 2026 17:42:41 +0800
+
 deepin-editor (6.5.63) unstable; urgency=medium
 
   * fix: use DevicePixel for print page rect under Qt6
