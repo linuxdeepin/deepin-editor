@@ -2374,7 +2374,6 @@ void Window::popupPrintDialog()
         return;
     }
 
-    DPrinter printer(QPrinter::HighResolution);
     m_isNewPrint = true;
     m_pPreview = new DPrintPreviewDialog(this);
     m_pPreview->setAttribute(Qt::WA_DeleteOnClose);
