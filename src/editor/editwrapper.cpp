@@ -1452,8 +1452,12 @@ void EditWrapper::updateHighlighterAll()
             return;
         }
 
+        int blockCount = 0;
         for (QTextBlock var = beginBlock; var != endBlock; var = var.next()) {
             m_pSyntaxHighlighter->rehighlightBlock(var);
+            if (++blockCount % 100 == 0) {
+                qApp->processEvents();
+            }
         }
 
         m_pSyntaxHighlighter->rehighlightBlock(endBlock);
