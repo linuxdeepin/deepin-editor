@@ -2,41 +2,41 @@
 <context>
     <name>BottomBar</name>
     <message>
-        <location filename="../src/widgets/bottombar.cpp" line="30"/>
+        <location filename="../src/widgets/bottombar.cpp" line="31"/>
         <source>Row</source>
         <translation>Строка</translation>
     </message>
     <message>
-        <location filename="../src/widgets/bottombar.cpp" line="31"/>
+        <location filename="../src/widgets/bottombar.cpp" line="32"/>
         <source>Column</source>
         <translation>Столбец</translation>
     </message>
     <message>
-        <location filename="../src/widgets/bottombar.cpp" line="32"/>
+        <location filename="../src/widgets/bottombar.cpp" line="33"/>
         <source>Characters %1</source>
         <translation>Символы %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/bottombar.cpp" line="47"/>
+        <location filename="../src/widgets/bottombar.cpp" line="48"/>
         <source>Loading:</source>
         <translation>Загрузка:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/bottombar.cpp" line="73"/>
-        <location filename="../src/widgets/bottombar.cpp" line="91"/>
-        <location filename="../src/widgets/bottombar.cpp" line="501"/>
+        <location filename="../src/widgets/bottombar.cpp" line="74"/>
+        <location filename="../src/widgets/bottombar.cpp" line="92"/>
+        <location filename="../src/widgets/bottombar.cpp" line="502"/>
         <source>Edit Mode</source>
         <translation>Режим правки</translation>
     </message>
     <message>
-        <location filename="../src/widgets/bottombar.cpp" line="74"/>
-        <location filename="../src/widgets/bottombar.cpp" line="491"/>
+        <location filename="../src/widgets/bottombar.cpp" line="75"/>
+        <location filename="../src/widgets/bottombar.cpp" line="492"/>
         <source>Read View</source>
         <translation>Просмотр для чтения</translation>
     </message>
     <message>
-        <location filename="../src/widgets/bottombar.cpp" line="75"/>
-        <location filename="../src/widgets/bottombar.cpp" line="495"/>
+        <location filename="../src/widgets/bottombar.cpp" line="76"/>
+        <location filename="../src/widgets/bottombar.cpp" line="496"/>
         <source>Live Preview</source>
         <translation>Живой предпросмотр</translation>
     </message>
@@ -44,9 +44,9 @@
 <context>
     <name>DDropdownMenu</name>
     <message>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="370"/>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="428"/>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="433"/>
+        <location filename="../src/widgets/ddropdownmenu.cpp" line="417"/>
+        <location filename="../src/widgets/ddropdownmenu.cpp" line="475"/>
+        <location filename="../src/widgets/ddropdownmenu.cpp" line="480"/>
         <source>None</source>
         <translation>Ничего</translation>
     </message>
@@ -54,62 +54,62 @@
 <context>
     <name>EditWrapper</name>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="357"/>
-        <location filename="../src/editor/editwrapper.cpp" line="431"/>
-        <location filename="../src/editor/editwrapper.cpp" line="597"/>
-        <location filename="../src/editor/editwrapper.cpp" line="889"/>
+        <location filename="../src/editor/editwrapper.cpp" line="366"/>
+        <location filename="../src/editor/editwrapper.cpp" line="441"/>
+        <location filename="../src/editor/editwrapper.cpp" line="607"/>
+        <location filename="../src/editor/editwrapper.cpp" line="916"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="592"/>
+        <location filename="../src/editor/editwrapper.cpp" line="602"/>
         <source>Do you want to save this file?</source>
         <translation>Вы хотите сохранить этот документ?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="429"/>
-        <location filename="../src/editor/editwrapper.cpp" line="595"/>
+        <location filename="../src/editor/editwrapper.cpp" line="439"/>
+        <location filename="../src/editor/editwrapper.cpp" line="605"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="426"/>
+        <location filename="../src/editor/editwrapper.cpp" line="436"/>
         <source>Encoding changed. Do you want to save the file now?</source>
         <translation>Кодирование изменилось. Вы хотите сохранить файл сейчас?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="596"/>
+        <location filename="../src/editor/editwrapper.cpp" line="606"/>
         <source>Discard</source>
         <translation>Забыть</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="339"/>
-        <location filename="../src/editor/editwrapper.cpp" line="707"/>
+        <location filename="../src/editor/editwrapper.cpp" line="348"/>
+        <location filename="../src/editor/editwrapper.cpp" line="724"/>
         <source>You do not have permission to save %1</source>
         <translation>Вы не имеете разрешения на сохранение %1</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="989"/>
+        <location filename="../src/editor/editwrapper.cpp" line="1016"/>
         <source>File removed on the disk. Save it now?</source>
         <translation>Файл удален на диске. Сохранить его сейчас?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="995"/>
+        <location filename="../src/editor/editwrapper.cpp" line="1022"/>
         <source>File has changed on disk. Reload?</source>
         <translation>Файл изменился на диске. Обновить?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="1817"/>
+        <location filename="../src/editor/editwrapper.cpp" line="1851"/>
         <source>The file cannot be read, which may be too large or has been damaged!</source>
         <translation>Файл не может быть прочитан, возможно, он слишком велик или поврежден!</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="2109"/>
+        <location filename="../src/editor/editwrapper.cpp" line="2152"/>
         <source>Read-Only mode is on</source>
         <translation>Режим «Только чтение» включён</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="1126"/>
+        <location filename="../src/editor/editwrapper.cpp" line="1160"/>
         <source>The file contains invalid characters (NUL). Preview mode is read-only.</source>
         <translation>Файл содержит недопустимые символы (NUL). Режим предварительного просмотра доступен только для чтения.</translation>
     </message>
@@ -117,22 +117,22 @@
 <context>
     <name>FindBar</name>
     <message>
-        <location filename="../src/controls/findbar.cpp" line="34"/>
+        <location filename="../src/controls/findbar.cpp" line="35"/>
         <source>Find</source>
         <translation>Найти</translation>
     </message>
     <message>
-        <location filename="../src/controls/findbar.cpp" line="39"/>
+        <location filename="../src/controls/findbar.cpp" line="40"/>
         <source>Previous</source>
         <translation>Предыдущий</translation>
     </message>
     <message>
-        <location filename="../src/controls/findbar.cpp" line="42"/>
+        <location filename="../src/controls/findbar.cpp" line="43"/>
         <source>Next</source>
         <translation>Следующий</translation>
     </message>
     <message>
-        <location filename="../src/controls/findbar.cpp" line="45"/>
+        <location filename="../src/controls/findbar.cpp" line="46"/>
         <source>Replace</source>
         <translation>Заменить</translation>
     </message>
@@ -140,7 +140,7 @@
 <context>
     <name>JumpLineBar</name>
     <message>
-        <location filename="../src/controls/jumplinebar.cpp" line="47"/>
+        <location filename="../src/controls/jumplinebar.cpp" line="48"/>
         <source>Go to Line: </source>
         <translation>Перейти к Строке:</translation>
     </message>
@@ -148,7 +148,7 @@
 <context>
     <name>LineBar</name>
     <message>
-        <location filename="../src/controls/linebar.cpp" line="148"/>
+        <location filename="../src/controls/linebar.cpp" line="149"/>
         <source>第%1/%2项</source>
         <translation>Совпадение: %1 из %2</translation>
     </message>
@@ -156,712 +156,754 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/editorapplication.cpp" line="12"/>
+        <location filename="../src/editorapplication.cpp" line="13"/>
         <source>Text Editor is a powerful tool for viewing and editing text files.</source>
         <translation>Текстовый редактор - это мощный инструмент для просмотра и редактирования текстовых файлов.</translation>
     </message>
     <message>
-        <location filename="../src/editorapplication.cpp" line="34"/>
+        <location filename="../src/editorapplication.cpp" line="35"/>
         <source>Text Editor</source>
         <translation>Текстовый Редактор</translation>
     </message>
 </context>
 <context>
+    <name>MarkdownBridge</name>
+    <message>
+        <location filename="../src/editor/markdown/markdownbridge.h" line="39"/>
+        <source>Collapse code block</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/editor/markdown/markdownbridge.h" line="40"/>
+        <source>Expand code block</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/editor/markdown/markdownbridge.h" line="41"/>
+        <source>Copy code</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/editor/markdown/markdownbridge.h" line="42"/>
+        <source>Expand</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/editor/markdown/markdownbridge.h" line="44"/>
+        <source>%1 line(s) of code collapsed</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>PathSettingWgt</name>
     <message>
+        <location filename="../src/widgets/pathsettintwgt.cpp" line="97"/>
         <source>Remember the last used path</source>
-        <translation type="vanished">Запомнить последний использованный путь</translation>
+        <translation>Запомнить последний использованный путь</translation>
     </message>
     <message>
+        <location filename="../src/widgets/pathsettintwgt.cpp" line="98"/>
         <source>Same path as the current file</source>
-        <translation type="vanished">Тот же путь, что и к текущему файлу</translation>
+        <translation>Тот же путь, что и к текущему файлу</translation>
     </message>
     <message>
+        <location filename="../src/widgets/pathsettintwgt.cpp" line="99"/>
         <source>Customize the default path</source>
-        <translation type="vanished">Настройка пути по умолчанию</translation>
+        <translation>Настройка пути по умолчанию</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/editorapplication.cpp" line="28"/>
+        <location filename="../src/editorapplication.cpp" line="29"/>
         <source>Text Editor</source>
         <translation>Текстовый редактор</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="359"/>
-        <location filename="../src/editor/editwrapper.cpp" line="899"/>
-        <location filename="../src/editor/editwrapper.cpp" line="914"/>
-        <location filename="../src/widgets/window.cpp" line="1540"/>
-        <location filename="../src/widgets/window.cpp" line="1568"/>
-        <location filename="../src/widgets/window.cpp" line="1727"/>
-        <location filename="../src/widgets/window.cpp" line="1744"/>
+        <location filename="../src/editor/editwrapper.cpp" line="368"/>
+        <location filename="../src/editor/editwrapper.cpp" line="926"/>
+        <location filename="../src/editor/editwrapper.cpp" line="941"/>
+        <location filename="../src/widgets/window.cpp" line="1541"/>
+        <location filename="../src/widgets/window.cpp" line="1569"/>
+        <location filename="../src/widgets/window.cpp" line="1728"/>
+        <location filename="../src/widgets/window.cpp" line="1745"/>
         <source>Encoding</source>
         <translation>Кодировка</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="2015"/>
-        <source>视图模式</source>
-        <translation>Режим просмотра</translation>
-    </message>
-    <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="11"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="12"/>
         <source>Basic</source>
         <translation>Основной</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="12"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="13"/>
         <source>Font Style</source>
         <translation>Стиль Шрифта</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="13"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="14"/>
         <source>Font</source>
         <translation>Шрифт</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="14"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="15"/>
         <source>Font Size</source>
         <translation>Размер Шрифта</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="15"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="16"/>
         <source>Shortcuts</source>
         <translation>Горячие Клавиши</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="16"/>
         <location filename="../src/controls/settingsdialog.cpp" line="17"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="18"/>
         <source>Keymap</source>
         <translation>Раскладка</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="18"/>
-        <location filename="../src/controls/settingsdialog.cpp" line="96"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="19"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="97"/>
         <location filename="../src/widgets/window.cpp" line="2611"/>
         <source>Window</source>
         <translation>Окно</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="19"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="20"/>
         <source>New tab</source>
         <translation>Новая вкладка</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="20"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="21"/>
         <source>New window</source>
         <translation>Новое окно</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="21"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="22"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="22"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="23"/>
         <source>Save as</source>
         <translation>Сохранить как</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="23"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="24"/>
         <source>Next tab</source>
         <translation>Следующая вкладка</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="24"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="25"/>
         <source>Previous tab</source>
         <translation>Предыдущая вкладка</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="25"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="26"/>
         <source>Close tab</source>
         <translation>Закрыть вкладку</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="26"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="27"/>
         <source>Close other tabs</source>
         <translation>Закрыть другие вкладки</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="27"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="28"/>
         <source>Restore tab</source>
         <translation>Восстановить вкладки</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="28"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="29"/>
         <source>Open file</source>
         <translation>Открыть файл</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="29"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="30"/>
         <source>Increment font size</source>
         <translation>Увеличить размер шрифта</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="30"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="31"/>
         <source>Decrement font size</source>
         <translation>Уменьшить размер шрифта</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="31"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="32"/>
         <source>Reset font size</source>
         <translation>Сбросить размер шрифта</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="32"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="33"/>
         <source>Help</source>
         <translation>Помощь</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="33"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="34"/>
         <source>Toggle fullscreen</source>
         <translation>Включить полноэкранный режим</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="34"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="35"/>
         <source>Find</source>
         <translation>Найти</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="35"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="36"/>
         <source>Find Next</source>
         <translation>Найти далее</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="36"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="37"/>
         <source>Find Previous</source>
         <translation>Найти ранее</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="37"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="38"/>
         <source>Replace</source>
         <translation>Заменить</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="38"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="39"/>
         <source>Go to line</source>
         <translation>Перейти к строке</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="39"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="40"/>
         <source>Save cursor position</source>
         <translation>Сохранить позицию курсора</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="40"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="41"/>
         <source>Reset cursor position</source>
         <translation>Сбросить позицию курсора</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="41"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="42"/>
         <source>Exit</source>
         <translation>Выйти</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="42"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="43"/>
         <source>Display shortcuts</source>
         <translation>Показать горячие клавиши</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="43"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="44"/>
         <source>Print</source>
         <translation>Печать</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="44"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="45"/>
         <source>Editor</source>
         <translation>Редактор</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="45"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="46"/>
         <source>Increase indent</source>
         <translation>Показать ярлыки</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="46"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="47"/>
         <source>Decrease indent</source>
         <translation>Уменьшить отступ</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="47"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="48"/>
         <source>Forward character</source>
         <translation>Символ спереди</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="48"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="49"/>
         <source>Backward character</source>
         <translation>Символ задом наперёд</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="49"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="50"/>
         <source>Forward word</source>
         <translation>Начальное слово</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="50"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="51"/>
         <source>Backward word</source>
         <translation>Последнее слово</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="51"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="52"/>
         <source>Next line</source>
         <translation>Следующая строка</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="52"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="53"/>
         <source>Previous line</source>
         <translation>Предыдущая строка</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="53"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="54"/>
         <source>New line</source>
         <translation>Новая строка</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="54"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="55"/>
         <source>New line above</source>
         <translation>Новая строка выше</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="55"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="56"/>
         <source>New line below</source>
         <translation>Новая строка ниже</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="56"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="57"/>
         <source>Duplicate line</source>
         <translation>Дублированная строка</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="57"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="58"/>
         <source>Delete to end of line</source>
         <translation>Удалить конец строки</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="58"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="59"/>
         <source>Delete current line</source>
         <translation>Удалить текущую строку</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="59"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="60"/>
         <source>Swap line up</source>
         <translation>заменить верхнюю строку</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="60"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="61"/>
         <source>Swap line down</source>
         <translation>Заменить нижнюю строку</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="61"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="62"/>
         <source>Scroll up one line</source>
         <translation>Прокрутка вверх на одну строку</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="62"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="63"/>
         <source>Scroll down one line</source>
         <translation>Прокрутка вниз на одну строку</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="63"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="64"/>
         <source>Page up</source>
         <translation>Страница вверх</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="64"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="65"/>
         <source>Page down</source>
         <translation>Страница вниз</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="65"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="66"/>
         <source>Move to end of line</source>
         <translation>Переход к конецу строки</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="66"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="67"/>
         <source>Move to start of line</source>
         <translation>Переход к началу строки</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="67"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="68"/>
         <source>Move to end of text</source>
         <translation>Переход к концу текста</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="68"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="69"/>
         <source>Move to start of text</source>
         <translation>Переход к началу текста</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="69"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="70"/>
         <source>Move to line indentation</source>
         <translation>Переход к строке отступа</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="70"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="71"/>
         <source>Upper case</source>
         <translation>Верхний регистр</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="71"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="72"/>
         <source>Lower case</source>
         <translation>Нижний регистр</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="72"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="73"/>
         <source>Capitalize</source>
         <translation>Прописной</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="73"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="74"/>
         <source>Delete backward word</source>
         <translation>Удалить слово с конца</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="74"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="75"/>
         <source>Delete forward word</source>
         <translation>Удалить слово с начала</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="75"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="76"/>
         <source>Forward over a pair</source>
         <translation>Вперед по паре</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="76"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="77"/>
         <source>Backward over a pair</source>
         <translation>Назад по паре</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="77"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="78"/>
         <source>Select all</source>
         <translation>Выбрать всё</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="78"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="79"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="79"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="80"/>
         <source>Cut</source>
         <translation>Вырезать</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="80"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="81"/>
         <source>Paste</source>
         <translation>Вставить</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="81"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="82"/>
         <source>Transpose character</source>
         <translation>Перемещаемый символ</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="82"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="83"/>
         <source>Mark</source>
         <translation>Пометить</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="83"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="84"/>
         <source>Unmark</source>
         <translation>Снять отметку</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="84"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="85"/>
         <source>Copy line</source>
         <translation>Копировать строку</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="85"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="86"/>
         <source>Cut line</source>
         <translation>Вырезать строку</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="86"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="87"/>
         <source>Merge lines</source>
         <translation>Совместить строки</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="87"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="88"/>
         <source>Read-Only mode</source>
         <translation>Режим «Только чтение»</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="88"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="89"/>
         <source>Add comment</source>
         <translation>Добавить комментарий</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="89"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="90"/>
         <source>Remove comment</source>
         <translation>Удалить комментарий</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="90"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="91"/>
         <source>Undo</source>
         <translation>Отменить</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="91"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="92"/>
         <source>Redo</source>
         <translation>Готово</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="92"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="93"/>
         <source>Add/Remove bookmark</source>
         <translation>Добавить/удалить закладку</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="93"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="94"/>
         <source>Move to previous bookmark</source>
         <translation>К предыдущей закладке</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="94"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="95"/>
         <source>Move to next bookmark</source>
         <translation>К следующей закладке</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="95"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="96"/>
         <source>Advanced</source>
         <translation>Расширенные</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="97"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="98"/>
         <source>Window size</source>
         <translation>Размер окна</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="98"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="99"/>
         <source>Tab width</source>
         <translation>Ширина вкладки</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="99"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="100"/>
         <source>Paste by pressing a middle mouse button</source>
         <translation>Вставить, нажав среднюю кнопку мыши</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="101"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="102"/>
         <source>Startup</source>
         <translation>Запуск</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="102"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="103"/>
         <source>Reopen last closed tabs</source>
         <translation>Снова открыть последние закрытые вкладки</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="104"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="105"/>
         <source>Open/Save Settings</source>
         <translation>Открыть/сохранить параметры</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="106"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="107"/>
         <source>Word wrap</source>
         <translation>Перенос cлова</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="107"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="108"/>
         <source>Code folding flag</source>
         <translation>Флаг сворачивания кода</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="108"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="109"/>
         <source>Show line numbers</source>
         <translation>Показать номера строк</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="109"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="110"/>
         <source>Show bookmarks icon</source>
         <translation>Показать значок закладок</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="110"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="111"/>
         <source>Show whitespaces and tabs</source>
         <translation>Показать пробелы и табуляции</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="111"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="112"/>
         <source>Highlight current line</source>
         <translation>Выделить текущую строку</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="112"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="113"/>
         <source>Color mark</source>
         <translation>Цветная метка</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="115"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="116"/>
         <source>Unicode</source>
         <translation>Unicode</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="116"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="117"/>
         <source>WesternEuropean</source>
         <translation>Западноевропейский</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="117"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="118"/>
         <source>CentralEuropean</source>
         <translation>Центральноевропейский</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="118"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="119"/>
         <source>Baltic</source>
         <translation>Балтийский</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="119"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="120"/>
         <source>Cyrillic</source>
         <translation>Кириллица</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="120"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="121"/>
         <source>Arabic</source>
         <translation>Арабский</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="125"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="126"/>
         <source>Celtic</source>
         <translation>Кельтский</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="126"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="127"/>
         <source>SouthEasternEuropean</source>
         <translation>Юго-Восточная Европа</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="121"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="122"/>
         <source>Greek</source>
         <translation>Греческий</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="122"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="123"/>
         <source>Hebrew</source>
         <translation>Еврейский</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="127"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="128"/>
         <source>ChineseSimplified</source>
         <translation>Китайский упрощенный</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="128"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="129"/>
         <source>ChineseTraditional</source>
         <translation>Китайский традиционный</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="129"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="130"/>
         <source>Japanese</source>
         <translation>Японский</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="130"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="131"/>
         <source>Korean</source>
         <translation>Корейский</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="124"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="125"/>
         <source>Thai</source>
         <translation>Тайландский</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="123"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="124"/>
         <source>Turkish</source>
         <translation>Турецкий</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="131"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="132"/>
         <source>Vietnamese</source>
         <translation>Вьетнамский</translation>
     </message>
     <message>
-        <location filename="../src/startmanager.cpp" line="1040"/>
+        <location filename="../src/startmanager.cpp" line="1046"/>
         <source>File not saved</source>
         <translation>Файл не сохранен</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1728"/>
-        <location filename="../src/widgets/window.cpp" line="1745"/>
+        <location filename="../src/widgets/window.cpp" line="1729"/>
+        <location filename="../src/widgets/window.cpp" line="1746"/>
         <source>Line Endings</source>
         <translation>Окончание строк</translation>
     </message>
     <message>
+        <location filename="../src/common/iflytek_ai_assistant.cpp" line="383"/>
         <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
-        <translation type="vanished">Пожалуйста, установите &apos;UOS AI&apos; из магазина приложений перед использованием</translation>
+        <translation>Пожалуйста, установите &apos;UOS AI&apos; из магазина приложений перед использованием</translation>
     </message>
     <message>
+        <location filename="../src/common/iflytek_ai_assistant.cpp" line="385"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation type="vanished">Не найдено устройство ввода аудио. Пожалуйста, проверьте и попробуйте снова</translation>
+        <translation>Не найдено устройство ввода аудио. Пожалуйста, проверьте и попробуйте снова</translation>
     </message>
     <message>
+        <location filename="../src/common/iflytek_ai_assistant.cpp" line="387"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation type="vanished">Не найдено устройство вывода аудио. Пожалуйста, проверьте и попробуйте снова</translation>
+        <translation>Не найдено устройство вывода аудио. Пожалуйста, проверьте и попробуйте снова</translation>
     </message>
     <message>
+        <location filename="../src/common/text_file_saver.cpp" line="75"/>
         <source>File path is empty</source>
-        <translation type="vanished">Путь к файлу пуст</translation>
+        <translation>Путь к файлу пуст</translation>
     </message>
     <message>
+        <location filename="../src/common/text_file_saver.cpp" line="149"/>
         <source>Insufficient memory to load document content</source>
-        <translation type="vanished">Недостаточно памяти для загрузки содержимого документа</translation>
+        <translation>Недостаточно памяти для загрузки содержимого документа</translation>
     </message>
     <message>
+        <location filename="../src/common/text_file_saver.cpp" line="182"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation type="vanished">Недостаточно памяти для кодирования</translation>
+        <translation>Недостаточно памяти для кодирования</translation>
     </message>
     <message>
+        <location filename="../src/common/text_file_saver.cpp" line="188"/>
         <source>Encoding conversion failed</source>
-        <translation type="vanished">Кодирование завершилось с ошибкой</translation>
+        <translation>Кодирование завершилось с ошибкой</translation>
     </message>
     <message>
+        <location filename="../src/common/text_file_saver.cpp" line="194"/>
         <source>Converted content is empty</source>
-        <translation type="vanished">Сконвертированное содержимое пусто</translation>
+        <translation>Сконвертированное содержимое пусто</translation>
     </message>
     <message>
+        <location filename="../src/common/text_file_saver.cpp" line="211"/>
+        <source>Save aborted: editor is closing</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/common/text_file_saver.cpp" line="230"/>
         <source>Memory allocation failed</source>
-        <translation type="vanished">Не удалось выделить память</translation>
+        <translation>Не удалось выделить память</translation>
     </message>
     <message>
+        <location filename="../src/common/text_file_saver.cpp" line="234"/>
         <source>Error occurred: %1</source>
-        <translation type="vanished">&apos;Ошибка: %1&apos;</translation>
+        <translation>&apos;Ошибка: %1&apos;</translation>
     </message>
     <message>
+        <location filename="../src/common/text_file_saver.cpp" line="238"/>
         <source>Unknown error occurred</source>
-        <translation type="vanished">Произошла неизвестная ошибка</translation>
+        <translation>Произошла неизвестная ошибка</translation>
     </message>
 </context>
 <context>
     <name>ReplaceBar</name>
     <message>
-        <location filename="../src/controls/replacebar.cpp" line="32"/>
+        <location filename="../src/controls/replacebar.cpp" line="33"/>
         <source>Find</source>
         <translation>Найти</translation>
     </message>
     <message>
-        <location filename="../src/controls/replacebar.cpp" line="37"/>
+        <location filename="../src/controls/replacebar.cpp" line="38"/>
         <source>Replace With</source>
         <translation>Заменить На</translation>
     </message>
     <message>
-        <location filename="../src/controls/replacebar.cpp" line="42"/>
+        <location filename="../src/controls/replacebar.cpp" line="43"/>
         <source>Replace</source>
         <translation>Заменить:</translation>
     </message>
     <message>
-        <location filename="../src/controls/replacebar.cpp" line="45"/>
+        <location filename="../src/controls/replacebar.cpp" line="46"/>
         <source>Skip</source>
         <translation>Пропустить</translation>
     </message>
     <message>
-        <location filename="../src/controls/replacebar.cpp" line="48"/>
+        <location filename="../src/controls/replacebar.cpp" line="49"/>
         <source>Replace Rest</source>
         <translation>Заменить остальное</translation>
     </message>
     <message>
-        <location filename="../src/controls/replacebar.cpp" line="51"/>
+        <location filename="../src/controls/replacebar.cpp" line="52"/>
         <source>Replace All</source>
         <translation>Заменить всё</translation>
     </message>
@@ -878,59 +920,59 @@
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../src/common/settings.cpp" line="141"/>
+        <location filename="../src/common/settings.cpp" line="142"/>
         <source>Standard</source>
         <translation>Стандартный</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="141"/>
+        <location filename="../src/common/settings.cpp" line="142"/>
         <source>Customize</source>
         <translation>Настроить</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="154"/>
+        <location filename="../src/common/settings.cpp" line="155"/>
         <source>Normal</source>
         <translation>Обычный</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="154"/>
+        <location filename="../src/common/settings.cpp" line="155"/>
         <source>Maximum</source>
         <translation>Максимум</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="154"/>
+        <location filename="../src/common/settings.cpp" line="155"/>
         <source>Fullscreen</source>
         <translation>Полный экран</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="491"/>
+        <location filename="../src/common/settings.cpp" line="502"/>
         <source>This shortcut conflicts with system shortcut %1</source>
         <translation>Это сочетание конфликтует с системным сочитанием %1</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="494"/>
+        <location filename="../src/common/settings.cpp" line="505"/>
         <source>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</source>
         <translation>Это сочетание конфликтует с %1, нажмите «Заменить», чтобы это сочетание вступило в силу немедленно</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="689"/>
-        <location filename="../src/common/settings.cpp" line="702"/>
-        <location filename="../src/common/settings.cpp" line="711"/>
+        <location filename="../src/common/settings.cpp" line="700"/>
+        <location filename="../src/common/settings.cpp" line="713"/>
+        <location filename="../src/common/settings.cpp" line="722"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
         <translation>Сочетание %1 недействительно, установите другое.</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="743"/>
+        <location filename="../src/common/settings.cpp" line="754"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="744"/>
+        <location filename="../src/common/settings.cpp" line="755"/>
         <source>Replace</source>
         <translation>Заменить</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="747"/>
+        <location filename="../src/common/settings.cpp" line="758"/>
         <source>OK</source>
         <translation>Хорошо</translation>
     </message>
@@ -938,7 +980,7 @@
 <context>
     <name>StartManager</name>
     <message>
-        <location filename="../src/startmanager.cpp" line="430"/>
+        <location filename="../src/startmanager.cpp" line="436"/>
         <source>Untitled %1</source>
         <translation>Без названия %1</translation>
     </message>
@@ -946,32 +988,32 @@
 <context>
     <name>Tabbar</name>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="683"/>
+        <location filename="../src/controls/tabbar.cpp" line="684"/>
         <source>Close tab</source>
         <translation>Закрыть вкладку</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="685"/>
+        <location filename="../src/controls/tabbar.cpp" line="686"/>
         <source>Close other tabs</source>
         <translation>Закрыть другие вкладки</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="687"/>
+        <location filename="../src/controls/tabbar.cpp" line="688"/>
         <source>More options</source>
         <translation>Больше вариантов</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="690"/>
+        <location filename="../src/controls/tabbar.cpp" line="691"/>
         <source>Close tabs to the left</source>
         <translation>Закрыть вкладки слева</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="692"/>
+        <location filename="../src/controls/tabbar.cpp" line="693"/>
         <source>Close tabs to the right</source>
         <translation>Закрыть вкладки справа</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="694"/>
+        <location filename="../src/controls/tabbar.cpp" line="695"/>
         <source>Close unmodified tabs</source>
         <translation>Закрыть не изменённые вкладки</translation>
     </message>
@@ -979,280 +1021,280 @@
 <context>
     <name>TextEdit</name>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="388"/>
+        <location filename="../src/editor/dtextedit.cpp" line="390"/>
         <source>Undo</source>
         <translation>Отменить</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="390"/>
+        <location filename="../src/editor/dtextedit.cpp" line="392"/>
         <source>Redo</source>
         <translation>Готово</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="392"/>
+        <location filename="../src/editor/dtextedit.cpp" line="394"/>
         <source>Cut</source>
         <translation>Вырезать</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="394"/>
+        <location filename="../src/editor/dtextedit.cpp" line="396"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="396"/>
+        <location filename="../src/editor/dtextedit.cpp" line="398"/>
         <source>Paste</source>
         <translation>Вставить</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="398"/>
+        <location filename="../src/editor/dtextedit.cpp" line="400"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="400"/>
+        <location filename="../src/editor/dtextedit.cpp" line="402"/>
         <source>Select All</source>
         <translation>Выбрать всё</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="402"/>
-        <location filename="../src/widgets/window.cpp" line="558"/>
+        <location filename="../src/editor/dtextedit.cpp" line="404"/>
+        <location filename="../src/widgets/window.cpp" line="559"/>
         <source>Find</source>
         <translation>Найти</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="404"/>
-        <location filename="../src/widgets/window.cpp" line="560"/>
+        <location filename="../src/editor/dtextedit.cpp" line="406"/>
+        <location filename="../src/widgets/window.cpp" line="561"/>
         <source>Replace</source>
         <translation>Заменить</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="406"/>
+        <location filename="../src/editor/dtextedit.cpp" line="408"/>
         <source>Go to Line</source>
         <translation>Перейти к строке</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="415"/>
+        <location filename="../src/editor/dtextedit.cpp" line="417"/>
         <source>Fullscreen</source>
         <translation>Полноэкранный режим</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="417"/>
+        <location filename="../src/editor/dtextedit.cpp" line="419"/>
         <source>Exit fullscreen</source>
         <translation>Выйти из полноэкранного режима</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="419"/>
+        <location filename="../src/editor/dtextedit.cpp" line="421"/>
         <source>Display in file manager</source>
         <translation>Показать в файловом менеджере</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="421"/>
-        <location filename="../src/editor/dtextedit.cpp" line="493"/>
+        <location filename="../src/editor/dtextedit.cpp" line="423"/>
+        <location filename="../src/editor/dtextedit.cpp" line="495"/>
         <source>Add Comment</source>
         <translation>Добавить комментарий</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="423"/>
+        <location filename="../src/editor/dtextedit.cpp" line="425"/>
         <source>Text to Speech</source>
         <translation>Текст в речь</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="425"/>
+        <location filename="../src/editor/dtextedit.cpp" line="427"/>
         <source>Speech to Text</source>
         <translation>Речь в текст</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="427"/>
+        <location filename="../src/editor/dtextedit.cpp" line="429"/>
         <source>Translate</source>
         <translation>Перевести</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="429"/>
+        <location filename="../src/editor/dtextedit.cpp" line="431"/>
         <source>Column Mode</source>
         <translation>Режим колонки</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="431"/>
+        <location filename="../src/editor/dtextedit.cpp" line="433"/>
         <source>Add bookmark</source>
         <translation>Добавить закладку</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="433"/>
+        <location filename="../src/editor/dtextedit.cpp" line="435"/>
         <source>Remove Bookmark</source>
         <translation>Удалить закладку</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="435"/>
+        <location filename="../src/editor/dtextedit.cpp" line="437"/>
         <source>Previous bookmark</source>
         <translation>Предыдущая закладка</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="437"/>
+        <location filename="../src/editor/dtextedit.cpp" line="439"/>
         <source>Next bookmark</source>
         <translation>Следующая закладка</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="439"/>
+        <location filename="../src/editor/dtextedit.cpp" line="441"/>
         <source>Remove All Bookmarks</source>
         <translation>Удалить все закладки</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="441"/>
+        <location filename="../src/editor/dtextedit.cpp" line="443"/>
         <source>Fold All</source>
         <translation>Свернуть всё</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="443"/>
+        <location filename="../src/editor/dtextedit.cpp" line="445"/>
         <source>Fold Current Level</source>
         <translation>Свернуть текущий уровень</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="445"/>
+        <location filename="../src/editor/dtextedit.cpp" line="447"/>
         <source>Unfold All</source>
         <translation>Развернуть всё</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="447"/>
+        <location filename="../src/editor/dtextedit.cpp" line="449"/>
         <source>Unfold Current Level</source>
         <translation>Развернуть текущий уровень</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="453"/>
+        <location filename="../src/editor/dtextedit.cpp" line="455"/>
         <source>Color Mark</source>
         <translation>Цветная метка</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="458"/>
+        <location filename="../src/editor/dtextedit.cpp" line="460"/>
         <source>Clear All Marks</source>
         <translation>Очистить все метки</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="460"/>
+        <location filename="../src/editor/dtextedit.cpp" line="462"/>
         <source>Clear Last Mark</source>
         <translation>Очистить последнюю метку</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="470"/>
+        <location filename="../src/editor/dtextedit.cpp" line="472"/>
         <source>Mark</source>
         <translation>Пометить</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="484"/>
+        <location filename="../src/editor/dtextedit.cpp" line="486"/>
         <source>Mark All</source>
         <translation>Пометить всё</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="494"/>
+        <location filename="../src/editor/dtextedit.cpp" line="496"/>
         <source>Remove Comment</source>
         <translation>Удалить комментарий</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="543"/>
+        <location filename="../src/editor/dtextedit.cpp" line="545"/>
         <source>View Mode</source>
         <translation>Режим просмотра</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3482"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3485"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3529"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3532"/>
         <source>Copy failed: not enough memory</source>
         <translation>Копирование не удалось: недостаточно памяти</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3607"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3609"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3654"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3656"/>
         <source>Press ALT and click lines to edit in column mode</source>
         <translation>Нажмите ALT и щелкните строки для редактирования в режиме колонки</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="9214"/>
-        <location filename="../src/editor/dtextedit.cpp" line="9216"/>
+        <location filename="../src/editor/dtextedit.cpp" line="9270"/>
+        <location filename="../src/editor/dtextedit.cpp" line="9272"/>
         <source>No audio output device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
         <translation>Устройство вывода звука обнаружено не было. Пожалуйста, убедитесь, что ваши динамики или наушники правильно подключены, и повторите попытку.</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="9223"/>
-        <location filename="../src/editor/dtextedit.cpp" line="9225"/>
+        <location filename="../src/editor/dtextedit.cpp" line="9279"/>
+        <location filename="../src/editor/dtextedit.cpp" line="9281"/>
         <source>No audio input device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
         <translation>Устройство ввода звука обнаружено не было. Пожалуйста, убедитесь, что ваши динамики или наушники правильно подключены, и повторите попытку.</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="534"/>
+        <location filename="../src/editor/dtextedit.cpp" line="536"/>
         <source>Change Case</source>
         <translation>Изменить регистр</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="409"/>
+        <location filename="../src/editor/dtextedit.cpp" line="411"/>
         <source>Edit Mode</source>
         <translation>Режим правки</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="411"/>
+        <location filename="../src/editor/dtextedit.cpp" line="413"/>
         <source>Read View</source>
         <translation>Просмотр для чтения</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="413"/>
+        <location filename="../src/editor/dtextedit.cpp" line="415"/>
         <source>Live Preview</source>
         <translation>Живой предпросмотр</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="535"/>
+        <location filename="../src/editor/dtextedit.cpp" line="537"/>
         <source>Upper Case</source>
         <translation>Верхний регистр</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="536"/>
+        <location filename="../src/editor/dtextedit.cpp" line="538"/>
         <source>Lower Case</source>
         <translation>Нижний регистр</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="537"/>
+        <location filename="../src/editor/dtextedit.cpp" line="539"/>
         <source>Capitalize</source>
         <translation>Заглавные буквы</translation>
     </message>
     <message>
-        <location filename="../src/widgets/bottombar.cpp" line="110"/>
+        <location filename="../src/widgets/bottombar.cpp" line="111"/>
         <source>None</source>
         <translation>Ничего</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1490"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1508"/>
         <source>Selected line(s) copied</source>
         <translation>Выбранные строки скопированы</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1497"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1515"/>
         <source>Current line copied</source>
         <translation>Текущая строка скопирована</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1527"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1545"/>
         <source>Selected line(s) clipped</source>
         <translation>Выбранные строки обрезаны</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1539"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1557"/>
         <source>Current line clipped</source>
         <translation>Текущая строка отрезана</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3501"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3504"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3548"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3551"/>
         <source>Paste failed: not enough memory</source>
         <translation>Вставка не удалось: недостаточно памяти</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="4833"/>
+        <location filename="../src/editor/dtextedit.cpp" line="4880"/>
         <source>Read-Only mode is off</source>
         <translation>Режим «Только чтение» отключён</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="4845"/>
-        <location filename="../src/editor/dtextedit.cpp" line="4869"/>
-        <location filename="../src/editor/dtextedit.cpp" line="7875"/>
-        <location filename="../src/editor/dtextedit.cpp" line="7986"/>
-        <location filename="../src/editor/dtextedit.cpp" line="7994"/>
-        <location filename="../src/editor/dtextedit.cpp" line="8005"/>
+        <location filename="../src/editor/dtextedit.cpp" line="4892"/>
+        <location filename="../src/editor/dtextedit.cpp" line="4916"/>
+        <location filename="../src/editor/dtextedit.cpp" line="7929"/>
+        <location filename="../src/editor/dtextedit.cpp" line="8040"/>
+        <location filename="../src/editor/dtextedit.cpp" line="8048"/>
+        <location filename="../src/editor/dtextedit.cpp" line="8059"/>
         <source>Read-Only mode is on</source>
         <translation>Режим «Только чтение» включён</translation>
     </message>
@@ -1260,12 +1302,12 @@
 <context>
     <name>WarningNotices</name>
     <message>
-        <location filename="../src/controls/warningnotices.cpp" line="25"/>
+        <location filename="../src/controls/warningnotices.cpp" line="26"/>
         <source>Reload</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../src/controls/warningnotices.cpp" line="31"/>
+        <location filename="../src/controls/warningnotices.cpp" line="32"/>
         <source>Edit Anyway</source>
         <translation>Редактировать в любом случае</translation>
     </message>
@@ -1273,97 +1315,98 @@
 <context>
     <name>Window</name>
     <message>
-        <location filename="../src/controls/warningnotices.cpp" line="28"/>
-        <location filename="../src/widgets/window.cpp" line="550"/>
+        <location filename="../src/controls/warningnotices.cpp" line="29"/>
+        <location filename="../src/widgets/window.cpp" line="551"/>
         <source>Save as</source>
         <translation>Сохранить как</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="542"/>
+        <location filename="../src/widgets/window.cpp" line="543"/>
         <source>New window</source>
         <translation>Новое окно</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="544"/>
+        <location filename="../src/widgets/window.cpp" line="545"/>
         <source>New tab</source>
         <translation>Новая вкладка</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="546"/>
+        <location filename="../src/widgets/window.cpp" line="547"/>
         <source>Open file</source>
         <translation>Открыть файл</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="548"/>
-        <location filename="../src/widgets/window.cpp" line="4008"/>
+        <location filename="../src/widgets/window.cpp" line="549"/>
+        <location filename="../src/widgets/window.cpp" line="4016"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="552"/>
+        <location filename="../src/widgets/window.cpp" line="553"/>
         <source>Print</source>
         <translation>Печать</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="554"/>
+        <location filename="../src/widgets/window.cpp" line="555"/>
         <source>Switch theme</source>
         <translation>Переключить тему</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="556"/>
+        <location filename="../src/widgets/window.cpp" line="557"/>
         <location filename="../src/widgets/window.cpp" line="2671"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="700"/>
-        <location filename="../src/widgets/window.cpp" line="4308"/>
+        <location filename="../src/widgets/window.cpp" line="701"/>
+        <location filename="../src/widgets/window.cpp" line="4316"/>
         <source>Read-Only</source>
         <translation>Только Чтение</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="723"/>
+        <location filename="../src/widgets/window.cpp" line="724"/>
         <source>You do not have permission to open %1</source>
         <translation>Вы не имеете разрешения на открытие %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="777"/>
+        <location filename="../src/widgets/window.cpp" line="778"/>
         <location filename="../src/widgets/window.cpp" line="3296"/>
         <source>Invalid file: %1</source>
         <translation>Недопустимый файл: %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="961"/>
-        <location filename="../src/widgets/window.cpp" line="1054"/>
+        <location filename="../src/widgets/window.cpp" line="962"/>
+        <location filename="../src/widgets/window.cpp" line="1055"/>
         <location filename="../src/widgets/window.cpp" line="3247"/>
         <source>Do you want to save this file?</source>
         <translation>Вы хотите сохранить этот документ?</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1468"/>
+        <location filename="../src/widgets/window.cpp" line="1469"/>
         <source>You do not have permission to save %1</source>
         <translation>Вы не имеете разрешения на сохранение %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1440"/>
-        <location filename="../src/widgets/window.cpp" line="1490"/>
+        <location filename="../src/widgets/window.cpp" line="1441"/>
+        <location filename="../src/widgets/window.cpp" line="1491"/>
         <source>Saved successfully</source>
         <translation>Успешно сохранено</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1532"/>
-        <location filename="../src/widgets/window.cpp" line="1677"/>
-        <location filename="../src/widgets/window.cpp" line="1725"/>
+        <location filename="../src/widgets/window.cpp" line="1533"/>
+        <location filename="../src/widgets/window.cpp" line="1678"/>
+        <location filename="../src/widgets/window.cpp" line="1726"/>
         <source>Save File</source>
         <translation>Сохранить Файл</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1679"/>
+        <location filename="../src/widgets/window.cpp" line="1680"/>
         <source>Encoding</source>
         <translation>Кодировка</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1969"/>
+        <location filename="../src/widgets/window.cpp" line="1970"/>
+        <location filename="../src/widgets/window.cpp" line="3744"/>
         <source>Read-Only mode is on</source>
         <translation>Режим Только чтение включён</translation>
     </message>
@@ -1393,42 +1436,42 @@
         <translation>Без названия %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="4006"/>
+        <location filename="../src/widgets/window.cpp" line="4014"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="4007"/>
+        <location filename="../src/widgets/window.cpp" line="4015"/>
         <source>Discard</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1393"/>
+        <location filename="../src/widgets/window.cpp" line="1394"/>
         <source>Invalid characters detected while saving &quot;%1&quot;</source>
         <translation>При сохранении файла «%1» обнаружены недопустимые символы</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1394"/>
+        <location filename="../src/widgets/window.cpp" line="1395"/>
         <source>If you force save this file, it may cause file corruption. Still want to save?</source>
         <translation>Если вы принудительно сохраните этот файл, это может привести к его повреждению. Все равно хотите сохранить?</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1398"/>
+        <location filename="../src/widgets/window.cpp" line="1399"/>
         <source>Don&apos;t Save</source>
         <translation>Не сохранять</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1399"/>
+        <location filename="../src/widgets/window.cpp" line="1400"/>
         <source>Save As</source>
         <translation>Сохранить как</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1400"/>
+        <location filename="../src/widgets/window.cpp" line="1401"/>
         <source>Save Anyway</source>
         <translation>«Сохранить всё равно»</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1581"/>
+        <location filename="../src/widgets/window.cpp" line="1582"/>
         <source>Cannot save as the original file in preview mode. Please choose a different path.</source>
         <translation>В режиме предварительного просмотра невозможно сохранить файл под исходным именем. Пожалуйста, выберите другой путь.</translation>
     </message>
