@@ -1,54 +1,52 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="am_ET">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="am_ET">
 <context>
     <name>BottomBar</name>
     <message>
-        <location filename="../src/widgets/bottombar.cpp" line="30"/>
+        <location filename="../src/widgets/bottombar.cpp" line="31"/>
         <source>Row</source>
         <translation>ረድፍ</translation>
     </message>
     <message>
-        <location filename="../src/widgets/bottombar.cpp" line="31"/>
+        <location filename="../src/widgets/bottombar.cpp" line="32"/>
         <source>Column</source>
         <translation>አምድ</translation>
     </message>
     <message>
-        <location filename="../src/widgets/bottombar.cpp" line="32"/>
+        <location filename="../src/widgets/bottombar.cpp" line="33"/>
         <source>Characters %1</source>
         <translation>ባህሪዎች %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/bottombar.cpp" line="47"/>
+        <location filename="../src/widgets/bottombar.cpp" line="48"/>
         <source>Loading:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/bottombar.cpp" line="73"/>
-        <location filename="../src/widgets/bottombar.cpp" line="91"/>
-        <location filename="../src/widgets/bottombar.cpp" line="501"/>
-        <source>Edit Mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="74"/>
-        <location filename="../src/widgets/bottombar.cpp" line="491"/>
-        <source>Read View</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/widgets/bottombar.cpp" line="92"/>
+        <location filename="../src/widgets/bottombar.cpp" line="502"/>
+        <source>Edit Mode</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="75"/>
-        <location filename="../src/widgets/bottombar.cpp" line="495"/>
+        <location filename="../src/widgets/bottombar.cpp" line="492"/>
+        <source>Read View</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/widgets/bottombar.cpp" line="76"/>
+        <location filename="../src/widgets/bottombar.cpp" line="496"/>
         <source>Live Preview</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>DDropdownMenu</name>
     <message>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="370"/>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="428"/>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="433"/>
+        <location filename="../src/widgets/ddropdownmenu.cpp" line="417"/>
+        <location filename="../src/widgets/ddropdownmenu.cpp" line="475"/>
+        <location filename="../src/widgets/ddropdownmenu.cpp" line="480"/>
         <source>None</source>
         <translation>ምንም</translation>
     </message>
@@ -56,85 +54,85 @@
 <context>
     <name>EditWrapper</name>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="357"/>
-        <location filename="../src/editor/editwrapper.cpp" line="431"/>
-        <location filename="../src/editor/editwrapper.cpp" line="597"/>
-        <location filename="../src/editor/editwrapper.cpp" line="889"/>
+        <location filename="../src/editor/editwrapper.cpp" line="366"/>
+        <location filename="../src/editor/editwrapper.cpp" line="441"/>
+        <location filename="../src/editor/editwrapper.cpp" line="607"/>
+        <location filename="../src/editor/editwrapper.cpp" line="916"/>
         <source>Save</source>
         <translation>ማስቀመጫ</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="592"/>
+        <location filename="../src/editor/editwrapper.cpp" line="602"/>
         <source>Do you want to save this file?</source>
         <translation>እርስዎ ይህን ፋይሉን ማስቀመጥ ይፈልጋሎ?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="429"/>
-        <location filename="../src/editor/editwrapper.cpp" line="595"/>
+        <location filename="../src/editor/editwrapper.cpp" line="439"/>
+        <location filename="../src/editor/editwrapper.cpp" line="605"/>
         <source>Cancel</source>
         <translation>መሰረዣ</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="426"/>
+        <location filename="../src/editor/editwrapper.cpp" line="436"/>
         <source>Encoding changed. Do you want to save the file now?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="596"/>
+        <location filename="../src/editor/editwrapper.cpp" line="606"/>
         <source>Discard</source>
         <translation>ማስወገጃ</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="1126"/>
-        <source>The file contains invalid characters (NUL). Preview mode is read-only.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/editor/editwrapper.cpp" line="2109"/>
-        <source>Read-Only mode is on</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/editor/editwrapper.cpp" line="339"/>
-        <location filename="../src/editor/editwrapper.cpp" line="707"/>
+        <location filename="../src/editor/editwrapper.cpp" line="348"/>
+        <location filename="../src/editor/editwrapper.cpp" line="724"/>
         <source>You do not have permission to save %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="989"/>
+        <location filename="../src/editor/editwrapper.cpp" line="1016"/>
         <source>File removed on the disk. Save it now?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="995"/>
+        <location filename="../src/editor/editwrapper.cpp" line="1022"/>
         <source>File has changed on disk. Reload?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="1817"/>
+        <location filename="../src/editor/editwrapper.cpp" line="1851"/>
         <source>The file cannot be read, which may be too large or has been damaged!</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/editor/editwrapper.cpp" line="2152"/>
+        <source>Read-Only mode is on</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/editor/editwrapper.cpp" line="1160"/>
+        <source>The file contains invalid characters (NUL). Preview mode is read-only.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>FindBar</name>
     <message>
-        <location filename="../src/controls/findbar.cpp" line="34"/>
+        <location filename="../src/controls/findbar.cpp" line="35"/>
         <source>Find</source>
         <translation>መፈለጊያ</translation>
     </message>
     <message>
-        <location filename="../src/controls/findbar.cpp" line="39"/>
+        <location filename="../src/controls/findbar.cpp" line="40"/>
         <source>Previous</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/controls/findbar.cpp" line="42"/>
+        <location filename="../src/controls/findbar.cpp" line="43"/>
         <source>Next</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/controls/findbar.cpp" line="45"/>
+        <location filename="../src/controls/findbar.cpp" line="46"/>
         <source>Replace</source>
         <translation>መቀየሪያ</translation>
     </message>
@@ -142,7 +140,7 @@
 <context>
     <name>JumpLineBar</name>
     <message>
-        <location filename="../src/controls/jumplinebar.cpp" line="47"/>
+        <location filename="../src/controls/jumplinebar.cpp" line="48"/>
         <source>Go to Line: </source>
         <translation>መሄጃ ወደ መስመር</translation>
     </message>
@@ -150,1210 +148,1282 @@
 <context>
     <name>LineBar</name>
     <message>
-        <location filename="../src/controls/linebar.cpp" line="148"/>
+        <location filename="../src/controls/linebar.cpp" line="149"/>
         <source>第%1/%2项</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/editorapplication.cpp" line="12"/>
+        <location filename="../src/editorapplication.cpp" line="13"/>
         <source>Text Editor is a powerful tool for viewing and editing text files.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/editorapplication.cpp" line="34"/>
+        <location filename="../src/editorapplication.cpp" line="35"/>
         <source>Text Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>MarkdownBridge</name>
+    <message>
+        <location filename="../src/editor/markdown/markdownbridge.h" line="39"/>
+        <source>Collapse code block</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/editor/markdown/markdownbridge.h" line="40"/>
+        <source>Expand code block</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/editor/markdown/markdownbridge.h" line="41"/>
+        <source>Copy code</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/editor/markdown/markdownbridge.h" line="42"/>
+        <source>Expand</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/editor/markdown/markdownbridge.h" line="44"/>
+        <source>%1 line(s) of code collapsed</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>PathSettingWgt</name>
+    <message>
+        <location filename="../src/widgets/pathsettintwgt.cpp" line="97"/>
+        <source>Remember the last used path</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/widgets/pathsettintwgt.cpp" line="98"/>
+        <source>Same path as the current file</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/widgets/pathsettintwgt.cpp" line="99"/>
+        <source>Customize the default path</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/editorapplication.cpp" line="28"/>
+        <location filename="../src/editorapplication.cpp" line="29"/>
         <source>Text Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="359"/>
-        <location filename="../src/editor/editwrapper.cpp" line="899"/>
-        <location filename="../src/editor/editwrapper.cpp" line="914"/>
-        <location filename="../src/widgets/window.cpp" line="1540"/>
-        <location filename="../src/widgets/window.cpp" line="1568"/>
-        <location filename="../src/widgets/window.cpp" line="1727"/>
-        <location filename="../src/widgets/window.cpp" line="1744"/>
+        <location filename="../src/editor/editwrapper.cpp" line="368"/>
+        <location filename="../src/editor/editwrapper.cpp" line="926"/>
+        <location filename="../src/editor/editwrapper.cpp" line="941"/>
+        <location filename="../src/widgets/window.cpp" line="1541"/>
+        <location filename="../src/widgets/window.cpp" line="1569"/>
+        <location filename="../src/widgets/window.cpp" line="1728"/>
+        <location filename="../src/widgets/window.cpp" line="1745"/>
         <source>Encoding</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/editor/editwrapper.cpp" line="2015"/>
-        <source>视图模式</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="11"/>
-        <source>Basic</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="12"/>
-        <source>Font Style</source>
-        <translation type="unfinished"></translation>
+        <source>Basic</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="13"/>
+        <source>Font Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="14"/>
         <source>Font</source>
         <translation>ፊደል</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="14"/>
-        <source>Font Size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/controls/settingsdialog.cpp" line="15"/>
-        <source>Shortcuts</source>
-        <translation type="unfinished"></translation>
+        <source>Font Size</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="16"/>
-        <location filename="../src/controls/settingsdialog.cpp" line="17"/>
-        <source>Keymap</source>
-        <translation type="unfinished"></translation>
+        <source>Shortcuts</source>
+        <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="17"/>
         <location filename="../src/controls/settingsdialog.cpp" line="18"/>
-        <location filename="../src/controls/settingsdialog.cpp" line="96"/>
-        <location filename="../src/widgets/window.cpp" line="2611"/>
-        <source>Window</source>
-        <translation type="unfinished"></translation>
+        <source>Keymap</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="19"/>
-        <source>New tab</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/controls/settingsdialog.cpp" line="97"/>
+        <location filename="../src/widgets/window.cpp" line="2611"/>
+        <source>Window</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="20"/>
-        <source>New window</source>
-        <translation type="unfinished"></translation>
+        <source>New tab</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="21"/>
+        <source>New window</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="22"/>
         <source>Save</source>
         <translation>ማስቀመጫ</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="22"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="23"/>
         <source>Save as</source>
         <translation>ማስቀመጫ እንደ</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="23"/>
-        <source>Next tab</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/controls/settingsdialog.cpp" line="24"/>
-        <source>Previous tab</source>
-        <translation type="unfinished"></translation>
+        <source>Next tab</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="25"/>
-        <source>Close tab</source>
-        <translation type="unfinished"></translation>
+        <source>Previous tab</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="26"/>
-        <source>Close other tabs</source>
-        <translation type="unfinished"></translation>
+        <source>Close tab</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="27"/>
-        <source>Restore tab</source>
-        <translation type="unfinished"></translation>
+        <source>Close other tabs</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="28"/>
+        <source>Restore tab</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="29"/>
         <source>Open file</source>
         <translation>ፋይል መክፈቻ</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="29"/>
-        <source>Increment font size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/controls/settingsdialog.cpp" line="30"/>
-        <source>Decrement font size</source>
-        <translation type="unfinished"></translation>
+        <source>Increment font size</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="31"/>
-        <source>Reset font size</source>
-        <translation type="unfinished"></translation>
+        <source>Decrement font size</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="32"/>
-        <source>Help</source>
-        <translation type="unfinished"></translation>
+        <source>Reset font size</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="33"/>
-        <source>Toggle fullscreen</source>
-        <translation type="unfinished"></translation>
+        <source>Help</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="34"/>
+        <source>Toggle fullscreen</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="35"/>
         <source>Find</source>
         <translation>መፈለጊያ</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="35"/>
-        <source>Find Next</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/controls/settingsdialog.cpp" line="36"/>
-        <source>Find Previous</source>
-        <translation type="unfinished"></translation>
+        <source>Find Next</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="37"/>
+        <source>Find Previous</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="38"/>
         <source>Replace</source>
         <translation>መቀየሪያ</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="38"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="39"/>
         <source>Go to line</source>
         <translation>መሄጃ ወደ መስመር</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="39"/>
-        <source>Save cursor position</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/controls/settingsdialog.cpp" line="40"/>
-        <source>Reset cursor position</source>
-        <translation type="unfinished"></translation>
+        <source>Save cursor position</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="41"/>
+        <source>Reset cursor position</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="42"/>
         <source>Exit</source>
         <translation>መውጫ</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="42"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="43"/>
         <source>Display shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="43"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="44"/>
         <source>Print</source>
         <translation>ማተሚያ</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="44"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="45"/>
         <source>Editor</source>
         <translation>ማረሚያ</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="45"/>
-        <source>Increase indent</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/controls/settingsdialog.cpp" line="46"/>
-        <source>Decrease indent</source>
-        <translation type="unfinished"></translation>
+        <source>Increase indent</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="47"/>
-        <source>Forward character</source>
-        <translation type="unfinished"></translation>
+        <source>Decrease indent</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="48"/>
-        <source>Backward character</source>
-        <translation type="unfinished"></translation>
+        <source>Forward character</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="49"/>
-        <source>Forward word</source>
-        <translation type="unfinished"></translation>
+        <source>Backward character</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="50"/>
-        <source>Backward word</source>
-        <translation type="unfinished"></translation>
+        <source>Forward word</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="51"/>
-        <source>Next line</source>
-        <translation type="unfinished"></translation>
+        <source>Backward word</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="52"/>
-        <source>Previous line</source>
-        <translation type="unfinished"></translation>
+        <source>Next line</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="53"/>
+        <source>Previous line</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="54"/>
         <source>New line</source>
         <translation>አዲስ መስመር</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="54"/>
-        <source>New line above</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/controls/settingsdialog.cpp" line="55"/>
-        <source>New line below</source>
-        <translation type="unfinished"></translation>
+        <source>New line above</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="56"/>
-        <source>Duplicate line</source>
-        <translation type="unfinished"></translation>
+        <source>New line below</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="57"/>
-        <source>Delete to end of line</source>
-        <translation type="unfinished"></translation>
+        <source>Duplicate line</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="58"/>
-        <source>Delete current line</source>
-        <translation type="unfinished"></translation>
+        <source>Delete to end of line</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="59"/>
-        <source>Swap line up</source>
-        <translation type="unfinished"></translation>
+        <source>Delete current line</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="60"/>
-        <source>Swap line down</source>
-        <translation type="unfinished"></translation>
+        <source>Swap line up</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="61"/>
-        <source>Scroll up one line</source>
-        <translation type="unfinished"></translation>
+        <source>Swap line down</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="62"/>
-        <source>Scroll down one line</source>
-        <translation type="unfinished"></translation>
+        <source>Scroll up one line</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="63"/>
+        <source>Scroll down one line</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="64"/>
         <source>Page up</source>
         <translation>ገጽ ወደ ላይ</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="64"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="65"/>
         <source>Page down</source>
         <translation>ገጽ ወደ ታች</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="65"/>
-        <source>Move to end of line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/controls/settingsdialog.cpp" line="66"/>
-        <source>Move to start of line</source>
-        <translation type="unfinished"></translation>
+        <source>Move to end of line</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="67"/>
-        <source>Move to end of text</source>
-        <translation type="unfinished"></translation>
+        <source>Move to start of line</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="68"/>
-        <source>Move to start of text</source>
-        <translation type="unfinished"></translation>
+        <source>Move to end of text</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="69"/>
-        <source>Move to line indentation</source>
-        <translation type="unfinished"></translation>
+        <source>Move to start of text</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="70"/>
-        <source>Upper case</source>
-        <translation type="unfinished"></translation>
+        <source>Move to line indentation</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="71"/>
-        <source>Lower case</source>
-        <translation type="unfinished"></translation>
+        <source>Upper case</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="72"/>
-        <source>Capitalize</source>
-        <translation type="unfinished"></translation>
+        <source>Lower case</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="73"/>
-        <source>Delete backward word</source>
-        <translation type="unfinished"></translation>
+        <source>Capitalize</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="74"/>
-        <source>Delete forward word</source>
-        <translation type="unfinished"></translation>
+        <source>Delete backward word</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="75"/>
-        <source>Forward over a pair</source>
-        <translation type="unfinished"></translation>
+        <source>Delete forward word</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="76"/>
-        <source>Backward over a pair</source>
-        <translation type="unfinished"></translation>
+        <source>Forward over a pair</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="77"/>
+        <source>Backward over a pair</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="78"/>
         <source>Select all</source>
         <translation>ሁሉንም መምረጫ</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="78"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="79"/>
         <source>Copy</source>
         <translation>ኮፒ</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="79"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="80"/>
         <source>Cut</source>
         <translation>መቁረጫ</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="80"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="81"/>
         <source>Paste</source>
         <translation>መለጠፊያ</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="81"/>
-        <source>Transpose character</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/controls/settingsdialog.cpp" line="82"/>
-        <source>Mark</source>
-        <translation type="unfinished"></translation>
+        <source>Transpose character</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="83"/>
-        <source>Unmark</source>
-        <translation type="unfinished"></translation>
+        <source>Mark</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="84"/>
-        <source>Copy line</source>
-        <translation type="unfinished"></translation>
+        <source>Unmark</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="85"/>
-        <source>Cut line</source>
-        <translation type="unfinished"></translation>
+        <source>Copy line</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="86"/>
-        <source>Merge lines</source>
-        <translation type="unfinished"></translation>
+        <source>Cut line</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="87"/>
-        <source>Read-Only mode</source>
-        <translation type="unfinished"></translation>
+        <source>Merge lines</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="88"/>
-        <source>Add comment</source>
-        <translation type="unfinished"></translation>
+        <source>Read-Only mode</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="89"/>
-        <source>Remove comment</source>
-        <translation type="unfinished"></translation>
+        <source>Add comment</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="90"/>
+        <source>Remove comment</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="91"/>
         <source>Undo</source>
         <translation>መተው</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="91"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="92"/>
         <source>Redo</source>
         <translation>እንደገና መስሪያ</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="92"/>
-        <source>Add/Remove bookmark</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/controls/settingsdialog.cpp" line="93"/>
-        <source>Move to previous bookmark</source>
-        <translation type="unfinished"></translation>
+        <source>Add/Remove bookmark</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="94"/>
-        <source>Move to next bookmark</source>
-        <translation type="unfinished"></translation>
+        <source>Move to previous bookmark</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="95"/>
-        <source>Advanced</source>
-        <translation type="unfinished"></translation>
+        <source>Move to next bookmark</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="97"/>
-        <source>Window size</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/controls/settingsdialog.cpp" line="96"/>
+        <source>Advanced</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="98"/>
-        <source>Tab width</source>
-        <translation type="unfinished"></translation>
+        <source>Window size</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="99"/>
-        <source>Paste by pressing a middle mouse button</source>
-        <translation type="unfinished"></translation>
+        <source>Tab width</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="101"/>
-        <source>Startup</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/controls/settingsdialog.cpp" line="100"/>
+        <source>Paste by pressing a middle mouse button</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="102"/>
+        <source>Startup</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="103"/>
         <source>Reopen last closed tabs</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="104"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="105"/>
         <source>Open/Save Settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="106"/>
-        <source>Word wrap</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="107"/>
-        <source>Code folding flag</source>
-        <translation type="unfinished"></translation>
+        <source>Word wrap</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="108"/>
-        <source>Show line numbers</source>
-        <translation type="unfinished"></translation>
+        <source>Code folding flag</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="109"/>
-        <source>Show bookmarks icon</source>
-        <translation type="unfinished"></translation>
+        <source>Show line numbers</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="110"/>
-        <source>Show whitespaces and tabs</source>
-        <translation type="unfinished"></translation>
+        <source>Show bookmarks icon</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="111"/>
-        <source>Highlight current line</source>
-        <translation type="unfinished"></translation>
+        <source>Show whitespaces and tabs</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="112"/>
-        <source>Color mark</source>
-        <translation type="unfinished"></translation>
+        <source>Highlight current line</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="115"/>
-        <source>Unicode</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/controls/settingsdialog.cpp" line="113"/>
+        <source>Color mark</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="116"/>
-        <source>WesternEuropean</source>
-        <translation type="unfinished"></translation>
+        <source>Unicode</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="117"/>
-        <source>CentralEuropean</source>
-        <translation type="unfinished"></translation>
+        <source>WesternEuropean</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="118"/>
-        <source>Baltic</source>
-        <translation type="unfinished"></translation>
+        <source>CentralEuropean</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="119"/>
-        <source>Cyrillic</source>
-        <translation type="unfinished"></translation>
+        <source>Baltic</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="120"/>
-        <source>Arabic</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="125"/>
-        <source>Celtic</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="126"/>
-        <source>SouthEasternEuropean</source>
-        <translation type="unfinished"></translation>
+        <source>Cyrillic</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="121"/>
-        <source>Greek</source>
-        <translation type="unfinished"></translation>
+        <source>Arabic</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="122"/>
-        <source>Hebrew</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/controls/settingsdialog.cpp" line="126"/>
+        <source>Celtic</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="127"/>
-        <source>ChineseSimplified</source>
-        <translation type="unfinished"></translation>
+        <source>SouthEasternEuropean</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="128"/>
-        <source>ChineseTraditional</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="129"/>
-        <source>Japanese</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="130"/>
-        <source>Korean</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="124"/>
-        <source>Thai</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/controls/settingsdialog.cpp" line="122"/>
+        <source>Greek</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="123"/>
-        <source>Turkish</source>
-        <translation type="unfinished"></translation>
+        <source>Hebrew</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="128"/>
+        <source>ChineseSimplified</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="129"/>
+        <source>ChineseTraditional</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="130"/>
+        <source>Japanese</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="131"/>
+        <source>Korean</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="125"/>
+        <source>Thai</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="124"/>
+        <source>Turkish</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="132"/>
         <source>Vietnamese</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/startmanager.cpp" line="1040"/>
+        <location filename="../src/startmanager.cpp" line="1046"/>
         <source>File not saved</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1728"/>
-        <location filename="../src/widgets/window.cpp" line="1745"/>
+        <location filename="../src/widgets/window.cpp" line="1729"/>
+        <location filename="../src/widgets/window.cpp" line="1746"/>
         <source>Line Endings</source>
         <translation>የ መስመር መጨረሻ</translation>
+    </message>
+    <message>
+        <location filename="../src/common/iflytek_ai_assistant.cpp" line="383"/>
+        <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/common/iflytek_ai_assistant.cpp" line="385"/>
+        <source>No audio input device detected. Please check and try again</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/common/iflytek_ai_assistant.cpp" line="387"/>
+        <source>No audio output device detected. Please check and try again</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/common/text_file_saver.cpp" line="75"/>
+        <source>File path is empty</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/common/text_file_saver.cpp" line="149"/>
+        <source>Insufficient memory to load document content</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/common/text_file_saver.cpp" line="182"/>
+        <source>Insufficient memory for encoding conversion</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/common/text_file_saver.cpp" line="188"/>
+        <source>Encoding conversion failed</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/common/text_file_saver.cpp" line="194"/>
+        <source>Converted content is empty</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/common/text_file_saver.cpp" line="211"/>
+        <source>Save aborted: editor is closing</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/common/text_file_saver.cpp" line="230"/>
+        <source>Memory allocation failed</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/common/text_file_saver.cpp" line="234"/>
+        <source>Error occurred: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/common/text_file_saver.cpp" line="238"/>
+        <source>Unknown error occurred</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>ReplaceBar</name>
     <message>
-        <location filename="../src/controls/replacebar.cpp" line="32"/>
+        <location filename="../src/controls/replacebar.cpp" line="33"/>
         <source>Find</source>
         <translation>መፈለጊያ</translation>
     </message>
     <message>
-        <location filename="../src/controls/replacebar.cpp" line="37"/>
+        <location filename="../src/controls/replacebar.cpp" line="38"/>
         <source>Replace With</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/controls/replacebar.cpp" line="42"/>
+        <location filename="../src/controls/replacebar.cpp" line="43"/>
         <source>Replace</source>
         <translation>መቀየሪያ</translation>
     </message>
     <message>
-        <location filename="../src/controls/replacebar.cpp" line="45"/>
+        <location filename="../src/controls/replacebar.cpp" line="46"/>
         <source>Skip</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/controls/replacebar.cpp" line="48"/>
+        <location filename="../src/controls/replacebar.cpp" line="49"/>
         <source>Replace Rest</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/controls/replacebar.cpp" line="51"/>
+        <location filename="../src/controls/replacebar.cpp" line="52"/>
         <source>Replace All</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>S:</name>
     <message>
         <location filename="../third/libiconv-1.16/src/iconv.c" line="103"/>
-        <source></source>
+        <source/>
         <comment>The first line of the short usage message.</comment>
-        <translation></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../src/common/settings.cpp" line="141"/>
+        <location filename="../src/common/settings.cpp" line="142"/>
         <source>Standard</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="141"/>
+        <location filename="../src/common/settings.cpp" line="142"/>
         <source>Customize</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="154"/>
+        <location filename="../src/common/settings.cpp" line="155"/>
         <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="154"/>
+        <location filename="../src/common/settings.cpp" line="155"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="154"/>
+        <location filename="../src/common/settings.cpp" line="155"/>
         <source>Fullscreen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="491"/>
+        <location filename="../src/common/settings.cpp" line="502"/>
         <source>This shortcut conflicts with system shortcut %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="494"/>
+        <location filename="../src/common/settings.cpp" line="505"/>
         <source>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="689"/>
-        <location filename="../src/common/settings.cpp" line="702"/>
-        <location filename="../src/common/settings.cpp" line="711"/>
+        <location filename="../src/common/settings.cpp" line="700"/>
+        <location filename="../src/common/settings.cpp" line="713"/>
+        <location filename="../src/common/settings.cpp" line="722"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="743"/>
+        <location filename="../src/common/settings.cpp" line="754"/>
         <source>Cancel</source>
         <translation>መሰረዣ</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="744"/>
+        <location filename="../src/common/settings.cpp" line="755"/>
         <source>Replace</source>
         <translation>መቀየሪያ</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="747"/>
+        <location filename="../src/common/settings.cpp" line="758"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>StartManager</name>
     <message>
-        <location filename="../src/startmanager.cpp" line="430"/>
+        <location filename="../src/startmanager.cpp" line="436"/>
         <source>Untitled %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Tabbar</name>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="683"/>
+        <location filename="../src/controls/tabbar.cpp" line="684"/>
         <source>Close tab</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="685"/>
+        <location filename="../src/controls/tabbar.cpp" line="686"/>
         <source>Close other tabs</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="687"/>
+        <location filename="../src/controls/tabbar.cpp" line="688"/>
         <source>More options</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="690"/>
+        <location filename="../src/controls/tabbar.cpp" line="691"/>
         <source>Close tabs to the left</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="692"/>
+        <location filename="../src/controls/tabbar.cpp" line="693"/>
         <source>Close tabs to the right</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="694"/>
+        <location filename="../src/controls/tabbar.cpp" line="695"/>
         <source>Close unmodified tabs</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>TextEdit</name>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="388"/>
+        <location filename="../src/editor/dtextedit.cpp" line="390"/>
         <source>Undo</source>
         <translation>መተው</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="390"/>
+        <location filename="../src/editor/dtextedit.cpp" line="392"/>
         <source>Redo</source>
         <translation>እንደገና መስሪያ</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="392"/>
+        <location filename="../src/editor/dtextedit.cpp" line="394"/>
         <source>Cut</source>
         <translation>መቁረጫ</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="394"/>
+        <location filename="../src/editor/dtextedit.cpp" line="396"/>
         <source>Copy</source>
         <translation>ኮፒ</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="396"/>
+        <location filename="../src/editor/dtextedit.cpp" line="398"/>
         <source>Paste</source>
         <translation>መለጠፊያ</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="398"/>
+        <location filename="../src/editor/dtextedit.cpp" line="400"/>
         <source>Delete</source>
         <translation>ማጥፊያ</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="400"/>
+        <location filename="../src/editor/dtextedit.cpp" line="402"/>
         <source>Select All</source>
         <translation>ሁሉንም መምረጫ</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="402"/>
-        <location filename="../src/widgets/window.cpp" line="558"/>
+        <location filename="../src/editor/dtextedit.cpp" line="404"/>
+        <location filename="../src/widgets/window.cpp" line="559"/>
         <source>Find</source>
         <translation>መፈለጊያ</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="404"/>
-        <location filename="../src/widgets/window.cpp" line="560"/>
+        <location filename="../src/editor/dtextedit.cpp" line="406"/>
+        <location filename="../src/widgets/window.cpp" line="561"/>
         <source>Replace</source>
         <translation>መቀየሪያ</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="406"/>
+        <location filename="../src/editor/dtextedit.cpp" line="408"/>
         <source>Go to Line</source>
         <translation>መሄጃ ወደ መስመር</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="415"/>
-        <source>Fullscreen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/editor/dtextedit.cpp" line="417"/>
-        <source>Exit fullscreen</source>
-        <translation type="unfinished"></translation>
+        <source>Fullscreen</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="419"/>
-        <source>Display in file manager</source>
-        <translation type="unfinished"></translation>
+        <source>Exit fullscreen</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="421"/>
-        <location filename="../src/editor/dtextedit.cpp" line="493"/>
-        <source>Add Comment</source>
-        <translation type="unfinished"></translation>
+        <source>Display in file manager</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="423"/>
-        <source>Text to Speech</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/editor/dtextedit.cpp" line="495"/>
+        <source>Add Comment</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="425"/>
-        <source>Speech to Text</source>
-        <translation type="unfinished"></translation>
+        <source>Text to Speech</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="427"/>
-        <source>Translate</source>
-        <translation type="unfinished"></translation>
+        <source>Speech to Text</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="429"/>
-        <source>Column Mode</source>
-        <translation type="unfinished"></translation>
+        <source>Translate</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="431"/>
-        <source>Add bookmark</source>
-        <translation type="unfinished"></translation>
+        <source>Column Mode</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="433"/>
-        <source>Remove Bookmark</source>
-        <translation type="unfinished"></translation>
+        <source>Add bookmark</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="435"/>
-        <source>Previous bookmark</source>
-        <translation type="unfinished"></translation>
+        <source>Remove Bookmark</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="437"/>
-        <source>Next bookmark</source>
-        <translation type="unfinished"></translation>
+        <source>Previous bookmark</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="439"/>
-        <source>Remove All Bookmarks</source>
-        <translation type="unfinished"></translation>
+        <source>Next bookmark</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="441"/>
-        <source>Fold All</source>
-        <translation type="unfinished"></translation>
+        <source>Remove All Bookmarks</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="443"/>
-        <source>Fold Current Level</source>
-        <translation type="unfinished"></translation>
+        <source>Fold All</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="445"/>
-        <source>Unfold All</source>
-        <translation type="unfinished"></translation>
+        <source>Fold Current Level</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="447"/>
+        <source>Unfold All</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/editor/dtextedit.cpp" line="449"/>
         <source>Unfold Current Level</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="453"/>
+        <location filename="../src/editor/dtextedit.cpp" line="455"/>
         <source>Color Mark</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/editor/dtextedit.cpp" line="458"/>
-        <source>Clear All Marks</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="460"/>
+        <source>Clear All Marks</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/editor/dtextedit.cpp" line="462"/>
         <source>Clear Last Mark</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="470"/>
+        <location filename="../src/editor/dtextedit.cpp" line="472"/>
         <source>Mark</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="484"/>
+        <location filename="../src/editor/dtextedit.cpp" line="486"/>
         <source>Mark All</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="494"/>
+        <location filename="../src/editor/dtextedit.cpp" line="496"/>
         <source>Remove Comment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="543"/>
+        <location filename="../src/editor/dtextedit.cpp" line="545"/>
         <source>View Mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3482"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3485"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3529"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3532"/>
         <source>Copy failed: not enough memory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3607"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3609"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3654"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3656"/>
         <source>Press ALT and click lines to edit in column mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="9214"/>
-        <location filename="../src/editor/dtextedit.cpp" line="9216"/>
+        <location filename="../src/editor/dtextedit.cpp" line="9270"/>
+        <location filename="../src/editor/dtextedit.cpp" line="9272"/>
         <source>No audio output device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="9223"/>
-        <location filename="../src/editor/dtextedit.cpp" line="9225"/>
+        <location filename="../src/editor/dtextedit.cpp" line="9279"/>
+        <location filename="../src/editor/dtextedit.cpp" line="9281"/>
         <source>No audio input device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/editor/dtextedit.cpp" line="534"/>
-        <source>Change Case</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/editor/dtextedit.cpp" line="409"/>
-        <source>Edit Mode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/editor/dtextedit.cpp" line="411"/>
-        <source>Read View</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/editor/dtextedit.cpp" line="413"/>
-        <source>Live Preview</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/editor/dtextedit.cpp" line="535"/>
-        <source>Upper Case</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="536"/>
-        <source>Lower Case</source>
-        <translation type="unfinished"></translation>
+        <source>Change Case</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/editor/dtextedit.cpp" line="411"/>
+        <source>Edit Mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/editor/dtextedit.cpp" line="413"/>
+        <source>Read View</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/editor/dtextedit.cpp" line="415"/>
+        <source>Live Preview</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="537"/>
-        <source>Capitalize</source>
-        <translation type="unfinished"></translation>
+        <source>Upper Case</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/widgets/bottombar.cpp" line="110"/>
+        <location filename="../src/editor/dtextedit.cpp" line="538"/>
+        <source>Lower Case</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/editor/dtextedit.cpp" line="539"/>
+        <source>Capitalize</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/widgets/bottombar.cpp" line="111"/>
         <source>None</source>
         <translation>ምንም</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1490"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1508"/>
         <source>Selected line(s) copied</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1497"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1515"/>
         <source>Current line copied</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1527"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1545"/>
         <source>Selected line(s) clipped</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1539"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1557"/>
         <source>Current line clipped</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3501"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3504"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3548"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3551"/>
         <source>Paste failed: not enough memory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="4833"/>
+        <location filename="../src/editor/dtextedit.cpp" line="4880"/>
         <source>Read-Only mode is off</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="4845"/>
-        <location filename="../src/editor/dtextedit.cpp" line="4869"/>
-        <location filename="../src/editor/dtextedit.cpp" line="7875"/>
-        <location filename="../src/editor/dtextedit.cpp" line="7986"/>
-        <location filename="../src/editor/dtextedit.cpp" line="7994"/>
-        <location filename="../src/editor/dtextedit.cpp" line="8005"/>
+        <location filename="../src/editor/dtextedit.cpp" line="4892"/>
+        <location filename="../src/editor/dtextedit.cpp" line="4916"/>
+        <location filename="../src/editor/dtextedit.cpp" line="7929"/>
+        <location filename="../src/editor/dtextedit.cpp" line="8040"/>
+        <location filename="../src/editor/dtextedit.cpp" line="8048"/>
+        <location filename="../src/editor/dtextedit.cpp" line="8059"/>
         <source>Read-Only mode is on</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>WarningNotices</name>
     <message>
-        <location filename="../src/controls/warningnotices.cpp" line="25"/>
+        <location filename="../src/controls/warningnotices.cpp" line="26"/>
         <source>Reload</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/controls/warningnotices.cpp" line="31"/>
+        <location filename="../src/controls/warningnotices.cpp" line="32"/>
         <source>Edit Anyway</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Window</name>
     <message>
-        <location filename="../src/controls/warningnotices.cpp" line="28"/>
-        <location filename="../src/widgets/window.cpp" line="550"/>
+        <location filename="../src/controls/warningnotices.cpp" line="29"/>
+        <location filename="../src/widgets/window.cpp" line="551"/>
         <source>Save as</source>
         <translation>ማስቀመጫ እንደ</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="542"/>
+        <location filename="../src/widgets/window.cpp" line="543"/>
         <source>New window</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="544"/>
+        <location filename="../src/widgets/window.cpp" line="545"/>
         <source>New tab</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="546"/>
+        <location filename="../src/widgets/window.cpp" line="547"/>
         <source>Open file</source>
         <translation>ፋይል መክፈቻ</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="548"/>
-        <location filename="../src/widgets/window.cpp" line="4008"/>
+        <location filename="../src/widgets/window.cpp" line="549"/>
+        <location filename="../src/widgets/window.cpp" line="4016"/>
         <source>Save</source>
         <translation>ማስቀመጫ</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="552"/>
+        <location filename="../src/widgets/window.cpp" line="553"/>
         <source>Print</source>
         <translation>ማተሚያ</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="554"/>
+        <location filename="../src/widgets/window.cpp" line="555"/>
         <source>Switch theme</source>
         <translation>ገጽታ መቀየሪያ</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="556"/>
+        <location filename="../src/widgets/window.cpp" line="557"/>
         <location filename="../src/widgets/window.cpp" line="2671"/>
         <source>Settings</source>
         <translation>ማሰናጃ</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="700"/>
-        <location filename="../src/widgets/window.cpp" line="4308"/>
+        <location filename="../src/widgets/window.cpp" line="701"/>
+        <location filename="../src/widgets/window.cpp" line="4316"/>
         <source>Read-Only</source>
         <translation>ለማንበብ-ብቻ</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="723"/>
+        <location filename="../src/widgets/window.cpp" line="724"/>
         <source>You do not have permission to open %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="777"/>
+        <location filename="../src/widgets/window.cpp" line="778"/>
         <location filename="../src/widgets/window.cpp" line="3296"/>
         <source>Invalid file: %1</source>
         <translation>ዋጋ የሌለው ፋይል: %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="961"/>
-        <location filename="../src/widgets/window.cpp" line="1054"/>
+        <location filename="../src/widgets/window.cpp" line="962"/>
+        <location filename="../src/widgets/window.cpp" line="1055"/>
         <location filename="../src/widgets/window.cpp" line="3247"/>
         <source>Do you want to save this file?</source>
         <translation>እርስዎ ይህን ፋይሉን ማስቀመጥ ይፈልጋሎ?</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1393"/>
-        <source>Invalid characters detected while saving &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/window.cpp" line="1394"/>
-        <source>If you force save this file, it may cause file corruption. Still want to save?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/window.cpp" line="1398"/>
-        <source>Don&apos;t Save</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/window.cpp" line="1399"/>
-        <source>Save As</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/window.cpp" line="1400"/>
-        <source>Save Anyway</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/window.cpp" line="1468"/>
+        <location filename="../src/widgets/window.cpp" line="1469"/>
         <source>You do not have permission to save %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1440"/>
-        <location filename="../src/widgets/window.cpp" line="1490"/>
+        <location filename="../src/widgets/window.cpp" line="1441"/>
+        <location filename="../src/widgets/window.cpp" line="1491"/>
         <source>Saved successfully</source>
         <translation>ተሳክቶ ተቀምጧል</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1532"/>
-        <location filename="../src/widgets/window.cpp" line="1677"/>
-        <location filename="../src/widgets/window.cpp" line="1725"/>
+        <location filename="../src/widgets/window.cpp" line="1533"/>
+        <location filename="../src/widgets/window.cpp" line="1678"/>
+        <location filename="../src/widgets/window.cpp" line="1726"/>
         <source>Save File</source>
         <translation>ፋይል ማስቀመጫ</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1581"/>
-        <source>Cannot save as the original file in preview mode. Please choose a different path.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/window.cpp" line="1679"/>
+        <location filename="../src/widgets/window.cpp" line="1680"/>
         <source>Encoding</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1969"/>
+        <location filename="../src/widgets/window.cpp" line="1970"/>
+        <location filename="../src/widgets/window.cpp" line="3744"/>
         <source>Read-Only mode is on</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2541"/>
         <source>Current location remembered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2621"/>
         <source>Ctrl+&apos;=&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2624"/>
         <source>Ctrl+&apos;-&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2653"/>
@@ -1363,17 +1433,47 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="3466"/>
         <source>Untitled %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="4006"/>
+        <location filename="../src/widgets/window.cpp" line="4014"/>
         <source>Cancel</source>
         <translation>መሰረዣ</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="4007"/>
+        <location filename="../src/widgets/window.cpp" line="4015"/>
         <source>Discard</source>
         <translation>ማስወገጃ</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1394"/>
+        <source>Invalid characters detected while saving &quot;%1&quot;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1395"/>
+        <source>If you force save this file, it may cause file corruption. Still want to save?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1399"/>
+        <source>Don&apos;t Save</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1400"/>
+        <source>Save As</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1401"/>
+        <source>Save Anyway</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="1582"/>
+        <source>Cannot save as the original file in preview mode. Please choose a different path.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>
