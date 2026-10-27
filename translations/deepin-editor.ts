@@ -171,16 +171,19 @@
 <context>
     <name>PathSettingWgt</name>
     <message>
+        <location filename="../src/widgets/pathsettintwgt.cpp" line="97"/>
         <source>Remember the last used path</source>
-        <translation type="vanished">Remember the last used path</translation>
+        <translation>Remember the last used path</translation>
     </message>
     <message>
+        <location filename="../src/widgets/pathsettintwgt.cpp" line="98"/>
         <source>Same path as the current file</source>
-        <translation type="vanished">Same path as the current file</translation>
+        <translation>Same path as the current file</translation>
     </message>
     <message>
+        <location filename="../src/widgets/pathsettintwgt.cpp" line="99"/>
         <source>Customize the default path</source>
-        <translation type="vanished">Customize the default path</translation>
+        <translation>Customize the default path</translation>
     </message>
 </context>
 <context>
