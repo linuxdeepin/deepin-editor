@@ -2724,7 +2724,7 @@ bool TextEdit::searchKeywordSeletion(QString keyword, QTextCursor cursor, bool f
         if (!next.isNull()) {
             qCDebug(appLog) << "Searching keyword seletion with find next and not null";
             m_findHighlightSelection.cursor = next;
-            jumpToLine(next.blockNumber() + offsetLines, false);
+            jumpToLine(next.blockNumber() + offsetLines, true);
             setTextCursor(next);
             ret = true;
         }
@@ -2745,7 +2745,7 @@ bool TextEdit::searchKeywordSeletion(QString keyword, QTextCursor cursor, bool f
         if (!prev.isNull()) {
             qCDebug(appLog) << "Searching keyword seletion with find previous and not null";
             m_findHighlightSelection.cursor = prev;
-            jumpToLine(prev.blockNumber() + offsetLines, false);
+            jumpToLine(prev.blockNumber() + offsetLines, true);
             setTextCursor(prev);
             ret = true;
         }
