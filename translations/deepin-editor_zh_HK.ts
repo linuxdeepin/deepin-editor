@@ -194,16 +194,19 @@
 <context>
     <name>PathSettingWgt</name>
     <message>
+        <location filename="../src/widgets/pathsettintwgt.cpp" line="97"/>
         <source>Remember the last used path</source>
-        <translation type="vanished">記住最後的操作路徑</translation>
+        <translation>記住最後的操作路徑</translation>
     </message>
     <message>
+        <location filename="../src/widgets/pathsettintwgt.cpp" line="98"/>
         <source>Same path as the current file</source>
-        <translation type="vanished">與當前文件保持一致</translation>
+        <translation>與當前文件保持一致</translation>
     </message>
     <message>
+        <location filename="../src/widgets/pathsettintwgt.cpp" line="99"/>
         <source>Customize the default path</source>
-        <translation type="vanished">自定義操作路徑</translation>
+        <translation>自定義操作路徑</translation>
     </message>
 </context>
 <context>
