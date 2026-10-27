@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="zh_CN">
 <context>
     <name>BottomBar</name>
     <message>
@@ -28,19 +26,19 @@
         <location filename="../src/widgets/bottombar.cpp" line="92"/>
         <location filename="../src/widgets/bottombar.cpp" line="502"/>
         <source>Edit Mode</source>
-        <translation>编辑视图</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="75"/>
         <location filename="../src/widgets/bottombar.cpp" line="492"/>
         <source>Read View</source>
-        <translation>查看视图</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="76"/>
         <location filename="../src/widgets/bottombar.cpp" line="496"/>
         <source>Live Preview</source>
-        <translation>实时阅览</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -113,7 +111,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="1160"/>
         <source>The file contains invalid characters (NUL). Preview mode is read-only.</source>
-        <translation>文件包含无效字符（NUL）。预览模式为只读。</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -152,7 +150,7 @@
     <message>
         <location filename="../src/controls/linebar.cpp" line="149"/>
         <source>第%1/%2项</source>
-        <translation>第%1/%2项</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -173,27 +171,27 @@
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="39"/>
         <source>Collapse code block</source>
-        <translation>折叠代码块</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="40"/>
         <source>Expand code block</source>
-        <translation>展开代码块</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="41"/>
         <source>Copy code</source>
-        <translation>复制代码</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="42"/>
         <source>Expand</source>
-        <translation>展开</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="44"/>
         <source>%1 line(s) of code collapsed</source>
-        <translation>已折叠 %1 行代码</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -859,7 +857,7 @@
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="211"/>
         <source>Save aborted: editor is closing</source>
-        <translation>保存已中止: 编辑器正在关闭</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="230"/>
@@ -914,9 +912,9 @@
     <name>S:</name>
     <message>
         <location filename="../third/libiconv-1.16/src/iconv.c" line="103"/>
-        <source></source>
+        <source/>
         <comment>The first line of the short usage message.</comment>
-        <translation></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1193,7 +1191,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="545"/>
         <source>View Mode</source>
-        <translation>视图模式</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3529"/>
@@ -1211,13 +1209,13 @@
         <location filename="../src/editor/dtextedit.cpp" line="9270"/>
         <location filename="../src/editor/dtextedit.cpp" line="9272"/>
         <source>No audio output device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
-        <translation>未检测到音频输出设备，请确保扬声器或耳机已正确连接后重试</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="9279"/>
         <location filename="../src/editor/dtextedit.cpp" line="9281"/>
         <source>No audio input device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
-        <translation>未检测到音频输入设备，请确保扬声器或耳机已正确连接后重试</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="536"/>
@@ -1227,17 +1225,17 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="411"/>
         <source>Edit Mode</source>
-        <translation>编辑视图</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="413"/>
         <source>Read View</source>
-        <translation>查看视图</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="415"/>
         <source>Live Preview</source>
-        <translation>实时阅览</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="537"/>
@@ -1311,7 +1309,7 @@
     <message>
         <location filename="../src/controls/warningnotices.cpp" line="32"/>
         <source>Edit Anyway</source>
-        <translation>仍然编辑</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1450,32 +1448,32 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="1394"/>
         <source>Invalid characters detected while saving &quot;%1&quot;</source>
-        <translation>保存&quot;%1&quot;时检测到无效字符</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1395"/>
         <source>If you force save this file, it may cause file corruption. Still want to save?</source>
-        <translation>强制保存此文件可能导致文件损坏。仍然要保存吗？</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1399"/>
         <source>Don&apos;t Save</source>
-        <translation>不保存</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1400"/>
         <source>Save As</source>
-        <translation>另存为</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1401"/>
         <source>Save Anyway</source>
-        <translation>强制保存</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1582"/>
         <source>Cannot save as the original file in preview mode. Please choose a different path.</source>
-        <translation>预览模式下不能另存为原文件。请选择其他路径。</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>
