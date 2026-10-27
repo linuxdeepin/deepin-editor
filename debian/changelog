@@ -1,3 +1,9 @@
+deepin-editor (6.5.65) unstable; urgency=medium
+
+  * docs: add Portuguese (pt_BR) help manual
+
+ -- re2zero <yangwu@uniontech.com>  Tue, 27 Oct 2026 19:39:03 +0800
+
 deepin-editor (6.5.64) unstable; urgency=medium
 
   * chore: bump version to 6.5.64
