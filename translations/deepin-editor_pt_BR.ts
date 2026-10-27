@@ -857,7 +857,7 @@
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="211"/>
         <source>Save aborted: editor is closing</source>
-        <translation type="unfinished"/>
+        <translation>Salvamento cancelado: o editor está sendo fechado</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="230"/>
