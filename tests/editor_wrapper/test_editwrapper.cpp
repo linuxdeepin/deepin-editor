@@ -639,6 +639,90 @@ TEST_F(EditWrapperTest, PlainTextEmpty_DefaultTrue_AfterInsertFalse)
 }
 
 // ============================================================================
+// V-6705 验证用例：md 只读视图下查找"下一个"，渲染页 scrollToLine 同步行为
+// 场景：隐藏 TextEdit（ReadView）+ 大窗口（模拟最大化），匹配项在远处
+// 断言（修复后期望）：1) 渲染器收到 scrollToLine；
+//   2) 同步行号与匹配行距离 ≤ 半屏（居中语义），保证渲染页顶部对齐后匹配仍在屏内
+// ============================================================================
+static void v6705FindNextScenario(EditWrapper *wrapper, RecordingRenderer *renderer,
+                                  int winW, int winH, const char *tag)
+{
+    renderer->ready = true;
+    wrapper->setMarkdownRendererForTest(renderer);
+
+    // 长文档：500 行，needle 只在第 400 行（0 基块号 399）
+    QString text;
+    for (int i = 1; i <= 500; ++i)
+        text += (i == 400 ? QString("line %1 needle here\n").arg(i)
+                          : QString("line %1 plain text content\n").arg(i));
+
+    QTemporaryDir dir;
+    const QString mdPath = dir.filePath("v6705.md");
+    {
+        QFile f(mdPath);
+        ASSERT_TRUE(f.open(QIODevice::WriteOnly));
+        f.write(text.toUtf8());
+        f.close();
+    }
+    wrapper->updatePath(mdPath, mdPath);
+    wrapper->textEditor()->setPlainText(text);
+
+    // 真实应用时序：编辑页先以真实尺寸布局（Edit 模式可见），再切 ReadView 隐藏。
+    // 未 show 的 widget 不派发 Resize 事件，隐藏页几何不会更新，必须先 show 顶层容器。
+    if (QWidget *top = wrapper->parentWidget() ? wrapper->parentWidget() : wrapper)
+        top->resize(winW, winH);
+    wrapper->resize(winW, winH);
+    if (wrapper->parentWidget())
+        wrapper->parentWidget()->show();
+    else
+        wrapper->show();
+    QApplication::processEvents();
+
+    wrapper->updateMarkdownRecognition(QStringLiteral("v6705.md"), QString());
+    wrapper->setViewMode(ViewMode::ReadView);
+    ASSERT_EQ(wrapper->viewMode(), ViewMode::ReadView);
+
+    TextEdit *ed = wrapper->textEditor();
+    ASSERT_EQ(ed->toPlainText().split('\n').size(), 501); // 500 行 + 末尾空串
+
+    ed->verticalScrollBar()->setValue(0);
+    QApplication::processEvents();
+    renderer->scrollCalls = 0;
+    renderer->lastLine = -1.0;
+
+    // Act：真实查找路径（Window::handleFindKeyword → updateCursorKeywordSelection）
+    ed->updateCursorKeywordSelection(QStringLiteral("needle"), true);
+    QApplication::processEvents();
+
+    const int matchBlock = ed->textCursor().blockNumber();
+    const int lineHeight = ed->cursorRect().height();
+    const int viewportH = ed->viewport()->height();
+    const int visibleLines = lineHeight > 0 ? viewportH / lineHeight : 0;
+    const double dist = matchBlock - renderer->lastLine;
+
+    qInfo("[%s] win=%dx%d scrollCalls=%d lastLine=%.1f matchBlock=%d vbarValue=%d "
+          "topVisibleBlock=%d viewportH=%d lineHeight=%d visibleLines=%d matchToSyncTopDist=%.1f",
+          tag, winW, winH, renderer->scrollCalls, renderer->lastLine, matchBlock,
+          ed->verticalScrollBar()->value(), ed->topVisibleBlockNumber(),
+          viewportH, lineHeight, visibleLines, dist);
+
+    // 观测点 1：渲染页确实收到滚动指令（Qt6 下 setTextCursor 内部滚动即触发）
+    EXPECT_GE(renderer->scrollCalls, 1);
+    // 观测点 2（修复语义）：同步行号与匹配行相距不超过半屏 + 少量余量
+    EXPECT_LE(dist, visibleLines / 2 + 3);
+}
+
+TEST_F(EditWrapperTest, V6705_ReadViewFindNext_SyncsRendererNearMatch_Maximized)
+{
+    v6705FindNextScenario(m_wrapper, &m_renderer, 1920, 1040, "maximized");
+}
+
+TEST_F(EditWrapperTest, V6705_ReadViewFindNext_SyncsRendererNearMatch_Normal)
+{
+    v6705FindNextScenario(m_wrapper, &m_renderer, 900, 600, "normal");
+}
+
+// ============================================================================
 // isModified（TEST_P：m_bIsTemFile × 撤销栈状态，B28）
 // ============================================================================
 
