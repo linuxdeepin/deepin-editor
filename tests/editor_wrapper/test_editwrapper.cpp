@@ -194,6 +194,7 @@ public:
     {
         ++scrollCalls;
         lastLine = line;
+        scrollLog << QString::number(line, 'f', 1);
     }
     void highlightSearch(const QString &keyword, int currentIndex, bool caseSensitive) override
     {
@@ -215,6 +216,7 @@ public:
     int lastMaxWidth = -1;
     bool lastCenter = false;
     double lastLine = -1.0;
+    QStringList scrollLog;
     QString lastSearchKeyword;
     int lastSearchIndex = -2;
     bool lastSearchCaseSensitive = false;
@@ -644,17 +646,22 @@ TEST_F(EditWrapperTest, PlainTextEmpty_DefaultTrue_AfterInsertFalse)
 // 断言（修复后期望）：1) 渲染器收到 scrollToLine；
 //   2) 同步行号与匹配行距离 ≤ 半屏（居中语义），保证渲染页顶部对齐后匹配仍在屏内
 // ============================================================================
-static void v6705FindNextScenario(EditWrapper *wrapper, RecordingRenderer *renderer,
-                                  int winW, int winH, const char *tag)
+// 真实应用时序变体：flow 控制进入只读视图的路径
+//  flow=0: Edit → 直接 ReadView（编辑页全程全宽）
+//  flow=1: Edit → LivePreview（编辑页半宽布局）→ ReadView（保留半宽陈旧几何）
+//  flow=2: 同 flow=1，但切 ReadView 后再把窗口放大（隐藏页几何完全陈旧）
+static void v6705Setup(EditWrapper *wrapper, RecordingRenderer *renderer,
+                       int winW, int winH, int flow)
 {
     renderer->ready = true;
     wrapper->setMarkdownRendererForTest(renderer);
 
-    // 长文档：500 行，needle 只在第 400 行（0 基块号 399）
     QString text;
     for (int i = 1; i <= 500; ++i)
-        text += (i == 400 ? QString("line %1 needle here\n").arg(i)
-                          : QString("line %1 plain text content\n").arg(i));
+        text += (i % 20 == 0 ? QString("# heading %1\n").arg(i)
+                             : QString("plain line %1 lorem ipsum dolor sit amet consectetur\n").arg(i))
+                + ((i == 150 || i == 300 || i == 450) ? QString("line %1 needlexx target here\n").arg(i)
+                                                      : QString());
 
     QTemporaryDir dir;
     const QString mdPath = dir.filePath("v6705.md");
@@ -667,32 +674,62 @@ static void v6705FindNextScenario(EditWrapper *wrapper, RecordingRenderer *rende
     wrapper->updatePath(mdPath, mdPath);
     wrapper->textEditor()->setPlainText(text);
 
-    // 真实应用时序：编辑页先以真实尺寸布局（Edit 模式可见），再切 ReadView 隐藏。
-    // 未 show 的 widget 不派发 Resize 事件，隐藏页几何不会更新，必须先 show 顶层容器。
-    if (QWidget *top = wrapper->parentWidget() ? wrapper->parentWidget() : wrapper)
-        top->resize(winW, winH);
+    QWidget *top = wrapper->parentWidget() ? wrapper->parentWidget() : wrapper;
+    top->resize(winW, winH);
     wrapper->resize(winW, winH);
-    if (wrapper->parentWidget())
-        wrapper->parentWidget()->show();
-    else
-        wrapper->show();
+    top->show();
     QApplication::processEvents();
 
     wrapper->updateMarkdownRecognition(QStringLiteral("v6705.md"), QString());
+    if (flow >= 1)
+        ASSERT_EQ(wrapper->viewMode(), ViewMode::LivePreview);
     wrapper->setViewMode(ViewMode::ReadView);
     ASSERT_EQ(wrapper->viewMode(), ViewMode::ReadView);
+    if (flow == 2) {
+        // 只读视图下放大窗口：隐藏的编辑页收不到 Resize 事件，几何停留在旧尺寸
+        top->resize(winW + 500, winH + 300);
+        wrapper->resize(winW + 500, winH + 300);
+        QApplication::processEvents();
+    }
+}
+
+static void v6705FindNextScenario(EditWrapper *wrapper, RecordingRenderer *renderer,
+                                  int winW, int winH, const char *tag, int path, int flow = 0)
+{
+    v6705Setup(wrapper, renderer, winW, winH, flow);
 
     TextEdit *ed = wrapper->textEditor();
-    ASSERT_EQ(ed->toPlainText().split('\n').size(), 501); // 500 行 + 末尾空串
 
     ed->verticalScrollBar()->setValue(0);
     QApplication::processEvents();
     renderer->scrollCalls = 0;
     renderer->lastLine = -1.0;
+    renderer->scrollLog.clear();
 
-    // Act：真实查找路径（Window::handleFindKeyword → updateCursorKeywordSelection）
-    ed->updateCursorKeywordSelection(QStringLiteral("needle"), true);
-    QApplication::processEvents();
+    // Act：三种真实路径
+    //  direct: updateCursorKeywordSelection 直调（两路径共享的核心）
+    //  enter : 回车键路径 Window::handleUpdateSearchKeyword → TextEdit::highlightKeyword
+    //  click : "下一个"按钮路径 Window::handleFindKeyword 的完整调用序列
+    if (path == 0) {
+        ed->updateCursorKeywordSelection(QStringLiteral("needle"), true);
+    } else if (path == 1) {
+        ed->highlightKeyword(QStringLiteral("needle"), 0, Qt::CaseSensitive);
+    } else {
+        ed->saveMarkStatus();
+        ed->updateCursorKeywordSelection(QStringLiteral("needle"), true);
+        // Window::handleFindKeyword 修复后（BUG-380705）：无论 m_keywordForSearchAll
+        // 是否已注册，均注册当前词并调用 highlightKeywordInView（向渲染页推送
+        // highlightSearch），此处对齐该调用序列
+        ed->highlightKeywordInView(QStringLiteral("needle"));
+        ed->markAllKeywordInView();
+        ed->renderAllSelections();
+        ed->restoreMarkStatus();
+        ed->updateLeftAreaWidget();
+        wrapper->OnUpdateHighlighter();
+    }
+    // QueuedConnection 的滚动条 lambda（OnUpdateHighlighter/高亮刷新）需跑满事件循环
+    for (int i = 0; i < 3; ++i)
+        QApplication::processEvents();
 
     const int matchBlock = ed->textCursor().blockNumber();
     const int lineHeight = ed->cursorRect().height();
@@ -700,9 +737,11 @@ static void v6705FindNextScenario(EditWrapper *wrapper, RecordingRenderer *rende
     const int visibleLines = lineHeight > 0 ? viewportH / lineHeight : 0;
     const double dist = matchBlock - renderer->lastLine;
 
-    qInfo("[%s] win=%dx%d scrollCalls=%d lastLine=%.1f matchBlock=%d vbarValue=%d "
-          "topVisibleBlock=%d viewportH=%d lineHeight=%d visibleLines=%d matchToSyncTopDist=%.1f",
-          tag, winW, winH, renderer->scrollCalls, renderer->lastLine, matchBlock,
+    qInfo("[%s] win=%dx%d scrollCalls=%d scrollLog=[%s] lastLine=%.1f matchBlock=%d "
+          "vbarValue=%d topVisibleBlock=%d viewportH=%d lineHeight=%d visibleLines=%d "
+          "matchToSyncTopDist=%.1f",
+          tag, winW, winH, renderer->scrollCalls,
+          qPrintable(renderer->scrollLog.join(",")), renderer->lastLine, matchBlock,
           ed->verticalScrollBar()->value(), ed->topVisibleBlockNumber(),
           viewportH, lineHeight, visibleLines, dist);
 
@@ -714,12 +753,35 @@ static void v6705FindNextScenario(EditWrapper *wrapper, RecordingRenderer *rende
 
 TEST_F(EditWrapperTest, V6705_ReadViewFindNext_SyncsRendererNearMatch_Maximized)
 {
-    v6705FindNextScenario(m_wrapper, &m_renderer, 1920, 1040, "maximized");
+    v6705FindNextScenario(m_wrapper, &m_renderer, 1920, 1040, "maximized-direct", 0);
 }
 
 TEST_F(EditWrapperTest, V6705_ReadViewFindNext_SyncsRendererNearMatch_Normal)
 {
-    v6705FindNextScenario(m_wrapper, &m_renderer, 900, 600, "normal");
+    v6705FindNextScenario(m_wrapper, &m_renderer, 900, 600, "normal-direct", 0);
+}
+
+TEST_F(EditWrapperTest, V6705_ReadViewFindNext_EnterPath_Maximized)
+{
+    v6705FindNextScenario(m_wrapper, &m_renderer, 1920, 1040, "maximized-ENTER", 1);
+}
+
+TEST_F(EditWrapperTest, V6705_ReadViewFindNext_ClickPath_Maximized)
+{
+    v6705FindNextScenario(m_wrapper, &m_renderer, 1920, 1040, "maximized-CLICK", 2);
+}
+
+// 真实应用流程复刻：md 打开先进 LivePreview（编辑页半宽布局），再切只读视图。
+// 隐藏的编辑页保留 LivePreview 时代的半宽几何（行折叠更密）。
+TEST_F(EditWrapperTest, V6705_Flow1_LivePreviewThenReadView_Maximized_Click)
+{
+    v6705FindNextScenario(m_wrapper, &m_renderer, 1920, 1040, "flow1-LPthenRV-max-CLICK", 2, 1);
+}
+
+// 真实应用流程复刻：普通窗口进只读视图后再最大化（隐藏编辑页几何完全陈旧）。
+TEST_F(EditWrapperTest, V6705_Flow2_MaximizeAfterReadView_Click)
+{
+    v6705FindNextScenario(m_wrapper, &m_renderer, 1000, 600, "flow2-maxAfterRV-CLICK", 2, 2);
 }
 
 // ============================================================================
