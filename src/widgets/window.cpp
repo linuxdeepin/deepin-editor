@@ -3654,14 +3654,16 @@ void Window::handleFindKeyword(const QString &keyword, bool state)
     m_keywordForSearch = keyword;
     wrapper->textEditor()->saveMarkStatus();
     wrapper->textEditor()->updateCursorKeywordSelection(m_keywordForSearch, state);
+    // 点击"下一个/上一个"可能是本会话首个查找动作（未经过回车路径
+    // handleUpdateSearchKeyword 注册查找词）。若此时按不等分支清空
+    // m_keywordForSearchAll，渲染页（MarkdownView）将收不到
+    // highlightSearch 推送，只读视图下命中处无任何高亮（BUG-380705）。
+    // 对齐回车路径的注册行为：查找词变更时注册当前词并同步高亮。
     if (QString::compare(m_keywordForSearch, m_keywordForSearchAll, Qt::CaseInsensitive) != 0) {
-        qCDebug(appLog) << "m_keywordForSearchAll is not equal to m_keywordForSearch, clear it";
-        m_keywordForSearchAll.clear();
-        wrapper->textEditor()->clearFindMatchSelections();
-    } else {
-        qCDebug(appLog) << "m_keywordForSearchAll is equal to m_keywordForSearch, highlight it";
-        wrapper->textEditor()->highlightKeywordInView(m_keywordForSearchAll);
+        qCDebug(appLog) << "m_keywordForSearchAll is not equal to m_keywordForSearch, register current keyword";
+        m_keywordForSearchAll = m_keywordForSearch;
     }
+    wrapper->textEditor()->highlightKeywordInView(m_keywordForSearchAll);
 
     wrapper->textEditor()->markAllKeywordInView();
 

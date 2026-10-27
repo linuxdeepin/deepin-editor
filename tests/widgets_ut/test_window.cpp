@@ -61,6 +61,7 @@
 #include "controls/jumplinebar.h"
 #include "editor/editwrapper.h"
 #include "editor/dtextedit.h"
+#include "editor/markdown/imarkdownrenderer.h"
 #include "common/settings.h"
 #include "common/utils.h"
 #include "common/iflytek_ai_assistant.h"
@@ -1646,11 +1647,11 @@ TEST_F(WindowTest, HandleFindKeywords_NextPrev_UpdateState)
     // Assert: 关键词记录
     EXPECT_EQ(m_win->getKeywordForSearch(), QString("alpha"));
 
-    // Act: 向前查找（与 all 不同 → 清空 all 分支）
+    // Act: 向前查找（与 all 不同 → 注册当前词分支，BUG-380705：与回车路径对齐）
     m_win->m_keywordForSearchAll = QStringLiteral("other");
     m_win->handleFindPrevSearchKeyword(QStringLiteral("beta"));
     EXPECT_EQ(m_win->getKeywordForSearch(), QString("beta"));
-    EXPECT_TRUE(m_win->m_keywordForSearchAll.isEmpty());
+    EXPECT_EQ(m_win->m_keywordForSearchAll, QString("beta"));
 }
 
 TEST_F(WindowTest, HandleFindKeyword_MatchAllBranch_HighlightsAll)
@@ -1665,6 +1666,57 @@ TEST_F(WindowTest, HandleFindKeyword_MatchAllBranch_HighlightsAll)
     // Assert: 两侧关键词一致且未清空
     EXPECT_EQ(m_win->getKeywordForSearch(), QString("x"));
     EXPECT_EQ(m_win->m_keywordForSearchAll, QString("x"));
+}
+
+// BUG-380705 残留缺陷回归：点击"下一个"作为会话内首个查找动作（未经回车注册
+// 查找词）时，渲染页必须收到 highlightSearch 推送，否则只读视图下命中处无高亮。
+// 记录型渲染器桩：仅记录 highlightSearch 入参。
+namespace {
+class V6705RecordingRenderer : public IMarkdownRenderer {
+public:
+    bool isReady() const override { return true; }
+    void setMarkdown(const QString &) override {}
+    void setMode(int) override {}
+    void applyTheme(const QVariantMap &) override {}
+    void setLayout(int, bool) override {}
+    void scrollToLine(double) override {}
+    void highlightSearch(const QString &keyword, int currentIndex, bool caseSensitive) override
+    {
+        ++calls;
+        lastKeyword = keyword;
+        lastIndex = currentIndex;
+        lastCaseSensitive = caseSensitive;
+    }
+    int calls = 0;
+    QString lastKeyword;
+    int lastIndex = -2;
+    bool lastCaseSensitive = false;
+};
+} // namespace
+
+TEST_F(WindowTest, HandleFindKeyword_ClickFirst_PushesRendererHighlight)
+{
+    // Arrange: 全新查找会话（m_keywordForSearchAll 为空），直接点击"下一个"
+    const QString path = addFileTab(QStringLiteral("v6705.txt"), QByteArray("aa bb aa bb aa\n"));
+    EditWrapper *wrapper = m_win->currentWrapper();
+    ASSERT_NE(wrapper, nullptr);
+    V6705RecordingRenderer renderer;
+    wrapper->setMarkdownRendererForTest(&renderer);
+
+    // Act: 首个动作即点击下一个（未经过回车路径注册）
+    m_win->handleFindNextSearchKeyword(QStringLiteral("aa"));
+
+    // Assert: 查找词已注册（滚动联动高亮可用）
+    EXPECT_EQ(m_win->getKeywordForSearchAll(), QString("aa"));
+    // 渲染页收到 highlightSearch 推送（修复前该路径从不推送 → 渲染页无高亮）
+    EXPECT_GE(renderer.calls, 1);
+    EXPECT_EQ(renderer.lastKeyword, QString("aa"));
+    // 当前命中为首个（0 基序号）
+    EXPECT_EQ(renderer.lastIndex, 0);
+
+    // Act 2: 再次点击下一个 → 当前命中推进到第二个
+    m_win->handleFindNextSearchKeyword(QStringLiteral("aa"));
+    EXPECT_EQ(renderer.lastIndex, 1);
 }
 
 TEST_F(WindowTest, HandleReplaceAll_ReplacesDocumentText)
