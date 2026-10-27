@@ -34,6 +34,7 @@ HEADERS += editor/bookmarkwidget.h \
            editor/linenumberarea.h \
            editor/showflodcodewidget.h \
            editor/uncommentselection.h \
+           editor/markdown/markdownbridge.h \
            encodes/detectcode.h \
            common/comment_global.h \
            common/common.h \
@@ -44,6 +45,8 @@ HEADERS += editor/bookmarkwidget.h \
            common/settings.h \
            common/urlinfo.h \
            common/utils.h \
+           common/iflytek_ai_assistant.h \
+           common/text_file_saver.h \
            controls/findbar.h \
            controls/fontitemdelegate.h \
            controls/jumplinebar.h \
@@ -61,6 +64,7 @@ HEADERS += editor/bookmarkwidget.h \
            widgets/ColorSelectWdg.h \
            widgets/ddropdownmenu.h \
            widgets/window.h \
+           widgets/pathsettintwgt.h \
            editorapplication.h \
            environments.h \
            startmanager.h
@@ -80,6 +84,8 @@ SOURCES += editor/bookmarkwidget.cpp \
            common/performancemonitor.cpp \
            common/settings.cpp \
            common/utils.cpp \
+           common/iflytek_ai_assistant.cpp \
+           common/text_file_saver.cpp \
            controls/findbar.cpp \
            controls/fontitemdelegate.cpp \
            controls/jumplinebar.cpp \
@@ -98,6 +104,7 @@ SOURCES += editor/bookmarkwidget.cpp \
            widgets/ColorSelectWdg.cpp \
            widgets/ddropdownmenu.cpp \
            widgets/window.cpp \
+           widgets/pathsettintwgt.cpp \
            editorapplication.cpp \
            startmanager.cpp \
            main.cpp
