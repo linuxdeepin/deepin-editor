@@ -839,6 +839,7 @@ private:
     QTextCursor m_altStartTextCursor;//开始按住alt鼠标点击光标位置
     QTextCursor m_altEndTextCursor;//结束按住alt鼠标点击光标位置
     bool m_bIsAltMod = false;
+    int m_columnEditSessionId = 0;
     int m_redoCount = 0;
     QStringList m_pastText;
     bool m_hasColumnSelection = false;
