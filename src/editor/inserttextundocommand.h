@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -29,6 +29,7 @@ private:
     int m_endPostion{0};
     QString m_sInsertText;
     QList<QTextEdit::ExtraSelection> m_ColumnEditSelections;
+    QList<int> m_originalPositions;
     QString m_selectText = QString();
 };
 

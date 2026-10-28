@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -25,6 +25,7 @@ private:
     QString m_sInsertText;
     QList<QString> m_selectTextList;
     QList<QTextEdit::ExtraSelection> m_ColumnEditSelections;
+    QList<int> m_originalPositions;
     int m_beginPos;     // 记录光标删除前位置
 };
 
@@ -42,6 +43,7 @@ private:
     QString m_sInsertText;
     QList<QString> m_selectTextList;
     QList<QTextEdit::ExtraSelection> m_ColumnEditSelections;
+    QList<int> m_originalPositions;
     QPlainTextEdit* m_edit;
     int m_beginPostion {0};
     bool m_iscurrLine {false};

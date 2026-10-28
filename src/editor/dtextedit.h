@@ -211,6 +211,7 @@ public:
                                        Qt::CaseSensitivity caseFlag = Qt::CaseInsensitive);
     bool searchKeywordSeletion(QString keyword, QTextCursor cursor, bool findNext);
     void renderAllSelections();
+    void syncColumnEditSelections(const QList<QTextEdit::ExtraSelection> &selections);
 
     bool clearMarkOperationForCursor(QTextCursor cursor);
     bool clearMarksForTextCursor();

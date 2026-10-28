@@ -2231,6 +2231,12 @@ void TextEdit::renderAllSelections()
     setExtraSelections(finalSelections);
 }
 
+void TextEdit::syncColumnEditSelections(const QList<QTextEdit::ExtraSelection> &selections)
+{
+    m_altModSelections = selections;
+    renderAllSelections();
+}
+
 void TextEdit::updateMarkAllSelectColor()
 {
     isMarkAllLine(m_bIsMarkAllLine, m_strMarkAllLineColorName);
