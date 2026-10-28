@@ -3815,7 +3815,7 @@ void TextEdit::undo_()
     m_pUndoStack->undo();
     qCDebug(appLog) << "Undo operation executed, new stack index:" << m_pUndoStack->index();
 
-    const bool needUpdate = refreshUndoRedoColumnStatus();
+    const bool needUpdate = refreshUndoRedoColumnStatusAfterUndo();
     if (needUpdate) {
         renderAllSelections();
         update();
@@ -9219,6 +9219,41 @@ bool TextEdit::refreshUndoRedoColumnStatus()
         if (columnEdit) {
             return true;
         }
+    }
+
+    return false;
+}
+
+/**
+   @brief Call this function after undo, refresh column edit status.
+   After undo(), index() has decremented, so command(index()) points to the
+   just-undone (redo-pending) command. To determine the current edit mode,
+   check command(index()-1) — the current top of the applied stack.
+   @return True if need update selection status.
+ */
+bool TextEdit::refreshUndoRedoColumnStatusAfterUndo()
+{
+    if (const QUndoCommand *cmd = m_pUndoStack->command(m_pUndoStack->index() - 1)) {
+        const int id = cmd->id();
+        const bool columnEdit = (id != Utils::IdDefault) && (Utils::IdColumnEdit & id);
+        if (columnEdit != m_bIsAltMod) {
+            // update selection
+            m_bIsAltMod = columnEdit;
+            if (!m_bIsAltMod) {
+                m_altModSelections.clear();
+            }
+
+            return true;
+        }
+
+        // in column editing, update every time.
+        if (columnEdit) {
+            return true;
+        }
+    } else {
+        // No commands applied after undo — leave column edit mode state
+        // unchanged; column mode entry/exit is driven by user actions,
+        // orthogonal to the undo stack state.
     }
 
     return false;
