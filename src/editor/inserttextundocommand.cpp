@@ -1,8 +1,9 @@
-// SPDX-FileCopyrightText: 2019 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "inserttextundocommand.h"
+#include "dtextedit.h"
 
 InsertTextUndoCommand::InsertTextUndoCommand(const QTextCursor &textcursor, const QString &text, QPlainTextEdit *edit, QUndoCommand *parent)
     : QUndoCommand(parent)
@@ -23,6 +24,9 @@ InsertTextUndoCommand::InsertTextUndoCommand(QList<QTextEdit::ExtraSelection> &s
     , m_ColumnEditSelections(selections)
 {
     m_sInsertText.replace("\r\n", "\n");
+    for (int i = 0; i < m_ColumnEditSelections.size(); i++) {
+        m_originalPositions.append(m_ColumnEditSelections[i].cursor.position());
+    }
 }
 
 void InsertTextUndoCommand::undo()
@@ -44,10 +48,18 @@ void InsertTextUndoCommand::undo()
     } else {
         int cnt = m_ColumnEditSelections.size();
         for (int i = 0; i < cnt; i++) {
-            m_ColumnEditSelections[i].cursor.deleteChar();
+            int pos = m_ColumnEditSelections[i].cursor.position();
+            m_ColumnEditSelections[i].cursor.setPosition(pos - m_sInsertText.length(), QTextCursor::MoveAnchor);
+            m_ColumnEditSelections[i].cursor.setPosition(pos, QTextCursor::KeepAnchor);
+            m_ColumnEditSelections[i].cursor.removeSelectedText();
+            m_ColumnEditSelections[i].cursor.setPosition(m_originalPositions[i]);
         }
 
         if (m_pEdit && !m_ColumnEditSelections.isEmpty()) {
+            TextEdit *pEdit = qobject_cast<TextEdit*>(m_pEdit);
+            if (pEdit) {
+                pEdit->syncColumnEditSelections(m_ColumnEditSelections);
+            }
             m_pEdit->setTextCursor(m_ColumnEditSelections.last().cursor);
         }
     }
@@ -75,14 +87,14 @@ void InsertTextUndoCommand::redo()
     } else {
         int cnt = m_ColumnEditSelections.size();
         for (int i = 0; i < cnt; i++) {
-            m_ColumnEditSelections[i].cursor.insertText(m_sInsertText);
-            m_ColumnEditSelections[i].cursor.setPosition(m_ColumnEditSelections[i].cursor.position() - m_sInsertText.length() + 1,
-                                                         QTextCursor::KeepAnchor);
+            QTextCursor tempCursor(m_pEdit->document());
+            tempCursor.setPosition(m_ColumnEditSelections[i].cursor.position());
+            tempCursor.insertText(m_sInsertText);
         }
 
         if (m_pEdit && !m_ColumnEditSelections.isEmpty()) {
             QTextCursor curCursor = m_pEdit->textCursor();
-            curCursor.setPosition(m_ColumnEditSelections.last().cursor.selectionEnd());
+            curCursor.setPosition(m_ColumnEditSelections.last().cursor.position());
             m_pEdit->setTextCursor(curCursor);
         }
     }

@@ -1,8 +1,9 @@
-// SPDX-FileCopyrightText: 2019 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "deletetextundocommand.h"
+#include "dtextedit.h"
 #include "editwrapper.h"
 #include <QDebug>
 #include <QTextBlock>
@@ -36,6 +37,7 @@ DeleteTextUndoCommand::DeleteTextUndoCommand(QList<QTextEdit::ExtraSelection> &s
 {
     int cnt = m_ColumnEditSelections.size();
     for (int i = 0; i < cnt; i++) {
+        m_originalPositions.append(m_ColumnEditSelections[i].cursor.position());
         QTextCursor textCursor = m_ColumnEditSelections[i].cursor;
         if (textCursor.hasSelection()) {
             m_selectTextList.append(textCursor.selectedText());
@@ -67,11 +69,15 @@ void DeleteTextUndoCommand::undo()
         int cnt = m_ColumnEditSelections.size();
         for (int i = 0; i < cnt; i++) {
             m_ColumnEditSelections[i].cursor.insertText(m_selectTextList[i]);
-            m_ColumnEditSelections[i].cursor.setPosition(
-                m_ColumnEditSelections[i].cursor.position() - m_selectTextList[i].length(), QTextCursor::KeepAnchor);
+            m_ColumnEditSelections[i].cursor.setPosition(m_originalPositions[i] - m_selectTextList[i].length(), QTextCursor::MoveAnchor);
+            m_ColumnEditSelections[i].cursor.setPosition(m_originalPositions[i], QTextCursor::KeepAnchor);
         }
 
         if (m_edit && !m_ColumnEditSelections.isEmpty()) {
+            TextEdit *pEdit = qobject_cast<TextEdit*>(m_edit);
+            if (pEdit) {
+                pEdit->syncColumnEditSelections(m_ColumnEditSelections);
+            }
             m_edit->setTextCursor(m_ColumnEditSelections.last().cursor);
         }
     }
@@ -89,7 +95,10 @@ void DeleteTextUndoCommand::redo()
     } else {
         int cnt = m_ColumnEditSelections.size();
         for (int i = 0; i < cnt; i++) {
-            m_ColumnEditSelections[i].cursor.deletePreviousChar();
+            QTextCursor tempCursor(m_edit->document());
+            tempCursor.setPosition(m_ColumnEditSelections[i].cursor.selectionStart());
+            tempCursor.setPosition(m_ColumnEditSelections[i].cursor.selectionEnd(), QTextCursor::KeepAnchor);
+            tempCursor.deletePreviousChar();
         }
 
         if (m_edit && !m_ColumnEditSelections.isEmpty()) {
@@ -119,6 +128,7 @@ DeleteTextUndoCommand2::DeleteTextUndoCommand2(QList<QTextEdit::ExtraSelection> 
     m_sInsertText.replace("\r\n", "\n");
     int cnt = m_ColumnEditSelections.size();
     for (int i = 0; i < cnt; i++) {
+        m_originalPositions.append(m_ColumnEditSelections[i].cursor.position());
         QTextCursor textCursor = m_ColumnEditSelections[i].cursor;
         if (textCursor.hasSelection()) {
             m_selectTextList.append(textCursor.selectedText());
@@ -144,10 +154,17 @@ void DeleteTextUndoCommand2::undo()
     } else {
         int cnt = m_ColumnEditSelections.size();
         for (int i = 0; i < cnt; i++) {
-            m_ColumnEditSelections[i].cursor.setPosition(m_beginPostion);
             m_ColumnEditSelections[i].cursor.insertText(m_selectTextList[i]);
-            m_ColumnEditSelections[i].cursor.setPosition(m_beginPostion);
-            m_edit->setTextCursor(m_ColumnEditSelections[i].cursor);
+            m_ColumnEditSelections[i].cursor.setPosition(m_originalPositions[i] - m_selectTextList[i].length(), QTextCursor::MoveAnchor);
+            m_ColumnEditSelections[i].cursor.setPosition(m_originalPositions[i], QTextCursor::KeepAnchor);
+        }
+
+        if (m_edit && !m_ColumnEditSelections.isEmpty()) {
+            TextEdit *pEdit = qobject_cast<TextEdit*>(m_edit);
+            if (pEdit) {
+                pEdit->syncColumnEditSelections(m_ColumnEditSelections);
+            }
+            m_edit->setTextCursor(m_ColumnEditSelections.last().cursor);
         }
     }
 }
@@ -185,9 +202,14 @@ void DeleteTextUndoCommand2::redo()
     } else {
         int cnt = m_ColumnEditSelections.size();
         for (int i = 0; i < cnt; i++) {
-            m_beginPostion = m_ColumnEditSelections[i].cursor.selectionStart();
-            m_ColumnEditSelections[i].cursor.deletePreviousChar();
-            m_edit->setTextCursor(m_ColumnEditSelections[i].cursor);
+            QTextCursor tempCursor(m_edit->document());
+            tempCursor.setPosition(m_ColumnEditSelections[i].cursor.selectionStart());
+            tempCursor.setPosition(m_ColumnEditSelections[i].cursor.selectionEnd(), QTextCursor::KeepAnchor);
+            tempCursor.deletePreviousChar();
+        }
+
+        if (m_edit && !m_ColumnEditSelections.isEmpty()) {
+            m_edit->setTextCursor(m_ColumnEditSelections.last().cursor);
         }
     }
 }
