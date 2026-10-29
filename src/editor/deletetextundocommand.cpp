@@ -98,6 +98,7 @@ void DeleteTextUndoCommand::undo()
             qCDebug(appLog) << "m_edit is not null";
             m_edit->restoreColumnEditSelection(m_ColumnEditSelections);
             m_edit->setTextCursor(m_ColumnEditSelections.last().cursor);
+            m_edit->renderAllSelections();
         }
     }
     qCDebug(appLog) << "DeleteTextUndoCommand undo end";
@@ -126,6 +127,7 @@ void DeleteTextUndoCommand::redo()
             qCDebug(appLog) << "m_edit is not null";
             m_edit->restoreColumnEditSelection(m_ColumnEditSelections);
             m_edit->setTextCursor(m_ColumnEditSelections.last().cursor);
+            m_edit->renderAllSelections();
         }
     }
     qCDebug(appLog) << "DeleteTextUndoCommand redo end";
