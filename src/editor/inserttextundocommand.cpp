@@ -93,6 +93,7 @@ void InsertTextUndoCommand::undo()
             qCDebug(appLog) << "InsertTextUndoCommand undo, pEdit not empty";
             m_pEdit->restoreColumnEditSelection(m_columnEditSelections);
             m_pEdit->setTextCursor(m_columnEditSelections.last().cursor);
+            m_pEdit->renderAllSelections();
         }
     }
     qCDebug(appLog) << "InsertTextUndoCommand undo exit";
