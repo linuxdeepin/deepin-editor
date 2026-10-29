@@ -1,8 +1,12 @@
-// SPDX-FileCopyrightText: 2019 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "inserttextundocommand.h"
+
+namespace {
+constexpr int ColumnEditTextMergeId = 1001;
+}
 
 InsertTextUndoCommand::InsertTextUndoCommand(const QTextCursor &textcursor, const QString &text, QPlainTextEdit *edit, QUndoCommand *parent)
     : QUndoCommand(parent)
@@ -43,8 +47,13 @@ void InsertTextUndoCommand::undo()
         }
     } else {
         int cnt = m_ColumnEditSelections.size();
+        int deleteLen = m_sInsertText.length();
         for (int i = 0; i < cnt; i++) {
-            m_ColumnEditSelections[i].cursor.deleteChar();
+            auto &cursor = m_ColumnEditSelections[i].cursor;
+            int startPos = cursor.selectionStart();
+            cursor.setPosition(startPos);
+            cursor.setPosition(startPos + deleteLen, QTextCursor::KeepAnchor);
+            cursor.deleteChar();
         }
 
         if (m_pEdit && !m_ColumnEditSelections.isEmpty()) {
@@ -76,7 +85,7 @@ void InsertTextUndoCommand::redo()
         int cnt = m_ColumnEditSelections.size();
         for (int i = 0; i < cnt; i++) {
             m_ColumnEditSelections[i].cursor.insertText(m_sInsertText);
-            m_ColumnEditSelections[i].cursor.setPosition(m_ColumnEditSelections[i].cursor.position() - m_sInsertText.length() + 1,
+            m_ColumnEditSelections[i].cursor.setPosition(m_ColumnEditSelections[i].cursor.position() - m_sInsertText.length(),
                                                          QTextCursor::KeepAnchor);
         }
 
@@ -86,6 +95,24 @@ void InsertTextUndoCommand::redo()
             m_pEdit->setTextCursor(curCursor);
         }
     }
+}
+
+int InsertTextUndoCommand::id() const
+{
+    return ColumnEditTextMergeId;
+}
+
+bool InsertTextUndoCommand::mergeWith(const QUndoCommand *other)
+{
+    if (m_ColumnEditSelections.isEmpty())
+        return false;
+
+    const InsertTextUndoCommand *cmd = dynamic_cast<const InsertTextUndoCommand *>(other);
+    if (!cmd || cmd->m_ColumnEditSelections.isEmpty())
+        return false;
+
+    m_sInsertText += cmd->m_sInsertText;
+    return true;
 }
 
 /**
