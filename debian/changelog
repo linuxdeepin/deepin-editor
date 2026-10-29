@@ -1,3 +1,17 @@
+deepin-editor (6.6.9) unstable; urgency=medium
+
+  * fix: center search result line in read-only markdown view
+  * fix: add missing tr() sources to .pro and regenerate translations
+  * fix: restore vanished translations for path settings
+  * fix: register markdown MIME types in desktop file
+  * fix(log): drop QT_NO_DEBUG_OUTPUT in Release so dynamic debug level works
+  * fix(log): defer encoding locale init to first use to avoid pre-main logging
+  * feat(log): categorize logging and support dynamic log rules via DConfig
+  * fix: remove dead DPrinter construction in popupPrintDialog
+  * test: add DevicePixel pageRect regression tests for BUG-380145
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Wed, 28 Oct 2026 15:46:44 +0800
+
 deepin-editor (6.6.8) unstable; urgency=medium
 
   * fix: wrap overlong link text in markdown preview
