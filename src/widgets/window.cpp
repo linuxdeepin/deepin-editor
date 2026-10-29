@@ -728,6 +728,15 @@ void Window::addTab(const QString &filepath, bool activeTab)
             }
         }
 
+        // Check if there is sufficient memory to open the file.
+        if (!Utils::isMemorySufficientForOperation(Utils::OperationType::RawOperation, fileInfo.size(), 0)) {
+            qCWarning(appLog) << "Insufficient memory to open file:" << filepath << "size:" << fileInfo.size();
+            QWidget *const msgParent = m_editorWidget->currentWidget() ? m_editorWidget->currentWidget() : this;
+            DMessageManager::instance()->sendMessage(msgParent, QIcon(":/images/warning.svg"),
+                                                     tr("Insufficient memory to open this file"));
+            return;
+        }
+
         if (StartManager::instance()->checkPath(filepath)) {
             qCDebug(appLog) << "Path check passed, adding tab for file";
             m_tabbar->addTab(filepath, tabName, filepath);
