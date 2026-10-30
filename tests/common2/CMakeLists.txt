@@ -50,6 +50,7 @@ add_executable(test_common2
 target_include_directories(test_common2
     PRIVATE
     ${CMAKE_SOURCE_DIR}/tests/3rdparty/stub
+    ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/src/common
     ${CMAKE_SOURCE_DIR}/src/encodes
     ${CMAKE_SOURCE_DIR}/src/basepub

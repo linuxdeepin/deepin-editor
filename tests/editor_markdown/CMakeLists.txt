@@ -14,6 +14,7 @@ function(md_add_test name)
     target_include_directories(test_${name} PRIVATE
         "${CMAKE_SOURCE_DIR}/tests/3rdparty/stub"
         "${MARKDOWN_SRC_DIR}"
+        "${CMAKE_SOURCE_DIR}/src"
     )
     target_link_libraries(test_${name} PRIVATE
         GTest::gtest
