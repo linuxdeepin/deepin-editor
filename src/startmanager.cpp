@@ -18,7 +18,6 @@
 #include <QDesktopWidget>
 #endif
 
-#include "common/iflytek_ai_assistant.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -96,8 +95,6 @@ StartManager::StartManager(QObject *parent)
     connect(m_pTimer, &QTimer::timeout, this, &StartManager::autoBackupFile);
     m_pTimer->start(EAutoBackupInterval);
 
-    // init flytek backend, check service valid
-    IflytekAiAssistant::instance()->checkAiExists();
     qCInfo(appLog) << "StartManager initialized with backup interval:" << EAutoBackupInterval << "ms";
     qCDebug(appLog) << "Exit StartManager constructor";
 }
