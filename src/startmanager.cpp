@@ -506,6 +506,10 @@ int StartManager::recoverFile(Window *window)
         // 焦点标签页文件不存在或无焦点记录，加载第一个可用标签页
         qCDebug(appLog) << "No focus tab available, loading first tab";
         window->activeTab(0);
+        QString firstFile = window->getTabbar()->fileAt(0);
+        if (window->isPendingTab(firstFile)) {
+            window->loadPendingTab(firstFile);
+        }
     }
 
     qCInfo(appLog) << "Recovered files count:" << recFilesSum;
