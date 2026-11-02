@@ -1284,6 +1284,14 @@ void EditWrapper::OnThemeChangeSlot(QString theme)
     palette.setColor(QPalette::Text, textColor);
     m_pBottomBar->setPalette(palette);
 
+    //设置只读视图容器背景色，防止深色主题切换瞬间白色闪烁
+    if (m_pReadPage) {
+        QPalette readPalette = m_pReadPage->palette();
+        readPalette.setColor(QPalette::Window, backgroundColor);
+        m_pReadPage->setAutoFillBackground(true);
+        m_pReadPage->setPalette(readPalette);
+    }
+
     //设置编辑器
     if (m_pSyntaxHighlighter) {
         qCDebug(appLog) << "EditWrapper OnThemeChangeSlot, m_pSyntaxHighlighter is not nullptr";

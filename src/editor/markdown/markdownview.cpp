@@ -137,6 +137,8 @@ void MarkdownView::init()
             load(QUrl(QStringLiteral("qrc:/editor/markdown/web/milkdown.html")));
         }
     });
+    // 设置 Chromium 渲染层背景色，防止 JS bridge 注入深色 CSS 变量前白色闪烁
+    page()->setBackgroundColor(Qt::white);
     load(QUrl(QStringLiteral("qrc:/editor/markdown/web/milkdown.html")));
 }
 
@@ -182,6 +184,12 @@ void MarkdownView::applyTheme(const QVariantMap &themeMap)
     // 同时缓存：ready 前发出的信号 JS 侧尚未接线，onBridgeReady 时补发（§5.3 时序）
     const QString json = ThemeSerializer::serialize(themeMap);
     const bool dark = ThemeSerializer::isDark(themeMap);
+    // 同步 Chromium 渲染层背景色，深色主题下即时绘制深色底色
+    // （无需等 JS bridge 异步注入 CSS 变量，消除切换瞬间白色闪烁）
+    QColor bgColor = QColor(themeMap.value(QStringLiteral("editor-colors"))
+                            .toMap().value(QStringLiteral("background-color")).toString());
+    if (bgColor.isValid())
+        page()->setBackgroundColor(bgColor);
     m_lastThemeJson = json;
     m_lastThemeDark = dark;
     m_hasTheme = true;
