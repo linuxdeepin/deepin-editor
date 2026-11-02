@@ -170,6 +170,7 @@ IflytekAiAssistant::CallStatus IflytekAiAssistant::checkValid()
 {
     qCDebug(appLog) << "checkValid status:" << m_status;
     switch (m_status) {
+        case Invalid:
         case NotInstalled:
             m_status = copilotInstalled(m_copilot);
             if (Enable != m_status) {
