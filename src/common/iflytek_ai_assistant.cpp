@@ -170,6 +170,8 @@ IflytekAiAssistant::CallStatus IflytekAiAssistant::checkValid()
 {
     qCDebug(appLog) << "checkValid status:" << m_status;
     switch (m_status) {
+        case Invalid:
+            Q_FALLTHROUGH();
         case NotInstalled:
             m_status = copilotInstalled(m_copilot);
             if (Enable != m_status) {
@@ -385,6 +387,8 @@ QString IflytekAiAssistant::errorString(CallStatus ret) const
             return QObject::tr("No audio input device detected. Please check and try again");
         case NoOutputDevice:
             return QObject::tr("No audio output device detected. Please check and try again");
+        case Invalid:
+            Q_FALLTHROUGH();
         default:
             // Unknown error
             qCDebug(appLog) << "unknown error ret:" << ret;
