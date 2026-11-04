@@ -221,16 +221,22 @@ TEST_F(IflytekAiAssistantTest, QueryMethods_StatusInvalid_ReturnInvalidWithoutDb
 }
 
 // B3
-TEST_F(IflytekAiAssistantTest, ActionMethods_StatusInvalid_ReturnInvalidStatus)
+TEST_F(IflytekAiAssistantTest, ActionMethods_StatusInvalid_TriggersLazyCheck_ReturnsNotInstalled)
 {
-    // Arrange
+    // Arrange: 状态机此步 status==Invalid（单例跨用例保持）
     IflytekAiAssistant *ins = IflytekAiAssistant::instance();
-    // Act/Assert: checkValid 走 default 分支保持 Invalid，动作方法直接返回
-    EXPECT_EQ(ins->textToSpeech(), IflytekAiAssistant::Invalid);
-    EXPECT_EQ(ins->speechToText(), IflytekAiAssistant::Invalid);
-    EXPECT_EQ(ins->textToTranslate(), IflytekAiAssistant::Invalid);
-    EXPECT_EQ(ins->checkValid(), IflytekAiAssistant::Invalid);
-    EXPECT_EQ(dbusCallCount, 0);
+    // Act/Assert: BUG-368911 后，Invalid 经 checkValid 懒加载 fallthrough 到
+    // case NotInstalled，触发 copilotInstalled()（DBus "version" 调用）。
+    // 后端无回复 → 状态转为 NotInstalled，动作方法提前返回 NotInstalled。
+    // 每次 checkValid 调用各触发 1 次 DBus "version" 调用，共 4 次。
+    EXPECT_EQ(ins->textToSpeech(), IflytekAiAssistant::NotInstalled);
+    EXPECT_EQ(ins->speechToText(), IflytekAiAssistant::NotInstalled);
+    EXPECT_EQ(ins->textToTranslate(), IflytekAiAssistant::NotInstalled);
+    EXPECT_EQ(ins->checkValid(), IflytekAiAssistant::NotInstalled);
+    EXPECT_EQ(dbusCallCount, 4);
+    EXPECT_EQ(asyncCallCount, 0);
+    // Assert: 状态已从 Invalid 转为 NotInstalled（后续用例依赖此状态）
+    EXPECT_EQ(ins->status(), IflytekAiAssistant::NotInstalled);
 }
 
 // B4

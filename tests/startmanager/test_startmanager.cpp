@@ -1741,6 +1741,10 @@ TEST_F(StartManagerTest, RecoverFile_NoFocusRecord_ActivatesFirstTab)
                    [fakeTabbar](Window *) -> Tabbar * { return fakeTabbar; });
     stub.set_lamda(static_cast<int (QTabBar::*)() const>(&QTabBar::count),
                    [](QTabBar *) -> int { return 1; });
+    stub.set_lamda(static_cast<QString (Tabbar::*)(int) const>(&Tabbar::fileAt),
+                   [](Tabbar *, int) -> QString { return QStringLiteral("first.txt"); });
+    stub.set_lamda(static_cast<bool (Window::*)(const QString &) const>(&Window::isPendingTab),
+                   [](Window *, const QString &) -> bool { return false; });
     stub.set_lamda(
         static_cast<void (Window::*)(const QString &, const QString &, const QString &, const QString &, bool, int, int)>(
             &Window::addTemFileTab),
@@ -1754,9 +1758,76 @@ TEST_F(StartManagerTest, RecoverFile_NoFocusRecord_ActivatesFirstTab)
     int ret = obj->recoverFile(win);
 
     // Assert：恢复 1 个标签 + 激活首标签（activeTab(0)，stubWindowInteraction 统一计数）
+    // BUG-376141 后兜底分支增加 isPendingTab 检查；此处 isPendingTab=false 不触发 loadPendingTab
     EXPECT_EQ(ret, 1);
     EXPECT_EQ(activeTabCalls, 1);
     EXPECT_EQ(lastActiveTab, 0);
+}
+
+// B39（BUG-376141）：焦点标签页文件被删除后兜底分支加载 pending 首标签
+TEST_F(StartManagerTest, RecoverFile_FocusTabDeleted_LoadsPendingFirstTab)
+{
+    // Arrange：两条记录——焦点标签页文件被删除（无 localPath → 跳过），
+    // 非焦点标签页文件存在 → addPendingTab 懒加载。
+    // 焦点被跳过后 pFocusWindow==nullptr → 走兜底分支 activeTab(0) +
+    // isPendingTab/loadPendingTab（BUG-376141 修复点）。
+    QJsonObject focusJson;
+    focusJson.insert("focus", true);
+    // 无 localPath/temFilePath → openPath 为空 → continue 跳过
+
+    QString pendingPath = tmp->filePath("pending_tab.txt");
+    QJsonObject pendingJson;
+    pendingJson.insert("localPath", pendingPath);
+    // 无 focus 字段 → isFocusTab=false → addPendingTab 懒加载
+
+    obj->m_qlistTemFile = QStringList {
+        QString::fromUtf8(QJsonDocument(focusJson).toJson(QJsonDocument::Compact)),
+        QString::fromUtf8(QJsonDocument(pendingJson).toJson(QJsonDocument::Compact))
+    };
+
+    Window *win = qobjFake<Window>();
+    obj->m_windows << win;
+    Tabbar *fakeTabbar = zeroFake<Tabbar>();
+    QString stubFirstFile = pendingPath;
+    int loadPendingCalls = 0;
+    QString lastLoadPendingPath;
+
+    stub.set_lamda(static_cast<void (Window::*)(bool)>(&Window::setBatchAddingPendingTabs),
+                   [](Window *, bool) {});
+    stub.set_lamda(static_cast<Tabbar *(Window::*)()>(&Window::getTabbar),
+                   [fakeTabbar](Window *) -> Tabbar * { return fakeTabbar; });
+    stub.set_lamda(static_cast<int (QTabBar::*)() const>(&QTabBar::count),
+                   [](QTabBar *) -> int { return 1; });
+    stub.set_lamda(static_cast<QString (Tabbar::*)(int) const>(&Tabbar::fileAt),
+                   [&stubFirstFile](Tabbar *, int) -> QString { return stubFirstFile; });
+    // BUG-376141 核心：isPendingTab 返回 true → 触发 loadPendingTab
+    stub.set_lamda(static_cast<bool (Window::*)(const QString &) const>(&Window::isPendingTab),
+                   [&stubFirstFile](Window *, const QString &fp) -> bool { return fp == stubFirstFile; });
+    stub.set_lamda(static_cast<bool (Window::*)(const QString &)>(&Window::loadPendingTab),
+                   [&loadPendingCalls, &lastLoadPendingPath](Window *, const QString &fp) -> bool {
+                       ++loadPendingCalls;
+                       lastLoadPendingPath = fp;
+                       return true;
+                   });
+    stub.set_lamda(
+        static_cast<void (Window::*)(const QString &, const QString &, const QString &, const QString &, bool, int, int)>(
+            &Window::addTemFileTab),
+        [](Window *, const QString &, const QString &, const QString &, const QString &, bool, int, int) {});
+    stub.set_lamda(
+        static_cast<void (Window::*)(const Window::PendingTabInfo &, int)>(&Window::addPendingTab),
+        [](Window *, const Window::PendingTabInfo &, int) {});
+    stubWindowInteraction(win);
+
+    // Act
+    int ret = obj->recoverFile(win);
+
+    // Assert：焦点标签页被跳过，1 个 pending 标签页恢复；
+    // 兜底分支 activeTab(0) + isPendingTab=true → loadPendingTab 被调用
+    EXPECT_EQ(ret, 1);
+    EXPECT_EQ(activeTabCalls, 1);
+    EXPECT_EQ(lastActiveTab, 0);
+    EXPECT_EQ(loadPendingCalls, 1);
+    EXPECT_EQ(lastLoadPendingPath, stubFirstFile);
 }
 
 TEST_F(StartManagerTest, RecoverFile_DraftDisplayName_BlankListed_UsesUntitledNumbered)
