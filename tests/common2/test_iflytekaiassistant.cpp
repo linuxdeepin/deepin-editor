@@ -225,12 +225,15 @@ TEST_F(IflytekAiAssistantTest, ActionMethods_StatusInvalid_ReturnInvalidStatus)
 {
     // Arrange
     IflytekAiAssistant *ins = IflytekAiAssistant::instance();
-    // Act/Assert: checkValid 走 default 分支保持 Invalid，动作方法直接返回
-    EXPECT_EQ(ins->textToSpeech(), IflytekAiAssistant::Invalid);
-    EXPECT_EQ(ins->speechToText(), IflytekAiAssistant::Invalid);
-    EXPECT_EQ(ins->textToTranslate(), IflytekAiAssistant::Invalid);
-    EXPECT_EQ(ins->checkValid(), IflytekAiAssistant::Invalid);
-    EXPECT_EQ(dbusCallCount, 0);
+    // Act/Assert：65226332 起 checkValid 对 Invalid/NotInstalled 懒加载——
+    // 首次调用同步执行 copilotInstalled 查询（stub 环境查询失败），
+    // 状态由 Invalid 迁移为 NotInstalled；四个动作方法各触发一次查询
+    EXPECT_EQ(ins->textToSpeech(), IflytekAiAssistant::NotInstalled);
+    EXPECT_EQ(ins->speechToText(), IflytekAiAssistant::NotInstalled);
+    EXPECT_EQ(ins->textToTranslate(), IflytekAiAssistant::NotInstalled);
+    EXPECT_EQ(ins->checkValid(), IflytekAiAssistant::NotInstalled);
+    EXPECT_EQ(ins->status(), IflytekAiAssistant::NotInstalled);
+    EXPECT_EQ(dbusCallCount, 4);
 }
 
 // B4
