@@ -2287,7 +2287,10 @@ void Window::displayShortcuts()
     QStringList shortcutString;
     QString param1 = "-j=" + QString(doc.toJson().data());
     QString param2 = "-p=" + QString::number(pos.x()) + "," + QString::number(pos.y());
-    shortcutString << param1 << param2;
+    //快捷键面板由独立进程 deepin-shortcut-viewer 绘制，需显式传递当前应用主题，否则面板跟随系统主题（bug 374339）
+    const bool isDarkTheme = DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType;
+    QString param3 = "-t=" + QString(isDarkTheme ? "dark" : "light");
+    shortcutString << param1 << param2 << param3;
 
     m_shortcutViewProcess = new QProcess();
     m_shortcutViewProcess->startDetached("deepin-shortcut-viewer", shortcutString);
