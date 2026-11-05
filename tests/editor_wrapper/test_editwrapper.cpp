@@ -2371,8 +2371,17 @@ TEST_F(EditWrapperTest, OnUpdateHighlighter_FoldRegion_RehighlightsUnmarkedBlock
 TEST_F(EditWrapperTest, MarkdownViewSignalHandlers_ViewEvents_ReactCorrectly)
 {
     // Arrange: 不注入渲染器 → 真实 MarkdownView 懒创建；init 置空桩避免
-    // WebEngine 页面加载（构造函数只建桥接与连接，offscreen 安全）
+    // WebEngine 页面加载（构造函数只建桥接与连接，offscreen 安全）。
+    // applyTheme 同样置空桩：createMarkdownView 会用宿主机已安装主题文件
+    // （/usr/share/deepin-editor/themes/*.theme，存在时含有效背景色）触发
+    // applyTheme → QWebEnginePage::setBackgroundColor 真实页面调用，
+    // 在 UT 集群环境（WebEngine 无法正常初始化）会 FATAL，且引入对宿主
+    // 主题文件的依赖；本用例聚焦信号处理，主题注入由 test_markdownview 覆盖
     stub.set_lamda(&MarkdownView::init, [](MarkdownView *) {});
+    // applyTheme 是虚函数（IMarkdownRenderer::applyTheme 的 override），
+    // PMF 按位取址非函数入口，须用 VADDR 定位（同 QWebEnginePage::triggerAction）
+    stub.set_lamda(VADDR(MarkdownView, applyTheme),
+                   [](MarkdownView *, const QVariantMap &) {});
 
     const QString mdPath = createFile("mv.md", QByteArray("# t"));
     m_wrapper->updatePath(mdPath, mdPath);

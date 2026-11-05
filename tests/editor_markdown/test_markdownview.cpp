@@ -82,12 +82,14 @@ protected:
 
     static void TearDownTestSuite()
     {
-        // 各用例 TearDown 已删除视图；销毁应用保证 WebEngine 干净退出码
-        if (s_app) {
+        // 各用例 TearDown 已删除视图。
+        // QApplication 故意不销毁：QtWebEngine 全局状态随首个 QCoreApplication
+        // 初始化且不支持"删应用后重建"，本套件结束即删应用会使后续参数化套件
+        // （ViewThemeParamTest/ViewLineParamTest 重建 QApplication 后）中的真实
+        // 页面调用（applyTheme → QWebEnginePage::setBackgroundColor）访问悬挂
+        // 状态而段错误；应用保留至进程退出（与 tests/editor_wrapper 策略一致）
+        if (s_app)
             s_app->processEvents(QEventLoop::AllEvents, 100);
-            delete s_app;
-            s_app = nullptr;
-        }
     }
 
     void SetUp() override

@@ -44,6 +44,7 @@
 #include <QFile>
 #include <QSignalSpy>
 #include <QPointer>
+#include <QTest>
 
 #include <memory>
 
@@ -394,7 +395,10 @@ TEST_F(FileLoadThreadTest, Start_FromWorkerThread_EmitsLoadFinished)
         EXPECT_EQ(spy.at(0).at(1).toByteArray(), raw);
         EXPECT_FALSE(spy.at(0).at(2).toBool());
     }
-    t->wait(2000);
+    // run() 末尾 deleteLater 投递至主线程，spy.wait 的事件循环即可能完成回收：
+    // 此后不得再经原始指针 t 调用 wait()（use-after-free 偶发段错误），
+    // 改为轮询 QPointer 直至线程结束且 DeferredDelete 回收完成
+    QTRY_VERIFY_WITH_TIMEOUT(guard.isNull(), 5000);
     QCoreApplication::processEvents();
     QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
     EXPECT_TRUE(guard.isNull()); // deleteLater 已处理
