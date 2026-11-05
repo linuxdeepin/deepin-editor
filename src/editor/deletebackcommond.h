@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -47,7 +47,8 @@ public:
     };
 
 private:
-    QList<QTextEdit::ExtraSelection>& m_ColumnEditSelections;
+    // 值快照：撤销命令自包含，不与编辑器当前列选区共享（编辑器侧列表会随鼠标交互被清空/重建）
+    QList<QTextEdit::ExtraSelection> m_ColumnEditSelections;
     QList<DelNode> m_deletions;
     QPlainTextEdit* m_edit;
 };

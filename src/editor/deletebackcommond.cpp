@@ -1,8 +1,9 @@
-// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "deletebackcommond.h"
+#include "dtextedit.h"
 #include <QTextBlock>
 
 DeleteBackCommand::DeleteBackCommand(QTextCursor cursor, QPlainTextEdit *edit):
@@ -86,10 +87,19 @@ void DeleteBackAltCommand::undo()
         cursor.setPosition(pos,QTextCursor::MoveAnchor);
         cursor.insertText(text);
 
+        // 使用 KeepAnchor 恢复选区，使撤销后列编辑选中高亮正确显示
         cursor.setPosition(pos,QTextCursor::MoveAnchor);
+        cursor.setPosition(pos + text.size(),QTextCursor::KeepAnchor);
         int id = m_deletions[i].m_id_in_Column;
         m_ColumnEditSelections[id].cursor = cursor;
         m_edit->setTextCursor(cursor);
+    }
+
+    // 撤销后用命令自身的选区快照恢复列编辑状态并刷新渲染
+    TextEdit *textEdit = qobject_cast<TextEdit *>(m_edit);
+    if (textEdit) {
+        textEdit->setAltModSelections(m_ColumnEditSelections);
+        textEdit->renderAllSelections();
     }
 
 }
@@ -107,6 +117,16 @@ void DeleteBackAltCommand::redo()
         for(int j=0;j<text.size();j++){
             cursor.deleteChar();
         }
+
+        int id = m_deletions[i].m_id_in_Column;
+        m_ColumnEditSelections[id].cursor = cursor;
+    }
+
+    // 重做后同步刷新列编辑选区渲染
+    TextEdit *textEdit = qobject_cast<TextEdit *>(m_edit);
+    if (textEdit) {
+        textEdit->setAltModSelections(m_ColumnEditSelections);
+        textEdit->renderAllSelections();
     }
 
 }

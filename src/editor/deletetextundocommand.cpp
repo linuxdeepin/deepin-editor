@@ -1,8 +1,9 @@
-// SPDX-FileCopyrightText: 2019 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "deletetextundocommand.h"
+#include "dtextedit.h"
 #include "editwrapper.h"
 #include <QDebug>
 #include <QTextBlock>
@@ -74,6 +75,13 @@ void DeleteTextUndoCommand::undo()
         if (m_edit && !m_ColumnEditSelections.isEmpty()) {
             m_edit->setTextCursor(m_ColumnEditSelections.last().cursor);
         }
+
+        // 撤销后用命令自身的选区快照恢复列编辑状态并刷新渲染，确保所有行的选中高亮正确显示
+        TextEdit *textEdit = qobject_cast<TextEdit *>(m_edit);
+        if (textEdit) {
+            textEdit->setAltModSelections(m_ColumnEditSelections);
+            textEdit->renderAllSelections();
+        }
     }
 }
 
@@ -94,6 +102,13 @@ void DeleteTextUndoCommand::redo()
 
         if (m_edit && !m_ColumnEditSelections.isEmpty()) {
             m_edit->setTextCursor(m_ColumnEditSelections.last().cursor);
+        }
+
+        // 重做后用命令自身的选区快照同步列编辑状态并刷新渲染
+        TextEdit *textEdit = qobject_cast<TextEdit *>(m_edit);
+        if (textEdit) {
+            textEdit->setAltModSelections(m_ColumnEditSelections);
+            textEdit->renderAllSelections();
         }
     }
 }

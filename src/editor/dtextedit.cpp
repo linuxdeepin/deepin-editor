@@ -2231,6 +2231,14 @@ void TextEdit::renderAllSelections()
     setExtraSelections(finalSelections);
 }
 
+/**
+ * @brief 更新列编辑选区列表，供撤销命令恢复选区状态后回写使用
+ */
+void TextEdit::setAltModSelections(const QList<QTextEdit::ExtraSelection> &selections)
+{
+    m_altModSelections = selections;
+}
+
 void TextEdit::updateMarkAllSelectColor()
 {
     isMarkAllLine(m_bIsMarkAllLine, m_strMarkAllLineColorName);
@@ -2801,12 +2809,9 @@ void TextEdit::slotDeleteAction(bool checked)
     }
 
     if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
-        for (int i = 0; i < m_altModSelections.size(); i++) {
-            if (m_altModSelections[i].cursor.hasSelection()) {
-                QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(m_altModSelections[i].cursor, this);
-                m_pUndoStack->push(pDeleteStack);
-            }
-        }
+        // 列编辑路径创建单个撤销命令，一次撤销恢复全部选区，与剪切行为保持一致
+        QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(m_altModSelections, this);
+        m_pUndoStack->push(pDeleteStack);
     } else {
         if (textCursor().hasSelection()) {
             QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(textCursor(), this);
