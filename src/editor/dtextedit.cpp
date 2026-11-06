@@ -839,7 +839,16 @@ int TextEdit::blockCount() const
 
 int TextEdit::characterCount() const
 {
-    return document()->characterCount();
+    const int rawCount = document()->characterCount();
+    const QString text = document()->toRawText();
+    int surrogatePairs = 0;
+    for (int i = 0; i < text.size() - 1; ++i) {
+        if (text.at(i).isHighSurrogate() && text.at(i + 1).isLowSurrogate()) {
+            ++surrogatePairs;
+            ++i; // skip the low surrogate
+        }
+    }
+    return rawCount - surrogatePairs;
 }
 
 QTextBlock TextEdit::firstVisibleBlock()
@@ -4005,11 +4014,11 @@ int TextEdit::getNextWordPosition(QTextCursor &cursor, QTextCursor::MoveMode mov
 
     // Just to next non-space char if current char is space.
     if (currentChar.data()->isSpace()) {
-        while (copyCursor.position() < characterCount() - 1 && currentChar.data()->isSpace()) {
+        while (copyCursor.position() < document()->characterCount() - 1 && currentChar.data()->isSpace()) {
             copyCursor.movePosition(QTextCursor::NextCharacter, moveMode);
             currentChar = copyCursor.selection().toPlainText();
         }
-        while (copyCursor.position() < characterCount() - 1 && !atWordSeparator(copyCursor.position())) {
+        while (copyCursor.position() < document()->characterCount() - 1 && !atWordSeparator(copyCursor.position())) {
             copyCursor.movePosition(QTextCursor::NextCharacter, moveMode);
 
             //cursor.movePosition(QTextCursor::NextCharacter, moveMode);
@@ -4017,7 +4026,7 @@ int TextEdit::getNextWordPosition(QTextCursor &cursor, QTextCursor::MoveMode mov
     }
     // Just to next word-separator char.
     else {
-        while (copyCursor.position() < characterCount() - 1 && !atWordSeparator(copyCursor.position())) {
+        while (copyCursor.position() < document()->characterCount() - 1 && !atWordSeparator(copyCursor.position())) {
             copyCursor.movePosition(QTextCursor::NextCharacter, moveMode);
         }
     }
