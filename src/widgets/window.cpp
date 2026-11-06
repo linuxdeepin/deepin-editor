@@ -815,6 +815,11 @@ bool Window::closeTab(const QString &filePath)
         StartManager::instance()->recordBookmark(localPath, bookmarkInfo);
     }
 
+    // 关闭标签页前，记录全局的标记颜色信息（空列表会清除历史记录）
+    QList<TextEdit::MarkReplaceInfo> markColorInfo = wrapper->textEditor()->getMarkColorInfo();
+    QString markLocalPath = wrapper->textEditor()->getTruePath();
+    StartManager::instance()->recordMarkColor(markLocalPath, markColorInfo);
+
     if (isDraftFile) {
         if (isModified) {
             DDialog *dialog = createDialog(tr("Do you want to save this file?"), "");
@@ -3599,6 +3604,15 @@ void Window::closeEvent(QCloseEvent *e)
         if (nullptr == wrapper) {
             continue;
         }
+
+        // 关闭窗口前，记录标记颜色信息（与书签同级；空列表会清除历史记录）
+        if (wrapper->textEditor() != nullptr) {
+            QString markLocalPath = wrapper->textEditor()->getTruePath();
+            if (!markLocalPath.isEmpty()) {
+                StartManager::instance()->recordMarkColor(markLocalPath, wrapper->textEditor()->getMarkColorInfo());
+            }
+        }
+
         m_wrappers.remove(wrapper->filePath());
         disconnect(wrapper->textEditor());
         wrapper->setQuitFlag();
