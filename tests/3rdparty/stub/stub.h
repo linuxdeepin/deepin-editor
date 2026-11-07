@@ -103,6 +103,50 @@
         ((uint32_t *)fn)[19] = 0x00000000;\
         CACHEFLUSH((char *)fn, CODESIZE);
     #define REPLACE_NEAR(t, fn, fn_stub) REPLACE_FAR(t, fn, fn_stub)
+#elif defined(__riscv) && __riscv_xlen == 64
+    #define CODESIZE 24U
+    #define CODESIZE_MIN 24U
+    #define CODESIZE_MAX CODESIZE
+    // Absolute jump. t1 is caller-saved and is not an argument register.
+    // auipc t1, 0
+    // addi  t1, t1, 16
+    // ld    t1, 0(t1)
+    // jalr  zero, t1, 0
+    // .quad fn_stub
+    // Same encoding as coolxv/cpp-stub src/stub.h.
+    #define REPLACE_FAR(t, fn, fn_stub)\
+        unsigned int auipc = 0x317;\
+        *(unsigned int *)(fn) = auipc;\
+        unsigned int addi = 0x1030313;\
+        *(unsigned int *)(fn + 4) = addi;\
+        unsigned int ld = 0x33303;\
+        *(unsigned int *)(fn + 8) = ld;\
+        unsigned int jalr = 0x30067;\
+        *(unsigned int *)(fn + 12) = jalr;\
+        *(unsigned long long*)(fn + 16) = (unsigned long long)fn_stub;\
+        CACHEFLUSH((char *)fn, CODESIZE);
+    #define REPLACE_NEAR(t, fn, fn_stub) REPLACE_FAR(t, fn, fn_stub)
+#elif defined(__riscv) && __riscv_xlen == 32
+    #define CODESIZE 20U
+    #define CODESIZE_MIN 20U
+    #define CODESIZE_MAX CODESIZE
+    // auipc t1, 0
+    // addi  t1, t1, 16
+    // lw    t1, 0(t1)
+    // jalr  zero, t1, 0
+    // .word fn_stub
+    #define REPLACE_FAR(t, fn, fn_stub)\
+        unsigned int auipc = 0x317;\
+        *(unsigned int *)(fn) = auipc;\
+        unsigned int addi = 0x1030313;\
+        *(unsigned int *)(fn + 4) = addi;\
+        unsigned int lw = 0x32303;\
+        *(unsigned int *)(fn + 8) = lw;\
+        unsigned int jalr = 0x30067;\
+        *(unsigned int *)(fn + 12) = jalr;\
+        *(unsigned int*)(fn + 16) = (unsigned int)fn_stub;\
+        CACHEFLUSH((char *)fn, CODESIZE);
+    #define REPLACE_NEAR(t, fn, fn_stub) REPLACE_FAR(t, fn, fn_stub)
 #elif defined(__thumb__) || defined(_M_THUMB)
     #error "Thumb is not supported"
 #else //__i386__ _x86_64__
