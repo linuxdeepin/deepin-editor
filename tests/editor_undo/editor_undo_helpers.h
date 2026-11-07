@@ -39,8 +39,8 @@ inline QApplication *ensureApp()
         static int argc = 1;
         static char argv0[] = "test_editor_undo";
         static char *argv[] = { argv0, nullptr };
-        static QApplication app(argc, argv);
-        return &app;
+        static QApplication *app = new QApplication(argc, argv);
+        return app;
     }
     return qobject_cast<QApplication *>(QApplication::instance());
 }
