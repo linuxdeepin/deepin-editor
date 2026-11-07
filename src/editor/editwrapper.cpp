@@ -257,6 +257,21 @@ void EditWrapper::openFile(const QString &filepath, QString qstrTruePath, bool b
         Settings::instance()->setSavePath(PathSettingWgt::CurFileBox, absPath);
     }
 
+    // Check if there is sufficient memory to open the file.
+    QFileInfo memFileInfo(filepath);
+    if (memFileInfo.exists() && !Utils::isMemorySufficientForOperation(Utils::OperationType::RawOperation, memFileInfo.size(), 0)) {
+        qCWarning(appLog) << "Insufficient memory to open file:" << filepath << "size:" << memFileInfo.size();
+        QWidget *target = m_pTextEdit;
+        if (target) {
+#ifdef DTKWIDGET_CLASS_DSizeMode
+            Utils::sendFloatMessageFixedFont(target, QIcon(":/images/warning.svg"), tr("Insufficient memory to open this file"));
+#else
+            DMessageManager::instance()->sendMessage(target, QIcon(":/images/warning.svg"), tr("Insufficient memory to open this file"));
+#endif
+        }
+        return;
+    }
+
     FileLoadThread *thread = new FileLoadThread(filepath);
     qCDebug(appLog) << "Created file load thread for:" << filepath;
     // 优先使用历史记录的编码
