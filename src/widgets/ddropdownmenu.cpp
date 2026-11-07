@@ -32,7 +32,8 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
 
     //设置toobutton属性
     m_pToolButton->setFocusPolicy(Qt::StrongFocus);
-    m_pToolButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    // 文字由按钮原生渲染，避免栅格化为 QPixmap 导致分数 DPI 缩放下模糊
+    m_pToolButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     m_pToolButton->setArrowType(Qt::NoArrow);
     m_pToolButton->setFixedHeight(28);
     m_pToolButton->installEventFilter(this);
@@ -54,6 +55,10 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     //设置字体
     int fontsize = DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T9);
     m_font.setPixelSize(fontsize);
+    // 文字走原生渲染，需将字号应用到按钮，与底栏 DLabel(T9) 保持一致
+    m_pToolButton->setFont(m_font);
+    // 箭头图标尺寸固定为 8x5，文字由按钮自适应布局
+    m_pToolButton->setIconSize(QSize(8, 5));
 
      //添加布局
     QHBoxLayout *layout = new QHBoxLayout();
@@ -178,7 +183,8 @@ void DDropdownMenu::slotRequestMenu(bool request)
 void DDropdownMenu::setText(const QString &text)
 {
     m_text = text;
-    //重新绘制icon　设置宽度
+    // 文字由按钮原生渲染，仅刷新箭头图标（按下态配色）
+    m_pToolButton->setText(m_text);
     m_pToolButton->setIcon(createIcon());
 }
 
@@ -360,66 +366,26 @@ DDropdownMenu *DDropdownMenu::createHighLightMenu()
 
 QIcon DDropdownMenu::createIcon()
 {
-
-    DPalette dpalette  = DApplicationHelper::instance()->palette(m_pToolButton);
-    QColor textColor;
-
+    // 仅生成箭头图标；文字由 DToolButton 原生渲染，不再栅格化为 QPixmap，
+    // 从根因层消除分数 DPI 缩放模糊与子像素抗锯齿丢失问题。
     QPixmap arrowPixmap;
-
-    if(m_bPressed){
-        textColor = dpalette.color(DPalette::Highlight);
-        QString color = textColor.name(QColor::HexRgb);
-        arrowPixmap = setSvgColor(color);
-    }else {
-        textColor = dpalette.color(DPalette::WindowText);
+    if (m_bPressed) {
+        DPalette dpalette = DApplicationHelper::instance()->palette(m_pToolButton);
+        QColor textColor = dpalette.color(DPalette::Highlight);
+        arrowPixmap = setSvgColor(textColor.name(QColor::HexRgb));
+    } else {
         arrowPixmap = m_arrowPixmap;
     }
-
-    // 根据字体大小设置icon大小，按计算的字体高度，而非从字体文件中读取的高度(部分字体中英文高度不同)
-    QFontMetrics metrics(m_font);
-    int fontWidth = metrics.width(m_text) + 20;
-    int fontHeight = metrics.size(Qt::TextSingleLine, m_text).height();
-    int iconW = 8;
-    int iconH = 5;
-
-    int totalWidth = fontWidth + iconW + 10;
-#ifdef DTKWIDGET_CLASS_DSizeMode
-    int totalHeigth = DGuiApplicationHelper::isCompactMode() ? s_DDropdownMenuHeightCompact : s_DDropdownMenuHeight;
-#else
-    int totalHeigth = s_DDropdownMenuHeight;
-#endif
-    m_pToolButton->setFixedSize(totalWidth,totalHeigth);
-    m_pToolButton->setIconSize(QSize(totalWidth,totalHeigth));
-
-    qreal rate = this->devicePixelRatioF();
-    QPixmap icon(QSize(totalWidth,totalHeigth)*rate);
-    icon.setDevicePixelRatio(rate);
-    icon.fill(Qt::transparent);
-
-    QPainter painter(&icon);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setRenderHints(QPainter::SmoothPixmapTransform);
-
-    painter.save();
-    painter.setFont(m_font);
-    painter.setPen(textColor);
-    painter.drawText(QRectF(10,(totalHeigth-fontHeight)/2,fontWidth,fontHeight),m_text);
-    painter.restore();
-
-    //arrowPixmap=arrowPixmap.scaled(iconW,iconH,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
-
-    //qDebug()<<"==================="<<arrowPixmap.rect().height();
-    painter.drawPixmap(QRectF(fontWidth,(totalHeigth-iconH)/2,iconW,iconH),arrowPixmap,arrowPixmap.rect());
-
-    painter.end();
-    return icon;
+    return QIcon(arrowPixmap);
 }
 
 void DDropdownMenu::OnFontChangedSlot(const QFont &font)
 {
     m_font = font;
-    int fontsize =DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T8);
+    // 修复 T8->T9 字号不一致：与构造函数统一为 T9，避免系统字体变化后字号变小
+    int fontsize = DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T9);
     m_font.setPixelSize(fontsize);
+    m_pToolButton->setFont(m_font);
     m_pToolButton->setIcon(createIcon());
 }
 
