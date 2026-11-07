@@ -18,9 +18,12 @@ public:
     explicit InsertTextUndoCommand(QList<QTextEdit::ExtraSelection> &selections,
                                    const QString &text,
                                    QPlainTextEdit *edit,
+                                   int sessionId = 0,
                                    QUndoCommand *parent = nullptr);
     virtual void undo();
     virtual void redo();
+    int id() const override;
+    bool mergeWith(const QUndoCommand *other) override;
 
 private:
     QPlainTextEdit *m_pEdit = nullptr;
@@ -29,7 +32,9 @@ private:
     int m_endPostion{0};
     QString m_sInsertText;
     QList<QTextEdit::ExtraSelection> m_ColumnEditSelections;
+    int m_sessionId = 0;
     QString m_selectText = QString();
+    static constexpr int kColumnEditInsertCommandId = 1001;
 };
 
 /**
