@@ -628,6 +628,7 @@ private:
     bool findFoldBlock(int line, QTextBlock &beginBlock, QTextBlock &endBlock, QTextBlock &curBlock);
 
     bool refreshUndoRedoColumnStatus();
+    bool refreshUndoRedoColumnStatusAfterUndo();
 
 private slots:
     // 文档内容变更时触发
