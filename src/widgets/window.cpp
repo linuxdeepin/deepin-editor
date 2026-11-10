@@ -2937,6 +2937,13 @@ void Window::handleCurrentChanged(const int &index)
     if (currentWrapper()) {
         currentWrapper()->checkForReload();
         checkTabbarForReload();
+
+        // 超大块文件激活时停用光标闪烁（闪烁重绘触发整块重算，PMS 129827），切走后恢复
+        if (currentWrapper()->textEditor()->isHugeBlockFile()) {
+            QApplication::setCursorFlashTime(kHugeBlockCursorFlashTime);
+        } else {
+            QApplication::setCursorFlashTime(kDefaultCursorFlashTime);
+        }
     }
 
     const QString &filepath = m_tabbar->fileAt(index);

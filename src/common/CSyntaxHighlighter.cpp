@@ -39,6 +39,12 @@ void CSyntaxHighlighter::highlightBlock(const QString &text)
         return;
     }
 
+    // 超大文本块跳过语法高亮：单块整段 rehighlight 在主线程可达数十秒，阻塞打开/滚动（PMS 129827）
+    static const int s_MaxHighlightBlockLen = 512 * 1024;
+    if (text.size() > s_MaxHighlightBlockLen) {
+        return;
+    }
+
     KSyntaxHighlighting::SyntaxHighlighter::highlightBlock(text);
 
     // 叠加 \00 无效字符高亮：红色背景 + 白色文字

@@ -2384,6 +2384,10 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
 
     for (int iBlockCount = blockNumber ; iBlockCount <= nPageLine; ++iBlockCount) {
         if (block.isVisible()) {
+            // 超大块跳过折叠图标扫描：block.text()/remove(QRegExp)/contains 在 10MB 级块上
+            // 每次绘制都是秒级开销（PMS 129827），超大块不绘制折叠图标
+            static const int s_MaxFoldScanBlockLen = 512 * 1024;
+            if (block.length() <= s_MaxFoldScanBlockLen) {
             //判定是否包含注释代码左括号、是否整行是注释，isNeedShowFoldIcon该函数是为了做判定当前行是否包含成对的括号，如果包括，则不显示折叠标志
 
             //获取行数文本块 出去字符串判断　梁卫东２０２０年０９月０１日１７：１６：１７
@@ -2435,6 +2439,7 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                     }
                 }
                 m_listFlodIconPos.append(block.blockNumber());
+            }
             }
         }
 
@@ -3396,8 +3401,10 @@ int TextEdit::getFirstVisibleBlockId() const
 
     cur = cursorForPosition(startPoint);
     startBlock = document()->findBlock(cur.position());
-    cur.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-    if (startBlock.text() != cur.selection().toPlainText()) {
+    // 原实现用「块尾选区文本是否等于整块文本」判断光标是否在块首，超大块（PMS 129827 的 10MB
+    // 单行）会产生两次 10MB 级字符串拷贝与一次全量比较，且 movePosition 触发整块字符属性
+    // 计算；等价改为光标位置与块首位置比较
+    if (cur.position() != startBlock.position()) {
         return startBlock.blockNumber() + 1;
     }
 

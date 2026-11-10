@@ -631,6 +631,9 @@ public:
     int getFirstVisibleBlockId() const;
     void setLeftAreaUpdateState(UpdateOperationType statevalue);
     UpdateOperationType getLeftAreaUpdateState();
+    // 含超大文本块的文件：光标闪烁重绘会触发整块重算（PMS 129827），激活该标签时停用闪烁
+    void setHugeBlockFile(bool huge) { m_bHugeBlockFile = huge; }
+    bool isHugeBlockFile() const { return m_bHugeBlockFile; }
 
 public:
     bool bIsSetLineNumberWidth = true;
@@ -879,6 +882,8 @@ private:
     bool m_Permission2 = false;
     //左边栏更新标记
     UpdateOperationType m_LeftAreaUpdateState;
+    // 文件含超大文本块（PMS 129827）：超大块高亮/光标闪烁重绘触发整块重算，需降级处理
+    bool m_bHugeBlockFile = false;
 
     bool m_MidButtonPatse = false;      // 鼠标中键黏贴处理
     bool m_isPreeditBefore = false;     // 上一个输入法时间是否是 preedit

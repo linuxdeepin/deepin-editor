@@ -984,6 +984,29 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
         updateModifyStatus(true);
     }
 
+    // 含超大文本块的文件隐藏光标：光标闪烁的每次绘制经 QTextLine::cursorToX 触发整块
+    // 字符属性重算与布局数据重分配，主线程持续秒级阻塞（PMS 129827）；正常文件不受影响
+    static const int s_HugeBlockLen = 512 * 1024;
+    {
+        bool hasHugeBlock = false;
+        for (QTextBlock b = m_pTextEdit->document()->begin(); b.isValid(); b = b.next()) {
+            if (b.length() > s_HugeBlockLen) {
+                hasHugeBlock = true;
+                break;
+            }
+        }
+        if (hasHugeBlock) {
+            // 光标闪烁的每次重绘都会经 QTextLine::cursorToX 触发整块字符属性重算与
+            // 布局数据重分配（实测稳态主线程占空 ~60%，PMS 129827），超大块文件：
+            // 隐藏光标 + 交由 Window::handleCurrentChanged 按激活标签停用闪烁
+            m_pTextEdit->setCursorWidth(0);
+            m_pTextEdit->setHugeBlockFile(true);
+            if (m_pWindow && m_pWindow->currentWrapper() == this) {
+                QApplication::setCursorFlashTime(kHugeBlockCursorFlashTime);
+            }
+        }
+    }
+
     if (m_pSyntaxHighlighter) {
         m_pSyntaxHighlighter->setEnableHighlight(true);
         OnUpdateHighlighter();
@@ -1346,10 +1369,30 @@ void EditWrapper::loadContent(const QByteArray &strContent)
     int InitContentPos = 5 * 1024;
     int max = 40 * 1024 * 1024;
 
+    // 粗扫是否存在超长行：超长行一次性 insertText 会让换行布局/首帧绘制在主线程长时间阻塞（PMS 129827），
+    // 复用大文件分块事件路径逐块插入，保持界面可响应
+    bool hasHugeLine = false;
+    if (len > InitContentPos && len <= max) {
+        static const int s_HugeLineLen = 512 * 1024;
+        int from = 0;
+        while (from < len) {
+            int nl = static_cast<int>(strContent.indexOf('\n', from));
+            int lineLen = (nl == -1) ? (len - from) : (nl - from);
+            if (lineLen > s_HugeLineLen) {
+                hasHugeLine = true;
+                break;
+            }
+            if (nl == -1) {
+                break;
+            }
+            from = nl + 1;
+        }
+    }
+
     QString data;
     int inserted = 0;
 
-    if (len > max) {
+    if (len > max || hasHugeLine) {
         // 当读取大文件时，采用事件队列方式处理
         ParseFileEvent *parseEvent = new ParseFileEvent;
         parseEvent->m_contentData = strContent;
