@@ -584,12 +584,18 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
         return true;
     }
 
-    if (mime.isValid()) {
-        for (const QString &supportedType : SupportedTextMimeTypes) {
-            if (mime.inherits(supportedType)) {
-                return true;
-            }
-        }
+    // Extension fallback: when content-based detection (MatchContent) does not
+    // identify a supported type, fall back to checking the file name extension.
+    // This allows files such as MHTML or XHTML saved with a .html/.htm
+    // extension to be opened, even though their content is detected as
+    // message/rfc822 or application/xhtml+xml (bug 164313). The default MIME
+    // type is skipped to avoid opening files with unknown or missing
+    // extensions through this path.
+    const QMimeType extMime = QMimeDatabase().mimeTypeForFile(filepath, QMimeDatabase::MatchMode::MatchExtension);
+    const QString extMimeType = extMime.name();
+    if (!extMime.isDefault() &&
+        (extMimeType.startsWith("text/") || SupportedTextMimeTypes.contains(extMimeType))) {
+        return true;
     }
 
     return false;
