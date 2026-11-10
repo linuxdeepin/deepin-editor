@@ -26,6 +26,11 @@
 #include <KSyntaxHighlighting/Theme>
 
 class Window;
+
+// 超大块文件激活期间的光标闪烁周期：足够大以停止周期性闪烁重绘（PMS 129827）
+static const int kHugeBlockCursorFlashTime = 2000000000;
+static const int kDefaultCursorFlashTime = 1060;
+
 class EditWrapper : public QWidget
 {
     Q_OBJECT
