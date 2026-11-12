@@ -111,7 +111,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="1160"/>
         <source>The file contains invalid characters (NUL). Preview mode is read-only.</source>
-        <translation type="unfinished"/>
+        <translation>O ficheiro contém caracteres inválidos (NUL). O modo de pré-visualização é de apenas-leitura.</translation>
     </message>
 </context>
 <context>
@@ -150,7 +150,7 @@
     <message>
         <location filename="../src/controls/linebar.cpp" line="149"/>
         <source>第%1/%2项</source>
-        <translation type="unfinished"/>
+        <translation>Correspondência %1 de %2</translation>
     </message>
 </context>
 <context>
@@ -171,12 +171,12 @@
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="39"/>
         <source>Collapse code block</source>
-        <translation type="unfinished"/>
+        <translation>Colapsar bloco de código</translation>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="40"/>
         <source>Expand code block</source>
-        <translation type="unfinished"/>
+        <translation>Expandir bloco de código</translation>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="41"/>
