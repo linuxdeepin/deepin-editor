@@ -1453,27 +1453,27 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="1395"/>
         <source>If you force save this file, it may cause file corruption. Still want to save?</source>
-        <translation type="unfinished"/>
+        <translation>Se guardar este ficheiro à força, isso poderá causar a sua corrupção. Mesmo assim, deseja guardar?</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1399"/>
         <source>Don&apos;t Save</source>
-        <translation type="unfinished"/>
+        <translation>Não Guardar</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1400"/>
         <source>Save As</source>
-        <translation type="unfinished"/>
+        <translation>Guardar Como</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1401"/>
         <source>Save Anyway</source>
-        <translation type="unfinished"/>
+        <translation>Guardar Mesmo Assim</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1582"/>
         <source>Cannot save as the original file in preview mode. Please choose a different path.</source>
-        <translation type="unfinished"/>
+        <translation>Não é possível guardar como o ficheiro original no modo de pré-visualização. Por favor escolha um caminho diferente.</translation>
     </message>
 </context>
 </TS>
