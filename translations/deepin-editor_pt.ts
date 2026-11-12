@@ -1209,13 +1209,13 @@
         <location filename="../src/editor/dtextedit.cpp" line="9270"/>
         <location filename="../src/editor/dtextedit.cpp" line="9272"/>
         <source>No audio output device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
-        <translation type="unfinished"/>
+        <translation>Não foi detetado nenhum dispositivo de saída de áudio. Certifique-se de que os altifalantes ou auscultadores estão devidamente ligados e tente novamente.</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="9279"/>
         <location filename="../src/editor/dtextedit.cpp" line="9281"/>
         <source>No audio input device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
-        <translation type="unfinished"/>
+        <translation>Não foi detetado nenhum dispositivo de entrada de áudio. Certifique-se de que as colunas ou os auscultadores estão devidamente ligados e tente novamente.</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="536"/>
@@ -1309,7 +1309,7 @@
     <message>
         <location filename="../src/controls/warningnotices.cpp" line="32"/>
         <source>Edit Anyway</source>
-        <translation type="unfinished"/>
+        <translation>Editar Mesmo Assim</translation>
     </message>
 </context>
 <context>
@@ -1448,7 +1448,7 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="1394"/>
         <source>Invalid characters detected while saving &quot;%1&quot;</source>
-        <translation type="unfinished"/>
+        <translation>Foram detetados caracteres inválidos ao guardar &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1395"/>
