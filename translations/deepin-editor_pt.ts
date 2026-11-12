@@ -181,17 +181,17 @@
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="41"/>
         <source>Copy code</source>
-        <translation type="unfinished"/>
+        <translation>Copiar código</translation>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="42"/>
         <source>Expand</source>
-        <translation type="unfinished"/>
+        <translation>Expandir</translation>
     </message>
     <message>
         <location filename="../src/editor/markdown/markdownbridge.h" line="44"/>
         <source>%1 line(s) of code collapsed</source>
-        <translation type="unfinished"/>
+        <translation>%1 linha(s) de código colapsado</translation>
     </message>
 </context>
 <context>
@@ -857,7 +857,7 @@
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="211"/>
         <source>Save aborted: editor is closing</source>
-        <translation type="unfinished"/>
+        <translation>Gravação interrompida: o editor está a fechar</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="230"/>
@@ -1191,7 +1191,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="545"/>
         <source>View Mode</source>
-        <translation type="unfinished"/>
+        <translation>Modo de Visualização</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3529"/>
