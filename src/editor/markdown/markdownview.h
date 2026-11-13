@@ -8,6 +8,7 @@
 #include "imarkdownrenderer.h"
 #include "markdownbridge.h"
 
+#include <QColor>
 #include <QWebEngineView>
 #include <QWebChannel>
 
@@ -65,6 +66,7 @@ private:
     QString m_lastThemeJson;
     bool m_lastThemeDark = false;
     bool m_hasTheme = false;
+    QColor m_lastBgColor;  // 缓存最近一次主题背景色，setMode() 切换时复用防止白色闪烁
     // —— ready 前协议缓存（§5.3 时序）：页面异步加载完成前 JS 未接线，直接 emit 的信号全部丢失 ——
     QString m_pendingMd;                 // 待渲染内容（与上层 RenderThrottle 缓存叠加，双保险）
     bool m_hasPendingMd = false;
