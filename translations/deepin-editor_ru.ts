@@ -336,7 +336,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="33"/>
         <source>Help</source>
-        <translation>Помощь</translation>
+        <translation>Справка</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="34"/>
@@ -401,7 +401,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="46"/>
         <source>Increase indent</source>
-        <translation>Показать ярлыки</translation>
+        <translation>Увеличить отступ</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="47"/>
