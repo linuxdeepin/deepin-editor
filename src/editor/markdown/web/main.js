@@ -235,7 +235,23 @@ function buildAnchorMap() {
     if (blocks.length === children.length) {
         lastAnchorMode = "zip";
         for (let i = 0; i < children.length; i++) {
-            anchors.push({ sourceLine: blocks[i].startLine, previewY: docY(children[i]) });
+            if (blocks[i].type === "table") {
+                const trs = children[i].querySelectorAll("table tbody tr");
+                if (trs.length > 0) {
+                    anchors.push({ sourceLine: blocks[i].startLine, previewY: docY(trs[0]) });
+                    if (trs.length > 1) {
+                        anchors.push({ sourceLine: blocks[i].startLine + 1,
+                                       previewY: trs[0].getBoundingClientRect().bottom + window.scrollY });
+                        for (let r = 1; r < trs.length; r++) {
+                            anchors.push({ sourceLine: blocks[i].startLine + r + 1, previewY: docY(trs[r]) });
+                        }
+                    }
+                } else {
+                    anchors.push({ sourceLine: blocks[i].startLine, previewY: docY(children[i]) });
+                }
+            } else {
+                anchors.push({ sourceLine: blocks[i].startLine, previewY: docY(children[i]) });
+            }
         }
     } else {
         const astHeadings = blocks.filter((b) => b.type === "heading");
