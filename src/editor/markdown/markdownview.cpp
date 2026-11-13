@@ -175,6 +175,9 @@ void MarkdownView::setMarkdown(const QString &md)
 
 void MarkdownView::setMode(int mode)
 {
+    // 切换模式时恢复最近一次主题背景色，防止 Chromium 渲染层回退到默认白色
+    if (m_hasTheme && m_lastBgColor.isValid())
+        page()->setBackgroundColor(m_lastBgColor);
     emit m_bridge->setModeRequested(mode == Editable);
 }
 
@@ -188,8 +191,10 @@ void MarkdownView::applyTheme(const QVariantMap &themeMap)
     // （无需等 JS bridge 异步注入 CSS 变量，消除切换瞬间白色闪烁）
     QColor bgColor = QColor(themeMap.value(QStringLiteral("editor-colors"))
                             .toMap().value(QStringLiteral("background-color")).toString());
-    if (bgColor.isValid())
+    if (bgColor.isValid()) {
         page()->setBackgroundColor(bgColor);
+        m_lastBgColor = bgColor;
+    }
     m_lastThemeJson = json;
     m_lastThemeDark = dark;
     m_hasTheme = true;
