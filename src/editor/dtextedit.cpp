@@ -2942,6 +2942,7 @@ void TextEdit::slotdictationAction(bool checked)
         }
     } else {
         qWarning() << "DBUS getIatEnable failed";
+        dictationState = true;
     }
     if (!dictationState) {
 #ifdef DTKWIDGET_CLASS_DSizeMode
