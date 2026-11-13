@@ -8,6 +8,7 @@
 #include "../encodes/detectcode.h"
 #include <QFile>
 #include <QDebug>
+#include <QTextCodec>
 
 FileLoadThread::FileLoadThread(const QString &filepath, QObject *parent)
     : QThread(parent),
@@ -59,12 +60,30 @@ void FileLoadThread::run()
                     emit sigPreProcess(encode, indata);
                 }
             } else {
-                QByteArray outHeadData;
-                DetectCode::ChangeFileEncodingFormat(indata, outHeadData, textEncode, QString("UTF-8"));
-                if (outHeadData.contains('\x00')) {
-                    outHeadData.replace('\x00', "\\00");
+                QTextCodec *utf8Codec = QTextCodec::codecForName("UTF-8");
+                bool isUtf8Valid = false;
+                if (utf8Codec) {
+                    QTextCodec::ConverterState state;
+                    utf8Codec->toUnicode(indata.constData(), indata.size(), &state);
+                    isUtf8Valid = (state.invalidChars == 0);
                 }
-                emit sigPreProcess(encode, outHeadData);
+                if (isUtf8Valid) {
+                    qCDebug(appLog) << "Head data is valid UTF-8 despite detection as" << textEncode;
+                    if (indata.contains('\x00')) {
+                        QByteArray headData = indata;
+                        headData.replace('\x00', "\\00");
+                        emit sigPreProcess("UTF-8", headData);
+                    } else {
+                        emit sigPreProcess("UTF-8", indata);
+                    }
+                } else {
+                    QByteArray outHeadData;
+                    DetectCode::ChangeFileEncodingFormat(indata, outHeadData, textEncode, QString("UTF-8"));
+                    if (outHeadData.contains('\x00')) {
+                        outHeadData.replace('\x00', "\\00");
+                    }
+                    emit sigPreProcess(encode, outHeadData);
+                }
             }
         }
 
@@ -121,11 +140,23 @@ void FileLoadThread::run()
             qCDebug(appLog) << "Using original encoding, no conversion needed";
             emit sigLoadFinished(encode, indata, false, hasNul);
         } else {
-            qCDebug(appLog) << "Converting from" << textEncode << "to UTF-8";
-            QByteArray outData;
-            DetectCode::ChangeFileEncodingFormat(indata, outData, textEncode, QString("UTF-8"));
-            emit sigLoadFinished(encode, outData, false, hasNul);
-            qCDebug(appLog) << "Encoding conversion completed, output size:" << outData.size();
+            QTextCodec *utf8Codec = QTextCodec::codecForName("UTF-8");
+            bool isUtf8Valid = false;
+            if (utf8Codec) {
+                QTextCodec::ConverterState state;
+                utf8Codec->toUnicode(indata.constData(), indata.size(), &state);
+                isUtf8Valid = (state.invalidChars == 0);
+            }
+            if (isUtf8Valid) {
+                qCDebug(appLog) << "Data is valid UTF-8 despite detection as" << textEncode << ", using original data";
+                emit sigLoadFinished("UTF-8", indata, false, hasNul);
+            } else {
+                qCDebug(appLog) << "Converting from" << textEncode << "to UTF-8";
+                QByteArray outData;
+                DetectCode::ChangeFileEncodingFormat(indata, outData, textEncode, QString("UTF-8"));
+                emit sigLoadFinished(encode, outData, false, hasNul);
+                qCDebug(appLog) << "Encoding conversion completed, output size:" << outData.size();
+            }
         }
     } else {
         qCWarning(appLog) << "Failed to open file:" << m_strFilePath << "error:" << file.errorString();
