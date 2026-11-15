@@ -100,6 +100,18 @@ static QHash<QByteArray, QByteArray> gs_ReplaceFromUtf8ToGB18030_2020Error{
     {QByteArray::fromHex("9635B630"), "\u241FE"},
 };
 
+// GB18030-2022 PUA → 2005 Unicode 映射表
+// iconv 在 2022 标准下将 FE51 等转换为 PUA 码位（U+E816 等），无字体覆盖导致乱码
+// 重映射为 2005 标准 Unicode 码位（有字体覆盖）
+static QHash<QByteArray, QByteArray> gs_PUA2022ToUnicode2005{
+    {QByteArray::fromHex("EEA096"), QByteArray::fromHex("F0A08287")},
+    {QByteArray::fromHex("EEA097"), QByteArray::fromHex("F0A08289")},
+    {QByteArray::fromHex("EEA098"), QByteArray::fromHex("F0A0838C")},
+    {QByteArray::fromHex("EEA0B1"), QByteArray::fromHex("F0A19797")},
+    {QByteArray::fromHex("EEA0BB"), QByteArray::fromHex("F0A2A68F")},
+    {QByteArray::fromHex("EEA195"), QByteArray::fromHex("F0A487BE")},
+};
+
 // 见QTextCodec::mibEnum()
 enum MibEncoding {
     UnknownMib = 0,
@@ -811,29 +823,24 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr,
             fromMib = static_cast<MibEncoding>(fromCodec->mibEnum());
             qCDebug(appLog) << "fromMib:" << fromMib;
         }
-        // 不使用上层修改的Iconv处理时，不检测转换的编码格式，跳过GB18030转换特殊处理
         MibEncoding toMib = UnknownMib;
 
-        const bool enablePatchedIconv = Config::instance()->enablePatchedIconv();
-        if (enablePatchedIconv) {
-            qCDebug(appLog) << "Patched Iconv enabled";
-            QTextCodec *toCodec = QTextCodec::codecForName(toCode.toUtf8());
-            if (toCodec) {
-                toMib = static_cast<MibEncoding>(toCodec->mibEnum());
-                qCDebug(appLog) << "toMib:" << toMib;
-            }
+        QTextCodec *toCodec = QTextCodec::codecForName(toCode.toUtf8());
+        if (toCodec) {
+            toMib = static_cast<MibEncoding>(toCodec->mibEnum());
+            qCDebug(appLog) << "toMib:" << toMib;
+        }
 
-            // 替换需手动修改 UTF-8 和 GB180303 编码转换的部分
-            if (GB18030 == fromMib && UTF_8 == toMib) {
-                qCDebug(appLog) << "Converting from GB18030 to UTF-8, applying 2005 error replacements";
-                for (auto itr = gs_ReplaceFromGB18030_2005Error.begin(); itr != gs_ReplaceFromGB18030_2005Error.end(); ++itr) {
-                    inputStr.replace(itr.key(), itr.value());
-                }
-            } else if (UTF_8 == fromMib && GB18030 == toMib) {
-                qCDebug(appLog) << "Converting from UTF-8 to GB18030, applying 2020 error replacements";
-                for (auto itr = gs_ReplaceToGB18030_2020Error.begin(); itr != gs_ReplaceToGB18030_2020Error.end(); ++itr) {
-                    inputStr.replace(itr.key(), itr.value());
-                }
+        // 替换需手动修改 UTF-8 和 GB18030 编码转换的部分
+        if (GB18030 == fromMib && UTF_8 == toMib) {
+            qCDebug(appLog) << "Converting from GB18030 to UTF-8, applying 2005 error replacements";
+            for (auto itr = gs_ReplaceFromGB18030_2005Error.begin(); itr != gs_ReplaceFromGB18030_2005Error.end(); ++itr) {
+                inputStr.replace(itr.key(), itr.value());
+            }
+        } else if (UTF_8 == fromMib && GB18030 == toMib) {
+            qCDebug(appLog) << "Converting from UTF-8 to GB18030, applying 2020 error replacements";
+            for (auto itr = gs_ReplaceToGB18030_2020Error.begin(); itr != gs_ReplaceToGB18030_2020Error.end(); ++itr) {
+                inputStr.replace(itr.key(), itr.value());
             }
         }
 
@@ -944,7 +951,17 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr,
 
         // 计算 iconv() 实际转换的字节数
         size_t realConvertSize = maxBufferSize - outbytesleft;
-        outStr += QByteArray(bufferHeader, static_cast<int>(realConvertSize));
+        QByteArray convertedData(bufferHeader, static_cast<int>(realConvertSize));
+
+        // GB18030-2022 标准下 iconv 将 FE51 等转为 PUA 码位（U+E816 等），
+        // 无字体覆盖导致乱码，重映射为 2005 标准 Unicode 码位
+        if (GB18030 == fromMib && UTF_8 == toMib) {
+            for (auto itr = gs_PUA2022ToUnicode2005.begin(); itr != gs_PUA2022ToUnicode2005.end(); ++itr) {
+                convertedData.replace(itr.key(), itr.value());
+            }
+        }
+
+        outStr += convertedData;
         qCDebug(appLog) << "Converted data size:" << realConvertSize;
 
         delete[] bufferHeader;

@@ -818,14 +818,14 @@ TEST_F(DetectCodeTest, ChangeEncoding_Gb18030Pua_MapsToUtf8Pua)
 
 TEST_F(DetectCodeTest, ChangeEncoding_PatchedIconv_Fe51ReplacedVia2005Map)
 {
-    // Arrange: E9 enablePatchedIconv=true → FE51 预替换为 FFFFFF01 → EILSEQ → \uE816
+    // Arrange: FE51 预替换为 FFFFFF01 → EILSEQ → \uE816 → post-iconv PUA 重映射 → \u20087
     installConfigStubs(true, true, QByteArrayLiteral("UTF-8"));
     QByteArray in = QByteArray::fromHex("FE51"), out;
     // Act
     const bool ok = DetectCode::ChangeFileEncodingFormat(in, out, QStringLiteral("GB18030"), QStringLiteral("UTF-8"));
-    // Assert: \uE816 UTF-8 = EE A0 96
+    // Assert: \u20087 UTF-8 = F0 A0 82 87（post-iconv PUA 重映射后）
     EXPECT_TRUE(ok);
-    EXPECT_EQ(out, QByteArray::fromHex("EEA096"));
+    EXPECT_EQ(out, QByteArray::fromHex("F0A08287"));
 }
 
 TEST_F(DetectCodeTest, ChangeEncoding_PatchedIconv_U20087MapsToGbPuaBytes)
