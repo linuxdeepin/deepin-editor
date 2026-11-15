@@ -1292,6 +1292,14 @@ void EditWrapper::OnThemeChangeSlot(QString theme)
         m_pReadPage->setPalette(readPalette);
     }
 
+    //设置 Markdown 渲染视图 widget 背景色，防止深色主题切换瞬间白色闪烁
+    if (m_pMarkdownView) {
+        QPalette mdPalette = m_pMarkdownView->palette();
+        mdPalette.setColor(QPalette::Window, backgroundColor);
+        m_pMarkdownView->setAutoFillBackground(true);
+        m_pMarkdownView->setPalette(mdPalette);
+    }
+
     //设置编辑器
     if (m_pSyntaxHighlighter) {
         qCDebug(appLog) << "EditWrapper OnThemeChangeSlot, m_pSyntaxHighlighter is not nullptr";
@@ -2061,7 +2069,14 @@ void EditWrapper::ensureMarkdownViewCreated()
     });
     // 主题注入（§4.7）：创建即应用当前主题，深浅色与编辑器一致
     QString themePath = Settings::instance()->settings->option("advance.editor.theme")->value().toString();
-    m_pMarkdownView->applyTheme(Utils::getThemeMapFromPath(themePath));
+    QVariantMap themeMap = Utils::getThemeMapFromPath(themePath);
+    m_pMarkdownView->applyTheme(themeMap);
+    // 为 MarkdownView widget 补设深色 QPalette，避免切换标签瞬间 Chromium 渲染层尚未就绪时白色背景闪烁
+    QString mdBgColor = themeMap["editor-colors"].toMap()["background-color"].toString();
+    QPalette mdPalette = m_pMarkdownView->palette();
+    mdPalette.setColor(QPalette::Window, mdBgColor);
+    m_pMarkdownView->setAutoFillBackground(true);
+    m_pMarkdownView->setPalette(mdPalette);
     static_cast<QVBoxLayout *>(m_pReadPage->layout())->addWidget(m_pMarkdownView);
     m_pRenderer = m_pMarkdownView;
 }
