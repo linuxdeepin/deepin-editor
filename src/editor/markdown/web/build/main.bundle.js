@@ -45682,6 +45682,22 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
     };
   }
   const remarkTrimCodeTrailingBlankLines = $remark("remarkTrimCodeTrailingBlankLines", () => trimCodeTrailingBlankLinesAttacher);
+  function transformBrToHardbreakAttacher() {
+    return (tree) => {
+      const walk = (node2) => {
+        if (!node2 || !Array.isArray(node2.children)) return;
+        for (let i = 0; i < node2.children.length; i++) {
+          const child = node2.children[i];
+          if (child.type === "html" && /^<br\s*\/?>$/i.test(child.value)) {
+            node2.children[i] = { type: "break" };
+          }
+          walk(child);
+        }
+      };
+      walk(tree);
+    };
+  }
+  const remarkTransformBrToHardbreak = $remark("remarkTransformBrToHardbreak", () => transformBrToHardbreakAttacher);
   async function boot() {
     const rootEl = document.getElementById(ROOT_ID);
     editor = await Editor.make().config((ctx) => {
@@ -45692,7 +45708,7 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
         editable: () => false,
         attributes: { class: "milkdown-read-only" }
       }));
-    }).use(commonmark).use(gfm).use(history).use(indent).use(clipboard).use(mathPlugins).use(remarkTrimCodeTrailingBlankLines).use(tableView).use(codeBlockView).create();
+    }).use(commonmark).use(gfm).use(history).use(indent).use(clipboard).use(mathPlugins).use(remarkTrimCodeTrailingBlankLines).use(remarkTransformBrToHardbreak).use(tableView).use(codeBlockView).create();
     setupBridge({
       onSetMarkdown: renderMarkdown,
       onSetMode: () => {
