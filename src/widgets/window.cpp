@@ -2297,6 +2297,13 @@ void Window::displayShortcuts()
     QString param3 = "-t=" + QString(isDarkTheme ? "dark" : "light");
     shortcutString << param1 << param2 << param3;
 
+    DGuiApplicationHelper::ColorType paletteType = DGuiApplicationHelper::instance()->paletteType();
+    if (paletteType == DGuiApplicationHelper::DarkType) {
+        shortcutString << "-t=dark";
+    } else if (paletteType == DGuiApplicationHelper::LightType) {
+        shortcutString << "-t=light";
+    }
+
     m_shortcutViewProcess = new QProcess();
     m_shortcutViewProcess->startDetached("deepin-shortcut-viewer", shortcutString);
 
