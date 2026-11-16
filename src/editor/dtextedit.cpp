@@ -7593,7 +7593,9 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
     }
     bool isPreedit = !e->preeditString().isEmpty();
     if (isPreedit || !e->commitString().isEmpty()) {
-        const QString &text = isPreedit ? e->preeditString() : e->commitString();
+        QString text = isPreedit ? e->preeditString() : e->commitString();
+        text.remove(QLatin1Char('\x00'));
+        if (!text.isEmpty()) {
 
         //列编辑添加撤销重做
         if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
@@ -7609,6 +7611,7 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
             } else {
                 insertSelectTextEx(textCursor(), text);
             }
+        }
         }
 
         m_isSelectAll = false;
