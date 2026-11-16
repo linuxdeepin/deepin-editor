@@ -140,10 +140,17 @@ static const QString kFlytekService = "com.iflytek.aiassistant";
 
 IflytekAiAssistant::IflytekAiAssistant(QObject *parent)
     : QObject(parent)
-    , m_copilot{new QDBusInterface(kCopilotService, kCopilotPath, kCopilotInterface)}
 {
     qCDebug(appLog) << "IflytekAiAssistant created";
-    m_copilot->setTimeout(2000);
+}
+
+QSharedPointer<QDBusInterface> IflytekAiAssistant::ensureCopilot()
+{
+    if (!m_copilot) {
+        m_copilot = QSharedPointer<QDBusInterface>::create(kCopilotService, kCopilotPath, kCopilotInterface);
+        m_copilot->setTimeout(2000);
+    }
+    return m_copilot;
 }
 
 bool IflytekAiAssistant::hasAudioOutputDevice() const
@@ -169,6 +176,7 @@ IflytekAiAssistant *IflytekAiAssistant::instance()
 IflytekAiAssistant::CallStatus IflytekAiAssistant::checkValid()
 {
     qCDebug(appLog) << "checkValid status:" << m_status;
+    ensureCopilot();
     switch (m_status) {
         case Invalid:
         case NotInstalled:
