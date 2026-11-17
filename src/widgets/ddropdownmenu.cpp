@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -372,7 +372,6 @@ QIcon DDropdownMenu::createIcon()
         arrowPixmap = setSvgColor(color);
     }else {
         textColor = dpalette.color(DPalette::WindowText);
-        arrowPixmap = m_arrowPixmap;
     }
 
     // 根据字体大小设置icon大小，按计算的字体高度，而非从字体文件中读取的高度(部分字体中英文高度不同)
@@ -409,7 +408,17 @@ QIcon DDropdownMenu::createIcon()
     //arrowPixmap=arrowPixmap.scaled(iconW,iconH,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
 
     //qDebug()<<"==================="<<arrowPixmap.rect().height();
-    painter.drawPixmap(QRectF(fontWidth,(totalHeigth-iconH)/2,iconW,iconH),arrowPixmap,arrowPixmap.rect());
+    if (m_bPressed) {
+        painter.drawPixmap(QRectF(fontWidth,(totalHeigth-iconH)/2,iconW,iconH),arrowPixmap,arrowPixmap.rect());
+    } else {
+        // 箭头直接按当前图标密度矢量渲染，与文字密度保持一致。
+        // 原实现使用构造期按当时缩放比缓存的位图，分数倍缩放比在窗口创建后
+        // 才被主题层异步应用，缓存位图被拉伸显示而模糊（PMS 171749）。
+        // 注意：不可改用 devicePixelRatioF() 自行光栅化——分数缩放下该值不可靠。
+        const QString arrowTheme = (dpalette.color(QPalette::Background).lightness() < 128) ? "dark" : "light";
+        QSvgRenderer svgRender(QString(":/images/dropdown_arrow_%1.svg").arg(arrowTheme));
+        svgRender.render(&painter, QRectF(fontWidth, (totalHeigth-iconH)/2.0, iconW, iconH));
+    }
 
     painter.end();
     return icon;
