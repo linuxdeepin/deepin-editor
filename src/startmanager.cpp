@@ -327,7 +327,7 @@ void StartManager::autoBackupFile()
     qCDebug(appLog) << "Exit autoBackupFile";
 }
 
-int StartManager::recoverFile(Window *window)
+int StartManager::recoverFile(Window *window, const QStringList &explicitFiles)
 {
     qCDebug(appLog) << "Enter recoverFile";
 
@@ -416,6 +416,15 @@ int StartManager::recoverFile(Window *window)
             qCDebug(appLog) << "Local file path:" << localPath << "exists:" << fi.exists();
             if (!fi.exists()) {
                 qCWarning(appLog) << "Local file does not exist, skipping:" << localPath;
+                continue;
+            }
+        }
+
+        // 跳过显式请求打开的文件的备份记录，避免会话恢复与显式打开之间路径去重失败
+        if (!explicitFiles.isEmpty() && !localPath.isEmpty()) {
+            QString resolvedLocal = Utils::getFilePath(localPath);
+            if (explicitFiles.contains(resolvedLocal)) {
+                qCDebug(appLog) << "Skipping backup for explicitly opened file:" << localPath;
                 continue;
             }
         }
@@ -639,7 +648,11 @@ void StartManager::openFilesInTab(QStringList files)
                 // 以 window 为 context：窗口在延时期间被销毁则不触发，避免悬空调用
                 QTimer::singleShot(50, window, [ = ] {
                     qCDebug(appLog) << "Delayed file opening for:" << resolvedFile;
-                    recoverFile(window);
+                    QStringList resolvedFiles;
+                    for (const QString &f : files) {
+                        resolvedFiles << Utils::getFilePath(f);
+                    }
+                    recoverFile(window, resolvedFiles);
                     window->addTab(resolvedFile);
                 });
             }
