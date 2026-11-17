@@ -451,6 +451,15 @@ QByteArray DetectCode::selectCoding(QByteArray ucharDetectdRet, QByteArrayList i
                     return icuDetectRetList[0];
                 }
                 qCDebug(appLog) << "Returning uchardetDetectRet as fallback";
+                // uchardet 与 ICU[0] 完全无包含关系时的交叉校验：
+                // 若 ICU[0] 为 UTF-8 而 uchardet 结果非 UTF 变体（UTF-16/UTF-32 等），
+                // 优先信任 ICU，避免 UTF-8 文件被 uchardet 误判为 TIS-620 等编码
+                if (icuDetectRetList[0].contains("UTF-8") &&
+                    !ucharDetectdRet.contains("UTF-16") &&
+                    !ucharDetectdRet.contains("UTF-32")) {
+                    qCDebug(appLog) << "ICU[0] is UTF-8 and uchardet is not UTF variant, trusting ICU";
+                    return icuDetectRetList[0];
+                }
                 return ucharDetectdRet;
             }
         }
