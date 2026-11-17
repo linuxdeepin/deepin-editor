@@ -304,6 +304,7 @@ INSTANTIATE_TEST_SUITE_P(
         SelectCase{QByteArrayLiteral("BIG5"), {QByteArrayLiteral("GB18030")}, 0.99f, false, true, QByteArrayLiteral("GB18030")},// S4 含 GB18030
         SelectCase{QByteArrayLiteral("UTF-16"), {QByteArrayLiteral("UTF-16BE")}, 0.99f, false, true, QByteArrayLiteral("UTF-16BE")}, // S5 icu[0] 包含
         SelectCase{QByteArrayLiteral("EUC-JP"), {QByteArrayLiteral("SHIFT-JIS")}, 0.99f, false, true, QByteArrayLiteral("EUC-JP")},   // S6 兜底
+        SelectCase{QByteArrayLiteral("TIS-620"), {QByteArrayLiteral("UTF-8")}, 0.99f, false, true, QByteArrayLiteral("UTF-8")},      // S6 交叉校验：ICU[0]=UTF-8, uchardet=TIS-620 → 信任 ICU
         SelectCase{QByteArrayLiteral(""), {QByteArrayLiteral("GB18030")}, 0.99f, false, true, QByteArrayLiteral("GB18030")},    // S7 空 uchar+GB
         SelectCase{QByteArrayLiteral(""), {QByteArrayLiteral("UTF-16LE")}, 0.99f, false, true, QByteArrayLiteral("UTF-16LE")})); // S7 空 uchar+首项
 
