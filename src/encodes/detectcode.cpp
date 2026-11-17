@@ -100,6 +100,38 @@ static QHash<QByteArray, QByteArray> gs_ReplaceFromUtf8ToGB18030_2020Error{
     {QByteArray::fromHex("9635B630"), "\u241FE"},
 };
 
+// GB18030-2022 PUA → 2005 Unicode 映射表
+// iconv 在 2022 标准下将 FE51 等转换为 PUA 码位（U+E816 等），无字体覆盖导致乱码
+// 重映射为 2005 标准 Unicode 码位（有字体覆盖）
+static QHash<QByteArray, QByteArray> gs_PUA2022ToUnicode2005{
+    {QByteArray::fromHex("EEA096"), QByteArray::fromHex("F0A08287")},
+    {QByteArray::fromHex("EEA097"), QByteArray::fromHex("F0A08289")},
+    {QByteArray::fromHex("EEA098"), QByteArray::fromHex("F0A0838C")},
+    {QByteArray::fromHex("EEA0B1"), QByteArray::fromHex("F0A19797")},
+    {QByteArray::fromHex("EEA0BB"), QByteArray::fromHex("F0A2A68F")},
+    {QByteArray::fromHex("EEA195"), QByteArray::fromHex("F0A487BE")},
+    // 竖排形式：四字节 8431xxxx 在 2022 下映射 PUA，等价双字节 A6D9 系的正式码位
+    {QByteArray::fromHex("EE9E8D"), QByteArray::fromHex("EFB890")},  // U+E78D -> U+FE10
+    {QByteArray::fromHex("EE9E8F"), QByteArray::fromHex("EFB891")},  // U+E78F -> U+FE11
+    {QByteArray::fromHex("EE9E8E"), QByteArray::fromHex("EFB892")},  // U+E78E -> U+FE12
+    {QByteArray::fromHex("EE9E90"), QByteArray::fromHex("EFB893")},  // U+E790 -> U+FE13
+    {QByteArray::fromHex("EE9E91"), QByteArray::fromHex("EFB894")},  // U+E791 -> U+FE14
+    {QByteArray::fromHex("EE9E92"), QByteArray::fromHex("EFB895")},  // U+E792 -> U+FE15
+    {QByteArray::fromHex("EE9E93"), QByteArray::fromHex("EFB896")},  // U+E793 -> U+FE16
+    {QByteArray::fromHex("EE9E94"), QByteArray::fromHex("EFB897")},  // U+E794 -> U+FE17
+    {QByteArray::fromHex("EE9E95"), QByteArray::fromHex("EFB898")},  // U+E795 -> U+FE18
+    {QByteArray::fromHex("EE9E96"), QByteArray::fromHex("EFB899")},  // U+E796 -> U+FE19
+    // CJK 扩展 B：四字节 8235xxxx 在 2022 下映射 PUA，等价正式码位 U+9FB4 系
+    {QByteArray::fromHex("EEA09E"), QByteArray::fromHex("E9BEB4")},  // U+E81E -> U+9FB4
+    {QByteArray::fromHex("EEA0A6"), QByteArray::fromHex("E9BEB5")},  // U+E826 -> U+9FB5
+    {QByteArray::fromHex("EEA0AB"), QByteArray::fromHex("E9BEB6")},  // U+E82B -> U+9FB6
+    {QByteArray::fromHex("EEA0AC"), QByteArray::fromHex("E9BEB7")},  // U+E82C -> U+9FB7
+    {QByteArray::fromHex("EEA0B2"), QByteArray::fromHex("E9BEB8")},  // U+E832 -> U+9FB8
+    {QByteArray::fromHex("EEA183"), QByteArray::fromHex("E9BEB9")},  // U+E843 -> U+9FB9
+    {QByteArray::fromHex("EEA194"), QByteArray::fromHex("E9BEBA")},  // U+E854 -> U+9FBA
+    {QByteArray::fromHex("EEA1A4"), QByteArray::fromHex("E9BEBB")},  // U+E864 -> U+9FBB
+};
+
 // 见QTextCodec::mibEnum()
 enum MibEncoding {
     UnknownMib = 0,
@@ -811,29 +843,24 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr,
             fromMib = static_cast<MibEncoding>(fromCodec->mibEnum());
             qCDebug(appLog) << "fromMib:" << fromMib;
         }
-        // 不使用上层修改的Iconv处理时，不检测转换的编码格式，跳过GB18030转换特殊处理
         MibEncoding toMib = UnknownMib;
 
-        const bool enablePatchedIconv = Config::instance()->enablePatchedIconv();
-        if (enablePatchedIconv) {
-            qCDebug(appLog) << "Patched Iconv enabled";
-            QTextCodec *toCodec = QTextCodec::codecForName(toCode.toUtf8());
-            if (toCodec) {
-                toMib = static_cast<MibEncoding>(toCodec->mibEnum());
-                qCDebug(appLog) << "toMib:" << toMib;
-            }
+        QTextCodec *toCodec = QTextCodec::codecForName(toCode.toUtf8());
+        if (toCodec) {
+            toMib = static_cast<MibEncoding>(toCodec->mibEnum());
+            qCDebug(appLog) << "toMib:" << toMib;
+        }
 
-            // 替换需手动修改 UTF-8 和 GB180303 编码转换的部分
-            if (GB18030 == fromMib && UTF_8 == toMib) {
-                qCDebug(appLog) << "Converting from GB18030 to UTF-8, applying 2005 error replacements";
-                for (auto itr = gs_ReplaceFromGB18030_2005Error.begin(); itr != gs_ReplaceFromGB18030_2005Error.end(); ++itr) {
-                    inputStr.replace(itr.key(), itr.value());
-                }
-            } else if (UTF_8 == fromMib && GB18030 == toMib) {
-                qCDebug(appLog) << "Converting from UTF-8 to GB18030, applying 2020 error replacements";
-                for (auto itr = gs_ReplaceToGB18030_2020Error.begin(); itr != gs_ReplaceToGB18030_2020Error.end(); ++itr) {
-                    inputStr.replace(itr.key(), itr.value());
-                }
+        // 替换需手动修改 UTF-8 和 GB18030 编码转换的部分
+        if (GB18030 == fromMib && UTF_8 == toMib) {
+            qCDebug(appLog) << "Converting from GB18030 to UTF-8, applying 2005 error replacements";
+            for (auto itr = gs_ReplaceFromGB18030_2005Error.begin(); itr != gs_ReplaceFromGB18030_2005Error.end(); ++itr) {
+                inputStr.replace(itr.key(), itr.value());
+            }
+        } else if (UTF_8 == fromMib && GB18030 == toMib) {
+            qCDebug(appLog) << "Converting from UTF-8 to GB18030, applying 2020 error replacements";
+            for (auto itr = gs_ReplaceToGB18030_2020Error.begin(); itr != gs_ReplaceToGB18030_2020Error.end(); ++itr) {
+                inputStr.replace(itr.key(), itr.value());
             }
         }
 
@@ -944,7 +971,17 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr,
 
         // 计算 iconv() 实际转换的字节数
         size_t realConvertSize = maxBufferSize - outbytesleft;
-        outStr += QByteArray(bufferHeader, static_cast<int>(realConvertSize));
+        QByteArray convertedData(bufferHeader, static_cast<int>(realConvertSize));
+
+        // GB18030-2022 标准下 iconv 将 FE51 等转为 PUA 码位（U+E816 等），
+        // 无字体覆盖导致乱码，重映射为 2005 标准 Unicode 码位
+        if (GB18030 == fromMib && UTF_8 == toMib) {
+            for (auto itr = gs_PUA2022ToUnicode2005.begin(); itr != gs_PUA2022ToUnicode2005.end(); ++itr) {
+                convertedData.replace(itr.key(), itr.value());
+            }
+        }
+
+        outStr += convertedData;
         qCDebug(appLog) << "Converted data size:" << realConvertSize;
 
         delete[] bufferHeader;

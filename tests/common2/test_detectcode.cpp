@@ -808,24 +808,25 @@ TEST_F(DetectCodeTest, ChangeEncoding_InvalidGb18030Byte_ReplacedAndContinues)
 TEST_F(DetectCodeTest, ChangeEncoding_Gb18030Pua_MapsToUtf8Pua)
 {
     // Arrange: E8 GB18030 PUA 0x37903582（小端字节 82 35 90 37）
+    // GB18030-2022 下 iconv 输出 PUA \uE81E，post-iconv 重映射为等价正式码位 \u9FB4
     QByteArray in = QByteArray::fromHex("82359037"), out;
     // Act
     const bool ok = DetectCode::ChangeFileEncodingFormat(in, out, QStringLiteral("GB18030"), QStringLiteral("UTF-8"));
-    // Assert: \uE81E 的 UTF-8 编码（本机 iconv 实测映射，见文件头注释）
+    // Assert: \u9FB4 的 UTF-8 编码 E9 BE B4
     EXPECT_TRUE(ok);
-    EXPECT_EQ(out, QByteArray::fromHex("EEA09E"));
+    EXPECT_EQ(out, QByteArray::fromHex("E9BEB4"));
 }
 
 TEST_F(DetectCodeTest, ChangeEncoding_PatchedIconv_Fe51ReplacedVia2005Map)
 {
-    // Arrange: E9 enablePatchedIconv=true → FE51 预替换为 FFFFFF01 → EILSEQ → \uE816
+    // Arrange: FE51 预替换为 FFFFFF01 → EILSEQ → \uE816 → post-iconv PUA 重映射 → \u20087
     installConfigStubs(true, true, QByteArrayLiteral("UTF-8"));
     QByteArray in = QByteArray::fromHex("FE51"), out;
     // Act
     const bool ok = DetectCode::ChangeFileEncodingFormat(in, out, QStringLiteral("GB18030"), QStringLiteral("UTF-8"));
-    // Assert: \uE816 UTF-8 = EE A0 96
+    // Assert: \u20087 UTF-8 = F0 A0 82 87（post-iconv PUA 重映射后）
     EXPECT_TRUE(ok);
-    EXPECT_EQ(out, QByteArray::fromHex("EEA096"));
+    EXPECT_EQ(out, QByteArray::fromHex("F0A08287"));
 }
 
 TEST_F(DetectCodeTest, ChangeEncoding_PatchedIconv_U20087MapsToGbPuaBytes)
@@ -838,6 +839,32 @@ TEST_F(DetectCodeTest, ChangeEncoding_PatchedIconv_U20087MapsToGbPuaBytes)
     // Assert
     EXPECT_TRUE(ok);
     EXPECT_EQ(out, QByteArray::fromHex("95329031"));
+}
+
+TEST_F(DetectCodeTest, ChangeEncoding_StandardIconv_FourByteE78DRemappedToFE10)
+{
+    // Arrange: GB18030-2022 下 glibc iconv 将四字节 8431 8236 转为 PUA \uE78D，
+    // post-iconv 重映射 → \uFE10（与双字节 A6D9 的解码结果一致）
+    installConfigStubs(false, false, QByteArrayLiteral("UTF-8"));
+    QByteArray in = QByteArray::fromHex("84318236"), out;
+    // Act
+    const bool ok = DetectCode::ChangeFileEncodingFormat(in, out, QStringLiteral("GB18030"), QStringLiteral("UTF-8"));
+    // Assert: \uFE10 UTF-8 = EF B8 90
+    EXPECT_TRUE(ok);
+    EXPECT_EQ(out, QByteArray::fromHex("EFB890"));
+}
+
+TEST_F(DetectCodeTest, ChangeEncoding_StandardIconv_FourByteE81ERemappedTo9FB4)
+{
+    // Arrange: GB18030-2022 下 glibc iconv 将四字节 8235 9037 转为 PUA \uE81E，
+    // post-iconv 重映射 → \u9FB4（glibc charmap 注释的等价字符）
+    installConfigStubs(false, false, QByteArrayLiteral("UTF-8"));
+    QByteArray in = QByteArray::fromHex("82359037"), out;
+    // Act
+    const bool ok = DetectCode::ChangeFileEncodingFormat(in, out, QStringLiteral("GB18030"), QStringLiteral("UTF-8"));
+    // Assert: \u9FB4 UTF-8 = E9 BE B4
+    EXPECT_TRUE(ok);
+    EXPECT_EQ(out, QByteArray::fromHex("E9BEB4"));
 }
 
 TEST_F(DetectCodeTest, ChangeEncoding_InvalidFromCode_FallsBackAndFails)
