@@ -6630,43 +6630,76 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
         return;
     }
 
-    if (m_isPreeditBefore) {
-        // 每次 preedit 都是完整的字符串，所以撤销上次的 preedit
-        undo_();
+    // 标记进入 preedit 更新过程，屏蔽中间态信号，避免输入法查询到撤销后的旧坐标
+    m_bInputMethodUpdating = true;
+    // 进入前先缓存当前（正确的）光标矩形，供 inputMethodQuery 在屏蔽期间返回
+    m_cachedCursorRect = QPlainTextEdit::cursorRect();
 
-        // 将光标移回原位
-        if (Overwrite == m_cursorMode) {
-            auto cursor = textCursor();
-            cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor, m_preeditLengthBefore);
-            setTextCursor(cursor);
-        }
-    }
-    bool isPreedit = !e->preeditString().isEmpty();
-    if (isPreedit || !e->commitString().isEmpty()) {
-        const QString &text = isPreedit ? e->preeditString() : e->commitString();
+    // 用单独作用域包裹 QSignalBlocker，确保 updateMicroFocus 在解除屏蔽后调用
+    {
+        const QSignalBlocker blocker(this);
 
-        //列编辑添加撤销重做
-        if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
-            insertColumnEditTextEx(text);
-        } else {
-            // 覆盖模式下输入法输入时，单独处理，模拟选中替换处理
+        if (m_isPreeditBefore) {
+            // 每次 preedit 都是完整的字符串，所以撤销上次的 preedit
+            undo_();
+
+            // 将光标移回原位
             if (Overwrite == m_cursorMode) {
-                auto cursor = this->textCursor();
-                // 设置光标选中后续与当前输入法输入的文本相同长度
-                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, text.size());
-                // 使用此光标信息插入将输入的文本替换选中的长度
-                insertSelectTextEx(cursor, text);
-            } else {
-                insertSelectTextEx(textCursor(), text);
+                auto cursor = textCursor();
+                cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor, m_preeditLengthBefore);
+                setTextCursor(cursor);
             }
         }
+        bool isPreedit = !e->preeditString().isEmpty();
+        if (isPreedit || !e->commitString().isEmpty()) {
+            const QString &text = isPreedit ? e->preeditString() : e->commitString();
 
-        m_isSelectAll = false;
+            //列编辑添加撤销重做
+            if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
+                insertColumnEditTextEx(text);
+            } else {
+                // 覆盖模式下输入法输入时，单独处理，模拟选中替换处理
+                if (Overwrite == m_cursorMode) {
+                    auto cursor = this->textCursor();
+                    // 设置光标选中后续与当前输入法输入的文本相同长度
+                    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, text.size());
+                    // 使用此光标信息插入将输入的文本替换选中的长度
+                    insertSelectTextEx(cursor, text);
+                } else {
+                    insertSelectTextEx(textCursor(), text);
+                }
+            }
+
+            m_isSelectAll = false;
+        }
+
+        m_isPreeditBefore = isPreedit;
+        m_preeditLengthBefore = e->preeditString().length();
+
+        // 更新缓存为最终光标矩形，解除屏蔽后对外返回的是正确坐标
+        m_cachedCursorRect = QPlainTextEdit::cursorRect();
+    }
+    // blocker 在此析构，解除信号屏蔽
+
+    // 关闭 query 屏蔽标志，后续输入法查询走默认实现拿到正确坐标
+    m_bInputMethodUpdating = false;
+    // 主动触发一次 microFocus 更新，让输入法拿到最终坐标
+    updateMicroFocus();
+}
+
+QVariant TextEdit::inputMethodQuery(Qt::InputMethodQuery query) const
+{
+    // 在 preedit 更新过程（undo 旧 preedit + 重新插入新 preedit）中，
+    // 光标会短暂处于撤销后的旧位置。此时若输入法（如搜狗候选首选项）
+    // 查询光标矩形，会拿到错误的旧坐标导致候选框左跳。
+    // 屏蔽期间统一返回缓存的正确坐标，避免中间态坐标外泄。
+    // 注意：ImMicroFocus 是 ImCursorRectangle 的废弃别名，两者值相同(0x2)，
+    // 故只需判断 ImCursorRectangle 即可同时覆盖两者。
+    if (m_bInputMethodUpdating && query == Qt::ImCursorRectangle) {
+        return QVariant(m_cachedCursorRect);
     }
 
-    m_isPreeditBefore = isPreedit;
-    m_preeditLengthBefore = e->preeditString().length();
-
+    return QPlainTextEdit::inputMethodQuery(query);
 }
 
 void TextEdit::mousePressEvent(QMouseEvent *e)
