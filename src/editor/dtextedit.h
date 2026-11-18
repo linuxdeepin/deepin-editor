@@ -578,6 +578,7 @@ protected:
     void dragMoveEvent(QDragMoveEvent *event) override;
     void dropEvent(QDropEvent *event) override;
     void inputMethodEvent(QInputMethodEvent *e) override;
+    QVariant inputMethodQuery(Qt::InputMethodQuery query) const override;
     void mousePressEvent(QMouseEvent *e) override;
     void mouseMoveEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
@@ -888,6 +889,11 @@ private:
     bool m_MidButtonPatse = false;      // 鼠标中键黏贴处理
     bool m_isPreeditBefore = false;     // 上一个输入法时间是否是 preedit
     int m_preeditLengthBefore = 0;
+
+    // preedit 更新过程中（undo 旧 preedit + 重新插入新 preedit）屏蔽中间态信号，
+    // 避免输入法查询到撤销后的旧坐标导致候选框左跳（搜狗候选首选项场景）
+    bool m_bInputMethodUpdating = false;
+    mutable QRect m_cachedCursorRect;   // 屏蔽期间对外返回的缓存光标矩形
 
     Qt::CaseSensitivity defaultCaseSensitive = Qt::CaseInsensitive; // 查找匹配时默认不区分
 };
