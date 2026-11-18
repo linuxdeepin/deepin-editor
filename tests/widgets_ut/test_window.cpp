@@ -736,11 +736,10 @@ TEST_F(WindowTest, AddTab_ReadOnlyFile_MarksTabReadOnly)
     EXPECT_TRUE(waitUntil([w]() { return !w->getFileLoading(); }));
 }
 
-TEST_F(WindowTest, AddTab_UnreadableFile_OpenFailsWithGenericError_Continues)
+TEST_F(WindowTest, AddTab_UnreadableFile_ShowsPermissionWarning_NoTabCreated)
 {
-    // Arrange: 无读权限文件。Qt 6.8 实测 EACCES 映射为 OpenError（非
-    // PermissionsError），走"仅告警继续"分支（PermissionsError 提示分支在
-    // 本 Qt 版本不可达，已记录到 session.skip_reason）
+    // Arrange: 无读权限文件。修复后任何 open 失败均提示权限不足并 return，
+    // 不创建标签页
     if (geteuid() == 0)
         GTEST_SKIP() << "root 用户不受读权限位约束，跳过";
     const QString path = createFile(QStringLiteral("secret.txt"));
@@ -753,10 +752,10 @@ TEST_F(WindowTest, AddTab_UnreadableFile_OpenFailsWithGenericError_Continues)
     m_win->addTab(path, true);
     QApplication::processEvents();
 
-    // Assert: 无权限提示（未走 PermissionsError 分支）且标签照常创建
-    EXPECT_EQ(m_iconMsgCalls, 0);
-    EXPECT_EQ(m_tabbar->count(), 1);
-    EXPECT_EQ(m_tabbar->currentName(), QString("secret.txt"));
+    // Assert: 权限提示已弹出，未创建标签
+    EXPECT_EQ(m_iconMsgCalls, 1);
+    EXPECT_TRUE(m_lastIconMsg.contains(QStringLiteral("permission")));
+    EXPECT_EQ(m_tabbar->count(), 0);
 }
 
 TEST_F(WindowTest, AddTabWithWrapper_RegistersAndShowsEditor)

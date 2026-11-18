@@ -717,14 +717,12 @@ void Window::addTab(const QString &filepath, bool activeTab)
             QFile testFile(filepath);
             if (testFile.open(QIODevice::ReadOnly)) {
                 testFile.close();
-            } else if (testFile.error() == QFileDevice::PermissionsError) {
+            } else {
                 qCWarning(appLog) << "No permission to read file:" << filepath << "error:" << testFile.errorString();
                 QWidget *const msgParent = m_editorWidget->currentWidget() ? m_editorWidget->currentWidget() : this;
                 DMessageManager::instance()->sendMessage(msgParent, QIcon(":/images/warning.svg"),
                                                          QString(tr("You do not have permission to open %1")).arg(filepath));
                 return;
-            } else {
-                qCWarning(appLog) << "Failed to open file:" << filepath << "error:" << testFile.errorString();
             }
         }
 
