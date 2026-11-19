@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -46,6 +46,10 @@ int ThemeListModel::rowCount(const QModelIndex &parent) const
 QVariant ThemeListModel::data(const QModelIndex &index, int role) const
 {
     const int r = index.row();
+
+    if (!index.isValid() || r < 0 || r >= m_themes.count()) {
+        return QVariant();
+    }
 
     const QString &name = m_themes.at(r).first;
     const QString &path = m_themes.at(r).second;

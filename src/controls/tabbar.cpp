@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -245,6 +245,10 @@ void Tabbar::closeRightTabs(const QString &filePath)
 
 void Tabbar::updateTab(int index, const QString &filePath, const QString &tabName)
 {
+    if (index < 0 || index >= m_tabPaths.count()) {
+        return;
+    }
+
     // 适配助记符 '&' 后设置文本
     setTabText(index, tabName);
     m_tabPaths[index] = filePath;
@@ -705,7 +709,9 @@ QSize Tabbar::tabSizeHint(int index) const
 
         //计算每个tab平均宽度 返回　100到160
         int aveargeWidth = 160;
-        aveargeWidth = total / DTabBar::count();
+        if (DTabBar::count() > 0) {
+            aveargeWidth = total / DTabBar::count();
+        }
 
         if (aveargeWidth >= 160) {
             aveargeWidth = 160;
@@ -791,6 +797,10 @@ void Tabbar::handleTabReleased(int index)
 void Tabbar::handleTabIsRemoved(int index)
 {
     //qDebug() << "handleTabIsRemoved" << index;
+    if (index < 0 || index >= m_tabPaths.count()) {
+        return;
+    }
+
     const QString filePath = m_tabPaths.at(index);
     Window *window = static_cast<Window *>(this->window());
     m_tabPaths.removeAt(index);
