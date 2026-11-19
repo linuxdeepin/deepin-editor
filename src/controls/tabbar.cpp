@@ -314,6 +314,12 @@ void Tabbar::updateTab(int index, const QString &filePath, const QString &tabNam
     qCDebug(appLog) << "Updating tab index:" << index
                    << "file:" << QFileInfo(filePath).fileName()
                    << "new name:" << tabName;
+
+    if (index < 0 || index >= m_tabPaths.count()) {
+        qCWarning(appLog) << "Invalid index for updateTab:" << index;
+        return;
+    }
+
     // 适配助记符 '&' 后设置文本
     setTabText(index, tabName);
     m_tabPaths[index] = filePath;
@@ -984,6 +990,12 @@ void Tabbar::handleTabReleased(int index)
 void Tabbar::handleTabIsRemoved(int index)
 {
     qCDebug(appLog) << "Enter handleTabIsRemoved, index:" << index;
+
+    if (index < 0 || index >= m_tabPaths.count()) {
+        qCWarning(appLog) << "Invalid index for handleTabIsRemoved:" << index;
+        return;
+    }
+
     const QString filePath = m_tabPaths.at(index);
     Window *window = static_cast<Window *>(this->window());
     m_tabPaths.removeAt(index);
