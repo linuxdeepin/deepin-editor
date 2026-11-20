@@ -4036,7 +4036,8 @@ void Window::slotLoadContentTheme(DGuiApplicationHelper::ColorType themeType)
         }
     }
 
-    QString qstrColor = palette().color(QPalette::Active, QPalette::Text).name();
+    QVariantMap themeMap = Utils::getThemeMapFromPath(m_themePath);
+    QString qstrColor = themeMap["text-styles"].toMap()["Normal"].toMap()["text-color"].toString();
 
     for (auto wrapper : m_wrappers) {
         wrapper->textEditor()->setEditPalette(qstrColor, qstrColor);
