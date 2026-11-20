@@ -5958,16 +5958,12 @@ void TextEdit::tellFindBarClose()
 void TextEdit::setEditPalette(const QString &activeColor, const QString &inactiveColor)
 {
     qCDebug(appLog) << "Set edit palette, activeColor:" << activeColor << "inactiveColor:" << inactiveColor;
-    // Not recommend manually setPalette()
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    Q_UNUSED(activeColor)
-    Q_UNUSED(inactiveColor)
-#else
+    // DTK6 下控件调色板由主题引擎管理，但 QPlainTextEdit 的文本色
+    // 需要显式设置才能在深/浅主题切换时正确生效，故仍需 setPalette()。
     QPalette pa = this->palette();
     pa.setColor(QPalette::Inactive, QPalette::Text, QColor(inactiveColor));
     pa.setColor(QPalette::Active, QPalette::Text, QColor(activeColor));
     setPalette(pa);
-#endif
     qCDebug(appLog) << "Set edit palette completed";
 }
 

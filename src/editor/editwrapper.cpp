@@ -1276,7 +1276,7 @@ void EditWrapper::OnThemeChangeSlot(QString theme)
     qCDebug(appLog) << "EditWrapper OnThemeChangeSlot, theme:" << theme;
     QVariantMap jsonMap = Utils::getThemeMapFromPath(theme);
     QString backgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
-    QString textColor = jsonMap["Normal"].toMap()["text-color"].toString();
+    QString textColor = jsonMap["text-styles"].toMap()["Normal"].toMap()["text-color"].toString();
 
     //设置底部栏
     QPalette palette = m_pBottomBar->palette();
@@ -1308,6 +1308,7 @@ void EditWrapper::OnThemeChangeSlot(QString theme)
     }
 
     m_pTextEdit->setTheme(theme);
+    m_pTextEdit->setEditPalette(textColor, textColor);
     qCDebug(appLog) << "EditWrapper OnThemeChangeSlot, m_pTextEdit->setTheme(theme)";
 
     // Markdown 渲染视图跟随主题（§4.7：themeMap 序列化为 CSS 变量注入渲染页）
