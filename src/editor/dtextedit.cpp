@@ -273,7 +273,7 @@ void TextEdit::insertColumnEditTextEx(QString text)
     for (int i = 0; i < m_altModSelections.size(); i++) {
         if (m_altModSelections[i].cursor.hasSelection()) deleteTextEx(m_altModSelections[i].cursor);
     }
-    QUndoCommand *pInsertStack = new InsertTextUndoCommand(m_altModSelections, text, this);
+    QUndoCommand *pInsertStack = new InsertTextUndoCommand(m_altModSelections, text, this, m_columnEditSessionId);
     m_pUndoStack->push(pInsertStack);
     ensureCursorVisible();
 }
@@ -6780,6 +6780,7 @@ void TextEdit::mousePressEvent(QMouseEvent *e)
         m_altStartTextCursor.clearSelection();
         this->setTextCursor(m_altStartTextCursor);
         m_altModSelections.clear();
+        m_columnEditSessionId++;
     }
     else
     {
@@ -6787,6 +6788,7 @@ void TextEdit::mousePressEvent(QMouseEvent *e)
         { // 右键,调用右键菜单时候不能清空
             m_bIsAltMod = false;
             m_altModSelections.clear();
+            m_columnEditSessionId++;
         }
     }
 
