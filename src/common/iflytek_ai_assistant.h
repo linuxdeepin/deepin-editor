@@ -63,6 +63,8 @@ private:
 
     CallStatus stopTtsDirectlyInternal() const;
 
+    QSharedPointer<QDBusInterface> ensureCopilot();
+
     static CallStatus copilotInstalled(const QSharedPointer<QDBusInterface> &copilot);
     static CallStatus isCopilotEnabled(const QSharedPointer<QDBusInterface> &copilot);
     static CallStatus launchCopilotChat(const QSharedPointer<QDBusInterface> &copilot);
