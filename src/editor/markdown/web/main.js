@@ -595,6 +595,28 @@ function trimCodeTrailingBlankLinesAttacher() {
 const remarkTrimCodeTrailingBlankLines =
     $remark("remarkTrimCodeTrailingBlankLines", () => trimCodeTrailingBlankLinesAttacher);
 
+// —— <br> HTML 标签转 hardbreak（parse 期）——
+// remark-parse 将内联 HTML（如 <br>）解析为 html 类型节点，Milkdown 的 htmlSchema.toDOM
+// 通过 span.textContent 将其渲染为字面文本而非换行。此处将值为 <br>（含 <br/>、<br />）
+// 的 html 节点转换为 mdast break 节点，由 hardbreakSchema 渲染为 <br> 元素实现换行。
+function transformBrToHardbreakAttacher() {
+    return (tree) => {
+        const walk = (node) => {
+            if (!node || !Array.isArray(node.children)) return;
+            for (let i = 0; i < node.children.length; i++) {
+                const child = node.children[i];
+                if (child.type === "html" && /^<br\s*\/?>$/i.test(child.value)) {
+                    node.children[i] = { type: "break" };
+                }
+                walk(child);
+            }
+        };
+        walk(tree);
+    };
+}
+const remarkTransformBrToHardbreak =
+    $remark("remarkTransformBrToHardbreak", () => transformBrToHardbreakAttacher);
+
 // 启动 Milkdown
 async function boot() {
     const rootEl = document.getElementById(ROOT_ID);
@@ -619,6 +641,8 @@ async function boot() {
         .use(mathPlugins)
         // 代码块末尾空白行修剪：见 trimCodeTrailingBlankLinesAttacher 注释
         .use(remarkTrimCodeTrailingBlankLines)
+        // <br> HTML 标签转 hardbreak：见 transformBrToHardbreakAttacher 注释
+        .use(remarkTransformBrToHardbreak)
         // 表格/代码块包裹结构的 NodeView（闪烁根治，见 nodeViews.js 头注）
         .use(tableView)
         .use(codeBlockView)
