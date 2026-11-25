@@ -39,9 +39,13 @@ configure_file(
 # Find the library
 find_package(PkgConfig REQUIRED)
 
-set(qt_required_components Gui Widgets DBus Concurrent PrintSupport Svg Xml WebEngineWidgets WebChannel OpenGLWidgets)
+# OpenGLWidgets 为 Qt6 独有模块；Qt5 中 QOpenGLWidget 属于 QtOpenGL 模块
+# （QOpenGLWidget 头文件名两代一致，仅 CMake 组件名不同）
+set(qt_required_components Gui Widgets DBus Concurrent PrintSupport Svg Xml WebEngineWidgets WebChannel)
 if (QT_DESIRED_VERSION MATCHES 6)
-    list(APPEND qt_required_components Core5Compat)
+    list(APPEND qt_required_components Core5Compat OpenGLWidgets)
+else()
+    list(APPEND qt_required_components OpenGL)
 endif()
 find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS ${qt_required_components})
 find_package(Dtk${DTK_VERSION_MAJOR} REQUIRED COMPONENTS Widget Core)
@@ -58,7 +62,6 @@ set(LINK_LIBS
     Qt${QT_VERSION_MAJOR}::DBus
     Qt${QT_VERSION_MAJOR}::WebEngineWidgets
     Qt${QT_VERSION_MAJOR}::WebChannel
-    Qt${QT_VERSION_MAJOR}::OpenGLWidgets
     Dtk${DTK_VERSION_MAJOR}::Widget
     Dtk${DTK_VERSION_MAJOR}::Core
     KF${KF_VERSION_MAJOR}::Codecs
@@ -66,8 +69,9 @@ set(LINK_LIBS
 )
 
 if (QT_DESIRED_VERSION MATCHES 6)
-    list(APPEND LINK_LIBS Qt${QT_DESIRED_VERSION}::Core5Compat)
+    list(APPEND LINK_LIBS Qt${QT_DESIRED_VERSION}::Core5Compat Qt${QT_DESIRED_VERSION}::OpenGLWidgets)
 else()
+    list(APPEND LINK_LIBS Qt${QT_DESIRED_VERSION}::OpenGL)
     include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 endif()
 
