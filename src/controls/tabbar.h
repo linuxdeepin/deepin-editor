@@ -61,6 +61,7 @@ signals:
     void closeTabs(const QStringList pathList);
 
 protected:
+    void paintTab(QPainter *painter, int index, const QStyleOptionTab &option) const override;
     QPixmap createDragPixmapFromTab(int index, const QStyleOptionTab &option, QPoint *hotspot) const;
     QMimeData *createMimeDataFromTab(int index, const QStyleOptionTab &option) const;
     void insertFromMimeDataOnDragEnter(int index, const QMimeData *source);

@@ -15,6 +15,12 @@
 #include <DPlatformWindowHandle>
 #include <DWindowManagerHelper>
 #include <QPixmap>
+#include <QBrush>
+#include <QLinearGradient>
+#include <QPainter>
+#include <QPalette>
+#include <QStyle>
+#include <QStyleOptionTab>
 #include <DFrame>
 #include <DGuiApplicationHelper>
 #include <QDebug>
@@ -460,6 +466,78 @@ void Tabbar::setDNDColor(const QString &startColor, const QString &endColor)
     m_dndStartColor = startColor;
     m_dndEndColor = endColor;
     qCDebug(appLog) << "Exit setDNDColor";
+}
+
+/**
+ * @brief 自定义标签页绘制，规避中英文混排时文字被逐段淡出的重影
+ *
+ * Chameleon 样式（dde-qt6integration）在“选中且显示关闭按钮”时，会给标签页文字设置
+ * ObjectBoundingMode 的线性渐变画刷，用于让文字靠近关闭按钮的部分淡出。Qt 绘制中英文
+ * 混排文本时会按字体/脚本拆成多个 glyph run 分别绘制，ObjectBoundingMode 的渐变会在
+ * 每个 run 内重新开始，导致每个 run 末尾（例如 "SubTR第一轮P1.txt" 中的 R、轮）被额外
+ * 淡出，看起来像中英文交界处多了一层虚化阴影。
+ *
+ * 这里把背景仍交给样式绘制（清空 text 即可跳过其文字画刷），文字改由本类用逻辑坐标的
+ * 连续渐变绘制一次，只保留靠近关闭按钮处的淡出效果。
+ */
+void Tabbar::paintTab(QPainter *painter, int index, const QStyleOptionTab &option) const
+{
+    const bool selected = option.state & QStyle::State_Selected;
+    if (!selected || !tabsClosable()) {
+        DTabBar::paintTab(painter, index, option);
+        return;
+    }
+
+    // 背景、圆角与选中态仍由样式绘制，仅把文字留空
+    QStyleOptionTab backgroundOption = option;
+    backgroundOption.text.clear();
+    DTabBar::paintTab(painter, index, backgroundOption);
+    if (option.text.isEmpty())
+        return;
+
+    // DTabBar 已将 rightButtonSize 清零，文字按整个标签页居中；样式对 pill 矩形左右对称
+    // 内缩，居中位置不变，因此这里的文字区域与样式绘制的位置一致
+    const QRect textRect = style()->subElementRect(QStyle::SE_TabBarTabText, &option, this)
+                               .adjusted(1, 0, 0, 0);
+
+    int alignment = property("_d_dtk_tabbar_alignment").toInt();
+    if (alignment == 0)
+        alignment = Qt::AlignCenter;
+    alignment |= Qt::TextShowMnemonic;
+    if (!style()->styleHint(QStyle::SH_UnderlineShortcut, &option, this))
+        alignment |= Qt::TextHideMnemonic;
+
+    QPalette palette = option.palette;
+    // 选中标签页的文字颜色由 setTabPalette() 设置在 HighlightedText 上
+    const QBrush textBrush = palette.brush(QPalette::HighlightedText);
+    const QColor textColor = textBrush.color();
+    const QRect textBounding = option.fontMetrics.boundingRect(textRect, alignment, option.text);
+
+    // 与 Chameleon 相同：文字接近关闭按钮时淡出
+    const int closeButtonWidth = style()->pixelMetric(QStyle::PM_TabCloseIndicatorWidth, &option, this);
+    const qreal textWidth = textBounding.width();
+    const qreal stop = textWidth > 0 ? (textRect.right() - closeButtonWidth - textBounding.left() - 5) / textWidth : 1.0;
+    const qreal offset = textWidth > 0 ? 5.0 / textWidth : 0.0;
+    // 拖动缩略图的绘制设备不是 widget，且没有关闭按钮，不需要淡出
+    const bool widgetPaint = dynamic_cast<const QWidget *>(painter->device()) != nullptr;
+
+    if (widgetPaint && stop > 0 && stop < 1) {
+        // 逻辑坐标的连续渐变：整段文字只解析一次，不会随 glyph run 重新开始
+        QLinearGradient gradient(textBounding.left(), 0, textBounding.right(), 0);
+        gradient.setColorAt(0.0, textColor);
+        gradient.setColorAt(qMax(0.0, stop - offset), textColor);
+        gradient.setColorAt(stop, QColor(textColor.red(), textColor.green(), textColor.blue(), 100));
+        if (textBounding.right() > textRect.right())
+            gradient.setColorAt(qBound(0.0, (textRect.right() - textBounding.left()) / textWidth, 1.0),
+                                Qt::transparent);
+        gradient.setColorAt(1.0, Qt::transparent);
+        palette.setBrush(QPalette::WindowText, QBrush(gradient));
+    } else {
+        palette.setBrush(QPalette::WindowText, textBrush);
+    }
+
+    style()->drawItemText(painter, textRect, alignment, palette,
+                          option.state & QStyle::State_Enabled, option.text, QPalette::WindowText);
 }
 
 QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option, QPoint *hotspot) const
