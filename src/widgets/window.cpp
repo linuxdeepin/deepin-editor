@@ -4585,6 +4585,8 @@ void Window::keyPressEvent(QKeyEvent *e)
         qCDebug(appLog) << "key press event press escape";
         emit pressEsc();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "displayshortcuts")) {
+        if (e->isAutoRepeat())
+            return;
         qCDebug(appLog) << "key press event display shortcuts";
         displayShortcuts();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "print")) {
