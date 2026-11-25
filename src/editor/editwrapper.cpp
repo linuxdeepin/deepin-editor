@@ -1292,6 +1292,14 @@ void EditWrapper::OnThemeChangeSlot(QString theme)
         m_pReadPage->setPalette(readPalette);
     }
 
+    //设置 MarkdownView widget 背景色，防止 reparent 时 Show 事件绘制白色表面
+    if (m_pMarkdownView) {
+        QPalette mdPalette = m_pMarkdownView->palette();
+        mdPalette.setColor(QPalette::Window, backgroundColor);
+        m_pMarkdownView->setAutoFillBackground(true);
+        m_pMarkdownView->setPalette(mdPalette);
+    }
+
     //设置编辑器
     if (m_pSyntaxHighlighter) {
         qCDebug(appLog) << "EditWrapper OnThemeChangeSlot, m_pSyntaxHighlighter is not nullptr";

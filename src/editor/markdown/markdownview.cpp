@@ -188,8 +188,13 @@ void MarkdownView::applyTheme(const QVariantMap &themeMap)
     // （无需等 JS bridge 异步注入 CSS 变量，消除切换瞬间白色闪烁）
     QColor bgColor = QColor(themeMap.value(QStringLiteral("editor-colors"))
                             .toMap().value(QStringLiteral("background-color")).toString());
-    if (bgColor.isValid())
+    if (bgColor.isValid()) {
         page()->setBackgroundColor(bgColor);
+        QPalette p = palette();
+        p.setColor(QPalette::Window, bgColor);
+        setAutoFillBackground(true);
+        setPalette(p);
+    }
     m_lastThemeJson = json;
     m_lastThemeDark = dark;
     m_hasTheme = true;
