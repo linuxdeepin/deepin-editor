@@ -150,6 +150,7 @@ void DeleteBackAltCommand::undo()
         qCDebug(appLog) << "m_edit is not null";
         m_edit->restoreColumnEditSelection(m_columnEditSelections);
         m_edit->setTextCursor(m_columnEditSelections.last().cursor);
+        m_edit->renderAllSelections();
     }
     qCDebug(appLog) << "DeleteBackAltCommand undo end";
 }
@@ -172,6 +173,7 @@ void DeleteBackAltCommand::redo()
         qCDebug(appLog) << "m_edit is not null";
         m_edit->restoreColumnEditSelection(m_columnEditSelections);
         m_edit->setTextCursor(m_columnEditSelections.last().cursor);
+        m_edit->renderAllSelections();
     }
     qCDebug(appLog) << "DeleteBackAltCommand redo end";
 }
