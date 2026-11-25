@@ -710,6 +710,16 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
         }
     }
 
+    // Extension fallback: when content-based detection (MatchContent) does not
+    // identify a supported type, fall back to checking the file name extension.
+    const QMimeType extMime = QMimeDatabase().mimeTypeForFile(filepath, QMimeDatabase::MatchMode::MatchExtension);
+    const QString extMimeType = extMime.name();
+    if (!extMime.isDefault() &&
+        (extMimeType.startsWith("text/") || SupportedTextMimeTypes.contains(extMimeType))) {
+        qCDebug(appLog) << "extension-based mime type supported:" << extMimeType;
+        return true;
+    }
+
     qCDebug(appLog) << "mimeType does not contain textMimeTypes";
     return false;
 }
