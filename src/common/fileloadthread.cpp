@@ -93,11 +93,11 @@ void FileLoadThread::run()
             return;
         }
 
-        // NUL 字节检测与转义：将每个 \x00 替换为三个 ASCII 字符 \00
+        // NUL 字节检测：记录是否存在 NUL 字节，转义在编码检测和转换之后进行，
+        // 避免破坏 UTF-16 等多字节编码的字节对齐结构
         bool hasNul = indata.contains('\x00');
         if (hasNul) {
-            qCDebug(appLog) << "NUL bytes detected in file, escaping to \\00";
-            indata.replace('\x00', "\\00");
+            qCDebug(appLog) << "NUL bytes detected in file, will escape after encoding handling";
         }
 
         if (!m_encodeHint.isEmpty()) {
@@ -119,11 +119,18 @@ void FileLoadThread::run()
         qCDebug(appLog) << "Final encoding detected:" << textEncode;
         if (textEncode.contains("ASCII", Qt::CaseInsensitive) || textEncode.contains("UTF-8", Qt::CaseInsensitive)) {
             qCDebug(appLog) << "Using original encoding, no conversion needed";
+            if (hasNul) {
+                indata.replace('\x00', "\\00");
+            }
             emit sigLoadFinished(encode, indata, false, hasNul);
         } else {
             qCDebug(appLog) << "Converting from" << textEncode << "to UTF-8";
             QByteArray outData;
             DetectCode::ChangeFileEncodingFormat(indata, outData, textEncode, QString("UTF-8"));
+            hasNul = outData.contains('\x00');
+            if (hasNul) {
+                outData.replace('\x00', "\\00");
+            }
             emit sigLoadFinished(encode, outData, false, hasNul);
             qCDebug(appLog) << "Encoding conversion completed, output size:" << outData.size();
         }

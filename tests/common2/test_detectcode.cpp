@@ -6,9 +6,10 @@
  *
  * 分支清单（来源：detectcode.cpp 全部导出函数）
  * GetFileEncodingFormat:
- *   G1 中文内容分支（附加中文字符+尾部重试）  G2 非中文低置信重试(chop)
- *   G3 需 uchardet 兜底                       G4 ASCII → 默认编码
- *   G5 非 ASCII → icu + selectCoding          G6 结果空/ASCII → 默认编码
+ *   G0 文件头带 BOM → 直接返回 BOM 编码  G1 中文内容分支（附加中文字符+尾部重试）
+ *   G2 非中文低置信重试(chop)             G3 需 uchardet 兜底
+ *   G4 ASCII → 默认编码                   G5 非 ASCII → icu + selectCoding
+ *   G6 结果空/ASCII → 默认编码
  * UchardetCode: U1 文件打开失败 U2 正常识别 U3 MAC-CENTRALEUROPE 纠正
  *   U4 MAC-CYRILLIC 纠正 U5 WINDOWS-→CP 纠正 U6 handle_data 非零 continue
  * icuDetectTextEncoding: I1 打开失败 I2 正常识别 I3 超 1MB 读上限 break
@@ -40,6 +41,7 @@
 #include <QTemporaryDir>
 #include <QFile>
 #include <QLocale>
+#include <QTextCodec>
 
 #include <cstring>
 
@@ -681,6 +683,71 @@ TEST_F(DetectCodeTest, GetFileEncodingFormat_MissingFile_ReturnsDefaultEncoding)
     // Assert
     EXPECT_EQ(ret, Config::instance()->defaultEncoding().toUpper());
     EXPECT_FALSE(ret.isEmpty());
+}
+
+// ---------------- GetFileEncodingFormat：BOM 直判 ----------------
+
+// PMS: https://pms.uniontech.com/bug-view-383919.html
+// 场景：UTF-16LE + BOM 的文件中 ASCII 码元的高位字节为 NUL，统计检测置信度不足，
+// 中文系统下被 GB18030 兜底规则抢占而误判为 GB18030。BOM 已声明编码，须直接采用
+TEST_F(DetectCodeTest, GetFileEncodingFormat_Bom_EmitsDeclaredEncodingWithoutStatisticalDetection)
+{
+    // Arrange: G0 四种 BOM，正文均为 "ab" 的对应编码（均含 NUL 字节）
+    struct BomCase {
+        QByteArray bom;
+        QByteArray body;
+        QByteArray expected;
+    };
+    const BomCase cases[] = {
+        {QByteArray::fromHex("FFFE"), QByteArray::fromHex("61006200"), QByteArrayLiteral("UTF-16LE")},
+        {QByteArray::fromHex("FEFF"), QByteArray::fromHex("00610062"), QByteArrayLiteral("UTF-16BE")},
+        {QByteArray::fromHex("FFFE0000"), QByteArray::fromHex("6100000062000000"), QByteArrayLiteral("UTF-32LE")},
+        {QByteArray::fromHex("0000FEFF"), QByteArray::fromHex("0000006100000062"), QByteArrayLiteral("UTF-32BE")},
+    };
+    stub.set_lamda(&DetectCode::ChartDet_DetectingTextCoding,
+                   [this](const char *, QString &, float &) -> int {
+                       ++chardetCalls;
+                       return CHARDET_SUCCESS;
+                   });
+    stub.set_lamda(&DetectCode::UchardetCode,
+                   [this](QString) -> QByteArray {
+                       ++uchardetCalls;
+                       return QByteArrayLiteral("GB18030");
+                   });
+    stub.set_lamda(&DetectCode::icuDetectTextEncoding,
+                   [this](const QString &, QByteArrayList &list) {
+                       ++icuOuterCalls;
+                       list << QByteArrayLiteral("GB18030");
+                   });
+
+    for (const BomCase &c : cases) {
+        SCOPED_TRACE(c.expected.constData());
+        // Act
+        const QByteArray ret = DetectCode::GetFileEncodingFormat(QString(), c.bom + c.body);
+        // Assert: UTF-32LE 的 BOM 以 UTF-16LE 的 BOM 开头，须先匹配更长的 BOM
+        EXPECT_EQ(ret, c.expected);
+    }
+    // Assert: 带 BOM 时不进入统计检测
+    EXPECT_EQ(chardetCalls, 0);
+    EXPECT_EQ(uchardetCalls, 0);
+    EXPECT_EQ(icuOuterCalls, 0);
+}
+
+TEST_F(DetectCodeTest, GetFileEncodingFormat_Utf16LeBomWithNul_NotDetectedAsGb18030)
+{
+    // Arrange: 真实探测（无 chardet/uchardet/icu stub）；固定中文系统并开启"提高 GB18030 识别率"，
+    // 即统计检测误判为 GB18030 的触发条件
+    installConfigStubs(true, false, QByteArrayLiteral("UTF-8"));
+    QTextCodec *codec = QTextCodec::codecForName("UTF-16LE");
+    ASSERT_NE(codec, nullptr);
+    const QString text = QStringLiteral("--------- beginning of events\n09-16 07:38:42.635   748   748 I auditd  : Multiple same specifications for nfc_settings.\n");
+    const QByteArray raw = QByteArray::fromHex("FFFE") + codec->fromUnicode(text);
+    const QString path = writeTempFile(QStringLiteral("gf_u16le_bom.txt"), raw);
+    ASSERT_FALSE(path.isEmpty());
+    // Act
+    const QByteArray ret = DetectCode::GetFileEncodingFormat(path, raw);
+    // Assert
+    EXPECT_EQ(ret, QByteArrayLiteral("UTF-16LE"));
 }
 
 // ---------------- ChangeFileEncodingFormat ----------------
