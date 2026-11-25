@@ -235,7 +235,10 @@ function buildAnchorMap() {
     if (blocks.length === children.length) {
         lastAnchorMode = "zip";
         for (let i = 0; i < children.length; i++) {
-            anchors.push({ sourceLine: blocks[i].startLine, previewY: docY(children[i]) });
+            const child = children[i];
+            const tableEl = child.querySelector('.table-wrapper table');
+            const y = tableEl ? docY(tableEl) : docY(child);
+            anchors.push({ sourceLine: blocks[i].startLine, previewY: y });
         }
     } else {
         const astHeadings = blocks.filter((b) => b.type === "heading");
