@@ -2588,7 +2588,6 @@ void Window::displayShortcuts()
 #endif
 
     if (screen) {
-        pos = screen->geometry().center();
         qCDebug(appLog) << "Screen center position: " << pos;
     }
 
