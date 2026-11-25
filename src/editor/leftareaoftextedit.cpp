@@ -61,7 +61,7 @@ int LeftAreaTextEdit::lineNumberAreaWidth()
     }
 
     qCDebug(appLog) << "LeftAreaTextEdit lineNumberAreaWidth return";
-    return 13 + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits + 40;
+    return m_pTextEdit->lineNumberAreaWidth();
 }
 
 
