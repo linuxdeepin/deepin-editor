@@ -1,3 +1,9 @@
+deepin-editor (6.6.10) unstable; urgency=medium
+
+  * fix: detect BOM before encoding detection, escape NUL after
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Wed, 25 Nov 2026 14:42:15 +0800
+
 deepin-editor (6.6.9) unstable; urgency=medium
 
   * fix: center search result line in read-only markdown view
