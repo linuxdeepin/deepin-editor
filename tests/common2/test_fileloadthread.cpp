@@ -15,6 +15,9 @@
  * B8 : 大文件头含 NUL                     → 头部 \x00 转义后发射 sigPreProcess
  * B9 : 大文件 GB18030 hint                → 头部先转码 UTF-8 再发射 sigPreProcess
  * B10: start() 线程方式运行               → 跨线程信号正常送达
+ * B11: UTF-16LE + BOM（真实探测）         → 按 BOM 判为 UTF-16LE，转 UTF-8 后发射，hasNul=false
+ * B12: UTF-16LE + BOM 且含真实 NUL        → 先转码再把 U+0000 转义为 "\\00"，hasNul=true
+ * B13: UTF-16BE + BOM（真实探测）         → 按 BOM 判为 UTF-16BE，转 UTF-8 后发射
  *
  * 用例映射：
  * - Run_FileMissing_EmitsLoadFinishedError            → B1
@@ -27,9 +30,13 @@
  * - Run_LargeFileNulInHead_EscapesHeadNulBytes        → B8
  * - Run_LargeGb18030HintFile_ConvertsHeadToUtf8       → B9
  * - Start_FromWorkerThread_EmitsLoadFinished          → B10
+ * - Run_Utf16LeBomFile_ConvertsToUtf8Content          → B11
+ * - Run_Utf16LeBomWithRealNul_ConvertsThenEscapesNul  → B12
+ * - Run_Utf16BeBomFile_ConvertsToUtf8Content          → B13
  *
  * 隔离：全部文件经由 QTemporaryDir 创建；编码探测 DetectCode::GetFileEncodingFormat
  * 默认 stub 为固定 "UTF-8"（探测逻辑由 DetectCode 自身套件覆盖），hint 用例不触发探测。
+ * B11~B13 例外：恢复真实探测，覆盖"BOM 直判 → 转码 → NUL 处理"的完整链路。
  */
 
 #include <gtest/gtest.h>
@@ -45,6 +52,7 @@
 #include <QSignalSpy>
 #include <QPointer>
 #include <QTest>
+#include <QTextCodec>
 
 #include <memory>
 
@@ -402,6 +410,87 @@ TEST_F(FileLoadThreadTest, Start_FromWorkerThread_EmitsLoadFinished)
     QCoreApplication::processEvents();
     QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
     EXPECT_TRUE(guard.isNull()); // deleteLater 已处理
+}
+
+// B11
+// PMS: https://pms.uniontech.com/bug-view-383919.html
+// 场景：UTF-16LE + BOM 的日志文件（ASCII 码元的高位字节为 NUL）打开后乱码。
+// 探测须按 BOM 判为 UTF-16LE；转码后高位 NUL 随之消失，不进入 NUL 预览模式
+TEST_F(FileLoadThreadTest, Run_Utf16LeBomFile_ConvertsToUtf8Content)
+{
+    // Arrange: 恢复真实探测（BOM 直判，不依赖系统语言与配置）
+    stub.clear();
+    QTextCodec *codec = QTextCodec::codecForName("UTF-16LE");
+    ASSERT_NE(codec, nullptr);
+    const QString text = QStringLiteral("--------- beginning of crash\n09-16 07:38:42.631   751   751 F libc    : Fatal signal 6 (SIGABRT), code -1 (SI_QUEUE) in tid 751 (init), pid 751 (init)\n");
+    const QString path = writeTempFile(QStringLiteral("u16le_bom.txt"), QByteArray::fromHex("FFFE") + codec->fromUnicode(text));
+    ASSERT_FALSE(path.isEmpty());
+    FileLoadThread *t = new FileLoadThread(path);
+    QPointer<FileLoadThread> guard(t);
+    QSignalSpy spy(t, &FileLoadThread::sigLoadFinished);
+    // Act
+    runSync(t);
+    // Assert: 源文件的 BOM 转为 UTF-8 BOM 保留在内容头部，其余为正文
+    EXPECT_EQ(spy.count(), 1);
+    if (spy.count() == 1) {
+        EXPECT_EQ(spy.at(0).at(0).toByteArray(), QByteArrayLiteral("UTF-16LE"));
+        EXPECT_EQ(spy.at(0).at(1).toByteArray(), QByteArray::fromHex("EFBBBF") + text.toUtf8());
+        EXPECT_FALSE(spy.at(0).at(2).toBool());
+        EXPECT_FALSE(spy.at(0).at(3).toBool());
+    }
+    EXPECT_TRUE(guard.isNull());
+}
+
+// B12
+TEST_F(FileLoadThreadTest, Run_Utf16LeBomWithRealNul_ConvertsThenEscapesNul)
+{
+    // Arrange: UTF-16LE + BOM，正文含真实的 U+0000（码元 00 00）
+    stub.clear();
+    QTextCodec *codec = QTextCodec::codecForName("UTF-16LE");
+    ASSERT_NE(codec, nullptr);
+    const QString text = QStringLiteral("a") + QChar(QChar::Null) + QStringLiteral("b");
+    const QString path = writeTempFile(QStringLiteral("u16le_bom_nul.txt"), QByteArray::fromHex("FFFE") + codec->fromUnicode(text));
+    ASSERT_FALSE(path.isEmpty());
+    FileLoadThread *t = new FileLoadThread(path);
+    QPointer<FileLoadThread> guard(t);
+    QSignalSpy spy(t, &FileLoadThread::sigLoadFinished);
+    // Act
+    runSync(t);
+    // Assert: 先转码，再把转码后 UTF-8 中的 NUL 转义为 "\\00"，hasNul 置位
+    EXPECT_EQ(spy.count(), 1);
+    if (spy.count() == 1) {
+        EXPECT_EQ(spy.at(0).at(0).toByteArray(), QByteArrayLiteral("UTF-16LE"));
+        EXPECT_EQ(spy.at(0).at(1).toByteArray(), QByteArray::fromHex("EFBBBF") + QByteArrayLiteral("a\\00b"));
+        EXPECT_FALSE(spy.at(0).at(2).toBool());
+        EXPECT_TRUE(spy.at(0).at(3).toBool());
+    }
+    EXPECT_TRUE(guard.isNull());
+}
+
+// B13
+TEST_F(FileLoadThreadTest, Run_Utf16BeBomFile_ConvertsToUtf8Content)
+{
+    // Arrange: UTF-16BE + BOM
+    stub.clear();
+    QTextCodec *codec = QTextCodec::codecForName("UTF-16BE");
+    ASSERT_NE(codec, nullptr);
+    const QString text = QStringLiteral("--------- beginning of crash\n");
+    const QString path = writeTempFile(QStringLiteral("u16be_bom.txt"), QByteArray::fromHex("FEFF") + codec->fromUnicode(text));
+    ASSERT_FALSE(path.isEmpty());
+    FileLoadThread *t = new FileLoadThread(path);
+    QPointer<FileLoadThread> guard(t);
+    QSignalSpy spy(t, &FileLoadThread::sigLoadFinished);
+    // Act
+    runSync(t);
+    // Assert
+    EXPECT_EQ(spy.count(), 1);
+    if (spy.count() == 1) {
+        EXPECT_EQ(spy.at(0).at(0).toByteArray(), QByteArrayLiteral("UTF-16BE"));
+        EXPECT_EQ(spy.at(0).at(1).toByteArray(), QByteArray::fromHex("EFBBBF") + text.toUtf8());
+        EXPECT_FALSE(spy.at(0).at(2).toBool());
+        EXPECT_FALSE(spy.at(0).at(3).toBool());
+    }
+    EXPECT_TRUE(guard.isNull());
 }
 
 // setEncodeHint：未显式给出 getter，经由 B5/B6 的行为断言覆盖（见上方用例）

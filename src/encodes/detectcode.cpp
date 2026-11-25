@@ -14,6 +14,7 @@
 #include <QRegularExpression>
 
 #include <stdio.h>
+#include <algorithm>
 
 #define DISABLE_TEXTCODEC
 
@@ -148,6 +149,30 @@ enum MibEncoding {
 DetectCode::DetectCode() {}
 
 /**
+ * @brief 根据文件头内容 \a content 的 BOM 取得字符编码格式
+ * @param content   文件头内容
+ * @return BOM 对应的字符编码格式，文件头不带 BOM 时返回空 QByteArray
+ *
+ * @note UTF-32LE 的 BOM 以 UTF-16LE 的 BOM（FF FE）开头，须先比较更长的 BOM，
+ *       因此按 BOM 长度从长到短匹配 gs_byteOrderMark。
+ */
+static QByteArray bomEncoding(const QByteArray &content)
+{
+    QList<QByteArray> boms = gs_byteOrderMark.values();
+    std::sort(boms.begin(), boms.end(), [](const QByteArray &left, const QByteArray &right) {
+        return left.size() > right.size();
+    });
+
+    for (const QByteArray &bom : boms) {
+        if (content.startsWith(bom)) {
+            return gs_byteOrderMark.key(bom).toUtf8();
+        }
+    }
+
+    return QByteArray();
+}
+
+/**
  * @brief 根据文件头内容 \a content 取得文件 \a filepath 字符编码格式
  * @param filepath  待获取字符编码文件
  * @param content   文件头内容
@@ -159,10 +184,19 @@ DetectCode::DetectCode() {}
 QByteArray DetectCode::GetFileEncodingFormat(QString filepath, QByteArray content)
 {
     qCDebug(appLog) << "Enter GetFileEncodingFormat";
+
+    // 文件头带 BOM 时编码已经确定，直接采用，不进入统计检测。
+    // 统计检测对含 NUL 的 UTF-16/UTF-32 文件并不可靠：libchardet 以 C 字符串读取，在首个 NUL 处截断，
+    // 置信度随之偏低，中文系统下剩余候选会被 GB18030 兜底规则抢占，UTF-16 文件因此被误判为 GB18030
+    QByteArray detectRet = bomEncoding(content);
+    if (!detectRet.isEmpty()) {
+        qCDebug(appLog) << "Encoding declared by BOM:" << detectRet;
+        return detectRet.toUpper();
+    }
+
     QString charDetectedResult;
     QByteArray ucharDetectdRet;
     QByteArrayList icuDetectRetList;
-    QByteArray detectRet;
     float chardetconfidence = 0.0f;
 
     /* chardet识别编码 */
