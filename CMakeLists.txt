@@ -37,8 +37,18 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 include(translation-generate)
 
 # Find Qt version
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
-message("   >>> Found Qt version: ${QT_VERSION_MAJOR}")
+# 不能仅凭"存在 Qt6"就选择 Qt6：mips64el 源没有 Qt6WebEngine 包，但其它依赖
+# （如 polkit-qt6）可能把 qt6-base-dev/qmake6 带进构建环境，形成"部分 Qt6"。
+# 只有当应用必需的组件集（以 WebEngineWidgets 为代表）在 Qt6 下齐全时才选
+# Qt6，否则回退 Qt5（QOpenGLWidget 头文件两代一致，代码可双栈编译）。
+find_package(Qt6 QUIET COMPONENTS Core WebEngineWidgets)
+if (Qt6_FOUND)
+    set(QT_VERSION_MAJOR 6)
+    message("   >>> Found Qt version: 6 (full stack with WebEngineWidgets)")
+else()
+    find_package(QT NAMES Qt5 REQUIRED COMPONENTS Core)
+    message("   >>> Found Qt version: ${QT_VERSION_MAJOR} (Qt6 stack incomplete, falling back)")
+endif()
 set(QT_DESIRED_VERSION ${QT_VERSION_MAJOR})
 
 if (QT_VERSION_MAJOR MATCHES 6)

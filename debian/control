@@ -18,7 +18,7 @@ Build-Depends:
  libdtk6gui-dev [!mipsel !mips64el] | libdtkgui-dev,
  libdtk6core-dev [!mipsel !mips64el] | libdtkcore-dev,
  libdtk6declarative-dev [!mipsel !mips64el] | libdtkdeclarative-dev,
- libpolkit-qt6-1-dev,
+ libpolkit-qt6-1-dev [!mipsel !mips64el] | libpolkit-qt5-1-dev,
  libkf6syntaxhighlighting-dev [!mipsel !mips64el] | libkf5syntaxhighlighting-dev,
  libkf6codecs-dev [!mipsel !mips64el] | libkf5codecs-dev,
  libgtest-dev,
