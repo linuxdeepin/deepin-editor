@@ -46,6 +46,15 @@
 // - onTabDrapStart(private)        → OnTabDragStart_DragBegin_SavesOldPaths
 // - resizeEvent                    → ResizeEvent_WrappedTooltip_StripsNewlines
 // - dropEvent                      → DropEvent_WithDragPixmap_PlaysAnimation（sm_pDragPixmap 静态成员直控）
+// - paintTab(protected)            → PaintTab_SelectedWithCloseButton_UsesContinuousLogicalGradient /
+//                                    PaintTab_ShortText_UsesSolidTextBrush /
+//                                    PaintTab_TextWiderThanLabelRect_AddsTransparentOverflowStop /
+//                                    PaintTab_SelectedEmptyText_SkipsLabelDrawing /
+//                                    PaintTab_NoCloseButton_DelegatesToStyle /
+//                                    PaintTab_NonSelected_DelegatesToStyle /
+//                                    PaintTab_NonWidgetDevice_UsesSolidTextBrush /
+//                                    PaintTab_MissingAlignmentProperty_UsesCenterAlignment /
+//                                    PaintTab_RealStyle_DrawsLabelPixels
 // - createDragPixmapFromTab(protected) → CreateDragPixmap_Composite_Composites（真实 EditWrapper）
 // - createMimeDataFromTab(protected)   → CreateMimeData_WrapperMissing_ReturnsNull /
 //                                        CreateMimeData_ValidWrapper_CarriesTabPayload
@@ -77,6 +86,14 @@
 // - insertFromMimeDataOnDragEnter B20: source 空 / wrapper loading / wrapper 空 / 全路径
 // - dropEvent B21: CopyAction+format+sm_pDragPixmap → 动画      → DropEvent_WithDragPixmap_...
 // - resizeEvent B22: nFontWidth>=w → 去 \n 重排                 → ResizeEvent_WrappedTooltip_StripsNewlines
+// - paintTab B23: !selected || !tabsClosable → 基类              → PaintTab_NonSelected_DelegatesToStyle /
+//                                                                PaintTab_NoCloseButton_DelegatesToStyle
+// - paintTab B24: option.text 为空 → 仅画背景后返回              → PaintTab_SelectedEmptyText_SkipsLabelDrawing
+// - paintTab B25: widget 设备 + 0<stop<1 → 逻辑坐标连续渐变     → PaintTab_...ContinuousLogicalGradient
+// - paintTab B26: stop 越界 / 非 widget 设备 → 实色画刷          → PaintTab_ShortText_UsesSolidTextBrush /
+//                                                                PaintTab_NonWidgetDevice_UsesSolidTextBrush
+// - paintTab B27: textBounding 超出 textRect → 额外透明 stop     → PaintTab_TextWiderThanLabelRect_...
+// - paintTab B28: 对齐属性缺失 → AlignCenter 兜底                → PaintTab_MissingAlignmentProperty_UsesCenterAlignment
 //
 // 最小清单完成情况：
 // | 1 | 每个方法 ≥1 用例 | 完成 |
@@ -98,6 +115,13 @@
 #include <gtest/gtest.h>
 
 #include <QApplication>
+#include <QBrush>
+#include <QLinearGradient>
+#include <QList>
+#include <QPainter>
+#include <QPixmap>
+#include <QProxyStyle>
+#include <QStyleOptionTab>
 #include <DPlatformWindowHandle>
 #include <DRecentManager>
 #include <DWindowManagerHelper>
@@ -1629,5 +1653,371 @@ INSTANTIATE_TEST_SUITE_P(
     ::testing::Values(
         DragPixmapSingleTabCase{ true, false },    // wayland：不最小化（97737 回归点）
         DragPixmapSingleTabCase{ false, true }));  // 非 wayland：showMinimized
+
+// ---- paintTab ----
+
+// paintTab 的分支通过记录型样式验证：标签页背景绘制被短路，drawItemText 的
+// 调色板/矩形/文本被截获，从而在不依赖具体主题与字体渲染的前提下断言绘制分支。
+struct PaintTextRecord {
+    QRect rect;
+    int flags = 0;
+    QPalette palette;
+    bool enabled = false;
+    QString text;
+    QPalette::ColorRole role = QPalette::NoRole;
+};
+
+class PaintTabRecordingStyle : public QProxyStyle {
+public:
+    void drawControl(ControlElement element, const QStyleOption *option,
+                     QPainter *painter, const QWidget *widget) const override
+    {
+        if (element == CE_TabBarTab) {
+            ++tabDrawCount;
+            return;
+        }
+        QProxyStyle::drawControl(element, option, painter, widget);
+    }
+
+    void drawItemText(QPainter *painter, const QRect &rect, int flags,
+                      const QPalette &palette, bool enabled, const QString &text,
+                      QPalette::ColorRole role) const override
+    {
+        Q_UNUSED(painter)
+        textDraws.append(PaintTextRecord{rect, flags, palette, enabled, text, role});
+    }
+
+    mutable int tabDrawCount = 0;
+    mutable QList<PaintTextRecord> textDraws;
+};
+
+// 测试结束前恢复控件原样式，避免栈上的记录样式先于控件析构
+class ScopedWidgetStyle {
+public:
+    ScopedWidgetStyle(QWidget *widget, QStyle *style)
+        : m_widget(widget), m_oldStyle(widget->style())
+    {
+        m_widget->setStyle(style);
+    }
+    ~ScopedWidgetStyle() { m_widget->setStyle(m_oldStyle); }
+
+private:
+    QWidget *m_widget;
+    QStyle *m_oldStyle;
+};
+
+// 在真实 paintEvent 中调用 paintTab，使 painter->device() 为 QWidget
+// （paintTab 依据绘制设备类型决定是否启用关闭按钮渐变）
+class PaintDeviceProbe : public QWidget {
+public:
+    Tabbar *bar = nullptr;
+    const QStyleOptionTab *option = nullptr;
+    PaintTabRecordingStyle *recordingStyle = nullptr;
+
+protected:
+    void paintEvent(QPaintEvent *) override
+    {
+        if (!bar || !option)
+            return;
+        if (recordingStyle) {
+            recordingStyle->tabDrawCount = 0;
+            recordingStyle->textDraws.clear();
+        }
+        QPainter painter(this);
+        bar->paintTab(&painter, 0, *option);
+    }
+};
+
+QStyleOptionTab makePaintTabOption(Tabbar *bar, const QRect &rect, QStyle::State state,
+                                   const QString &text)
+{
+    QStyleOptionTab option;
+    option.rect = rect;
+    option.state = state;
+    option.text = text;
+    option.fontMetrics = bar->fontMetrics();
+    option.palette = bar->palette();
+    option.shape = QTabBar::RoundedNorth;
+    option.position = QStyleOptionTab::OnlyOneTab;
+    option.rightButtonSize = QSize();   // DTabBar::paintEvent 对进入 paintTab 的 option 清零
+    return option;
+}
+
+void paintTabWithWidgetDevice(Tabbar *bar, const QStyleOptionTab &option,
+                              PaintTabRecordingStyle *recordingStyle)
+{
+    PaintDeviceProbe probe;
+    probe.bar = bar;
+    probe.option = &option;
+    probe.recordingStyle = recordingStyle;
+    probe.resize(option.rect.size());
+    QImage target(probe.size(), QImage::Format_ARGB32_Premultiplied);
+    target.fill(Qt::transparent);
+    probe.render(&target);
+}
+
+const QBrush recordedLabelBrush(const PaintTextRecord &record)
+{
+    return record.palette.brush(QPalette::WindowText);
+}
+
+const PaintTextRecord *firstNonEmptyTextDraw(const PaintTabRecordingStyle &style)
+{
+    for (const PaintTextRecord &record : style.textDraws) {
+        if (!record.text.isEmpty())
+            return &record;
+    }
+    return nullptr;
+}
+
+int paintTabAlignment(Tabbar *bar, const QStyleOptionTab &option)
+{
+    int alignment = bar->property("_d_dtk_tabbar_alignment").toInt();
+    if (alignment == 0)
+        alignment = Qt::AlignCenter;
+    alignment |= Qt::TextShowMnemonic;
+    if (!bar->style()->styleHint(QStyle::SH_UnderlineShortcut, &option, bar))
+        alignment |= Qt::TextHideMnemonic;
+    return alignment;
+}
+
+TEST_F(TabbarTest, PaintTab_SelectedWithCloseButton_UsesContinuousLogicalGradient)
+{
+    // Arrange：记录型样式 + 真实 paintEvent（painter 设备为 QWidget）
+    PaintTabRecordingStyle recordingStyle;
+    ScopedWidgetStyle styleGuard(bar, &recordingStyle);
+
+    // 文本远宽于标签页，确保触发关闭按钮淡出分支
+    const QString text = QString::fromUtf8("SubTR第一轮P1.txtSubTR第一轮P1.txt");
+    const QRect tabRect(0, 0, 160, 40);
+    QStyleOptionTab option = makePaintTabOption(
+        bar, tabRect, QStyle::State_Enabled | QStyle::State_Selected, text);
+
+    const int alignment = paintTabAlignment(bar, option);
+    const QRect textRect = bar->style()->subElementRect(QStyle::SE_TabBarTabText, &option, bar)
+                               .adjusted(1, 0, 0, 0);
+    const QRect textBounding = option.fontMetrics.boundingRect(textRect, alignment, text);
+    const int closeWidth = bar->style()->pixelMetric(QStyle::PM_TabCloseIndicatorWidth, &option, bar);
+    const qreal stop = (textRect.right() - closeWidth - textBounding.left() - 5)
+                       / qreal(textBounding.width());
+    ASSERT_GT(stop, 0.0);
+    ASSERT_LT(stop, 1.0);
+
+    // Act
+    paintTabWithWidgetDevice(bar, option, &recordingStyle);
+
+    // Assert：背景交给样式一次，文字只由本类绘制一次
+    EXPECT_EQ(recordingStyle.tabDrawCount, 1);
+    ASSERT_EQ(recordingStyle.textDraws.size(), 1);
+    const PaintTextRecord *record = firstNonEmptyTextDraw(recordingStyle);
+    ASSERT_NE(record, nullptr);
+    EXPECT_EQ(record->text, text);
+    EXPECT_EQ(record->rect, textRect);
+    EXPECT_EQ(record->flags, alignment);
+    EXPECT_TRUE(record->enabled);
+
+    // 关键回归：整段文字使用一个逻辑坐标的连续渐变（而非 ObjectBoundingMode）
+    const QBrush brush = recordedLabelBrush(*record);
+    ASSERT_EQ(brush.style(), Qt::LinearGradientPattern);
+    const QLinearGradient *gradient = static_cast<const QLinearGradient *>(brush.gradient());
+    ASSERT_NE(gradient, nullptr);
+    EXPECT_EQ(gradient->coordinateMode(), QGradient::LogicalMode);
+    EXPECT_DOUBLE_EQ(gradient->start().x(), textBounding.left());
+    EXPECT_DOUBLE_EQ(gradient->finalStop().x(), textBounding.right());
+
+    const QGradientStops stops = gradient->stops();
+    ASSERT_GE(stops.size(), 4);
+    EXPECT_EQ(stops.first().second.alpha(), 255);
+    EXPECT_EQ(stops.last().second.alpha(), 0);
+}
+
+TEST_F(TabbarTest, PaintTab_ShortText_UsesSolidTextBrush)
+{
+    // Arrange：短文本未接近关闭按钮，stop 落在 (0,1) 之外
+    PaintTabRecordingStyle recordingStyle;
+    ScopedWidgetStyle styleGuard(bar, &recordingStyle);
+    const QRect tabRect(0, 0, 160, 40);
+    QStyleOptionTab option = makePaintTabOption(
+        bar, tabRect, QStyle::State_Enabled | QStyle::State_Selected, QStringLiteral("A"));
+
+    // Act
+    paintTabWithWidgetDevice(bar, option, &recordingStyle);
+
+    // Assert：使用 HighlightedText 实色画刷
+    const PaintTextRecord *record = firstNonEmptyTextDraw(recordingStyle);
+    ASSERT_NE(record, nullptr);
+    const QBrush brush = recordedLabelBrush(*record);
+    EXPECT_EQ(brush.style(), Qt::SolidPattern);
+    EXPECT_EQ(brush.color(), option.palette.brush(QPalette::HighlightedText).color());
+}
+
+TEST_F(TabbarTest, PaintTab_TextWiderThanLabelRect_AddsTransparentOverflowStop)
+{
+    // Arrange：窄标签页 + 超长文本，文字包围盒超出文字矩形
+    PaintTabRecordingStyle recordingStyle;
+    ScopedWidgetStyle styleGuard(bar, &recordingStyle);
+    const QString text = QString::fromUtf8("SubTR第一轮P1.txtSubTR第一轮P1.txt");
+    const QRect tabRect(0, 0, 70, 40);
+    QStyleOptionTab option = makePaintTabOption(
+        bar, tabRect, QStyle::State_Enabled | QStyle::State_Selected, text);
+    const int alignment = paintTabAlignment(bar, option);
+    const QRect textRect = bar->style()->subElementRect(QStyle::SE_TabBarTabText, &option, bar)
+                               .adjusted(1, 0, 0, 0);
+    const QRect textBounding = option.fontMetrics.boundingRect(textRect, alignment, text);
+    ASSERT_GT(textBounding.right(), textRect.right());
+
+    // Act
+    paintTabWithWidgetDevice(bar, option, &recordingStyle);
+
+    // Assert：渐变中存在 1.0 之前的透明 stop（文字超出显示区域的部分透明）
+    const PaintTextRecord *record = firstNonEmptyTextDraw(recordingStyle);
+    ASSERT_NE(record, nullptr);
+    const QBrush brush = recordedLabelBrush(*record);
+    ASSERT_EQ(brush.style(), Qt::LinearGradientPattern);
+    ASSERT_NE(brush.gradient(), nullptr);
+    const QGradientStops stops = brush.gradient()->stops();
+    ASSERT_GE(stops.size(), 5);
+
+    bool hasOverflowStop = false;
+    for (const QGradientStop &stop : stops) {
+        if (stop.first < 1.0 && stop.second.alpha() == 0) {
+            hasOverflowStop = true;
+            break;
+        }
+    }
+    EXPECT_TRUE(hasOverflowStop);
+}
+
+TEST_F(TabbarTest, PaintTab_SelectedEmptyText_SkipsLabelDrawing)
+{
+    // Arrange：选中 + 关闭按钮 + 空文本
+    PaintTabRecordingStyle recordingStyle;
+    ScopedWidgetStyle styleGuard(bar, &recordingStyle);
+    const QRect tabRect(0, 0, 160, 40);
+    QStyleOptionTab option = makePaintTabOption(
+        bar, tabRect, QStyle::State_Enabled | QStyle::State_Selected, QString());
+
+    // Act
+    paintTabWithWidgetDevice(bar, option, &recordingStyle);
+
+    // Assert：只调用样式画背景，不落笔文字
+    EXPECT_EQ(recordingStyle.tabDrawCount, 1);
+    EXPECT_TRUE(recordingStyle.textDraws.isEmpty());
+}
+
+TEST_F(TabbarTest, PaintTab_NoCloseButton_DelegatesToStyle)
+{
+    // Arrange：选中但关闭按钮不可见 → 完全交给基类/样式
+    bar->setTabsClosable(false);
+    PaintTabRecordingStyle recordingStyle;
+    ScopedWidgetStyle styleGuard(bar, &recordingStyle);
+    const QRect tabRect(0, 0, 160, 40);
+    QStyleOptionTab option = makePaintTabOption(
+        bar, tabRect, QStyle::State_Enabled | QStyle::State_Selected,
+        QString::fromUtf8("SubTR第一轮P1.txt"));
+
+    // Act
+    paintTabWithWidgetDevice(bar, option, &recordingStyle);
+
+    // Assert：本类未接管文字绘制
+    EXPECT_EQ(recordingStyle.tabDrawCount, 1);
+    EXPECT_TRUE(recordingStyle.textDraws.isEmpty());
+}
+
+TEST_F(TabbarTest, PaintTab_NonSelected_DelegatesToStyle)
+{
+    // Arrange：非选中标签页 → 完全交给基类/样式
+    PaintTabRecordingStyle recordingStyle;
+    ScopedWidgetStyle styleGuard(bar, &recordingStyle);
+    const QRect tabRect(0, 0, 160, 40);
+    QStyleOptionTab option = makePaintTabOption(
+        bar, tabRect, QStyle::State_Enabled, QString::fromUtf8("SubTR第一轮P1.txt"));
+
+    // Act
+    paintTabWithWidgetDevice(bar, option, &recordingStyle);
+
+    // Assert：本类未接管文字绘制
+    EXPECT_EQ(recordingStyle.tabDrawCount, 1);
+    EXPECT_TRUE(recordingStyle.textDraws.isEmpty());
+}
+
+TEST_F(TabbarTest, PaintTab_NonWidgetDevice_UsesSolidTextBrush)
+{
+    // Arrange：直接以 QImage 为绘制设备（拖动缩略图等非 widget 场景）
+    PaintTabRecordingStyle recordingStyle;
+    ScopedWidgetStyle styleGuard(bar, &recordingStyle);
+    const QString text = QString::fromUtf8("SubTR第一轮P1.txtSubTR第一轮P1.txt");
+    const QRect tabRect(0, 0, 160, 40);
+    QStyleOptionTab option = makePaintTabOption(
+        bar, tabRect, QStyle::State_Enabled | QStyle::State_Selected, text);
+    QImage target(tabRect.size(), QImage::Format_ARGB32_Premultiplied);
+    target.fill(Qt::transparent);
+    QPainter painter(&target);
+
+    // Act
+    bar->paintTab(&painter, 0, option);
+    painter.end();
+
+    // Assert：非 widget 设备不做关闭按钮渐变，直接使用实色
+    const PaintTextRecord *record = firstNonEmptyTextDraw(recordingStyle);
+    ASSERT_NE(record, nullptr);
+    EXPECT_EQ(recordedLabelBrush(*record).style(), Qt::SolidPattern);
+}
+
+TEST_F(TabbarTest, PaintTab_MissingAlignmentProperty_UsesCenterAlignment)
+{
+    // Arrange：对齐属性缺失 → paintTab 回退到 AlignCenter
+    bar->setProperty("_d_dtk_tabbar_alignment", QVariant());
+    PaintTabRecordingStyle recordingStyle;
+    ScopedWidgetStyle styleGuard(bar, &recordingStyle);
+    const QRect tabRect(0, 0, 160, 40);
+    QStyleOptionTab option = makePaintTabOption(
+        bar, tabRect, QStyle::State_Enabled | QStyle::State_Selected,
+        QString::fromUtf8("SubTR第一轮P1.txtSubTR第一轮P1.txt"));
+
+    // Act
+    paintTabWithWidgetDevice(bar, option, &recordingStyle);
+
+    // Assert：绘制标志包含水平/垂直居中与助记符
+    const PaintTextRecord *record = firstNonEmptyTextDraw(recordingStyle);
+    ASSERT_NE(record, nullptr);
+    EXPECT_TRUE(record->flags & Qt::AlignHCenter);
+    EXPECT_TRUE(record->flags & Qt::AlignVCenter);
+    EXPECT_TRUE(record->flags & Qt::TextShowMnemonic);
+}
+
+TEST_F(TabbarTest, PaintTab_RealStyle_DrawsLabelPixels)
+{
+    // Arrange：真实样式 + 真实 paintEvent；再构造一个空文本镜像标签页做差分
+    addTabsQuietly({ localRoot + "/SubTR第一轮P1.txt" });
+    ASSERT_EQ(bar->count(), 1);
+    bar->setCurrentIndex(0);
+    QApplication::processEvents();
+    const QImage withText = bar->grab().toImage().convertToFormat(QImage::Format_ARGB32);
+    ASSERT_FALSE(withText.isNull());
+
+    QWidget emptyHost;
+    emptyHost.resize(host->size());
+    auto *emptyBar = new Tabbar(&emptyHost);
+    emptyBar->resize(bar->size());
+    emptyBar->addTab(localRoot + "/empty.txt", QString());
+    emptyBar->setCurrentIndex(0);
+    emptyHost.show();
+    QApplication::processEvents();
+    const QImage withoutText = emptyBar->grab().toImage().convertToFormat(QImage::Format_ARGB32);
+    ASSERT_EQ(withText.size(), withoutText.size());
+
+    // Act：统计两幅渲染结果的差异像素
+    int diffPixels = 0;
+    for (int y = 0; y < withText.height(); ++y) {
+        for (int x = 0; x < withText.width(); ++x) {
+            if (withText.pixel(x, y) != withoutText.pixel(x, y))
+                ++diffPixels;
+        }
+    }
+
+    // Assert：有文本/无文本的唯一差异是标签文字，确认 paintTab 接管后仍真实落笔
+    EXPECT_GT(diffPixels, 50);
+}
 
 }  // namespace
