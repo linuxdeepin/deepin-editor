@@ -21,6 +21,7 @@ Build-Depends:
  libpolkit-qt6-1-dev [!mipsel !mips64el] | libpolkit-qt5-1-dev,
  libkf6syntaxhighlighting-dev [!mipsel !mips64el] | libkf5syntaxhighlighting-dev,
  libkf6codecs-dev [!mipsel !mips64el] | libkf5codecs-dev,
+ libqt5opengl5-dev [mipsel mips64el],
  libgtest-dev,
  libgmock-dev,
  libchardet-dev,
@@ -34,8 +35,8 @@ Architecture: any
 Depends:
  ${shlibs:Depends},
  ${misc:Depends},
- dde-qt6integration,
- libdtk6widget,
+ dde-qt6integration [!mipsel !mips64el] | dde-qt5integration,
+ libdtk6widget [!mipsel !mips64el] | libdtkwidget5,
  libuchardet0 (>= 0.0.6),
  libchardet1
 Description: Text editor for DDE (Deepin Desktop Environment)
