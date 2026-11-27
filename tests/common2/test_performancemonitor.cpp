@@ -17,7 +17,9 @@
  * - Constructor_NewInstance_LogsCreated                   → B4
  *
  * 隔离：QDateTime::currentDateTime 全部 stub 为固定队列时间（确定性时间差），
- * qInfo/qDebug 经 qInstallMessageHandler 捕获后断言（TearDown 恢复默认 handler）。
+ * qInfo/qDebug 经 qInstallMessageHandler 捕获后断言（TearDown 恢复默认 handler）；
+ * 夹具内用 setFilterRules 显式放开 appLog 的 debug/info，避免运行脚本的
+ * QT_LOGGING_RULES 全局关日志导致断言失败（TearDown 恢复环境原规则）。
  */
 
 #include <gtest/gtest.h>
@@ -28,6 +30,7 @@
 #include <QCoreApplication>
 #include <QDateTime>
 #include <QDebug>
+#include <QLoggingCategory>
 #include <QStringList>
 #include <QVector>
 
@@ -64,6 +67,13 @@ protected:
     void SetUp() override
     {
         ensureApp();
+        // 运行脚本会导出 QT_LOGGING_RULES="*.debug=false;*.info=false" 压日志量，
+        // 该规则会让 qCDebug/qCInfo(appLog) 整体短路：消息到不了捕获 handler，
+        // 流表达式里的 currentDateTime() 副作用也随之消失（timeCalls 少计）。
+        // setFilterRules 优先级高于环境变量，夹具内显式放开 appLog，保证用例
+        // 不随运行环境的日志配置漂移；TearDown 恢复原规则。
+        QLoggingCategory::setFilterRules(QStringLiteral(
+            "org.deepin.editor.debug=true\norg.deepin.editor.info=true"));
         stub.clear();
         logs.clear();
         timeQueue.clear();
@@ -80,6 +90,9 @@ protected:
 
     void TearDown() override
     {
+        // 先恢复运行环境自带的日志规则（无则清空回到进程默认），再恢复默认
+        // handler，避免中间窗口 debug/info 直接打到 stderr
+        QLoggingCategory::setFilterRules(QString::fromLatin1(qgetenv("QT_LOGGING_RULES")));
         qInstallMessageHandler(nullptr); // 恢复默认 handler
         g_capturedLogs = nullptr;
         stub.clear();
