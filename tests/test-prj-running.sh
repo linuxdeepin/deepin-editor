@@ -21,6 +21,10 @@ make -j$(nproc)
 export ASAN_OPTIONS=abort_on_error=0:detect_leaks=0
 export UBSAN_OPTIONS=halt_on_error=0
 export QT_QPA_PLATFORM=offscreen
+# UT 的 qCDebug/qCInfo 输出量极大（参数化用例逐字符打印），会把 AT/UT 平台
+# 256MB 日志上限打满导致任务被杀（daily_auto 曾以 exit 125 终止，后半程用例
+# 未执行）。测试结果以 gtest XML 为准，运行期关闭 Qt debug/info 日志即可。
+export QT_LOGGING_RULES="*.debug=false;*.info=false"
 
 # 运行测试并生成 gtest XML 报告（每个测试可执行文件一份 XML）
 GTEST_XML_DIR="$projectdir/$builddir/report"
